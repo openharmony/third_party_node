@@ -61,9 +61,12 @@ Note:If the text contains special characters, please escape them according to th
             <policy name="projectPolicy" desc="多个协议，均不影响兼容性 ：ISC License,Public Domain,MIT License,Free Software Foundation - MIT License,Apache License V2.0,ICU License,zlib/libpng License,BSD 2-Clause License,BSD 3-Clause License">
             <policyitem type="compatibility" name="Unicode-DFS-2016" path="deps/icu-small/.*" desc="ICU License，不影响兼容性"/>
             <policyitem type="compatibility" name="Unicode-TOU" path="deps/icu-small/.*" desc="ICU License，不影响兼容性"/>
+            <policyitem type="compatibility" name="Unicode-TOU" path="tools/.*" desc="Unicode License，不影响兼容性"/>
+            <policyitem type="compatibility" name="NAIST-2003" path="deps/icu-small/.*" desc="NAIST-2003 License，不影响兼容性"/>
             <policyitem type="compatibility" name="c-ares license" path="deps/cares/.*" desc="BSD-style License，不影响兼容性"/>
             <policyitem type="compatibility" name="zlib-acknowledgement" path="deps/zlib/.*" desc="zlib/libpng License，不影响兼容性"/>
             <policyitem type="compatibility" name="Artistic-2.0" path="deps/npm/.*" desc="Artistic License 2.0，协议友好，不影响兼容性"/>
+            <policyitem type="compatibility" name="Artistic-2.0" path=".*" desc="Artistic License 2.0，协议友好，不影响兼容性"/>
             <policyitem type="compatibility" name="BSD License" path="deps/npm/.*" desc="BSD License，不影响兼容性"/>
             <policyitem type="compatibility" name="Unicode-DFS-2016" path="tools/icu/.*" desc="ICU License，不影响兼容性"/>
             <policyitem type="compatibility" name="The zlib/libpng License (Zlib)" path=".*" desc="BSD-style License，不影响兼容性"/>
@@ -155,6 +158,7 @@ Note:If the text contains special characters, please escape them according to th
         <filefilterlist>
             <filefilter name="defaultPolicyFilter" desc="compatibility，license文件头校验策略的过滤条件" >
                 <filteritem type="filepath" name="deps/zlib/contrib/minizip/unzip.c" desc="zlib LICENSE，文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/zlib/contrib/minizip/crypt.h" desc="申明可自由分发，无许可头申明"/>
                 <filteritem type="filepath" name="deps/npm/node_modules/bcrypt-pbkdf/index.js" desc="BSD LICENSE，文件未使用，不参与编译,不影响兼容性"/>
                 <filteritem type="filepath" name="deps/npm/node_modules/init-package-json/default-input.js" desc="三方代码未写LICENSE头"/>
                 <filteritem type="filepath" name="deps/npm/node_modules/normalize-package-data/lib/fixer.js" desc="三方代码未写LICENSE头"/>
@@ -163,6 +167,8 @@ Note:If the text contains special characters, please escape them according to th
                 <filteritem type="filepath" name="deps/npm/node_modules/spdx-expression-parse/scan.js" desc="三方代码未写LICENSE头"/>
                 <filteritem type="filepath" name="deps/npm/test/tap/deprecate.js" desc="三方代码未写LICENSE头"/>
                 <filteritem type="filepath" name="deps/npm/test/tap/sorted-package-json.js" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/npm/man/man1/npm-dist-tag.1" desc="说明文档生成的文件，未使用，不参与打包"/>
+                <filteritem type="filepath" name="deps/npm/man/man5/install.5" desc="说明文档生成的文件，未使用，不参与打包"/>
                 <filteritem type="filepath" name="test/parallel/test-whatwg-url-constructor.js" desc="三方代码未写LICENSE头"/>
                 <filteritem type="filepath" name="test/parallel/test-whatwg-url-origin.js" desc="三方代码未写LICENSE头"/>
                 <filteritem type="filepath" name="test/parallel/test-whatwg-url-setters.js" desc="三方代码未写LICENSE头"/>
@@ -182,6 +188,12 @@ Note:If the text contains special characters, please escape them according to th
                 <filteritem type="filepath" name="tools/inspector_protocol/markupsafe/get_markupsafe.sh" desc="三方仓内编译脚本，未写license头，不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="tools/msvs/install_tools/install_tools.bat" desc="三方仓内编译脚本，未写license头，不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="tools/node_modules/eslint/node_modules/ajv/scripts/travis-gh-pages" desc="文三方仓内编译脚本，未写license头，不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="lib/internal/cluster/master.js" desc="lib库文件，未使用，不参与编译"/>
+                <filteritem type="filepath" name="deps/cares/src/bitncmp.c" desc="ISC License, 未使用，不参与编译"/>
+                <filteritem type="filepath" name="deps/cares/src/inet_net_pton.c" desc="ISC License, 未使用，不参与编译"/>
+                <filteritem type="filepath" name="deps/cares/src/inet_ntop.c" desc="ISC License, 未使用，不参与编译"/>
+                <filteritem type="filepath" name="deps/cares/src/README.cares" desc="MIT License, 协议友好，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/cares/src/ares_getopt.h" desc="MIT License, 协议友好，不影响兼容性"/>
             </filefilter>
         </filefilterlist>
         <licensematcherlist>
