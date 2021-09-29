@@ -193,7 +193,8 @@ Note:If the text contains special characters, please escape them according to th
                 <filteritem type="filepath" name="deps/cares/src/inet_net_pton.c" desc="ISC License, 未使用，不参与编译"/>
                 <filteritem type="filepath" name="deps/cares/src/inet_ntop.c" desc="ISC License, 未使用，不参与编译"/>
                 <filteritem type="filepath" name="deps/cares/src/README.cares" desc="MIT License, 协议友好，不影响兼容性"/>
-                <filteritem type="filepath" name="deps/cares/src/ares_getopt.h" desc="MIT License, 协议友好，不影响兼容性"/>
+		<filteritem type="filepath" name="deps/cares/src/ares_getopt.h" desc="MIT License, 协议友好，不影响兼容性"/>
+		<filteritem type="filepath" name="tools/node_modules/babel-eslint/node_modules/eslint-visitor-keys/lib/index.js" desc="开源声明跟随整个node.js，协议友好，不影响兼容性"/>
             </filefilter>
         </filefilterlist>
         <licensematcherlist>
