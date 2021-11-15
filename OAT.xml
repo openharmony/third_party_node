@@ -60,7 +60,11 @@ Note:If the text contains special characters, please escape them according to th
         <policylist>
             <policy name="projectPolicy" desc="多个协议，均不影响兼容性 ：ISC License,Public Domain,MIT License,Free Software Foundation - MIT License,Apache License V2.0,ICU License,zlib/libpng License,BSD 2-Clause License,BSD 3-Clause License">
             <policyitem type="compatibility" name="Unicode-DFS-2016" path="deps/icu-small/.*" desc="ICU License，不影响兼容性"/>
+            <policyitem type="compatibility" name="Unicode-TOU" path="deps/icu-small/.*" desc="ICU License，不影响兼容性"/>
+            <policyitem type="compatibility" name="Unicode-TOU" path="tools/icu/patches/64/source/.*" desc="ICU License，不影响兼容性"/>
+            <policyitem type="compatibility" name="c-ares license" path="deps/cares/.*" desc="c-ares license，不影响兼容性"/>
             <policyitem type="compatibility" name="zlib-acknowledgement" path="deps/zlib/.*" desc="zlib/libpng License，不影响兼容性"/>
+            <policyitem type="compatibility" name="zlib/libpng License" path="deps/zlib/.*" desc="zlib/libpng License，不影响兼容性"/>
             <policyitem type="compatibility" name="Artistic-2.0" path="deps/npm/.*" desc="Artistic License 2.0，协议友好，不影响兼容性"/>
             <policyitem type="compatibility" name="Unicode-DFS-2016" path="tools/icu/.*" desc="ICU License，不影响兼容性"/>
             <policyitem type="compatibility" name="BSD License" path="deps/npm/node_modules/bcrypt-pbkdf/.*" desc="BSD LICENSE，不影响兼容性"/>
@@ -139,6 +143,9 @@ Note:If the text contains special characters, please escape them according to th
             <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/semver/.*" desc="ISC License，BSD-style，不影响兼容性"/>
             <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/which/.*" desc="ISC License，BSD-style，不影响兼容性"/>
             <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/wrappy/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/uri-js/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/lib/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="Apache License" path="tools/node_modules/eslint/node_modules/eslint-visitor-keys/.*" desc="Apache License，不影响兼容性"/>
             <policyitem type="compatibility" name="BSD License" path="test/fixtures/wpt/resources/.*" desc="BSD License，不影响兼容性"/>
             </policy>
         </policylist>
@@ -172,6 +179,19 @@ Note:If the text contains special characters, please escape them according to th
                 <filteritem type="filepath" name="tools/inspector_protocol/markupsafe/get_markupsafe.sh" desc="三方仓内编译脚本，未写license头，不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="tools/msvs/install_tools/install_tools.bat" desc="三方仓内编译脚本，未写license头，不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="tools/node_modules/eslint/node_modules/ajv/scripts/travis-gh-pages" desc="文三方仓内编译脚本，未写license头，不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="tools/inspector_protocol/jinja2/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="tools/inspector_protocol/markupsafe/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="tools/node_modules/babel-eslint/node_modules/source-map/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="tools/node_modules/eslint/node_modules/uri-js/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/icu-small/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/uri-js/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/qs/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="lib/internal/cluster/.*" desc="文件没有添加license头，跟随node整体的license"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/validate-npm-package-license/index.js" desc="文件没有添加license头，外层LICENSE位Apache"/>
+                <filteritem type="filepath" name="deps/cares/src/README.cares" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/man/man1/npm-dist-tag.1" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/man/man5/install.5" desc="不参与编译，不影响兼容性"/>
             </filefilter>
         </filefilterlist>
         <licensematcherlist>
@@ -267,6 +287,68 @@ policies and contribution forms [3]." desc="BSD License"/>
                     MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
                     DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE
                     OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+                " desc=""/>
+            </licensematcher>
+            <licensematcher name="zlib/libpng License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+                <licensetext name="
+                    * For conditions of distribution and use, see copyright notice in zlib.h
+                " desc="zlib/libpng License"/>
+            </licensematcher>
+            <licensematcher name="zlib/libpng License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+                <licensetext name="
+                    The encryption/decryption parts of this source code (as opposed to the
+                    non-echoing password parts) were originally written in Europe.  The
+                    whole source package can be freely distributed, including from the USA.
+                    (Prior to January 2000, re-export from the US was a violation of US law.)
+                " desc="zlib/libpng License"/>
+            </licensematcher>
+            <licensematcher name="Apache License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+                <licensetext name="
+                    @author Toru Nagashima &lt;https://github.com/mysticatea&gt;
+                    See LICENSE file in root directory for full license.
+                " desc="Apache License"/>
+            </licensematcher>
+            <licensematcher name="ISC License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+                <licensetext name="
+                    @fileoverview Prefers object spread property over Object.assign
+                    @author Sharmila Jesupaul
+                    See LICENSE file in root directory for full license.
+                " desc=""/>
+            </licensematcher>
+            <licensematcher name="ISC License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+                <licensetext name="
+                    Redistribution and use in source and binary forms, with or without modification, are
+                    permitted provided that the following conditions are met:
+
+                       1. Redistributions of source code must retain the above copyright notice, this list of
+                          conditions and the following disclaimer.
+
+                       2. Redistributions in binary form must reproduce the above copyright notice, this list
+                          of conditions and the following disclaimer in the documentation and/or other materials
+                          provided with the distribution.
+                " desc=""/>
+                <licensetext name="
+                    Redistribution and use in source and binary forms, with or without
+                    modification, are permitted provided that the following conditions are met:
+
+                    A. Redistributions of source code must retain the above copyright notice,
+                       this list of conditions and the following disclaimer.
+                    B. Redistributions in binary form must reproduce the above copyright notice,
+                       this list of conditions and the following disclaimer in the documentation
+                       and/or other materials provided with the distribution.
+                    C. Neither the names of the copyright holders nor the names of its
+                       contributors may be used to endorse or promote products derived from this
+                       software without specific prior written permission.
+                " desc=""/>
+            </licensematcher>
+            <licensematcher name="c-ares license" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+                <licensetext name="
+                    Copyright (c) 2004 by Internet Systems Consortium, Inc. (&quot;ISC&quot;)
+                    Copyright (c) 1996,1999 by Internet Software Consortium.
+
+                    Permission to use, copy, modify, and distribute this software for any
+                    purpose with or without fee is hereby granted, provided that the above
+                    copyright notice and this permission notice appear in all copies.
                 " desc=""/>
             </licensematcher>
         </licensematcherlist>
