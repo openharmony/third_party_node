@@ -189,7 +189,8 @@ Note:If the text contains special characters, please escape them according to th
                 <filteritem type="filepath" name="deps/npm/node_modules/qs/LICENSE" desc="此为LICENSE文件"/>
                 <filteritem type="filepath" name="lib/internal/cluster/.*" desc="文件没有添加license头，跟随node整体的license"/>
                 <filteritem type="filepath" name="deps/npm/node_modules/validate-npm-package-license/index.js" desc="文件没有添加license头，外层LICENSE位Apache"/>
-                <filteritem type="filepath" name="deps/cares/src/README.cares" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/cares/README.cares" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/cares/RELEASE-NOTES" desc="不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="deps/npm/man/man1/npm-dist-tag.1" desc="不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="deps/npm/man/man5/install.5" desc="不参与编译，不影响兼容性"/>
             </filefilter>
