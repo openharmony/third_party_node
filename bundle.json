@@ -17,8 +17,8 @@
         "third-party",
         "node"
     ],
-    "envs": [],
-    "dirs": [],
+    "envs": {},
+    "dirs": {},
     "segment": {
         "destPath": "third_party/node"
     },
