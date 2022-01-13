@@ -1,0 +1,39 @@
+{
+    "name": "@ohos/node",
+    "version": "",
+    "description": "Third-party open-source software node | 三方开源软件node",
+    "homePage": "https://gitee.com/openharmony",
+    "license": "ISC,Public Domain,MIT,Free Software Foundation - MIT,Apache V2,ICU,zlib/libpng,BSD 2-Clause,BSD 3-Clause",
+    "repository": "https://gitee.com/openharmony/third_party_node",
+    "domain": "os",
+    "language": "",
+    "publishAs": "code-segment",
+    "private": false,
+    "scripts": {},
+    "tags": [
+        "third_party"
+    ],
+    "keywords": [
+        "third-party",
+        "node"
+    ],
+    "envs": {},
+    "dirs": {},
+    "segment": {
+        "destPath": "third_party/node"
+    },
+    "component": {
+        "name": "thirdparty_node",
+        "subsystem": "",
+        "syscap": [],
+        "features": [],
+        "adapted_system_type": [],
+        "rom": "",
+        "ram": "",
+        "build": {
+            "sub_component": [],
+            "inner_kits": [],
+            "test": []
+        }
+    }
+}
