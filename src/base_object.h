@@ -65,9 +65,9 @@ class BaseObject : public MemoryRetainer {
   // was also passed to the `BaseObject()` constructor initially.
   // This may return `nullptr` if the C++ object has not been constructed yet,
   // e.g. when the JS object used `MakeLazilyInitializedJSTemplate`.
-  static inline BaseObject* FromJSObject(v8::Local<v8::Object> object);
+  static inline BaseObject* FromJSObject(v8::Local<v8::Value> object);
   template <typename T>
-  static inline T* FromJSObject(v8::Local<v8::Object> object);
+  static inline T* FromJSObject(v8::Local<v8::Value> object);
 
   // Make the `v8::Global` a weak reference and, `delete` this object once
   // the JS object has been garbage collected and there are no (strong)
@@ -77,6 +77,11 @@ class BaseObject : public MemoryRetainer {
   // Undo `MakeWeak()`, i.e. turn this into a strong reference that is a GC
   // root and will not be touched by the garbage collector.
   inline void ClearWeak();
+
+  // Reports whether this BaseObject is using a weak reference or detached,
+  // i.e. whether is can be deleted by GC once no strong BaseObjectPtrs refer
+  // to it anymore.
+  inline bool IsWeakOrDetached() const;
 
   // Utility to create a FunctionTemplate with one internal field (used for
   // the `BaseObject*` pointer) and a constructor that initializes that field
@@ -111,13 +116,13 @@ class BaseObject : public MemoryRetainer {
   // the current object:
   // - kUntransferable:
   //     No transfer is possible, either because this type of BaseObject does
-  //     not know how to be transfered, or because it is not in a state in
+  //     not know how to be transferred, or because it is not in a state in
   //     which it is possible to do so (e.g. because it has already been
-  //     transfered).
+  //     transferred).
   // - kTransferable:
-  //     This object can be transfered in a destructive fashion, i.e. will be
+  //     This object can be transferred in a destructive fashion, i.e. will be
   //     rendered unusable on the sending side of the channel in the process
-  //     of being transfered. (In C++ this would be referred to as movable but
+  //     of being transferred. (In C++ this would be referred to as movable but
   //     not copyable.) Objects of this type need to be listed in the
   //     `transferList` argument of the relevant postMessage() call in order to
   //     make sure that they are not accidentally destroyed on the sending side.
@@ -146,6 +151,10 @@ class BaseObject : public MemoryRetainer {
       NestedTransferables() const;
   virtual v8::Maybe<bool> FinalizeTransferRead(
       v8::Local<v8::Context> context, v8::ValueDeserializer* deserializer);
+
+  // Indicates whether this object is expected to use a strong reference during
+  // a clean process exit (due to an empty event loop).
+  virtual bool IsNotIndicativeOfMemoryLeakAtExit() const;
 
   virtual inline void OnGCCollect();
 
@@ -180,7 +189,7 @@ class BaseObject : public MemoryRetainer {
     // Indicates whether MakeWeak() has been called.
     bool wants_weak_jsobj = false;
     // Indicates whether Detach() has been called. If that is the case, this
-    // object will be destryoed once the strong pointer count drops to zero.
+    // object will be destroyed once the strong pointer count drops to zero.
     bool is_detached = false;
     // Reference to the original BaseObject. This is used by weak pointers.
     BaseObject* self = nullptr;
@@ -201,7 +210,7 @@ class BaseObject : public MemoryRetainer {
 
 // Global alias for FromJSObject() to avoid churn.
 template <typename T>
-inline T* Unwrap(v8::Local<v8::Object> obj) {
+inline T* Unwrap(v8::Local<v8::Value> obj) {
   return BaseObject::FromJSObject<T>(obj);
 }
 

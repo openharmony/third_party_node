@@ -8,7 +8,7 @@
       "introduced_in": "v0.10.0",
       "stability": 2,
       "stabilityText": "Stable",
-      "desc": "<p><strong>Source Code:</strong> <a href=\"https://github.com/nodejs/node/blob/v12.22.7/lib/zlib.js\">lib/zlib.js</a></p>\n<p>The <code>zlib</code> module provides compression functionality implemented using Gzip,\nDeflate/Inflate, and Brotli.</p>\n<p>To access it:</p>\n<pre><code class=\"language-js\">const zlib = require('zlib');\n</code></pre>\n<p>Compression and decompression are built around the Node.js <a href=\"stream.md\">Streams API</a>.</p>\n<p>Compressing or decompressing a stream (such as a file) can be accomplished by\npiping the source stream through a <code>zlib</code> <code>Transform</code> stream into a destination\nstream:</p>\n<pre><code class=\"language-js\">const { createGzip } = require('zlib');\nconst { pipeline } = require('stream');\nconst {\n  createReadStream,\n  createWriteStream\n} = require('fs');\n\nconst gzip = createGzip();\nconst source = createReadStream('input.txt');\nconst destination = createWriteStream('input.txt.gz');\n\npipeline(source, gzip, destination, (err) => {\n  if (err) {\n    console.error('An error occurred:', err);\n    process.exitCode = 1;\n  }\n});\n\n// Or, Promisified\n\nconst { promisify } = require('util');\nconst pipe = promisify(pipeline);\n\nasync function do_gzip(input, output) {\n  const gzip = createGzip();\n  const source = createReadStream(input);\n  const destination = createWriteStream(output);\n  await pipe(source, gzip, destination);\n}\n\ndo_gzip('input.txt', 'input.txt.gz')\n  .catch((err) => {\n    console.error('An error occurred:', err);\n    process.exitCode = 1;\n  });\n</code></pre>\n<p>It is also possible to compress or decompress data in a single step:</p>\n<pre><code class=\"language-js\">const { deflate, unzip } = require('zlib');\n\nconst input = '.................................';\ndeflate(input, (err, buffer) => {\n  if (err) {\n    console.error('An error occurred:', err);\n    process.exitCode = 1;\n  }\n  console.log(buffer.toString('base64'));\n});\n\nconst buffer = Buffer.from('eJzT0yMAAGTvBe8=', 'base64');\nunzip(buffer, (err, buffer) => {\n  if (err) {\n    console.error('An error occurred:', err);\n    process.exitCode = 1;\n  }\n  console.log(buffer.toString());\n});\n\n// Or, Promisified\n\nconst { promisify } = require('util');\nconst do_unzip = promisify(unzip);\n\ndo_unzip(buffer)\n  .then((buf) => console.log(buf.toString()))\n  .catch((err) => {\n    console.error('An error occurred:', err);\n    process.exitCode = 1;\n  });\n</code></pre>",
+      "desc": "<p><strong>Source Code:</strong> <a href=\"https://github.com/nodejs/node/blob/v14.18.3/lib/zlib.js\">lib/zlib.js</a></p>\n<p>The <code>zlib</code> module provides compression functionality implemented using Gzip,\nDeflate/Inflate, and Brotli.</p>\n<p>To access it:</p>\n<pre><code class=\"language-js\">const zlib = require('zlib');\n</code></pre>\n<p>Compression and decompression are built around the Node.js <a href=\"stream.html\">Streams API</a>.</p>\n<p>Compressing or decompressing a stream (such as a file) can be accomplished by\npiping the source stream through a <code>zlib</code> <code>Transform</code> stream into a destination\nstream:</p>\n<pre><code class=\"language-js\">const { createGzip } = require('zlib');\nconst { pipeline } = require('stream');\nconst {\n  createReadStream,\n  createWriteStream\n} = require('fs');\n\nconst gzip = createGzip();\nconst source = createReadStream('input.txt');\nconst destination = createWriteStream('input.txt.gz');\n\npipeline(source, gzip, destination, (err) => {\n  if (err) {\n    console.error('An error occurred:', err);\n    process.exitCode = 1;\n  }\n});\n\n// Or, Promisified\n\nconst { promisify } = require('util');\nconst pipe = promisify(pipeline);\n\nasync function do_gzip(input, output) {\n  const gzip = createGzip();\n  const source = createReadStream(input);\n  const destination = createWriteStream(output);\n  await pipe(source, gzip, destination);\n}\n\ndo_gzip('input.txt', 'input.txt.gz')\n  .catch((err) => {\n    console.error('An error occurred:', err);\n    process.exitCode = 1;\n  });\n</code></pre>\n<p>It is also possible to compress or decompress data in a single step:</p>\n<pre><code class=\"language-js\">const { deflate, unzip } = require('zlib');\n\nconst input = '.................................';\ndeflate(input, (err, buffer) => {\n  if (err) {\n    console.error('An error occurred:', err);\n    process.exitCode = 1;\n  }\n  console.log(buffer.toString('base64'));\n});\n\nconst buffer = Buffer.from('eJzT0yMAAGTvBe8=', 'base64');\nunzip(buffer, (err, buffer) => {\n  if (err) {\n    console.error('An error occurred:', err);\n    process.exitCode = 1;\n  }\n  console.log(buffer.toString());\n});\n\n// Or, Promisified\n\nconst { promisify } = require('util');\nconst do_unzip = promisify(unzip);\n\ndo_unzip(buffer)\n  .then((buf) => console.log(buf.toString()))\n  .catch((err) => {\n    console.error('An error occurred:', err);\n    process.exitCode = 1;\n  });\n</code></pre>",
       "modules": [
         {
           "textRaw": "Threadpool usage and performance considerations",
@@ -77,7 +77,8 @@
               "name": "brotli_constants",
               "meta": {
                 "added": [
-                  "v11.7.0"
+                  "v11.7.0",
+                  "v10.16.0"
                 ],
                 "changes": []
               },
@@ -120,7 +121,10 @@
             ],
             "changes": [
               {
-                "version": "v12.19.0",
+                "version": [
+                  "v14.5.0",
+                  "v12.19.0"
+                ],
                 "pr-url": "https://github.com/nodejs/node/pull/33516",
                 "description": "The `maxOutputLength` option is supported now."
               },
@@ -153,7 +157,7 @@
             ],
             "changes": [
               {
-                "version": "v12.19.0",
+                "version": "v14.5.0",
                 "pr-url": "https://github.com/nodejs/node/pull/33516",
                 "description": "The `maxOutputLength` option is supported now."
               }
@@ -173,7 +177,8 @@
               "name": "brotliCompress",
               "meta": {
                 "added": [
-                  "v11.7.0"
+                  "v11.7.0",
+                  "v10.16.0"
                 ],
                 "changes": []
               },
@@ -205,7 +210,8 @@
               "name": "brotliCompressSync",
               "meta": {
                 "added": [
-                  "v11.7.0"
+                  "v11.7.0",
+                  "v10.16.0"
                 ],
                 "changes": []
               },
@@ -233,7 +239,8 @@
               "name": "brotliDecompress",
               "meta": {
                 "added": [
-                  "v11.7.0"
+                  "v11.7.0",
+                  "v10.16.0"
                 ],
                 "changes": []
               },
@@ -265,7 +272,8 @@
               "name": "brotliDecompressSync",
               "meta": {
                 "added": [
-                  "v11.7.0"
+                  "v11.7.0",
+                  "v10.16.0"
                 ],
                 "changes": []
               },
@@ -942,7 +950,8 @@
           "name": "zlib.BrotliCompress",
           "meta": {
             "added": [
-              "v11.7.0"
+              "v11.7.0",
+              "v10.16.0"
             ],
             "changes": []
           },
@@ -954,7 +963,8 @@
           "name": "zlib.BrotliDecompress",
           "meta": {
             "added": [
-              "v11.7.0"
+              "v11.7.0",
+              "v10.16.0"
             ],
             "changes": []
           },
@@ -1087,7 +1097,10 @@
             ],
             "changes": [
               {
-                "version": "v11.7.0",
+                "version": [
+                  "v11.7.0",
+                  "v10.16.0"
+                ],
                 "pr-url": "https://github.com/nodejs/node/pull/24939",
                 "description": "This class was renamed from `Zlib` to `ZlibBase`."
               }
@@ -1250,7 +1263,8 @@
           "name": "createBrotliCompress",
           "meta": {
             "added": [
-              "v11.7.0"
+              "v11.7.0",
+              "v10.16.0"
             ],
             "changes": []
           },
@@ -1273,7 +1287,8 @@
           "name": "createBrotliDecompress",
           "meta": {
             "added": [
-              "v11.7.0"
+              "v11.7.0",
+              "v10.16.0"
             ],
             "changes": []
           },
@@ -1457,7 +1472,8 @@
           "name": "brotliCompress",
           "meta": {
             "added": [
-              "v11.7.0"
+              "v11.7.0",
+              "v10.16.0"
             ],
             "changes": []
           },
@@ -1489,7 +1505,8 @@
           "name": "brotliCompressSync",
           "meta": {
             "added": [
-              "v11.7.0"
+              "v11.7.0",
+              "v10.16.0"
             ],
             "changes": []
           },
@@ -1517,7 +1534,8 @@
           "name": "brotliDecompress",
           "meta": {
             "added": [
-              "v11.7.0"
+              "v11.7.0",
+              "v10.16.0"
             ],
             "changes": []
           },
@@ -1549,7 +1567,8 @@
           "name": "brotliDecompressSync",
           "meta": {
             "added": [
-              "v11.7.0"
+              "v11.7.0",
+              "v10.16.0"
             ],
             "changes": []
           },

@@ -77,7 +77,7 @@ async function tests(options) {
   repl.inputStream.run([
     'function foo(x) { return x; }',
     'function koo() { console.log("abc"); }',
-    'a = undefined;'
+    'a = undefined;',
   ]);
 
   const testCases = [{
@@ -86,15 +86,19 @@ async function tests(options) {
     preview: [
       'foo',
       '\x1B[90m[Function: foo]\x1B[39m\x1B[11G\x1B[1A\x1B[1B\x1B[2K\x1B[1A\r',
-      '\x1B[36m[Function: foo]\x1B[39m'
+      '\x1B[36m[Function: foo]\x1B[39m',
     ]
   }, {
     input: 'koo',
     noPreview: '[Function: koo]',
     preview: [
-      'k\x1B[90moo\x1B[39m\x1B[9G\x1B[0Ko\x1B[90mo\x1B[39m\x1B[10G\x1B[0Ko',
+      'k\x1B[90moo\x1B[39m\x1B[9G',
+      '\x1B[90m[Function: koo]\x1B[39m\x1B[9G\x1B[1A\x1B[1B\x1B[2K\x1B[1A' +
+        '\x1B[0Ko\x1B[90mo\x1B[39m\x1B[10G',
+      '\x1B[90m[Function: koo]\x1B[39m\x1B[10G\x1B[1A\x1B[1B\x1B[2K\x1B[1A' +
+        '\x1B[0Ko',
       '\x1B[90m[Function: koo]\x1B[39m\x1B[11G\x1B[1A\x1B[1B\x1B[2K\x1B[1A\r',
-      '\x1B[36m[Function: koo]\x1B[39m'
+      '\x1B[36m[Function: koo]\x1B[39m',
     ]
   }, {
     input: 'a',
@@ -108,7 +112,7 @@ async function tests(options) {
       '\x1B[90m1\x1B[39m\x1B[22G\x1B[1A\x1B[1B\x1B[2K\x1B[1A ',
       '\x1B[90m1\x1B[39m\x1B[23G\x1B[1A\x1B[1B\x1B[2K\x1B[1A=== 1',
       '\x1B[90mtrue\x1B[39m\x1B[28G\x1B[1A\x1B[1B\x1B[2K\x1B[1A\r',
-      '\x1B[33mtrue\x1B[39m'
+      '\x1B[33mtrue\x1B[39m',
     ]
   }, {
     input: "{ b: 1 }['b'] === 1;",
@@ -119,14 +123,14 @@ async function tests(options) {
       '\x1B[90m1\x1B[39m\x1B[22G\x1B[1A\x1B[1B\x1B[2K\x1B[1A=== 1',
       '\x1B[90mtrue\x1B[39m\x1B[27G\x1B[1A\x1B[1B\x1B[2K\x1B[1A;',
       '\x1B[90mfalse\x1B[39m\x1B[28G\x1B[1A\x1B[1B\x1B[2K\x1B[1A\r',
-      '\x1B[33mfalse\x1B[39m'
+      '\x1B[33mfalse\x1B[39m',
     ]
   }, {
     input: '{ a: true }',
     noPreview: '{ a: \x1B[33mtrue\x1B[39m }',
     preview: [
       '{ a: tru\x1B[90me\x1B[39m\x1B[16G\x1B[0Ke }\r',
-      '{ a: \x1B[33mtrue\x1B[39m }'
+      '{ a: \x1B[33mtrue\x1B[39m }',
     ]
   }, {
     input: '{ a: true };',
@@ -134,7 +138,7 @@ async function tests(options) {
     preview: [
       '{ a: tru\x1B[90me\x1B[39m\x1B[16G\x1B[0Ke };',
       '\x1B[90mtrue\x1B[39m\x1B[20G\x1B[1A\x1B[1B\x1B[2K\x1B[1A\r',
-      '\x1B[33mtrue\x1B[39m'
+      '\x1B[33mtrue\x1B[39m',
     ]
   }, {
     input: ' \t { a: true};',
@@ -143,7 +147,7 @@ async function tests(options) {
       '  { a: tru\x1B[90me\x1B[39m\x1B[18G\x1B[0Ke}',
       '\x1B[90m{ a: true }\x1B[39m\x1B[20G\x1B[1A\x1B[1B\x1B[2K\x1B[1A;',
       '\x1B[90mtrue\x1B[39m\x1B[21G\x1B[1A\x1B[1B\x1B[2K\x1B[1A\r',
-      '\x1B[33mtrue\x1B[39m'
+      '\x1B[33mtrue\x1B[39m',
     ]
   }, {
     input: '1n + 2n',
@@ -152,7 +156,7 @@ async function tests(options) {
       '1n + 2',
       '\x1B[90mType[39m\x1B[14G\x1B[1A\x1B[1B\x1B[2K\x1B[1An',
       '\x1B[90m3n\x1B[39m\x1B[15G\x1B[1A\x1B[1B\x1B[2K\x1B[1A\r',
-      '\x1B[33m3n\x1B[39m'
+      '\x1B[33m3n\x1B[39m',
     ]
   }, {
     input: '{};1',
@@ -160,7 +164,7 @@ async function tests(options) {
     preview: [
       '{};1',
       '\x1B[90m1\x1B[39m\x1B[12G\x1B[1A\x1B[1B\x1B[2K\x1B[1A\r',
-      '\x1B[33m1\x1B[39m'
+      '\x1B[33m1\x1B[39m',
     ]
   }];
 

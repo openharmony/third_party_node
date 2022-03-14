@@ -1,12 +1,8 @@
 #include "inspector_socket.h"
+#include "llhttp.h"
 
-#define NODE_EXPERIMENTAL_HTTP
-#include "http_parser_adaptor.h"
-
+#include "base64-inl.h"
 #include "util-inl.h"
-
-#define NODE_WANT_INTERNALS 1
-#include "base64.h"
 
 #include "openssl/sha.h"  // Sha-1 hash
 
@@ -322,7 +318,7 @@ class WsHandler : public ProtocolHandler {
   WsHandler(InspectorSocket* inspector, TcpHolder::Pointer tcp)
             : ProtocolHandler(inspector, std::move(tcp)),
               OnCloseSent(&WsHandler::WaitForCloseReply),
-              OnCloseRecieved(&WsHandler::CloseFrameReceived),
+              OnCloseReceived(&WsHandler::CloseFrameReceived),
               dispose_(false) { }
 
   void AcceptUpgrade(const std::string& accept_key) override { }
@@ -373,7 +369,7 @@ class WsHandler : public ProtocolHandler {
   }
 
   void WaitForCloseReply() {
-    OnCloseRecieved = &WsHandler::OnEof;
+    OnCloseReceived = &WsHandler::OnEof;
   }
 
   void SendClose() {
@@ -400,7 +396,7 @@ class WsHandler : public ProtocolHandler {
       OnEof();
       bytes_consumed = 0;
     } else if (r == FRAME_CLOSE) {
-      (this->*OnCloseRecieved)();
+      (this->*OnCloseReceived)();
       bytes_consumed = 0;
     } else if (r == FRAME_OK) {
       delegate()->OnWsFrame(output);
@@ -410,7 +406,7 @@ class WsHandler : public ProtocolHandler {
 
 
   Callback OnCloseSent;
-  Callback OnCloseRecieved;
+  Callback OnCloseReceived;
   bool dispose_;
 };
 
@@ -479,7 +475,7 @@ class HttpHandler : public ProtocolHandler {
   }
 
   void OnData(std::vector<char>* data) override {
-    parser_errno_t err;
+    llhttp_errno_t err;
     err = llhttp_execute(&parser_, data->data(), data->size());
 
     if (err == HPE_PAUSED_UPGRADE) {
@@ -524,14 +520,14 @@ class HttpHandler : public ProtocolHandler {
     handler->inspector()->SwitchProtocol(nullptr);
   }
 
-  static int OnHeaderValue(parser_t* parser, const char* at, size_t length) {
+  static int OnHeaderValue(llhttp_t* parser, const char* at, size_t length) {
     HttpHandler* handler = From(parser);
     handler->parsing_value_ = true;
     handler->headers_[handler->current_header_].append(at, length);
     return 0;
   }
 
-  static int OnHeaderField(parser_t* parser, const char* at, size_t length) {
+  static int OnHeaderField(llhttp_t* parser, const char* at, size_t length) {
     HttpHandler* handler = From(parser);
     if (handler->parsing_value_) {
       handler->parsing_value_ = false;
@@ -541,17 +537,17 @@ class HttpHandler : public ProtocolHandler {
     return 0;
   }
 
-  static int OnPath(parser_t* parser, const char* at, size_t length) {
+  static int OnPath(llhttp_t* parser, const char* at, size_t length) {
     HttpHandler* handler = From(parser);
     handler->path_.append(at, length);
     return 0;
   }
 
-  static HttpHandler* From(parser_t* parser) {
+  static HttpHandler* From(llhttp_t* parser) {
     return node::ContainerOf(&HttpHandler::parser_, parser);
   }
 
-  static int OnMessageComplete(parser_t* parser) {
+  static int OnMessageComplete(llhttp_t* parser) {
     // Event needs to be fired after the parser is done.
     HttpHandler* handler = From(parser);
     handler->events_.emplace_back(handler->path_,
@@ -588,8 +584,8 @@ class HttpHandler : public ProtocolHandler {
   }
 
   bool parsing_value_;
-  parser_t parser_;
-  parser_settings_t parser_settings;
+  llhttp_t parser_;
+  llhttp_settings_t parser_settings;
   std::vector<HttpEvent> events_;
   std::string current_header_;
   std::map<std::string, std::string> headers_;

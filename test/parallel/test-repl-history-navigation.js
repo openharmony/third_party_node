@@ -15,6 +15,8 @@ common.skipIfDumbTerminal();
 const tmpdir = require('../common/tmpdir');
 tmpdir.refresh();
 
+process.throwDeprecation = true;
+
 const defaultHistoryPath = path.join(tmpdir.path, '.node_repl_history');
 
 // Create an input stream specialized for testing an array of actions
@@ -57,6 +59,7 @@ const WORD_RIGHT = { name: 'right', ctrl: true };
 const GO_TO_END = { name: 'end' };
 const DELETE_WORD_LEFT = { name: 'backspace', ctrl: true };
 const SIGINT = { name: 'c', ctrl: true };
+const ESCAPE = { name: 'escape', meta: true };
 
 const prompt = '> ';
 const WAIT = '€';
@@ -113,7 +116,7 @@ const tests = [
       'const foo = true', ENTER,
       '555n + 111n', ENTER,
       '5 + 5', ENTER,
-      '55 - 13 === 42', ENTER
+      '55 - 13 === 42', ENTER,
     ],
     expected: [],
     clean: false
@@ -124,7 +127,7 @@ const tests = [
     preview: false,
     showEscapeCodes: true,
     test: [
-      '55', UP, UP, UP, UP, UP, UP, ENTER
+      '55', UP, UP, UP, UP, UP, UP, ENTER,
     ],
     expected: [
       '\x1B[1G', '\x1B[0J', prompt, '\x1B[3G',
@@ -147,7 +150,7 @@ const tests = [
       '\r\n', '55\n',
       '\x1B[1G', '\x1B[0J',
       '> ', '\x1B[3G',
-      '\r\n'
+      '\r\n',
     ],
     clean: true
   },
@@ -182,9 +185,11 @@ const tests = [
       'veryLongName'.repeat(30),
       ENTER,
       `${'\x1B[90m \x1B[39m'.repeat(235)} fun`,
+      ESCAPE,
       ENTER,
       `${' '.repeat(236)} fun`,
-      ENTER
+      ESCAPE,
+      ENTER,
     ],
     expected: [],
     clean: false
@@ -215,7 +220,7 @@ const tests = [
       '2',
       BACKSPACE,
       '3',
-      SIGINT
+      SIGINT,
     ],
     // A = Cursor n up
     // B = Cursor n down
@@ -310,7 +315,7 @@ const tests = [
       '\r\n',
       '\x1B[1G', '\x1B[0J',
       '> ', '\x1B[3G',
-      '\r\n'
+      '\r\n',
     ],
     clean: true
   },
@@ -318,6 +323,7 @@ const tests = [
     env: { NODE_REPL_HISTORY: defaultHistoryPath },
     showEscapeCodes: true,
     skip: !process.features.inspector,
+    checkTotal: true,
     test: [
       'fu',
       'n',
@@ -331,7 +337,13 @@ const tests = [
       BACKSPACE,
       WORD_LEFT,
       WORD_RIGHT,
-      ENTER
+      ESCAPE,
+      ENTER,
+      UP,
+      LEFT,
+      ENTER,
+      UP,
+      ENTER,
     ],
     // C = Cursor n forward
     // D = Cursor n back
@@ -379,12 +391,36 @@ const tests = [
       '\x1B[0K', '\x1B[7D', '\x1B[10G', ' // n', '\x1B[3G', '\x1B[10G',
       // 10. Word right. Cleanup
       '\x1B[0K', '\x1B[3G', '\x1B[7C', ' // n', '\x1B[10G',
-      '\x1B[0K',
-      // 11. ENTER
+      // 11. ESCAPE
+      '\x1B[0K', ' // n', '\x1B[10G', '\x1B[0K',
+      // 12. ENTER
       '\r\n',
       'Uncaught ReferenceError: functio is not defined\n',
       '\x1B[1G', '\x1B[0J',
-      prompt, '\x1B[3G', '\r\n'
+      // 13. UP
+      prompt, '\x1B[3G', '\x1B[1G', '\x1B[0J',
+      `${prompt}functio`, '\x1B[10G',
+      ' // n', '\x1B[10G',
+      ' // n', '\x1B[10G',
+      // 14. LEFT
+      '\x1B[0K', '\x1B[1D',
+      '\x1B[10G', ' // n', '\x1B[9G', '\x1B[10G',
+      // 15. ENTER
+      '\x1B[0K', '\x1B[9G', '\x1B[1C',
+      '\r\n',
+      'Uncaught ReferenceError: functio is not defined\n',
+      '\x1B[1G', '\x1B[0J',
+      '> ', '\x1B[3G',
+      // 16. UP
+      '\x1B[1G', '\x1B[0J',
+      '> functio', '\x1B[10G',
+      ' // n', '\x1B[10G',
+      ' // n', '\x1B[10G', '\x1B[0K',
+      // 17. ENTER
+      'n', '\r\n',
+      '\x1B[1G', '\x1B[0J',
+      '... ', '\x1B[5G',
+      '\r\n',
     ],
     clean: true
   },
@@ -394,7 +430,7 @@ const tests = [
     skip: !process.features.inspector,
     test: [
       'util.inspect.replDefaults.showHidden',
-      ENTER
+      ENTER,
     ],
     expected: [],
     clean: false
@@ -411,7 +447,7 @@ const tests = [
       ' = true',
       ENTER,
       '[ ]',
-      ENTER
+      ENTER,
     ],
     expected: [
       prompt,
@@ -451,7 +487,7 @@ const tests = [
       WAIT, // The second call is not awaited. It won't trigger the preview.
       BACKSPACE,
       's',
-      BACKSPACE
+      BACKSPACE,
     ],
     expected: [
       prompt,
@@ -468,7 +504,56 @@ const tests = [
       prompt,
     ],
     clean: true
-  }
+  },
+  {
+    env: { NODE_REPL_HISTORY: defaultHistoryPath },
+    test: (function*() {
+      // Deleting Array iterator should not break history feature.
+      //
+      // Using a generator function instead of an object to allow the test to
+      // keep iterating even when Array.prototype[Symbol.iterator] has been
+      // deleted.
+      yield 'const ArrayIteratorPrototype =';
+      yield '  Object.getPrototypeOf(Array.prototype[Symbol.iterator]());';
+      yield ENTER;
+      yield 'const {next} = ArrayIteratorPrototype;';
+      yield ENTER;
+      yield 'const realArrayIterator = Array.prototype[Symbol.iterator];';
+      yield ENTER;
+      yield 'delete Array.prototype[Symbol.iterator];';
+      yield ENTER;
+      yield 'delete ArrayIteratorPrototype.next;';
+      yield ENTER;
+      yield UP;
+      yield UP;
+      yield DOWN;
+      yield DOWN;
+      yield 'fu';
+      yield 'n';
+      yield RIGHT;
+      yield BACKSPACE;
+      yield LEFT;
+      yield LEFT;
+      yield 'A';
+      yield BACKSPACE;
+      yield GO_TO_END;
+      yield BACKSPACE;
+      yield WORD_LEFT;
+      yield WORD_RIGHT;
+      yield ESCAPE;
+      yield ENTER;
+      yield 'Array.proto';
+      yield RIGHT;
+      yield '.pu';
+      yield ENTER;
+      yield 'ArrayIteratorPrototype.next = next;';
+      yield ENTER;
+      yield 'Array.prototype[Symbol.iterator] = realArrayIterator;';
+      yield ENTER;
+    })(),
+    expected: [],
+    clean: false
+  },
 ];
 const numtests = tests.length;
 

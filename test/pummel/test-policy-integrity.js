@@ -1,7 +1,17 @@
 'use strict';
 
 const common = require('../common');
-if (!common.hasCrypto) common.skip('missing crypto');
+
+if (!common.hasCrypto) {
+  common.skip('missing crypto');
+}
+
+if ((process.config.variables.arm_version === '6') ||
+  (process.config.variables.arm_version === '7')) {
+  common.skip('Too slow for armv6 and armv7 bots');
+}
+
+common.requireNoPackageJSONAbove();
 
 const { debuglog } = require('util');
 const debug = debuglog('test');
@@ -75,6 +85,7 @@ function newTestId() {
   return nextTestId++;
 }
 tmpdir.refresh();
+common.requireNoPackageJSONAbove(tmpdir.path);
 
 let spawned = 0;
 const toSpawn = [];
@@ -109,7 +120,7 @@ function drainQueue() {
       `deletable-policy-${testId}.json`
     );
     const cliPolicy = willDeletePolicy ? tmpPolicyPath : policyPath;
-    fs.rmdirSync(configDirPath, { maxRetries: 3, recursive: true });
+    fs.rmSync(configDirPath, { maxRetries: 3, recursive: true, force: true });
     fs.mkdirSync(configDirPath, { recursive: true });
     const manifest = {
       onerror: onError,
@@ -185,7 +196,7 @@ function drainQueue() {
         console.log(`stderr: ${Buffer.concat(stderr)}`);
         throw e;
       }
-      fs.rmdirSync(configDirPath, { maxRetries: 3, recursive: true });
+      fs.rmSync(configDirPath, { maxRetries: 3, recursive: true, force: true });
       drainQueue();
     });
   }
