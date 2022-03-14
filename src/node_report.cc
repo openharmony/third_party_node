@@ -12,8 +12,8 @@
 #ifdef _WIN32
 #include <Windows.h>
 #else  // !_WIN32
-#include <sys/resource.h>
 #include <cxxabi.h>
+#include <sys/resource.h>
 #include <dlfcn.h>
 #endif
 
@@ -43,13 +43,11 @@ using v8::HeapSpaceStatistics;
 using v8::HeapStatistics;
 using v8::Isolate;
 using v8::Local;
-using v8::Number;
 using v8::Object;
-using v8::StackTrace;
 using v8::String;
 using v8::TryCatch;
-using v8::Value;
 using v8::V8;
+using v8::Value;
 
 namespace per_process = node::per_process;
 
@@ -269,19 +267,21 @@ static void WriteNodeReport(Isolate* isolate,
   PrintVersionInformation(&writer);
   writer.json_objectend();
 
-  writer.json_objectstart("javascriptStack");
-  // Report summary JavaScript error stack backtrace
-  PrintJavaScriptErrorStack(&writer, isolate, error, trigger);
+  if (isolate != nullptr) {
+    writer.json_objectstart("javascriptStack");
+    // Report summary JavaScript error stack backtrace
+    PrintJavaScriptErrorStack(&writer, isolate, error, trigger);
 
-  // Report summary JavaScript error properties backtrace
-  PrintJavaScriptErrorProperties(&writer, isolate, error);
-  writer.json_objectend();  // the end of 'javascriptStack'
+    // Report summary JavaScript error properties backtrace
+    PrintJavaScriptErrorProperties(&writer, isolate, error);
+    writer.json_objectend();  // the end of 'javascriptStack'
+
+    // Report V8 Heap and Garbage Collector information
+    PrintGCStatistics(&writer, isolate);
+  }
 
   // Report native stack backtrace
   PrintNativeStack(&writer);
-
-  // Report V8 Heap and Garbage Collector information
-  PrintGCStatistics(&writer, isolate);
 
   // Report OS and current thread resource usage
   PrintResourceUsage(&writer);
@@ -296,6 +296,10 @@ static void WriteNodeReport(Isolate* isolate,
         static_cast<bool>(uv_loop_alive(env->event_loop())));
     writer.json_keyvalue("address",
         ValueToHexString(reinterpret_cast<int64_t>(env->event_loop())));
+
+    // Report Event loop idle time
+    uint64_t idle_time = uv_metrics_idle_time(env->event_loop());
+    writer.json_keyvalue("loopIdleTimeSeconds", 1.0 * idle_time / 1e9);
     writer.json_end();
   }
 

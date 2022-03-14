@@ -5,6 +5,8 @@
 #include "node_native_module_env.h"
 #include "util.h"
 
+#include <string>
+
 #if HAVE_OPENSSL
 #define NODE_BUILTIN_OPENSSL_MODULES(V) V(crypto) V(tls_wrap)
 #else
@@ -37,6 +39,7 @@
 // __attribute__((constructor)) like mechanism in GCC.
 #define NODE_BUILTIN_STANDARD_MODULES(V)                                       \
   V(async_wrap)                                                                \
+  V(block_list)                                                                \
   V(buffer)                                                                    \
   V(cares_wrap)                                                                \
   V(config)                                                                    \
@@ -49,7 +52,6 @@
   V(heap_utils)                                                                \
   V(http2)                                                                     \
   V(http_parser)                                                               \
-  V(http_parser_llhttp)                                                        \
   V(inspector)                                                                 \
   V(js_stream)                                                                 \
   V(js_udp_wrap)                                                               \
@@ -231,9 +233,9 @@ namespace node {
 
 using v8::Context;
 using v8::Exception;
+using v8::Function;
 using v8::FunctionCallbackInfo;
 using v8::Local;
-using v8::NewStringType;
 using v8::Object;
 using v8::String;
 using v8::Value;
@@ -416,13 +418,13 @@ void DLOpen(const FunctionCallbackInfo<Value>& args) {
   CHECK_NULL(thread_local_modpending);
 
   if (args.Length() < 2) {
-    env->ThrowError("process.dlopen needs at least 2 arguments.");
-    return;
+    return THROW_ERR_MISSING_ARGS(
+        env, "process.dlopen needs at least 2 arguments");
   }
 
   int32_t flags = DLib::kDefaultFlags;
   if (args.Length() > 2 && !args[2]->Int32Value(context).To(&flags)) {
-    return env->ThrowTypeError("flag argument must be an integer.");
+    return THROW_ERR_INVALID_ARG_TYPE(env, "flag argument must be an integer.");
   }
 
   Local<Object> module;
@@ -448,15 +450,13 @@ void DLOpen(const FunctionCallbackInfo<Value>& args) {
     thread_local_modpending = nullptr;
 
     if (!is_opened) {
-      Local<String> errmsg =
-          OneByteString(env->isolate(), dlib->errmsg_.c_str());
+      std::string errmsg = dlib->errmsg_.c_str();
       dlib->Close();
 #ifdef _WIN32
       // Windows needs to add the filename into the error message
-      errmsg = String::Concat(
-          env->isolate(), errmsg, args[1]->ToString(context).ToLocalChecked());
+      errmsg += *filename;
 #endif  // _WIN32
-      env->isolate()->ThrowException(Exception::Error(errmsg));
+      THROW_ERR_DLOPEN_FAILED(env, errmsg.c_str());
       return false;
     }
 
@@ -486,7 +486,7 @@ void DLOpen(const FunctionCallbackInfo<Value>& args) {
                    sizeof(errmsg),
                    "Module did not self-register: '%s'.",
                    *filename);
-          env->ThrowError(errmsg);
+          THROW_ERR_DLOPEN_FAILED(env, errmsg);
           return false;
         }
       }
@@ -517,7 +517,7 @@ void DLOpen(const FunctionCallbackInfo<Value>& args) {
       // NOTE: `mp` is allocated inside of the shared library's memory, calling
       // `dlclose` will deallocate it
       dlib->Close();
-      env->ThrowError(errmsg);
+      THROW_ERR_DLOPEN_FAILED(env, errmsg);
       return false;
     }
     CHECK_EQ(mp->nm_flags & NM_F_BUILTIN, 0);
@@ -530,7 +530,7 @@ void DLOpen(const FunctionCallbackInfo<Value>& args) {
       mp->nm_register_func(exports, module, mp->nm_priv);
     } else {
       dlib->Close();
-      env->ThrowError("Module has no declared entry point.");
+      THROW_ERR_DLOPEN_FAILED(env, "Module has no declared entry point.");
       return false;
     }
 
@@ -557,19 +557,16 @@ inline struct node_module* FindModule(struct node_module* list,
 static Local<Object> InitModule(Environment* env,
                                 node_module* mod,
                                 Local<String> module) {
-  Local<Object> exports = Object::New(env->isolate());
   // Internal bindings don't have a "module" object, only exports.
+  Local<Function> ctor = env->binding_data_ctor_template()
+                             ->GetFunction(env->context())
+                             .ToLocalChecked();
+  Local<Object> exports = ctor->NewInstance(env->context()).ToLocalChecked();
   CHECK_NULL(mod->nm_register_func);
   CHECK_NOT_NULL(mod->nm_context_register_func);
   Local<Value> unused = Undefined(env->isolate());
   mod->nm_context_register_func(exports, unused, env->context(), mod->nm_priv);
   return exports;
-}
-
-static void ThrowIfNoSuchModule(Environment* env, const char* module_v) {
-  char errmsg[1024];
-  snprintf(errmsg, sizeof(errmsg), "No such module: %s", module_v);
-  env->ThrowError(errmsg);
 }
 
 void GetInternalBinding(const FunctionCallbackInfo<Value>& args) {
@@ -600,7 +597,9 @@ void GetInternalBinding(const FunctionCallbackInfo<Value>& args) {
                         env->isolate()))
               .FromJust());
   } else {
-    return ThrowIfNoSuchModule(env, *module_v);
+    char errmsg[1024];
+    snprintf(errmsg, sizeof(errmsg), "No such module: %s", *module_v);
+    return THROW_ERR_INVALID_MODULE(env, errmsg);
   }
 
   args.GetReturnValue().Set(exports);
@@ -635,14 +634,13 @@ void GetLinkedBinding(const FunctionCallbackInfo<Value>& args) {
              sizeof(errmsg),
              "No such module was linked: %s",
              *module_name_v);
-    return env->ThrowError(errmsg);
+    return THROW_ERR_INVALID_MODULE(env, errmsg);
   }
 
   Local<Object> module = Object::New(env->isolate());
   Local<Object> exports = Object::New(env->isolate());
   Local<String> exports_prop =
-      String::NewFromUtf8(env->isolate(), "exports", NewStringType::kNormal)
-          .ToLocalChecked();
+      String::NewFromUtf8Literal(env->isolate(), "exports");
   module->Set(env->context(), exports_prop, exports).Check();
 
   if (mod->nm_context_register_func != nullptr) {
@@ -651,7 +649,9 @@ void GetLinkedBinding(const FunctionCallbackInfo<Value>& args) {
   } else if (mod->nm_register_func != nullptr) {
     mod->nm_register_func(exports, module, mod->nm_priv);
   } else {
-    return env->ThrowError("Linked module has no declared entry point.");
+    return THROW_ERR_INVALID_MODULE(
+        env,
+        "Linked moduled has no declared entry point.");
   }
 
   auto effective_exports =
