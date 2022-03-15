@@ -228,7 +228,7 @@ class InspectorSession {
 
   waitForNotification(methodOrPredicate, description) {
     const desc = description || methodOrPredicate;
-    const message = `Timed out waiting for matching notification (${desc}))`;
+    const message = `Timed out waiting for matching notification (${desc})`;
     return fires(
       this._asyncWaitForNotification(methodOrPredicate), message, TIMEOUT);
   }
@@ -515,7 +515,7 @@ function fires(promise, error, timeoutMs) {
   const timeout = timeoutPromise(error, timeoutMs);
   return Promise.race([
     onResolvedOrRejected(promise, () => timeout.clear()),
-    timeout
+    timeout,
   ]);
 }
 

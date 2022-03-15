@@ -8,7 +8,7 @@ If you can reproduce a test failure, search for it in the
 [Node.js issue tracker](https://github.com/nodejs/node/issues) or
 file a new issue.
 
-## Table of Contents
+## Table of contents
 
 * [Supported platforms](#supported-platforms)
   * [Input](#input)
@@ -24,11 +24,13 @@ file a new issue.
     * [Unix prerequisites](#unix-prerequisites)
     * [macOS prerequisites](#macos-prerequisites)
     * [Building Node.js](#building-nodejs-1)
+    * [Installing Node.js](#installing-nodejs)
     * [Running Tests](#running-tests)
     * [Running Coverage](#running-coverage)
     * [Building the documentation](#building-the-documentation)
     * [Building a debug build](#building-a-debug-build)
     * [Building an ASAN build](#building-an-asan-build)
+    * [Speeding up frequent rebuilds when developing](#speeding-up-frequent-rebuilds-when-developing)
     * [Troubleshooting Unix and macOS builds](#troubleshooting-unix-and-macos-builds)
   * [Windows](#windows)
     * [Prerequisites](#prerequisites)
@@ -37,21 +39,23 @@ file a new issue.
     * [Building Node.js](#building-nodejs-2)
   * [Android/Android-based devices (e.g. Firefox OS)](#androidandroid-based-devices-eg-firefox-os)
 * [`Intl` (ECMA-402) support](#intl-ecma-402-support)
-  * [Default: `small-icu` (English only) support](#default-small-icu-english-only-support)
   * [Build with full ICU support (all locales supported by ICU)](#build-with-full-icu-support-all-locales-supported-by-icu)
     * [Unix/macOS](#unixmacos)
     * [Windows](#windows-1)
-  * [Building without Intl support](#building-without-intl-support)
+  * [Trimmed: `small-icu` (English only) support](#trimmed-small-icu-english-only-support)
     * [Unix/macOS](#unixmacos-1)
     * [Windows](#windows-2)
-  * [Use existing installed ICU (Unix/macOS only)](#use-existing-installed-icu-unixmacos-only)
-  * [Build with a specific ICU](#build-with-a-specific-icu)
+  * [Building without Intl support](#building-without-intl-support)
     * [Unix/macOS](#unixmacos-2)
     * [Windows](#windows-3)
+  * [Use existing installed ICU (Unix/macOS only)](#use-existing-installed-icu-unixmacos-only)
+  * [Build with a specific ICU](#build-with-a-specific-icu)
+    * [Unix/macOS](#unixmacos-3)
+    * [Windows](#windows-4)
 * [Building Node.js with FIPS-compliant OpenSSL](#building-nodejs-with-fips-compliant-openssl)
 * [Building Node.js with external core modules](#building-nodejs-with-external-core-modules)
-  * [Unix/macOS](#unixmacos-3)
-  * [Windows](#windows-4)
+  * [Unix/macOS](#unixmacos-4)
+  * [Windows](#windows-5)
 * [Note for downstream distributors of Node.js](#note-for-downstream-distributors-of-nodejs)
 
 ## Supported platforms
@@ -105,10 +109,12 @@ platforms. This is true regardless of entries in the table below.
 | GNU/Linux        | armv6            | kernel >= 4.14, glibc >= 2.24   | Experimental | Downgraded as of Node.js 12       |
 | GNU/Linux        | ppc64le >=power8 | kernel >= 3.10.0, glibc >= 2.17 | Tier 2       | e.g. Ubuntu 16.04 <sup>[1](#fn1)</sup>, EL 7  <sup>[2](#fn2)</sup> |
 | GNU/Linux        | s390x            | kernel >= 3.10.0, glibc >= 2.17 | Tier 2       | e.g. EL 7 <sup>[2](#fn2)</sup>    |
-| Windows          | x64, x86 (WoW64) | >= Windows 7/2008 R2/2012 R2    | Tier 1       | <sup>[4](#fn4),[5](#fn5)</sup>    |
-| Windows          | x86 (native)     | >= Windows 7/2008 R2/2012 R2    | Tier 1 (running) / Experimental (compiling) <sup>[6](#fn6)</sup> | |
-| Windows          | arm64            | >= Windows 10                   | Experimental |                                   |
+| Windows          | x64, x86 (WoW64) | >= Windows 8.1/2012 R2          | Tier 1       | <sup>[4](#fn4),[5](#fn5)</sup>    |
+| Windows          | x86 (native)     | >= Windows 8.1/2012 R2          | Tier 1 (running) / Experimental (compiling) <sup>[6](#fn6)</sup> | |
+| Windows          | x64, x86         | Windows Server 2012 (not R2)    | Experimental |                                   |
+| Windows          | arm64            | >= Windows 10                   | Tier 2 (compiling) / Experimental (running) |    |
 | macOS            | x64              | >= 10.11                        | Tier 1       |                                   |
+| macOS            | arm64            | >= 11                           | Experimental |                                   |
 | SmartOS          | x64              | >= 18                           | Tier 2       |                                   |
 | AIX              | ppc64be >=power7 | >= 7.2 TL02                     | Tier 2       |                                   |
 | FreeBSD          | x64              | >= 11                           | Experimental | Downgraded as of Node.js 12  <sup>[7](#fn7)</sup>     |
@@ -157,26 +163,25 @@ Depending on the host platform, the selection of toolchains may vary.
 | ---------------- | -------------------------------------------------------------- |
 | Linux            | GCC >= 6.3                                                     |
 | Windows          | Visual Studio >= 2017 with the Windows 10 SDK on a 64-bit host |
-| macOS            | Xcode >= 8 (Apple LLVM >= 8)                                   |
+| macOS            | Xcode >= 10 (Apple LLVM >= 10)                                 |
 
 ### Official binary platforms and toolchains
 
 Binaries at <https://nodejs.org/download/release/> are produced on:
 
-| Binary package        | Platform and Toolchain                                                   |
-| --------------------- | ------------------------------------------------------------------------ |
-| aix-ppc64             | AIX 7.1 TL05 on PPC64BE with GCC 6                                       |
-| darwin-x64 (and .pkg) | macOS 10.15, Xcode Command Line Tools 11 with -mmacosx-version-min=10.10 |
-| linux-arm64           | CentOS 7 with devtoolset-6 / GCC 6                                       |
-| linux-armv7l          | Cross-compiled on Ubuntu 16.04 x64 with [custom GCC toolchain](https://github.com/rvagg/rpi-newer-crosstools)   |
-| linux-ppc64le         | CentOS 7 with devtoolset-6 / GCC 6 <sup>[7](#fn7)</sup>                  |
-| linux-s390x           | RHEL 7 with devtoolset-6 / GCC 6 <sup>[7](#fn7)</sup>                    |
-| linux-x64             | CentOS 7 with devtoolset-6 / GCC 6 <sup>[7](#fn7)</sup>                  |
-| sunos-x64             | SmartOS 18 with GCC 7                                                    |
-| win-x64 and win-x86   | Windows 2012 R2 (x64) with Visual Studio 2017                            |
+| Binary package        | Platform and Toolchain                                                                                        |
+| --------------------- | ------------------------------------------------------------------------------------------------------------- |
+| aix-ppc64             | AIX 7.1 TL05 on PPC64BE with GCC 6                                                                            |
+| darwin-x64 (and .pkg) | macOS 10.15, Xcode Command Line Tools 11 with -mmacosx-version-min=10.13                                      |
+| linux-arm64           | CentOS 7 with devtoolset-8 / GCC 8 <sup>[8](#fn8)</sup>                                                       |
+| linux-armv7l          | Cross-compiled on Ubuntu 18.04 x64 with [custom GCC toolchain](https://github.com/rvagg/rpi-newer-crosstools) |
+| linux-ppc64le         | CentOS 7 with devtoolset-8 / GCC 8 <sup>[8](#fn8)</sup>                                                       |
+| linux-s390x           | RHEL 7 with devtoolset-8 / GCC 8 <sup>[8](#fn8)</sup>                                                         |
+| linux-x64             | CentOS 7 with devtoolset-8 / GCC 8 <sup>[8](#fn8)</sup>                                                       |
+| win-x64 and win-x86   | Windows 2012 R2 (x64) with Visual Studio 2019                                                                 |
 
-<em id="fn7">7</em>: The Enterprise Linux devtoolset-6 allows us to compile
-binaries with GCC 6 but linked to the glibc and libstdc++ versions of the host
+<em id="fn8">8</em>: The Enterprise Linux devtoolset-8 allows us to compile
+binaries with GCC 8 but linked to the glibc and libstdc++ versions of the host
 platforms (CentOS 7 / RHEL 7). Therefore, binaries produced on these systems
 are compatible with glibc >= 2.17 and libstdc++ >= 6.0.20 (`GLIBCXX_3.4.20`).
 These are available on distributions natively supporting GCC 4.9, such as
@@ -213,27 +218,18 @@ Supported platforms and toolchains change with each major version of Node.js.
 This document is only valid for the current major version of Node.js.
 Consult previous versions of this document for older versions of Node.js:
 
-* [Node.js 13](https://github.com/nodejs/node/blob/v13.x/BUILDING.md)
+* [Node.js 14](https://github.com/nodejs/node/blob/v14.x/BUILDING.md)
 * [Node.js 12](https://github.com/nodejs/node/blob/v12.x/BUILDING.md)
 * [Node.js 10](https://github.com/nodejs/node/blob/v10.x/BUILDING.md)
-* [Node.js 8](https://github.com/nodejs/node/blob/v8.x/BUILDING.md)
 
 ## Building Node.js on supported platforms
 
 ### Note about Python 2 and Python 3
 
-The Node.js project uses Python as part of its build process and has
-historically only been Python 2 compatible.
-
-Python 2 will reach its _End-of-Life_ at the end of 2019 at which point the
-interpreter will cease receiving updates. See <https://python3statement.org/>
-for more information.
-
-The Node.js project is in the process of transitioning its Python code to
-Python 3 compatibility. Installing both versions of Python while building
-and testing Node.js allows developers and end users to test, benchmark,
-and debug Node.js running on both versions to ensure a smooth and complete
-transition before the year-end deadline.
+The Node.js project supports both Python 3 and Python 2 for building.
+If both are installed Python 3 will be used. If only Python 2 is available
+it will be used instead. When possible we recommend that you build and
+test with Python 3.
 
 ### Unix and macOS
 
@@ -243,7 +239,7 @@ transition before the year-end deadline.
 * GNU Make 3.81 or newer
 * Python (see note above)
   * Python 2.7
-  * Python 3.5, 3.6, and 3.7 are experimental.
+  * Python 3.5, 3.6, 3.7, 3.8, 3.9 or 3.10 (see note above)
 
 Installation via Linux package manager can be achieved with:
 
@@ -255,14 +251,12 @@ Installation via Linux package manager can be achieved with:
 
 FreeBSD and OpenBSD users may also need to install `libexecinfo`.
 
-Python 3 users may also need to install `python3-distutils`.
-
 #### macOS prerequisites
 
-* Xcode Command Line Tools >= 8 for macOS
+* Xcode Command Line Tools >= 10 for macOS
 * Python (see note above)
   * Python 2.7
-  * Python 3.5, 3.6, and 3.7 are experimental.
+  * Python 3.6, 3.7, 3.8, 3.9, or 3.10 (see note above)
 
 macOS users can install the `Xcode Command Line Tools` by running
 `xcode-select --install`. Alternatively, if you already have the full Xcode
@@ -282,11 +276,6 @@ $ ./configure
 $ make -j4
 ```
 
-If you run into a `No module named 'distutils.spawn'` error when executing
-`./configure`, please try `python3 -m pip install --upgrade setuptools` or
-`sudo apt install python3-distutils -y`.
-For more information, see <https://github.com/nodejs/node/issues/30189>.
-
 The `-j4` option will cause `make` to run 4 simultaneous compilation jobs which
 may reduce build time. For more information, see the
 [GNU Make Documentation](https://www.gnu.org/software/make/manual/html_node/Parallel.html).
@@ -305,7 +294,15 @@ project's root directory.
 $ sudo ./tools/macos-firewall.sh
 ```
 
-#### Running Tests
+#### Installing Node.js
+
+To install this version of Node.js into a system directory:
+
+```bash
+[sudo] make install
+```
+
+#### Running tests
 
 To verify the build:
 
@@ -315,7 +312,7 @@ $ make test-only
 
 At this point, you are ready to make code changes and re-run the tests.
 
-If you are running tests before submitting a Pull Request, the recommended
+If you are running tests before submitting a pull request, the recommended
 command is:
 
 ```console
@@ -375,7 +372,7 @@ You can use
 [node-code-ide-configs](https://github.com/nodejs/node-code-ide-configs)
 to run/debug tests, if your IDE configs are present.
 
-#### Running Coverage
+#### Running coverage
 
 It's good practice to ensure any code you add or change is covered by tests.
 You can do so by running the test suite with coverage enabled:
@@ -386,28 +383,32 @@ $ make coverage
 ```
 
 A detailed coverage report will be written to `coverage/index.html` for
-JavaScript coverage and to `coverage/cxxcoverage.html` for C++ coverage
-(if you only want to run the JavaScript tests then you do not need to run
-the first command `./configure --coverage`).
+JavaScript coverage and to `coverage/cxxcoverage.html` for C++ coverage.
 
-_Generating a test coverage report can take several minutes._
-
-To collect coverage for a subset of tests you can set the `CI_JS_SUITES` and
-`CI_NATIVE_SUITES` variables (to run specific suites, e.g., `child-process`, in
-isolation, unset the opposing `_SUITES` variable):
+If you only want to run the JavaScript tests then you do not need to run
+the first command (`./configure --coverage`). Run `make coverage-run-js`,
+to execute JavaScript tests independently of the C++ test suite:
 
 ```text
-$ CI_JS_SUITES=child-process CI_NATIVE_SUITES= make coverage
+$ make coverage-run-js
 ```
 
-The above command executes tests for the `child-process` subsystem and
-outputs the resulting coverage report.
-
-Alternatively, you can run `make coverage-run-js`, to execute JavaScript tests
-independently of the C++ test suite:
+If you are updating tests and want to collect coverage for a single test file
+(e.g. `test/parallel/test-stream2-transform.js`):
 
 ```text
-$ CI_JS_SUITES=fs CI_NATIVE_SUITES= make coverage-run-js
+$ make coverage-clean
+$ NODE_V8_COVERAGE=coverage/tmp python tools/test.py test/parallel/test-stream2-transform.js
+$ make coverage-report-js
+```
+
+You can collect coverage for the entire suite of tests for a given subsystem
+by providing the name of a subsystem:
+
+```text
+$ make coverage-clean
+$ NODE_V8_COVERAGE=coverage/tmp python tools/test.py -J --mode=release child-process
+$ make coverage-report-js
 ```
 
 The `make coverage` command downloads some tools to the project root directory.
@@ -462,12 +463,6 @@ To test if Node.js was built correctly:
 
 ```bash
 ./node -e "console.log('Hello from Node.js ' + process.version)"
-```
-
-To install this version of Node.js into a system directory:
-
-```bash
-[sudo] make install
 ```
 
 #### Building a debug build
@@ -525,6 +520,29 @@ $  ./configure --debug --enable-asan && make -j4
 $ make test-only
 ```
 
+#### Speeding up frequent rebuilds when developing
+
+If you plan to frequently rebuild Node.js, especially if using several branches,
+installing `ccache` can help to greatly reduce build times. Set up with:
+```console
+$ sudo apt install ccache   # for Debian/Ubuntu, included in most Linux distros
+$ ccache -o cache_dir=<tmp_dir>
+$ ccache -o max_size=5.0G
+$ export CC="ccache gcc"    # add to your .profile
+$ export CXX="ccache g++"   # add to your .profile
+```
+This will allow for near-instantaneous rebuilds even when switching branches.
+
+When modifying only the JS layer in `lib`, it is possible to externally load it
+without modifying the executable:
+```console
+$ ./configure --node-builtin-modules-path $(pwd)
+```
+The resulting binary won't include any JS files and will try to load them from
+the specified directory. The JS debugger of Visual Studio Code supports this
+configuration since the November 2020 version and allows for setting
+breakpoints.
+
 #### Troubleshooting Unix and macOS builds
 
 Stale builds can sometimes result in `file not found` errors while building.
@@ -542,12 +560,12 @@ to run it again before invoking `make -j4`.
 
 ##### Option 1: Manual install
 
-* [Python 2.7](https://www.python.org/downloads/)
+* [Python 3.8](https://www.python.org/downloads/)
 * The "Desktop development with C++" workload from
-  [Visual Studio 2017](https://www.visualstudio.com/downloads/) or the
-  "Visual C++ build tools" workload from the
-  [Build Tools](https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2017),
-  with the default optional components.
+  [Visual Studio 2017 or 2019](https://visualstudio.microsoft.com/downloads/) or
+  the "Visual C++ build tools" workload from the
+  [Build Tools](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019),
+  with the default optional components
 * Basic Unix tools required for some tests,
   [Git for Windows](https://git-scm.com/download/win) includes Git Bash
   and tools which can be included in the global `PATH`.
@@ -559,13 +577,13 @@ to run it again before invoking `make -j4`.
 Optional requirements to build the MSI installer package:
 
 * The [WiX Toolset v3.11](https://wixtoolset.org/releases/) and the
-  [Wix Toolset Visual Studio 2017 Extension](https://marketplace.visualstudio.com/items?itemName=RobMensching.WixToolsetVisualStudio2017Extension).
+  [Wix Toolset Visual Studio 2017 Extension](https://marketplace.visualstudio.com/items?itemName=RobMensching.WixToolsetVisualStudio2017Extension)
+  or the [Wix Toolset Visual Studio 2019 Extension](https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2019Extension).
+* The [WiX Toolset v3.14](https://wixtoolset.org/releases/) if
+  building for Windows 10 on ARM (ARM64)
 
 Optional requirements for compiling for Windows 10 on ARM (ARM64):
 
-* ARM64 Windows build machine
-  * Due to a GYP limitation, this is required to run compiled code
-    generation tools (like V8's builtins and mksnapshot tools)
 * Visual Studio 15.9.0 or newer
 * Visual Studio optional components
   * Visual C++ compilers and libraries for ARM64
@@ -580,7 +598,7 @@ This script will install the following [Chocolatey](https://chocolatey.org/)
 packages:
 
 * [Git for Windows](https://chocolatey.org/packages/git) with the `git` and
-  Unix tools added to the `PATH`.
+  Unix tools added to the `PATH`
 * [Python 3.x](https://chocolatey.org/packages/python) and
   [legacy Python](https://chocolatey.org/packages/python2)
 * [Visual Studio 2019 Build Tools](https://chocolatey.org/packages/visualstudio2019buildtools)
@@ -589,7 +607,7 @@ packages:
 
 To install Node.js prerequisites using
 [Boxstarter WebLauncher](https://boxstarter.org/WebLauncher), open
-<https://boxstarter.org/package/nr/url?https://raw.githubusercontent.com/nodejs/node/master/tools/bootstrap/windows_boxstarter>
+<https://boxstarter.org/package/nr/url?https://raw.githubusercontent.com/nodejs/node/HEAD/tools/bootstrap/windows_boxstarter>
 with Internet Explorer or Edge browser on the target machine.
 
 Alternatively, you can use PowerShell. Run those commands from an elevated
@@ -599,7 +617,7 @@ PowerShell terminal:
 Set-ExecutionPolicy Unrestricted -Force
 iex ((New-Object System.Net.WebClient).DownloadString('https://boxstarter.org/bootstrapper.ps1'))
 get-boxstarter -Force
-Install-BoxstarterPackage https://raw.githubusercontent.com/nodejs/node/master/tools/bootstrap/windows_boxstarter -DisableReboots
+Install-BoxstarterPackage https://raw.githubusercontent.com/nodejs/node/HEAD/tools/bootstrap/windows_boxstarter -DisableReboots
 ```
 
 The entire installation using Boxstarter will take up approximately 10 GB of
@@ -644,32 +662,41 @@ $ make
 
 ## `Intl` (ECMA-402) support
 
-[Intl](https://github.com/nodejs/node/blob/master/doc/api/intl.md) support is
-enabled by default, with English data only.
-
-### Default: `small-icu` (English only) support
-
-By default, only English data is included, but
-the full `Intl` (ECMA-402) APIs.  It does not need to download
-any dependencies to function. You can add full
-data at runtime.
+[Intl](https://github.com/nodejs/node/blob/HEAD/doc/api/intl.md) support is
+enabled by default.
 
 ### Build with full ICU support (all locales supported by ICU)
 
-With the `--download=all`, this may download ICU if you don't have an
-ICU in `deps/icu`. (The embedded `small-icu` included in the default
-Node.js source does not include all locales.)
+This is the default option.
 
 #### Unix/macOS
 
 ```console
-$ ./configure --with-intl=full-icu --download=all
+$ ./configure --with-intl=full-icu
 ```
 
 #### Windows
 
 ```console
-> .\vcbuild full-icu download-all
+> .\vcbuild full-icu
+```
+
+### Trimmed: `small-icu` (English only) support
+
+ In this configuration, only English data is included, but
+the full `Intl` (ECMA-402) APIs.  It does not need to download
+any dependencies to function. You can add full data at runtime.
+
+#### Unix/macOS
+
+```console
+$ ./configure --with-intl=small-icu
+```
+
+#### Windows
+
+```console
+> .\vcbuild small-icu
 ```
 
 ### Building without Intl support
@@ -779,4 +806,4 @@ When Node.js is built (with an intention to distribute) with an ABI
 incompatible with the official Node.js builds (e.g. using a ABI incompatible
 version of a dependency), please reserve and use a custom `NODE_MODULE_VERSION`
 by opening a pull request against the registry available at
-<https://github.com/nodejs/node/blob/master/doc/abi_version_registry.json>.
+<https://github.com/nodejs/node/blob/HEAD/doc/abi_version_registry.json>.

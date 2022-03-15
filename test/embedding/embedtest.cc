@@ -16,8 +16,8 @@ using v8::Local;
 using v8::Locker;
 using v8::MaybeLocal;
 using v8::SealHandleScope;
-using v8::Value;
 using v8::V8;
+using v8::Value;
 
 static int RunNodeInstance(MultiIsolatePlatform* platform,
                            const std::vector<std::string>& args,
@@ -63,7 +63,7 @@ int RunNodeInstance(MultiIsolatePlatform* platform,
   std::shared_ptr<ArrayBufferAllocator> allocator =
       ArrayBufferAllocator::Create();
 
-  Isolate* isolate = NewIsolate(allocator.get(), &loop, platform);
+  Isolate* isolate = NewIsolate(allocator, &loop, platform);
   if (isolate == nullptr) {
     fprintf(stderr, "%s: Failed to initialize V8 Isolate\n", args[0].c_str());
     return 1;
@@ -110,12 +110,14 @@ int RunNodeInstance(MultiIsolatePlatform* platform,
         more = uv_loop_alive(&loop);
         if (more) continue;
 
-        node::EmitBeforeExit(env.get());
+        if (node::EmitProcessBeforeExit(env.get()).IsNothing())
+          break;
+
         more = uv_loop_alive(&loop);
       } while (more == true);
     }
 
-    exit_code = node::EmitExit(env.get());
+    exit_code = node::EmitProcessExit(env.get()).FromMaybe(1);
 
     node::Stop(env.get());
   }

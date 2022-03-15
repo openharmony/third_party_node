@@ -16,7 +16,6 @@ using errors::TryCatchScope;
 using v8::Array;
 using v8::Context;
 using v8::EscapableHandleScope;
-using v8::FinalizationGroup;
 using v8::Function;
 using v8::FunctionCallbackInfo;
 using v8::HandleScope;
@@ -75,15 +74,6 @@ MaybeLocal<Value> PrepareStackTraceCallback(Local<Context> context,
     try_catch.ReThrow();
   }
   return result;
-}
-
-static void HostCleanupFinalizationGroupCallback(
-    Local<Context> context, Local<FinalizationGroup> group) {
-  Environment* env = Environment::GetCurrent(context);
-  if (env == nullptr) {
-    return;
-  }
-  env->RegisterFinalizationGroupForCleanup(group);
 }
 
 void* NodeArrayBufferAllocator::Allocate(size_t size) {
@@ -238,9 +228,11 @@ void SetIsolateErrorHandlers(v8::Isolate* isolate, const IsolateSettings& s) {
       s.fatal_error_callback : OnFatalError;
   isolate->SetFatalErrorHandler(fatal_error_cb);
 
-  auto* prepare_stack_trace_cb = s.prepare_stack_trace_callback ?
-      s.prepare_stack_trace_callback : PrepareStackTraceCallback;
-  isolate->SetPrepareStackTraceCallback(prepare_stack_trace_cb);
+  if ((s.flags & SHOULD_NOT_SET_PREPARE_STACK_TRACE_CALLBACK) == 0) {
+    auto* prepare_stack_trace_cb = s.prepare_stack_trace_callback ?
+        s.prepare_stack_trace_callback : PrepareStackTraceCallback;
+    isolate->SetPrepareStackTraceCallback(prepare_stack_trace_cb);
+  }
 }
 
 void SetIsolateMiscHandlers(v8::Isolate* isolate, const IsolateSettings& s) {
@@ -255,11 +247,6 @@ void SetIsolateMiscHandlers(v8::Isolate* isolate, const IsolateSettings& s) {
       s.promise_reject_callback : PromiseRejectCallback;
     isolate->SetPromiseRejectCallback(promise_reject_cb);
   }
-
-  auto* host_cleanup_cb = s.host_cleanup_finalization_group_callback ?
-    s.host_cleanup_finalization_group_callback :
-    HostCleanupFinalizationGroupCallback;
-  isolate->SetHostCleanupFinalizationGroupCallback(host_cleanup_cb);
 
   if (s.flags & DETAILED_SOURCE_POSITIONS_FOR_PROFILING)
     v8::CpuProfiler::UseDetailedSourcePositionsForProfiling(isolate);
@@ -304,6 +291,14 @@ Isolate* NewIsolate(ArrayBufferAllocator* allocator,
                     MultiIsolatePlatform* platform) {
   Isolate::CreateParams params;
   if (allocator != nullptr) params.array_buffer_allocator = allocator;
+  return NewIsolate(&params, event_loop, platform);
+}
+
+Isolate* NewIsolate(std::shared_ptr<ArrayBufferAllocator> allocator,
+                    uv_loop_t* event_loop,
+                    MultiIsolatePlatform* platform) {
+  Isolate::CreateParams params;
+  if (allocator) params.array_buffer_allocator_shared = allocator;
   return NewIsolate(&params, event_loop, platform);
 }
 
@@ -427,7 +422,7 @@ MaybeLocal<Value> LoadEnvironment(
     Environment* env,
     StartExecutionCallback cb,
     std::unique_ptr<InspectorParentHandle> removeme) {
-  env->InitializeLibuv(per_process::v8_is_profiling);
+  env->InitializeLibuv();
   env->InitializeDiagnostics();
 
   return StartExecution(env, cb);
@@ -444,8 +439,7 @@ MaybeLocal<Value> LoadEnvironment(
         // This is a slightly hacky way to convert UTF-8 to UTF-16.
         Local<String> str =
             String::NewFromUtf8(env->isolate(),
-                                main_script_source_utf8,
-                                v8::NewStringType::kNormal).ToLocalChecked();
+                                main_script_source_utf8).ToLocalChecked();
         auto main_utf16 = std::make_unique<String::Value>(env->isolate(), str);
 
         // TODO(addaleax): Avoid having a global table for all scripts.
@@ -470,6 +464,14 @@ Environment* GetCurrentEnvironment(Local<Context> context) {
 
 MultiIsolatePlatform* GetMainThreadMultiIsolatePlatform() {
   return per_process::v8_platform.Platform();
+}
+
+IsolateData* GetEnvironmentIsolateData(Environment* env) {
+  return env->isolate_data();
+}
+
+ArrayBufferAllocator* GetArrayBufferAllocator(IsolateData* isolate_data) {
+  return isolate_data->node_allocator();
 }
 
 MultiIsolatePlatform* GetMultiIsolatePlatform(Environment* env) {
@@ -679,10 +681,14 @@ void AddLinkedBinding(Environment* env, const node_module& mod) {
   CHECK_NOT_NULL(env);
   Mutex::ScopedLock lock(env->extra_linked_bindings_mutex());
 
-  node_module* prev_head = env->extra_linked_bindings_head();
+  node_module* prev_tail = env->extra_linked_bindings_tail();
   env->extra_linked_bindings()->push_back(mod);
-  if (prev_head != nullptr)
-    prev_head->nm_link = &env->extra_linked_bindings()->back();
+  if (prev_tail != nullptr)
+    prev_tail->nm_link = &env->extra_linked_bindings()->back();
+}
+
+void AddLinkedBinding(Environment* env, const napi_module& mod) {
+  AddLinkedBinding(env, napi_module_to_node_module(&mod));
 }
 
 void AddLinkedBinding(Environment* env,
@@ -706,9 +712,7 @@ void AddLinkedBinding(Environment* env,
 static std::atomic<uint64_t> next_thread_id{0};
 
 ThreadId AllocateEnvironmentThreadId() {
-  ThreadId ret;
-  ret.id = next_thread_id++;
-  return ret;
+  return ThreadId { next_thread_id++ };
 }
 
 void DefaultProcessExitHandler(Environment* env, int exit_code) {
