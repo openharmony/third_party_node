@@ -13,7 +13,10 @@ invariants.
 <!-- YAML
 added: v9.9.0
 changes:
-  - version: v12.16.2
+  - version:
+      - v13.9.0
+      - v12.16.2
+    pr-url: https://github.com/nodejs/node/pull/31635
     description: Changed "strict mode" to "strict assertion mode" and "legacy
                  mode" to "legacy assertion mode" to avoid confusion with the
                  more usual meaning of "strict mode".
@@ -62,7 +65,7 @@ assert.deepEqual([[[1, 2, 3]], 4, 5], [[[1, 2, '3']], 4, 5]);
 To deactivate the colors, use the `NO_COLOR` or `NODE_DISABLE_COLORS`
 environment variables. This will also deactivate the colors in the REPL. For
 more on color support in terminal environments, read the tty
-[getColorDepth()](tty.html#tty_writestream_getcolordepth_env) documentation.
+[getColorDepth()](tty.md#tty_writestream_getcolordepth_env) documentation.
 
 ## Legacy assertion mode
 
@@ -151,16 +154,16 @@ try {
 
 ## Class: `assert.CallTracker`
 <!-- YAML
-added: v12.19.0
+added: v14.2.0
 -->
 
 > Stability: 1 - Experimental
 
 This feature is currently experimental and behavior might still change.
 
-### `new assert.CallTracker()`
+### `new assert.CallTracker()`
 <!-- YAML
-added: v12.19.0
+added: v14.2.0
 -->
 
 Creates a new [`CallTracker`][] object which can be used to track if functions
@@ -189,7 +192,7 @@ process.on('exit', () => {
 
 ### `tracker.calls([fn][, exact])`
 <!-- YAML
-added: v12.19.0
+added: v14.2.0
 -->
 
 * `fn` {Function} **Default** A no-op function.
@@ -216,11 +219,11 @@ const callsfunc = tracker.calls(func);
 
 ### `tracker.report()`
 <!-- YAML
-added: v12.19.0
+added: v14.2.0
 -->
 
 * Returns: {Array} of objects containing information about the wrapper functions
-returned by [`tracker.calls()`][].
+  returned by [`tracker.calls()`][].
 * Object {Object}
   * `message` {string}
   * `actual` {number} The actual number of times the function was called.
@@ -262,7 +265,7 @@ tracker.report();
 
 ### `tracker.verify()`
 <!-- YAML
-added: v12.19.0
+added: v14.2.0
 -->
 
 Iterates through the list of functions passed to
@@ -301,23 +304,37 @@ An alias of [`assert.ok()`][].
 <!-- YAML
 added: v0.1.21
 changes:
+  - version: v14.18.0
+    pr-url: https://github.com/nodejs/node/pull/38113
+    description: In Legacy assertion mode, changed status from Deprecated to
+                 Legacy.
+  - version: v14.0.0
+    pr-url: https://github.com/nodejs/node/pull/30766
+    description: NaN is now treated as being identical in case both sides are
+                 NaN.
   - version: v12.0.0
     pr-url: https://github.com/nodejs/node/pull/25008
     description: The type tags are now properly compared and there are a couple
                  minor comparison adjustments to make the check less surprising.
   - version: v9.0.0
     pr-url: https://github.com/nodejs/node/pull/15001
-    description: The `Error` names and messages are now properly compared
+    description: The `Error` names and messages are now properly compared.
   - version: v8.0.0
     pr-url: https://github.com/nodejs/node/pull/12142
-    description: The `Set` and `Map` content is also compared
-  - version: v6.4.0, v4.7.1
+    description: The `Set` and `Map` content is also compared.
+  - version:
+    - v6.4.0
+    - v4.7.1
     pr-url: https://github.com/nodejs/node/pull/8002
     description: Typed array slices are handled correctly now.
-  - version: v6.1.0, v4.5.0
+  - version:
+    - v6.1.0
+    - v4.5.0
     pr-url: https://github.com/nodejs/node/pull/6432
     description: Objects with circular references can be used as inputs now.
-  - version: v5.10.1, v4.4.3
+  - version:
+    - v5.10.1
+    - v4.4.3
     pr-url: https://github.com/nodejs/node/pull/5910
     description: Handle non-`Uint8Array` typed arrays correctly.
 -->
@@ -332,7 +349,7 @@ An alias of [`assert.deepStrictEqual()`][].
 
 **Legacy assertion mode**
 
-> Stability: 0 - Deprecated: Use [`assert.deepStrictEqual()`][] instead.
+> Stability: 3 - Legacy: Use [`assert.deepStrictEqual()`][] instead.
 
 Tests for deep equality between the `actual` and `expected` parameters. Consider
 using [`assert.deepStrictEqual()`][] instead. [`assert.deepEqual()`][] can have
@@ -344,7 +361,8 @@ are also recursively evaluated by the following rules.
 ### Comparison details
 
 * Primitive values are compared with the [Abstract Equality Comparison][]
-  ( `==` ).
+  ( `==` ) with the exception of `NaN`. It is treated as being identical in case
+  both sides are `NaN`.
 * [Type tags][Object.prototype.toString()] of objects should be the same.
 * Only [enumerable "own" properties][] are considered.
 * [`Error`][] names and messages are always compared, even if these are not
@@ -426,17 +444,21 @@ changes:
               comparison.
   - version: v8.5.0
     pr-url: https://github.com/nodejs/node/pull/15001
-    description: The `Error` names and messages are now properly compared
+    description: The `Error` names and messages are now properly compared.
   - version: v8.0.0
     pr-url: https://github.com/nodejs/node/pull/12142
-    description: The `Set` and `Map` content is also compared
-  - version: v6.4.0, v4.7.1
+    description: The `Set` and `Map` content is also compared.
+  - version:
+    - v6.4.0
+    - v4.7.1
     pr-url: https://github.com/nodejs/node/pull/8002
     description: Typed array slices are handled correctly now.
   - version: v6.1.0
     pr-url: https://github.com/nodejs/node/pull/6432
     description: Objects with circular references can be used as inputs now.
-  - version: v5.10.1, v4.4.3
+  - version:
+    - v5.10.1
+    - v4.4.3
     pr-url: https://github.com/nodejs/node/pull/5910
     description: Handle non-`Uint8Array` typed arrays correctly.
 -->
@@ -568,7 +590,9 @@ parameter is an instance of an [`Error`][] then it will be thrown instead of the
 
 ## `assert.doesNotMatch(string, regexp[, message])`
 <!-- YAML
-added: v12.16.0
+added:
+  - v13.6.0
+  - v12.16.0
 -->
 
 * `string` {string}
@@ -656,7 +680,9 @@ assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
 <!-- YAML
 added: v0.1.21
 changes:
-  - version: v5.11.0, v4.4.5
+  - version:
+    - v5.11.0
+    - v4.4.5
     pr-url: https://github.com/nodejs/node/pull/2407
     description: The `message` parameter is respected now.
   - version: v4.2.0
@@ -731,6 +757,15 @@ assert.doesNotThrow(
 ## `assert.equal(actual, expected[, message])`
 <!-- YAML
 added: v0.1.21
+changes:
+  - version: v14.18.0
+    pr-url: https://github.com/nodejs/node/pull/38113
+    description: In Legacy assertion mode, changed status from Deprecated to
+                 Legacy.
+  - version: v14.0.0
+    pr-url: https://github.com/nodejs/node/pull/30766
+    description: NaN is now treated as being identical in case both sides are
+                 NaN.
 -->
 
 * `actual` {any}
@@ -743,10 +778,11 @@ An alias of [`assert.strictEqual()`][].
 
 **Legacy assertion mode**
 
-> Stability: 0 - Deprecated: Use [`assert.strictEqual()`][] instead.
+> Stability: 3 - Legacy: Use [`assert.strictEqual()`][] instead.
 
 Tests shallow, coercive equality between the `actual` and `expected` parameters
-using the [Abstract Equality Comparison][] ( `==` ).
+using the [Abstract Equality Comparison][] ( `==` ). `NaN` is special handled
+and treated as being identical in case both sides are `NaN`.
 
 ```js
 const assert = require('assert');
@@ -755,6 +791,8 @@ assert.equal(1, 1);
 // OK, 1 == 1
 assert.equal(1, '1');
 // OK, 1 == '1'
+assert.equal(NaN, NaN);
+// OK
 
 assert.equal(1, 2);
 // AssertionError: 1 == 2
@@ -907,7 +945,9 @@ let err;
 
 ## `assert.match(string, regexp[, message])`
 <!-- YAML
-added: v12.16.0
+added:
+  - v13.6.0
+  - v12.16.0
 -->
 
 * `string` {string}
@@ -945,19 +985,33 @@ instance of an [`Error`][] then it will be thrown instead of the
 <!-- YAML
 added: v0.1.21
 changes:
+  - version: v14.18.0
+    pr-url: https://github.com/nodejs/node/pull/38113
+    description: In Legacy assertion mode, changed status from Deprecated to
+                 Legacy.
+  - version: v14.0.0
+    pr-url: https://github.com/nodejs/node/pull/30766
+    description: NaN is now treated as being identical in case both sides are
+                 NaN.
   - version: v9.0.0
     pr-url: https://github.com/nodejs/node/pull/15001
-    description: The `Error` names and messages are now properly compared
+    description: The `Error` names and messages are now properly compared.
   - version: v8.0.0
     pr-url: https://github.com/nodejs/node/pull/12142
-    description: The `Set` and `Map` content is also compared
-  - version: v6.4.0, v4.7.1
+    description: The `Set` and `Map` content is also compared.
+  - version:
+    - v6.4.0
+    - v4.7.1
     pr-url: https://github.com/nodejs/node/pull/8002
     description: Typed array slices are handled correctly now.
-  - version: v6.1.0, v4.5.0
+  - version:
+    - v6.1.0
+    - v4.5.0
     pr-url: https://github.com/nodejs/node/pull/6432
     description: Objects with circular references can be used as inputs now.
-  - version: v5.10.1, v4.4.3
+  - version:
+    - v5.10.1
+    - v4.4.3
     pr-url: https://github.com/nodejs/node/pull/5910
     description: Handle non-`Uint8Array` typed arrays correctly.
 -->
@@ -972,7 +1026,7 @@ An alias of [`assert.notDeepStrictEqual()`][].
 
 **Legacy assertion mode**
 
-> Stability: 0 - Deprecated: Use [`assert.notDeepStrictEqual()`][] instead.
+> Stability: 3 - Legacy: Use [`assert.notDeepStrictEqual()`][] instead.
 
 Tests for any deep inequality. Opposite of [`assert.deepEqual()`][].
 
@@ -1029,17 +1083,21 @@ changes:
               comparison.
   - version: v9.0.0
     pr-url: https://github.com/nodejs/node/pull/15001
-    description: The `Error` names and messages are now properly compared
+    description: The `Error` names and messages are now properly compared.
   - version: v8.0.0
     pr-url: https://github.com/nodejs/node/pull/12142
-    description: The `Set` and `Map` content is also compared
-  - version: v6.4.0, v4.7.1
+    description: The `Set` and `Map` content is also compared.
+  - version:
+    - v6.4.0
+    - v4.7.1
     pr-url: https://github.com/nodejs/node/pull/8002
     description: Typed array slices are handled correctly now.
   - version: v6.1.0
     pr-url: https://github.com/nodejs/node/pull/6432
     description: Objects with circular references can be used as inputs now.
-  - version: v5.10.1, v4.4.3
+  - version:
+    - v5.10.1
+    - v4.4.3
     pr-url: https://github.com/nodejs/node/pull/5910
     description: Handle non-`Uint8Array` typed arrays correctly.
 -->
@@ -1066,6 +1124,15 @@ instead of the [`AssertionError`][].
 ## `assert.notEqual(actual, expected[, message])`
 <!-- YAML
 added: v0.1.21
+changes:
+  - version: v14.18.0
+    pr-url: https://github.com/nodejs/node/pull/38113
+    description: In Legacy assertion mode, changed status from Deprecated to
+                 Legacy.
+  - version: v14.0.0
+    pr-url: https://github.com/nodejs/node/pull/30766
+    description: NaN is now treated as being identical in case both sides are
+                 NaN.
 -->
 
 * `actual` {any}
@@ -1078,10 +1145,11 @@ An alias of [`assert.notStrictEqual()`][].
 
 **Legacy assertion mode**
 
-> Stability: 0 - Deprecated: Use [`assert.notStrictEqual()`][] instead.
+> Stability: 3 - Legacy: Use [`assert.notStrictEqual()`][] instead.
 
 Tests shallow, coercive inequality with the [Abstract Equality Comparison][]
-( `!=` ).
+(`!=` ). `NaN` is special handled and treated as being identical in case both
+sides are `NaN`.
 
 ```js
 const assert = require('assert');
@@ -1108,7 +1176,7 @@ added: v0.1.21
 changes:
   - version: v10.0.0
     pr-url: https://github.com/nodejs/node/pull/17003
-    description: Used comparison changed from Strict Equality to `Object.is()`
+    description: Used comparison changed from Strict Equality to `Object.is()`.
 -->
 
 * `actual` {any}
@@ -1287,7 +1355,7 @@ added: v0.1.21
 changes:
   - version: v10.0.0
     pr-url: https://github.com/nodejs/node/pull/17003
-    description: Used comparison changed from Strict Equality to `Object.is()`
+    description: Used comparison changed from Strict Equality to `Object.is()`.
 -->
 
 * `actual` {any}
@@ -1527,20 +1595,25 @@ assert.throws(throwingFirst, /Second$/);
 Due to the confusing error-prone notation, avoid a string as the second
 argument.
 
+[Abstract Equality Comparison]: https://tc39.github.io/ecma262/#sec-abstract-equality-comparison
+[Object wrappers]: https://developer.mozilla.org/en-US/docs/Glossary/Primitive#Primitive_wrapper_objects_in_JavaScript
+[Object.prototype.toString()]: https://tc39.github.io/ecma262/#sec-object.prototype.tostring
+[SameValue Comparison]: https://tc39.github.io/ecma262/#sec-samevalue
+[Strict Equality Comparison]: https://tc39.github.io/ecma262/#sec-strict-equality-comparison
 [`AssertionError`]: #assert_class_assert_assertionerror
+[`CallTracker`]: #assert_class_assert_calltracker
 [`Class`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
-[`ERR_INVALID_RETURN_VALUE`]: errors.html#errors_err_invalid_return_value
-[`Error.captureStackTrace`]: errors.html#errors_error_capturestacktrace_targetobject_constructoropt
-[`Error`]: errors.html#errors_class_error
+[`ERR_INVALID_RETURN_VALUE`]: errors.md#errors_err_invalid_return_value
+[`Error.captureStackTrace`]: errors.md#errors_error_capturestacktrace_targetobject_constructoropt
+[`Error`]: errors.md#errors_class_error
 [`Map`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
 [`Object.is()`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
 [`RegExp`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
 [`Set`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
 [`Symbol`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol
-[`TypeError`]: errors.html#errors_class_typeerror
+[`TypeError`]: errors.md#errors_class_typeerror
 [`WeakMap`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap
 [`WeakSet`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet
-[`CallTracker`]: #assert_class_assert_calltracker
 [`assert.deepEqual()`]: #assert_assert_deepequal_actual_expected_message
 [`assert.deepStrictEqual()`]: #assert_assert_deepstrictequal_actual_expected_message
 [`assert.doesNotThrow()`]: #assert_assert_doesnotthrow_fn_error_message
@@ -1552,14 +1625,9 @@ argument.
 [`assert.ok()`]: #assert_assert_ok_value_message
 [`assert.strictEqual()`]: #assert_assert_strictequal_actual_expected_message
 [`assert.throws()`]: #assert_assert_throws_fn_error_message
-[`process.on('exit')`]: process.html#process_event_exit
+[`process.on('exit')`]: process.md#process_event_exit
 [`tracker.calls()`]: #assert_tracker_calls_fn_exact
 [`tracker.verify()`]: #assert_tracker_verify
-[strict assertion mode]: #assert_strict_assertion_mode
-[Abstract Equality Comparison]: https://tc39.github.io/ecma262/#sec-abstract-equality-comparison
-[Object wrappers]: https://developer.mozilla.org/en-US/docs/Glossary/Primitive#Primitive_wrapper_objects_in_JavaScript
-[Object.prototype.toString()]: https://tc39.github.io/ecma262/#sec-object.prototype.tostring
-[SameValue Comparison]: https://tc39.github.io/ecma262/#sec-samevalue
-[Strict Equality Comparison]: https://tc39.github.io/ecma262/#sec-strict-equality-comparison
 [enumerable "own" properties]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Enumerability_and_ownership_of_properties
 [prototype-spec]: https://tc39.github.io/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots
+[strict assertion mode]: #assert_strict_assertion_mode

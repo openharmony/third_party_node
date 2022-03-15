@@ -3,6 +3,7 @@
 
 #if defined(NODE_WANT_INTERNALS) && NODE_WANT_INTERNALS
 
+#include "debug_utils-inl.h"
 #include "env.h"
 #include "v8.h"
 
@@ -31,15 +32,19 @@ void OnFatalError(const char* location, const char* message);
   V(ERR_BUFFER_CONTEXT_NOT_AVAILABLE, Error)                                   \
   V(ERR_BUFFER_OUT_OF_BOUNDS, RangeError)                                      \
   V(ERR_BUFFER_TOO_LARGE, Error)                                               \
+  V(ERR_CLOSED_MESSAGE_PORT, Error)                                            \
   V(ERR_CONSTRUCT_CALL_REQUIRED, TypeError)                                    \
   V(ERR_CONSTRUCT_CALL_INVALID, TypeError)                                     \
   V(ERR_CRYPTO_TIMING_SAFE_EQUAL_LENGTH, RangeError)                           \
   V(ERR_CRYPTO_UNKNOWN_CIPHER, Error)                                          \
   V(ERR_CRYPTO_UNKNOWN_DH_GROUP, Error)                                        \
+  V(ERR_DLOPEN_FAILED, Error)                                                  \
   V(ERR_EXECUTION_ENVIRONMENT_NOT_AVAILABLE, Error)                            \
+  V(ERR_INVALID_ADDRESS, Error)                                                \
   V(ERR_INVALID_ARG_VALUE, TypeError)                                          \
   V(ERR_OSSL_EVP_INVALID_DIGEST, Error)                                        \
   V(ERR_INVALID_ARG_TYPE, TypeError)                                           \
+  V(ERR_INVALID_MODULE, Error)                                                 \
   V(ERR_INVALID_THIS, TypeError)                                               \
   V(ERR_INVALID_TRANSFER_OBJECT, TypeError)                                    \
   V(ERR_MEMORY_ALLOCATION_FAILED, Error)                                       \
@@ -54,32 +59,42 @@ void OnFatalError(const char* location, const char* message);
   V(ERR_SCRIPT_EXECUTION_TIMEOUT, Error)                                       \
   V(ERR_STRING_TOO_LONG, Error)                                                \
   V(ERR_TLS_INVALID_PROTOCOL_METHOD, TypeError)                                \
-  V(ERR_TRANSFERRING_EXTERNALIZED_SHAREDARRAYBUFFER, TypeError)                \
   V(ERR_TLS_PSK_SET_IDENTIY_HINT_FAILED, Error)                                \
   V(ERR_VM_MODULE_CACHED_DATA_REJECTED, Error)                                 \
+  V(ERR_VM_MODULE_LINK_FAILURE, Error)                                         \
   V(ERR_WASI_NOT_STARTED, Error)                                               \
   V(ERR_WORKER_INIT_FAILED, Error)                                             \
   V(ERR_PROTO_ACCESS, Error)
 
-#define V(code, type)                                                         \
-  inline v8::Local<v8::Value> code(v8::Isolate* isolate,                      \
-                                   const char* message)       {               \
-    v8::Local<v8::String> js_code = OneByteString(isolate, #code);            \
-    v8::Local<v8::String> js_msg = OneByteString(isolate, message);           \
-    v8::Local<v8::Object> e =                                                 \
-        v8::Exception::type(js_msg)->ToObject(                                \
-            isolate->GetCurrentContext()).ToLocalChecked();                   \
-    e->Set(isolate->GetCurrentContext(), OneByteString(isolate, "code"),      \
-           js_code).Check();                                                  \
-    return e;                                                                 \
-  }                                                                           \
-  inline void THROW_ ## code(v8::Isolate* isolate, const char* message) {     \
-    isolate->ThrowException(code(isolate, message));                          \
-  }                                                                           \
-  inline void THROW_ ## code(Environment* env, const char* message) {         \
-    THROW_ ## code(env->isolate(), message);                                  \
+#define V(code, type)                                                          \
+  template <typename... Args>                                                  \
+  inline v8::Local<v8::Value> code(                                            \
+      v8::Isolate* isolate, const char* format, Args&&... args) {              \
+    std::string message = SPrintF(format, std::forward<Args>(args)...);        \
+    v8::Local<v8::String> js_code = OneByteString(isolate, #code);             \
+    v8::Local<v8::String> js_msg =                                             \
+        OneByteString(isolate, message.c_str(), message.length());             \
+    v8::Local<v8::Object> e = v8::Exception::type(js_msg)                      \
+                                  ->ToObject(isolate->GetCurrentContext())     \
+                                  .ToLocalChecked();                           \
+    e->Set(isolate->GetCurrentContext(),                                       \
+           OneByteString(isolate, "code"),                                     \
+           js_code)                                                            \
+        .Check();                                                              \
+    return e;                                                                  \
+  }                                                                            \
+  template <typename... Args>                                                  \
+  inline void THROW_##code(                                                    \
+      v8::Isolate* isolate, const char* format, Args&&... args) {              \
+    isolate->ThrowException(                                                   \
+        code(isolate, format, std::forward<Args>(args)...));                   \
+  }                                                                            \
+  template <typename... Args>                                                  \
+  inline void THROW_##code(                                                    \
+      Environment* env, const char* format, Args&&... args) {                  \
+    THROW_##code(env->isolate(), format, std::forward<Args>(args)...);         \
   }
-  ERRORS_WITH_CODE(V)
+ERRORS_WITH_CODE(V)
 #undef V
 
 // Errors with predefined static messages
@@ -87,14 +102,18 @@ void OnFatalError(const char* location, const char* message);
 #define PREDEFINED_ERROR_MESSAGES(V)                                           \
   V(ERR_BUFFER_CONTEXT_NOT_AVAILABLE,                                          \
     "Buffer is not available for the current Context")                         \
+  V(ERR_CLOSED_MESSAGE_PORT, "Cannot send data on closed MessagePort")         \
   V(ERR_CONSTRUCT_CALL_INVALID, "Constructor cannot be called")                \
   V(ERR_CONSTRUCT_CALL_REQUIRED, "Cannot call constructor without `new`")      \
   V(ERR_CRYPTO_TIMING_SAFE_EQUAL_LENGTH,                                       \
     "Input buffers must have the same byte length")                            \
   V(ERR_CRYPTO_UNKNOWN_CIPHER, "Unknown cipher")                               \
   V(ERR_CRYPTO_UNKNOWN_DH_GROUP, "Unknown DH group")                           \
+  V(ERR_DLOPEN_FAILED, "DLOpen failed")                                        \
   V(ERR_EXECUTION_ENVIRONMENT_NOT_AVAILABLE,                                   \
     "Context not associated with Node.js environment")                         \
+  V(ERR_INVALID_ADDRESS, "Invalid socket address")                             \
+  V(ERR_INVALID_MODULE, "No such module")                                      \
   V(ERR_INVALID_THIS, "Value of \"this\" is the wrong type")                   \
   V(ERR_INVALID_TRANSFER_OBJECT, "Found invalid object in transferList")       \
   V(ERR_MEMORY_ALLOCATION_FAILED, "Failed to allocate memory")                 \
@@ -112,8 +131,6 @@ void OnFatalError(const char* location, const char* message);
     "Loading non context-aware native modules has been disabled")              \
   V(ERR_SCRIPT_EXECUTION_INTERRUPTED,                                          \
     "Script execution was interrupted by `SIGINT`")                            \
-  V(ERR_TRANSFERRING_EXTERNALIZED_SHAREDARRAYBUFFER,                           \
-    "Cannot serialize externalized SharedArrayBuffer")                         \
   V(ERR_TLS_PSK_SET_IDENTIY_HINT_FAILED, "Failed to set PSK identity hint")    \
   V(ERR_WASI_NOT_STARTED, "wasi.start() has not been called")                  \
   V(ERR_WORKER_INIT_FAILED, "Worker initialization failure")                   \

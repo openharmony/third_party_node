@@ -1,5 +1,6 @@
 #include "node_worker.h"
 #include "debug_utils-inl.h"
+#include "histogram-inl.h"
 #include "memory_tracker-inl.h"
 #include "node_errors.h"
 #include "node_buffer.h"
@@ -51,7 +52,6 @@ Worker::Worker(Environment* env,
       per_isolate_opts_(per_isolate_opts),
       exec_argv_(exec_argv),
       platform_(env->isolate_data()->platform()),
-      array_buffer_allocator_(ArrayBufferAllocator::Create()),
       thread_id_(AllocateEnvironmentThreadId()),
       env_vars_(env_vars) {
   Debug(this, "Creating new worker instance with thread id %llu",
@@ -91,10 +91,6 @@ bool Worker::is_stopped() const {
   if (env_ != nullptr)
     return env_->is_stopping();
   return stopped_;
-}
-
-std::shared_ptr<ArrayBufferAllocator> Worker::array_buffer_allocator() {
-  return array_buffer_allocator_;
 }
 
 void Worker::UpdateResourceConstraints(ResourceConstraints* constraints) {
@@ -142,9 +138,11 @@ class WorkerThreadData {
     loop_init_failed_ = false;
     uv_loop_configure(&loop_, UV_METRICS_IDLE_TIME);
 
+    std::shared_ptr<ArrayBufferAllocator> allocator =
+        ArrayBufferAllocator::Create();
     Isolate::CreateParams params;
     SetIsolateCreateParamsForNode(&params);
-    params.array_buffer_allocator = w->array_buffer_allocator_.get();
+    params.array_buffer_allocator_shared = allocator;
 
     w->UpdateResourceConstraints(&params.constraints);
 
@@ -160,6 +158,9 @@ class WorkerThreadData {
     Isolate::Initialize(isolate, params);
     SetIsolateUpForNode(isolate);
 
+    // Be sure it's called before Environment::InitializeDiagnostics()
+    // so that this callback stays when the callback of
+    // --heapsnapshot-near-heap-limit gets is popped.
     isolate->AddNearHeapLimitCallback(Worker::NearHeapLimit, w);
 
     {
@@ -173,11 +174,13 @@ class WorkerThreadData {
       isolate_data_.reset(CreateIsolateData(isolate,
                                             &loop_,
                                             w_->platform_,
-                                            w->array_buffer_allocator_.get()));
+                                            allocator.get()));
       CHECK(isolate_data_);
       if (w_->per_isolate_opts_)
         isolate_data_->set_options(std::move(w_->per_isolate_opts_));
       isolate_data_->set_worker_context(w_);
+      isolate_data_->max_young_gen_size =
+          params.constraints.max_young_generation_size_in_bytes();
     }
 
     Mutex::ScopedLock lock(w_->mutex_);
@@ -331,7 +334,10 @@ void Worker::Run() {
       Debug(this, "Created Environment for worker with id %llu", thread_id_.id);
       if (is_stopped()) return;
       {
-        CreateEnvMessagePort(env_.get());
+        if (!CreateEnvMessagePort(env_.get())) {
+          return;
+        }
+
         Debug(this, "Created message port for worker %llu", thread_id_.id);
         if (LoadEnvironment(env_.get(), StartExecutionCallback{}).IsEmpty())
           return;
@@ -355,7 +361,8 @@ void Worker::Run() {
           more = uv_loop_alive(&data.loop_);
           if (more && !is_stopped()) continue;
 
-          EmitBeforeExit(env_.get());
+          if (EmitProcessBeforeExit(env_.get()).IsNothing())
+            break;
 
           // Emit `beforeExit` if the loop became alive either after emitting
           // event, or after running some callbacks.
@@ -369,8 +376,10 @@ void Worker::Run() {
     {
       int exit_code;
       bool stopped = is_stopped();
-      if (!stopped)
-        exit_code = EmitExit(env_.get());
+      if (!stopped) {
+        env_->VerifyNoStrongBaseObjects();
+        exit_code = EmitProcessExit(env_.get()).FromMaybe(1);
+      }
       Mutex::ScopedLock lock(mutex_);
       if (exit_code_ == 0 && !stopped)
         exit_code_ = exit_code;
@@ -383,17 +392,24 @@ void Worker::Run() {
   Debug(this, "Worker %llu thread stops", thread_id_.id);
 }
 
-void Worker::CreateEnvMessagePort(Environment* env) {
+bool Worker::CreateEnvMessagePort(Environment* env) {
   HandleScope handle_scope(isolate_);
-  Mutex::ScopedLock lock(mutex_);
+  std::unique_ptr<MessagePortData> data;
+  {
+    Mutex::ScopedLock lock(mutex_);
+    data = std::move(child_port_data_);
+  }
+
   // Set up the message channel for receiving messages in the child.
   MessagePort* child_port = MessagePort::New(env,
                                              env->context(),
-                                             std::move(child_port_data_));
+                                             std::move(data));
   // MessagePort::New() may return nullptr if execution is terminated
   // within it.
   if (child_port != nullptr)
     env->set_message_port(child_port->object(isolate_));
+
+  return child_port;
 }
 
 void Worker::JoinThread() {
@@ -589,6 +605,8 @@ void Worker::New(const FunctionCallbackInfo<Value>& args) {
   CHECK(args[4]->IsBoolean());
   if (args[4]->IsTrue() || env->tracks_unmanaged_fds())
     worker->environment_flags_ |= EnvironmentFlags::kTrackUnmanagedFds;
+  if (env->hide_console_windows())
+    worker->environment_flags_ |= EnvironmentFlags::kHideConsoleWindows;
 }
 
 void Worker::StartThread(const FunctionCallbackInfo<Value>& args) {
@@ -692,7 +710,10 @@ void Worker::GetResourceLimits(const FunctionCallbackInfo<Value>& args) {
 
 Local<Float64Array> Worker::GetResourceLimits(Isolate* isolate) const {
   Local<ArrayBuffer> ab = ArrayBuffer::New(isolate, sizeof(resource_limits_));
-  memcpy(ab->GetContents().Data(), resource_limits_, sizeof(resource_limits_));
+
+  memcpy(ab->GetBackingStore()->Data(),
+         resource_limits_,
+         sizeof(resource_limits_));
   return Float64Array::New(ab, 0, kTotalResourceLimitCount);
 }
 
@@ -716,6 +737,12 @@ void Worker::Exit(int code, const char* error_code, const char* error_message) {
 
 void Worker::MemoryInfo(MemoryTracker* tracker) const {
   tracker->TrackField("parent_port", parent_port_);
+}
+
+bool Worker::IsNotIndicativeOfMemoryLeakAtExit() const {
+  // Worker objects always stay alive as long as the child thread, regardless
+  // of whether they are being referenced in the parent thread.
+  return true;
 }
 
 class WorkerHeapSnapshotTaker : public AsyncWrap {
@@ -834,12 +861,7 @@ void InitWorker(Local<Object> target,
     env->SetProtoMethod(w, "loopIdleTime", Worker::LoopIdleTime);
     env->SetProtoMethod(w, "loopStartTime", Worker::LoopStartTime);
 
-    Local<String> workerString =
-        FIXED_ONE_BYTE_STRING(env->isolate(), "Worker");
-    w->SetClassName(workerString);
-    target->Set(env->context(),
-                workerString,
-                w->GetFunction(env->context()).ToLocalChecked()).Check();
+    env->SetConstructorFunction(target, "Worker", w);
   }
 
   {

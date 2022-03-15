@@ -75,6 +75,12 @@
 #include <memory>
 #include <functional>
 
+// We cannot use __POSIX__ in this header because that's only defined when
+// building Node.js.
+#ifndef _WIN32
+#include <signal.h>
+#endif  // _WIN32
+
 #define NODE_MAKE_VERSION(major, minor, patch)                                \
   ((major) * 0x1000 + (minor) * 0x100 + (patch))
 
@@ -110,6 +116,8 @@
 
 // Forward-declare libuv loop
 struct uv_loop_s;
+
+struct napi_module;
 
 // Forward-declare these functions now to stop MSVS from becoming
 // terminally confused when it's done in node_internals.h
@@ -221,15 +229,14 @@ NODE_EXTERN int Start(int argc, char* argv[]);
 // in the loop and / or actively executing JavaScript code).
 NODE_EXTERN int Stop(Environment* env);
 
-// TODO(addaleax): Officially deprecate this and replace it with something
-// better suited for a public embedder API.
 // It is recommended to use InitializeNodeWithArgs() instead as an embedder.
 // Init() calls InitializeNodeWithArgs() and exits the process with the exit
 // code returned from it.
-NODE_EXTERN void Init(int* argc,
-                      const char** argv,
-                      int* exec_argc,
-                      const char*** exec_argv);
+NODE_DEPRECATED("Use InitializeNodeWithArgs() instead",
+    NODE_EXTERN void Init(int* argc,
+                          const char** argv,
+                          int* exec_argc,
+                          const char*** exec_argv));
 // Set up per-process state needed to run Node.js. This will consume arguments
 // from argv, fill exec_argv, and possibly add errors resulting from parsing
 // the arguments to `errors`. The return value is a suggested exit code for the
@@ -275,6 +282,12 @@ class NODE_EXTERN ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
 NODE_EXTERN ArrayBufferAllocator* CreateArrayBufferAllocator();
 NODE_EXTERN void FreeArrayBufferAllocator(ArrayBufferAllocator* allocator);
 
+class NODE_EXTERN IsolatePlatformDelegate {
+ public:
+  virtual std::shared_ptr<v8::TaskRunner> GetForegroundTaskRunner() = 0;
+  virtual bool IdleTasksEnabled() = 0;
+};
+
 class NODE_EXTERN MultiIsolatePlatform : public v8::Platform {
  public:
   ~MultiIsolatePlatform() override = default;
@@ -296,6 +309,12 @@ class NODE_EXTERN MultiIsolatePlatform : public v8::Platform {
   // This function may only be called once per `Isolate`.
   virtual void RegisterIsolate(v8::Isolate* isolate,
                                struct uv_loop_s* loop) = 0;
+  // This method can be used when an application handles task scheduling on its
+  // own through `IsolatePlatformDelegate`. Upon registering an isolate with
+  // this overload any other method in this class with the exception of
+  // `UnregisterIsolate` *must not* be used on that isolate.
+  virtual void RegisterIsolate(v8::Isolate* isolate,
+                               IsolatePlatformDelegate* delegate) = 0;
 
   // This function may only be called once per `Isolate`, and discard any
   // pending delayed tasks scheduled for that isolate.
@@ -317,7 +336,8 @@ class NODE_EXTERN MultiIsolatePlatform : public v8::Platform {
 enum IsolateSettingsFlags {
   MESSAGE_LISTENER_WITH_ERROR_LEVEL = 1 << 0,
   DETAILED_SOURCE_POSITIONS_FOR_PROFILING = 1 << 1,
-  SHOULD_NOT_SET_PROMISE_REJECTION_CALLBACK = 1 << 2
+  SHOULD_NOT_SET_PROMISE_REJECTION_CALLBACK = 1 << 2,
+  SHOULD_NOT_SET_PREPARE_STACK_TRACE_CALLBACK = 1 << 3
 };
 
 struct IsolateSettings {
@@ -335,8 +355,6 @@ struct IsolateSettings {
   v8::PromiseRejectCallback promise_reject_callback = nullptr;
   v8::AllowWasmCodeGenerationCallback
       allow_wasm_code_generation_callback = nullptr;
-  v8::HostCleanupFinalizationGroupCallback
-      host_cleanup_finalization_group_callback = nullptr;
 };
 
 // Overriding IsolateSettings may produce unexpected behavior
@@ -357,6 +375,10 @@ NODE_EXTERN v8::Isolate* NewIsolate(ArrayBufferAllocator* allocator,
 NODE_EXTERN v8::Isolate* NewIsolate(ArrayBufferAllocator* allocator,
                                     struct uv_loop_s* event_loop,
                                     MultiIsolatePlatform* platform);
+NODE_EXTERN v8::Isolate* NewIsolate(
+    std::shared_ptr<ArrayBufferAllocator> allocator,
+    struct uv_loop_s* event_loop,
+    MultiIsolatePlatform* platform);
 
 // Creates a new context with Node.js-specific tweaks.
 NODE_EXTERN v8::Local<v8::Context> NewContext(
@@ -402,7 +424,11 @@ enum Flags : uint64_t {
   kNoRegisterESMLoader = 1 << 3,
   // Set this flag to make Node.js track "raw" file descriptors, i.e. managed
   // by fs.open() and fs.close(), and close them during FreeEnvironment().
-  kTrackUnmanagedFds = 1 << 4
+  kTrackUnmanagedFds = 1 << 4,
+  // Set this flag to force hiding console windows when spawning child
+  // processes. This is usually used when embedding Node.js in GUI programs on
+  // Windows.
+  kHideConsoleWindows = 1 << 5
 };
 }  // namespace EnvironmentFlags
 
@@ -414,12 +440,13 @@ struct InspectorParentHandle {
 // Returns nullptr when the Environment cannot be created e.g. there are
 // pending JavaScript exceptions.
 // It is recommended to use the second variant taking a flags argument.
-NODE_EXTERN Environment* CreateEnvironment(IsolateData* isolate_data,
-                                           v8::Local<v8::Context> context,
-                                           int argc,
-                                           const char* const* argv,
-                                           int exec_argc,
-                                           const char* const* exec_argv);
+NODE_DEPRECATED("Use overload taking a flags argument",
+    NODE_EXTERN Environment* CreateEnvironment(IsolateData* isolate_data,
+                                               v8::Local<v8::Context> context,
+                                               int argc,
+                                               const char* const* argv,
+                                               int exec_argc,
+                                               const char* const* exec_argv));
 NODE_EXTERN Environment* CreateEnvironment(
     IsolateData* isolate_data,
     v8::Local<v8::Context> context,
@@ -449,8 +476,8 @@ struct StartExecutionCallbackInfo {
 using StartExecutionCallback =
     std::function<v8::MaybeLocal<v8::Value>(const StartExecutionCallbackInfo&)>;
 
-// TODO(addaleax): Deprecate this in favour of the MaybeLocal<> overload.
-NODE_EXTERN void LoadEnvironment(Environment* env);
+NODE_DEPRECATED("Use variants returning MaybeLocal<> instead",
+    NODE_EXTERN void LoadEnvironment(Environment* env));
 // The `InspectorParentHandle` arguments here are ignored and not used.
 // For passing `InspectorParentHandle`, use `CreateEnvironment()`.
 NODE_EXTERN v8::MaybeLocal<v8::Value> LoadEnvironment(
@@ -477,6 +504,8 @@ NODE_EXTERN void DefaultProcessExitHandler(Environment* env, int exit_code);
 
 // This may return nullptr if context is not associated with a Node instance.
 NODE_EXTERN Environment* GetCurrentEnvironment(v8::Local<v8::Context> context);
+NODE_EXTERN IsolateData* GetEnvironmentIsolateData(Environment* env);
+NODE_EXTERN ArrayBufferAllocator* GetArrayBufferAllocator(IsolateData* data);
 
 NODE_EXTERN void OnFatalError(const char* location, const char* message);
 NODE_EXTERN void PromiseRejectCallback(v8::PromiseRejectMessage message);
@@ -491,18 +520,18 @@ NODE_EXTERN v8::MaybeLocal<v8::Value> PrepareStackTraceCallback(
 // This returns the MultiIsolatePlatform used in the main thread of Node.js.
 // If NODE_USE_V8_PLATFORM has not been defined when Node.js was built,
 // it returns nullptr.
-// TODO(addaleax): Deprecate in favour of GetMultiIsolatePlatform().
-NODE_EXTERN MultiIsolatePlatform* GetMainThreadMultiIsolatePlatform();
+NODE_DEPRECATED("Use GetMultiIsolatePlatform(env) instead",
+    NODE_EXTERN MultiIsolatePlatform* GetMainThreadMultiIsolatePlatform());
 // This returns the MultiIsolatePlatform used for an Environment or IsolateData
 // instance, if one exists.
 NODE_EXTERN MultiIsolatePlatform* GetMultiIsolatePlatform(Environment* env);
 NODE_EXTERN MultiIsolatePlatform* GetMultiIsolatePlatform(IsolateData* env);
 
 // Legacy variants of MultiIsolatePlatform::Create().
-// TODO(addaleax): Deprecate in favour of the v8::TracingController variant.
-NODE_EXTERN MultiIsolatePlatform* CreatePlatform(
-    int thread_pool_size,
-    node::tracing::TracingController* tracing_controller);
+NODE_DEPRECATED("Use variant taking a v8::TracingController* pointer instead",
+    NODE_EXTERN MultiIsolatePlatform* CreatePlatform(
+        int thread_pool_size,
+        node::tracing::TracingController* tracing_controller));
 NODE_EXTERN MultiIsolatePlatform* CreatePlatform(
     int thread_pool_size,
     v8::TracingController* tracing_controller);
@@ -517,8 +546,19 @@ NODE_EXTERN void FreePlatform(MultiIsolatePlatform* platform);
 NODE_EXTERN v8::TracingController* GetTracingController();
 NODE_EXTERN void SetTracingController(v8::TracingController* controller);
 
-NODE_EXTERN void EmitBeforeExit(Environment* env);
-NODE_EXTERN int EmitExit(Environment* env);
+// Run `process.emit('beforeExit')` as it would usually happen when Node.js is
+// run in standalone mode.
+NODE_EXTERN v8::Maybe<bool> EmitProcessBeforeExit(Environment* env);
+NODE_DEPRECATED("Use Maybe version (EmitProcessBeforeExit) instead",
+    NODE_EXTERN void EmitBeforeExit(Environment* env));
+// Run `process.emit('exit')` as it would usually happen when Node.js is run
+// in standalone mode. The return value corresponds to the exit code.
+NODE_EXTERN v8::Maybe<int> EmitProcessExit(Environment* env);
+NODE_DEPRECATED("Use Maybe version (EmitProcessExit) instead",
+    NODE_EXTERN int EmitExit(Environment* env));
+
+// Runs hooks added through `AtExit()`. This is part of `FreeEnvironment()`,
+// so calling it manually is typically not necessary.
 NODE_EXTERN void RunAtExit(Environment* env);
 
 // This may return nullptr if the current v8::Context is not associated
@@ -628,7 +668,18 @@ inline void NODE_SET_PROTOTYPE_METHOD(v8::Local<v8::FunctionTemplate> recv,
 #define NODE_SET_PROTOTYPE_METHOD node::NODE_SET_PROTOTYPE_METHOD
 
 // BINARY is a deprecated alias of LATIN1.
-enum encoding {ASCII, UTF8, BASE64, UCS2, BINARY, HEX, BUFFER, LATIN1 = BINARY};
+// BASE64URL is not currently exposed to the JavaScript side.
+enum encoding {
+  ASCII,
+  UTF8,
+  BASE64,
+  UCS2,
+  BINARY,
+  HEX,
+  BUFFER,
+  BASE64URL,
+  LATIN1 = BINARY
+};
 
 NODE_EXTERN enum encoding ParseEncoding(
     v8::Isolate* isolate,
@@ -815,6 +866,8 @@ extern "C" NODE_EXTERN void node_module_register(void* mod);
 // the time during which the Environment exists.
 NODE_EXTERN void AddLinkedBinding(Environment* env, const node_module& mod);
 NODE_EXTERN void AddLinkedBinding(Environment* env,
+                                  const struct napi_module& mod);
+NODE_EXTERN void AddLinkedBinding(Environment* env,
                                   const char* name,
                                   addon_context_register_func fn,
                                   void* priv);
@@ -934,6 +987,9 @@ class NODE_EXTERN CallbackScope {
   CallbackScope(v8::Isolate* isolate,
                 v8::Local<v8::Object> resource,
                 async_context asyncContext);
+  CallbackScope(Environment* env,
+                v8::Local<v8::Object> resource,
+                async_context asyncContext);
   ~CallbackScope();
 
   void operator=(const CallbackScope&) = delete;
@@ -1023,6 +1079,21 @@ class NODE_EXTERN AsyncResource {
   v8::Global<v8::Object> resource_;
   async_context async_context_;
 };
+
+#ifndef _WIN32
+// Register a signal handler without interrupting any handlers that node
+// itself needs. This does override handlers registered through
+// process.on('SIG...', function() { ... }). The `reset_handler` flag indicates
+// whether the signal handler for the given signal should be reset to its
+// default value before executing the handler (i.e. it works like SA_RESETHAND).
+// The `reset_handler` flag is invalid when `signal` is SIGSEGV.
+NODE_EXTERN
+void RegisterSignalHandler(int signal,
+                           void (*handler)(int signal,
+                                           siginfo_t* info,
+                                           void* ucontext),
+                           bool reset_handler = false);
+#endif  // _WIN32
 
 }  // namespace node
 

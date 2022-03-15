@@ -5,7 +5,7 @@
 #include "node_contextify.h"
 #include "node_errors.h"
 #include "node_internals.h"
-#include "node_process.h"
+#include "node_process-inl.h"
 #include "node_url.h"
 #include "node_watchdog.h"
 #include "util-inl.h"
@@ -23,7 +23,6 @@ using node::contextify::ContextifyContext;
 using node::url::URL;
 using node::url::URL_FLAGS_FAILED;
 using v8::Array;
-using v8::ArrayBuffer;
 using v8::ArrayBufferView;
 using v8::Context;
 using v8::EscapableHandleScope;
@@ -36,6 +35,7 @@ using v8::IntegrityLevel;
 using v8::Isolate;
 using v8::Local;
 using v8::MaybeLocal;
+using v8::MicrotaskQueue;
 using v8::Module;
 using v8::Number;
 using v8::Object;
@@ -55,9 +55,13 @@ ModuleWrap::ModuleWrap(Environment* env,
                        Local<String> url)
   : BaseObject(env, object),
     module_(env->isolate(), module),
-    url_(env->isolate(), url),
     id_(env->get_next_module_id()) {
   env->id_to_module_map.emplace(id_, this);
+
+  Local<Value> undefined = Undefined(env->isolate());
+  object->SetInternalField(kURLSlot, url);
+  object->SetInternalField(kSyntheticEvaluationStepsSlot, undefined);
+  object->SetInternalField(kContextObjectSlot, undefined);
 }
 
 ModuleWrap::~ModuleWrap() {
@@ -71,6 +75,12 @@ ModuleWrap::~ModuleWrap() {
       break;
     }
   }
+}
+
+Local<Context> ModuleWrap::context() const {
+  Local<Value> obj = object()->GetInternalField(kContextObjectSlot);
+  if (obj.IsEmpty()) return {};
+  return obj.As<Object>()->CreationContext();
 }
 
 ModuleWrap* ModuleWrap::GetFromModule(Environment* env,
@@ -107,15 +117,15 @@ void ModuleWrap::New(const FunctionCallbackInfo<Value>& args) {
   Local<String> url = args[0].As<String>();
 
   Local<Context> context;
+  ContextifyContext* contextify_context = nullptr;
   if (args[1]->IsUndefined()) {
     context = that->CreationContext();
   } else {
     CHECK(args[1]->IsObject());
-    ContextifyContext* sandbox =
-        ContextifyContext::ContextFromContextifiedSandbox(
-            env, args[1].As<Object>());
-    CHECK_NOT_NULL(sandbox);
-    context = sandbox->context();
+    contextify_context = ContextifyContext::ContextFromContextifiedSandbox(
+        env, args[1].As<Object>());
+    CHECK_NOT_NULL(contextify_context);
+    context = contextify_context->context();
   }
 
   Local<Integer> line_offset;
@@ -166,9 +176,8 @@ void ModuleWrap::New(const FunctionCallbackInfo<Value>& args) {
       if (!args[5]->IsUndefined()) {
         CHECK(args[5]->IsArrayBufferView());
         Local<ArrayBufferView> cached_data_buf = args[5].As<ArrayBufferView>();
-        ArrayBuffer::Contents contents =
-            cached_data_buf->Buffer()->GetContents();
-        uint8_t* data = static_cast<uint8_t*>(contents.Data());
+        uint8_t* data = static_cast<uint8_t*>(
+            cached_data_buf->Buffer()->GetBackingStore()->Data());
         cached_data =
             new ScriptCompiler::CachedData(data + cached_data_buf->ByteOffset(),
                                            cached_data_buf->ByteLength());
@@ -221,11 +230,15 @@ void ModuleWrap::New(const FunctionCallbackInfo<Value>& args) {
 
   if (synthetic) {
     obj->synthetic_ = true;
-    obj->synthetic_evaluation_steps_.Reset(
-        env->isolate(), args[3].As<Function>());
+    obj->object()->SetInternalField(kSyntheticEvaluationStepsSlot, args[3]);
   }
 
-  obj->context_.Reset(isolate, context);
+  // Use the extras object as an object whose CreationContext() will be the
+  // original `context`, since the `Context` itself strictly speaking cannot
+  // be stored in an internal field.
+  obj->object()->SetInternalField(kContextObjectSlot,
+      context->GetExtrasBindingObject());
+  obj->contextify_context_ = contextify_context;
 
   env->hash_to_module_map.emplace(module->GetIdentityHash(), obj);
 
@@ -254,7 +267,7 @@ void ModuleWrap::Link(const FunctionCallbackInfo<Value>& args) {
 
   Local<Function> resolver_arg = args[0].As<Function>();
 
-  Local<Context> mod_context = obj->context_.Get(isolate);
+  Local<Context> mod_context = obj->context();
   Local<Module> module = obj->module_.Get(isolate);
 
   const int module_requests_length = module->GetModuleRequestsLength();
@@ -278,7 +291,9 @@ void ModuleWrap::Link(const FunctionCallbackInfo<Value>& args) {
     Local<Value> resolve_return_value =
         maybe_resolve_return_value.ToLocalChecked();
     if (!resolve_return_value->IsPromise()) {
-      env->ThrowError("linking error, expected resolver to return a promise");
+      THROW_ERR_VM_MODULE_LINK_FAILURE(
+          env, "request for '%s' did not return promise", specifier_std);
+      return;
     }
     Local<Promise> resolve_promise = resolve_return_value.As<Promise>();
     obj->resolve_cache_[specifier_std].Reset(env->isolate(), resolve_promise);
@@ -295,7 +310,7 @@ void ModuleWrap::Instantiate(const FunctionCallbackInfo<Value>& args) {
   Isolate* isolate = args.GetIsolate();
   ModuleWrap* obj;
   ASSIGN_OR_RETURN_UNWRAP(&obj, args.This());
-  Local<Context> context = obj->context_.Get(isolate);
+  Local<Context> context = obj->context();
   Local<Module> module = obj->module_.Get(isolate);
   TryCatchScope try_catch(env);
   USE(module->InstantiateModule(context, ResolveCallback));
@@ -318,8 +333,13 @@ void ModuleWrap::Evaluate(const FunctionCallbackInfo<Value>& args) {
   Isolate* isolate = env->isolate();
   ModuleWrap* obj;
   ASSIGN_OR_RETURN_UNWRAP(&obj, args.This());
-  Local<Context> context = obj->context_.Get(isolate);
+  Local<Context> context = obj->context();
   Local<Module> module = obj->module_.Get(isolate);
+
+  ContextifyContext* contextify_context = obj->contextify_context_;
+  std::shared_ptr<MicrotaskQueue> microtask_queue;
+  if (contextify_context != nullptr)
+      microtask_queue = contextify_context->microtask_queue();
 
   // module.evaluate(timeout, breakOnSigint)
   CHECK_EQ(args.Length(), 2);
@@ -332,22 +352,29 @@ void ModuleWrap::Evaluate(const FunctionCallbackInfo<Value>& args) {
 
   ShouldNotAbortOnUncaughtScope no_abort_scope(env);
   TryCatchScope try_catch(env);
+  Isolate::SafeForTerminationScope safe_for_termination(env->isolate());
 
   bool timed_out = false;
   bool received_signal = false;
   MaybeLocal<Value> result;
+  auto run = [&]() {
+    MaybeLocal<Value> result = module->Evaluate(context);
+    if (!result.IsEmpty() && microtask_queue)
+      microtask_queue->PerformCheckpoint(isolate);
+    return result;
+  };
   if (break_on_sigint && timeout != -1) {
     Watchdog wd(isolate, timeout, &timed_out);
     SigintWatchdog swd(isolate, &received_signal);
-    result = module->Evaluate(context);
+    result = run();
   } else if (break_on_sigint) {
     SigintWatchdog swd(isolate, &received_signal);
-    result = module->Evaluate(context);
+    result = run();
   } else if (timeout != -1) {
     Watchdog wd(isolate, timeout, &timed_out);
-    result = module->Evaluate(context);
+    result = run();
   } else {
-    result = module->Evaluate(context);
+    result = run();
   }
 
   if (result.IsEmpty()) {
@@ -375,7 +402,13 @@ void ModuleWrap::Evaluate(const FunctionCallbackInfo<Value>& args) {
     return;
   }
 
-  args.GetReturnValue().Set(result.ToLocalChecked());
+  // If TLA is enabled, `result` is the evaluation's promise.
+  // Otherwise, `result` is the last evaluated value of the module,
+  // which could be a promise, which would result in it being incorrectly
+  // unwrapped when the higher level code awaits the evaluation.
+  if (env->isolate_data()->options()->experimental_top_level_await) {
+    args.GetReturnValue().Set(result.ToLocalChecked());
+  }
 }
 
 void ModuleWrap::GetNamespace(const FunctionCallbackInfo<Value>& args) {
@@ -387,13 +420,17 @@ void ModuleWrap::GetNamespace(const FunctionCallbackInfo<Value>& args) {
   Local<Module> module = obj->module_.Get(isolate);
 
   switch (module->GetStatus()) {
-    default:
+    case v8::Module::Status::kUninstantiated:
+    case v8::Module::Status::kInstantiating:
       return env->ThrowError(
-          "cannot get namespace, Module has not been instantiated");
+          "cannot get namespace, module has not been instantiated");
     case v8::Module::Status::kInstantiated:
     case v8::Module::Status::kEvaluating:
     case v8::Module::Status::kEvaluated:
+    case v8::Module::Status::kErrored:
       break;
+    default:
+      UNREACHABLE();
   }
 
   Local<Value> result = module->GetModuleNamespace();
@@ -450,17 +487,19 @@ MaybeLocal<Module> ModuleWrap::ResolveCallback(Local<Context> context,
 
   Isolate* isolate = env->isolate();
 
-  ModuleWrap* dependent = GetFromModule(env, referrer);
-  if (dependent == nullptr) {
-    env->ThrowError("linking error, null dep");
-    return MaybeLocal<Module>();
-  }
-
   Utf8Value specifier_utf8(isolate, specifier);
   std::string specifier_std(*specifier_utf8, specifier_utf8.length());
 
+  ModuleWrap* dependent = GetFromModule(env, referrer);
+  if (dependent == nullptr) {
+    THROW_ERR_VM_MODULE_LINK_FAILURE(
+        env, "request for '%s' is from invalid module", specifier_std);
+    return MaybeLocal<Module>();
+  }
+
   if (dependent->resolve_cache_.count(specifier_std) != 1) {
-    env->ThrowError("linking error, not in local cache");
+    THROW_ERR_VM_MODULE_LINK_FAILURE(
+        env, "request for '%s' is not in cache", specifier_std);
     return MaybeLocal<Module>();
   }
 
@@ -468,15 +507,15 @@ MaybeLocal<Module> ModuleWrap::ResolveCallback(Local<Context> context,
       dependent->resolve_cache_[specifier_std].Get(isolate);
 
   if (resolve_promise->State() != Promise::kFulfilled) {
-    env->ThrowError("linking error, dependency promises must be resolved on "
-                    "instantiate");
+    THROW_ERR_VM_MODULE_LINK_FAILURE(
+        env, "request for '%s' is not yet fulfilled", specifier_std);
     return MaybeLocal<Module>();
   }
 
   Local<Object> module_object = resolve_promise->Result().As<Object>();
   if (module_object.IsEmpty() || !module_object->IsObject()) {
-    env->ThrowError("linking error, expected a valid module object from "
-                    "resolver");
+    THROW_ERR_VM_MODULE_LINK_FAILURE(
+        env, "request for '%s' did not return an object", specifier_std);
     return MaybeLocal<Module>();
   }
 
@@ -615,20 +654,29 @@ MaybeLocal<Value> ModuleWrap::SyntheticModuleEvaluationStepsCallback(
 
   TryCatchScope try_catch(env);
   Local<Function> synthetic_evaluation_steps =
-      obj->synthetic_evaluation_steps_.Get(isolate);
+      obj->object()->GetInternalField(kSyntheticEvaluationStepsSlot)
+          .As<Function>();
+  obj->object()->SetInternalField(
+      kSyntheticEvaluationStepsSlot, Undefined(isolate));
   MaybeLocal<Value> ret = synthetic_evaluation_steps->Call(context,
       obj->object(), 0, nullptr);
   if (ret.IsEmpty()) {
     CHECK(try_catch.HasCaught());
   }
-  obj->synthetic_evaluation_steps_.Reset();
   if (try_catch.HasCaught() && !try_catch.HasTerminated()) {
     CHECK(!try_catch.Message().IsEmpty());
     CHECK(!try_catch.Exception().IsEmpty());
     try_catch.ReThrow();
     return MaybeLocal<Value>();
   }
-  return ret;
+
+  Local<Promise::Resolver> resolver;
+  if (!Promise::Resolver::New(context).ToLocal(&resolver)) {
+    return MaybeLocal<Value>();
+  }
+
+  resolver->Resolve(context, Undefined(isolate)).ToChecked();
+  return resolver->GetPromise();
 }
 
 void ModuleWrap::SetSyntheticExport(const FunctionCallbackInfo<Value>& args) {
@@ -685,10 +733,8 @@ void ModuleWrap::Initialize(Local<Object> target,
                             Local<Context> context,
                             void* priv) {
   Environment* env = Environment::GetCurrent(context);
-  Isolate* isolate = env->isolate();
 
   Local<FunctionTemplate> tpl = env->NewFunctionTemplate(New);
-  tpl->SetClassName(FIXED_ONE_BYTE_STRING(isolate, "ModuleWrap"));
   tpl->InstanceTemplate()->SetInternalFieldCount(
       ModuleWrap::kInternalFieldCount);
   tpl->Inherit(BaseObject::GetConstructorTemplate(env));
@@ -704,8 +750,8 @@ void ModuleWrap::Initialize(Local<Object> target,
   env->SetProtoMethodNoSideEffect(tpl, "getStaticDependencySpecifiers",
                                   GetStaticDependencySpecifiers);
 
-  target->Set(env->context(), FIXED_ONE_BYTE_STRING(isolate, "ModuleWrap"),
-              tpl->GetFunction(context).ToLocalChecked()).Check();
+  env->SetConstructorFunction(target, "ModuleWrap", tpl);
+
   env->SetMethod(target,
                  "setImportModuleDynamicallyCallback",
                  SetImportModuleDynamicallyCallback);

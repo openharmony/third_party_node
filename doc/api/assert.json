@@ -8,7 +8,7 @@
       "introduced_in": "v0.1.21",
       "stability": 2,
       "stabilityText": "Stable",
-      "desc": "<p><strong>Source Code:</strong> <a href=\"https://github.com/nodejs/node/blob/v12.22.7/lib/assert.js\">lib/assert.js</a></p>\n<p>The <code>assert</code> module provides a set of assertion functions for verifying\ninvariants.</p>",
+      "desc": "<p><strong>Source Code:</strong> <a href=\"https://github.com/nodejs/node/blob/v14.18.3/lib/assert.js\">lib/assert.js</a></p>\n<p>The <code>assert</code> module provides a set of assertion functions for verifying\ninvariants.</p>",
       "modules": [
         {
           "textRaw": "Strict assertion mode",
@@ -19,7 +19,11 @@
             ],
             "changes": [
               {
-                "version": "v12.16.2",
+                "version": [
+                  "v13.9.0",
+                  "v12.16.2"
+                ],
+                "pr-url": "https://github.com/nodejs/node/pull/31635",
                 "description": "Changed \"strict mode\" to \"strict assertion mode\" and \"legacy mode\" to \"legacy assertion mode\" to avoid confusion with the more usual meaning of \"strict mode\"."
               },
               {
@@ -103,13 +107,13 @@
           "name": "assert.CallTracker",
           "meta": {
             "added": [
-              "v12.19.0"
+              "v14.2.0"
             ],
             "changes": []
           },
           "stability": 1,
           "stabilityText": "Experimental",
-          "desc": "<p>This feature is currently experimental and behavior might still change.</p>\n<p>### <code>new assert.CallTracker()</code></p>\n<p>Creates a new <a href=\"#assert_class_assert_calltracker\"><code>CallTracker</code></a> object which can be used to track if functions\nwere called a specific number of times. The <code>tracker.verify()</code> must be called\nfor the verification to take place. The usual pattern would be to call it in a\n<a href=\"process.html#process_event_exit\"><code>process.on('exit')</code></a> handler.</p>\n<pre><code class=\"language-js\">const assert = require('assert');\n\nconst tracker = new assert.CallTracker();\n\nfunction func() {}\n\n// callsfunc() must be called exactly 1 time before tracker.verify().\nconst callsfunc = tracker.calls(func, 1);\n\ncallsfunc();\n\n// Calls tracker.verify() and verifies if all tracker.calls() functions have\n// been called exact times.\nprocess.on('exit', () => {\n  tracker.verify();\n});\n</code></pre>",
+          "desc": "<p>This feature is currently experimental and behavior might still change.</p>",
           "methods": [
             {
               "textRaw": "`tracker.calls([fn][, exact])`",
@@ -117,7 +121,7 @@
               "name": "calls",
               "meta": {
                 "added": [
-                  "v12.19.0"
+                  "v14.2.0"
                 ],
                 "changes": []
               },
@@ -153,7 +157,7 @@
               "name": "report",
               "meta": {
                 "added": [
-                  "v12.19.0"
+                  "v14.2.0"
                 ],
                 "changes": []
               },
@@ -213,7 +217,7 @@
               "name": "verify",
               "meta": {
                 "added": [
-                  "v12.19.0"
+                  "v14.2.0"
                 ],
                 "changes": []
               },
@@ -223,6 +227,12 @@
                 }
               ],
               "desc": "<p>Iterates through the list of functions passed to\n<a href=\"#assert_tracker_calls_fn_exact\"><code>tracker.calls()</code></a> and will throw an error for functions that\nhave not been called the expected number of times.</p>\n<pre><code class=\"language-js\">const assert = require('assert');\n\n// Creates call tracker.\nconst tracker = new assert.CallTracker();\n\nfunction func() {}\n\n// Returns a function that wraps func() that must be called exact times\n// before tracker.verify().\nconst callsfunc = tracker.calls(func, 2);\n\ncallsfunc();\n\n// Will throw an error since callsfunc() was only called once.\ntracker.verify();\n</code></pre>"
+            }
+          ],
+          "signatures": [
+            {
+              "params": [],
+              "desc": "<p>Creates a new <a href=\"#assert_class_assert_calltracker\"><code>CallTracker</code></a> object which can be used to track if functions\nwere called a specific number of times. The <code>tracker.verify()</code> must be called\nfor the verification to take place. The usual pattern would be to call it in a\n<a href=\"process.html#process_event_exit\"><code>process.on('exit')</code></a> handler.</p>\n<pre><code class=\"language-js\">const assert = require('assert');\n\nconst tracker = new assert.CallTracker();\n\nfunction func() {}\n\n// callsfunc() must be called exactly 1 time before tracker.verify().\nconst callsfunc = tracker.calls(func, 1);\n\ncallsfunc();\n\n// Calls tracker.verify() and verifies if all tracker.calls() functions have\n// been called exact times.\nprocess.on('exit', () => {\n  tracker.verify();\n});\n</code></pre>"
             }
           ]
         }
@@ -267,6 +277,16 @@
             ],
             "changes": [
               {
+                "version": "v14.18.0",
+                "pr-url": "https://github.com/nodejs/node/pull/38113",
+                "description": "In Legacy assertion mode, changed status from Deprecated to Legacy."
+              },
+              {
+                "version": "v14.0.0",
+                "pr-url": "https://github.com/nodejs/node/pull/30766",
+                "description": "NaN is now treated as being identical in case both sides are NaN."
+              },
+              {
                 "version": "v12.0.0",
                 "pr-url": "https://github.com/nodejs/node/pull/25008",
                 "description": "The type tags are now properly compared and there are a couple minor comparison adjustments to make the check less surprising."
@@ -274,25 +294,34 @@
               {
                 "version": "v9.0.0",
                 "pr-url": "https://github.com/nodejs/node/pull/15001",
-                "description": "The `Error` names and messages are now properly compared"
+                "description": "The `Error` names and messages are now properly compared."
               },
               {
                 "version": "v8.0.0",
                 "pr-url": "https://github.com/nodejs/node/pull/12142",
-                "description": "The `Set` and `Map` content is also compared"
+                "description": "The `Set` and `Map` content is also compared."
               },
               {
-                "version": "v6.4.0, v4.7.1",
+                "version": [
+                  "v6.4.0",
+                  "v4.7.1"
+                ],
                 "pr-url": "https://github.com/nodejs/node/pull/8002",
                 "description": "Typed array slices are handled correctly now."
               },
               {
-                "version": "v6.1.0, v4.5.0",
+                "version": [
+                  "v6.1.0",
+                  "v4.5.0"
+                ],
                 "pr-url": "https://github.com/nodejs/node/pull/6432",
                 "description": "Objects with circular references can be used as inputs now."
               },
               {
-                "version": "v5.10.1, v4.4.3",
+                "version": [
+                  "v5.10.1",
+                  "v4.4.3"
+                ],
                 "pr-url": "https://github.com/nodejs/node/pull/5910",
                 "description": "Handle non-`Uint8Array` typed arrays correctly."
               }
@@ -319,12 +348,12 @@
               ]
             }
           ],
-          "desc": "<p><strong>Strict assertion mode</strong></p>\n<p>An alias of <a href=\"#assert_assert_deepstrictequal_actual_expected_message\"><code>assert.deepStrictEqual()</code></a>.</p>\n<p><strong>Legacy assertion mode</strong></p>\n<blockquote>\n<p>Stability: 0 - Deprecated: Use <a href=\"#assert_assert_deepstrictequal_actual_expected_message\"><code>assert.deepStrictEqual()</code></a> instead.</p>\n</blockquote>\n<p>Tests for deep equality between the <code>actual</code> and <code>expected</code> parameters. Consider\nusing <a href=\"#assert_assert_deepstrictequal_actual_expected_message\"><code>assert.deepStrictEqual()</code></a> instead. <a href=\"#assert_assert_deepequal_actual_expected_message\"><code>assert.deepEqual()</code></a> can have\nsurprising results.</p>\n<p><em>Deep equality</em> means that the enumerable \"own\" properties of child objects\nare also recursively evaluated by the following rules.</p>",
+          "desc": "<p><strong>Strict assertion mode</strong></p>\n<p>An alias of <a href=\"#assert_assert_deepstrictequal_actual_expected_message\"><code>assert.deepStrictEqual()</code></a>.</p>\n<p><strong>Legacy assertion mode</strong></p>\n<blockquote>\n<p>Stability: 3 - Legacy: Use <a href=\"#assert_assert_deepstrictequal_actual_expected_message\"><code>assert.deepStrictEqual()</code></a> instead.</p>\n</blockquote>\n<p>Tests for deep equality between the <code>actual</code> and <code>expected</code> parameters. Consider\nusing <a href=\"#assert_assert_deepstrictequal_actual_expected_message\"><code>assert.deepStrictEqual()</code></a> instead. <a href=\"#assert_assert_deepequal_actual_expected_message\"><code>assert.deepEqual()</code></a> can have\nsurprising results.</p>\n<p><em>Deep equality</em> means that the enumerable \"own\" properties of child objects\nare also recursively evaluated by the following rules.</p>",
           "modules": [
             {
               "textRaw": "Comparison details",
               "name": "comparison_details",
-              "desc": "<ul>\n<li>Primitive values are compared with the <a href=\"https://tc39.github.io/ecma262/#sec-abstract-equality-comparison\">Abstract Equality Comparison</a>\n( <code>==</code> ).</li>\n<li><a href=\"https://tc39.github.io/ecma262/#sec-object.prototype.tostring\">Type tags</a> of objects should be the same.</li>\n<li>Only <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Enumerability_and_ownership_of_properties\">enumerable \"own\" properties</a> are considered.</li>\n<li><a href=\"errors.html#errors_class_error\"><code>Error</code></a> names and messages are always compared, even if these are not\nenumerable properties.</li>\n<li><a href=\"https://developer.mozilla.org/en-US/docs/Glossary/Primitive#Primitive_wrapper_objects_in_JavaScript\">Object wrappers</a> are compared both as objects and unwrapped values.</li>\n<li><code>Object</code> properties are compared unordered.</li>\n<li><a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map\"><code>Map</code></a> keys and <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set\"><code>Set</code></a> items are compared unordered.</li>\n<li>Recursion stops when both sides differ or both sides encounter a circular\nreference.</li>\n<li>Implementation does not test the <a href=\"https://tc39.github.io/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots\"><code>[[Prototype]]</code></a> of\nobjects.</li>\n<li><a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol\"><code>Symbol</code></a> properties are not compared.</li>\n<li><a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap\"><code>WeakMap</code></a> and <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet\"><code>WeakSet</code></a> comparison does not rely on their values.</li>\n</ul>\n<p>The following example does not throw an <a href=\"#assert_class_assert_assertionerror\"><code>AssertionError</code></a> because the\nprimitives are considered equal by the <a href=\"https://tc39.github.io/ecma262/#sec-abstract-equality-comparison\">Abstract Equality Comparison</a>\n( <code>==</code> ).</p>\n<pre><code class=\"language-js\">// WARNING: This does not throw an AssertionError!\nassert.deepEqual('+00000000', false);\n</code></pre>\n<p>\"Deep\" equality means that the enumerable \"own\" properties of child objects\nare evaluated also:</p>\n<pre><code class=\"language-js\">const assert = require('assert');\n\nconst obj1 = {\n  a: {\n    b: 1\n  }\n};\nconst obj2 = {\n  a: {\n    b: 2\n  }\n};\nconst obj3 = {\n  a: {\n    b: 1\n  }\n};\nconst obj4 = Object.create(obj1);\n\nassert.deepEqual(obj1, obj1);\n// OK\n\n// Values of b are different:\nassert.deepEqual(obj1, obj2);\n// AssertionError: { a: { b: 1 } } deepEqual { a: { b: 2 } }\n\nassert.deepEqual(obj1, obj3);\n// OK\n\n// Prototypes are ignored:\nassert.deepEqual(obj1, obj4);\n// AssertionError: { a: { b: 1 } } deepEqual {}\n</code></pre>\n<p>If the values are not equal, an <a href=\"#assert_class_assert_assertionerror\"><code>AssertionError</code></a> is thrown with a <code>message</code>\nproperty set equal to the value of the <code>message</code> parameter. If the <code>message</code>\nparameter is undefined, a default error message is assigned. If the <code>message</code>\nparameter is an instance of an <a href=\"errors.html#errors_class_error\"><code>Error</code></a> then it will be thrown instead of the\n<a href=\"#assert_class_assert_assertionerror\"><code>AssertionError</code></a>.</p>",
+              "desc": "<ul>\n<li>Primitive values are compared with the <a href=\"https://tc39.github.io/ecma262/#sec-abstract-equality-comparison\">Abstract Equality Comparison</a>\n( <code>==</code> ) with the exception of <code>NaN</code>. It is treated as being identical in case\nboth sides are <code>NaN</code>.</li>\n<li><a href=\"https://tc39.github.io/ecma262/#sec-object.prototype.tostring\">Type tags</a> of objects should be the same.</li>\n<li>Only <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Enumerability_and_ownership_of_properties\">enumerable \"own\" properties</a> are considered.</li>\n<li><a href=\"errors.html#errors_class_error\"><code>Error</code></a> names and messages are always compared, even if these are not\nenumerable properties.</li>\n<li><a href=\"https://developer.mozilla.org/en-US/docs/Glossary/Primitive#Primitive_wrapper_objects_in_JavaScript\">Object wrappers</a> are compared both as objects and unwrapped values.</li>\n<li><code>Object</code> properties are compared unordered.</li>\n<li><a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map\"><code>Map</code></a> keys and <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set\"><code>Set</code></a> items are compared unordered.</li>\n<li>Recursion stops when both sides differ or both sides encounter a circular\nreference.</li>\n<li>Implementation does not test the <a href=\"https://tc39.github.io/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots\"><code>[[Prototype]]</code></a> of\nobjects.</li>\n<li><a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol\"><code>Symbol</code></a> properties are not compared.</li>\n<li><a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap\"><code>WeakMap</code></a> and <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet\"><code>WeakSet</code></a> comparison does not rely on their values.</li>\n</ul>\n<p>The following example does not throw an <a href=\"#assert_class_assert_assertionerror\"><code>AssertionError</code></a> because the\nprimitives are considered equal by the <a href=\"https://tc39.github.io/ecma262/#sec-abstract-equality-comparison\">Abstract Equality Comparison</a>\n( <code>==</code> ).</p>\n<pre><code class=\"language-js\">// WARNING: This does not throw an AssertionError!\nassert.deepEqual('+00000000', false);\n</code></pre>\n<p>\"Deep\" equality means that the enumerable \"own\" properties of child objects\nare evaluated also:</p>\n<pre><code class=\"language-js\">const assert = require('assert');\n\nconst obj1 = {\n  a: {\n    b: 1\n  }\n};\nconst obj2 = {\n  a: {\n    b: 2\n  }\n};\nconst obj3 = {\n  a: {\n    b: 1\n  }\n};\nconst obj4 = Object.create(obj1);\n\nassert.deepEqual(obj1, obj1);\n// OK\n\n// Values of b are different:\nassert.deepEqual(obj1, obj2);\n// AssertionError: { a: { b: 1 } } deepEqual { a: { b: 2 } }\n\nassert.deepEqual(obj1, obj3);\n// OK\n\n// Prototypes are ignored:\nassert.deepEqual(obj1, obj4);\n// AssertionError: { a: { b: 1 } } deepEqual {}\n</code></pre>\n<p>If the values are not equal, an <a href=\"#assert_class_assert_assertionerror\"><code>AssertionError</code></a> is thrown with a <code>message</code>\nproperty set equal to the value of the <code>message</code> parameter. If the <code>message</code>\nparameter is undefined, a default error message is assigned. If the <code>message</code>\nparameter is an instance of an <a href=\"errors.html#errors_class_error\"><code>Error</code></a> then it will be thrown instead of the\n<a href=\"#assert_class_assert_assertionerror\"><code>AssertionError</code></a>.</p>",
               "type": "module",
               "displayName": "Comparison details"
             }
@@ -352,15 +381,18 @@
               {
                 "version": "v8.5.0",
                 "pr-url": "https://github.com/nodejs/node/pull/15001",
-                "description": "The `Error` names and messages are now properly compared"
+                "description": "The `Error` names and messages are now properly compared."
               },
               {
                 "version": "v8.0.0",
                 "pr-url": "https://github.com/nodejs/node/pull/12142",
-                "description": "The `Set` and `Map` content is also compared"
+                "description": "The `Set` and `Map` content is also compared."
               },
               {
-                "version": "v6.4.0, v4.7.1",
+                "version": [
+                  "v6.4.0",
+                  "v4.7.1"
+                ],
                 "pr-url": "https://github.com/nodejs/node/pull/8002",
                 "description": "Typed array slices are handled correctly now."
               },
@@ -370,7 +402,10 @@
                 "description": "Objects with circular references can be used as inputs now."
               },
               {
-                "version": "v5.10.1, v4.4.3",
+                "version": [
+                  "v5.10.1",
+                  "v4.4.3"
+                ],
                 "pr-url": "https://github.com/nodejs/node/pull/5910",
                 "description": "Handle non-`Uint8Array` typed arrays correctly."
               }
@@ -414,6 +449,7 @@
           "name": "doesNotMatch",
           "meta": {
             "added": [
+              "v13.6.0",
               "v12.16.0"
             ],
             "changes": []
@@ -486,7 +522,10 @@
             ],
             "changes": [
               {
-                "version": "v5.11.0, v4.4.5",
+                "version": [
+                  "v5.11.0",
+                  "v4.4.5"
+                ],
                 "pr-url": "https://github.com/nodejs/node/pull/2407",
                 "description": "The `message` parameter is respected now."
               },
@@ -528,7 +567,18 @@
             "added": [
               "v0.1.21"
             ],
-            "changes": []
+            "changes": [
+              {
+                "version": "v14.18.0",
+                "pr-url": "https://github.com/nodejs/node/pull/38113",
+                "description": "In Legacy assertion mode, changed status from Deprecated to Legacy."
+              },
+              {
+                "version": "v14.0.0",
+                "pr-url": "https://github.com/nodejs/node/pull/30766",
+                "description": "NaN is now treated as being identical in case both sides are NaN."
+              }
+            ]
           },
           "signatures": [
             {
@@ -551,7 +601,7 @@
               ]
             }
           ],
-          "desc": "<p><strong>Strict assertion mode</strong></p>\n<p>An alias of <a href=\"#assert_assert_strictequal_actual_expected_message\"><code>assert.strictEqual()</code></a>.</p>\n<p><strong>Legacy assertion mode</strong></p>\n<blockquote>\n<p>Stability: 0 - Deprecated: Use <a href=\"#assert_assert_strictequal_actual_expected_message\"><code>assert.strictEqual()</code></a> instead.</p>\n</blockquote>\n<p>Tests shallow, coercive equality between the <code>actual</code> and <code>expected</code> parameters\nusing the <a href=\"https://tc39.github.io/ecma262/#sec-abstract-equality-comparison\">Abstract Equality Comparison</a> ( <code>==</code> ).</p>\n<pre><code class=\"language-js\">const assert = require('assert');\n\nassert.equal(1, 1);\n// OK, 1 == 1\nassert.equal(1, '1');\n// OK, 1 == '1'\n\nassert.equal(1, 2);\n// AssertionError: 1 == 2\nassert.equal({ a: { b: 1 } }, { a: { b: 1 } });\n// AssertionError: { a: { b: 1 } } == { a: { b: 1 } }\n</code></pre>\n<p>If the values are not equal, an <a href=\"#assert_class_assert_assertionerror\"><code>AssertionError</code></a> is thrown with a <code>message</code>\nproperty set equal to the value of the <code>message</code> parameter. If the <code>message</code>\nparameter is undefined, a default error message is assigned. If the <code>message</code>\nparameter is an instance of an <a href=\"errors.html#errors_class_error\"><code>Error</code></a> then it will be thrown instead of the\n<code>AssertionError</code>.</p>"
+          "desc": "<p><strong>Strict assertion mode</strong></p>\n<p>An alias of <a href=\"#assert_assert_strictequal_actual_expected_message\"><code>assert.strictEqual()</code></a>.</p>\n<p><strong>Legacy assertion mode</strong></p>\n<blockquote>\n<p>Stability: 3 - Legacy: Use <a href=\"#assert_assert_strictequal_actual_expected_message\"><code>assert.strictEqual()</code></a> instead.</p>\n</blockquote>\n<p>Tests shallow, coercive equality between the <code>actual</code> and <code>expected</code> parameters\nusing the <a href=\"https://tc39.github.io/ecma262/#sec-abstract-equality-comparison\">Abstract Equality Comparison</a> ( <code>==</code> ). <code>NaN</code> is special handled\nand treated as being identical in case both sides are <code>NaN</code>.</p>\n<pre><code class=\"language-js\">const assert = require('assert');\n\nassert.equal(1, 1);\n// OK, 1 == 1\nassert.equal(1, '1');\n// OK, 1 == '1'\nassert.equal(NaN, NaN);\n// OK\n\nassert.equal(1, 2);\n// AssertionError: 1 == 2\nassert.equal({ a: { b: 1 } }, { a: { b: 1 } });\n// AssertionError: { a: { b: 1 } } == { a: { b: 1 } }\n</code></pre>\n<p>If the values are not equal, an <a href=\"#assert_class_assert_assertionerror\"><code>AssertionError</code></a> is thrown with a <code>message</code>\nproperty set equal to the value of the <code>message</code> parameter. If the <code>message</code>\nparameter is undefined, a default error message is assigned. If the <code>message</code>\nparameter is an instance of an <a href=\"errors.html#errors_class_error\"><code>Error</code></a> then it will be thrown instead of the\n<code>AssertionError</code>.</p>"
         },
         {
           "textRaw": "`assert.fail([message])`",
@@ -670,6 +720,7 @@
           "name": "match",
           "meta": {
             "added": [
+              "v13.6.0",
               "v12.16.0"
             ],
             "changes": []
@@ -709,27 +760,46 @@
             ],
             "changes": [
               {
+                "version": "v14.18.0",
+                "pr-url": "https://github.com/nodejs/node/pull/38113",
+                "description": "In Legacy assertion mode, changed status from Deprecated to Legacy."
+              },
+              {
+                "version": "v14.0.0",
+                "pr-url": "https://github.com/nodejs/node/pull/30766",
+                "description": "NaN is now treated as being identical in case both sides are NaN."
+              },
+              {
                 "version": "v9.0.0",
                 "pr-url": "https://github.com/nodejs/node/pull/15001",
-                "description": "The `Error` names and messages are now properly compared"
+                "description": "The `Error` names and messages are now properly compared."
               },
               {
                 "version": "v8.0.0",
                 "pr-url": "https://github.com/nodejs/node/pull/12142",
-                "description": "The `Set` and `Map` content is also compared"
+                "description": "The `Set` and `Map` content is also compared."
               },
               {
-                "version": "v6.4.0, v4.7.1",
+                "version": [
+                  "v6.4.0",
+                  "v4.7.1"
+                ],
                 "pr-url": "https://github.com/nodejs/node/pull/8002",
                 "description": "Typed array slices are handled correctly now."
               },
               {
-                "version": "v6.1.0, v4.5.0",
+                "version": [
+                  "v6.1.0",
+                  "v4.5.0"
+                ],
                 "pr-url": "https://github.com/nodejs/node/pull/6432",
                 "description": "Objects with circular references can be used as inputs now."
               },
               {
-                "version": "v5.10.1, v4.4.3",
+                "version": [
+                  "v5.10.1",
+                  "v4.4.3"
+                ],
                 "pr-url": "https://github.com/nodejs/node/pull/5910",
                 "description": "Handle non-`Uint8Array` typed arrays correctly."
               }
@@ -756,7 +826,7 @@
               ]
             }
           ],
-          "desc": "<p><strong>Strict assertion mode</strong></p>\n<p>An alias of <a href=\"#assert_assert_notdeepstrictequal_actual_expected_message\"><code>assert.notDeepStrictEqual()</code></a>.</p>\n<p><strong>Legacy assertion mode</strong></p>\n<blockquote>\n<p>Stability: 0 - Deprecated: Use <a href=\"#assert_assert_notdeepstrictequal_actual_expected_message\"><code>assert.notDeepStrictEqual()</code></a> instead.</p>\n</blockquote>\n<p>Tests for any deep inequality. Opposite of <a href=\"#assert_assert_deepequal_actual_expected_message\"><code>assert.deepEqual()</code></a>.</p>\n<pre><code class=\"language-js\">const assert = require('assert');\n\nconst obj1 = {\n  a: {\n    b: 1\n  }\n};\nconst obj2 = {\n  a: {\n    b: 2\n  }\n};\nconst obj3 = {\n  a: {\n    b: 1\n  }\n};\nconst obj4 = Object.create(obj1);\n\nassert.notDeepEqual(obj1, obj1);\n// AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }\n\nassert.notDeepEqual(obj1, obj2);\n// OK\n\nassert.notDeepEqual(obj1, obj3);\n// AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }\n\nassert.notDeepEqual(obj1, obj4);\n// OK\n</code></pre>\n<p>If the values are deeply equal, an <a href=\"#assert_class_assert_assertionerror\"><code>AssertionError</code></a> is thrown with a\n<code>message</code> property set equal to the value of the <code>message</code> parameter. If the\n<code>message</code> parameter is undefined, a default error message is assigned. If the\n<code>message</code> parameter is an instance of an <a href=\"errors.html#errors_class_error\"><code>Error</code></a> then it will be thrown\ninstead of the <code>AssertionError</code>.</p>"
+          "desc": "<p><strong>Strict assertion mode</strong></p>\n<p>An alias of <a href=\"#assert_assert_notdeepstrictequal_actual_expected_message\"><code>assert.notDeepStrictEqual()</code></a>.</p>\n<p><strong>Legacy assertion mode</strong></p>\n<blockquote>\n<p>Stability: 3 - Legacy: Use <a href=\"#assert_assert_notdeepstrictequal_actual_expected_message\"><code>assert.notDeepStrictEqual()</code></a> instead.</p>\n</blockquote>\n<p>Tests for any deep inequality. Opposite of <a href=\"#assert_assert_deepequal_actual_expected_message\"><code>assert.deepEqual()</code></a>.</p>\n<pre><code class=\"language-js\">const assert = require('assert');\n\nconst obj1 = {\n  a: {\n    b: 1\n  }\n};\nconst obj2 = {\n  a: {\n    b: 2\n  }\n};\nconst obj3 = {\n  a: {\n    b: 1\n  }\n};\nconst obj4 = Object.create(obj1);\n\nassert.notDeepEqual(obj1, obj1);\n// AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }\n\nassert.notDeepEqual(obj1, obj2);\n// OK\n\nassert.notDeepEqual(obj1, obj3);\n// AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }\n\nassert.notDeepEqual(obj1, obj4);\n// OK\n</code></pre>\n<p>If the values are deeply equal, an <a href=\"#assert_class_assert_assertionerror\"><code>AssertionError</code></a> is thrown with a\n<code>message</code> property set equal to the value of the <code>message</code> parameter. If the\n<code>message</code> parameter is undefined, a default error message is assigned. If the\n<code>message</code> parameter is an instance of an <a href=\"errors.html#errors_class_error\"><code>Error</code></a> then it will be thrown\ninstead of the <code>AssertionError</code>.</p>"
         },
         {
           "textRaw": "`assert.notDeepStrictEqual(actual, expected[, message])`",
@@ -780,15 +850,18 @@
               {
                 "version": "v9.0.0",
                 "pr-url": "https://github.com/nodejs/node/pull/15001",
-                "description": "The `Error` names and messages are now properly compared"
+                "description": "The `Error` names and messages are now properly compared."
               },
               {
                 "version": "v8.0.0",
                 "pr-url": "https://github.com/nodejs/node/pull/12142",
-                "description": "The `Set` and `Map` content is also compared"
+                "description": "The `Set` and `Map` content is also compared."
               },
               {
-                "version": "v6.4.0, v4.7.1",
+                "version": [
+                  "v6.4.0",
+                  "v4.7.1"
+                ],
                 "pr-url": "https://github.com/nodejs/node/pull/8002",
                 "description": "Typed array slices are handled correctly now."
               },
@@ -798,7 +871,10 @@
                 "description": "Objects with circular references can be used as inputs now."
               },
               {
-                "version": "v5.10.1, v4.4.3",
+                "version": [
+                  "v5.10.1",
+                  "v4.4.3"
+                ],
                 "pr-url": "https://github.com/nodejs/node/pull/5910",
                 "description": "Handle non-`Uint8Array` typed arrays correctly."
               }
@@ -835,7 +911,18 @@
             "added": [
               "v0.1.21"
             ],
-            "changes": []
+            "changes": [
+              {
+                "version": "v14.18.0",
+                "pr-url": "https://github.com/nodejs/node/pull/38113",
+                "description": "In Legacy assertion mode, changed status from Deprecated to Legacy."
+              },
+              {
+                "version": "v14.0.0",
+                "pr-url": "https://github.com/nodejs/node/pull/30766",
+                "description": "NaN is now treated as being identical in case both sides are NaN."
+              }
+            ]
           },
           "signatures": [
             {
@@ -858,7 +945,7 @@
               ]
             }
           ],
-          "desc": "<p><strong>Strict assertion mode</strong></p>\n<p>An alias of <a href=\"#assert_assert_notstrictequal_actual_expected_message\"><code>assert.notStrictEqual()</code></a>.</p>\n<p><strong>Legacy assertion mode</strong></p>\n<blockquote>\n<p>Stability: 0 - Deprecated: Use <a href=\"#assert_assert_notstrictequal_actual_expected_message\"><code>assert.notStrictEqual()</code></a> instead.</p>\n</blockquote>\n<p>Tests shallow, coercive inequality with the <a href=\"https://tc39.github.io/ecma262/#sec-abstract-equality-comparison\">Abstract Equality Comparison</a>\n( <code>!=</code> ).</p>\n<pre><code class=\"language-js\">const assert = require('assert');\n\nassert.notEqual(1, 2);\n// OK\n\nassert.notEqual(1, 1);\n// AssertionError: 1 != 1\n\nassert.notEqual(1, '1');\n// AssertionError: 1 != '1'\n</code></pre>\n<p>If the values are equal, an <a href=\"#assert_class_assert_assertionerror\"><code>AssertionError</code></a> is thrown with a <code>message</code>\nproperty set equal to the value of the <code>message</code> parameter. If the <code>message</code>\nparameter is undefined, a default error message is assigned. If the <code>message</code>\nparameter is an instance of an <a href=\"errors.html#errors_class_error\"><code>Error</code></a> then it will be thrown instead of the\n<code>AssertionError</code>.</p>"
+          "desc": "<p><strong>Strict assertion mode</strong></p>\n<p>An alias of <a href=\"#assert_assert_notstrictequal_actual_expected_message\"><code>assert.notStrictEqual()</code></a>.</p>\n<p><strong>Legacy assertion mode</strong></p>\n<blockquote>\n<p>Stability: 3 - Legacy: Use <a href=\"#assert_assert_notstrictequal_actual_expected_message\"><code>assert.notStrictEqual()</code></a> instead.</p>\n</blockquote>\n<p>Tests shallow, coercive inequality with the <a href=\"https://tc39.github.io/ecma262/#sec-abstract-equality-comparison\">Abstract Equality Comparison</a>\n(<code>!=</code> ). <code>NaN</code> is special handled and treated as being identical in case both\nsides are <code>NaN</code>.</p>\n<pre><code class=\"language-js\">const assert = require('assert');\n\nassert.notEqual(1, 2);\n// OK\n\nassert.notEqual(1, 1);\n// AssertionError: 1 != 1\n\nassert.notEqual(1, '1');\n// AssertionError: 1 != '1'\n</code></pre>\n<p>If the values are equal, an <a href=\"#assert_class_assert_assertionerror\"><code>AssertionError</code></a> is thrown with a <code>message</code>\nproperty set equal to the value of the <code>message</code> parameter. If the <code>message</code>\nparameter is undefined, a default error message is assigned. If the <code>message</code>\nparameter is an instance of an <a href=\"errors.html#errors_class_error\"><code>Error</code></a> then it will be thrown instead of the\n<code>AssertionError</code>.</p>"
         },
         {
           "textRaw": "`assert.notStrictEqual(actual, expected[, message])`",
@@ -872,7 +959,7 @@
               {
                 "version": "v10.0.0",
                 "pr-url": "https://github.com/nodejs/node/pull/17003",
-                "description": "Used comparison changed from Strict Equality to `Object.is()`"
+                "description": "Used comparison changed from Strict Equality to `Object.is()`."
               }
             ]
           },
@@ -978,7 +1065,7 @@
               {
                 "version": "v10.0.0",
                 "pr-url": "https://github.com/nodejs/node/pull/17003",
-                "description": "Used comparison changed from Strict Equality to `Object.is()`"
+                "description": "Used comparison changed from Strict Equality to `Object.is()`."
               }
             ]
           },

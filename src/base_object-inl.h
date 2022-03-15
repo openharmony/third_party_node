@@ -100,15 +100,16 @@ Environment* BaseObject::env() const {
   return env_;
 }
 
-BaseObject* BaseObject::FromJSObject(v8::Local<v8::Object> obj) {
-  CHECK_GT(obj->InternalFieldCount(), 0);
+BaseObject* BaseObject::FromJSObject(v8::Local<v8::Value> value) {
+  v8::Local<v8::Object> obj = value.As<v8::Object>();
+  DCHECK_GE(obj->InternalFieldCount(), BaseObject::kSlot);
   return static_cast<BaseObject*>(
       obj->GetAlignedPointerFromInternalField(BaseObject::kSlot));
 }
 
 
 template <typename T>
-T* BaseObject::FromJSObject(v8::Local<v8::Object> object) {
+T* BaseObject::FromJSObject(v8::Local<v8::Value> object) {
   return static_cast<T*>(FromJSObject(object));
 }
 
@@ -145,6 +146,13 @@ void BaseObject::ClearWeak() {
   persistent_handle_.ClearWeak();
 }
 
+bool BaseObject::IsWeakOrDetached() const {
+  if (persistent_handle_.IsWeak()) return true;
+
+  if (!has_pointer_data()) return false;
+  const PointerData* pd = const_cast<BaseObject*>(this)->pointer_data();
+  return pd->wants_weak_jsobj || pd->is_detached;
+}
 
 v8::Local<v8::FunctionTemplate>
 BaseObject::MakeLazilyInitializedJSTemplate(Environment* env) {
@@ -199,7 +207,7 @@ void BaseObject::decrease_refcount() {
   unsigned int new_refcount = --metadata->strong_ptr_count;
   if (new_refcount == 0) {
     if (metadata->is_detached) {
-      delete this;
+      OnGCCollect();
     } else if (metadata->wants_weak_jsobj && !persistent_handle_.IsEmpty()) {
       MakeWeak();
     }

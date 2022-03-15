@@ -73,6 +73,7 @@
 <a href="#0.8.3">0.8.3</a><br/>
 <a href="#0.8.2">0.8.2</a><br/>
 <a href="#0.8.1">0.8.1</a><br/>
+<a href="#0.8.0">0.8.0</a><br/>
 </td>
 <td valign="top">
 <a href="#0.7.12">0.7.12</a><br/>
@@ -155,6 +156,8 @@
 </table>
 
 * Other Versions
+  * [14.x](CHANGELOG_V14.md)
+  * [13.x](CHANGELOG_V13.md)
   * [12.x](CHANGELOG_V12.md)
   * [11.x](CHANGELOG_V11.md)
   * [10.x](CHANGELOG_V10.md)
