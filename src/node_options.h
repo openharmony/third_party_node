@@ -101,7 +101,9 @@ class EnvironmentOptions : public Options {
  public:
   bool abort_on_uncaught_exception = false;
   std::vector<std::string> conditions;
+  std::string dns_result_order;
   bool enable_source_maps = false;
+  bool experimental_abortcontroller = false;
   bool experimental_json_modules = false;
   bool experimental_modules = false;
   std::string experimental_specifier_resolution;
@@ -115,12 +117,12 @@ class EnvironmentOptions : public Options {
   bool experimental_vm_modules = false;
   bool expose_internals = false;
   bool frozen_intrinsics = false;
+  int64_t heap_snapshot_near_heap_limit = 0;
   std::string heap_snapshot_signal;
-  std::string http_parser = "llhttp";
-  uint64_t http_server_default_timeout = 120000;
-  bool no_deprecation = false;
-  bool no_force_async_hooks_checks = false;
-  bool no_warnings = false;
+  uint64_t max_http_header_size = 16 * 1024;
+  bool deprecation = true;
+  bool force_async_hooks_checks = true;
+  bool warnings = true;
   bool force_context_aware = false;
   bool pending_deprecation = false;
   bool preserve_symlinks = false;
@@ -142,6 +144,7 @@ class EnvironmentOptions : public Options {
   std::string diagnostic_dir;
   bool test_udp_no_try_send = false;
   bool throw_deprecation = false;
+  bool trace_atomics_wait = false;
   bool trace_deprecation = false;
   bool trace_exit = false;
   bool trace_sync_io = false;
@@ -150,6 +153,12 @@ class EnvironmentOptions : public Options {
   bool trace_warnings = false;
   std::string unhandled_rejections;
   std::string userland_loader;
+  bool verify_base_objects =
+#ifdef DEBUG
+      true;
+#else
+      false;
+#endif  // DEBUG
 
   bool syntax_check_only = false;
   bool has_eval_string = false;
@@ -185,9 +194,10 @@ class PerIsolateOptions : public Options {
  public:
   std::shared_ptr<EnvironmentOptions> per_env { new EnvironmentOptions() };
   bool track_heap_objects = false;
-  bool no_node_snapshot = false;
+  bool node_snapshot = true;
   bool report_uncaught_exception = false;
   bool report_on_signal = false;
+  bool experimental_top_level_await = true;
   std::string report_signal = "SIGUSR2";
   inline EnvironmentOptions* get_per_env_options();
   void CheckOptions(std::vector<std::string>* errors) override;
@@ -208,7 +218,6 @@ class PerProcessOptions : public Options {
   std::string title;
   std::string trace_event_categories;
   std::string trace_event_file_pattern = "node_trace.${rotation}.log";
-  uint64_t max_http_header_size = 8 * 1024;
   int64_t v8_thread_pool_size = 4;
   bool zero_fill_all_buffers = false;
   bool debug_arraybuffer_allocations = false;
@@ -225,7 +234,7 @@ class PerProcessOptions : public Options {
 #endif
 
   // Per-process because they affect singleton OpenSSL shared library state,
-  // or are used once during process intialization.
+  // or are used once during process initialization.
 #if HAVE_OPENSSL
   std::string openssl_config;
   std::string tls_cipher_list = DEFAULT_CIPHER_LIST_CORE;
@@ -293,7 +302,8 @@ class OptionsParser {
   void AddOption(const char* name,
                  const char* help_text,
                  bool Options::* field,
-                 OptionEnvvarSettings env_setting = kDisallowedInEnvironment);
+                 OptionEnvvarSettings env_setting = kDisallowedInEnvironment,
+                 bool default_is_true = false);
   void AddOption(const char* name,
                  const char* help_text,
                  uint64_t Options::* field,
@@ -416,11 +426,14 @@ class OptionsParser {
     std::shared_ptr<BaseOptionField> field;
     OptionEnvvarSettings env_setting;
     std::string help_text;
+    bool default_is_true = false;
   };
 
   // An implied option is composed of the information on where to store a
   // specific boolean value (if another specific option is encountered).
   struct Implication {
+    OptionType type;
+    std::string name;
     std::shared_ptr<BaseOptionField> target_field;
     bool target_value;
   };

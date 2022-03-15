@@ -64,7 +64,7 @@ assert.strictEqual(tracing.enabled, true);
 
 assert.strictEqual(getEnabledCategories(),
                    [
-                     ...[enabledCategories].filter((_) => !!_), 'node.perf'
+                     ...[enabledCategories].filter((_) => !!_), 'node.perf',
                    ].join(','));
 
 tracing.disable();
@@ -134,23 +134,27 @@ function testApiInChildProcess(execArgs, cb) {
   const expectedMarks = ['A', 'B'];
   const expectedBegins = [
     { cat: 'node,node.perf,node.perf.timerify', name: 'f' },
-    { cat: 'node,node.perf,node.perf.usertiming', name: 'A to B' }
+    { cat: 'node,node.perf,node.perf.usertiming', name: 'A to B' },
   ];
   const expectedEnds = [
     { cat: 'node,node.perf,node.perf.timerify', name: 'f' },
-    { cat: 'node,node.perf,node.perf.usertiming', name: 'A to B' }
+    { cat: 'node,node.perf,node.perf.usertiming', name: 'A to B' },
   ];
 
   const proc = cp.fork(__filename,
                        ['child'],
-                       { execArgv: [ '--expose-gc', ...execArgs ] });
+                       {
+                         execArgv: [
+                           '--expose-gc',
+                           ...execArgs,
+                         ]
+                       });
 
   proc.once('exit', common.mustCall(() => {
     const file = path.join(tmpdir.path, 'node_trace.1.log');
 
     assert(fs.existsSync(file));
-    fs.readFile(file, common.mustCall((err, data) => {
-      assert.ifError(err);
+    fs.readFile(file, common.mustSucceed((data) => {
       const traces = JSON.parse(data.toString()).traceEvents
         .filter((trace) => trace.cat !== '__metadata');
       assert.strictEqual(traces.length,

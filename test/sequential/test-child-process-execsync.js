@@ -27,6 +27,7 @@ tmpdir.refresh();
 const assert = require('assert');
 
 const { execFileSync, execSync, spawnSync } = require('child_process');
+const { getSystemErrorName } = require('util');
 
 const TIMER = 200;
 const SLEEP = 2000;
@@ -51,7 +52,7 @@ try {
   ret = execSync(cmd, { timeout: TIMER });
 } catch (e) {
   caught = true;
-  assert.strictEqual(e.errno, 'ETIMEDOUT');
+  assert.strictEqual(getSystemErrorName(e.errno), 'ETIMEDOUT');
   err = e;
 } finally {
   assert.strictEqual(ret, undefined,
@@ -86,7 +87,7 @@ const cmd = `"${process.execPath}" -e "console.log('${msg}');"`;
 
 const args = [
   '-e',
-  `console.log("${msg}");`
+  `console.log("${msg}");`,
 ];
 {
   const ret = execFileSync(process.execPath, args);
@@ -127,7 +128,7 @@ const args = [
     'signal',
     'status',
     'stderr',
-    'stdout'
+    'stdout',
   ]);
 
   assert.throws(() => {

@@ -25,34 +25,34 @@ const util = require('util');
   assert.strictEqual(m.status, 'unlinked');
   await m.link(common.mustNotCall());
   assert.strictEqual(m.status, 'linked');
-  const result = await m.evaluate();
+  assert.strictEqual(await m.evaluate(), undefined);
   assert.strictEqual(m.status, 'evaluated');
-  assert.strictEqual(Object.getPrototypeOf(result), null);
   assert.deepStrictEqual(context, {
     foo: 'bar',
     baz: 'bar',
     typeofProcess: 'undefined'
   });
-  assert.strictEqual(result.result, 'function');
-}());
+}().then(common.mustCall()));
 
 (async () => {
-  const m = new SourceTextModule(
-    'global.vmResult = "foo"; Object.prototype.toString.call(process);'
-  );
+  const m = new SourceTextModule(`
+    global.vmResultFoo = "foo";
+    global.vmResultTypeofProcess = Object.prototype.toString.call(process);
+  `);
   await m.link(common.mustNotCall());
-  const { result } = await m.evaluate();
-  assert.strictEqual(global.vmResult, 'foo');
-  assert.strictEqual(result, '[object process]');
-  delete global.vmResult;
-})();
+  await m.evaluate();
+  assert.strictEqual(global.vmResultFoo, 'foo');
+  assert.strictEqual(global.vmResultTypeofProcess, '[object process]');
+  delete global.vmResultFoo;
+  delete global.vmResultTypeofProcess;
+})().then(common.mustCall());
 
 (async () => {
   const m = new SourceTextModule('while (true) {}');
   await m.link(common.mustNotCall());
   await m.evaluate({ timeout: 500 })
     .then(() => assert(false), () => {});
-})();
+})().then(common.mustCall());
 
 // Check the generated identifier for each module
 (async () => {
@@ -65,7 +65,7 @@ const util = require('util');
   assert.strictEqual(m2.identifier, 'vm:module(1)');
   const m3 = new SourceTextModule('3', { context: context2 });
   assert.strictEqual(m3.identifier, 'vm:module(0)');
-})();
+})().then(common.mustCall());
 
 // Check inspection of the instance
 {
@@ -83,9 +83,12 @@ const util = require('util');
 
   assert.strictEqual(util.inspect(m, { depth: -1 }), '[SourceTextModule]');
 
-  assert.strictEqual(
-    m[util.inspect.custom].call(Object.create(null)),
-    'Module { status: undefined, identifier: undefined, context: undefined }',
+  assert.throws(
+    () => m[util.inspect.custom].call(Object.create(null)),
+    {
+      code: 'ERR_VM_MODULE_NOT_MODULE',
+      message: 'Provided module is not an instance of Module'
+    },
   );
 }
 

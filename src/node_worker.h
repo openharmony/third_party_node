@@ -50,9 +50,9 @@ class Worker : public AsyncWrap {
   void MemoryInfo(MemoryTracker* tracker) const override;
   SET_MEMORY_INFO_NAME(Worker)
   SET_SELF_SIZE(Worker)
+  bool IsNotIndicativeOfMemoryLeakAtExit() const override;
 
   bool is_stopped() const;
-  std::shared_ptr<ArrayBufferAllocator> array_buffer_allocator();
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void CloneParentEnvVars(
@@ -70,7 +70,7 @@ class Worker : public AsyncWrap {
   static void LoopStartTime(const v8::FunctionCallbackInfo<v8::Value>& args);
 
  private:
-  void CreateEnvMessagePort(Environment* env);
+  bool CreateEnvMessagePort(Environment* env);
   static size_t NearHeapLimit(void* data, size_t current_heap_limit,
                               size_t initial_heap_limit);
 
@@ -79,7 +79,6 @@ class Worker : public AsyncWrap {
   std::vector<std::string> argv_;
 
   MultiIsolatePlatform* platform_;
-  std::shared_ptr<ArrayBufferAllocator> array_buffer_allocator_;
   v8::Isolate* isolate_ = nullptr;
   uv_thread_t tid_;
 

@@ -149,6 +149,14 @@ Note:If the text contains special characters, please escape them according to th
             <policyitem type="compatibility" name="BSD License" path="test/fixtures/wpt/resources/.*" desc="BSD License，不影响兼容性"/>
             </policy>
         </policylist>
+		<filefilterlist>
+            <filefilter name="binaryFileTypePolicyFilter" desc="doc和test中的图片" >
+			    <filteritem type="filepath" name="doc/.*.jpg" desc="doc和test中的图片"/>
+				<filteritem type="filepath" name="doc/.*.png" desc="doc和test中的图片"/>
+				<filteritem type="filepath" name="test/.*.jpg" desc="doc和test中的图片"/>
+				<filteritem type="filepath" name="test/.*.png" desc="doc和test中的图片"/>
+            </filefilter>
+        </filefilterlist>
         <filefilterlist>
             <filefilter name="defaultPolicyFilter" desc="compatibility，license文件头校验策略的过滤条件" >
                 <filteritem type="filepath" name="deps/zlib/contrib/minizip/unzip.c" desc="zlib LICENSE，文件未使用，不参与编译,不影响兼容性"/>
@@ -188,7 +196,15 @@ Note:If the text contains special characters, please escape them according to th
                 <filteritem type="filepath" name="deps/npm/node_modules/uri-js/LICENSE" desc="此为LICENSE文件"/>
                 <filteritem type="filepath" name="deps/npm/node_modules/qs/LICENSE" desc="此为LICENSE文件"/>
                 <filteritem type="filepath" name="lib/internal/cluster/.*" desc="文件没有添加license头，跟随node整体的license"/>
+                <filteritem type="filepath" name="lib/internal/util/iterable_weak_map.js" desc="不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="deps/npm/node_modules/validate-npm-package-license/index.js" desc="文件没有添加license头，外层LICENSE位Apache"/>
+				<filteritem type="filepath" name="deps/cares/Makefile.am" desc="不参与编译，不影响兼容性"/>
+				<filteritem type="filepath" name="deps/cares/m4/zz40-xc-ovr.m4" desc="不参与编译，不影响兼容性"/>
+				<filteritem type="filepath" name="deps/cares/m4/xc-val-flgs.m4" desc="不参与编译，不影响兼容性"/>
+				<filteritem type="filepath" name="deps/cares/m4/xc-am-iface.m4" desc="不参与编译，不影响兼容性"/>
+				<filteritem type="filepath" name="deps/cares/m4/xc-cc-check.m4" desc="不参与编译，不影响兼容性"/>
+				<filteritem type="filepath" name="deps/cares/m4/xc-lt-iface.m4" desc="不参与编译，不影响兼容性"/>
+				<filteritem type="filepath" name="deps/cares/m4/xc-translit.m4" desc="不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="deps/cares/README.cares" desc="不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="deps/cares/RELEASE-NOTES" desc="不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="deps/npm/man/man1/npm-dist-tag.1" desc="不参与编译，不影响兼容性"/>
