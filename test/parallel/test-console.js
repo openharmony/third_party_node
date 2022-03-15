@@ -49,7 +49,7 @@ common.expectWarning(
     ['No such label \'default\' for console.timeLog()'],
     ['No such label \'default\' for console.timeEnd()'],
     ['Label \'default\' already exists for console.time()'],
-    ['Label \'test\' already exists for console.time()']
+    ['Label \'test\' already exists for console.time()'],
   ]
 );
 
@@ -216,7 +216,7 @@ console.timeEnd('label3');
 assert.strictEqual(console._times.size, timesMapSize);
 
 const expectedStrings = [
-  'foo', 'foo bar', 'foo bar hop', "{ slashes: '\\\\\\\\' }", 'inspect'
+  'foo', 'foo bar', 'foo bar hop', "{ slashes: '\\\\\\\\' }", 'inspect',
 ];
 
 for (const expected of expectedStrings) {
@@ -246,24 +246,24 @@ assert.ok(strings[0].includes('foo: { bar: { baz:'));
 assert.ok(strings[0].includes('quux'));
 assert.ok(strings.shift().includes('quux: true'));
 
-assert.ok(/^label: \d+\.\d{3}ms$/.test(strings.shift().trim()));
-assert.ok(/^__proto__: \d+\.\d{3}ms$/.test(strings.shift().trim()));
-assert.ok(/^constructor: \d+\.\d{3}ms$/.test(strings.shift().trim()));
-assert.ok(/^hasOwnProperty: \d+\.\d{3}ms$/.test(strings.shift().trim()));
+assert.ok(/^label: \d+(\.\d{1,3})?(ms|s)$/.test(strings.shift().trim()));
+assert.ok(/^__proto__: \d+(\.\d{1,3})?(ms|s)$/.test(strings.shift().trim()));
+assert.ok(/^constructor: \d+(\.\d{1,3})?(ms|s)$/.test(strings.shift().trim()));
+assert.ok(/^hasOwnProperty: \d+(\.\d{1,3})?(ms|s)$/.test(strings.shift().trim()));
 
 // Verify that console.time() coerces label values to strings as expected
-assert.ok(/^: \d+\.\d{3}ms$/.test(strings.shift().trim()));
-assert.ok(/^\[object Object\]: \d+\.\d{3}ms$/.test(strings.shift().trim()));
-assert.ok(/^\[object Object\]: \d+\.\d{3}ms$/.test(strings.shift().trim()));
-assert.ok(/^null: \d+\.\d{3}ms$/.test(strings.shift().trim()));
-assert.ok(/^default: \d+\.\d{3}ms$/.test(strings.shift().trim()));
-assert.ok(/^default: \d+\.\d{3}ms$/.test(strings.shift().trim()));
-assert.ok(/^NaN: \d+\.\d{3}ms$/.test(strings.shift().trim()));
+assert.ok(/^: \d+(\.\d{1,3})?(ms|s)$/.test(strings.shift().trim()));
+assert.ok(/^\[object Object\]: \d+(\.\d{1,3})?(ms|s)$/.test(strings.shift().trim()));
+assert.ok(/^\[object Object\]: \d+(\.\d{1,3})?(ms|s)$/.test(strings.shift().trim()));
+assert.ok(/^null: \d+(\.\d{1,3})?(ms|s)$/.test(strings.shift().trim()));
+assert.ok(/^default: \d+(\.\d{1,3})?(ms|s)$/.test(strings.shift().trim()));
+assert.ok(/^default: \d+(\.\d{1,3})?(ms|s)$/.test(strings.shift().trim()));
+assert.ok(/^NaN: \d+(\.\d{1,3})?(ms|s)$/.test(strings.shift().trim()));
 
-assert.ok(/^log1: \d+\.\d{3}ms$/.test(strings.shift().trim()));
-assert.ok(/^log1: \d+\.\d{3}ms test$/.test(strings.shift().trim()));
-assert.ok(/^log1: \d+\.\d{3}ms {} \[ 1, 2, 3 ]$/.test(strings.shift().trim()));
-assert.ok(/^log1: \d+\.\d{3}ms$/.test(strings.shift().trim()));
+assert.ok(/^log1: \d+(\.\d{1,3})?(ms|s)$/.test(strings.shift().trim()));
+assert.ok(/^log1: \d+(\.\d{1,3})?(ms|s) test$/.test(strings.shift().trim()));
+assert.ok(/^log1: \d+(\.\d{1,3})?(ms|s) {} \[ 1, 2, 3 ]$/.test(strings.shift().trim()));
+assert.ok(/^log1: \d+(\.\d{1,3})?(ms|s)$/.test(strings.shift().trim()));
 
 // Make sure that we checked all strings
 assert.strictEqual(strings.length, 0);

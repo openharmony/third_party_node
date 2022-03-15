@@ -61,6 +61,38 @@ Worker threads inherit non-process-specific options by default. Refer to
 [`Worker constructor options`][] to know how to customize worker thread options,
 specifically `argv` and `execArgv` options.
 
+## `worker.getEnvironmentData(key)`
+<!-- YAML
+added: v14.18.0
+-->
+
+> Stability: 1 - Experimental
+
+* `key` {any} Any arbitrary, cloneable JavaScript value that can be used as a
+  {Map} key.
+* Returns: {any}
+
+Within a worker thread, `worker.getEnvironmentData()` returns a clone
+of data passed to the spawning thread's `worker.setEnvironmentData()`.
+Every new `Worker` receives its own copy of the environment data
+automatically.
+
+```js
+const {
+  Worker,
+  isMainThread,
+  setEnvironmentData,
+  getEnvironmentData,
+} = require('worker_threads');
+
+if (isMainThread) {
+  setEnvironmentData('Hello', 'World!');
+  const worker = new Worker(__filename);
+} else {
+  console.log(getEnvironmentData('Hello'));  // Prints 'World!'.
+}
+```
+
 ## `worker.isMainThread`
 <!-- YAML
 added: v10.5.0
@@ -84,7 +116,7 @@ if (isMainThread) {
 
 ## `worker.markAsUntransferable(object)`
 <!-- YAML
-added: v12.19.0
+added: v14.5.0
 -->
 
 Mark an object as not transferable. If `object` occurs in the transfer list of
@@ -140,7 +172,7 @@ inherit from its global `Object` class. Objects passed to the
 and inherit from its global `Object` class.
 
 However, the created `MessagePort` will no longer inherit from
-[`EventEmitter`][], and only [`port.onmessage()`][] can be used to receive
+[`EventTarget`][], and only [`port.onmessage()`][] can be used to receive
 events using it.
 
 ## `worker.parentPort`
@@ -204,7 +236,9 @@ When this function is used, no `'message'` event will be emitted and the
 
 ## `worker.resourceLimits`
 <!-- YAML
-added: v12.16.0
+added:
+ - v13.2.0
+ - v12.16.0
 -->
 
 * {Object}
@@ -237,6 +271,23 @@ new Worker('process.env.SET_IN_WORKER = "foo"', { eval: true, env: SHARE_ENV })
     console.log(process.env.SET_IN_WORKER);  // Prints 'foo'.
   });
 ```
+
+## `worker.setEnvironmentData(key[, value])`
+<!-- YAML
+added: v14.18.0
+-->
+
+> Stability: 1 - Experimental
+
+* `key` {any} Any arbitrary, cloneable JavaScript value that can be used as a
+  {Map} key.
+* `value` {any} Any arbitrary, cloneable JavaScript value that will be cloned
+  and passed automatically to all new `Worker` instances. If `value` is passed
+  as `undefined`, any previously set value for the `key` will be deleted.
+
+The `worker.setEnvironmentData()` API sets the content of
+`worker.getEnvironmentData()` in the current thread and all new `Worker`
+instances spawned from the current context.
 
 ## `worker.threadId`
 <!-- YAML
@@ -293,17 +344,22 @@ port2.postMessage({ foo: 'bar' });
 ## Class: `MessagePort`
 <!-- YAML
 added: v10.5.0
+changes:
+  - version:
+    - v14.7.0
+    pr-url: https://github.com/nodejs/node/pull/34057
+    description: This class now inherits from `EventTarget` rather than
+                 from `EventEmitter`.
 -->
 
-* Extends: {EventEmitter}
+* Extends: {EventTarget}
 
 Instances of the `worker.MessagePort` class represent one end of an
 asynchronous, two-way communications channel. It can be used to transfer
 structured data, memory regions and other `MessagePort`s between different
 [`Worker`][]s.
 
-With the exception of `MessagePort`s being [`EventEmitter`][]s rather
-than [`EventTarget`][]s, this implementation matches [browser `MessagePort`][]s.
+This implementation matches [browser `MessagePort`][]s.
 
 ### Event: `'close'`
 <!-- YAML
@@ -342,12 +398,18 @@ to `postMessage()` and no further arguments.
 
 ### Event: `'messageerror'`
 <!-- YAML
-added: v12.19.0
+added: v14.5.0
 -->
 
 * `error` {Error} An Error object
 
 The `'messageerror'` event is emitted when deserializing a message failed.
+
+Currently, this event is emitted when there is an error occurring while
+instantiating the posted JS object on the receiving end. Such situations
+are rare, but can happen, for instance, when certain Node.js API objects
+are received in a `vm.Context` (where Node.js APIs are currently
+unavailable).
 
 ### `port.close()`
 <!-- YAML
@@ -365,10 +427,16 @@ are part of the channel.
 <!-- YAML
 added: v10.5.0
 changes:
-  - version: v12.19.0
+  - version: v14.18.0
+    pr-url: https://github.com/nodejs/node/pull/37917
+    description: Add 'BlockList' to the list of cloneable types.
+  - version: v14.18.0
+    pr-url: https://github.com/nodejs/node/pull/37155
+    description: Add 'Histogram' types to the list of cloneable types.
+  - version: v14.5.0
     pr-url: https://github.com/nodejs/node/pull/33360
     description: Added `KeyObject` to the list of cloneable types.
-  - version: v12.19.0
+  - version: v14.5.0
     pr-url: https://github.com/nodejs/node/pull/33772
     description: Added `FileHandle` to the list of transferable types.
 -->
@@ -388,8 +456,13 @@ In particular, the significant differences to `JSON` are:
 * `value` may contain typed arrays, both using `ArrayBuffer`s
    and `SharedArrayBuffer`s.
 * `value` may contain [`WebAssembly.Module`][] instances.
-* `value` may not contain native (C++-backed) objects other than `MessagePort`s,
-  [`FileHandle`][]s, and [`KeyObject`][]s.
+* `value` may not contain native (C++-backed) objects other than:
+  * {FileHandle}s,
+  * {Histogram}s,
+  * {KeyObject}s,
+  * {MessagePort}s,
+  * {net.BlockList}s,
+  * {net.SocketAddress}es,
 
 ```js
 const { MessageChannel } = require('worker_threads');
@@ -619,29 +692,42 @@ if (isMainThread) {
 <!-- YAML
 added: v10.5.0
 changes:
+  - version: v14.9.0
+    pr-url: https://github.com/nodejs/node/pull/34584
+    description: The `filename` parameter can be a WHATWG `URL` object using
+                 `data:` protocol.
+  - version: v14.9.0
+    pr-url: https://github.com/nodejs/node/pull/34394
+    description: The `trackUnmanagedFds` option was set to `true` by default.
   - version:
-    - v12.19.0
+    - v14.6.0
     pr-url: https://github.com/nodejs/node/pull/34303
     description: The `trackUnmanagedFds` option was introduced.
-  - version: v12.17.0
+  - version: v14.0.0
     pr-url: https://github.com/nodejs/node/pull/32278
     description: The `transferList` option was introduced.
-  - version: v12.17.0
+  - version: v13.12.0
     pr-url: https://github.com/nodejs/node/pull/31664
     description: The `filename` parameter can be a WHATWG `URL` object using
                  `file:` protocol.
-  - version: v12.16.0
-    pr-url: https://github.com/nodejs/node/pull/26628
-    description: The `resourceLimits` option was introduced.
-  - version: v12.16.0
+  - version:
+     - v13.4.0
+     - v12.16.0
     pr-url: https://github.com/nodejs/node/pull/30559
     description: The `argv` option was introduced.
+  - version:
+     - v13.2.0
+     - v12.16.0
+    pr-url: https://github.com/nodejs/node/pull/26628
+    description: The `resourceLimits` option was introduced.
 -->
 
 * `filename` {string|URL} The path to the Worker’s main script or module. Must
   be either an absolute path or a relative path (i.e. relative to the
   current working directory) starting with `./` or `../`, or a WHATWG `URL`
-  object using `file:` protocol.
+  object using `file:` or `data:` protocol.
+  When using a [`data:` URL][], the data is interpreted based on MIME type using
+  the [ECMAScript module loader][].
   If `options.eval` is `true`, this is a string containing JavaScript code
   rather than a path.
 * `options` {Object}
@@ -737,7 +823,7 @@ All messages sent from the worker thread will be emitted before the
 
 ### Event: `'messageerror'`
 <!-- YAML
-added: v12.19.0
+added: v14.5.0
 -->
 
 * `error` {Error} An Error object
@@ -754,7 +840,7 @@ JavaScript code.
 
 ### `worker.getHeapSnapshot()`
 <!-- YAML
-added: v12.17.0
+added: v13.9.0
 -->
 
 * Returns: {Promise} A promise for a Readable Stream containing
@@ -769,7 +855,7 @@ immediately with an [`ERR_WORKER_NOT_RUNNING`][] error.
 
 ### `worker.performance`
 <!-- YAML
-added: v12.22.0
+added: v14.17.0
 -->
 
 An object that can be used to query performance information from a worker
@@ -777,7 +863,7 @@ instance. Similar to [`perf_hooks.performance`][].
 
 #### `performance.eventLoopUtilization([utilization1[, utilization2]])`
 <!-- YAML
-added: v12.22.0
+added: v14.17.0
 -->
 
 * `utilization1` {Object} The result of a previous call to
@@ -850,7 +936,9 @@ no effect.
 
 ### `worker.resourceLimits`
 <!-- YAML
-added: v12.16.0
+added:
+ - v13.2.0
+ - v12.16.0
 -->
 
 * {Object}
@@ -864,6 +952,7 @@ If the `resourceLimits` option was passed to the [`Worker`][] constructor,
 this matches its values.
 
 If the worker has stopped, the return value is an empty object.
+
 ### `worker.stderr`
 <!-- YAML
 added: v10.5.0
@@ -937,63 +1026,113 @@ Calling `unref()` on a worker will allow the thread to exit if this is the only
 active handle in the event system. If the worker is already `unref()`ed calling
 `unref()` again will have no effect.
 
+## Notes
+
+### Synchronous blocking of stdio
+
+`Worker`s utilize message passing via {MessagePort} to implement interactions
+with `stdio`. This means that `stdio` output originating from a `Worker` can
+get blocked by synchronous code on the receiving end that is blocking the
+Node.js event loop.
+
+```mjs
+import {
+  Worker,
+  isMainThread,
+} from 'worker_threads';
+
+if (isMainThread) {
+  new Worker(new URL(import.meta.url));
+  for (let n = 0; n < 1e10; n++) {}
+} else {
+  // This output will be blocked by the for loop in the main thread.
+  console.log('foo');
+}
+```
+
+```cjs
+'use strict';
+
+const {
+  Worker,
+  isMainThread,
+} = require('worker_threads');
+
+if (isMainThread) {
+  new Worker(__filename);
+  for (let n = 0; n < 1e10; n++) {}
+} else {
+  // This output will be blocked by the for loop in the main thread.
+  console.log('foo');
+}
+```
+
+### Launching worker threads from preload scripts
+
+Take care when launching worker threads from preload scripts (scripts loaded
+and run using the `-r` command line flag). Unless the `execArgv` option is
+explicitly set, new Worker threads automatically inherit the command line flags
+from the running process and will preload the same preload scripts as the main
+thread. If the preload script unconditionally launches a worker thread, every
+thread spawned will spawn another until the application crashes.
+
+[Addons worker support]: addons.md#addons_worker_support
+[ECMAScript module loader]: esm.md#esm_data_imports
+[HTML structured clone algorithm]: https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm
+[Signals events]: process.md#process_signal_events
+[Web Workers]: https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API
 [`'close'` event]: #worker_threads_event_close
 [`'exit'` event]: #worker_threads_event_exit
 [`'online'` event]: #worker_threads_event_online
 [`ArrayBuffer`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer
-[`AsyncResource`]: async_hooks.html#async_hooks_class_asyncresource
-[`Buffer`]: buffer.html
-[`Buffer.allocUnsafe()`]: buffer.html#buffer_static_method_buffer_allocunsafe_size
-[`ERR_MISSING_MESSAGE_PORT_IN_TRANSFER_LIST`]: errors.html#errors_err_missing_message_port_in_transfer_list
-[`ERR_WORKER_NOT_RUNNING`]: errors.html#ERR_WORKER_NOT_RUNNING
-[`EventEmitter`]: events.html
+[`AsyncResource`]: async_hooks.md#async_hooks_class_asyncresource
+[`Buffer.allocUnsafe()`]: buffer.md#buffer_static_method_buffer_allocunsafe_size
+[`Buffer`]: buffer.md
+[`ERR_MISSING_MESSAGE_PORT_IN_TRANSFER_LIST`]: errors.md#errors_err_missing_message_port_in_transfer_list
+[`ERR_WORKER_NOT_RUNNING`]: errors.md#ERR_WORKER_NOT_RUNNING
 [`EventTarget`]: https://developer.mozilla.org/en-US/docs/Web/API/EventTarget
-[`FileHandle`]: fs.html#fs_class_filehandle
-[`KeyObject`]: crypto.html#crypto_class_keyobject
+[`FileHandle`]: fs.md#fs_class_filehandle
 [`MessagePort`]: #worker_threads_class_messageport
 [`SharedArrayBuffer`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer
 [`Uint8Array`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array
 [`WebAssembly.Module`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Module
+[`Worker constructor options`]: #worker_threads_new_worker_filename_options
 [`Worker`]: #worker_threads_class_worker
-[`cluster` module]: cluster.html
-[`fs.open()`]: fs.html#fs_fs_open_path_flags_mode_callback
-[`fs.close()`]: fs.html#fs_fs_close_fd_callback
+[`cluster` module]: cluster.md
+[`data:` URL]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs
+[`fs.close()`]: fs.md#fs_fs_close_fd_callback
+[`fs.open()`]: fs.md#fs_fs_open_path_flags_mode_callback
 [`markAsUntransferable()`]: #worker_threads_worker_markasuntransferable_object
-[`perf_hooks.performance`]: #perf_hooks.md#perf_hooks_perf_hooks_performance
+[`perf_hooks.performance`]: perf_hooks.md#perf_hooks_perf_hooks_performance
 [`perf_hooks` `eventLoopUtilization()`]: perf_hooks.md#perf_hooks_performance_eventlooputilization_utilization1_utilization2
 [`port.on('message')`]: #worker_threads_event_message
 [`port.onmessage()`]: https://developer.mozilla.org/en-US/docs/Web/API/MessagePort/onmessage
 [`port.postMessage()`]: #worker_threads_port_postmessage_value_transferlist
-[`process.abort()`]: process.html#process_process_abort
-[`process.chdir()`]: process.html#process_process_chdir_directory
-[`process.env`]: process.html#process_process_env
-[`process.execArgv`]: process.html#process_process_execargv
-[`process.exit()`]: process.html#process_process_exit_code
-[`process.stderr`]: process.html#process_process_stderr
-[`process.stdin`]: process.html#process_process_stdin
-[`process.stdout`]: process.html#process_process_stdout
-[`process.title`]: process.html#process_process_title
+[`process.abort()`]: process.md#process_process_abort
+[`process.chdir()`]: process.md#process_process_chdir_directory
+[`process.env`]: process.md#process_process_env
+[`process.execArgv`]: process.md#process_process_execargv
+[`process.exit()`]: process.md#process_process_exit_code
+[`process.stderr`]: process.md#process_process_stderr
+[`process.stdin`]: process.md#process_process_stdin
+[`process.stdout`]: process.md#process_process_stdout
+[`process.title`]: process.md#process_process_title
 [`require('worker_threads').isMainThread`]: #worker_threads_worker_ismainthread
 [`require('worker_threads').parentPort.on('message')`]: #worker_threads_event_message
-[`require('worker_threads').parentPort`]: #worker_threads_worker_parentport
 [`require('worker_threads').parentPort.postMessage()`]: #worker_threads_worker_postmessage_value_transferlist
+[`require('worker_threads').parentPort`]: #worker_threads_worker_parentport
 [`require('worker_threads').threadId`]: #worker_threads_worker_threadid
 [`require('worker_threads').workerData`]: #worker_threads_worker_workerdata
-[`trace_events`]: tracing.html
-[`v8.getHeapSnapshot()`]: v8.html#v8_v8_getheapsnapshot
-[`vm`]: vm.html
-[`Worker constructor options`]: #worker_threads_new_worker_filename_options
+[`trace_events`]: tracing.md
+[`v8.getHeapSnapshot()`]: v8.md#v8_v8_getheapsnapshot
+[`vm`]: vm.md
+[`worker.SHARE_ENV`]: #worker_threads_worker_share_env
 [`worker.on('message')`]: #worker_threads_event_message_1
 [`worker.postMessage()`]: #worker_threads_worker_postmessage_value_transferlist
-[`worker.SHARE_ENV`]: #worker_threads_worker_share_env
 [`worker.terminate()`]: #worker_threads_worker_terminate
 [`worker.threadId`]: #worker_threads_worker_threadid_1
-[Addons worker support]: addons.html#addons_worker_support
-[async-resource-worker-pool]: async_hooks.html#async-resource-worker-pool
-[HTML structured clone algorithm]: https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm
-[Signals events]: process.html#process_signal_events
-[Web Workers]: https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API
+[async-resource-worker-pool]: async_hooks.md#async-resource-worker-pool
 [browser `MessagePort`]: https://developer.mozilla.org/en-US/docs/Web/API/MessagePort
-[child processes]: child_process.html
-[contextified]: vm.html#vm_what_does_it_mean_to_contextify_an_object
-[v8.serdes]: v8.html#v8_serialization_api
+[child processes]: child_process.md
+[contextified]: vm.md#vm_what_does_it_mean_to_contextify_an_object
+[v8.serdes]: v8.md#v8_serialization_api

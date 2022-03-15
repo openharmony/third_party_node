@@ -54,7 +54,6 @@ using v8::Int32;
 using v8::Integer;
 using v8::Local;
 using v8::Object;
-using v8::String;
 using v8::Uint32Array;
 using v8::Value;
 
@@ -72,6 +71,9 @@ namespace {
 #define Z_MIN_LEVEL -1
 #define Z_MAX_LEVEL 9
 #define Z_DEFAULT_LEVEL Z_DEFAULT_COMPRESSION
+#define Z_MIN_WINDOWBITS 8
+#define Z_MAX_WINDOWBITS 15
+#define Z_DEFAULT_WINDOWBITS 15
 
 #define ZLIB_ERROR_CODES(V)      \
   V(Z_OK)                        \
@@ -598,7 +600,8 @@ class ZlibStream : public CompressionStream<ZlibContext> {
     CHECK(args[4]->IsUint32Array());
     Local<Uint32Array> array = args[4].As<Uint32Array>();
     Local<ArrayBuffer> ab = array->Buffer();
-    uint32_t* write_result = static_cast<uint32_t*>(ab->GetContents().Data());
+    uint32_t* write_result = static_cast<uint32_t*>(
+        ab->GetBackingStore()->Data());
 
     CHECK(args[5]->IsFunction());
     Local<Function> write_js_callback = args[5].As<Function>();
@@ -1261,11 +1264,7 @@ struct MakeClass {
     env->SetProtoMethod(z, "params", Stream::Params);
     env->SetProtoMethod(z, "reset", Stream::Reset);
 
-    Local<String> zlibString = OneByteString(env->isolate(), name);
-    z->SetClassName(zlibString);
-    target->Set(env->context(),
-                zlibString,
-                z->GetFunction(env->context()).ToLocalChecked()).Check();
+    env->SetConstructorFunction(target, name, z);
   }
 };
 

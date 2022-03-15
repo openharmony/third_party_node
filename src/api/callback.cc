@@ -13,18 +13,22 @@ using v8::Isolate;
 using v8::Local;
 using v8::MaybeLocal;
 using v8::MicrotasksScope;
-using v8::NewStringType;
 using v8::Object;
 using v8::String;
 using v8::Value;
 
 CallbackScope::CallbackScope(Isolate* isolate,
                              Local<Object> object,
+                             async_context async_context)
+  : CallbackScope(Environment::GetCurrent(isolate), object, async_context) {}
+
+CallbackScope::CallbackScope(Environment* env,
+                             Local<Object> object,
                              async_context asyncContext)
-  : private_(new InternalCallbackScope(Environment::GetCurrent(isolate),
+  : private_(new InternalCallbackScope(env,
                                        object,
                                        asyncContext)),
-    try_catch_(isolate) {
+    try_catch_(env->isolate()) {
   try_catch_.SetVerbose(true);
 }
 
@@ -62,6 +66,8 @@ InternalCallbackScope::InternalCallbackScope(Environment* env,
   // If you hit this assertion, you forgot to enter the v8::Context first.
   CHECK_EQ(Environment::GetCurrent(env->isolate()), env);
 
+  env->isolate()->SetIdle(false);
+
   env->async_hooks()->push_async_context(
     async_context_.async_id, async_context_.trigger_async_id, object);
 
@@ -82,6 +88,8 @@ InternalCallbackScope::~InternalCallbackScope() {
 void InternalCallbackScope::Close() {
   if (closed_) return;
   closed_ = true;
+
+  auto idle = OnScopeLeave([&]() { env_->isolate()->SetIdle(true); });
 
   if (!env_->can_call_into_js()) return;
   auto perform_stopping_check = [&]() {
@@ -214,8 +222,7 @@ MaybeLocal<Value> MakeCallback(Isolate* isolate,
                                Local<Value> argv[],
                                async_context asyncContext) {
   Local<String> method_string =
-      String::NewFromUtf8(isolate, method, NewStringType::kNormal)
-          .ToLocalChecked();
+      String::NewFromUtf8(isolate, method).ToLocalChecked();
   return MakeCallback(isolate, recv, method_string, argc, argv, asyncContext);
 }
 

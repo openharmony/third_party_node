@@ -427,7 +427,7 @@ attempts to read a file that does not exist.
 * `code` {string} The string error code
 * `dest` {string} If present, the file path destination when reporting a file
   system error
-* `errno` {number|string} The system-provided error number
+* `errno` {number} The system-provided error number
 * `info` {Object} If present, extra details about the error condition
 * `message` {string} A system-provided human-readable description of the error
 * `path` {string} If present, the file path when reporting a file system error
@@ -456,13 +456,15 @@ system error.
 
 ### `error.errno`
 
-* {string|number}
+* {number}
 
-The `error.errno` property is a number or a string. If it is a number, it is a
-negative value which corresponds to the error code defined in
-[`libuv Error handling`][]. See the libuv `errno.h` header file
-(`deps/uv/include/uv/errno.h` in the Node.js source tree) for details. In case
-of a string, it is the same as `error.code`.
+The `error.errno` property is a negative number which corresponds
+to the error code defined in [`libuv Error handling`][].
+
+On Windows the error number provided by the system will be normalized by libuv.
+
+To get the string representation of the error code, use
+[`util.getSystemErrorName(error.errno)`][].
 
 ### `error.info`
 
@@ -610,6 +612,18 @@ A human-readable string describing the reason for the error.
 <a id="nodejs-error-codes"></a>
 ## Node.js error codes
 
+<a id="ABORT_ERR"></a>
+### `ABORT_ERR`
+<!-- YAML
+added: v14.17.0
+-->
+Used when an operation has been aborted (typically using an `AbortController`).
+
+APIs _not_ using `AbortSignal`s typically do not raise an error with this code.
+
+This code does not use the regular `ERR_*` convention Node.js errors use in
+order to be compatible with the web platform's `AbortError`.
+
 <a id="ERR_AMBIGUOUS_ARGUMENT"></a>
 ### `ERR_AMBIGUOUS_ARGUMENT`
 
@@ -700,16 +714,27 @@ Used when a child process is being forked without specifying an IPC channel.
 Used when the main process is trying to read data from the child process's
 STDERR/STDOUT, and the data's length is longer than the `maxBuffer` option.
 
+<a id="ERR_CLOSED_MESSAGE_PORT"></a>
+### `ERR_CLOSED_MESSAGE_PORT`
+<!--
+added: v14.17.1
+changes:
+  - version: 11.12.0
+    pr-url: https://github.com/nodejs/node/pull/26487
+    description: The error message was removed.
+  - version: v14.17.1
+    pr-url: https://github.com/nodejs/node/pull/38510
+    description: The error message was reintroduced.
+-->
+
+There was an attempt to use a `MessagePort` instance in a closed
+state, usually after `.close()` has been called.
+
 <a id="ERR_CONSOLE_WRITABLE_STREAM"></a>
 ### `ERR_CONSOLE_WRITABLE_STREAM`
 
 `Console` was instantiated without `stdout` stream, or `Console` has a
 non-writable `stdout` or `stderr` stream.
-
-<a id="ERR_CONSTRUCT_CALL_REQUIRED"></a>
-### `ERR_CONSTRUCT_CALL_REQUIRED`
-
-A constructor for a class was called without `new`.
 
 <a id="ERR_CONSTRUCT_CALL_INVALID"></a>
 ### `ERR_CONSTRUCT_CALL_INVALID`
@@ -718,6 +743,19 @@ added: v12.5.0
 -->
 
 A class constructor was called that is not callable.
+
+<a id="ERR_CONSTRUCT_CALL_REQUIRED"></a>
+### `ERR_CONSTRUCT_CALL_REQUIRED`
+
+A constructor for a class was called without `new`.
+
+<a id="ERR_CONTEXT_NOT_INITIALIZED"></a>
+### `ERR_CONTEXT_NOT_INITIALIZED`
+
+The vm context passed into the API is not yet initialized. This could happen
+when an error occurs (and is caught) during the creation of the
+context, for example, when the allocation fails or the maximum call stack
+size is reached when the context is created.
 
 <a id="ERR_CPU_USAGE"></a>
 ### `ERR_CPU_USAGE`
@@ -838,6 +876,30 @@ An unknown cipher was specified.
 An unknown Diffie-Hellman group name was given. See
 [`crypto.getDiffieHellman()`][] for a list of valid group names.
 
+<a id="ERR_DLOPEN_FAILED"></a>
+### `ERR_DLOPEN_FAILED`
+<!-- YAML
+added: v14.18.0
+-->
+
+A call to `process.dlopen()` failed.
+
+<a id="ERR_DEBUGGER_ERROR"></a>
+### `ERR_DEBUGGER_ERROR`
+<!-- YAML
+added: v14.17.4
+-->
+
+An error occurred with the [debugger][].
+
+<a id="ERR_DEBUGGER_STARTUP_ERROR"></a>
+### `ERR_DEBUGGER_STARTUP_ERROR`
+<!-- YAML
+added: v14.17.4
+-->
+
+The [debugger][] timed out waiting for the required host/port to be free.
+
 <a id="ERR_DIR_CLOSED"></a>
 ### `ERR_DIR_CLOSED`
 
@@ -846,7 +908,7 @@ The [`fs.Dir`][] was previously closed.
 <a id="ERR_DIR_CONCURRENT_OPERATION"></a>
 ### `ERR_DIR_CONCURRENT_OPERATION`
 <!-- YAML
-added: v12.18.1
+added: v14.3.0
 -->
 
 A synchronous read or close call was attempted on an [`fs.Dir`][] which has
@@ -886,6 +948,16 @@ provided.
 Encoding provided to `TextDecoder()` API was not one of the
 [WHATWG Supported Encodings][].
 
+<a id="ERR_EVAL_ESM_CANNOT_PRINT"></a>
+### `ERR_EVAL_ESM_CANNOT_PRINT`
+
+`--print` cannot be used with ESM input.
+
+<a id="ERR_EVENT_RECURSION"></a>
+### `ERR_EVENT_RECURSION`
+
+Thrown when an attempt is made to recursively dispatch an event on `EventTarget`.
+
 <a id="ERR_EXECUTION_ENVIRONMENT_NOT_AVAILABLE"></a>
 ### `ERR_EXECUTION_ENVIRONMENT_NOT_AVAILABLE`
 
@@ -898,6 +970,20 @@ for the JS engine are not set up properly.
 
 A `Promise` that was callbackified via `util.callbackify()` was rejected with a
 falsy value.
+
+<a id="ERR_FEATURE_UNAVAILABLE_ON_PLATFORM"></a>
+### `ERR_FEATURE_UNAVAILABLE_ON_PLATFORM`
+<!-- YAML
+added: v14.0.0
+-->
+
+Used when a feature that is not available
+to the current platform which is running Node.js is used.
+
+<a id="ERR_FS_EISDIR"></a>
+### `ERR_FS_EISDIR`
+
+Path is a directory.
 
 <a id="ERR_FS_FILE_TOO_LARGE"></a>
 ### `ERR_FS_FILE_TOO_LARGE`
@@ -971,6 +1057,12 @@ A non-specific HTTP/2 error has occurred.
 New HTTP/2 Streams may not be opened after the `Http2Session` has received a
 `GOAWAY` frame from the connected peer.
 
+<a id="ERR_HTTP2_HEADER_SINGLE_VALUE"></a>
+### `ERR_HTTP2_HEADER_SINGLE_VALUE`
+
+Multiple values were provided for an HTTP/2 header field that was required to
+have only a single value.
+
 <a id="ERR_HTTP2_HEADERS_AFTER_RESPOND"></a>
 ### `ERR_HTTP2_HEADERS_AFTER_RESPOND`
 
@@ -980,12 +1072,6 @@ An additional headers was specified after an HTTP/2 response was initiated.
 ### `ERR_HTTP2_HEADERS_SENT`
 
 An attempt was made to send multiple response headers.
-
-<a id="ERR_HTTP2_HEADER_SINGLE_VALUE"></a>
-### `ERR_HTTP2_HEADER_SINGLE_VALUE`
-
-Multiple values were provided for an HTTP/2 header field that was required to
-have only a single value.
 
 <a id="ERR_HTTP2_INFO_STATUS_NOT_ALLOWED"></a>
 ### `ERR_HTTP2_INFO_STATUS_NOT_ALLOWED`
@@ -1058,6 +1144,11 @@ reached.
 
 An attempt was made to initiate a new push stream from within a push stream.
 Nested push streams are not permitted.
+
+<a id="ERR_HTTP2_NO_MEM"></a>
+### `ERR_HTTP2_NO_MEM`
+
+Out of memory when using the `http2session.setLocalWindowSize(windowSize)` API.
 
 <a id="ERR_HTTP2_NO_SOCKET_MANIPULATION"></a>
 ### `ERR_HTTP2_NO_SOCKET_MANIPULATION`
@@ -1187,12 +1278,6 @@ is set for the `Http2Stream`.
 `http2.connect()` was passed a URL that uses any protocol other than `http:` or
 `https:`.
 
-<a id="ERR_INTERNAL_ASSERTION"></a>
-### `ERR_INTERNAL_ASSERTION`
-
-There was a bug in Node.js or incorrect usage of Node.js internals.
-To fix the error, open an issue at <https://github.com/nodejs/node/issues>.
-
 <a id="ERR_INCOMPATIBLE_OPTION_PAIR"></a>
 ### `ERR_INCOMPATIBLE_OPTION_PAIR`
 
@@ -1252,6 +1337,12 @@ before it was connected.
 
 An API was called on the main thread that can only be used from
 the worker thread.
+
+<a id="ERR_INTERNAL_ASSERTION"></a>
+### `ERR_INTERNAL_ASSERTION`
+
+There was a bug in Node.js or incorrect usage of Node.js internals.
+To fix the error, open an issue at <https://github.com/nodejs/node/issues>.
 
 <a id="ERR_INVALID_ADDRESS_FAMILY"></a>
 ### `ERR_INVALID_ADDRESS_FAMILY`
@@ -1338,6 +1429,15 @@ An invalid HTTP token was supplied.
 
 An IP address is not valid.
 
+<a id="ERR_INVALID_MODULE"></a>
+### `ERR_INVALID_MODULE`
+<!-- YAML
+added: v14.18.0
+-->
+
+An attempt was made to load a module that does not exist or was otherwise not
+valid.
+
 <a id="ERR_INVALID_MODULE_SPECIFIER"></a>
 ### `ERR_INVALID_MODULE_SPECIFIER`
 
@@ -1385,8 +1485,8 @@ which is not supported.
 <a id="ERR_INVALID_REPL_INPUT"></a>
 ### `ERR_INVALID_REPL_INPUT`
 
-The input may not be used in the [`REPL`][]. All prohibited inputs are
-documented in the [`REPL`][]'s documentation.
+The input may not be used in the [`REPL`][]. The conditions under which this
+error is used are described in the [`REPL`][] documentation.
 
 <a id="ERR_INVALID_RETURN_PROPERTY"></a>
 ### `ERR_INVALID_RETURN_PROPERTY`
@@ -1515,6 +1615,13 @@ A policy manifest resource had an invalid value for one of its fields. Update
 the manifest entry to match in order to resolve this error. See the
 documentation for [policy][] manifests for more information.
 
+<a id="ERR_MANIFEST_INVALID_SPECIFIER"></a>
+### `ERR_MANIFEST_INVALID_SPECIFIER`
+
+A policy manifest resource had an invalid value for one of its dependency
+mappings. Update the manifest entry to match to resolve this error. See the
+documentation for [policy][] manifests for more information.
+
 <a id="ERR_MANIFEST_PARSE_POLICY"></a>
 ### `ERR_MANIFEST_PARSE_POLICY`
 
@@ -1542,7 +1649,7 @@ failed.
 <a id="ERR_MESSAGE_TARGET_CONTEXT_UNAVAILABLE"></a>
 ### `ERR_MESSAGE_TARGET_CONTEXT_UNAVAILABLE`
 <!-- YAML
-added: v12.19.0
+added: v14.5.0
 -->
 
 A message posted to a [`MessagePort`][] could not be deserialized in the target
@@ -1564,26 +1671,18 @@ strict compliance with the API specification (which in some cases may accept
 `func(undefined)` and `func()` are treated identically, and the
 [`ERR_INVALID_ARG_TYPE`][] error code may be used instead.
 
-<a id="ERR_MISSING_DYNAMIC_INSTANTIATE_HOOK"></a>
-### `ERR_MISSING_DYNAMIC_INSTANTIATE_HOOK`
+<a id="ERR_MISSING_MESSAGE_PORT_IN_TRANSFER_LIST"></a>
+### `ERR_MISSING_MESSAGE_PORT_IN_TRANSFER_LIST`
 
-> Stability: 1 - Experimental
-
-An [ES Module][] loader hook specified `format: 'dynamic'` but did not provide
-a `dynamicInstantiate` hook.
+An object that needs to be explicitly listed in the `transferList` argument
+is in the object passed to a `postMessage()` call, but is not provided
+in the `transferList` for that call. Usually, this is a `MessagePort`.
 
 <a id="ERR_MISSING_OPTION"></a>
 ### `ERR_MISSING_OPTION`
 
 For APIs that accept options objects, some options might be mandatory. This code
 is thrown if a required option is missing.
-
-<a id="ERR_MISSING_MESSAGE_PORT_IN_TRANSFER_LIST"></a>
-### `ERR_MISSING_MESSAGE_PORT_IN_TRANSFER_LIST`
-
-An object that needs to be explicitly listed in the `transferList` argument
-was found in the object passed to a `postMessage()` call, but not provided in
-the `transferList` for that call. Usually, this is a `MessagePort`.
 
 <a id="ERR_MISSING_PASSPHRASE"></a>
 ### `ERR_MISSING_PASSPHRASE`
@@ -1616,7 +1715,7 @@ would be possible by calling a callback more than once.
 <a id="ERR_NAPI_CONS_FUNCTION"></a>
 ### `ERR_NAPI_CONS_FUNCTION`
 
-While using `N-API`, a constructor passed was not a function.
+While using `Node-API`, a constructor passed was not a function.
 
 <a id="ERR_NAPI_INVALID_DATAVIEW_ARGS"></a>
 ### `ERR_NAPI_INVALID_DATAVIEW_ARGS`
@@ -1677,6 +1776,12 @@ compiled with ICU support.
 ### `ERR_NON_CONTEXT_AWARE_DISABLED`
 
 A non-context-aware native addon was loaded in a process that disallows them.
+
+<a id="ERR_OPERATION_FAILED"></a>
+### `ERR_OPERATION_FAILED`
+
+An operation failed. This is typically used to signal the general failure of an
+asynchronous operation.
 
 <a id="ERR_OUT_OF_RANGE"></a>
 ### `ERR_OUT_OF_RANGE`
@@ -1764,11 +1869,6 @@ value.
 While using [`dgram.createSocket()`][], the size of the receive or send `Buffer`
 could not be determined.
 
-<a id="ERR_SOCKET_CANNOT_SEND"></a>
-### `ERR_SOCKET_CANNOT_SEND`
-
-Data could be sent on a socket.
-
 <a id="ERR_SOCKET_CLOSED"></a>
 ### `ERR_SOCKET_CLOSED`
 
@@ -1796,6 +1896,12 @@ A call was made and the UDP subsystem was not running.
 A string was provided for a Subresource Integrity check, but was unable to be
 parsed. Check the format of integrity attributes by looking at the
 [Subresource Integrity specification][].
+
+<a id="ERR_STREAM_ALREADY_FINISHED"></a>
+### `ERR_STREAM_ALREADY_FINISHED`
+
+A stream method was called that cannot complete because the stream was
+finished.
 
 <a id="ERR_STREAM_CANNOT_PIPE"></a>
 ### `ERR_STREAM_CANNOT_PIPE`
@@ -1869,6 +1975,14 @@ An unspecified or non-specific system error has occurred within the Node.js
 process. The error object will have an `err.info` object property with
 additional details.
 
+<a id="ERR_TLS_CERT_ALTNAME_FORMAT"></a>
+### `ERR_TLS_CERT_ALTNAME_FORMAT`
+
+This error is thrown by `checkServerIdentity` if a user-supplied
+`subjectaltname` property violates encoding rules. Certificate objects produced
+by Node.js itself always comply with encoding rules and will never cause
+this error.
+
 <a id="ERR_TLS_CERT_ALTNAME_INVALID"></a>
 ### `ERR_TLS_CERT_ALTNAME_INVALID`
 
@@ -1892,19 +2006,10 @@ connection.
 <a id="ERR_TLS_INVALID_CONTEXT"></a>
 ### `ERR_TLS_INVALID_CONTEXT`
 <!-- YAML
-added: v12.16.0
+added: v13.3.0
 -->
 
 The context must be a `SecureContext`.
-
-<a id="ERR_TLS_INVALID_STATE"></a>
-### `ERR_TLS_INVALID_STATE`
-<!-- YAML
-added: v12.17.0
--->
-
-The TLS socket must be connected and securily established. Ensure the 'secure'
-event is emitted before continuing.
 
 <a id="ERR_TLS_INVALID_PROTOCOL_METHOD"></a>
 ### `ERR_TLS_INVALID_PROTOCOL_METHOD`
@@ -1917,11 +2022,27 @@ disabled because it is insecure.
 
 Valid TLS protocol versions are `'TLSv1'`, `'TLSv1.1'`, or `'TLSv1.2'`.
 
+<a id="ERR_TLS_INVALID_STATE"></a>
+### `ERR_TLS_INVALID_STATE`
+<!-- YAML
+added:
+ - v13.10.0
+ - v12.17.0
+-->
+
+The TLS socket must be connected and securily established. Ensure the 'secure'
+event is emitted before continuing.
+
 <a id="ERR_TLS_PROTOCOL_VERSION_CONFLICT"></a>
 ### `ERR_TLS_PROTOCOL_VERSION_CONFLICT`
 
 Attempting to set a TLS protocol `minVersion` or `maxVersion` conflicts with an
 attempt to set the `secureProtocol` explicitly. Use one mechanism or the other.
+
+<a id="ERR_TLS_PSK_SET_IDENTIY_HINT_FAILED"></a>
+### `ERR_TLS_PSK_SET_IDENTIY_HINT_FAILED`
+
+Failed to set PSK identity hint. Hint may be too long.
 
 <a id="ERR_TLS_RENEGOTIATION_DISABLED"></a>
 ### `ERR_TLS_RENEGOTIATION_DISABLED`
@@ -1946,11 +2067,6 @@ vector for denial-of-service attacks.
 An attempt was made to issue Server Name Indication from a TLS server-side
 socket, which is only valid from a client.
 
-<a id="ERR_TLS_PSK_SET_IDENTIY_HINT_FAILED"></a>
-### `ERR_TLS_PSK_SET_IDENTIY_HINT_FAILED`
-
-Failed to set PSK identity hint. Hint may be too long.
-
 <a id="ERR_TRACE_EVENTS_CATEGORY_REQUIRED"></a>
 ### `ERR_TRACE_EVENTS_CATEGORY_REQUIRED`
 
@@ -1962,16 +2078,6 @@ category.
 
 The `trace_events` module could not be loaded because Node.js was compiled with
 the `--without-v8-platform` flag.
-
-<a id="ERR_TRANSFERRING_EXTERNALIZED_SHAREDARRAYBUFFER"></a>
-### `ERR_TRANSFERRING_EXTERNALIZED_SHAREDARRAYBUFFER`
-
-A `SharedArrayBuffer` whose memory is not managed by the JavaScript engine
-or by Node.js was encountered during serialization. Such a `SharedArrayBuffer`
-cannot be serialized.
-
-This can only happen when native addons create `SharedArrayBuffer`s in
-"externalized" mode, or put existing `SharedArrayBuffer` into externalized mode.
 
 <a id="ERR_TRANSFORM_ALREADY_TRANSFORMING"></a>
 ### `ERR_TRANSFORM_ALREADY_TRANSFORMING`
@@ -2075,7 +2181,7 @@ import 'package-name'; // supported
 ### `ERR_VALID_PERFORMANCE_ENTRY_TYPE`
 
 While using the Performance Timing API (`perf_hooks`), no valid performance
-entry types were found.
+entry types are found.
 
 <a id="ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING"></a>
 ### `ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING`
@@ -2112,6 +2218,11 @@ than the parent module. Linked modules must share the same context.
 ### `ERR_VM_MODULE_LINKING_ERRORED`
 
 The linker function returned a module for which linking has failed.
+
+<a id="ERR_VM_MODULE_LINK_FAILURE"></a>
+### `ERR_VM_MODULE_LINK_FAILURE`
+
+The module was unable to be linked due to a failure.
 
 <a id="ERR_VM_MODULE_NOT_MODULE"></a>
 ### `ERR_VM_MODULE_NOT_MODULE`
@@ -2186,8 +2297,11 @@ Creation of a [`zlib`][] object failed due to incorrect configuration.
 ### `HPE_HEADER_OVERFLOW`
 <!-- YAML
 changes:
-  - version: v11.4.0
-    pr-url: https://github.com/nodejs/node/commit/186035243fad247e3955f
+  - version:
+     - v11.4.0
+     - v10.15.0
+    commit: 186035243fad247e3955f
+    pr-url: https://github.com/nodejs-private/node-private/pull/143
     description: Max header size in `http_parser` was set to 8KB.
 -->
 
@@ -2232,16 +2346,6 @@ removed: v12.5.0
 
 The value passed to `postMessage()` contained an object that is not supported
 for transferring.
-
-<a id="ERR_CLOSED_MESSAGE_PORT"></a>
-### `ERR_CLOSED_MESSAGE_PORT`
-<!-- YAML
-added: v10.5.0
-removed: v11.12.0
--->
-
-There was an attempt to use a `MessagePort` instance in a closed
-state, usually after `.close()` has been called.
 
 <a id="ERR_CRYPTO_HASH_DIGEST_NO_UTF16"></a>
 ### `ERR_CRYPTO_HASH_DIGEST_NO_UTF16`
@@ -2313,6 +2417,11 @@ removed: v10.0.0
 Used when an invalid character is found in an HTTP response status message
 (reason phrase).
 
+<a id="ERR_HTTP_REQUEST_TIMEOUT"></a>
+### `ERR_HTTP_REQUEST_TIMEOUT`
+
+The client has not sent the entire request within the allowed time.
+
 <a id="ERR_INDEX_OUT_OF_RANGE"></a>
 ### `ERR_INDEX_OUT_OF_RANGE`
 <!-- YAML
@@ -2328,7 +2437,7 @@ added: v9.0.0
 removed: v10.0.0
 -->
 
-Used by the `N-API` when `Constructor.prototype` is not an object.
+Used by the `Node-API` when `Constructor.prototype` is not an object.
 
 <a id="ERR_NO_LONGER_SUPPORTED"></a>
 ### `ERR_NO_LONGER_SUPPORTED`
@@ -2354,6 +2463,15 @@ removed: v10.0.0
 -->
 
 The `repl` module was unable to parse data from the REPL history file.
+
+<a id="ERR_SOCKET_CANNOT_SEND"></a>
+### `ERR_SOCKET_CANNOT_SEND`
+<!-- YAML
+added: v9.0.0
+removed: v14.0.0
+-->
+
+Data could not be sent on a socket.
 
 <a id="ERR_STDERR_CLOSE"></a>
 ### `ERR_STDERR_CLOSE`
@@ -2404,17 +2522,19 @@ removed: v10.0.0
 
 Used when a TLS renegotiation request has failed in a non-specific way.
 
-<a id="ERR_UNKNOWN_BUILTIN_MODULE"></a>
-### `ERR_UNKNOWN_BUILTIN_MODULE`
+<a id="ERR_TRANSFERRING_EXTERNALIZED_SHAREDARRAYBUFFER"></a>
+### `ERR_TRANSFERRING_EXTERNALIZED_SHAREDARRAYBUFFER`
 <!-- YAML
-added: v8.0.0
-removed: v9.0.0
+added: v10.5.0
+removed: v14.0.0
 -->
 
-The `'ERR_UNKNOWN_BUILTIN_MODULE'` error code is used to identify a specific
-kind of internal Node.js error that should not typically be triggered by user
-code. Instances of this error point to an internal bug within the Node.js
-binary itself.
+A `SharedArrayBuffer` whose memory is not managed by the JavaScript engine
+or by Node.js was encountered during serialization. Such a `SharedArrayBuffer`
+cannot be serialized.
+
+This can only happen when native addons create `SharedArrayBuffer`s in
+"externalized" mode, or put existing `SharedArrayBuffer` into externalized mode.
 
 <a id="ERR_UNKNOWN_STDIN_TYPE"></a>
 ### `ERR_UNKNOWN_STDIN_TYPE`
@@ -2467,77 +2587,79 @@ removed: v10.0.0
 Used when an attempt is made to use a `zlib` object after it has already been
 closed.
 
-[`'uncaughtException'`]: process.html#process_event_uncaughtexception
-[`--disable-proto=throw`]: cli.html#cli_disable_proto_mode
-[`--force-fips`]: cli.html#cli_force_fips
-[`Class: assert.AssertionError`]: assert.html#assert_class_assert_assertionerror
+[ES Module]: esm.md
+[ICU]: intl.md#intl_internationalization_support
+[Node.js error codes]: #nodejs-error-codes
+[Subresource Integrity specification]: https://www.w3.org/TR/SRI/#the-integrity-attribute
+[V8's stack trace API]: https://github.com/v8/v8/wiki/Stack-Trace-API
+[WHATWG Supported Encodings]: util.md#util_whatwg_supported_encodings
+[WHATWG URL API]: url.md#url_the_whatwg_url_api
+[`"exports"`]: packages.md#packages_exports
+[`"imports"`]: packages.md#packages_imports
+[`'uncaughtException'`]: process.md#process_event_uncaughtexception
+[`--disable-proto=throw`]: cli.md#cli_disable_proto_mode
+[`--force-fips`]: cli.md#cli_force_fips
+[`Class: assert.AssertionError`]: assert.md#assert_class_assert_assertionerror
 [`ERR_INVALID_ARG_TYPE`]: #ERR_INVALID_ARG_TYPE
-[`EventEmitter`]: events.html#events_class_eventemitter
-[`MessagePort`]: worker_threads.html#worker_threads_class_messageport
+[`EventEmitter`]: events.md#events_class_eventemitter
+[`MessagePort`]: worker_threads.md#worker_threads_class_messageport
 [`Object.getPrototypeOf`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getPrototypeOf
 [`Object.setPrototypeOf`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf
-[`REPL`]: repl.html
-[`Writable`]: stream.html#stream_class_stream_writable
-[`child_process`]: child_process.html
-[`cipher.getAuthTag()`]: crypto.html#crypto_cipher_getauthtag
-[`crypto.getDiffieHellman()`]: crypto.html#crypto_crypto_getdiffiehellman_groupname
-[`crypto.scrypt()`]: crypto.html#crypto_crypto_scrypt_password_salt_keylen_options_callback
-[`crypto.scryptSync()`]: crypto.html#crypto_crypto_scryptsync_password_salt_keylen_options
-[`crypto.timingSafeEqual()`]: crypto.html#crypto_crypto_timingsafeequal_a_b
-[`dgram.connect()`]: dgram.html#dgram_socket_connect_port_address_callback
-[`dgram.createSocket()`]: dgram.html#dgram_dgram_createsocket_options_callback
-[`dgram.disconnect()`]: dgram.html#dgram_socket_disconnect
-[`dgram.remoteAddress()`]: dgram.html#dgram_socket_remoteaddress
+[`REPL`]: repl.md
+[`Writable`]: stream.md#stream_class_stream_writable
+[`child_process`]: child_process.md
+[`cipher.getAuthTag()`]: crypto.md#crypto_cipher_getauthtag
+[`crypto.getDiffieHellman()`]: crypto.md#crypto_crypto_getdiffiehellman_groupname
+[`crypto.scrypt()`]: crypto.md#crypto_crypto_scrypt_password_salt_keylen_options_callback
+[`crypto.scryptSync()`]: crypto.md#crypto_crypto_scryptsync_password_salt_keylen_options
+[`crypto.timingSafeEqual()`]: crypto.md#crypto_crypto_timingsafeequal_a_b
+[`dgram.connect()`]: dgram.md#dgram_socket_connect_port_address_callback
+[`dgram.createSocket()`]: dgram.md#dgram_dgram_createsocket_options_callback
+[`dgram.disconnect()`]: dgram.md#dgram_socket_disconnect
+[`dgram.remoteAddress()`]: dgram.md#dgram_socket_remoteaddress
 [`errno`(3) man page]: https://man7.org/linux/man-pages/man3/errno.3.html
-[`fs.Dir`]: fs.html#fs_class_fs_dir
-[`fs.readFileSync`]: fs.html#fs_fs_readfilesync_path_options
-[`fs.readdir`]: fs.html#fs_fs_readdir_path_options_callback
-[`fs.symlink()`]: fs.html#fs_fs_symlink_target_path_type_callback
-[`fs.symlinkSync()`]: fs.html#fs_fs_symlinksync_target_path_type
-[`fs.unlink`]: fs.html#fs_fs_unlink_path_callback
-[`fs`]: fs.html
-[`hash.digest()`]: crypto.html#crypto_hash_digest_encoding
-[`hash.update()`]: crypto.html#crypto_hash_update_data_inputencoding
-[`http`]: http.html
-[`https`]: https.html
+[`fs.Dir`]: fs.md#fs_class_fs_dir
+[`fs.readFileSync`]: fs.md#fs_fs_readfilesync_path_options
+[`fs.readdir`]: fs.md#fs_fs_readdir_path_options_callback
+[`fs.symlink()`]: fs.md#fs_fs_symlink_target_path_type_callback
+[`fs.symlinkSync()`]: fs.md#fs_fs_symlinksync_target_path_type
+[`fs.unlink`]: fs.md#fs_fs_unlink_path_callback
+[`fs`]: fs.md
+[`hash.digest()`]: crypto.md#crypto_hash_digest_encoding
+[`hash.update()`]: crypto.md#crypto_hash_update_data_inputencoding
+[`http`]: http.md
+[`https`]: https.md
 [`libuv Error handling`]: https://docs.libuv.org/en/v1.x/errors.html
-[`net`]: net.html
-[`new URL(input)`]: url.html#url_new_url_input_base
-[`new URLSearchParams(iterable)`]: url.html#url_new_urlsearchparams_iterable
-[`process.on('exit')`]: process.html#Event:-`'exit'`
-[`process.send()`]: process.html#process_process_send_message_sendhandle_options_callback
-[`process.setUncaughtExceptionCaptureCallback()`]: process.html#process_process_setuncaughtexceptioncapturecallback_fn
-[`readable._read()`]: stream.html#stream_readable_read_size_1
-[`require('crypto').setEngine()`]: crypto.html#crypto_crypto_setengine_engine_flags
-[`require()`]: modules.html#modules_require_id
-[`server.close()`]: net.html#net_server_close_callback
-[`server.listen()`]: net.html#net_server_listen
-[`sign.sign()`]: crypto.html#crypto_sign_sign_privatekey_outputencoding
-[`stream.pipe()`]: stream.html#stream_readable_pipe_destination_options
-[`stream.push()`]: stream.html#stream_readable_push_chunk_encoding
-[`stream.unshift()`]: stream.html#stream_readable_unshift_chunk_encoding
-[`stream.write()`]: stream.html#stream_writable_write_chunk_encoding_callback
-[`subprocess.kill()`]: child_process.html#child_process_subprocess_kill_signal
-[`subprocess.send()`]: child_process.html#child_process_subprocess_send_message_sendhandle_options_callback
-[`zlib`]: zlib.html
-[ES Module]: esm.html
-[ICU]: intl.html#intl_internationalization_support
-[Node.js error codes]: #nodejs-error-codes
-[V8's stack trace API]: https://github.com/v8/v8/wiki/Stack-Trace-API
-[WHATWG Supported Encodings]: util.html#util_whatwg_supported_encodings
-[WHATWG URL API]: url.html#url_the_whatwg_url_api
-[crypto digest algorithm]: crypto.html#crypto_crypto_gethashes
-[domains]: domain.html
-[event emitter-based]: events.html#events_class_eventemitter
-[`package.json`]: packages.html#packages_node_js_package_json_field_definitions
-[`"exports"`]: packages.html#packages_exports
+[`net`]: net.md
+[`new URL(input)`]: url.md#url_new_url_input_base
+[`new URLSearchParams(iterable)`]: url.md#url_new_urlsearchparams_iterable
+[`package.json`]: packages.md#packages_node_js_package_json_field_definitions
+[`process.on('exit')`]: process.md#process_event_exit
+[`process.send()`]: process.md#process_process_send_message_sendhandle_options_callback
+[`process.setUncaughtExceptionCaptureCallback()`]: process.md#process_process_setuncaughtexceptioncapturecallback_fn
+[`readable._read()`]: stream.md#stream_readable_read_size_1
+[`require('crypto').setEngine()`]: crypto.md#crypto_crypto_setengine_engine_flags
+[`require()`]: modules.md#modules_require_id
+[`server.close()`]: net.md#net_server_close_callback
+[`server.listen()`]: net.md#net_server_listen
+[`sign.sign()`]: crypto.md#crypto_sign_sign_privatekey_outputencoding
+[`stream.pipe()`]: stream.md#stream_readable_pipe_destination_options
+[`stream.push()`]: stream.md#stream_readable_push_chunk_encoding
+[`stream.unshift()`]: stream.md#stream_readable_unshift_chunk_encoding
+[`stream.write()`]: stream.md#stream_writable_write_chunk_encoding_callback
+[`subprocess.kill()`]: child_process.md#child_process_subprocess_kill_signal
+[`subprocess.send()`]: child_process.md#child_process_subprocess_send_message_sendhandle_options_callback
+[`util.getSystemErrorName(error.errno)`]: util.md#util_util_getsystemerrorname_err
+[`zlib`]: zlib.md
+[crypto digest algorithm]: crypto.md#crypto_crypto_gethashes
+[debugger]: debugger.md
+[define a custom subpath]: packages.md#packages_subpath_exports
+[domains]: domain.md
+[event emitter-based]: events.md#events_class_eventemitter
 [file descriptors]: https://en.wikipedia.org/wiki/File_descriptor
-[policy]: policy.html
-[stream-based]: stream.html
+[policy]: policy.md
+[self-reference a package using its name]: packages.md#packages_self_referencing_a_package_using_its_name
+[stream-based]: stream.md
 [syscall]: https://man7.org/linux/man-pages/man2/syscalls.2.html
-[Subresource Integrity specification]: https://www.w3.org/TR/SRI/#the-integrity-attribute
 [try-catch]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch
-[vm]: vm.html
-[self-reference a package using its name]: packages.html#packages_self_referencing_a_package_using_its_name
-[define a custom subpath]: packages.html#packages_subpath_exports
-[`"imports"`]: packages.html#packages_imports
+[vm]: vm.md

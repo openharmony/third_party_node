@@ -2,7 +2,7 @@
 #include "node_internals.h"
 #include "node_options-inl.h"
 #include "node_metadata.h"
-#include "node_process.h"
+#include "node_process-inl.h"
 #include "node_revert.h"
 #include "util-inl.h"
 
@@ -145,7 +145,7 @@ void PatchProcessObject(const FunctionCallbackInfo<Value>& args) {
                 FIXED_ONE_BYTE_STRING(isolate, "title"),
                 ProcessTitleGetter,
                 env->owns_process_state() ? ProcessTitleSetter : nullptr,
-                env->as_callback_data(),
+                Local<Value>(),
                 DEFAULT,
                 None,
                 SideEffectType::kHasNoSideEffect)
@@ -196,7 +196,7 @@ void PatchProcessObject(const FunctionCallbackInfo<Value>& args) {
                           FIXED_ONE_BYTE_STRING(isolate, "debugPort"),
                           DebugPortGetter,
                           env->owns_process_state() ? DebugPortSetter : nullptr,
-                          env->as_callback_data())
+                          Local<Value>())
             .FromJust());
 }
 

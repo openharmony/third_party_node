@@ -132,7 +132,7 @@ to mark specific significant moments in the Performance Timeline.
 <!-- YAML
 added: v8.5.0
 changes:
-  - version: v12.16.3
+  - version: v14.0.0
     pr-url: https://github.com/nodejs/node/pull/32651
     description: Make `startMark` and `endMark` parameters optional.
 -->
@@ -225,62 +225,6 @@ obs.observe({ entryTypes: ['function'] });
 wrapped();
 ```
 
-### `performance.eventLoopUtilization([util1][,util2])`
-<!-- YAML
-added: v12.19.0
--->
-
-* `util1` {Object} The result of a previous call to `eventLoopUtilization()`
-* `util2` {Object} The result of a previous call to `eventLoopUtilization()`
-    prior to `util1`
-* Returns {Object}
-  * `idle` {number}
-  * `active` {number}
-  * `utilization` {number}
-
-The `eventLoopUtilization()` method returns an object that contains the
-cumulative duration of time the event loop has been both idle and active as a
-high resolution milliseconds timer. The `utilization` value is the calculated
-Event Loop Utilization (ELU). If bootstrapping has not yet finished, the
-properties have the value of 0.
-
-`util1` and `util2` are optional parameters.
-
-If `util1` is passed then the delta between the current call's `active` and
-`idle` times are calculated and returned (similar to [`process.hrtime()`][]).
-Likewise the adjusted `utilization` value is calculated.
-
-If `util1` and `util2` are both passed then the calculation adjustments are
-done between the two arguments. This is a convenience option because unlike
-[`process.hrtime()`][] additional work is done to calculate the ELU.
-
-ELU is similar to CPU utilization except that it is calculated using high
-precision wall-clock time. It represents the percentage of time the event loop
-has spent outside the event loop's event provider (e.g. `epoll_wait`). No other
-CPU idle time is taken into consideration. The following is an example of how
-a mostly idle process will have a high ELU.
-
-<!-- eslint-skip -->
-```js
-'use strict';
-const { eventLoopUtilization } = require('perf_hooks').performance;
-const { spawnSync } = require('child_process');
-
-setImmediate(() => {
-  const elu = eventLoopUtilization();
-  spawnSync('sleep', ['5']);
-  console.log(eventLoopUtilization(elu).utilization);
-});
-```
-
-Although the CPU is mostly idle while running this script, the value of
-`utilization` is 1. This is because the call to [`child_process.spawnSync()`][]
-blocks the event loop from proceeding.
-
-Passing in a user-defined object instead of the result of a previous call to
-`eventLoopUtilization()` will lead to undefined behavior. The return values
-are not guaranteed to reflect any correct state of the event loop.
-
 ## Class: `PerformanceEntry`
 <!-- YAML
 added: v8.5.0
@@ -295,25 +239,6 @@ added: v8.5.0
 
 The total number of milliseconds elapsed for this entry. This value will not
 be meaningful for all Performance Entry types.
-
-### `performanceEntry.name`
-<!-- YAML
-added: v8.5.0
--->
-
-* {string}
-
-The name of the performance entry.
-
-### `performanceEntry.startTime`
-<!-- YAML
-added: v8.5.0
--->
-
-* {number}
-
-The high resolution millisecond timestamp marking the starting time of the
-Performance Entry.
 
 ### `performanceEntry.entryType`
 <!-- YAML
@@ -331,6 +256,38 @@ The type of the performance entry. It may be one of:
 * `'function'` (Node.js only)
 * `'http2'` (Node.js only)
 * `'http'` (Node.js only)
+
+### `performanceEntry.flags`
+<!-- YAML
+added:
+ - v13.9.0
+ - v12.17.0
+-->
+
+* {number}
+
+_This property is an extension by Node.js. It is not available in Web browsers._
+
+When `performanceEntry.entryType` is equal to `'gc'`, the `performance.flags`
+property contains additional information about garbage collection operation.
+The value may be one of:
+
+* `perf_hooks.constants.NODE_PERFORMANCE_GC_FLAGS_NO`
+* `perf_hooks.constants.NODE_PERFORMANCE_GC_FLAGS_CONSTRUCT_RETAINED`
+* `perf_hooks.constants.NODE_PERFORMANCE_GC_FLAGS_FORCED`
+* `perf_hooks.constants.NODE_PERFORMANCE_GC_FLAGS_SYNCHRONOUS_PHANTOM_PROCESSING`
+* `perf_hooks.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE`
+* `perf_hooks.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_EXTERNAL_MEMORY`
+* `perf_hooks.constants.NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE`
+
+### `performanceEntry.name`
+<!-- YAML
+added: v8.5.0
+-->
+
+* {string}
+
+The name of the performance entry.
 
 ### `performanceEntry.kind`
 <!-- YAML
@@ -350,31 +307,22 @@ The value may be one of:
 * `perf_hooks.constants.NODE_PERFORMANCE_GC_INCREMENTAL`
 * `perf_hooks.constants.NODE_PERFORMANCE_GC_WEAKCB`
 
-### performanceEntry.flags
+### `performanceEntry.startTime`
 <!-- YAML
-added: v12.17.0
+added: v8.5.0
 -->
 
 * {number}
 
-_This property is an extension by Node.js. It is not available in Web browsers._
+The high resolution millisecond timestamp marking the starting time of the
+Performance Entry.
 
-When `performanceEntry.entryType` is equal to `'gc'`, the `performance.flags`
-property contains additional information about garbage collection operation.
-The value may be one of:
-
-* `perf_hooks.constants.NODE_PERFORMANCE_GC_FLAGS_NO`
-* `perf_hooks.constants.NODE_PERFORMANCE_GC_FLAGS_CONSTRUCT_RETAINED`
-* `perf_hooks.constants.NODE_PERFORMANCE_GC_FLAGS_FORCED`
-* `perf_hooks.constants.NODE_PERFORMANCE_GC_FLAGS_SYNCHRONOUS_PHANTOM_PROCESSING`
-* `perf_hooks.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE`
-* `perf_hooks.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_EXTERNAL_MEMORY`
-* `perf_hooks.constants.NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE`
-
-## Class: `PerformanceNodeTiming extends PerformanceEntry`
+## Class: `PerformanceNodeTiming`
 <!-- YAML
 added: v8.5.0
 -->
+
+* Extends: {PerformanceEntry}
 
 _This property is an extension by Node.js. It is not available in Web browsers._
 
@@ -401,6 +349,21 @@ added: v8.5.0
 
 The high resolution millisecond timestamp at which the Node.js environment was
 initialized.
+
+### `performanceNodeTiming.idleTime`
+<!-- YAML
+added:
+  - v14.10.0
+  - v12.19.0
+-->
+
+* {number}
+
+The high resolution millisecond timestamp of the amount of time the event loop
+has been idle within the event loop's event provider (e.g. `epoll_wait`). This
+does not take CPU usage into consideration. If the event loop has not yet
+started (e.g., in the first tick of the main script), the property has the
+value of 0.
 
 ### `performanceNodeTiming.loopExit`
 <!-- YAML
@@ -443,19 +406,6 @@ added: v8.5.0
 
 The high resolution millisecond timestamp at which the V8 platform was
 initialized.
-
-### `performanceNodeTiming.idleTime`
-<!-- YAML
-added: v12.19.0
--->
-
-* {number}
-
-The high resolution millisecond timestamp of the amount of time the event loop
-has been idle within the event loop's event provider (e.g. `epoll_wait`). This
-does not take CPU usage into consideration. If the event loop has not yet
-started (e.g., in the first tick of the main script), the property has the
-value of 0.
 
 ## Class: `perf_hooks.PerformanceObserver`
 
@@ -571,6 +521,38 @@ added: v8.5.0
 Returns a list of `PerformanceEntry` objects in chronological order
 with respect to `performanceEntry.startTime`.
 
+```js
+const {
+  performance,
+  PerformanceObserver
+} = require('perf_hooks');
+
+const obs = new PerformanceObserver((perfObserverList, observer) => {
+  console.log(perfObserverList.getEntries());
+  /**
+   * [
+   *   PerformanceEntry {
+   *     name: 'test',
+   *     entryType: 'mark',
+   *     startTime: 81.465639,
+   *     duration: 0
+   *   },
+   *   PerformanceEntry {
+   *     name: 'meow',
+   *     entryType: 'mark',
+   *     startTime: 81.860064,
+   *     duration: 0
+   *   }
+   * ]
+   */
+  observer.disconnect();
+});
+obs.observe({ entryTypes: ['mark'], buffered: true });
+
+performance.mark('test');
+performance.mark('meow');
+```
+
 ### `performanceObserverEntryList.getEntriesByName(name[, type])`
 <!-- YAML
 added: v8.5.0
@@ -585,6 +567,46 @@ with respect to `performanceEntry.startTime` whose `performanceEntry.name` is
 equal to `name`, and optionally, whose `performanceEntry.entryType` is equal to
 `type`.
 
+```js
+const {
+  performance,
+  PerformanceObserver
+} = require('perf_hooks');
+
+const obs = new PerformanceObserver((perfObserverList, observer) => {
+  console.log(perfObserverList.getEntriesByName('meow'));
+  /**
+   * [
+   *   PerformanceEntry {
+   *     name: 'meow',
+   *     entryType: 'mark',
+   *     startTime: 98.545991,
+   *     duration: 0
+   *   }
+   * ]
+   */
+  console.log(perfObserverList.getEntriesByName('nope')); // []
+
+  console.log(perfObserverList.getEntriesByName('test', 'mark'));
+  /**
+   * [
+   *   PerformanceEntry {
+   *     name: 'test',
+   *     entryType: 'mark',
+   *     startTime: 63.518931,
+   *     duration: 0
+   *   }
+   * ]
+   */
+  console.log(perfObserverList.getEntriesByName('test', 'measure')); // []
+  observer.disconnect();
+});
+obs.observe({ entryTypes: ['mark', 'measure'], buffered: true });
+
+performance.mark('test');
+performance.mark('meow');
+```
+
 ### `performanceObserverEntryList.getEntriesByType(type)`
 <!-- YAML
 added: v8.5.0
@@ -597,6 +619,54 @@ Returns a list of `PerformanceEntry` objects in chronological order
 with respect to `performanceEntry.startTime` whose `performanceEntry.entryType`
 is equal to `type`.
 
+```js
+const {
+  performance,
+  PerformanceObserver
+} = require('perf_hooks');
+
+const obs = new PerformanceObserver((perfObserverList, observer) => {
+  console.log(perfObserverList.getEntriesByType('mark'));
+  /**
+   * [
+   *   PerformanceEntry {
+   *     name: 'test',
+   *     entryType: 'mark',
+   *     startTime: 55.897834,
+   *     duration: 0
+   *   },
+   *   PerformanceEntry {
+   *     name: 'meow',
+   *     entryType: 'mark',
+   *     startTime: 56.350146,
+   *     duration: 0
+   *   }
+   * ]
+   */
+  observer.disconnect();
+});
+obs.observe({ entryTypes: ['mark'], buffered: true });
+
+performance.mark('test');
+performance.mark('meow');
+```
+
+## `perf_hooks.createHistogram([options])`
+<!-- YAML
+added: v14.18.0
+-->
+
+* `options` {Object}
+  * `min` {number|bigint} The minimum recordable value. Must be an integer
+    value greater than 0. **Defaults**: `1`.
+  * `max` {number|bigint} The maximum recordable value. Must be an integer
+    value greater than `min`. **Defaults**: `Number.MAX_SAFE_INTEGER`.
+  * `figures` {number} The number of accuracy digits. Must be a number between
+    `1` and `5`. **Defaults**: `3`.
+* Returns {RecordableHistogram}
+
+Returns a {RecordableHistogram}.
+
 ## `perf_hooks.monitorEventLoopDelay([options])`
 <!-- YAML
 added: v11.10.0
@@ -605,12 +675,12 @@ added: v11.10.0
 * `options` {Object}
   * `resolution` {number} The sampling rate in milliseconds. Must be greater
     than zero. **Default:** `10`.
-* Returns: {Histogram}
+* Returns: {IntervalHistogram}
 
 _This property is an extension by Node.js. It is not available in Web browsers._
 
-Creates a `Histogram` object that samples and reports the event loop delay
-over time. The delays will be reported in nanoseconds.
+Creates an `IntervalHistogram` object that samples and reports the event loop
+delay over time. The delays will be reported in nanoseconds.
 
 Using a timer to detect approximate event loop delay works because the
 execution of timers is tied specifically to the lifecycle of the libuv
@@ -633,36 +703,12 @@ console.log(h.percentile(50));
 console.log(h.percentile(99));
 ```
 
-### Class: `Histogram`
-<!-- YAML
-added: v11.10.0
--->
-Tracks the event loop delay at a given sampling rate. The constructor of
-this class not exposed to users.
-
-_This property is an extension by Node.js. It is not available in Web browsers._
-
-#### `histogram.disable()`
+## Class: `Histogram`
 <!-- YAML
 added: v11.10.0
 -->
 
-* Returns: {boolean}
-
-Disables the event loop delay sample timer. Returns `true` if the timer was
-stopped, `false` if it was already stopped.
-
-#### `histogram.enable()`
-<!-- YAML
-added: v11.10.0
--->
-
-* Returns: {boolean}
-
-Enables the event loop delay sample timer. Returns `true` if the timer was
-started, `false` if it was already started.
-
-#### `histogram.exceeds`
+### `histogram.exceeds`
 <!-- YAML
 added: v11.10.0
 -->
@@ -672,7 +718,7 @@ added: v11.10.0
 The number of times the event loop delay exceeded the maximum 1 hour event
 loop delay threshold.
 
-#### `histogram.max`
+### `histogram.max`
 <!-- YAML
 added: v11.10.0
 -->
@@ -681,7 +727,7 @@ added: v11.10.0
 
 The maximum recorded event loop delay.
 
-#### `histogram.mean`
+### `histogram.mean`
 <!-- YAML
 added: v11.10.0
 -->
@@ -690,7 +736,7 @@ added: v11.10.0
 
 The mean of the recorded event loop delays.
 
-#### `histogram.min`
+### `histogram.min`
 <!-- YAML
 added: v11.10.0
 -->
@@ -699,17 +745,17 @@ added: v11.10.0
 
 The minimum recorded event loop delay.
 
-#### `histogram.percentile(percentile)`
+### `histogram.percentile(percentile)`
 <!-- YAML
 added: v11.10.0
 -->
 
-* `percentile` {number} A percentile value between 1 and 100.
+* `percentile` {number} A percentile value in the range (0, 100].
 * Returns: {number}
 
 Returns the value at the given percentile.
 
-#### `histogram.percentiles`
+### `histogram.percentiles`
 <!-- YAML
 added: v11.10.0
 -->
@@ -718,14 +764,14 @@ added: v11.10.0
 
 Returns a `Map` object detailing the accumulated percentile distribution.
 
-#### `histogram.reset()`
+### `histogram.reset()`
 <!-- YAML
 added: v11.10.0
 -->
 
 Resets the collected histogram data.
 
-#### `histogram.stddev`
+### `histogram.stddev`
 <!-- YAML
 added: v11.10.0
 -->
@@ -733,6 +779,56 @@ added: v11.10.0
 * {number}
 
 The standard deviation of the recorded event loop delays.
+
+## Class: `IntervalHistogram extends Histogram`
+
+A `Histogram` that is periodically updated on a given interval.
+
+### `histogram.disable()`
+<!-- YAML
+added: v11.10.0
+-->
+
+* Returns: {boolean}
+
+Disables the update interval timer. Returns `true` if the timer was
+stopped, `false` if it was already stopped.
+
+### `histogram.enable()`
+<!-- YAML
+added: v11.10.0
+-->
+
+* Returns: {boolean}
+
+Enables the update interval timer. Returns `true` if the timer was
+started, `false` if it was already started.
+
+### Cloning an `IntervalHistogram`
+
+{IntervalHistogram} instances can be cloned via {MessagePort}. On the receiving
+end, the histogram is cloned as a plain {Histogram} object that does not
+implement the `enable()` and `disable()` methods.
+
+## Class: `RecordableHistogram extends Histogram`
+<!-- YAML
+added: v14.18.0
+-->
+
+### `histogram.record(val)`
+<!-- YAML
+added: v14.18.0
+-->
+
+* `val` {number|bigint} The amount to record in the histogram.
+
+### `histogram.recordDelta()`
+<!-- YAML
+added: v14.18.0
+-->
+
+Calculates the amount of time (in nanoseconds) that has passed since the
+previous call to `recordDelta()` and records that amount in the histogram.
 
 ## Examples
 
@@ -812,14 +908,14 @@ obs.observe({ entryTypes: ['function'], buffered: true });
 require('some-module');
 ```
 
-[`'exit'`]: process.html#process_event_exit
-[`process.hrtime()`]: process.html#process_process_hrtime_time
-[`child_process.spawnSync()`]: child_process.html#child_process_child_process_spawnsync_command_args_options
-[`timeOrigin`]: https://w3c.github.io/hr-time/#dom-performance-timeorigin
-[`window.performance`]: https://developer.mozilla.org/en-US/docs/Web/API/Window/performance
-[Async Hooks]: async_hooks.html
+[Async Hooks]: async_hooks.md
 [High Resolution Time]: https://www.w3.org/TR/hr-time-2
 [Performance Timeline]: https://w3c.github.io/performance-timeline/
-[Web Performance APIs]: https://w3c.github.io/perf-timing-primer/
 [User Timing]: https://www.w3.org/TR/user-timing/
+[Web Performance APIs]: https://w3c.github.io/perf-timing-primer/
 [Worker threads]: worker_threads.md#worker_threads_worker_threads
+[`'exit'`]: process.md#process_event_exit
+[`child_process.spawnSync()`]: child_process.md#child_process_child_process_spawnsync_command_args_options
+[`process.hrtime()`]: process.md#process_process_hrtime_time
+[`timeOrigin`]: https://w3c.github.io/hr-time/#dom-performance-timeorigin
+[`window.performance`]: https://developer.mozilla.org/en-US/docs/Web/API/Window/performance

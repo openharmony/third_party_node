@@ -5,7 +5,6 @@
 
 #include "env.h"
 #include "node_mutex.h"
-#include "sharedarraybuffer_metadata.h"
 #include <list>
 
 namespace node {
@@ -17,7 +16,7 @@ class MessagePort;
 typedef MaybeStackBuffer<v8::Local<v8::Value>, 8> TransferList;
 
 // Used to represent the in-flight structure of an object that is being
-// transfered or cloned using postMessage().
+// transferred or cloned using postMessage().
 class TransferData : public MemoryRetainer {
  public:
   // Deserialize this object on the receiving end after a .postMessage() call.
@@ -75,13 +74,13 @@ class Message : public MemoryRetainer {
 
   // Internal method of Message that is called when a new SharedArrayBuffer
   // object is encountered in the incoming value's structure.
-  void AddSharedArrayBuffer(const SharedArrayBufferMetadataReference& ref);
+  void AddSharedArrayBuffer(std::shared_ptr<v8::BackingStore> backing_store);
   // Internal method of Message that is called once serialization finishes
   // and that transfers ownership of `data` to this message.
   void AddTransferable(std::unique_ptr<TransferData>&& data);
   // Internal method of Message that is called when a new WebAssembly.Module
   // object is encountered in the incoming value's structure.
-  uint32_t AddWASMModule(v8::WasmModuleObject::TransferrableModule&& mod);
+  uint32_t AddWASMModule(v8::CompiledWasmModule&& mod);
 
   // The host objects that will be transferred, as recorded by Serialize()
   // (e.g. MessagePorts).
@@ -98,10 +97,10 @@ class Message : public MemoryRetainer {
 
  private:
   MallocedBuffer<char> main_message_buf_;
-  std::vector<MallocedBuffer<char>> array_buffer_contents_;
-  std::vector<SharedArrayBufferMetadataReference> shared_array_buffers_;
+  std::vector<std::shared_ptr<v8::BackingStore>> array_buffers_;
+  std::vector<std::shared_ptr<v8::BackingStore>> shared_array_buffers_;
   std::vector<std::unique_ptr<TransferData>> transferables_;
-  std::vector<v8::WasmModuleObject::TransferrableModule> wasm_modules_;
+  std::vector<v8::CompiledWasmModule> wasm_modules_;
 
   friend class MessagePort;
 };
@@ -182,6 +181,7 @@ class MessagePort : public HandleWrap {
   // If this port is closed, or if there is no sibling, this message is
   // serialized with transfers, then silently discarded.
   v8::Maybe<bool> PostMessage(Environment* env,
+                              v8::Local<v8::Context> context,
                               v8::Local<v8::Value> message,
                               const TransferList& transfer);
 

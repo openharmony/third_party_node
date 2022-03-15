@@ -102,7 +102,7 @@ for (const g of [Buffer.from([]),
   [0x1, 0x2],
   () => { },
   /abc/,
-  {}
+  {},
 ].forEach((input) => {
   assert.throws(
     () => crypto.createDiffieHellman(input),
@@ -182,9 +182,9 @@ const aSecret = alice.computeSecret(bob.getPublicKey()).toString('hex');
 const bSecret = bob.computeSecret(alice.getPublicKey()).toString('hex');
 assert.strictEqual(aSecret, bSecret);
 
-/* Ensure specific generator (buffer) works as expected.
- * The values below (modp2/modp2buf) are for a 1024 bits long prime from
- * RFC 2412 E.2, see https://tools.ietf.org/html/rfc2412. */
+// Ensure specific generator (buffer) works as expected.
+// The values below (modp2/modp2buf) are for a 1024 bits long prime from
+// RFC 2412 E.2, see https://tools.ietf.org/html/rfc2412. */
 const modp2 = crypto.createDiffieHellmanGroup('modp2');
 const modp2buf = Buffer.from([
   0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xc9, 0x0f,
@@ -199,7 +199,7 @@ const modp2buf = Buffer.from([
   0x5c, 0xb6, 0xf4, 0x06, 0xb7, 0xed, 0xee, 0x38, 0x6b, 0xfb,
   0x5a, 0x89, 0x9f, 0xa5, 0xae, 0x9f, 0x24, 0x11, 0x7c, 0x4b,
   0x1f, 0xe6, 0x49, 0x28, 0x66, 0x51, 0xec, 0xe6, 0x53, 0x81,
-  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 ]);
 
 {
@@ -448,7 +448,7 @@ assert.throws(
   {
     name: 'Error',
     code: 'ERR_CRYPTO_UNKNOWN_DH_GROUP',
-    message: 'Unknown group'
+    message: 'Unknown DH group'
   },
   'crypto.getDiffieHellman(\'unknown-group\') ' +
   'failed to throw the expected error.'
@@ -470,4 +470,10 @@ assert.throws(
   'setPublicKey is not a function$'),
   'crypto.getDiffieHellman(\'modp1\').setPublicKey(\'\') ' +
   'failed to throw the expected error.'
+);
+assert.throws(
+  () => crypto.createDiffieHellman('', true),
+  {
+    code: 'ERR_INVALID_ARG_TYPE'
+  }
 );

@@ -14,10 +14,8 @@ const childProcess = require('child_process');
 
 let offset = 0;
 
-/*
- * This test suite checks that inspector port in cluster is incremented
- * for different execArgv combinations
- */
+// This test suite checks that inspector port in cluster is incremented
+// for different execArgv combinations
 
 function testRunnerMain() {
   let defaultPortCase = spawnMaster({
@@ -31,7 +29,7 @@ function testRunnerMain() {
       { expectedPort: 65535 },
       { expectedPort: 1024 },
       { expectedPort: 1025 },
-      { expectedPort: 1026 }
+      { expectedPort: 1026 },
     ]
   });
 
@@ -42,7 +40,7 @@ function testRunnerMain() {
     workers: [
       { expectedPort: port + 1 },
       { expectedPort: port + 2 },
-      { expectedPort: port + 3 }
+      { expectedPort: port + 3 },
     ]
   });
 
@@ -108,7 +106,7 @@ function testRunnerMain() {
     clusterSettings: { inspectPort: 'addTwo' },
     workers: [
       { expectedPort: port + 2 },
-      { expectedPort: port + 4 }
+      { expectedPort: port + 4 },
     ]
   });
 
@@ -166,7 +164,7 @@ function testRunnerMain() {
     execArgv: [],
     clusterSettings: { inspectPort: port, execArgv: ['--inspect'] },
     workers: [
-      { expectedPort: port }
+      { expectedPort: port },
     ]
   });
 
@@ -178,7 +176,7 @@ function testRunnerMain() {
     workers: [
       { expectedInitialPort: 0 },
       { expectedInitialPort: 0 },
-      { expectedInitialPort: 0 }
+      { expectedInitialPort: 0 },
     ]
   });
 
@@ -190,7 +188,7 @@ function testRunnerMain() {
     workers: [
       { expectedInitialPort: 0 },
       { expectedInitialPort: 0 },
-      { expectedInitialPort: 0 }
+      { expectedInitialPort: 0 },
     ]
   });
 
@@ -200,7 +198,7 @@ function testRunnerMain() {
       execArgv: ['--inspect'],
       clusterSettings: { inspectPort: port + 2 },
       workers: [
-        { expectedInitialPort: port + 2 }
+        { expectedInitialPort: port + 2 },
       ]
     });
   });
@@ -332,8 +330,7 @@ function spawnMaster({ execArgv, workers, clusterSettings = {} }) {
       env: { ...process.env,
              workers: JSON.stringify(workers),
              clusterSettings: JSON.stringify(clusterSettings),
-             testProcess: true
-      },
+             testProcess: true },
       execArgv: execArgv.concat(['--expose-internals'])
     }).on('exit', common.mustCall((code, signal) => {
       checkExitCode(code, signal);
