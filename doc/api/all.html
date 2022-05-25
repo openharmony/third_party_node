@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <meta name="nodejs.org:node-version" content="v14.18.3">
-  <title>Node.js v14.18.3 Documentation</title>
+  <meta name="nodejs.org:node-version" content="v14.19.1">
+  <title>Node.js v14.19.1 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic&display=fallback">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/hljs.css">
@@ -34,6 +34,7 @@
 <li><a href="cluster.html" class="nav-cluster">Cluster</a></li>
 <li><a href="cli.html" class="nav-cli">Command-line options</a></li>
 <li><a href="console.html" class="nav-console">Console</a></li>
+<li><a href="corepack.html" class="nav-corepack">Corepack</a></li>
 <li><a href="crypto.html" class="nav-crypto">Crypto</a></li>
 <li><a href="debugger.html" class="nav-debugger">Debugger</a></li>
 <li><a href="deprecations.html" class="nav-deprecations">Deprecated APIs</a></li>
@@ -88,7 +89,7 @@
     <div id="column1" data-id="all" class="interior">
       <header>
         <div class="header-container">
-          <h1>Node.js v14.18.3 documentation</h1>
+          <h1>Node.js v14.19.1 documentation</h1>
           <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark mode/light mode" aria-label="Toggle dark mode/light mode" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon dark-icon" height="24" width="24">
               <path fill="none" d="M0 0h24v24H0z" />
@@ -931,6 +932,7 @@
 <li><a href="#cli_jitless"><code>--jitless</code></a></li>
 <li><a href="#cli_max_http_header_size_size"><code>--max-http-header-size=size</code></a></li>
 <li><a href="#cli_napi_modules"><code>--napi-modules</code></a></li>
+<li><a href="#cli_no_addons"><code>--no-addons</code></a></li>
 <li><a href="#cli_no_deprecation"><code>--no-deprecation</code></a></li>
 <li><a href="#cli_no_force_async_hooks_checks"><code>--no-force-async-hooks-checks</code></a></li>
 <li><a href="#cli_no_warnings"><code>--no-warnings</code></a></li>
@@ -1058,6 +1060,25 @@
 <li><a href="#console_console_profile_label"><code>console.profile([label])</code></a></li>
 <li><a href="#console_console_profileend_label"><code>console.profileEnd([label])</code></a></li>
 <li><a href="#console_console_timestamp_label"><code>console.timeStamp([label])</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span class="stability_1"><a href="#corepack_corepack">Corepack</a></span>
+<ul>
+<li><a href="#corepack_workflows">Workflows</a>
+<ul>
+<li><a href="#corepack_enabling_the_feature">Enabling the feature</a></li>
+<li><a href="#corepack_configuring_a_package">Configuring a package</a></li>
+<li><a href="#corepack_upgrading_the_global_versions">Upgrading the global versions</a></li>
+<li><a href="#corepack_offline_workflow">Offline workflow</a></li>
+</ul>
+</li>
+<li><a href="#corepack_supported_package_managers">Supported package managers</a></li>
+<li><a href="#corepack_common_questions">Common questions</a>
+<ul>
+<li><a href="#corepack_how_does_corepack_currently_interact_with_npm">How does Corepack currently interact with npm?</a></li>
+<li><a href="#corepack_running_npm_install_g_yarn_doesn_t_work">Running <code>npm install -g yarn</code> doesn't work</a></li>
 </ul>
 </li>
 </ul>
@@ -1594,6 +1615,7 @@
 <li><a href="#errors_err_crypto_timing_safe_equal_length"><code>ERR_CRYPTO_TIMING_SAFE_EQUAL_LENGTH</code></a></li>
 <li><a href="#errors_err_crypto_unknown_cipher"><code>ERR_CRYPTO_UNKNOWN_CIPHER</code></a></li>
 <li><a href="#errors_err_crypto_unknown_dh_group"><code>ERR_CRYPTO_UNKNOWN_DH_GROUP</code></a></li>
+<li><a href="#errors_err_dlopen_disabled"><code>ERR_DLOPEN_DISABLED</code></a></li>
 <li><a href="#errors_err_dlopen_failed"><code>ERR_DLOPEN_FAILED</code></a></li>
 <li><a href="#errors_err_debugger_error"><code>ERR_DEBUGGER_ERROR</code></a></li>
 <li><a href="#errors_err_debugger_startup_error"><code>ERR_DEBUGGER_STARTUP_ERROR</code></a></li>
@@ -2949,6 +2971,7 @@
 <li><a href="#packages_input_type_flag"><code>--input-type</code> flag</a></li>
 </ul>
 </li>
+<li><span class="stability_1"><a href="#packages_determining_package_manager">Determining package manager</a></span></li>
 <li><a href="#packages_package_entry_points">Package entry points</a>
 <ul>
 <li><a href="#packages_main_entry_point_export">Main entry point export</a></li>
@@ -2978,6 +3001,7 @@
 <ul>
 <li><a href="#packages_name"><code>"name"</code></a></li>
 <li><a href="#packages_main"><code>"main"</code></a></li>
+<li><span class="stability_1"><a href="#packages_packagemanager"><code>"packageManager"</code></a></span></li>
 <li><a href="#packages_type"><code>"type"</code></a></li>
 <li><a href="#packages_exports"><code>"exports"</code></a></li>
 <li><a href="#packages_imports"><code>"imports"</code></a></li>
@@ -4491,7 +4515,7 @@ the server is working.</p></section>
 <section><h2>Assert<span><a class="mark" href="#assert_assert" id="assert_assert">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/assert.js">lib/assert.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/assert.js">lib/assert.js</a></p>
 <p>The <code>assert</code> module provides a set of assertion functions for verifying
 invariants.</p>
 <section><h3>Strict assertion mode<span><a class="mark" href="#assert_strict_assertion_mode" id="assert_strict_assertion_mode">#</a></span></h3>
@@ -4554,7 +4578,7 @@ especially true for <a href="#assert_assert_deepequal_actual_expected_message"><
 lax:</p>
 <pre><code class="language-js"><span class="hljs-comment">// WARNING: This does not throw an AssertionError!</span>
 assert.<span class="hljs-title function_">deepEqual</span>(<span class="hljs-regexp">/a/gi</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>());</code></pre>
-</section><section><h3>Class: assert.AssertionError<a class="srclink" href="https://github.com/nodejs/node/blob/92df3d654b366aa115fb672756cb051d480d8acc/lib/assert.js#L172">[src]</a><span><a class="mark" href="#assert_class_assert_assertionerror" id="assert_class_assert_assertionerror">#</a></span></h3>
+</section><section><h3>Class: assert.AssertionError<a class="srclink" href="https://github.com/nodejs/node/blob/9e0bba5648e9c4116b06a31afeb216bbba39c134/lib/assert.js#L172">[src]</a><span><a class="mark" href="#assert_class_assert_assertionerror" id="assert_class_assert_assertionerror">#</a></span></h3>
 <ul>
 <li>Extends: <a href="#errors_class_error" class="type">&#x3C;errors.Error></a></li>
 </ul>
@@ -5847,7 +5871,7 @@ argument.</p></section>
 <section><h2>Async hooks<span><a class="mark" href="#async_hooks_async_hooks" id="async_hooks_async_hooks">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/async_hooks.js">lib/async_hooks.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/async_hooks.js">lib/async_hooks.js</a></p>
 <p>The <code>async_hooks</code> module provides an API to track asynchronous resources. It
 can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> async_hooks = <span class="hljs-built_in">require</span>(<span class="hljs-string">'async_hooks'</span>);</code></pre>
@@ -6816,7 +6840,7 @@ to associate the asynchronous operation with the correct execution context.</p><
 <section><h2>Buffer<span><a class="mark" href="#buffer_buffer" id="buffer_buffer">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/buffer.js">lib/buffer.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/buffer.js">lib/buffer.js</a></p>
 <p><code>Buffer</code> objects are used to represent a fixed-length sequence of bytes. Many
 Node.js APIs support <code>Buffer</code>s.</p>
 <p>The <code>Buffer</code> class is a subclass of JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array"><code>Uint8Array</code></a> class and
@@ -16026,7 +16050,7 @@ and registers it with the platform automatically.</p>
 <section><h2>Child process<span><a class="mark" href="#child_process_child_process" id="child_process_child_process">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/child_process.js">lib/child_process.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/child_process.js">lib/child_process.js</a></p>
 <p>The <code>child_process</code> module provides the ability to spawn subprocesses in
 a manner that is similar, but not identical, to <a href="http://man7.org/linux/man-pages/man3/popen.3.html"><code>popen(3)</code></a>. This capability
 is primarily provided by the <a href="#child_process_child_process_spawn_command_args_options"><code>child_process.spawn()</code></a> function:</p>
@@ -17580,7 +17604,7 @@ or <a href="#child_process_child_process_fork_modulepath_args_options"><code>chi
 <section><h2>Cluster<span><a class="mark" href="#cluster_cluster" id="cluster_cluster">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/cluster.js">lib/cluster.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/cluster.js">lib/cluster.js</a></p>
 <p>A single instance of Node.js runs in a single thread. To take advantage of
 multi-core systems, the user will sometimes want to launch a cluster of Node.js
 processes to handle the load.</p>
@@ -18461,8 +18485,8 @@ priority than <code>--dns-result-order</code>.</p>
 <div class="api_metadata">
 <span>Added in: v6.0.0</span>
 </div>
-<p>Enable FIPS-compliant crypto at startup. (Requires Node.js to be built with
-<code>./configure --openssl-fips</code>.)</p>
+<p>Enable FIPS-compliant crypto at startup. (Requires Node.js to be built
+against FIPS-compatible OpenSSL.)</p>
 <h4><code>--enable-source-maps</code><span><a class="mark" href="#cli_enable_source_maps" id="cli_enable_source_maps">#</a></span></h4>
 <div class="api_metadata">
 <details class="changelog"><summary>History</summary>
@@ -18748,6 +18772,13 @@ disappear in a non-semver-major release.</p>
 <span>Added in: v7.10.0</span>
 </div>
 <p>This option is a no-op. It is kept for compatibility.</p>
+<h4><code>--no-addons</code><span><a class="mark" href="#cli_no_addons" id="cli_no_addons">#</a></span></h4>
+<div class="api_metadata">
+<span>Added in: v14.19.0</span>
+</div>
+<p>Disable the <code>node-addons</code> exports condition as well as disable loading
+native addons. When <code>--no-addons</code> is specified, calling <code>process.dlopen</code> or
+requiring a native C++ addon will fail and throw an exception.</p>
 <h4><code>--no-deprecation</code><span><a class="mark" href="#cli_no_deprecation" id="cli_no_deprecation">#</a></span></h4>
 <div class="api_metadata">
 <span>Added in: v0.8.0</span>
@@ -18775,8 +18806,8 @@ usually only useful for developers debugging Node.js itself.</p>
 <span>Added in: v6.9.0</span>
 </div>
 <p>Load an OpenSSL configuration file on startup. Among other uses, this can be
-used to enable FIPS-compliant crypto if Node.js is built with
-<code>./configure --openssl-fips</code>.</p>
+used to enable FIPS-compliant crypto if Node.js is built
+against FIPS-enabled OpenSSL.</p>
 <h4><code>--pending-deprecation</code><span><a class="mark" href="#cli_pending_deprecation" id="cli_pending_deprecation">#</a></span></h4>
 <div class="api_metadata">
 <span>Added in: v8.0.0</span>
@@ -19363,6 +19394,7 @@ node --require <span class="hljs-string">"./a.js"</span> --require <span class="
 <li><code>--inspect</code></li>
 <li><code>--max-http-header-size</code></li>
 <li><code>--napi-modules</code></li>
+<li><code>--no-addons</code></li>
 <li><code>--no-deprecation</code></li>
 <li><code>--no-force-async-hooks-checks</code></li>
 <li><code>--no-warnings</code></li>
@@ -19619,7 +19651,7 @@ garbage collection in an effort to free unused memory.</p>
 <section><h2>Console<span><a class="mark" href="#console_console" id="console_console">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/console.js">lib/console.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/console.js">lib/console.js</a></p>
 <p>The <code>console</code> module provides a simple debugging console that is similar to the
 JavaScript console mechanism provided by web browsers.</p>
 <p>The module exports two specific components:</p>
@@ -20105,10 +20137,111 @@ stopped.</p>
 <code>console.timeStamp()</code> method adds an event with the label <code>'label'</code> to the
 <strong>Timeline</strong> panel of the inspector.</p></section>
         </section>
+<section><h2>Corepack<span><a class="mark" href="#corepack_corepack" id="corepack_corepack">#</a></span></h2>
+
+
+<p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
+<p><em><a href="https://github.com/nodejs/corepack">Corepack</a></em> is an experimental tool to help with
+managing versions of your package managers. It exposes binary proxies for
+each <a href="#corepack_supported_package_managers">supported package manager</a> that, when called, will identify whatever
+package manager is configured for the current project, transparently install
+it if needed, and finally run it without requiring explicit user interactions.</p>
+<p>This feature simplifies two core workflows:</p>
+<ul>
+<li>
+<p>It eases new contributor onboarding, since they won't have to follow
+system-specific installation processes anymore just to have the package
+manager you want them to.</p>
+</li>
+<li>
+<p>It allows you to ensure that everyone in your team will use exactly the
+package manager version you intend them to, without them having to
+manually synchronize it each time you need to make an update.</p>
+</li>
+</ul>
+<section><h3>Workflows<span><a class="mark" href="#corepack_workflows" id="corepack_workflows">#</a></span></h3>
+<h4>Enabling the feature<span><a class="mark" href="#corepack_enabling_the_feature" id="corepack_enabling_the_feature">#</a></span></h4>
+<p>Due to its experimental status, Corepack currently needs to be explicitly
+enabled to have any effect. To do that simply run <a href="https://github.com/nodejs/corepack#corepack-enable--name"><code>corepack enable</code></a>, which
+will set up the symlinks in your environment, next to the <code>node</code> binary
+(and overwrite the existing symlinks if necessary).</p>
+<p>From this point forward, any call to the <a href="#corepack_supported_package_managers">supported binaries</a> will work
+without further setup. Should you experience a problem, just run
+<a href="https://github.com/nodejs/corepack#corepack-disable--name"><code>corepack disable</code></a> to remove the proxies from your system (and consider
+opening up an issue on the <a href="https://github.com/nodejs/corepack">Corepack repository</a> to let us know).</p>
+<h4>Configuring a package<span><a class="mark" href="#corepack_configuring_a_package" id="corepack_configuring_a_package">#</a></span></h4>
+<p>The Corepack proxies will find the closest <a href="#packages_node_js_package_json_field_definitions"><code>package.json</code></a> file in your
+current directory hierarchy to extract its <a href="#packages_packagemanager"><code>"packageManager"</code></a> property.</p>
+<p>If the value corresponds to a <a href="#corepack_supported_package_managers">supported package manager</a>, Corepack will make
+sure that all calls to the relevant binaries are run against the requested
+version, downloading it on demand if needed, and aborting if it cannot be
+successfully retrieved.</p>
+<h4>Upgrading the global versions<span><a class="mark" href="#corepack_upgrading_the_global_versions" id="corepack_upgrading_the_global_versions">#</a></span></h4>
+<p>When running outside of an existing project (for example when running
+<code>yarn init</code>), Corepack will by default use predefined versions roughly
+corresponding to the latest stable releases from each tool. Those versions can
+be easily overriden by running the <a href="https://github.com/nodejs/corepack#corepack-prepare--nameversion"><code>corepack prepare</code></a> command along with the
+package manager version you wish to set:</p>
+<pre><code class="language-bash">corepack prepare yarn@x.y.z --activate</code></pre>
+<h4>Offline workflow<span><a class="mark" href="#corepack_offline_workflow" id="corepack_offline_workflow">#</a></span></h4>
+<p>Many production environments don't have network access. Since Corepack
+usually downloads the package manager releases straight from their registries,
+it can conflict with such environments. To avoid that happening, call the
+<a href="https://github.com/nodejs/corepack#corepack-prepare--nameversion"><code>corepack prepare</code></a> command while you still have network access (typically at
+the same time you're preparing your deploy image). This will ensure that the
+required package managers are available even without network access.</p>
+<p>The <code>prepare</code> command has <a href="https://github.com/nodejs/corepack#utility-commands">various flags</a>, consult the detailed
+<a href="https://github.com/nodejs/corepack#readme">Corepack documentation</a> for more information on the matter.</p>
+</section><section><h3>Supported package managers<span><a class="mark" href="#corepack_supported_package_managers" id="corepack_supported_package_managers">#</a></span></h3>
+<p>The following binaries are provided through Corepack:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Package manager</th><th>Binary names</th></tr></thead><tbody><tr><td><a href="https://yarnpkg.com">Yarn</a></td><td><code>yarn</code>, <code>yarnpkg</code></td></tr><tr><td><a href="https://pnpm.js.org">pnpm</a></td><td><code>pnpm</code>, <code>pnpx</code></td></tr></tbody></table>
+</section><section><h3>Common questions<span><a class="mark" href="#corepack_common_questions" id="corepack_common_questions">#</a></span></h3>
+<h4>How does Corepack currently interact with npm?<span><a class="mark" href="#corepack_how_does_corepack_currently_interact_with_npm" id="corepack_how_does_corepack_currently_interact_with_npm">#</a></span></h4>
+<p>While Corepack could easily support npm like any other package manager, its
+shims aren't currently enabled by default. This has a few consequences:</p>
+<ul>
+<li>It's always possible to run a <code>npm</code> command within a project configured to</li>
+</ul>
+<p>be used with another package manager, since Corepack cannot intercept it.</p>
+<ul>
+<li>While <code>npm</code> is a valid option in the <a href="#packages_packagemanager"><code>"packageManager"</code></a> property, the</li>
+</ul>
+<p>lack of shim will cause the global npm to be used.</p>
+<h4>Running <code>npm install -g yarn</code> doesn't work<span><a class="mark" href="#corepack_running_npm_install_g_yarn_doesn_t_work" id="corepack_running_npm_install_g_yarn_doesn_t_work">#</a></span></h4>
+<p>npm prevents accidentally overriding the Corepack binaries when doing a global
+install. To avoid this problem, consider one of the following options:</p>
+<ul>
+<li>Don't run this command anymore; Corepack will provide the package manager</li>
+</ul>
+<p>binaries anyway and will ensure that the requested versions are always
+available, so installing the package managers explicitly isn't needed anymore.</p>
+<ul>
+<li>Add the <code>--force</code> flag to <code>npm install</code>; this will tell npm that it's fine to</li>
+</ul>
+<p>override binaries, but you'll erase the Corepack ones in the process (should
+that happen, run <a href="https://github.com/nodejs/corepack#corepack-enable--name"><code>corepack enable</code></a> again to add them back).</p></section>
+        </section>
 <section><h2>Crypto<span><a class="mark" href="#crypto_crypto" id="crypto_crypto">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/crypto.js">lib/crypto.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/crypto.js">lib/crypto.js</a></p>
 <p>The <code>crypto</code> module provides cryptographic functionality that includes a set of
 wrappers for OpenSSL's hash, HMAC, cipher, decipher, sign, and verify functions.</p>
 <p>Use <code>require('crypto')</code> to access this module.</p>
@@ -25980,7 +26113,7 @@ an explicit <a href="#packages_main_entry_point_export"><code>"exports"</code> o
 <section><h2>Diagnostics Channel<span><a class="mark" href="#diagnostics_channel_diagnostics_channel" id="diagnostics_channel_diagnostics_channel">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/diagnostics_channel.js">lib/diagnostics_channel.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/diagnostics_channel.js">lib/diagnostics_channel.js</a></p>
 <p>The <code>diagnostics_channel</code> module provides an API to create named channels
 to report arbitrary message data for diagnostics purposes.</p>
 <p>It can be accessed using:</p>
@@ -26096,8 +26229,20 @@ channel.<span class="hljs-title function_">subscribe</span>(<span class="hljs-fu
   <span class="hljs-comment">// Received data</span>
 });</code></pre>
 <h5><code>channel.unsubscribe(onMessage)</code><span><a class="mark" href="#diagnostics_channel_channel_unsubscribe_onmessage" id="diagnostics_channel_channel_unsubscribe_onmessage">#</a></span></h5>
+<div class="api_metadata">
+<details class="changelog"><summary>History</summary>
+<table>
+<tbody><tr><th>Version</th><th>Changes</th></tr>
+<tr><td>v14.19.0</td>
+<td><p>Added return value. Added to channels without subscribers.</p></td></tr>
+<tr><td>v14.17.0</td>
+<td><p><span>Added in: v14.17.0</span></p></td></tr>
+</tbody></table>
+</details>
+</div>
 <ul>
 <li><code>onMessage</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&#x3C;Function></a> The previous subscribed handler to remove</li>
+<li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type" class="type">&#x3C;boolean></a> <code>true</code> if the handler was found, <code>false</code> otherwise.</li>
 </ul>
 <p>Remove a message handler previously registered to this channel with
 <a href="#diagnostics_channel_channel_subscribe_onmessage"><code>channel.subscribe(onMessage)</code></a>.</p>
@@ -26116,7 +26261,7 @@ channel.<span class="hljs-title function_">unsubscribe</span>(onMessage);</code>
 <section><h2>DNS<span><a class="mark" href="#dns_dns" id="dns_dns">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/dns.js">lib/dns.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/dns.js">lib/dns.js</a></p>
 <p>The <code>dns</code> module enables name resolution. For example, use it to look up IP
 addresses of host names.</p>
 <p>Although named for the <a href="https://en.wikipedia.org/wiki/Domain_Name_System">Domain Name System (DNS)</a>, it does not always use the
@@ -27545,7 +27690,7 @@ uses. For instance, <em>they do not use the configuration from <code>/etc/hosts<
 </div>
 
 <p></p><div class="api_stability api_stability_0"><a href="#documentation_stability_index">Stability: 0</a> - Deprecated</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/domain.js">lib/domain.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/domain.js">lib/domain.js</a></p>
 <p><strong>This module is pending deprecation</strong>. Once a replacement API has been
 finalized, this module will be fully deprecated. Most developers should
 <strong>not</strong> have cause to use this module. Users who absolutely must have
@@ -28627,6 +28772,12 @@ release binaries but can happen with custom builds, including distro builds.</p>
 <h4><code>ERR_CRYPTO_UNKNOWN_DH_GROUP</code><span><a class="mark" href="#errors_err_crypto_unknown_dh_group" id="errors_err_crypto_unknown_dh_group">#</a></span></h4>
 <p>An unknown Diffie-Hellman group name was given. See
 <a href="#crypto_crypto_getdiffiehellman_groupname"><code>crypto.getDiffieHellman()</code></a> for a list of valid group names.</p>
+<p><a id="ERR_DLOPEN_DISABLED"></a></p>
+<h4><code>ERR_DLOPEN_DISABLED</code><span><a class="mark" href="#errors_err_dlopen_disabled" id="errors_err_dlopen_disabled">#</a></span></h4>
+<div class="api_metadata">
+<span>Added in: v14.19.0</span>
+</div>
+<p>Loading native addons has been disabled using <a href="#cli_no_addons"><code>--no-addons</code></a>.</p>
 <p><a id="ERR_DLOPEN_FAILED"></a></p>
 <h4><code>ERR_DLOPEN_FAILED</code><span><a class="mark" href="#errors_err_dlopen_failed" id="errors_err_dlopen_failed">#</a></span></h4>
 <div class="api_metadata">
@@ -29791,7 +29942,7 @@ closed.</p></section>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/events.js">lib/events.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/events.js">lib/events.js</a></p>
 <p>Much of the Node.js core API is built around an idiomatic asynchronous
 event-driven architecture in which certain kinds of objects (called "emitters")
 emit named events that cause <code>Function</code> objects ("listeners") to be called.</p>
@@ -31169,7 +31320,7 @@ to the <code>EventTarget</code>.</p></section>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/fs.js">lib/fs.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/fs.js">lib/fs.js</a></p>
 <p>The <code>fs</code> module enables interacting with the file system in a
 way modeled on standard POSIX functions.</p>
 <p>To use the promise-based APIs:</p>
@@ -37587,7 +37738,7 @@ within each turn of the Node.js event loop.</p>
 <section><h2>HTTP<span><a class="mark" href="#http_http" id="http_http">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/http.js">lib/http.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/http.js">lib/http.js</a></p>
 <p>To use the HTTP server and client one must <code>require('http')</code>.</p>
 <p>The HTTP interfaces in Node.js are designed to support many features
 of the protocol which have been traditionally difficult to use.
@@ -40282,7 +40433,7 @@ or response. The HTTP module will automatically validate such headers.</p>
 </div>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/http2.js">lib/http2.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/http2.js">lib/http2.js</a></p>
 <p>The <code>http2</code> module provides an implementation of the <a href="https://tools.ietf.org/html/rfc7540">HTTP/2</a> protocol. It
 can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> http2 = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http2'</span>);</code></pre>
@@ -43580,7 +43731,7 @@ the <code>Http2Session</code>.</li>
 <section><h2>HTTPS<span><a class="mark" href="#https_https" id="https_https">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/https.js">lib/https.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/https.js">lib/https.js</a></p>
 <p>HTTPS is the HTTP protocol over TLS/SSL. In Node.js this is implemented as a
 separate module.</p>
 <section><h3>Class: <code>https.Agent</code><span><a class="mark" href="#https_class_https_agent" id="https_class_https_agent">#</a></span></h3>
@@ -43995,7 +44146,7 @@ headers: max-age=0; pin-sha256="WoiWRyIOVNa9ihaBciRSC7XHjliYS9VwUGOIud4PB18="; p
 <section><h2>Inspector<span><a class="mark" href="#inspector_inspector" id="inspector_inspector">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/inspector.js">lib/inspector.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/inspector.js">lib/inspector.js</a></p>
 <p>The <code>inspector</code> module provides an API for interacting with the V8 inspector.</p>
 <p>It can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> inspector = <span class="hljs-built_in">require</span>(<span class="hljs-string">'inspector'</span>);</code></pre>
@@ -45583,17 +45734,31 @@ imported as normal modules while also supporting their module imports.</p>
 <p>would provide the exports interface for the instantiation of <code>module.wasm</code>.</p>
 <p><i id="esm_experimental_top_level_await"></i></p>
 </section><section><h3>Top-level <code>await</code><span><a class="mark" href="#esm_top_level_await" id="esm_top_level_await">#</a></span></h3>
+<div class="api_metadata">
+<span>Added in: v14.8.0</span>
+</div>
 <p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
-<p>The <code>await</code> keyword may be used in the top level (outside of async functions)
-within modules as per the <a href="https://github.com/tc39/proposal-top-level-await/">ECMAScript Top-Level <code>await</code> proposal</a>.</p>
+<p>The <code>await</code> keyword may be used in the top level body of an ECMAScript module.</p>
 <p>Assuming an <code>a.mjs</code> with</p>
-<!-- eslint-skip -->
 <pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> five = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-number">5</span>);</code></pre>
 <p>And a <code>b.mjs</code> with</p>
 <pre><code class="language-js"><span class="hljs-keyword">import</span> { five } <span class="hljs-keyword">from</span> <span class="hljs-string">'./a.mjs'</span>;
 
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(five); <span class="hljs-comment">// Logs `5`</span></code></pre>
 <pre><code class="language-bash">node b.mjs <span class="hljs-comment"># works</span></code></pre>
+<p>If a top level <code>await</code> expression never resolves, the <code>node</code> process will exit
+with a <code>13</code> <a href="#process_exit_codes">status code</a>.</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { spawn } <span class="hljs-keyword">from</span> <span class="hljs-string">'child_process'</span>;
+<span class="hljs-keyword">import</span> { execPath } <span class="hljs-keyword">from</span> <span class="hljs-string">'process'</span>;
+
+<span class="hljs-title function_">spawn</span>(execPath, [
+  <span class="hljs-string">'--input-type=module'</span>,
+  <span class="hljs-string">'--eval'</span>,
+  <span class="hljs-comment">// Never-resolving Promise:</span>
+  <span class="hljs-string">'await new Promise(() => {})'</span>,
+]).<span class="hljs-title function_">once</span>(<span class="hljs-string">'exit'</span>, <span class="hljs-function">(<span class="hljs-params">code</span>) =></span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(code); <span class="hljs-comment">// Logs `13`</span>
+});</code></pre>
 <p><i id="esm_experimental_loaders"></i></p>
 </section><section><h3>Loaders<span><a class="mark" href="#esm_loaders" id="esm_loaders">#</a></span></h3>
 <p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
@@ -46287,7 +46452,8 @@ starting with <em>"."</em>, then
 <em>isImports</em>, <em>conditions</em>)</p>
 <blockquote>
 <ol>
-<li>If <em>matchKey</em> is a key of <em>matchObj</em>, and does not end in <em>"*"</em>, then
+<li>If <em>matchKey</em> is a key of <em>matchObj</em> and does not end in <em>"/"</em> or contain
+<em>"*"</em>, then
 <ol>
 <li>Let <em>target</em> be the value of <em>matchObj</em>[<em>matchKey</em>].</li>
 <li>Let <em>resolved</em> be the result of <strong>PACKAGE_TARGET_RESOLVE</strong>(
@@ -46295,24 +46461,37 @@ starting with <em>"."</em>, then
 <li>Return the object <em>{ resolved, exact: <strong>true</strong> }</em>.</li>
 </ol>
 </li>
-<li>Let <em>expansionKeys</em> be the list of keys of <em>matchObj</em> ending in <em>"/"</em>
-or <em>"*"</em>, sorted by length descending.</li>
+<li>Let <em>expansionKeys</em> be the list of keys of <em>matchObj</em> either ending in
+<em>"/"</em> or containing only a single <em>"*"</em>, sorted by the sorting function
+<strong>PATTERN_KEY_COMPARE</strong> which orders in descending order of specificity.</li>
 <li>For each key <em>expansionKey</em> in <em>expansionKeys</em>, do
 <ol>
-<li>If <em>expansionKey</em> ends in <em>"*"</em> and <em>matchKey</em> starts with but is
-not equal to the substring of <em>expansionKey</em> excluding the last <em>"*"</em>
-character, then
+<li>Let <em>patternBase</em> be <strong>null</strong>.</li>
+<li>If <em>expansionKey</em> contains <em>"*"</em>, set <em>patternBase</em> to the substring of
+<em>expansionKey</em> up to but excluding the first <em>"*"</em> character.</li>
+<li>If <em>patternBase</em> is not <strong>null</strong> and <em>matchKey</em> starts with but is not
+equal to <em>patternBase</em>, then
+<ol>
+<li>Let <em>patternTrailer</em> be the substring of <em>expansionKey</em> from the
+index after the first <em>"*"</em> character.</li>
+<li>If <em>patternTrailer</em> has zero length, or if <em>matchKey</em> ends with
+<em>patternTrailer</em> and the length of <em>matchKey</em> is greater than or
+equal to the length of <em>expansionKey</em>, then
 <ol>
 <li>Let <em>target</em> be the value of <em>matchObj</em>[<em>expansionKey</em>].</li>
 <li>Let <em>subpath</em> be the substring of <em>matchKey</em> starting at the
-index of the length of <em>expansionKey</em> minus one.</li>
+index of the length of <em>patternBase</em> up to the length of
+<em>matchKey</em> minus the length of <em>patternTrailer</em>.</li>
 <li>Let <em>resolved</em> be the result of <strong>PACKAGE_TARGET_RESOLVE</strong>(
 <em>packageURL</em>, <em>target</em>, <em>subpath</em>, <strong>true</strong>, <em>isImports</em>,
 <em>conditions</em>).</li>
 <li>Return the object <em>{ resolved, exact: <strong>true</strong> }</em>.</li>
 </ol>
 </li>
-<li>If <em>matchKey</em> starts with <em>expansionKey</em>, then
+</ol>
+</li>
+<li>Otherwise if <em>patternBase</em> is <strong>null</strong> and <em>matchKey</em> starts with
+<em>expansionKey</em>, then
 <ol>
 <li>Let <em>target</em> be the value of <em>matchObj</em>[<em>expansionKey</em>].</li>
 <li>Let <em>subpath</em> be the substring of <em>matchKey</em> starting at the
@@ -46326,6 +46505,24 @@ index of the length of <em>expansionKey</em>.</li>
 </ol>
 </li>
 <li>Return the object <em>{ resolved: <strong>null</strong>, exact: <strong>true</strong> }</em>.</li>
+</ol>
+</blockquote>
+<p><strong>PATTERN_KEY_COMPARE</strong>(<em>keyA</em>, <em>keyB</em>)</p>
+<blockquote>
+<ol>
+<li>Assert: <em>keyA</em> ends with <em>"/"</em> or contains only a single <em>"*"</em>.</li>
+<li>Assert: <em>keyB</em> ends with <em>"/"</em> or contains only a single <em>"*"</em>.</li>
+<li>Let <em>baseLengthA</em> be the index of <em>"*"</em> in <em>keyA</em> plus one, if <em>keyA</em>
+contains <em>"*"</em>, or the length of <em>keyA</em> otherwise.</li>
+<li>Let <em>baseLengthB</em> be the index of <em>"*"</em> in <em>keyB</em> plus one, if <em>keyB</em>
+contains <em>"*"</em>, or the length of <em>keyB</em> otherwise.</li>
+<li>If <em>baseLengthA</em> is greater than <em>baseLengthB</em>, return -1.</li>
+<li>If <em>baseLengthB</em> is greater than <em>baseLengthA</em>, return 1.</li>
+<li>If <em>keyA</em> does not contain <em>"*"</em>, return 1.</li>
+<li>If <em>keyB</em> does not contain <em>"*"</em>, return -1.</li>
+<li>If the length of <em>keyA</em> is greater than the length of <em>keyB</em>, return -1.</li>
+<li>If the length of <em>keyB</em> is greater than the length of <em>keyA</em>, return 1.</li>
+<li>Return 0.</li>
 </ol>
 </blockquote>
 <p><strong>PACKAGE_TARGET_RESOLVE</strong>(<em>packageURL</em>, <em>target</em>, <em>subpath</em>, <em>pattern</em>,
@@ -46798,6 +46995,17 @@ is set.</p>
 <p>For completeness there is also <code>--input-type=commonjs</code>, for explicitly running
 string input as CommonJS. This is the default behavior if <code>--input-type</code> is
 unspecified.</p>
+</section><section><h3>Determining package manager<span><a class="mark" href="#packages_determining_package_manager" id="packages_determining_package_manager">#</a></span></h3>
+<p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
+<p>While all Node.js projects are expected to be installable by all package
+managers once published, their development teams are often required to use one
+specific package manager. To make this process easier, Node.js ships with a
+tool called <a href="corepack.html">Corepack</a> that aims to make all package managers transparently
+available in your environment - provided you have Node.js installed.</p>
+<p>By default Corepack won't enforce any specific package manager and will use
+the generic "Last Known Good" versions associated with each Node.js release,
+but you can improve this experience by setting the <a href="#packages_packagemanager"><code>"packageManager"</code></a> field
+in your project's <code>package.json</code>.</p>
 </section><section><h3>Package entry points<span><a class="mark" href="#packages_package_entry_points" id="packages_package_entry_points">#</a></span></h3>
 <p>In a package’s <code>package.json</code> file, two fields can define entry points for a
 package: <a href="#packages_main"><code>"main"</code></a> and <a href="#packages_exports"><code>"exports"</code></a>. The <a href="#packages_main"><code>"main"</code></a> field is supported
@@ -46947,9 +47155,8 @@ maintenance issues.</p>
 <span class="hljs-punctuation">}</span></code></pre>
 <p><strong><code>*</code> maps expose nested subpaths as it is a string replacement syntax
 only.</strong></p>
-<p>The left hand matching pattern must always end in <code>*</code>. All instances of <code>*</code> on
-the right hand side will then be replaced with this value, including if it
-contains any <code>/</code> separators.</p>
+<p>All instances of <code>*</code> on the right hand side will then be replaced with this
+value, including if it contains any <code>/</code> separators.</p>
 <pre><code class="language-js"><span class="hljs-keyword">import</span> featureX <span class="hljs-keyword">from</span> <span class="hljs-string">'es-module-package/features/x'</span>;
 <span class="hljs-comment">// Loads ./node_modules/es-module-package/src/features/x.js</span>
 
@@ -47036,6 +47243,11 @@ formats include CommonJS, JSON, and native addons but not ES modules as
 <li><code>"node"</code> - matches for any Node.js environment. Can be a CommonJS or ES
 module file. <em>This condition should always come after <code>"import"</code> or
 <code>"require"</code>.</em></li>
+<li><code>"node-addons"</code> - similar to <code>"node"</code> and matches for any Node.js environment.
+This condition can be used to provide an entry point which uses native C++
+addons as opposed to an entry point which is more universal and doesn't rely
+on native addons. This condition can be disabled via the
+<a href="#cli_no_addons"><code>--no-addons</code> flag</a>.</li>
 <li><code>"default"</code> - the generic fallback that always matches. Can be a CommonJS
 or ES module file. <em>This condition should always come last.</em></li>
 </ul>
@@ -47092,13 +47304,18 @@ conditions behave analogously to nested JavaScript <code>if</code> statements.</
 <code>--conditions</code> flag:</p>
 <pre><code class="language-bash">node --conditions=development main.js</code></pre>
 <p>which would then resolve the <code>"development"</code> condition in package imports and
-exports, while resolving the existing <code>"node"</code>, <code>"default"</code>, <code>"import"</code>, and
-<code>"require"</code> conditions as appropriate.</p>
+exports, while resolving the existing <code>"node"</code>, <code>"node-addons"</code>, <code>"default"</code>,
+<code>"import"</code>, and <code>"require"</code> conditions as appropriate.</p>
 <p>Any number of custom conditions can be set with repeat flags.</p>
 <h4>Conditions Definitions<span><a class="mark" href="#packages_conditions_definitions" id="packages_conditions_definitions">#</a></span></h4>
-<p>The <code>"import"</code>, <code>"require"</code>, <code>"node"</code> and <code>"default"</code> conditions are defined
-and implemented in Node.js core,
+<p>The <code>"import"</code>, <code>"require"</code>, <code>"node"</code>, <code>"node-addons"</code> and <code>"default"</code>
+conditions are defined and implemented in Node.js core,
 <a href="#packages_conditional_exports">as specified above</a>.</p>
+<p>The <code>"node-addons"</code> condition can be used to provide an entry point which
+uses native C++ addons. However, this condition can be disabled via the
+<a href="#cli_no_addons"><code>--no-addons</code> flag</a>. When using <code>"node-addons"</code>, it's recommended to treat
+<code>"default"</code> as an enhancement that provides a more universal entry point, e.g.
+using WebAssembly instead of a native addon.</p>
 <p>Other condition strings are unknown to Node.js and thus ignored by default.
 Runtimes or tools other than Node.js can use them at their discretion.</p>
 <p>These user conditions can be enabled in Node.js via the <a href="#packages_resolving_user_conditions"><code>--conditions</code>
@@ -47409,6 +47626,8 @@ additional fields which are ignored by Node.js and not documented here.</p>
 by package managers as the name of the package.</li>
 <li><a href="#packages_main"><code>"main"</code></a> - The default module when loading the package, if exports is not
 specified, and in versions of Node.js prior to the introduction of exports.</li>
+<li><a href="#packages_packagemanager"><code>"packageManager"</code></a> - The package manager recommended when contributing to
+the package. Leveraged by the <a href="corepack.html">Corepack</a> shims.</li>
 <li><a href="#packages_type"><code>"type"</code></a> - The package type determining whether to load <code>.js</code> files as
 CommonJS or ES modules.</li>
 <li><a href="#packages_exports"><code>"exports"</code></a> - Package exports and conditional exports. When present,
@@ -47455,6 +47674,24 @@ is a path.</p>
 <pre><code class="language-js cjs"><span class="hljs-built_in">require</span>(<span class="hljs-string">'./path/to/directory'</span>); <span class="hljs-comment">// This resolves to ./path/to/directory/main.js.</span></code></pre>
 <p>When a package has an <a href="#packages_exports"><code>"exports"</code></a> field, this will take precedence over the
 <code>"main"</code> field when importing the package by name.</p>
+<h4><code>"packageManager"</code><span><a class="mark" href="#packages_packagemanager" id="packages_packagemanager">#</a></span></h4>
+<div class="api_metadata">
+<span>Added in: v14.19.0</span>
+</div>
+<p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
+<ul>
+<li>Type: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a></li>
+</ul>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">"packageManager"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"&#x3C;package manager name>@&#x3C;version>"</span>
+<span class="hljs-punctuation">}</span></code></pre>
+<p>The <code>"packageManager"</code> field defines which package manager is expected to be
+used when working on the current project. It can set to any of the
+<a href="#corepack_supported_package_managers">supported package managers</a>, and will ensure that your teams use the exact
+same package manager versions without having to install anything else than
+Node.js.</p>
+<p>This field is currently experimental and needs to be opted-in; check the
+<a href="corepack.html">Corepack</a> page for details about the procedure.</p>
 <h4><code>"type"</code><span><a class="mark" href="#packages_type" id="packages_type">#</a></span></h4>
 <div class="api_metadata">
 <details class="changelog"><summary>History</summary>
@@ -47555,7 +47792,7 @@ referenced via <code>require</code> or via <code>import</code>.</p>
 
 <!--lint disable maximum-line-length-->
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/net.js">lib/net.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/net.js">lib/net.js</a></p>
 <p>The <code>net</code> module provides an asynchronous network API for creating stream-based
 TCP or <a href="#net_ipc_support">IPC</a> servers (<a href="#net_net_createserver_options_connectionlistener"><code>net.createServer()</code></a>) and clients
 (<a href="#net_net_createconnection"><code>net.createConnection()</code></a>).</p>
@@ -48781,7 +49018,7 @@ addresses.</p>
 <section><h2>OS<span><a class="mark" href="#os_os" id="os_os">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/os.js">lib/os.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/os.js">lib/os.js</a></p>
 <p>The <code>os</code> module provides operating system-related utility methods and
 properties. It can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> os = <span class="hljs-built_in">require</span>(<span class="hljs-string">'os'</span>);</code></pre>
@@ -50007,7 +50244,7 @@ information.</p>
 <section><h2>Path<span><a class="mark" href="#path_path" id="path_path">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/path.js">lib/path.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/path.js">lib/path.js</a></p>
 <p>The <code>path</code> module provides utilities for working with file and directory paths.
 It can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>);</code></pre>
@@ -50454,7 +50691,7 @@ of the <code>path</code> methods.</p></section>
 <section><h2>Performance measurement APIs<span><a class="mark" href="#perf_hooks_performance_measurement_apis" id="perf_hooks_performance_measurement_apis">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/perf_hooks.js">lib/perf_hooks.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/perf_hooks.js">lib/perf_hooks.js</a></p>
 <p>This module provides an implementation of a subset of the W3C
 <a href="https://w3c.github.io/perf-timing-primer/">Web Performance APIs</a> as well as additional APIs for
 Node.js-specific performance measurements.</p>
@@ -51589,7 +51826,7 @@ not adopt the origin of the <code>blob:</code> URL.</p>
 <section><h2>Process<span><a class="mark" href="#process_process" id="process_process">#</a></span></h2>
 
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/process.js">lib/process.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/process.js">lib/process.js</a></p>
 <p>The <code>process</code> object is a <code>global</code> that provides information about, and control
 over, the current Node.js process. As a global, it is always available to
 Node.js applications without using <code>require()</code>. It can also be explicitly
@@ -53890,7 +54127,7 @@ code will be <code>128</code> + <code>6</code>, or <code>134</code>.</li>
 </div>
 
 <p></p><div class="api_stability api_stability_0"><a href="#documentation_stability_index">Stability: 0</a> - Deprecated</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/punycode.js">lib/punycode.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/punycode.js">lib/punycode.js</a></p>
 <p><strong>The version of the punycode module bundled in Node.js is being deprecated</strong>.
 In a future major version of Node.js this module will be removed. Users
 currently depending on the <code>punycode</code> module should switch to using the
@@ -54003,7 +54240,7 @@ punycode.<span class="hljs-property">ucs2</span>.<span class="hljs-title functio
 
 <p></p><div class="api_stability api_stability_3"><a href="#documentation_stability_index">Stability: 3</a> - Legacy</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/querystring.js">lib/querystring.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/querystring.js">lib/querystring.js</a></p>
 <p>The <code>querystring</code> module provides utilities for parsing and formatting URL
 query strings. It can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> querystring = <span class="hljs-built_in">require</span>(<span class="hljs-string">'querystring'</span>);</code></pre>
@@ -54140,7 +54377,7 @@ a safer equivalent that does not throw on malformed URLs will be used.</p></sect
 <section><h2>Readline<span><a class="mark" href="#readline_readline" id="readline_readline">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/readline.js">lib/readline.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/readline.js">lib/readline.js</a></p>
 <p>The <code>readline</code> module provides an interface for reading data from a <a href="#stream_readable_streams">Readable</a>
 stream (such as <a href="#process_process_stdin"><code>process.stdin</code></a>) one line at a time. It can be accessed
 using:</p>
@@ -54966,7 +55203,7 @@ flow and speed are both essential, a mixed approach can be applied:</p>
 <section><h2>REPL<span><a class="mark" href="#repl_repl" id="repl_repl">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/repl.js">lib/repl.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/repl.js">lib/repl.js</a></p>
 <p>The <code>repl</code> module provides a Read-Eval-Print-Loop (REPL) implementation that
 is available both as a standalone program or includible in other applications.
 It can be accessed using:</p>
@@ -56127,10 +56364,10 @@ in the standard report format.</p>
 threads to finish. However, the latency for this will usually be low, as both
 running JavaScript and the event loop are interrupted to generate the report.</p></section>
         </section>
-<section><h2>Stream<a class="srclink" href="https://github.com/nodejs/node/blob/92df3d654b366aa115fb672756cb051d480d8acc/lib/stream.js#L28">[src]</a><span><a class="mark" href="#stream_stream" id="stream_stream">#</a></span></h2>
+<section><h2>Stream<a class="srclink" href="https://github.com/nodejs/node/blob/9e0bba5648e9c4116b06a31afeb216bbba39c134/lib/stream.js#L28">[src]</a><span><a class="mark" href="#stream_stream" id="stream_stream">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/stream.js">lib/stream.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/stream.js">lib/stream.js</a></p>
 <p>A stream is an abstract interface for working with streaming data in Node.js.
 The <code>stream</code> module provides an API for implementing the stream interface.</p>
 <p>There are many stream objects provided by Node.js. For instance, a
@@ -58693,7 +58930,7 @@ contain multi-byte characters.</p></section>
 <section><h2>String decoder<span><a class="mark" href="#string_decoder_string_decoder" id="string_decoder_string_decoder">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/string_decoder.js">lib/string_decoder.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/string_decoder.js">lib/string_decoder.js</a></p>
 <p>The <code>string_decoder</code> module provides an API for decoding <code>Buffer</code> objects into
 strings in a manner that preserves encoded multi-byte UTF-8 and UTF-16
 characters. It can be accessed using:</p>
@@ -58769,7 +59006,7 @@ returned string and stored in an internal buffer for the next call to
 <section><h2>Timers<span><a class="mark" href="#timers_timers" id="timers_timers">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/timers.js">lib/timers.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/timers.js">lib/timers.js</a></p>
 <p>The <code>timer</code> module exposes a global API for scheduling functions to
 be called at some future period of time. Because the timer functions are
 globals, there is no need to call <code>require('timers')</code> to use the API.</p>
@@ -59034,7 +59271,7 @@ or the <a href="#timers_timeout_symbol_toprimitive">primitive</a> of the <code>T
 <section><h2>TLS (SSL)<span><a class="mark" href="#tls_tls_ssl" id="tls_tls_ssl">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/tls.js">lib/tls.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/tls.js">lib/tls.js</a></p>
 <p>The <code>tls</code> module provides an implementation of the Transport Layer Security
 (TLS) and Secure Socket Layer (SSL) protocols that is built on top of OpenSSL.
 The module can be accessed using:</p>
@@ -60782,7 +61019,7 @@ used.</li>
 <section><h2>Trace events<span><a class="mark" href="#tracing_trace_events" id="tracing_trace_events">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/trace_events.js">lib/trace_events.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/trace_events.js">lib/trace_events.js</a></p>
 <p>The <code>trace_events</code> module provides a mechanism to centralize tracing information
 generated by V8, Node.js core, and userspace code.</p>
 <p>Tracing can be enabled with the <code>--trace-event-categories</code> command-line flag
@@ -60951,7 +61188,7 @@ t2.<span class="hljs-title function_">enable</span>();
 <section><h2>TTY<span><a class="mark" href="#tty_tty" id="tty_tty">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/tty.js">lib/tty.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/tty.js">lib/tty.js</a></p>
 <p>The <code>tty</code> module provides the <code>tty.ReadStream</code> and <code>tty.WriteStream</code> classes.
 In most cases, it will not be necessary or possible to use this module directly.
 However, it can be accessed using:</p>
@@ -61220,7 +61457,7 @@ integer.</p></section>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/dgram.js">lib/dgram.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/dgram.js">lib/dgram.js</a></p>
 <p>The <code>dgram</code> module provides an implementation of UDP datagram sockets.</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> dgram = <span class="hljs-built_in">require</span>(<span class="hljs-string">'dgram'</span>);
 <span class="hljs-keyword">const</span> server = dgram.<span class="hljs-title function_">createSocket</span>(<span class="hljs-string">'udp4'</span>);
@@ -61899,7 +62136,7 @@ and <code>udp6</code> sockets). The bound address and port can be retrieved usin
 <section><h2>URL<span><a class="mark" href="#url_url" id="url_url">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/url.js">lib/url.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/url.js">lib/url.js</a></p>
 <p>The <code>url</code> module provides utilities for URL resolution and parsing. It can be
 accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> url = <span class="hljs-built_in">require</span>(<span class="hljs-string">'url'</span>);</code></pre>
@@ -63143,7 +63380,7 @@ using the <a href="https://tools.ietf.org/html/rfc5891#section-4.4">Punycode</a>
 <section><h2>Util<span><a class="mark" href="#util_util" id="util_util">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/util.js">lib/util.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/util.js">lib/util.js</a></p>
 <p>The <code>util</code> module supports the needs of Node.js internal APIs. Many of the
 utilities are useful for application and module developers as well. To access
 it:</p>
@@ -65252,7 +65489,7 @@ util.<span class="hljs-title function_">log</span>(<span class="hljs-string">'Ti
         </section>
 <section><h2>V8<span><a class="mark" href="#v8_v8" id="v8_v8">#</a></span></h2>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/v8.js">lib/v8.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/v8.js">lib/v8.js</a></p>
 <p>The <code>v8</code> module exposes APIs that are specific to the version of <a href="https://developers.google.com/v8/">V8</a>
 built into the Node.js binary. It can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> v8 = <span class="hljs-built_in">require</span>(<span class="hljs-string">'v8'</span>);</code></pre>
@@ -65711,7 +65948,7 @@ stores the part of their underlying <code>ArrayBuffer</code>s that they are refe
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/vm.js">lib/vm.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/vm.js">lib/vm.js</a></p>
 <p>The <code>vm</code> module enables compiling and running code within V8 Virtual
 Machine contexts. <strong>The <code>vm</code> module is not a security mechanism. Do
 not use it to run untrusted code</strong>.</p>
@@ -67066,7 +67303,7 @@ are not controllable through the timeout either.</p></section>
 <section><h2>WebAssembly System Interface (WASI)<span><a class="mark" href="#wasi_webassembly_system_interface_wasi" id="wasi_webassembly_system_interface_wasi">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/wasi.js">lib/wasi.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/wasi.js">lib/wasi.js</a></p>
 <p>The WASI API provides an implementation of the <a href="https://wasi.dev/">WebAssembly System Interface</a>
 specification. WASI gives sandboxed WebAssembly applications access to the
 underlying operating system via a collection of POSIX-like functions.</p>
@@ -67215,7 +67452,7 @@ of a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
 <section><h2>Worker threads<span><a class="mark" href="#worker_threads_worker_threads" id="worker_threads_worker_threads">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/worker_threads.js">lib/worker_threads.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/worker_threads.js">lib/worker_threads.js</a></p>
 <p>The <code>worker_threads</code> module enables the use of threads that execute JavaScript
 in parallel. To access it:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> worker = <span class="hljs-built_in">require</span>(<span class="hljs-string">'worker_threads'</span>);</code></pre>
@@ -68150,7 +68387,7 @@ thread spawned will spawn another until the application crashes.</p></section>
 <section><h2>Zlib<span><a class="mark" href="#zlib_zlib" id="zlib_zlib">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/zlib.js">lib/zlib.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/zlib.js">lib/zlib.js</a></p>
 <p>The <code>zlib</code> module provides compression functionality implemented using Gzip,
 Deflate/Inflate, and Brotli.</p>
 <p>To access it:</p>
