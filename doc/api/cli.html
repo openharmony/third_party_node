@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <meta name="nodejs.org:node-version" content="v14.18.3">
-  <title>Command-line options | Node.js v14.18.3 Documentation</title>
+  <meta name="nodejs.org:node-version" content="v14.19.1">
+  <title>Command-line options | Node.js v14.19.1 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic&display=fallback">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/hljs.css">
@@ -34,6 +34,7 @@
 <li><a href="cluster.html" class="nav-cluster">Cluster</a></li>
 <li><a href="cli.html" class="nav-cli active">Command-line options</a></li>
 <li><a href="console.html" class="nav-console">Console</a></li>
+<li><a href="corepack.html" class="nav-corepack">Corepack</a></li>
 <li><a href="crypto.html" class="nav-crypto">Crypto</a></li>
 <li><a href="debugger.html" class="nav-debugger">Debugger</a></li>
 <li><a href="deprecations.html" class="nav-deprecations">Deprecated APIs</a></li>
@@ -88,7 +89,7 @@
     <div id="column1" data-id="cli" class="interior">
       <header>
         <div class="header-container">
-          <h1>Node.js v14.18.3 documentation</h1>
+          <h1>Node.js v14.19.1 documentation</h1>
           <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark mode/light mode" aria-label="Toggle dark mode/light mode" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon dark-icon" height="24" width="24">
               <path fill="none" d="M0 0h24v24H0z" />
@@ -191,6 +192,7 @@
 <li><a href="#cli_jitless"><code>--jitless</code></a></li>
 <li><a href="#cli_max_http_header_size_size"><code>--max-http-header-size=size</code></a></li>
 <li><a href="#cli_napi_modules"><code>--napi-modules</code></a></li>
+<li><a href="#cli_no_addons"><code>--no-addons</code></a></li>
 <li><a href="#cli_no_deprecation"><code>--no-deprecation</code></a></li>
 <li><a href="#cli_no_force_async_hooks_checks"><code>--no-force-async-hooks-checks</code></a></li>
 <li><a href="#cli_no_warnings"><code>--no-warnings</code></a></li>
@@ -435,8 +437,8 @@ priority than <code>--dns-result-order</code>.</p>
 <div class="api_metadata">
 <span>Added in: v6.0.0</span>
 </div>
-<p>Enable FIPS-compliant crypto at startup. (Requires Node.js to be built with
-<code>./configure --openssl-fips</code>.)</p>
+<p>Enable FIPS-compliant crypto at startup. (Requires Node.js to be built
+against FIPS-compatible OpenSSL.)</p>
 <h4><code>--enable-source-maps</code><span><a class="mark" href="#cli_enable_source_maps" id="cli_enable_source_maps">#</a></span></h4>
 <div class="api_metadata">
 <details class="changelog"><summary>History</summary>
@@ -722,6 +724,13 @@ disappear in a non-semver-major release.</p>
 <span>Added in: v7.10.0</span>
 </div>
 <p>This option is a no-op. It is kept for compatibility.</p>
+<h4><code>--no-addons</code><span><a class="mark" href="#cli_no_addons" id="cli_no_addons">#</a></span></h4>
+<div class="api_metadata">
+<span>Added in: v14.19.0</span>
+</div>
+<p>Disable the <code>node-addons</code> exports condition as well as disable loading
+native addons. When <code>--no-addons</code> is specified, calling <code>process.dlopen</code> or
+requiring a native C++ addon will fail and throw an exception.</p>
 <h4><code>--no-deprecation</code><span><a class="mark" href="#cli_no_deprecation" id="cli_no_deprecation">#</a></span></h4>
 <div class="api_metadata">
 <span>Added in: v0.8.0</span>
@@ -749,8 +758,8 @@ usually only useful for developers debugging Node.js itself.</p>
 <span>Added in: v6.9.0</span>
 </div>
 <p>Load an OpenSSL configuration file on startup. Among other uses, this can be
-used to enable FIPS-compliant crypto if Node.js is built with
-<code>./configure --openssl-fips</code>.</p>
+used to enable FIPS-compliant crypto if Node.js is built
+against FIPS-enabled OpenSSL.</p>
 <h4><code>--pending-deprecation</code><span><a class="mark" href="#cli_pending_deprecation" id="cli_pending_deprecation">#</a></span></h4>
 <div class="api_metadata">
 <span>Added in: v8.0.0</span>
@@ -1337,6 +1346,7 @@ node --require <span class="hljs-string">"./a.js"</span> --require <span class="
 <li><code>--inspect</code></li>
 <li><code>--max-http-header-size</code></li>
 <li><code>--napi-modules</code></li>
+<li><code>--no-addons</code></li>
 <li><code>--no-deprecation</code></li>
 <li><code>--no-force-async-hooks-checks</code></li>
 <li><code>--no-warnings</code></li>

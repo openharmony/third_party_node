@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <meta name="nodejs.org:node-version" content="v14.18.3">
-  <title>Modules: Packages | Node.js v14.18.3 Documentation</title>
+  <meta name="nodejs.org:node-version" content="v14.19.1">
+  <title>Modules: Packages | Node.js v14.19.1 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic&display=fallback">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/hljs.css">
@@ -34,6 +34,7 @@
 <li><a href="cluster.html" class="nav-cluster">Cluster</a></li>
 <li><a href="cli.html" class="nav-cli">Command-line options</a></li>
 <li><a href="console.html" class="nav-console">Console</a></li>
+<li><a href="corepack.html" class="nav-corepack">Corepack</a></li>
 <li><a href="crypto.html" class="nav-crypto">Crypto</a></li>
 <li><a href="debugger.html" class="nav-debugger">Debugger</a></li>
 <li><a href="deprecations.html" class="nav-deprecations">Deprecated APIs</a></li>
@@ -88,7 +89,7 @@
     <div id="column1" data-id="packages" class="interior">
       <header>
         <div class="header-container">
-          <h1>Node.js v14.18.3 documentation</h1>
+          <h1>Node.js v14.19.1 documentation</h1>
           <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark mode/light mode" aria-label="Toggle dark mode/light mode" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon dark-icon" height="24" width="24">
               <path fill="none" d="M0 0h24v24H0z" />
@@ -139,6 +140,7 @@
 <li><a href="#packages_input_type_flag"><code>--input-type</code> flag</a></li>
 </ul>
 </li>
+<li><span class="stability_1"><a href="#packages_determining_package_manager">Determining package manager</a></span></li>
 <li><a href="#packages_package_entry_points">Package entry points</a>
 <ul>
 <li><a href="#packages_main_entry_point_export">Main entry point export</a></li>
@@ -168,6 +170,7 @@
 <ul>
 <li><a href="#packages_name"><code>"name"</code></a></li>
 <li><a href="#packages_main"><code>"main"</code></a></li>
+<li><span class="stability_1"><a href="#packages_packagemanager"><code>"packageManager"</code></a></span></li>
 <li><a href="#packages_type"><code>"type"</code></a></li>
 <li><a href="#packages_exports"><code>"exports"</code></a></li>
 <li><a href="#packages_imports"><code>"imports"</code></a></li>
@@ -308,6 +311,17 @@ is set.</p>
 <p>For completeness there is also <code>--input-type=commonjs</code>, for explicitly running
 string input as CommonJS. This is the default behavior if <code>--input-type</code> is
 unspecified.</p>
+</section><section><h3>Determining package manager<span><a class="mark" href="#packages_determining_package_manager" id="packages_determining_package_manager">#</a></span></h3>
+<p></p><div class="api_stability api_stability_1"><a href="documentation.html#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
+<p>While all Node.js projects are expected to be installable by all package
+managers once published, their development teams are often required to use one
+specific package manager. To make this process easier, Node.js ships with a
+tool called <a href="corepack.html">Corepack</a> that aims to make all package managers transparently
+available in your environment - provided you have Node.js installed.</p>
+<p>By default Corepack won't enforce any specific package manager and will use
+the generic "Last Known Good" versions associated with each Node.js release,
+but you can improve this experience by setting the <a href="#packages_packagemanager"><code>"packageManager"</code></a> field
+in your project's <code>package.json</code>.</p>
 </section><section><h3>Package entry points<span><a class="mark" href="#packages_package_entry_points" id="packages_package_entry_points">#</a></span></h3>
 <p>In a package’s <code>package.json</code> file, two fields can define entry points for a
 package: <a href="#packages_main"><code>"main"</code></a> and <a href="#packages_exports"><code>"exports"</code></a>. The <a href="#packages_main"><code>"main"</code></a> field is supported
@@ -457,9 +471,8 @@ maintenance issues.</p>
 <span class="hljs-punctuation">}</span></code></pre>
 <p><strong><code>*</code> maps expose nested subpaths as it is a string replacement syntax
 only.</strong></p>
-<p>The left hand matching pattern must always end in <code>*</code>. All instances of <code>*</code> on
-the right hand side will then be replaced with this value, including if it
-contains any <code>/</code> separators.</p>
+<p>All instances of <code>*</code> on the right hand side will then be replaced with this
+value, including if it contains any <code>/</code> separators.</p>
 <pre><code class="language-js"><span class="hljs-keyword">import</span> featureX <span class="hljs-keyword">from</span> <span class="hljs-string">'es-module-package/features/x'</span>;
 <span class="hljs-comment">// Loads ./node_modules/es-module-package/src/features/x.js</span>
 
@@ -546,6 +559,11 @@ formats include CommonJS, JSON, and native addons but not ES modules as
 <li><code>"node"</code> - matches for any Node.js environment. Can be a CommonJS or ES
 module file. <em>This condition should always come after <code>"import"</code> or
 <code>"require"</code>.</em></li>
+<li><code>"node-addons"</code> - similar to <code>"node"</code> and matches for any Node.js environment.
+This condition can be used to provide an entry point which uses native C++
+addons as opposed to an entry point which is more universal and doesn't rely
+on native addons. This condition can be disabled via the
+<a href="cli.html#cli_no_addons"><code>--no-addons</code> flag</a>.</li>
 <li><code>"default"</code> - the generic fallback that always matches. Can be a CommonJS
 or ES module file. <em>This condition should always come last.</em></li>
 </ul>
@@ -602,13 +620,18 @@ conditions behave analogously to nested JavaScript <code>if</code> statements.</
 <code>--conditions</code> flag:</p>
 <pre><code class="language-bash">node --conditions=development main.js</code></pre>
 <p>which would then resolve the <code>"development"</code> condition in package imports and
-exports, while resolving the existing <code>"node"</code>, <code>"default"</code>, <code>"import"</code>, and
-<code>"require"</code> conditions as appropriate.</p>
+exports, while resolving the existing <code>"node"</code>, <code>"node-addons"</code>, <code>"default"</code>,
+<code>"import"</code>, and <code>"require"</code> conditions as appropriate.</p>
 <p>Any number of custom conditions can be set with repeat flags.</p>
 <h4>Conditions Definitions<span><a class="mark" href="#packages_conditions_definitions" id="packages_conditions_definitions">#</a></span></h4>
-<p>The <code>"import"</code>, <code>"require"</code>, <code>"node"</code> and <code>"default"</code> conditions are defined
-and implemented in Node.js core,
+<p>The <code>"import"</code>, <code>"require"</code>, <code>"node"</code>, <code>"node-addons"</code> and <code>"default"</code>
+conditions are defined and implemented in Node.js core,
 <a href="#packages_conditional_exports">as specified above</a>.</p>
+<p>The <code>"node-addons"</code> condition can be used to provide an entry point which
+uses native C++ addons. However, this condition can be disabled via the
+<a href="cli.html#cli_no_addons"><code>--no-addons</code> flag</a>. When using <code>"node-addons"</code>, it's recommended to treat
+<code>"default"</code> as an enhancement that provides a more universal entry point, e.g.
+using WebAssembly instead of a native addon.</p>
 <p>Other condition strings are unknown to Node.js and thus ignored by default.
 Runtimes or tools other than Node.js can use them at their discretion.</p>
 <p>These user conditions can be enabled in Node.js via the <a href="#packages_resolving_user_conditions"><code>--conditions</code>
@@ -919,6 +942,8 @@ additional fields which are ignored by Node.js and not documented here.</p>
 by package managers as the name of the package.</li>
 <li><a href="#packages_main"><code>"main"</code></a> - The default module when loading the package, if exports is not
 specified, and in versions of Node.js prior to the introduction of exports.</li>
+<li><a href="#packages_packagemanager"><code>"packageManager"</code></a> - The package manager recommended when contributing to
+the package. Leveraged by the <a href="corepack.html">Corepack</a> shims.</li>
 <li><a href="#packages_type"><code>"type"</code></a> - The package type determining whether to load <code>.js</code> files as
 CommonJS or ES modules.</li>
 <li><a href="#packages_exports"><code>"exports"</code></a> - Package exports and conditional exports. When present,
@@ -965,6 +990,24 @@ is a path.</p>
 <pre><code class="language-js cjs"><span class="hljs-built_in">require</span>(<span class="hljs-string">'./path/to/directory'</span>); <span class="hljs-comment">// This resolves to ./path/to/directory/main.js.</span></code></pre>
 <p>When a package has an <a href="#packages_exports"><code>"exports"</code></a> field, this will take precedence over the
 <code>"main"</code> field when importing the package by name.</p>
+<h4><code>"packageManager"</code><span><a class="mark" href="#packages_packagemanager" id="packages_packagemanager">#</a></span></h4>
+<div class="api_metadata">
+<span>Added in: v14.19.0</span>
+</div>
+<p></p><div class="api_stability api_stability_1"><a href="documentation.html#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
+<ul>
+<li>Type: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a></li>
+</ul>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">"packageManager"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"&#x3C;package manager name>@&#x3C;version>"</span>
+<span class="hljs-punctuation">}</span></code></pre>
+<p>The <code>"packageManager"</code> field defines which package manager is expected to be
+used when working on the current project. It can set to any of the
+<a href="corepack.html#corepack_supported_package_managers">supported package managers</a>, and will ensure that your teams use the exact
+same package manager versions without having to install anything else than
+Node.js.</p>
+<p>This field is currently experimental and needs to be opted-in; check the
+<a href="corepack.html">Corepack</a> page for details about the procedure.</p>
 <h4><code>"type"</code><span><a class="mark" href="#packages_type" id="packages_type">#</a></span></h4>
 <div class="api_metadata">
 <details class="changelog"><summary>History</summary>

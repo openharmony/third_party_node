@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <meta name="nodejs.org:node-version" content="v14.18.3">
-  <title>Diagnostics Channel | Node.js v14.18.3 Documentation</title>
+  <meta name="nodejs.org:node-version" content="v14.19.1">
+  <title>Diagnostics Channel | Node.js v14.19.1 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic&display=fallback">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/hljs.css">
@@ -34,6 +34,7 @@
 <li><a href="cluster.html" class="nav-cluster">Cluster</a></li>
 <li><a href="cli.html" class="nav-cli">Command-line options</a></li>
 <li><a href="console.html" class="nav-console">Console</a></li>
+<li><a href="corepack.html" class="nav-corepack">Corepack</a></li>
 <li><a href="crypto.html" class="nav-crypto">Crypto</a></li>
 <li><a href="debugger.html" class="nav-debugger">Debugger</a></li>
 <li><a href="deprecations.html" class="nav-deprecations">Deprecated APIs</a></li>
@@ -88,7 +89,7 @@
     <div id="column1" data-id="diagnostics_channel" class="interior">
       <header>
         <div class="header-container">
-          <h1>Node.js v14.18.3 documentation</h1>
+          <h1>Node.js v14.19.1 documentation</h1>
           <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark mode/light mode" aria-label="Toggle dark mode/light mode" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon dark-icon" height="24" width="24">
               <path fill="none" d="M0 0h24v24H0z" />
@@ -156,7 +157,7 @@
         <h2>Diagnostics Channel<span><a class="mark" href="#diagnostics_channel_diagnostics_channel" id="diagnostics_channel_diagnostics_channel">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_1"><a href="documentation.html#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.18.3/lib/diagnostics_channel.js">lib/diagnostics_channel.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/diagnostics_channel.js">lib/diagnostics_channel.js</a></p>
 <p>The <code>diagnostics_channel</code> module provides an API to create named channels
 to report arbitrary message data for diagnostics purposes.</p>
 <p>It can be accessed using:</p>
@@ -272,8 +273,20 @@ channel.<span class="hljs-title function_">subscribe</span>(<span class="hljs-fu
   <span class="hljs-comment">// Received data</span>
 });</code></pre>
 <h5><code>channel.unsubscribe(onMessage)</code><span><a class="mark" href="#diagnostics_channel_channel_unsubscribe_onmessage" id="diagnostics_channel_channel_unsubscribe_onmessage">#</a></span></h5>
+<div class="api_metadata">
+<details class="changelog"><summary>History</summary>
+<table>
+<tbody><tr><th>Version</th><th>Changes</th></tr>
+<tr><td>v14.19.0</td>
+<td><p>Added return value. Added to channels without subscribers.</p></td></tr>
+<tr><td>v14.17.0</td>
+<td><p><span>Added in: v14.17.0</span></p></td></tr>
+</tbody></table>
+</details>
+</div>
 <ul>
 <li><code>onMessage</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&#x3C;Function></a> The previous subscribed handler to remove</li>
+<li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type" class="type">&#x3C;boolean></a> <code>true</code> if the handler was found, <code>false</code> otherwise.</li>
 </ul>
 <p>Remove a message handler previously registered to this channel with
 <a href="#diagnostics_channel_channel_subscribe_onmessage"><code>channel.subscribe(onMessage)</code></a>.</p>
