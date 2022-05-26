@@ -524,9 +524,22 @@
             {
               "textRaw": "`ERR_CRYPTO_UNKNOWN_DH_GROUP`",
               "name": "`err_crypto_unknown_dh_group`",
-              "desc": "<p>An unknown Diffie-Hellman group name was given. See\n<a href=\"crypto.html#crypto_crypto_getdiffiehellman_groupname\"><code>crypto.getDiffieHellman()</code></a> for a list of valid group names.</p>\n<p><a id=\"ERR_DLOPEN_FAILED\"></a></p>",
+              "desc": "<p>An unknown Diffie-Hellman group name was given. See\n<a href=\"crypto.html#crypto_crypto_getdiffiehellman_groupname\"><code>crypto.getDiffieHellman()</code></a> for a list of valid group names.</p>\n<p><a id=\"ERR_DLOPEN_DISABLED\"></a></p>",
               "type": "module",
               "displayName": "`ERR_CRYPTO_UNKNOWN_DH_GROUP`"
+            },
+            {
+              "textRaw": "`ERR_DLOPEN_DISABLED`",
+              "name": "`err_dlopen_disabled`",
+              "meta": {
+                "added": [
+                  "v14.19.0"
+                ],
+                "changes": []
+              },
+              "desc": "<p>Loading native addons has been disabled using <a href=\"cli.html#cli_no_addons\"><code>--no-addons</code></a>.</p>\n<p><a id=\"ERR_DLOPEN_FAILED\"></a></p>",
+              "type": "module",
+              "displayName": "`ERR_DLOPEN_DISABLED`"
             },
             {
               "textRaw": "`ERR_DLOPEN_FAILED`",
