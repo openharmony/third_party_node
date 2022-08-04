@@ -147,14 +147,44 @@ Note:If the text contains special characters, please escape them according to th
             <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/lib/.*" desc="ISC License，BSD-style，不影响兼容性"/>
             <policyitem type="compatibility" name="Apache License" path="tools/node_modules/eslint/node_modules/eslint-visitor-keys/.*" desc="Apache License，不影响兼容性"/>
             <policyitem type="compatibility" name="BSD License" path="test/fixtures/wpt/resources/.*" desc="BSD License，不影响兼容性"/>
+            <policyitem type="compatibility" name="GPLStyleLicense" path="deps/cares/.*" desc="GPLStyleLicense，不影响兼容性"/>
+            <policyitem type="compatibility" name="AFL-2.1" path="deps/npm/node_modules/json-schema/LICENSE" desc="不影响兼容性"/>
+            <policyitem type="compatibility" name="InvalidLicense" path="deps/npm/node_modules/json-schema/lib/.*" desc="不影响兼容性"/>
+            <policyitem type="compatibility" name="InvalidLicense" path="deps/icu-small/source/common/.*" desc="不影响兼容性"/>
+            <policyitem type="compatibility" name="GPL-3.0+" path="deps/cares/m4/.*" desc="不影响兼容性"/>
             </policy>
         </policylist>
-		<filefilterlist>
+        <filefilterlist>
             <filefilter name="binaryFileTypePolicyFilter" desc="doc和test中的图片" >
-			    <filteritem type="filepath" name="doc/.*.jpg" desc="doc和test中的图片"/>
-				<filteritem type="filepath" name="doc/.*.png" desc="doc和test中的图片"/>
-				<filteritem type="filepath" name="test/.*.jpg" desc="doc和test中的图片"/>
-				<filteritem type="filepath" name="test/.*.png" desc="doc和test中的图片"/>
+                <filteritem type="filepath" name="doc/.*.jpg" desc="doc和test中的图片"/>
+                <filteritem type="filepath" name="doc/.*.png" desc="doc和test中的图片"/>
+                <filteritem type="filepath" name="test/.*.jpg" desc="doc和test中的图片"/>
+                <filteritem type="filepath" name="test/.*.png" desc="doc和test中的图片"/>
+                <filteritem type="filepath" name="test/.*.pem" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.wasm" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.pfx" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.gz" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.der" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.z" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.zip" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.sha256" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.sha1" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.http2" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.br" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.bin" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.pem" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.png" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.zip" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.tgz" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.tar" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.bz2" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.gif" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.br" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.gz" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.size" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.exe" desc="无关二进制"/>
+                <filteritem type="filepath" name="src/.*.ico" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/clone/LICENSE" desc="无关二进制"/>
             </filefilter>
         </filefilterlist>
         <filefilterlist>
