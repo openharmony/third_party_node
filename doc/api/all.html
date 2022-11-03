@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <meta name="nodejs.org:node-version" content="v14.19.1">
-  <title>Node.js v14.19.1 Documentation</title>
+  <meta name="nodejs.org:node-version" content="v14.20.1">
+  <title>Node.js v14.20.1 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic&display=fallback">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/hljs.css">
@@ -89,7 +89,7 @@
     <div id="column1" data-id="all" class="interior">
       <header>
         <div class="header-container">
-          <h1>Node.js v14.19.1 documentation</h1>
+          <h1>Node.js v14.20.1 documentation</h1>
           <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark mode/light mode" aria-label="Toggle dark mode/light mode" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon dark-icon" height="24" width="24">
               <path fill="none" d="M0 0h24v24H0z" />
@@ -116,7 +116,8 @@
             
     <li class="version-picker">
       <a href="#">View another version <span>&#x25bc;</span></a>
-      <ol class="version-picker"><li><a href="https://nodejs.org/docs/latest-v17.x/api/all.html">17.x</a></li>
+      <ol class="version-picker"><li><a href="https://nodejs.org/docs/latest-v18.x/api/all.html">18.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v17.x/api/all.html">17.x</a></li>
 <li><a href="https://nodejs.org/docs/latest-v16.x/api/all.html">16.x <b>LTS</b></a></li>
 <li><a href="https://nodejs.org/docs/latest-v15.x/api/all.html">15.x</a></li>
 <li><a href="https://nodejs.org/docs/latest-v14.x/api/all.html">14.x <b>LTS</b></a></li>
@@ -4515,7 +4516,7 @@ the server is working.</p></section>
 <section><h2>Assert<span><a class="mark" href="#assert_assert" id="assert_assert">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/assert.js">lib/assert.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/assert.js">lib/assert.js</a></p>
 <p>The <code>assert</code> module provides a set of assertion functions for verifying
 invariants.</p>
 <section><h3>Strict assertion mode<span><a class="mark" href="#assert_strict_assertion_mode" id="assert_strict_assertion_mode">#</a></span></h3>
@@ -4578,7 +4579,7 @@ especially true for <a href="#assert_assert_deepequal_actual_expected_message"><
 lax:</p>
 <pre><code class="language-js"><span class="hljs-comment">// WARNING: This does not throw an AssertionError!</span>
 assert.<span class="hljs-title function_">deepEqual</span>(<span class="hljs-regexp">/a/gi</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>());</code></pre>
-</section><section><h3>Class: assert.AssertionError<a class="srclink" href="https://github.com/nodejs/node/blob/9e0bba5648e9c4116b06a31afeb216bbba39c134/lib/assert.js#L172">[src]</a><span><a class="mark" href="#assert_class_assert_assertionerror" id="assert_class_assert_assertionerror">#</a></span></h3>
+</section><section><h3>Class: assert.AssertionError<a class="srclink" href="https://github.com/nodejs/node/blob/c11b8215bd6388854efcc9302a7383c8c63b8127/lib/assert.js#L172">[src]</a><span><a class="mark" href="#assert_class_assert_assertionerror" id="assert_class_assert_assertionerror">#</a></span></h3>
 <ul>
 <li>Extends: <a href="#errors_class_error" class="type">&#x3C;errors.Error></a></li>
 </ul>
@@ -5871,7 +5872,7 @@ argument.</p></section>
 <section><h2>Async hooks<span><a class="mark" href="#async_hooks_async_hooks" id="async_hooks_async_hooks">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/async_hooks.js">lib/async_hooks.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/async_hooks.js">lib/async_hooks.js</a></p>
 <p>The <code>async_hooks</code> module provides an API to track asynchronous resources. It
 can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> async_hooks = <span class="hljs-built_in">require</span>(<span class="hljs-string">'async_hooks'</span>);</code></pre>
@@ -6840,7 +6841,7 @@ to associate the asynchronous operation with the correct execution context.</p><
 <section><h2>Buffer<span><a class="mark" href="#buffer_buffer" id="buffer_buffer">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/buffer.js">lib/buffer.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/buffer.js">lib/buffer.js</a></p>
 <p><code>Buffer</code> objects are used to represent a fixed-length sequence of bytes. Many
 Node.js APIs support <code>Buffer</code>s.</p>
 <p>The <code>Buffer</code> class is a subclass of JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array"><code>Uint8Array</code></a> class and
@@ -16050,7 +16051,7 @@ and registers it with the platform automatically.</p>
 <section><h2>Child process<span><a class="mark" href="#child_process_child_process" id="child_process_child_process">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/child_process.js">lib/child_process.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/child_process.js">lib/child_process.js</a></p>
 <p>The <code>child_process</code> module provides the ability to spawn subprocesses in
 a manner that is similar, but not identical, to <a href="http://man7.org/linux/man-pages/man3/popen.3.html"><code>popen(3)</code></a>. This capability
 is primarily provided by the <a href="#child_process_child_process_spawn_command_args_options"><code>child_process.spawn()</code></a> function:</p>
@@ -17604,7 +17605,7 @@ or <a href="#child_process_child_process_fork_modulepath_args_options"><code>chi
 <section><h2>Cluster<span><a class="mark" href="#cluster_cluster" id="cluster_cluster">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/cluster.js">lib/cluster.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/cluster.js">lib/cluster.js</a></p>
 <p>A single instance of Node.js runs in a single thread. To take advantage of
 multi-core systems, the user will sometimes want to launch a cluster of Node.js
 processes to handle the load.</p>
@@ -19651,7 +19652,7 @@ garbage collection in an effort to free unused memory.</p>
 <section><h2>Console<span><a class="mark" href="#console_console" id="console_console">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/console.js">lib/console.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/console.js">lib/console.js</a></p>
 <p>The <code>console</code> module provides a simple debugging console that is similar to the
 JavaScript console mechanism provided by web browsers.</p>
 <p>The module exports two specific components:</p>
@@ -20241,7 +20242,7 @@ that happen, run <a href="https://github.com/nodejs/corepack#corepack-enable--na
 <section><h2>Crypto<span><a class="mark" href="#crypto_crypto" id="crypto_crypto">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/crypto.js">lib/crypto.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/crypto.js">lib/crypto.js</a></p>
 <p>The <code>crypto</code> module provides cryptographic functionality that includes a set of
 wrappers for OpenSSL's hash, HMAC, cipher, decipher, sign, and verify functions.</p>
 <p>Use <code>require('crypto')</code> to access this module.</p>
@@ -26113,7 +26114,7 @@ an explicit <a href="#packages_main_entry_point_export"><code>"exports"</code> o
 <section><h2>Diagnostics Channel<span><a class="mark" href="#diagnostics_channel_diagnostics_channel" id="diagnostics_channel_diagnostics_channel">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/diagnostics_channel.js">lib/diagnostics_channel.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/diagnostics_channel.js">lib/diagnostics_channel.js</a></p>
 <p>The <code>diagnostics_channel</code> module provides an API to create named channels
 to report arbitrary message data for diagnostics purposes.</p>
 <p>It can be accessed using:</p>
@@ -26261,7 +26262,7 @@ channel.<span class="hljs-title function_">unsubscribe</span>(onMessage);</code>
 <section><h2>DNS<span><a class="mark" href="#dns_dns" id="dns_dns">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/dns.js">lib/dns.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/dns.js">lib/dns.js</a></p>
 <p>The <code>dns</code> module enables name resolution. For example, use it to look up IP
 addresses of host names.</p>
 <p>Although named for the <a href="https://en.wikipedia.org/wiki/Domain_Name_System">Domain Name System (DNS)</a>, it does not always use the
@@ -27690,7 +27691,7 @@ uses. For instance, <em>they do not use the configuration from <code>/etc/hosts<
 </div>
 
 <p></p><div class="api_stability api_stability_0"><a href="#documentation_stability_index">Stability: 0</a> - Deprecated</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/domain.js">lib/domain.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/domain.js">lib/domain.js</a></p>
 <p><strong>This module is pending deprecation</strong>. Once a replacement API has been
 finalized, this module will be fully deprecated. Most developers should
 <strong>not</strong> have cause to use this module. Users who absolutely must have
@@ -29942,7 +29943,7 @@ closed.</p></section>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/events.js">lib/events.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/events.js">lib/events.js</a></p>
 <p>Much of the Node.js core API is built around an idiomatic asynchronous
 event-driven architecture in which certain kinds of objects (called "emitters")
 emit named events that cause <code>Function</code> objects ("listeners") to be called.</p>
@@ -31320,7 +31321,7 @@ to the <code>EventTarget</code>.</p></section>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/fs.js">lib/fs.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/fs.js">lib/fs.js</a></p>
 <p>The <code>fs</code> module enables interacting with the file system in a
 way modeled on standard POSIX functions.</p>
 <p>To use the promise-based APIs:</p>
@@ -31430,10 +31431,20 @@ it can be unreliable and the file may not be closed. Instead, always explicitly
 close <a href="#fs_class_filehandle" class="type">&#x3C;FileHandle></a>s. Node.js may change this behavior in the future.</p>
 <h5><code>filehandle.appendFile(data[, options])</code><span><a class="mark" href="#fs_filehandle_appendfile_data_options" id="fs_filehandle_appendfile_data_options">#</a></span></h5>
 <div class="api_metadata">
-<span>Added in: v10.0.0</span>
+<details class="changelog"><summary>History</summary>
+<table>
+<tbody><tr><th>Version</th><th>Changes</th></tr>
+<tr><td>v14.18.0</td>
+<td><p>The <code>data</code> argument supports <code>AsyncIterable</code>, <code>Iterable</code> and <code>Stream</code>.</p></td></tr>
+<tr><td>v14.0.0</td>
+<td><p>The <code>data</code> parameter won't coerce unsupported input to strings anymore.</p></td></tr>
+<tr><td>v10.0.0</td>
+<td><p><span>Added in: v10.0.0</span></p></td></tr>
+</tbody></table>
+</details>
 </div>
 <ul>
-<li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a></li>
+<li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> | <a href="#stream_stream" class="type">&#x3C;Stream></a></li>
 <li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a>
 <ul>
 <li><code>encoding</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type" class="type">&#x3C;null></a> <strong>Default:</strong> <code>'utf8'</code></li>
@@ -31668,8 +31679,6 @@ promise with an error using code <code>UV_ENOSYS</code>.</p>
 <details class="changelog"><summary>History</summary>
 <table>
 <tbody><tr><th>Version</th><th>Changes</th></tr>
-<tr><td>v14.12.0</td>
-<td><p>The <code>buffer</code> parameter will stringify an object with an explicit <code>toString</code> function.</p></td></tr>
 <tr><td>v14.0.0</td>
 <td><p>The <code>buffer</code> parameter won't coerce unsupported input to buffers anymore.</p></td></tr>
 <tr><td>v10.0.0</td>
@@ -31678,11 +31687,11 @@ promise with an error using code <code>UV_ENOSYS</code>.</p>
 </details>
 </div>
 <ul>
-<li><code>buffer</code> <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a></li>
+<li><code>buffer</code> <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a></li>
 <li><code>offset</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a> The start position from within <code>buffer</code> where the data
 to write begins. <strong>Default:</strong> <code>0</code></li>
 <li><code>length</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a> The number of bytes from <code>buffer</code> to write. <strong>Default:</strong>
-<code>buffer.byteLength</code></li>
+<code>buffer.byteLength - offset</code></li>
 <li><code>position</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a> The offset from the beginning of the file where the
 data from <code>buffer</code> should be written. If <code>position</code> is not a <code>number</code>,
 the data will be written at the current position. See the POSIX <a href="http://man7.org/linux/man-pages/man2/pwrite.2.html"><code>pwrite(2)</code></a>
@@ -31690,12 +31699,10 @@ documentation for more detail.</li>
 <li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="type">&#x3C;Promise></a></li>
 </ul>
 <p>Write <code>buffer</code> to the file.</p>
-<p>If <code>buffer</code> is a plain object, it must have an own (not inherited) <code>toString</code>
-function property.</p>
 <p>The promise is resolved with an object containing two properties:</p>
 <ul>
 <li><code>bytesWritten</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a> the number of bytes written</li>
-<li><code>buffer</code> <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a> a reference to the
+<li><code>buffer</code> <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> a reference to the
 <code>buffer</code> written.</li>
 </ul>
 <p>It is unsafe to use <code>filehandle.write()</code> multiple times on the same file
@@ -31709,8 +31716,6 @@ the end of the file.</p>
 <details class="changelog"><summary>History</summary>
 <table>
 <tbody><tr><th>Version</th><th>Changes</th></tr>
-<tr><td>v14.12.0</td>
-<td><p>The <code>string</code> parameter will stringify an object with an explicit <code>toString</code> function.</p></td></tr>
 <tr><td>v14.0.0</td>
 <td><p>The <code>string</code> parameter won't coerce unsupported input to strings anymore.</p></td></tr>
 <tr><td>v10.0.0</td>
@@ -31719,7 +31724,7 @@ the end of the file.</p>
 </details>
 </div>
 <ul>
-<li><code>string</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a></li>
+<li><code>string</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a></li>
 <li><code>position</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a> The offset from the beginning of the file where the
 data from <code>string</code> should be written. If <code>position</code> is not a <code>number</code> the
 data will be written at the current position. See the POSIX <a href="http://man7.org/linux/man-pages/man2/pwrite.2.html"><code>pwrite(2)</code></a>
@@ -31727,12 +31732,12 @@ documentation for more detail.</li>
 <li><code>encoding</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> The expected string encoding. <strong>Default:</strong> <code>'utf8'</code></li>
 <li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="type">&#x3C;Promise></a></li>
 </ul>
-<p>Write <code>string</code> to the file. If <code>string</code> is not a string, or an object with an
-own <code>toString</code> function property, the promise is rejected with an error.</p>
+<p>Write <code>string</code> to the file. If <code>string</code> is not a string, the promise is
+rejected with an error.</p>
 <p>The promise is resolved with an object containing two properties:</p>
 <ul>
 <li><code>bytesWritten</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a> the number of bytes written</li>
-<li><code>buffer</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a> a reference to the <code>string</code> written.</li>
+<li><code>buffer</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> a reference to the <code>string</code> written.</li>
 </ul>
 <p>It is unsafe to use <code>filehandle.write()</code> multiple times on the same file
 without waiting for the promise to be resolved (or rejected). For this
@@ -31747,8 +31752,6 @@ the end of the file.</p>
 <tbody><tr><th>Version</th><th>Changes</th></tr>
 <tr><td>v14.18.0</td>
 <td><p>The <code>data</code> argument supports <code>AsyncIterable</code>, <code>Iterable</code> and <code>Stream</code>.</p></td></tr>
-<tr><td>v14.12.0</td>
-<td><p>The <code>data</code> parameter will stringify an object with an explicit <code>toString</code> function.</p></td></tr>
 <tr><td>v14.0.0</td>
 <td><p>The <code>data</code> parameter won't coerce unsupported input to strings anymore.</p></td></tr>
 <tr><td>v10.0.0</td>
@@ -31757,7 +31760,7 @@ the end of the file.</p>
 </details>
 </div>
 <ul>
-<li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a> | <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> | <a href="#stream_stream" class="type">&#x3C;Stream></a></li>
+<li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> | <a href="#stream_stream" class="type">&#x3C;Stream></a></li>
 <li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a>
 <ul>
 <li><code>encoding</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type" class="type">&#x3C;null></a> The expected character encoding when <code>data</code> is a
@@ -31767,9 +31770,8 @@ string. <strong>Default:</strong> <code>'utf8'</code></li>
 <li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="type">&#x3C;Promise></a></li>
 </ul>
 <p>Asynchronously writes data to a file, replacing the file if it already exists.
-<code>data</code> can be a string, a buffer, an <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> or <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> object, or an
-object with an own <code>toString</code> function
-property. The promise is resolved with no arguments upon success.</p>
+<code>data</code> can be a string, a buffer, an <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> or <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> object.
+The promise is resolved with no arguments upon success.</p>
 <p>If <code>options</code> is a string, then it specifies the <code>encoding</code>.</p>
 <p>The <a href="#fs_class_filehandle" class="type">&#x3C;FileHandle></a> has to support writing.</p>
 <p>It is unsafe to use <code>filehandle.writeFile()</code> multiple times on the same file
@@ -32492,8 +32494,6 @@ disappears in the directory.</p>
 <td><p>The <code>data</code> argument supports <code>AsyncIterable</code>, <code>Iterable</code> and <code>Stream</code>.</p></td></tr>
 <tr><td>v14.17.0</td>
 <td><p>The options argument may include an AbortSignal to abort an ongoing writeFile request.</p></td></tr>
-<tr><td>v14.12.0</td>
-<td><p>The <code>data</code> parameter will stringify an object with an explicit <code>toString</code> function.</p></td></tr>
 <tr><td>v14.0.0</td>
 <td><p>The <code>data</code> parameter won't coerce unsupported input to strings anymore.</p></td></tr>
 <tr><td>v10.0.0</td>
@@ -32503,7 +32503,7 @@ disappears in the directory.</p>
 </div>
 <ul>
 <li><code>file</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="#url_the_whatwg_url_api" class="type">&#x3C;URL></a> | <a href="#fs_class_filehandle" class="type">&#x3C;FileHandle></a> filename or <code>FileHandle</code></li>
-<li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a> | <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> | <a href="#stream_stream" class="type">&#x3C;Stream></a></li>
+<li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> | <a href="#stream_stream" class="type">&#x3C;Stream></a></li>
 <li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a>
 <ul>
 <li><code>encoding</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type" class="type">&#x3C;null></a> <strong>Default:</strong> <code>'utf8'</code></li>
@@ -32515,8 +32515,7 @@ disappears in the directory.</p>
 <li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="type">&#x3C;Promise></a> Fulfills with <code>undefined</code> upon success.</li>
 </ul>
 <p>Asynchronously writes data to a file, replacing the file if it already exists.
-<code>data</code> can be a string, a <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a>, or, an object with an own (not inherited)
-<code>toString</code> function property.</p>
+<code>data</code> can be a string, a buffer, an <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> or <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> object.</p>
 <p>The <code>encoding</code> option is ignored if <code>data</code> is a buffer.</p>
 <p>If <code>options</code> is a string, then it specifies the encoding.</p>
 <p>The <code>mode</code> option only affects the newly created file. See <a href="#fs_fs_open_path_flags_mode_callback"><code>fs.open()</code></a>
@@ -34862,8 +34861,6 @@ callback event (its disappearance).</p>
 <details class="changelog"><summary>History</summary>
 <table>
 <tbody><tr><th>Version</th><th>Changes</th></tr>
-<tr><td>v14.12.0</td>
-<td><p>The <code>buffer</code> parameter will stringify an object with an explicit <code>toString</code> function.</p></td></tr>
 <tr><td>v14.0.0</td>
 <td><p>The <code>buffer</code> parameter won't coerce unsupported input to strings anymore.</p></td></tr>
 <tr><td>v10.10.0</td>
@@ -34883,7 +34880,7 @@ callback event (its disappearance).</p>
 </div>
 <ul>
 <li><code>fd</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
-<li><code>buffer</code> <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a></li>
+<li><code>buffer</code> <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a></li>
 <li><code>offset</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
 <li><code>length</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
 <li><code>position</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
@@ -34895,8 +34892,7 @@ callback event (its disappearance).</p>
 </ul>
 </li>
 </ul>
-<p>Write <code>buffer</code> to the file specified by <code>fd</code>. If <code>buffer</code> is a normal object, it
-must have an own <code>toString</code> function property.</p>
+<p>Write <code>buffer</code> to the file specified by <code>fd</code>.</p>
 <p><code>offset</code> determines the part of the buffer to be written, and <code>length</code> is
 an integer specifying the number of bytes to write.</p>
 <p><code>position</code> refers to the offset from the beginning of the file where this data
@@ -36059,8 +36055,6 @@ this API: <a href="#fs_fs_writefile_file_data_options_callback"><code>fs.writeFi
 <details class="changelog"><summary>History</summary>
 <table>
 <tbody><tr><th>Version</th><th>Changes</th></tr>
-<tr><td>v14.12.0</td>
-<td><p>The <code>buffer</code> parameter will stringify an object with an explicit <code>toString</code> function.</p></td></tr>
 <tr><td>v14.0.0</td>
 <td><p>The <code>buffer</code> parameter won't coerce unsupported input to strings anymore.</p></td></tr>
 <tr><td>v10.10.0</td>
@@ -36076,14 +36070,12 @@ this API: <a href="#fs_fs_writefile_file_data_options_callback"><code>fs.writeFi
 </div>
 <ul>
 <li><code>fd</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
-<li><code>buffer</code> <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a></li>
+<li><code>buffer</code> <a href="#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a></li>
 <li><code>offset</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
 <li><code>length</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
 <li><code>position</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
 <li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;number></a> The number of bytes written.</li>
 </ul>
-<p>If <code>buffer</code> is a plain object, it must have an own (not inherited) <code>toString</code>
-function property.</p>
 <p>For detailed information, see the documentation of the asynchronous version of
 this API: <a href="#fs_fs_write_fd_buffer_offset_length_position_callback"><code>fs.write(fd, buffer...)</code></a>.</p>
 <h4><code>fs.writeSync(fd, string[, position[, encoding]])</code><span><a class="mark" href="#fs_fs_writesync_fd_string_position_encoding" id="fs_fs_writesync_fd_string_position_encoding">#</a></span></h4>
@@ -36091,8 +36083,6 @@ this API: <a href="#fs_fs_write_fd_buffer_offset_length_position_callback"><code
 <details class="changelog"><summary>History</summary>
 <table>
 <tbody><tr><th>Version</th><th>Changes</th></tr>
-<tr><td>v14.12.0</td>
-<td><p>The <code>string</code> parameter will stringify an object with an explicit <code>toString</code> function.</p></td></tr>
 <tr><td>v14.0.0</td>
 <td><p>The <code>string</code> parameter won't coerce unsupported input to strings anymore.</p></td></tr>
 <tr><td>v7.2.0</td>
@@ -36104,13 +36094,11 @@ this API: <a href="#fs_fs_write_fd_buffer_offset_length_position_callback"><code
 </div>
 <ul>
 <li><code>fd</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
-<li><code>string</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a></li>
+<li><code>string</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a></li>
 <li><code>position</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
 <li><code>encoding</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a></li>
 <li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;number></a> The number of bytes written.</li>
 </ul>
-<p>If <code>string</code> is a plain object, it must have an own (not inherited) <code>toString</code>
-function property.</p>
 <p>For detailed information, see the documentation of the asynchronous version of
 this API: <a href="#fs_fs_write_fd_string_position_encoding_callback"><code>fs.write(fd, string...)</code></a>.</p>
 <h4><code>fs.writevSync(fd, buffers[, position])</code><span><a class="mark" href="#fs_fs_writevsync_fd_buffers_position" id="fs_fs_writevsync_fd_buffers_position">#</a></span></h4>
@@ -37738,7 +37726,7 @@ within each turn of the Node.js event loop.</p>
 <section><h2>HTTP<span><a class="mark" href="#http_http" id="http_http">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/http.js">lib/http.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/http.js">lib/http.js</a></p>
 <p>To use the HTTP server and client one must <code>require('http')</code>.</p>
 <p>The HTTP interfaces in Node.js are designed to support many features
 of the protocol which have been traditionally difficult to use.
@@ -40433,7 +40421,7 @@ or response. The HTTP module will automatically validate such headers.</p>
 </div>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/http2.js">lib/http2.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/http2.js">lib/http2.js</a></p>
 <p>The <code>http2</code> module provides an implementation of the <a href="https://tools.ietf.org/html/rfc7540">HTTP/2</a> protocol. It
 can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> http2 = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http2'</span>);</code></pre>
@@ -43731,7 +43719,7 @@ the <code>Http2Session</code>.</li>
 <section><h2>HTTPS<span><a class="mark" href="#https_https" id="https_https">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/https.js">lib/https.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/https.js">lib/https.js</a></p>
 <p>HTTPS is the HTTP protocol over TLS/SSL. In Node.js this is implemented as a
 separate module.</p>
 <section><h3>Class: <code>https.Agent</code><span><a class="mark" href="#https_class_https_agent" id="https_class_https_agent">#</a></span></h3>
@@ -44146,7 +44134,7 @@ headers: max-age=0; pin-sha256="WoiWRyIOVNa9ihaBciRSC7XHjliYS9VwUGOIud4PB18="; p
 <section><h2>Inspector<span><a class="mark" href="#inspector_inspector" id="inspector_inspector">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/inspector.js">lib/inspector.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/inspector.js">lib/inspector.js</a></p>
 <p>The <code>inspector</code> module provides an API for interacting with the V8 inspector.</p>
 <p>It can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> inspector = <span class="hljs-built_in">require</span>(<span class="hljs-string">'inspector'</span>);</code></pre>
@@ -45491,8 +45479,8 @@ details), it is recommended to use <a href="#url_url_pathtofileurl_path">url.pat
 <p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs"><code>data:</code> URLs</a> are supported for importing with the following MIME types:</p>
 <ul>
 <li><code>text/javascript</code> for ES Modules</li>
-<li><code>application/json</code> for JSON</li>
-<li><code>application/wasm</code> for Wasm</li>
+<li><code>application/json</code> for JSON (requires <a href="#cli_experimental_json_modules"><code>--experimental-json-modules</code></a> flag)</li>
+<li><code>application/wasm</code> for Wasm (requires <a href="#cli_experimental_wasm_modules"><code>--experimental-wasm-modules</code></a> flag)</li>
 </ul>
 <p><code>data:</code> URLs only resolve <a href="#esm_terminology"><em>Bare specifiers</em></a> for builtin modules
 and <a href="#esm_terminology"><em>Absolute specifiers</em></a>. Resolving
@@ -47792,7 +47780,7 @@ referenced via <code>require</code> or via <code>import</code>.</p>
 
 <!--lint disable maximum-line-length-->
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/net.js">lib/net.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/net.js">lib/net.js</a></p>
 <p>The <code>net</code> module provides an asynchronous network API for creating stream-based
 TCP or <a href="#net_ipc_support">IPC</a> servers (<a href="#net_net_createserver_options_connectionlistener"><code>net.createServer()</code></a>) and clients
 (<a href="#net_net_createconnection"><code>net.createConnection()</code></a>).</p>
@@ -49018,7 +49006,7 @@ addresses.</p>
 <section><h2>OS<span><a class="mark" href="#os_os" id="os_os">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/os.js">lib/os.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/os.js">lib/os.js</a></p>
 <p>The <code>os</code> module provides operating system-related utility methods and
 properties. It can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> os = <span class="hljs-built_in">require</span>(<span class="hljs-string">'os'</span>);</code></pre>
@@ -50244,7 +50232,7 @@ information.</p>
 <section><h2>Path<span><a class="mark" href="#path_path" id="path_path">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/path.js">lib/path.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/path.js">lib/path.js</a></p>
 <p>The <code>path</code> module provides utilities for working with file and directory paths.
 It can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>);</code></pre>
@@ -50691,7 +50679,7 @@ of the <code>path</code> methods.</p></section>
 <section><h2>Performance measurement APIs<span><a class="mark" href="#perf_hooks_performance_measurement_apis" id="perf_hooks_performance_measurement_apis">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/perf_hooks.js">lib/perf_hooks.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/perf_hooks.js">lib/perf_hooks.js</a></p>
 <p>This module provides an implementation of a subset of the W3C
 <a href="https://w3c.github.io/perf-timing-primer/">Web Performance APIs</a> as well as additional APIs for
 Node.js-specific performance measurements.</p>
@@ -51826,7 +51814,7 @@ not adopt the origin of the <code>blob:</code> URL.</p>
 <section><h2>Process<span><a class="mark" href="#process_process" id="process_process">#</a></span></h2>
 
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/process.js">lib/process.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/process.js">lib/process.js</a></p>
 <p>The <code>process</code> object is a <code>global</code> that provides information about, and control
 over, the current Node.js process. As a global, it is always available to
 Node.js applications without using <code>require()</code>. It can also be explicitly
@@ -54127,7 +54115,7 @@ code will be <code>128</code> + <code>6</code>, or <code>134</code>.</li>
 </div>
 
 <p></p><div class="api_stability api_stability_0"><a href="#documentation_stability_index">Stability: 0</a> - Deprecated</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/punycode.js">lib/punycode.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/punycode.js">lib/punycode.js</a></p>
 <p><strong>The version of the punycode module bundled in Node.js is being deprecated</strong>.
 In a future major version of Node.js this module will be removed. Users
 currently depending on the <code>punycode</code> module should switch to using the
@@ -54240,7 +54228,7 @@ punycode.<span class="hljs-property">ucs2</span>.<span class="hljs-title functio
 
 <p></p><div class="api_stability api_stability_3"><a href="#documentation_stability_index">Stability: 3</a> - Legacy</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/querystring.js">lib/querystring.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/querystring.js">lib/querystring.js</a></p>
 <p>The <code>querystring</code> module provides utilities for parsing and formatting URL
 query strings. It can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> querystring = <span class="hljs-built_in">require</span>(<span class="hljs-string">'querystring'</span>);</code></pre>
@@ -54377,7 +54365,7 @@ a safer equivalent that does not throw on malformed URLs will be used.</p></sect
 <section><h2>Readline<span><a class="mark" href="#readline_readline" id="readline_readline">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/readline.js">lib/readline.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/readline.js">lib/readline.js</a></p>
 <p>The <code>readline</code> module provides an interface for reading data from a <a href="#stream_readable_streams">Readable</a>
 stream (such as <a href="#process_process_stdin"><code>process.stdin</code></a>) one line at a time. It can be accessed
 using:</p>
@@ -55203,7 +55191,7 @@ flow and speed are both essential, a mixed approach can be applied:</p>
 <section><h2>REPL<span><a class="mark" href="#repl_repl" id="repl_repl">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/repl.js">lib/repl.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/repl.js">lib/repl.js</a></p>
 <p>The <code>repl</code> module provides a Read-Eval-Print-Loop (REPL) implementation that
 is available both as a standalone program or includible in other applications.
 It can be accessed using:</p>
@@ -56364,10 +56352,10 @@ in the standard report format.</p>
 threads to finish. However, the latency for this will usually be low, as both
 running JavaScript and the event loop are interrupted to generate the report.</p></section>
         </section>
-<section><h2>Stream<a class="srclink" href="https://github.com/nodejs/node/blob/9e0bba5648e9c4116b06a31afeb216bbba39c134/lib/stream.js#L28">[src]</a><span><a class="mark" href="#stream_stream" id="stream_stream">#</a></span></h2>
+<section><h2>Stream<a class="srclink" href="https://github.com/nodejs/node/blob/c11b8215bd6388854efcc9302a7383c8c63b8127/lib/stream.js#L28">[src]</a><span><a class="mark" href="#stream_stream" id="stream_stream">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/stream.js">lib/stream.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/stream.js">lib/stream.js</a></p>
 <p>A stream is an abstract interface for working with streaming data in Node.js.
 The <code>stream</code> module provides an API for implementing the stream interface.</p>
 <p>There are many stream objects provided by Node.js. For instance, a
@@ -58930,7 +58918,7 @@ contain multi-byte characters.</p></section>
 <section><h2>String decoder<span><a class="mark" href="#string_decoder_string_decoder" id="string_decoder_string_decoder">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/string_decoder.js">lib/string_decoder.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/string_decoder.js">lib/string_decoder.js</a></p>
 <p>The <code>string_decoder</code> module provides an API for decoding <code>Buffer</code> objects into
 strings in a manner that preserves encoded multi-byte UTF-8 and UTF-16
 characters. It can be accessed using:</p>
@@ -59006,7 +58994,7 @@ returned string and stored in an internal buffer for the next call to
 <section><h2>Timers<span><a class="mark" href="#timers_timers" id="timers_timers">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/timers.js">lib/timers.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/timers.js">lib/timers.js</a></p>
 <p>The <code>timer</code> module exposes a global API for scheduling functions to
 be called at some future period of time. Because the timer functions are
 globals, there is no need to call <code>require('timers')</code> to use the API.</p>
@@ -59271,7 +59259,7 @@ or the <a href="#timers_timeout_symbol_toprimitive">primitive</a> of the <code>T
 <section><h2>TLS (SSL)<span><a class="mark" href="#tls_tls_ssl" id="tls_tls_ssl">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/tls.js">lib/tls.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/tls.js">lib/tls.js</a></p>
 <p>The <code>tls</code> module provides an implementation of the Transport Layer Security
 (TLS) and Secure Socket Layer (SSL) protocols that is built on top of OpenSSL.
 The module can be accessed using:</p>
@@ -61019,7 +61007,7 @@ used.</li>
 <section><h2>Trace events<span><a class="mark" href="#tracing_trace_events" id="tracing_trace_events">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/trace_events.js">lib/trace_events.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/trace_events.js">lib/trace_events.js</a></p>
 <p>The <code>trace_events</code> module provides a mechanism to centralize tracing information
 generated by V8, Node.js core, and userspace code.</p>
 <p>Tracing can be enabled with the <code>--trace-event-categories</code> command-line flag
@@ -61188,7 +61176,7 @@ t2.<span class="hljs-title function_">enable</span>();
 <section><h2>TTY<span><a class="mark" href="#tty_tty" id="tty_tty">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/tty.js">lib/tty.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/tty.js">lib/tty.js</a></p>
 <p>The <code>tty</code> module provides the <code>tty.ReadStream</code> and <code>tty.WriteStream</code> classes.
 In most cases, it will not be necessary or possible to use this module directly.
 However, it can be accessed using:</p>
@@ -61457,7 +61445,7 @@ integer.</p></section>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/dgram.js">lib/dgram.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/dgram.js">lib/dgram.js</a></p>
 <p>The <code>dgram</code> module provides an implementation of UDP datagram sockets.</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> dgram = <span class="hljs-built_in">require</span>(<span class="hljs-string">'dgram'</span>);
 <span class="hljs-keyword">const</span> server = dgram.<span class="hljs-title function_">createSocket</span>(<span class="hljs-string">'udp4'</span>);
@@ -62136,7 +62124,7 @@ and <code>udp6</code> sockets). The bound address and port can be retrieved usin
 <section><h2>URL<span><a class="mark" href="#url_url" id="url_url">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/url.js">lib/url.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/url.js">lib/url.js</a></p>
 <p>The <code>url</code> module provides utilities for URL resolution and parsing. It can be
 accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> url = <span class="hljs-built_in">require</span>(<span class="hljs-string">'url'</span>);</code></pre>
@@ -63380,7 +63368,7 @@ using the <a href="https://tools.ietf.org/html/rfc5891#section-4.4">Punycode</a>
 <section><h2>Util<span><a class="mark" href="#util_util" id="util_util">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/util.js">lib/util.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/util.js">lib/util.js</a></p>
 <p>The <code>util</code> module supports the needs of Node.js internal APIs. Many of the
 utilities are useful for application and module developers as well. To access
 it:</p>
@@ -65489,7 +65477,7 @@ util.<span class="hljs-title function_">log</span>(<span class="hljs-string">'Ti
         </section>
 <section><h2>V8<span><a class="mark" href="#v8_v8" id="v8_v8">#</a></span></h2>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/v8.js">lib/v8.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/v8.js">lib/v8.js</a></p>
 <p>The <code>v8</code> module exposes APIs that are specific to the version of <a href="https://developers.google.com/v8/">V8</a>
 built into the Node.js binary. It can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> v8 = <span class="hljs-built_in">require</span>(<span class="hljs-string">'v8'</span>);</code></pre>
@@ -65948,7 +65936,7 @@ stores the part of their underlying <code>ArrayBuffer</code>s that they are refe
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/vm.js">lib/vm.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/vm.js">lib/vm.js</a></p>
 <p>The <code>vm</code> module enables compiling and running code within V8 Virtual
 Machine contexts. <strong>The <code>vm</code> module is not a security mechanism. Do
 not use it to run untrusted code</strong>.</p>
@@ -67303,7 +67291,7 @@ are not controllable through the timeout either.</p></section>
 <section><h2>WebAssembly System Interface (WASI)<span><a class="mark" href="#wasi_webassembly_system_interface_wasi" id="wasi_webassembly_system_interface_wasi">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/wasi.js">lib/wasi.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/wasi.js">lib/wasi.js</a></p>
 <p>The WASI API provides an implementation of the <a href="https://wasi.dev/">WebAssembly System Interface</a>
 specification. WASI gives sandboxed WebAssembly applications access to the
 underlying operating system via a collection of POSIX-like functions.</p>
@@ -67452,7 +67440,7 @@ of a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
 <section><h2>Worker threads<span><a class="mark" href="#worker_threads_worker_threads" id="worker_threads_worker_threads">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/worker_threads.js">lib/worker_threads.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/worker_threads.js">lib/worker_threads.js</a></p>
 <p>The <code>worker_threads</code> module enables the use of threads that execute JavaScript
 in parallel. To access it:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> worker = <span class="hljs-built_in">require</span>(<span class="hljs-string">'worker_threads'</span>);</code></pre>
@@ -68387,7 +68375,7 @@ thread spawned will spawn another until the application crashes.</p></section>
 <section><h2>Zlib<span><a class="mark" href="#zlib_zlib" id="zlib_zlib">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/zlib.js">lib/zlib.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/zlib.js">lib/zlib.js</a></p>
 <p>The <code>zlib</code> module provides compression functionality implemented using Gzip,
 Deflate/Inflate, and Brotli.</p>
 <p>To access it:</p>
