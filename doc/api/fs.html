@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <meta name="nodejs.org:node-version" content="v14.19.1">
-  <title>File system | Node.js v14.19.1 Documentation</title>
+  <meta name="nodejs.org:node-version" content="v14.20.1">
+  <title>File system | Node.js v14.20.1 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic&display=fallback">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/hljs.css">
@@ -89,7 +89,7 @@
     <div id="column1" data-id="fs" class="interior">
       <header>
         <div class="header-container">
-          <h1>Node.js v14.19.1 documentation</h1>
+          <h1>Node.js v14.20.1 documentation</h1>
           <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark mode/light mode" aria-label="Toggle dark mode/light mode" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon dark-icon" height="24" width="24">
               <path fill="none" d="M0 0h24v24H0z" />
@@ -116,7 +116,8 @@
             
     <li class="version-picker">
       <a href="#">View another version <span>&#x25bc;</span></a>
-      <ol class="version-picker"><li><a href="https://nodejs.org/docs/latest-v17.x/api/fs.html">17.x</a></li>
+      <ol class="version-picker"><li><a href="https://nodejs.org/docs/latest-v18.x/api/fs.html">18.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v17.x/api/fs.html">17.x</a></li>
 <li><a href="https://nodejs.org/docs/latest-v16.x/api/fs.html">16.x <b>LTS</b></a></li>
 <li><a href="https://nodejs.org/docs/latest-v15.x/api/fs.html">15.x</a></li>
 <li><a href="https://nodejs.org/docs/latest-v14.x/api/fs.html">14.x <b>LTS</b></a></li>
@@ -463,7 +464,7 @@
 
 <p></p><div class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.19.1/lib/fs.js">lib/fs.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/fs.js">lib/fs.js</a></p>
 <p>The <code>fs</code> module enables interacting with the file system in a
 way modeled on standard POSIX functions.</p>
 <p>To use the promise-based APIs:</p>
@@ -573,10 +574,20 @@ it can be unreliable and the file may not be closed. Instead, always explicitly
 close <a href="fs.html#fs_class_filehandle" class="type">&#x3C;FileHandle></a>s. Node.js may change this behavior in the future.</p>
 <h5><code>filehandle.appendFile(data[, options])</code><span><a class="mark" href="#fs_filehandle_appendfile_data_options" id="fs_filehandle_appendfile_data_options">#</a></span></h5>
 <div class="api_metadata">
-<span>Added in: v10.0.0</span>
+<details class="changelog"><summary>History</summary>
+<table>
+<tbody><tr><th>Version</th><th>Changes</th></tr>
+<tr><td>v14.18.0</td>
+<td><p>The <code>data</code> argument supports <code>AsyncIterable</code>, <code>Iterable</code> and <code>Stream</code>.</p></td></tr>
+<tr><td>v14.0.0</td>
+<td><p>The <code>data</code> parameter won't coerce unsupported input to strings anymore.</p></td></tr>
+<tr><td>v10.0.0</td>
+<td><p><span>Added in: v10.0.0</span></p></td></tr>
+</tbody></table>
+</details>
 </div>
 <ul>
-<li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a></li>
+<li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> | <a href="stream.html#stream_stream" class="type">&#x3C;Stream></a></li>
 <li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a>
 <ul>
 <li><code>encoding</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type" class="type">&#x3C;null></a> <strong>Default:</strong> <code>'utf8'</code></li>
@@ -811,8 +822,6 @@ promise with an error using code <code>UV_ENOSYS</code>.</p>
 <details class="changelog"><summary>History</summary>
 <table>
 <tbody><tr><th>Version</th><th>Changes</th></tr>
-<tr><td>v14.12.0</td>
-<td><p>The <code>buffer</code> parameter will stringify an object with an explicit <code>toString</code> function.</p></td></tr>
 <tr><td>v14.0.0</td>
 <td><p>The <code>buffer</code> parameter won't coerce unsupported input to buffers anymore.</p></td></tr>
 <tr><td>v10.0.0</td>
@@ -821,11 +830,11 @@ promise with an error using code <code>UV_ENOSYS</code>.</p>
 </details>
 </div>
 <ul>
-<li><code>buffer</code> <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a></li>
+<li><code>buffer</code> <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a></li>
 <li><code>offset</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a> The start position from within <code>buffer</code> where the data
 to write begins. <strong>Default:</strong> <code>0</code></li>
 <li><code>length</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a> The number of bytes from <code>buffer</code> to write. <strong>Default:</strong>
-<code>buffer.byteLength</code></li>
+<code>buffer.byteLength - offset</code></li>
 <li><code>position</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a> The offset from the beginning of the file where the
 data from <code>buffer</code> should be written. If <code>position</code> is not a <code>number</code>,
 the data will be written at the current position. See the POSIX <a href="http://man7.org/linux/man-pages/man2/pwrite.2.html"><code>pwrite(2)</code></a>
@@ -833,12 +842,10 @@ documentation for more detail.</li>
 <li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="type">&#x3C;Promise></a></li>
 </ul>
 <p>Write <code>buffer</code> to the file.</p>
-<p>If <code>buffer</code> is a plain object, it must have an own (not inherited) <code>toString</code>
-function property.</p>
 <p>The promise is resolved with an object containing two properties:</p>
 <ul>
 <li><code>bytesWritten</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a> the number of bytes written</li>
-<li><code>buffer</code> <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a> a reference to the
+<li><code>buffer</code> <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> a reference to the
 <code>buffer</code> written.</li>
 </ul>
 <p>It is unsafe to use <code>filehandle.write()</code> multiple times on the same file
@@ -852,8 +859,6 @@ the end of the file.</p>
 <details class="changelog"><summary>History</summary>
 <table>
 <tbody><tr><th>Version</th><th>Changes</th></tr>
-<tr><td>v14.12.0</td>
-<td><p>The <code>string</code> parameter will stringify an object with an explicit <code>toString</code> function.</p></td></tr>
 <tr><td>v14.0.0</td>
 <td><p>The <code>string</code> parameter won't coerce unsupported input to strings anymore.</p></td></tr>
 <tr><td>v10.0.0</td>
@@ -862,7 +867,7 @@ the end of the file.</p>
 </details>
 </div>
 <ul>
-<li><code>string</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a></li>
+<li><code>string</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a></li>
 <li><code>position</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a> The offset from the beginning of the file where the
 data from <code>string</code> should be written. If <code>position</code> is not a <code>number</code> the
 data will be written at the current position. See the POSIX <a href="http://man7.org/linux/man-pages/man2/pwrite.2.html"><code>pwrite(2)</code></a>
@@ -870,12 +875,12 @@ documentation for more detail.</li>
 <li><code>encoding</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> The expected string encoding. <strong>Default:</strong> <code>'utf8'</code></li>
 <li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="type">&#x3C;Promise></a></li>
 </ul>
-<p>Write <code>string</code> to the file. If <code>string</code> is not a string, or an object with an
-own <code>toString</code> function property, the promise is rejected with an error.</p>
+<p>Write <code>string</code> to the file. If <code>string</code> is not a string, the promise is
+rejected with an error.</p>
 <p>The promise is resolved with an object containing two properties:</p>
 <ul>
 <li><code>bytesWritten</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a> the number of bytes written</li>
-<li><code>buffer</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a> a reference to the <code>string</code> written.</li>
+<li><code>buffer</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> a reference to the <code>string</code> written.</li>
 </ul>
 <p>It is unsafe to use <code>filehandle.write()</code> multiple times on the same file
 without waiting for the promise to be resolved (or rejected). For this
@@ -890,8 +895,6 @@ the end of the file.</p>
 <tbody><tr><th>Version</th><th>Changes</th></tr>
 <tr><td>v14.18.0</td>
 <td><p>The <code>data</code> argument supports <code>AsyncIterable</code>, <code>Iterable</code> and <code>Stream</code>.</p></td></tr>
-<tr><td>v14.12.0</td>
-<td><p>The <code>data</code> parameter will stringify an object with an explicit <code>toString</code> function.</p></td></tr>
 <tr><td>v14.0.0</td>
 <td><p>The <code>data</code> parameter won't coerce unsupported input to strings anymore.</p></td></tr>
 <tr><td>v10.0.0</td>
@@ -900,7 +903,7 @@ the end of the file.</p>
 </details>
 </div>
 <ul>
-<li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a> | <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> | <a href="stream.html#stream_stream" class="type">&#x3C;Stream></a></li>
+<li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> | <a href="stream.html#stream_stream" class="type">&#x3C;Stream></a></li>
 <li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a>
 <ul>
 <li><code>encoding</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type" class="type">&#x3C;null></a> The expected character encoding when <code>data</code> is a
@@ -910,9 +913,8 @@ string. <strong>Default:</strong> <code>'utf8'</code></li>
 <li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="type">&#x3C;Promise></a></li>
 </ul>
 <p>Asynchronously writes data to a file, replacing the file if it already exists.
-<code>data</code> can be a string, a buffer, an <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> or <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> object, or an
-object with an own <code>toString</code> function
-property. The promise is resolved with no arguments upon success.</p>
+<code>data</code> can be a string, a buffer, an <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> or <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> object.
+The promise is resolved with no arguments upon success.</p>
 <p>If <code>options</code> is a string, then it specifies the <code>encoding</code>.</p>
 <p>The <a href="fs.html#fs_class_filehandle" class="type">&#x3C;FileHandle></a> has to support writing.</p>
 <p>It is unsafe to use <code>filehandle.writeFile()</code> multiple times on the same file
@@ -1635,8 +1637,6 @@ disappears in the directory.</p>
 <td><p>The <code>data</code> argument supports <code>AsyncIterable</code>, <code>Iterable</code> and <code>Stream</code>.</p></td></tr>
 <tr><td>v14.17.0</td>
 <td><p>The options argument may include an AbortSignal to abort an ongoing writeFile request.</p></td></tr>
-<tr><td>v14.12.0</td>
-<td><p>The <code>data</code> parameter will stringify an object with an explicit <code>toString</code> function.</p></td></tr>
 <tr><td>v14.0.0</td>
 <td><p>The <code>data</code> parameter won't coerce unsupported input to strings anymore.</p></td></tr>
 <tr><td>v10.0.0</td>
@@ -1646,7 +1646,7 @@ disappears in the directory.</p>
 </div>
 <ul>
 <li><code>file</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="url.html#url_the_whatwg_url_api" class="type">&#x3C;URL></a> | <a href="fs.html#fs_class_filehandle" class="type">&#x3C;FileHandle></a> filename or <code>FileHandle</code></li>
-<li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a> | <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> | <a href="stream.html#stream_stream" class="type">&#x3C;Stream></a></li>
+<li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> | <a href="stream.html#stream_stream" class="type">&#x3C;Stream></a></li>
 <li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a>
 <ul>
 <li><code>encoding</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type" class="type">&#x3C;null></a> <strong>Default:</strong> <code>'utf8'</code></li>
@@ -1658,8 +1658,7 @@ disappears in the directory.</p>
 <li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="type">&#x3C;Promise></a> Fulfills with <code>undefined</code> upon success.</li>
 </ul>
 <p>Asynchronously writes data to a file, replacing the file if it already exists.
-<code>data</code> can be a string, a <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a>, or, an object with an own (not inherited)
-<code>toString</code> function property.</p>
+<code>data</code> can be a string, a buffer, an <a href="https://tc39.github.io/ecma262/#sec-asynciterable-interface" class="type">&#x3C;AsyncIterable></a> or <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol" class="type">&#x3C;Iterable></a> object.</p>
 <p>The <code>encoding</code> option is ignored if <code>data</code> is a buffer.</p>
 <p>If <code>options</code> is a string, then it specifies the encoding.</p>
 <p>The <code>mode</code> option only affects the newly created file. See <a href="#fs_fs_open_path_flags_mode_callback"><code>fs.open()</code></a>
@@ -4005,8 +4004,6 @@ callback event (its disappearance).</p>
 <details class="changelog"><summary>History</summary>
 <table>
 <tbody><tr><th>Version</th><th>Changes</th></tr>
-<tr><td>v14.12.0</td>
-<td><p>The <code>buffer</code> parameter will stringify an object with an explicit <code>toString</code> function.</p></td></tr>
 <tr><td>v14.0.0</td>
 <td><p>The <code>buffer</code> parameter won't coerce unsupported input to strings anymore.</p></td></tr>
 <tr><td>v10.10.0</td>
@@ -4026,7 +4023,7 @@ callback event (its disappearance).</p>
 </div>
 <ul>
 <li><code>fd</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
-<li><code>buffer</code> <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a></li>
+<li><code>buffer</code> <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a></li>
 <li><code>offset</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
 <li><code>length</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
 <li><code>position</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
@@ -4038,8 +4035,7 @@ callback event (its disappearance).</p>
 </ul>
 </li>
 </ul>
-<p>Write <code>buffer</code> to the file specified by <code>fd</code>. If <code>buffer</code> is a normal object, it
-must have an own <code>toString</code> function property.</p>
+<p>Write <code>buffer</code> to the file specified by <code>fd</code>.</p>
 <p><code>offset</code> determines the part of the buffer to be written, and <code>length</code> is
 an integer specifying the number of bytes to write.</p>
 <p><code>position</code> refers to the offset from the beginning of the file where this data
@@ -5202,8 +5198,6 @@ this API: <a href="#fs_fs_writefile_file_data_options_callback"><code>fs.writeFi
 <details class="changelog"><summary>History</summary>
 <table>
 <tbody><tr><th>Version</th><th>Changes</th></tr>
-<tr><td>v14.12.0</td>
-<td><p>The <code>buffer</code> parameter will stringify an object with an explicit <code>toString</code> function.</p></td></tr>
 <tr><td>v14.0.0</td>
 <td><p>The <code>buffer</code> parameter won't coerce unsupported input to strings anymore.</p></td></tr>
 <tr><td>v10.10.0</td>
@@ -5219,14 +5213,12 @@ this API: <a href="#fs_fs_writefile_file_data_options_callback"><code>fs.writeFi
 </div>
 <ul>
 <li><code>fd</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
-<li><code>buffer</code> <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a></li>
+<li><code>buffer</code> <a href="buffer.html#buffer_class_buffer" class="type">&#x3C;Buffer></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" class="type">&#x3C;TypedArray></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" class="type">&#x3C;DataView></a></li>
 <li><code>offset</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
 <li><code>length</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
 <li><code>position</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
 <li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;number></a> The number of bytes written.</li>
 </ul>
-<p>If <code>buffer</code> is a plain object, it must have an own (not inherited) <code>toString</code>
-function property.</p>
 <p>For detailed information, see the documentation of the asynchronous version of
 this API: <a href="#fs_fs_write_fd_buffer_offset_length_position_callback"><code>fs.write(fd, buffer...)</code></a>.</p>
 <h4><code>fs.writeSync(fd, string[, position[, encoding]])</code><span><a class="mark" href="#fs_fs_writesync_fd_string_position_encoding" id="fs_fs_writesync_fd_string_position_encoding">#</a></span></h4>
@@ -5234,8 +5226,6 @@ this API: <a href="#fs_fs_write_fd_buffer_offset_length_position_callback"><code
 <details class="changelog"><summary>History</summary>
 <table>
 <tbody><tr><th>Version</th><th>Changes</th></tr>
-<tr><td>v14.12.0</td>
-<td><p>The <code>string</code> parameter will stringify an object with an explicit <code>toString</code> function.</p></td></tr>
 <tr><td>v14.0.0</td>
 <td><p>The <code>string</code> parameter won't coerce unsupported input to strings anymore.</p></td></tr>
 <tr><td>v7.2.0</td>
@@ -5247,13 +5237,11 @@ this API: <a href="#fs_fs_write_fd_buffer_offset_length_position_callback"><code
 </div>
 <ul>
 <li><code>fd</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
-<li><code>string</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&#x3C;Object></a></li>
+<li><code>string</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a></li>
 <li><code>position</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;integer></a></li>
 <li><code>encoding</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&#x3C;string></a></li>
 <li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;number></a> The number of bytes written.</li>
 </ul>
-<p>If <code>string</code> is a plain object, it must have an own (not inherited) <code>toString</code>
-function property.</p>
 <p>For detailed information, see the documentation of the asynchronous version of
 this API: <a href="#fs_fs_write_fd_string_position_encoding_callback"><code>fs.write(fd, string...)</code></a>.</p>
 <h4><code>fs.writevSync(fd, buffers[, position])</code><span><a class="mark" href="#fs_fs_writevsync_fd_buffers_position" id="fs_fs_writevsync_fd_buffers_position">#</a></span></h4>
