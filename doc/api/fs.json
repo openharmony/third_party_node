@@ -8,7 +8,7 @@
       "introduced_in": "v0.10.0",
       "stability": 2,
       "stabilityText": "Stable",
-      "desc": "<p><strong>Source Code:</strong> <a href=\"https://github.com/nodejs/node/blob/v14.19.1/lib/fs.js\">lib/fs.js</a></p>\n<p>The <code>fs</code> module enables interacting with the file system in a\nway modeled on standard POSIX functions.</p>\n<p>To use the promise-based APIs:</p>\n<pre><code class=\"language-mjs\">import * as fs from 'fs/promises';\n</code></pre>\n<pre><code class=\"language-cjs\">const fs = require('fs/promises');\n</code></pre>\n<p>To use the callback and sync APIs:</p>\n<pre><code class=\"language-mjs\">import * as fs from 'fs';\n</code></pre>\n<pre><code class=\"language-cjs\">const fs = require('fs');\n</code></pre>\n<p>All file system operations have synchronous, callback, and promise-based\nforms, and are accessible using both CommonJS syntax and ES6 Modules (ESM).</p>",
+      "desc": "<p><strong>Source Code:</strong> <a href=\"https://github.com/nodejs/node/blob/v14.20.1/lib/fs.js\">lib/fs.js</a></p>\n<p>The <code>fs</code> module enables interacting with the file system in a\nway modeled on standard POSIX functions.</p>\n<p>To use the promise-based APIs:</p>\n<pre><code class=\"language-mjs\">import * as fs from 'fs/promises';\n</code></pre>\n<pre><code class=\"language-cjs\">const fs = require('fs/promises');\n</code></pre>\n<p>To use the callback and sync APIs:</p>\n<pre><code class=\"language-mjs\">import * as fs from 'fs';\n</code></pre>\n<pre><code class=\"language-cjs\">const fs = require('fs');\n</code></pre>\n<p>All file system operations have synchronous, callback, and promise-based\nforms, and are accessible using both CommonJS syntax and ES6 Modules (ESM).</p>",
       "modules": [
         {
           "textRaw": "Promise example",
@@ -81,7 +81,18 @@
                     "added": [
                       "v10.0.0"
                     ],
-                    "changes": []
+                    "changes": [
+                      {
+                        "version": "v14.18.0",
+                        "pr-url": "https://github.com/nodejs/node/pull/37490",
+                        "description": "The `data` argument supports `AsyncIterable`, `Iterable` and `Stream`."
+                      },
+                      {
+                        "version": "v14.0.0",
+                        "pr-url": "https://github.com/nodejs/node/pull/31030",
+                        "description": "The `data` parameter won't coerce unsupported input to strings anymore."
+                      }
+                    ]
                   },
                   "signatures": [
                     {
@@ -93,9 +104,9 @@
                       },
                       "params": [
                         {
-                          "textRaw": "`data` {string|Buffer|TypedArray|DataView}",
+                          "textRaw": "`data` {string|Buffer|TypedArray|DataView|AsyncIterable|Iterable|Stream}",
                           "name": "data",
-                          "type": "string|Buffer|TypedArray|DataView"
+                          "type": "string|Buffer|TypedArray|DataView|AsyncIterable|Iterable|Stream"
                         },
                         {
                           "textRaw": "`options` {Object|string}",
@@ -597,11 +608,6 @@
                     ],
                     "changes": [
                       {
-                        "version": "v14.12.0",
-                        "pr-url": "https://github.com/nodejs/node/pull/34993",
-                        "description": "The `buffer` parameter will stringify an object with an explicit `toString` function."
-                      },
-                      {
                         "version": "v14.0.0",
                         "pr-url": "https://github.com/nodejs/node/pull/31030",
                         "description": "The `buffer` parameter won't coerce unsupported input to buffers anymore."
@@ -617,9 +623,9 @@
                       },
                       "params": [
                         {
-                          "textRaw": "`buffer` {Buffer|TypedArray|DataView|string|Object}",
+                          "textRaw": "`buffer` {Buffer|TypedArray|DataView}",
                           "name": "buffer",
-                          "type": "Buffer|TypedArray|DataView|string|Object"
+                          "type": "Buffer|TypedArray|DataView"
                         },
                         {
                           "textRaw": "`offset` {integer} The start position from within `buffer` where the data to write begins. **Default:** `0`",
@@ -629,10 +635,10 @@
                           "desc": "The start position from within `buffer` where the data to write begins."
                         },
                         {
-                          "textRaw": "`length` {integer} The number of bytes from `buffer` to write. **Default:** `buffer.byteLength`",
+                          "textRaw": "`length` {integer} The number of bytes from `buffer` to write. **Default:** `buffer.byteLength - offset`",
                           "name": "length",
                           "type": "integer",
-                          "default": "`buffer.byteLength`",
+                          "default": "`buffer.byteLength - offset`",
                           "desc": "The number of bytes from `buffer` to write."
                         },
                         {
@@ -644,7 +650,7 @@
                       ]
                     }
                   ],
-                  "desc": "<p>Write <code>buffer</code> to the file.</p>\n<p>If <code>buffer</code> is a plain object, it must have an own (not inherited) <code>toString</code>\nfunction property.</p>\n<p>The promise is resolved with an object containing two properties:</p>\n<ul>\n<li><code>bytesWritten</code> <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type\" class=\"type\">&lt;integer&gt;</a> the number of bytes written</li>\n<li><code>buffer</code> <a href=\"buffer.html#buffer_class_buffer\" class=\"type\">&lt;Buffer&gt;</a> | <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray\" class=\"type\">&lt;TypedArray&gt;</a> | <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView\" class=\"type\">&lt;DataView&gt;</a> | <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type\" class=\"type\">&lt;string&gt;</a> | <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object\" class=\"type\">&lt;Object&gt;</a> a reference to the\n<code>buffer</code> written.</li>\n</ul>\n<p>It is unsafe to use <code>filehandle.write()</code> multiple times on the same file\nwithout waiting for the promise to be resolved (or rejected). For this\nscenario, use <a href=\"#fs_fs_createwritestream_path_options\"><code>fs.createWriteStream()</code></a>.</p>\n<p>On Linux, positional writes do not work when the file is opened in append mode.\nThe kernel ignores the position argument and always appends the data to\nthe end of the file.</p>"
+                  "desc": "<p>Write <code>buffer</code> to the file.</p>\n<p>The promise is resolved with an object containing two properties:</p>\n<ul>\n<li><code>bytesWritten</code> <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type\" class=\"type\">&lt;integer&gt;</a> the number of bytes written</li>\n<li><code>buffer</code> <a href=\"buffer.html#buffer_class_buffer\" class=\"type\">&lt;Buffer&gt;</a> | <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray\" class=\"type\">&lt;TypedArray&gt;</a> | <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView\" class=\"type\">&lt;DataView&gt;</a> a reference to the\n<code>buffer</code> written.</li>\n</ul>\n<p>It is unsafe to use <code>filehandle.write()</code> multiple times on the same file\nwithout waiting for the promise to be resolved (or rejected). For this\nscenario, use <a href=\"#fs_fs_createwritestream_path_options\"><code>fs.createWriteStream()</code></a>.</p>\n<p>On Linux, positional writes do not work when the file is opened in append mode.\nThe kernel ignores the position argument and always appends the data to\nthe end of the file.</p>"
                 },
                 {
                   "textRaw": "`filehandle.write(string[, position[, encoding]])`",
@@ -655,11 +661,6 @@
                       "v10.0.0"
                     ],
                     "changes": [
-                      {
-                        "version": "v14.12.0",
-                        "pr-url": "https://github.com/nodejs/node/pull/34993",
-                        "description": "The `string` parameter will stringify an object with an explicit `toString` function."
-                      },
                       {
                         "version": "v14.0.0",
                         "pr-url": "https://github.com/nodejs/node/pull/31030",
@@ -676,9 +677,9 @@
                       },
                       "params": [
                         {
-                          "textRaw": "`string` {string|Object}",
+                          "textRaw": "`string` {string}",
                           "name": "string",
-                          "type": "string|Object"
+                          "type": "string"
                         },
                         {
                           "textRaw": "`position` {integer} The offset from the beginning of the file where the data from `string` should be written. If `position` is not a `number` the data will be written at the current position. See the POSIX pwrite(2) documentation for more detail.",
@@ -696,7 +697,7 @@
                       ]
                     }
                   ],
-                  "desc": "<p>Write <code>string</code> to the file. If <code>string</code> is not a string, or an object with an\nown <code>toString</code> function property, the promise is rejected with an error.</p>\n<p>The promise is resolved with an object containing two properties:</p>\n<ul>\n<li><code>bytesWritten</code> <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type\" class=\"type\">&lt;integer&gt;</a> the number of bytes written</li>\n<li><code>buffer</code> <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type\" class=\"type\">&lt;string&gt;</a> | <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object\" class=\"type\">&lt;Object&gt;</a> a reference to the <code>string</code> written.</li>\n</ul>\n<p>It is unsafe to use <code>filehandle.write()</code> multiple times on the same file\nwithout waiting for the promise to be resolved (or rejected). For this\nscenario, use <a href=\"#fs_fs_createwritestream_path_options\"><code>fs.createWriteStream()</code></a>.</p>\n<p>On Linux, positional writes do not work when the file is opened in append mode.\nThe kernel ignores the position argument and always appends the data to\nthe end of the file.</p>"
+                  "desc": "<p>Write <code>string</code> to the file. If <code>string</code> is not a string, the promise is\nrejected with an error.</p>\n<p>The promise is resolved with an object containing two properties:</p>\n<ul>\n<li><code>bytesWritten</code> <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type\" class=\"type\">&lt;integer&gt;</a> the number of bytes written</li>\n<li><code>buffer</code> <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type\" class=\"type\">&lt;string&gt;</a> a reference to the <code>string</code> written.</li>\n</ul>\n<p>It is unsafe to use <code>filehandle.write()</code> multiple times on the same file\nwithout waiting for the promise to be resolved (or rejected). For this\nscenario, use <a href=\"#fs_fs_createwritestream_path_options\"><code>fs.createWriteStream()</code></a>.</p>\n<p>On Linux, positional writes do not work when the file is opened in append mode.\nThe kernel ignores the position argument and always appends the data to\nthe end of the file.</p>"
                 },
                 {
                   "textRaw": "`filehandle.writeFile(data, options)`",
@@ -711,11 +712,6 @@
                         "version": "v14.18.0",
                         "pr-url": "https://github.com/nodejs/node/pull/37490",
                         "description": "The `data` argument supports `AsyncIterable`, `Iterable` and `Stream`."
-                      },
-                      {
-                        "version": "v14.12.0",
-                        "pr-url": "https://github.com/nodejs/node/pull/34993",
-                        "description": "The `data` parameter will stringify an object with an explicit `toString` function."
                       },
                       {
                         "version": "v14.0.0",
@@ -733,9 +729,9 @@
                       },
                       "params": [
                         {
-                          "textRaw": "`data` {string|Buffer|TypedArray|DataView|Object|AsyncIterable|Iterable |Stream}",
+                          "textRaw": "`data` {string|Buffer|TypedArray|DataView|AsyncIterable|Iterable|Stream}",
                           "name": "data",
-                          "type": "string|Buffer|TypedArray|DataView|Object|AsyncIterable|Iterable |Stream"
+                          "type": "string|Buffer|TypedArray|DataView|AsyncIterable|Iterable|Stream"
                         },
                         {
                           "textRaw": "`options` {Object|string}",
@@ -754,7 +750,7 @@
                       ]
                     }
                   ],
-                  "desc": "<p>Asynchronously writes data to a file, replacing the file if it already exists.\n<code>data</code> can be a string, a buffer, an <a href=\"https://tc39.github.io/ecma262/#sec-asynciterable-interface\" class=\"type\">&lt;AsyncIterable&gt;</a> or <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol\" class=\"type\">&lt;Iterable&gt;</a> object, or an\nobject with an own <code>toString</code> function\nproperty. The promise is resolved with no arguments upon success.</p>\n<p>If <code>options</code> is a string, then it specifies the <code>encoding</code>.</p>\n<p>The <a href=\"fs.html#fs_class_filehandle\" class=\"type\">&lt;FileHandle&gt;</a> has to support writing.</p>\n<p>It is unsafe to use <code>filehandle.writeFile()</code> multiple times on the same file\nwithout waiting for the promise to be resolved (or rejected).</p>\n<p>If one or more <code>filehandle.write()</code> calls are made on a file handle and then a\n<code>filehandle.writeFile()</code> call is made, the data will be written from the\ncurrent position till the end of the file. It doesn't always write from the\nbeginning of the file.</p>"
+                  "desc": "<p>Asynchronously writes data to a file, replacing the file if it already exists.\n<code>data</code> can be a string, a buffer, an <a href=\"https://tc39.github.io/ecma262/#sec-asynciterable-interface\" class=\"type\">&lt;AsyncIterable&gt;</a> or <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol\" class=\"type\">&lt;Iterable&gt;</a> object.\nThe promise is resolved with no arguments upon success.</p>\n<p>If <code>options</code> is a string, then it specifies the <code>encoding</code>.</p>\n<p>The <a href=\"fs.html#fs_class_filehandle\" class=\"type\">&lt;FileHandle&gt;</a> has to support writing.</p>\n<p>It is unsafe to use <code>filehandle.writeFile()</code> multiple times on the same file\nwithout waiting for the promise to be resolved (or rejected).</p>\n<p>If one or more <code>filehandle.write()</code> calls are made on a file handle and then a\n<code>filehandle.writeFile()</code> call is made, the data will be written from the\ncurrent position till the end of the file. It doesn't always write from the\nbeginning of the file.</p>"
                 },
                 {
                   "textRaw": "`filehandle.writev(buffers[, position])`",
@@ -2111,11 +2107,6 @@
                     "description": "The options argument may include an AbortSignal to abort an ongoing writeFile request."
                   },
                   {
-                    "version": "v14.12.0",
-                    "pr-url": "https://github.com/nodejs/node/pull/34993",
-                    "description": "The `data` parameter will stringify an object with an explicit `toString` function."
-                  },
-                  {
                     "version": "v14.0.0",
                     "pr-url": "https://github.com/nodejs/node/pull/31030",
                     "description": "The `data` parameter won't coerce unsupported input to strings anymore."
@@ -2138,9 +2129,9 @@
                       "desc": "filename or `FileHandle`"
                     },
                     {
-                      "textRaw": "`data` {string|Buffer|TypedArray|DataView|Object|AsyncIterable|Iterable |Stream}",
+                      "textRaw": "`data` {string|Buffer|TypedArray|DataView|AsyncIterable|Iterable|Stream}",
                       "name": "data",
-                      "type": "string|Buffer|TypedArray|DataView|Object|AsyncIterable|Iterable |Stream"
+                      "type": "string|Buffer|TypedArray|DataView|AsyncIterable|Iterable|Stream"
                     },
                     {
                       "textRaw": "`options` {Object|string}",
@@ -2177,7 +2168,7 @@
                   ]
                 }
               ],
-              "desc": "<p>Asynchronously writes data to a file, replacing the file if it already exists.\n<code>data</code> can be a string, a <a href=\"buffer.html#buffer_class_buffer\" class=\"type\">&lt;Buffer&gt;</a>, or, an object with an own (not inherited)\n<code>toString</code> function property.</p>\n<p>The <code>encoding</code> option is ignored if <code>data</code> is a buffer.</p>\n<p>If <code>options</code> is a string, then it specifies the encoding.</p>\n<p>The <code>mode</code> option only affects the newly created file. See <a href=\"#fs_fs_open_path_flags_mode_callback\"><code>fs.open()</code></a>\nfor more details.</p>\n<p>Any specified <a href=\"fs.html#fs_class_filehandle\" class=\"type\">&lt;FileHandle&gt;</a> has to support writing.</p>\n<p>It is unsafe to use <code>fsPromises.writeFile()</code> multiple times on the same file\nwithout waiting for the promise to be settled.</p>\n<p>Similarly to <code>fsPromises.readFile</code> - <code>fsPromises.writeFile</code> is a convenience\nmethod that performs multiple <code>write</code> calls internally to write the buffer\npassed to it. For performance sensitive code consider using\n<a href=\"#fs_fs_createwritestream_path_options\"><code>fs.createWriteStream()</code></a>.</p>\n<p>It is possible to use an <a href=\"globals.html#globals_class_abortsignal\" class=\"type\">&lt;AbortSignal&gt;</a> to cancel an <code>fsPromises.writeFile()</code>.\nCancelation is \"best effort\", and some amount of data is likely still\nto be written.</p>\n<pre><code class=\"language-mjs\">import { writeFile } from 'fs/promises';\n\ntry {\n  const controller = new AbortController();\n  const { signal } = controller;\n  const data = new Uint8Array(Buffer.from('Hello Node.js'));\n  const promise = writeFile('message.txt', data, { signal });\n\n  // Abort the request before the promise settles.\n  controller.abort();\n\n  await promise;\n} catch (err) {\n  // When a request is aborted - err is an AbortError\n  console.error(err);\n}\n</code></pre>\n<p>Aborting an ongoing request does not abort individual operating\nsystem requests but rather the internal buffering <code>fs.writeFile</code> performs.</p>"
+              "desc": "<p>Asynchronously writes data to a file, replacing the file if it already exists.\n<code>data</code> can be a string, a buffer, an <a href=\"https://tc39.github.io/ecma262/#sec-asynciterable-interface\" class=\"type\">&lt;AsyncIterable&gt;</a> or <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol\" class=\"type\">&lt;Iterable&gt;</a> object.</p>\n<p>The <code>encoding</code> option is ignored if <code>data</code> is a buffer.</p>\n<p>If <code>options</code> is a string, then it specifies the encoding.</p>\n<p>The <code>mode</code> option only affects the newly created file. See <a href=\"#fs_fs_open_path_flags_mode_callback\"><code>fs.open()</code></a>\nfor more details.</p>\n<p>Any specified <a href=\"fs.html#fs_class_filehandle\" class=\"type\">&lt;FileHandle&gt;</a> has to support writing.</p>\n<p>It is unsafe to use <code>fsPromises.writeFile()</code> multiple times on the same file\nwithout waiting for the promise to be settled.</p>\n<p>Similarly to <code>fsPromises.readFile</code> - <code>fsPromises.writeFile</code> is a convenience\nmethod that performs multiple <code>write</code> calls internally to write the buffer\npassed to it. For performance sensitive code consider using\n<a href=\"#fs_fs_createwritestream_path_options\"><code>fs.createWriteStream()</code></a>.</p>\n<p>It is possible to use an <a href=\"globals.html#globals_class_abortsignal\" class=\"type\">&lt;AbortSignal&gt;</a> to cancel an <code>fsPromises.writeFile()</code>.\nCancelation is \"best effort\", and some amount of data is likely still\nto be written.</p>\n<pre><code class=\"language-mjs\">import { writeFile } from 'fs/promises';\n\ntry {\n  const controller = new AbortController();\n  const { signal } = controller;\n  const data = new Uint8Array(Buffer.from('Hello Node.js'));\n  const promise = writeFile('message.txt', data, { signal });\n\n  // Abort the request before the promise settles.\n  controller.abort();\n\n  await promise;\n} catch (err) {\n  // When a request is aborted - err is an AbortError\n  console.error(err);\n}\n</code></pre>\n<p>Aborting an ongoing request does not abort individual operating\nsystem requests but rather the internal buffering <code>fs.writeFile</code> performs.</p>"
             }
           ],
           "type": "module",
@@ -5232,11 +5223,6 @@
                 ],
                 "changes": [
                   {
-                    "version": "v14.12.0",
-                    "pr-url": "https://github.com/nodejs/node/pull/34993",
-                    "description": "The `buffer` parameter will stringify an object with an explicit `toString` function."
-                  },
-                  {
                     "version": "v14.0.0",
                     "pr-url": "https://github.com/nodejs/node/pull/31030",
                     "description": "The `buffer` parameter won't coerce unsupported input to strings anymore."
@@ -5277,9 +5263,9 @@
                       "type": "integer"
                     },
                     {
-                      "textRaw": "`buffer` {Buffer|TypedArray|DataView|string|Object}",
+                      "textRaw": "`buffer` {Buffer|TypedArray|DataView}",
                       "name": "buffer",
-                      "type": "Buffer|TypedArray|DataView|string|Object"
+                      "type": "Buffer|TypedArray|DataView"
                     },
                     {
                       "textRaw": "`offset` {integer}",
@@ -5321,7 +5307,7 @@
                   ]
                 }
               ],
-              "desc": "<p>Write <code>buffer</code> to the file specified by <code>fd</code>. If <code>buffer</code> is a normal object, it\nmust have an own <code>toString</code> function property.</p>\n<p><code>offset</code> determines the part of the buffer to be written, and <code>length</code> is\nan integer specifying the number of bytes to write.</p>\n<p><code>position</code> refers to the offset from the beginning of the file where this data\nshould be written. If <code>typeof position !== 'number'</code>, the data will be written\nat the current position. See <a href=\"http://man7.org/linux/man-pages/man2/pwrite.2.html\"><code>pwrite(2)</code></a>.</p>\n<p>The callback will be given three arguments <code>(err, bytesWritten, buffer)</code> where\n<code>bytesWritten</code> specifies how many <em>bytes</em> were written from <code>buffer</code>.</p>\n<p>If this method is invoked as its <a href=\"util.html#util_util_promisify_original\"><code>util.promisify()</code></a>ed version, it returns\na promise for an <code>Object</code> with <code>bytesWritten</code> and <code>buffer</code> properties.</p>\n<p>It is unsafe to use <code>fs.write()</code> multiple times on the same file without waiting\nfor the callback. For this scenario, <a href=\"#fs_fs_createwritestream_path_options\"><code>fs.createWriteStream()</code></a> is\nrecommended.</p>\n<p>On Linux, positional writes don't work when the file is opened in append mode.\nThe kernel ignores the position argument and always appends the data to\nthe end of the file.</p>"
+              "desc": "<p>Write <code>buffer</code> to the file specified by <code>fd</code>.</p>\n<p><code>offset</code> determines the part of the buffer to be written, and <code>length</code> is\nan integer specifying the number of bytes to write.</p>\n<p><code>position</code> refers to the offset from the beginning of the file where this data\nshould be written. If <code>typeof position !== 'number'</code>, the data will be written\nat the current position. See <a href=\"http://man7.org/linux/man-pages/man2/pwrite.2.html\"><code>pwrite(2)</code></a>.</p>\n<p>The callback will be given three arguments <code>(err, bytesWritten, buffer)</code> where\n<code>bytesWritten</code> specifies how many <em>bytes</em> were written from <code>buffer</code>.</p>\n<p>If this method is invoked as its <a href=\"util.html#util_util_promisify_original\"><code>util.promisify()</code></a>ed version, it returns\na promise for an <code>Object</code> with <code>bytesWritten</code> and <code>buffer</code> properties.</p>\n<p>It is unsafe to use <code>fs.write()</code> multiple times on the same file without waiting\nfor the callback. For this scenario, <a href=\"#fs_fs_createwritestream_path_options\"><code>fs.createWriteStream()</code></a> is\nrecommended.</p>\n<p>On Linux, positional writes don't work when the file is opened in append mode.\nThe kernel ignores the position argument and always appends the data to\nthe end of the file.</p>"
             },
             {
               "textRaw": "`fs.write(fd, string[, position[, encoding]], callback)`",
@@ -7435,11 +7421,6 @@
                 ],
                 "changes": [
                   {
-                    "version": "v14.12.0",
-                    "pr-url": "https://github.com/nodejs/node/pull/34993",
-                    "description": "The `buffer` parameter will stringify an object with an explicit `toString` function."
-                  },
-                  {
                     "version": "v14.0.0",
                     "pr-url": "https://github.com/nodejs/node/pull/31030",
                     "description": "The `buffer` parameter won't coerce unsupported input to strings anymore."
@@ -7476,9 +7457,9 @@
                       "type": "integer"
                     },
                     {
-                      "textRaw": "`buffer` {Buffer|TypedArray|DataView|string|Object}",
+                      "textRaw": "`buffer` {Buffer|TypedArray|DataView}",
                       "name": "buffer",
-                      "type": "Buffer|TypedArray|DataView|string|Object"
+                      "type": "Buffer|TypedArray|DataView"
                     },
                     {
                       "textRaw": "`offset` {integer}",
@@ -7498,7 +7479,7 @@
                   ]
                 }
               ],
-              "desc": "<p>If <code>buffer</code> is a plain object, it must have an own (not inherited) <code>toString</code>\nfunction property.</p>\n<p>For detailed information, see the documentation of the asynchronous version of\nthis API: <a href=\"#fs_fs_write_fd_buffer_offset_length_position_callback\"><code>fs.write(fd, buffer...)</code></a>.</p>"
+              "desc": "<p>For detailed information, see the documentation of the asynchronous version of\nthis API: <a href=\"#fs_fs_write_fd_buffer_offset_length_position_callback\"><code>fs.write(fd, buffer...)</code></a>.</p>"
             },
             {
               "textRaw": "`fs.writeSync(fd, string[, position[, encoding]])`",
@@ -7509,11 +7490,6 @@
                   "v0.11.5"
                 ],
                 "changes": [
-                  {
-                    "version": "v14.12.0",
-                    "pr-url": "https://github.com/nodejs/node/pull/34993",
-                    "description": "The `string` parameter will stringify an object with an explicit `toString` function."
-                  },
                   {
                     "version": "v14.0.0",
                     "pr-url": "https://github.com/nodejs/node/pull/31030",
@@ -7541,9 +7517,9 @@
                       "type": "integer"
                     },
                     {
-                      "textRaw": "`string` {string|Object}",
+                      "textRaw": "`string` {string}",
                       "name": "string",
-                      "type": "string|Object"
+                      "type": "string"
                     },
                     {
                       "textRaw": "`position` {integer}",
@@ -7558,7 +7534,7 @@
                   ]
                 }
               ],
-              "desc": "<p>If <code>string</code> is a plain object, it must have an own (not inherited) <code>toString</code>\nfunction property.</p>\n<p>For detailed information, see the documentation of the asynchronous version of\nthis API: <a href=\"#fs_fs_write_fd_string_position_encoding_callback\"><code>fs.write(fd, string...)</code></a>.</p>"
+              "desc": "<p>For detailed information, see the documentation of the asynchronous version of\nthis API: <a href=\"#fs_fs_write_fd_string_position_encoding_callback\"><code>fs.write(fd, string...)</code></a>.</p>"
             },
             {
               "textRaw": "`fs.writevSync(fd, buffers[, position])`",
