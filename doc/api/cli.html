@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <meta name="nodejs.org:node-version" content="v14.20.1">
-  <title>Command-line options | Node.js v14.20.1 Documentation</title>
+  <meta name="nodejs.org:node-version" content="v14.21.2">
+  <title>Command-line options | Node.js v14.21.2 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic&display=fallback">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/hljs.css">
@@ -89,7 +89,7 @@
     <div id="column1" data-id="cli" class="interior">
       <header>
         <div class="header-container">
-          <h1>Node.js v14.20.1 documentation</h1>
+          <h1>Node.js v14.21.2 documentation</h1>
           <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark mode/light mode" aria-label="Toggle dark mode/light mode" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon dark-icon" height="24" width="24">
               <path fill="none" d="M0 0h24v24H0z" />
@@ -116,13 +116,14 @@
             
     <li class="version-picker">
       <a href="#">View another version <span>&#x25bc;</span></a>
-      <ol class="version-picker"><li><a href="https://nodejs.org/docs/latest-v18.x/api/cli.html">18.x</a></li>
+      <ol class="version-picker"><li><a href="https://nodejs.org/docs/latest-v19.x/api/cli.html">19.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v18.x/api/cli.html">18.x <b>LTS</b></a></li>
 <li><a href="https://nodejs.org/docs/latest-v17.x/api/cli.html">17.x</a></li>
 <li><a href="https://nodejs.org/docs/latest-v16.x/api/cli.html">16.x <b>LTS</b></a></li>
 <li><a href="https://nodejs.org/docs/latest-v15.x/api/cli.html">15.x</a></li>
 <li><a href="https://nodejs.org/docs/latest-v14.x/api/cli.html">14.x <b>LTS</b></a></li>
 <li><a href="https://nodejs.org/docs/latest-v13.x/api/cli.html">13.x</a></li>
-<li><a href="https://nodejs.org/docs/latest-v12.x/api/cli.html">12.x <b>LTS</b></a></li>
+<li><a href="https://nodejs.org/docs/latest-v12.x/api/cli.html">12.x</a></li>
 <li><a href="https://nodejs.org/docs/latest-v11.x/api/cli.html">11.x</a></li>
 <li><a href="https://nodejs.org/docs/latest-v10.x/api/cli.html">10.x</a></li>
 <li><a href="https://nodejs.org/docs/latest-v9.x/api/cli.html">9.x</a></li>
@@ -199,6 +200,7 @@
 <li><a href="#cli_no_warnings"><code>--no-warnings</code></a></li>
 <li><a href="#cli_node_memory_debug"><code>--node-memory-debug</code></a></li>
 <li><a href="#cli_openssl_config_file"><code>--openssl-config=file</code></a></li>
+<li><a href="#cli_openssl_shared_config"><code>--openssl-shared-config</code></a></li>
 <li><a href="#cli_pending_deprecation"><code>--pending-deprecation</code></a></li>
 <li><span class="stability_1"><a href="#cli_policy_integrity_sri"><code>--policy-integrity=sri</code></a></span></li>
 <li><a href="#cli_preserve_symlinks"><code>--preserve-symlinks</code></a></li>
@@ -761,6 +763,18 @@ usually only useful for developers debugging Node.js itself.</p>
 <p>Load an OpenSSL configuration file on startup. Among other uses, this can be
 used to enable FIPS-compliant crypto if Node.js is built
 against FIPS-enabled OpenSSL.</p>
+<h4><code>--openssl-shared-config</code><span><a class="mark" href="#cli_openssl_shared_config" id="cli_openssl_shared_config">#</a></span></h4>
+<div class="api_metadata">
+<span>Added in: v14.21.0</span>
+</div>
+<p>Enable OpenSSL default configuration section, <code>openssl_conf</code> to be read from
+the OpenSSL configuration file. The default configuration file is named
+<code>openssl.cnf</code> but this can be changed using the environment variable
+<code>OPENSSL_CONF</code>, or by using the command line option <code>--openssl-config</code>.
+The location of the default OpenSSL configuration file depends on how OpenSSL
+is being linked to Node.js. Sharing the OpenSSL configuration may have unwanted
+implications and it is recommended to use a configuration section specific to
+Node.js which is <code>nodejs_conf</code> and is default when this option is not used.</p>
 <h4><code>--pending-deprecation</code><span><a class="mark" href="#cli_pending_deprecation" id="cli_pending_deprecation">#</a></span></h4>
 <div class="api_metadata">
 <span>Added in: v8.0.0</span>
@@ -1353,6 +1367,7 @@ node --require <span class="hljs-string">"./a.js"</span> --require <span class="
 <li><code>--no-warnings</code></li>
 <li><code>--node-memory-debug</code></li>
 <li><code>--openssl-config</code></li>
+<li><code>--openssl-shared-config</code></li>
 <li><code>--pending-deprecation</code></li>
 <li><code>--policy-integrity</code></li>
 <li><code>--preserve-symlinks-main</code></li>

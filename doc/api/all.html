@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <meta name="nodejs.org:node-version" content="v14.20.1">
-  <title>Node.js v14.20.1 Documentation</title>
+  <meta name="nodejs.org:node-version" content="v14.21.2">
+  <title>Node.js v14.21.2 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic&display=fallback">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/hljs.css">
@@ -89,7 +89,7 @@
     <div id="column1" data-id="all" class="interior">
       <header>
         <div class="header-container">
-          <h1>Node.js v14.20.1 documentation</h1>
+          <h1>Node.js v14.21.2 documentation</h1>
           <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark mode/light mode" aria-label="Toggle dark mode/light mode" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon dark-icon" height="24" width="24">
               <path fill="none" d="M0 0h24v24H0z" />
@@ -116,13 +116,14 @@
             
     <li class="version-picker">
       <a href="#">View another version <span>&#x25bc;</span></a>
-      <ol class="version-picker"><li><a href="https://nodejs.org/docs/latest-v18.x/api/all.html">18.x</a></li>
+      <ol class="version-picker"><li><a href="https://nodejs.org/docs/latest-v19.x/api/all.html">19.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v18.x/api/all.html">18.x <b>LTS</b></a></li>
 <li><a href="https://nodejs.org/docs/latest-v17.x/api/all.html">17.x</a></li>
 <li><a href="https://nodejs.org/docs/latest-v16.x/api/all.html">16.x <b>LTS</b></a></li>
 <li><a href="https://nodejs.org/docs/latest-v15.x/api/all.html">15.x</a></li>
 <li><a href="https://nodejs.org/docs/latest-v14.x/api/all.html">14.x <b>LTS</b></a></li>
 <li><a href="https://nodejs.org/docs/latest-v13.x/api/all.html">13.x</a></li>
-<li><a href="https://nodejs.org/docs/latest-v12.x/api/all.html">12.x <b>LTS</b></a></li>
+<li><a href="https://nodejs.org/docs/latest-v12.x/api/all.html">12.x</a></li>
 <li><a href="https://nodejs.org/docs/latest-v11.x/api/all.html">11.x</a></li>
 <li><a href="https://nodejs.org/docs/latest-v10.x/api/all.html">10.x</a></li>
 <li><a href="https://nodejs.org/docs/latest-v9.x/api/all.html">9.x</a></li>
@@ -939,6 +940,7 @@
 <li><a href="#cli_no_warnings"><code>--no-warnings</code></a></li>
 <li><a href="#cli_node_memory_debug"><code>--node-memory-debug</code></a></li>
 <li><a href="#cli_openssl_config_file"><code>--openssl-config=file</code></a></li>
+<li><a href="#cli_openssl_shared_config"><code>--openssl-shared-config</code></a></li>
 <li><a href="#cli_pending_deprecation"><code>--pending-deprecation</code></a></li>
 <li><span class="stability_1"><a href="#cli_policy_integrity_sri"><code>--policy-integrity=sri</code></a></span></li>
 <li><a href="#cli_preserve_symlinks"><code>--preserve-symlinks</code></a></li>
@@ -4516,7 +4518,7 @@ the server is working.</p></section>
 <section><h2>Assert<span><a class="mark" href="#assert_assert" id="assert_assert">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/assert.js">lib/assert.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/assert.js">lib/assert.js</a></p>
 <p>The <code>assert</code> module provides a set of assertion functions for verifying
 invariants.</p>
 <section><h3>Strict assertion mode<span><a class="mark" href="#assert_strict_assertion_mode" id="assert_strict_assertion_mode">#</a></span></h3>
@@ -4579,7 +4581,7 @@ especially true for <a href="#assert_assert_deepequal_actual_expected_message"><
 lax:</p>
 <pre><code class="language-js"><span class="hljs-comment">// WARNING: This does not throw an AssertionError!</span>
 assert.<span class="hljs-title function_">deepEqual</span>(<span class="hljs-regexp">/a/gi</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>());</code></pre>
-</section><section><h3>Class: assert.AssertionError<a class="srclink" href="https://github.com/nodejs/node/blob/c11b8215bd6388854efcc9302a7383c8c63b8127/lib/assert.js#L172">[src]</a><span><a class="mark" href="#assert_class_assert_assertionerror" id="assert_class_assert_assertionerror">#</a></span></h3>
+</section><section><h3>Class: assert.AssertionError<a class="srclink" href="https://github.com/nodejs/node/blob/92caea621d0fea47ef5af0b3dda427ac2fe2df3f/lib/assert.js#L172">[src]</a><span><a class="mark" href="#assert_class_assert_assertionerror" id="assert_class_assert_assertionerror">#</a></span></h3>
 <ul>
 <li>Extends: <a href="#errors_class_error" class="type">&#x3C;errors.Error></a></li>
 </ul>
@@ -5872,7 +5874,7 @@ argument.</p></section>
 <section><h2>Async hooks<span><a class="mark" href="#async_hooks_async_hooks" id="async_hooks_async_hooks">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/async_hooks.js">lib/async_hooks.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/async_hooks.js">lib/async_hooks.js</a></p>
 <p>The <code>async_hooks</code> module provides an API to track asynchronous resources. It
 can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> async_hooks = <span class="hljs-built_in">require</span>(<span class="hljs-string">'async_hooks'</span>);</code></pre>
@@ -6841,7 +6843,7 @@ to associate the asynchronous operation with the correct execution context.</p><
 <section><h2>Buffer<span><a class="mark" href="#buffer_buffer" id="buffer_buffer">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/buffer.js">lib/buffer.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/buffer.js">lib/buffer.js</a></p>
 <p><code>Buffer</code> objects are used to represent a fixed-length sequence of bytes. Many
 Node.js APIs support <code>Buffer</code>s.</p>
 <p>The <code>Buffer</code> class is a subclass of JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array"><code>Uint8Array</code></a> class and
@@ -11564,6 +11566,7 @@ Currently, the following status codes are supported.</p>
   napi_arraybuffer_expected,
   napi_detachable_arraybuffer_expected,
   napi_would_deadlock,  <span class="hljs-comment">/* unused */</span>
+  napi_no_external_buffers_allowed
 } napi_status;</code></pre>
 <p>If additional information is required upon an API returning a failed status,
 it can be obtained by calling <code>napi_get_last_error_info</code>.</p>
@@ -12855,6 +12858,17 @@ collection.</li>
 <li><code>[out] result</code>: A <code>napi_value</code> representing a JavaScript <code>ArrayBuffer</code>.</li>
 </ul>
 <p>Returns <code>napi_ok</code> if the API succeeded.</p>
+<p><strong>Some runtimes other than Node.js have dropped support for external buffers</strong>.
+On runtimes other than Node.js this method may return
+<code>napi_no_external_buffers_allowed</code> to indicate that external
+buffers are not supported. One such runtime is Electron as
+described in this issue
+<a href="https://github.com/electron/electron/issues/35801">electron/issues/35801</a>.</p>
+<p>In order to maintain broadest compatibility with all runtimes
+you may define <code>NODE_API_NO_EXTERNAL_BUFFERS_ALLOWED</code> in your addon before
+includes for the node-api headers. Doing so will hide the 2 functions
+that create external buffers. This will ensure a compilation error
+occurs if you accidentally use one of these methods.</p>
 <p>This API returns a Node-API value corresponding to a JavaScript <code>ArrayBuffer</code>.
 The underlying byte buffer of the <code>ArrayBuffer</code> is externally allocated and
 managed. The caller must ensure that the byte buffer remains valid until the
@@ -12892,6 +12906,17 @@ collection.</li>
 <li><code>[out] result</code>: A <code>napi_value</code> representing a <code>node::Buffer</code>.</li>
 </ul>
 <p>Returns <code>napi_ok</code> if the API succeeded.</p>
+<p><strong>Some runtimes other than Node.js have dropped support for external buffers</strong>.
+On runtimes other than Node.js this method may return
+<code>napi_no_external_buffers_allowed</code> to indicate that external
+buffers are not supported. One such runtime is Electron as
+described in this issue
+<a href="https://github.com/electron/electron/issues/35801">electron/issues/35801</a>.</p>
+<p>In order to maintain broadest compatibility with all runtimes
+you may define <code>NODE_API_NO_EXTERNAL_BUFFERS_ALLOWED</code> in your addon before
+includes for the node-api headers. Doing so will hide the 2 functions
+that create external buffers. This will ensure a compilation error
+occurs if you accidentally use one of these methods.</p>
 <p>This API allocates a <code>node::Buffer</code> object and initializes it with data
 backed by the passed in buffer. While this is still a fully-supported data
 structure, in most cases using a <code>TypedArray</code> will suffice.</p>
@@ -16051,7 +16076,7 @@ and registers it with the platform automatically.</p>
 <section><h2>Child process<span><a class="mark" href="#child_process_child_process" id="child_process_child_process">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/child_process.js">lib/child_process.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/child_process.js">lib/child_process.js</a></p>
 <p>The <code>child_process</code> module provides the ability to spawn subprocesses in
 a manner that is similar, but not identical, to <a href="http://man7.org/linux/man-pages/man3/popen.3.html"><code>popen(3)</code></a>. This capability
 is primarily provided by the <a href="#child_process_child_process_spawn_command_args_options"><code>child_process.spawn()</code></a> function:</p>
@@ -17605,7 +17630,7 @@ or <a href="#child_process_child_process_fork_modulepath_args_options"><code>chi
 <section><h2>Cluster<span><a class="mark" href="#cluster_cluster" id="cluster_cluster">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/cluster.js">lib/cluster.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/cluster.js">lib/cluster.js</a></p>
 <p>A single instance of Node.js runs in a single thread. To take advantage of
 multi-core systems, the user will sometimes want to launch a cluster of Node.js
 processes to handle the load.</p>
@@ -18809,6 +18834,18 @@ usually only useful for developers debugging Node.js itself.</p>
 <p>Load an OpenSSL configuration file on startup. Among other uses, this can be
 used to enable FIPS-compliant crypto if Node.js is built
 against FIPS-enabled OpenSSL.</p>
+<h4><code>--openssl-shared-config</code><span><a class="mark" href="#cli_openssl_shared_config" id="cli_openssl_shared_config">#</a></span></h4>
+<div class="api_metadata">
+<span>Added in: v14.21.0</span>
+</div>
+<p>Enable OpenSSL default configuration section, <code>openssl_conf</code> to be read from
+the OpenSSL configuration file. The default configuration file is named
+<code>openssl.cnf</code> but this can be changed using the environment variable
+<code>OPENSSL_CONF</code>, or by using the command line option <code>--openssl-config</code>.
+The location of the default OpenSSL configuration file depends on how OpenSSL
+is being linked to Node.js. Sharing the OpenSSL configuration may have unwanted
+implications and it is recommended to use a configuration section specific to
+Node.js which is <code>nodejs_conf</code> and is default when this option is not used.</p>
 <h4><code>--pending-deprecation</code><span><a class="mark" href="#cli_pending_deprecation" id="cli_pending_deprecation">#</a></span></h4>
 <div class="api_metadata">
 <span>Added in: v8.0.0</span>
@@ -19401,6 +19438,7 @@ node --require <span class="hljs-string">"./a.js"</span> --require <span class="
 <li><code>--no-warnings</code></li>
 <li><code>--node-memory-debug</code></li>
 <li><code>--openssl-config</code></li>
+<li><code>--openssl-shared-config</code></li>
 <li><code>--pending-deprecation</code></li>
 <li><code>--policy-integrity</code></li>
 <li><code>--preserve-symlinks-main</code></li>
@@ -19652,7 +19690,7 @@ garbage collection in an effort to free unused memory.</p>
 <section><h2>Console<span><a class="mark" href="#console_console" id="console_console">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/console.js">lib/console.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/console.js">lib/console.js</a></p>
 <p>The <code>console</code> module provides a simple debugging console that is similar to the
 JavaScript console mechanism provided by web browsers.</p>
 <p>The module exports two specific components:</p>
@@ -20242,7 +20280,7 @@ that happen, run <a href="https://github.com/nodejs/corepack#corepack-enable--na
 <section><h2>Crypto<span><a class="mark" href="#crypto_crypto" id="crypto_crypto">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/crypto.js">lib/crypto.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/crypto.js">lib/crypto.js</a></p>
 <p>The <code>crypto</code> module provides cryptographic functionality that includes a set of
 wrappers for OpenSSL's hash, HMAC, cipher, decipher, sign, and verify functions.</p>
 <p>Use <code>require('crypto')</code> to access this module.</p>
@@ -26114,7 +26152,7 @@ an explicit <a href="#packages_main_entry_point_export"><code>"exports"</code> o
 <section><h2>Diagnostics Channel<span><a class="mark" href="#diagnostics_channel_diagnostics_channel" id="diagnostics_channel_diagnostics_channel">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/diagnostics_channel.js">lib/diagnostics_channel.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/diagnostics_channel.js">lib/diagnostics_channel.js</a></p>
 <p>The <code>diagnostics_channel</code> module provides an API to create named channels
 to report arbitrary message data for diagnostics purposes.</p>
 <p>It can be accessed using:</p>
@@ -26262,7 +26300,7 @@ channel.<span class="hljs-title function_">unsubscribe</span>(onMessage);</code>
 <section><h2>DNS<span><a class="mark" href="#dns_dns" id="dns_dns">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/dns.js">lib/dns.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/dns.js">lib/dns.js</a></p>
 <p>The <code>dns</code> module enables name resolution. For example, use it to look up IP
 addresses of host names.</p>
 <p>Although named for the <a href="https://en.wikipedia.org/wiki/Domain_Name_System">Domain Name System (DNS)</a>, it does not always use the
@@ -27691,7 +27729,7 @@ uses. For instance, <em>they do not use the configuration from <code>/etc/hosts<
 </div>
 
 <p></p><div class="api_stability api_stability_0"><a href="#documentation_stability_index">Stability: 0</a> - Deprecated</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/domain.js">lib/domain.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/domain.js">lib/domain.js</a></p>
 <p><strong>This module is pending deprecation</strong>. Once a replacement API has been
 finalized, this module will be fully deprecated. Most developers should
 <strong>not</strong> have cause to use this module. Users who absolutely must have
@@ -29943,7 +29981,7 @@ closed.</p></section>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/events.js">lib/events.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/events.js">lib/events.js</a></p>
 <p>Much of the Node.js core API is built around an idiomatic asynchronous
 event-driven architecture in which certain kinds of objects (called "emitters")
 emit named events that cause <code>Function</code> objects ("listeners") to be called.</p>
@@ -31321,7 +31359,7 @@ to the <code>EventTarget</code>.</p></section>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/fs.js">lib/fs.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/fs.js">lib/fs.js</a></p>
 <p>The <code>fs</code> module enables interacting with the file system in a
 way modeled on standard POSIX functions.</p>
 <p>To use the promise-based APIs:</p>
@@ -37726,7 +37764,7 @@ within each turn of the Node.js event loop.</p>
 <section><h2>HTTP<span><a class="mark" href="#http_http" id="http_http">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/http.js">lib/http.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/http.js">lib/http.js</a></p>
 <p>To use the HTTP server and client one must <code>require('http')</code>.</p>
 <p>The HTTP interfaces in Node.js are designed to support many features
 of the protocol which have been traditionally difficult to use.
@@ -40421,7 +40459,7 @@ or response. The HTTP module will automatically validate such headers.</p>
 </div>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/http2.js">lib/http2.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/http2.js">lib/http2.js</a></p>
 <p>The <code>http2</code> module provides an implementation of the <a href="https://tools.ietf.org/html/rfc7540">HTTP/2</a> protocol. It
 can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> http2 = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http2'</span>);</code></pre>
@@ -43719,7 +43757,7 @@ the <code>Http2Session</code>.</li>
 <section><h2>HTTPS<span><a class="mark" href="#https_https" id="https_https">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/https.js">lib/https.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/https.js">lib/https.js</a></p>
 <p>HTTPS is the HTTP protocol over TLS/SSL. In Node.js this is implemented as a
 separate module.</p>
 <section><h3>Class: <code>https.Agent</code><span><a class="mark" href="#https_class_https_agent" id="https_class_https_agent">#</a></span></h3>
@@ -44134,7 +44172,7 @@ headers: max-age=0; pin-sha256="WoiWRyIOVNa9ihaBciRSC7XHjliYS9VwUGOIud4PB18="; p
 <section><h2>Inspector<span><a class="mark" href="#inspector_inspector" id="inspector_inspector">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/inspector.js">lib/inspector.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/inspector.js">lib/inspector.js</a></p>
 <p>The <code>inspector</code> module provides an API for interacting with the V8 inspector.</p>
 <p>It can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> inspector = <span class="hljs-built_in">require</span>(<span class="hljs-string">'inspector'</span>);</code></pre>
@@ -47780,7 +47818,7 @@ referenced via <code>require</code> or via <code>import</code>.</p>
 
 <!--lint disable maximum-line-length-->
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/net.js">lib/net.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/net.js">lib/net.js</a></p>
 <p>The <code>net</code> module provides an asynchronous network API for creating stream-based
 TCP or <a href="#net_ipc_support">IPC</a> servers (<a href="#net_net_createserver_options_connectionlistener"><code>net.createServer()</code></a>) and clients
 (<a href="#net_net_createconnection"><code>net.createConnection()</code></a>).</p>
@@ -49006,7 +49044,7 @@ addresses.</p>
 <section><h2>OS<span><a class="mark" href="#os_os" id="os_os">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/os.js">lib/os.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/os.js">lib/os.js</a></p>
 <p>The <code>os</code> module provides operating system-related utility methods and
 properties. It can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> os = <span class="hljs-built_in">require</span>(<span class="hljs-string">'os'</span>);</code></pre>
@@ -50232,7 +50270,7 @@ information.</p>
 <section><h2>Path<span><a class="mark" href="#path_path" id="path_path">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/path.js">lib/path.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/path.js">lib/path.js</a></p>
 <p>The <code>path</code> module provides utilities for working with file and directory paths.
 It can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>);</code></pre>
@@ -50679,7 +50717,7 @@ of the <code>path</code> methods.</p></section>
 <section><h2>Performance measurement APIs<span><a class="mark" href="#perf_hooks_performance_measurement_apis" id="perf_hooks_performance_measurement_apis">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/perf_hooks.js">lib/perf_hooks.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/perf_hooks.js">lib/perf_hooks.js</a></p>
 <p>This module provides an implementation of a subset of the W3C
 <a href="https://w3c.github.io/perf-timing-primer/">Web Performance APIs</a> as well as additional APIs for
 Node.js-specific performance measurements.</p>
@@ -51814,7 +51852,7 @@ not adopt the origin of the <code>blob:</code> URL.</p>
 <section><h2>Process<span><a class="mark" href="#process_process" id="process_process">#</a></span></h2>
 
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/process.js">lib/process.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/process.js">lib/process.js</a></p>
 <p>The <code>process</code> object is a <code>global</code> that provides information about, and control
 over, the current Node.js process. As a global, it is always available to
 Node.js applications without using <code>require()</code>. It can also be explicitly
@@ -54115,7 +54153,7 @@ code will be <code>128</code> + <code>6</code>, or <code>134</code>.</li>
 </div>
 
 <p></p><div class="api_stability api_stability_0"><a href="#documentation_stability_index">Stability: 0</a> - Deprecated</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/punycode.js">lib/punycode.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/punycode.js">lib/punycode.js</a></p>
 <p><strong>The version of the punycode module bundled in Node.js is being deprecated</strong>.
 In a future major version of Node.js this module will be removed. Users
 currently depending on the <code>punycode</code> module should switch to using the
@@ -54228,7 +54266,7 @@ punycode.<span class="hljs-property">ucs2</span>.<span class="hljs-title functio
 
 <p></p><div class="api_stability api_stability_3"><a href="#documentation_stability_index">Stability: 3</a> - Legacy</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/querystring.js">lib/querystring.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/querystring.js">lib/querystring.js</a></p>
 <p>The <code>querystring</code> module provides utilities for parsing and formatting URL
 query strings. It can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> querystring = <span class="hljs-built_in">require</span>(<span class="hljs-string">'querystring'</span>);</code></pre>
@@ -54365,7 +54403,7 @@ a safer equivalent that does not throw on malformed URLs will be used.</p></sect
 <section><h2>Readline<span><a class="mark" href="#readline_readline" id="readline_readline">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/readline.js">lib/readline.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/readline.js">lib/readline.js</a></p>
 <p>The <code>readline</code> module provides an interface for reading data from a <a href="#stream_readable_streams">Readable</a>
 stream (such as <a href="#process_process_stdin"><code>process.stdin</code></a>) one line at a time. It can be accessed
 using:</p>
@@ -55191,7 +55229,7 @@ flow and speed are both essential, a mixed approach can be applied:</p>
 <section><h2>REPL<span><a class="mark" href="#repl_repl" id="repl_repl">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/repl.js">lib/repl.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/repl.js">lib/repl.js</a></p>
 <p>The <code>repl</code> module provides a Read-Eval-Print-Loop (REPL) implementation that
 is available both as a standalone program or includible in other applications.
 It can be accessed using:</p>
@@ -56352,10 +56390,10 @@ in the standard report format.</p>
 threads to finish. However, the latency for this will usually be low, as both
 running JavaScript and the event loop are interrupted to generate the report.</p></section>
         </section>
-<section><h2>Stream<a class="srclink" href="https://github.com/nodejs/node/blob/c11b8215bd6388854efcc9302a7383c8c63b8127/lib/stream.js#L28">[src]</a><span><a class="mark" href="#stream_stream" id="stream_stream">#</a></span></h2>
+<section><h2>Stream<a class="srclink" href="https://github.com/nodejs/node/blob/92caea621d0fea47ef5af0b3dda427ac2fe2df3f/lib/stream.js#L28">[src]</a><span><a class="mark" href="#stream_stream" id="stream_stream">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/stream.js">lib/stream.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/stream.js">lib/stream.js</a></p>
 <p>A stream is an abstract interface for working with streaming data in Node.js.
 The <code>stream</code> module provides an API for implementing the stream interface.</p>
 <p>There are many stream objects provided by Node.js. For instance, a
@@ -58918,7 +58956,7 @@ contain multi-byte characters.</p></section>
 <section><h2>String decoder<span><a class="mark" href="#string_decoder_string_decoder" id="string_decoder_string_decoder">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/string_decoder.js">lib/string_decoder.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/string_decoder.js">lib/string_decoder.js</a></p>
 <p>The <code>string_decoder</code> module provides an API for decoding <code>Buffer</code> objects into
 strings in a manner that preserves encoded multi-byte UTF-8 and UTF-16
 characters. It can be accessed using:</p>
@@ -58994,7 +59032,7 @@ returned string and stored in an internal buffer for the next call to
 <section><h2>Timers<span><a class="mark" href="#timers_timers" id="timers_timers">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/timers.js">lib/timers.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/timers.js">lib/timers.js</a></p>
 <p>The <code>timer</code> module exposes a global API for scheduling functions to
 be called at some future period of time. Because the timer functions are
 globals, there is no need to call <code>require('timers')</code> to use the API.</p>
@@ -59259,7 +59297,7 @@ or the <a href="#timers_timeout_symbol_toprimitive">primitive</a> of the <code>T
 <section><h2>TLS (SSL)<span><a class="mark" href="#tls_tls_ssl" id="tls_tls_ssl">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/tls.js">lib/tls.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/tls.js">lib/tls.js</a></p>
 <p>The <code>tls</code> module provides an implementation of the Transport Layer Security
 (TLS) and Secure Socket Layer (SSL) protocols that is built on top of OpenSSL.
 The module can be accessed using:</p>
@@ -61007,7 +61045,7 @@ used.</li>
 <section><h2>Trace events<span><a class="mark" href="#tracing_trace_events" id="tracing_trace_events">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/trace_events.js">lib/trace_events.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/trace_events.js">lib/trace_events.js</a></p>
 <p>The <code>trace_events</code> module provides a mechanism to centralize tracing information
 generated by V8, Node.js core, and userspace code.</p>
 <p>Tracing can be enabled with the <code>--trace-event-categories</code> command-line flag
@@ -61176,7 +61214,7 @@ t2.<span class="hljs-title function_">enable</span>();
 <section><h2>TTY<span><a class="mark" href="#tty_tty" id="tty_tty">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/tty.js">lib/tty.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/tty.js">lib/tty.js</a></p>
 <p>The <code>tty</code> module provides the <code>tty.ReadStream</code> and <code>tty.WriteStream</code> classes.
 In most cases, it will not be necessary or possible to use this module directly.
 However, it can be accessed using:</p>
@@ -61445,7 +61483,7 @@ integer.</p></section>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/dgram.js">lib/dgram.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/dgram.js">lib/dgram.js</a></p>
 <p>The <code>dgram</code> module provides an implementation of UDP datagram sockets.</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> dgram = <span class="hljs-built_in">require</span>(<span class="hljs-string">'dgram'</span>);
 <span class="hljs-keyword">const</span> server = dgram.<span class="hljs-title function_">createSocket</span>(<span class="hljs-string">'udp4'</span>);
@@ -62124,7 +62162,7 @@ and <code>udp6</code> sockets). The bound address and port can be retrieved usin
 <section><h2>URL<span><a class="mark" href="#url_url" id="url_url">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/url.js">lib/url.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/url.js">lib/url.js</a></p>
 <p>The <code>url</code> module provides utilities for URL resolution and parsing. It can be
 accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> url = <span class="hljs-built_in">require</span>(<span class="hljs-string">'url'</span>);</code></pre>
@@ -63368,7 +63406,7 @@ using the <a href="https://tools.ietf.org/html/rfc5891#section-4.4">Punycode</a>
 <section><h2>Util<span><a class="mark" href="#util_util" id="util_util">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/util.js">lib/util.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/util.js">lib/util.js</a></p>
 <p>The <code>util</code> module supports the needs of Node.js internal APIs. Many of the
 utilities are useful for application and module developers as well. To access
 it:</p>
@@ -65477,7 +65515,7 @@ util.<span class="hljs-title function_">log</span>(<span class="hljs-string">'Ti
         </section>
 <section><h2>V8<span><a class="mark" href="#v8_v8" id="v8_v8">#</a></span></h2>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/v8.js">lib/v8.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/v8.js">lib/v8.js</a></p>
 <p>The <code>v8</code> module exposes APIs that are specific to the version of <a href="https://developers.google.com/v8/">V8</a>
 built into the Node.js binary. It can be accessed using:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> v8 = <span class="hljs-built_in">require</span>(<span class="hljs-string">'v8'</span>);</code></pre>
@@ -65936,7 +65974,7 @@ stores the part of their underlying <code>ArrayBuffer</code>s that they are refe
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
 
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/vm.js">lib/vm.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/vm.js">lib/vm.js</a></p>
 <p>The <code>vm</code> module enables compiling and running code within V8 Virtual
 Machine contexts. <strong>The <code>vm</code> module is not a security mechanism. Do
 not use it to run untrusted code</strong>.</p>
@@ -67291,7 +67329,7 @@ are not controllable through the timeout either.</p></section>
 <section><h2>WebAssembly System Interface (WASI)<span><a class="mark" href="#wasi_webassembly_system_interface_wasi" id="wasi_webassembly_system_interface_wasi">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_1"><a href="#documentation_stability_index">Stability: 1</a> - Experimental</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/wasi.js">lib/wasi.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/wasi.js">lib/wasi.js</a></p>
 <p>The WASI API provides an implementation of the <a href="https://wasi.dev/">WebAssembly System Interface</a>
 specification. WASI gives sandboxed WebAssembly applications access to the
 underlying operating system via a collection of POSIX-like functions.</p>
@@ -67440,7 +67478,7 @@ of a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
 <section><h2>Worker threads<span><a class="mark" href="#worker_threads_worker_threads" id="worker_threads_worker_threads">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/worker_threads.js">lib/worker_threads.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/worker_threads.js">lib/worker_threads.js</a></p>
 <p>The <code>worker_threads</code> module enables the use of threads that execute JavaScript
 in parallel. To access it:</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> worker = <span class="hljs-built_in">require</span>(<span class="hljs-string">'worker_threads'</span>);</code></pre>
@@ -68375,7 +68413,7 @@ thread spawned will spawn another until the application crashes.</p></section>
 <section><h2>Zlib<span><a class="mark" href="#zlib_zlib" id="zlib_zlib">#</a></span></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="#documentation_stability_index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.20.1/lib/zlib.js">lib/zlib.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v14.21.2/lib/zlib.js">lib/zlib.js</a></p>
 <p>The <code>zlib</code> module provides compression functionality implemented using Gzip,
 Deflate/Inflate, and Brotli.</p>
 <p>To access it:</p>
