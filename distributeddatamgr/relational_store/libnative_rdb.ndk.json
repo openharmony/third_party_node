@@ -1,0 +1,21 @@
+[
+	{"name":"OH_Rdb_CreatePredicates" },
+	{"name":"OH_Rdb_CreateValueObject" },
+	{"name":"OH_Rdb_CreateValuesBucket" },
+	{"name":"OH_Rdb_GetOrOpen" },
+	{"name":"OH_Rdb_CloseStore" },
+	{"name":"OH_Rdb_DeleteStore" },
+	{"name":"OH_Rdb_Insert" },
+	{"name":"OH_Rdb_Update" },
+	{"name":"OH_Rdb_Delete" },
+	{"name":"OH_Rdb_Query" },
+	{"name":"OH_Rdb_Execute" },
+	{"name":"OH_Rdb_ExecuteQuery" },
+	{"name":"OH_Rdb_BeginTransaction" },
+	{"name":"OH_Rdb_RollBack" },
+	{"name":"OH_Rdb_Commit" },
+	{"name":"OH_Rdb_Backup" },
+	{"name":"OH_Rdb_Restore"},
+	{"name":"OH_Rdb_GetVersion"},
+	{"name":"OH_Rdb_SetVersion"}
+]

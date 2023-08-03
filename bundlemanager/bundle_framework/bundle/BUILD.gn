@@ -1,0 +1,71 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("../../../../appexecfwk.gni")
+
+config("bundle_ndk_config") {
+  include_dirs = [ "include" ]
+}
+ohos_ndk_headers("bundle_header") {
+  dest_dir = "$ndk_headers_out_dir/bundle/"
+  sources = [ "./include/native_interface_bundle.h" ]
+}
+
+ohos_ndk_library("libbundle_ndk") {
+  ndk_description_file = "./libbundle.ndk.json"
+  min_compact_version = "9"
+  output_name = "bundle_ndk"
+}
+
+ohos_shared_library("bundle_ndk") {
+  public_configs = [ ":bundle_ndk_config" ]
+  include_dirs = [
+    "${common_path}/log/include",
+    "${inner_api_path}/appexecfwk_base/include",
+    "${inner_api_path}/appexecfwk_base/include/quick_fix",
+    "${inner_api_path}/appexecfwk_base/include/overlay",
+    "//third_party/json/include",
+  ]
+  defines = [
+    "APP_LOG_TAG = \"BundleMgrService\"",
+    "LOG_DOMAIN = 0xD001120",
+  ]
+  sources = [
+    "${inner_api_path}/appexecfwk_base/src/ability_info.cpp",
+    "${inner_api_path}/appexecfwk_base/src/application_info.cpp",
+    "${inner_api_path}/appexecfwk_base/src/bundle_info.cpp",
+    "${inner_api_path}/appexecfwk_base/src/compatible_application_info.cpp",
+    "${inner_api_path}/appexecfwk_base/src/extension_ability_info.cpp",
+    "${inner_api_path}/appexecfwk_base/src/hap_module_info.cpp",
+    "${inner_api_path}/appexecfwk_base/src/module_info.cpp",
+    "${inner_api_path}/appexecfwk_base/src/overlay/overlay_bundle_info.cpp",
+    "${inner_api_path}/appexecfwk_base/src/overlay/overlay_module_info.cpp",
+    "${inner_api_path}/appexecfwk_base/src/quick_fix/app_quick_fix.cpp",
+    "${inner_api_path}/appexecfwk_base/src/quick_fix/appqf_info.cpp",
+    "${inner_api_path}/appexecfwk_base/src/quick_fix/hqf_info.cpp",
+    "src/bundle_mgr_proxy_native.cpp",
+    "src/native_interface_bundle.cpp",
+  ]
+
+  deps = [ "${common_path}:libappexecfwk_common" ]
+
+  external_deps = [
+    "c_utils:utils",
+    "hilog:libhilog",
+    "ipc:ipc_core",
+    "samgr:samgr_proxy",
+  ]
+  subsystem_name = "bundlemanager"
+  part_name = "bundle_framework"
+}

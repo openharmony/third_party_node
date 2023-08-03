@@ -1,0 +1,9 @@
+{
+    "patches": [
+        {
+            "project":"build",
+            "path":"build",
+            "pr_url":"https://gitee.com/openharmony/build/pulls/2215"
+        }
+    ]
+}
