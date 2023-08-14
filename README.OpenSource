@@ -1,0 +1,56 @@
+[
+    {
+        "Name"            : "zlib",
+        "License"         : "zlib/libpng License",
+        "License File"    : "LICENSE",
+        "Version Number"  : "v1.2.12",
+        "Owner"           : "gongjunsong@huawei.com",
+        "Upstream URL"    : "https://github.com/madler/zlib/archive/refs/tags/v1.2.12.tar.gz",
+        "Description"     : "zlib 1.2.12 is a general purpose data compression library. All the code is thread safe. The data format used by the zlib library is described by RFCs (Request for Comments) 1950 to 1952 in the files"
+    },
+    {
+        "Name": "libuv",
+        "License": "MIT License",
+        "License File": "LICENSE",
+        "Version Number": "v1.44.1",
+        "Owner": "sunbingxin@huawei.com",
+        "Upstream URL": "https://github.com/libuv/libuv",
+        "Description": "libuv is a multi-platform support library with a focus on asynchronous I/O."
+    },
+    {
+        "Name": "MindSpore",
+        "License": "Apache License 2.0",
+        "License File": "LICENSE.txt",
+        "Version Number": "1.8.1",
+        "Owner": "zhuguodong0001@163.com",
+        "Upstream URL": "https://gitee.com/mindspore/mindspore/repository/archive/v1.8.1",
+        "Description": "MindSpore is a new open source deep learning training/inference framework that could be used for mobile, edge and cloud scenarios."
+    },
+    {
+        "Name"                  : "OpenEuler: musl",
+        "License"               : "MIT License",
+        "License File"          : "COPYRIGHT",
+        "Version Number"        : "1.2.3-1.oe2203sp1",
+        "Owner"                 : "jianghan2@huawei.com",
+        "Upstream URL"          : "https://repo.openeuler.org/openEuler-22.03-LTS-SP1/source/Packages/musl-1.2.3-1.oe2203sp1.src.rpm",
+        "Description"           : "musl is an MIT-licensed implementation of the standard C library"
+    },
+    {
+        "Name": "node",
+        "License": "ISC License,Public Domain,MIT License,Free Software Foundation - MIT License,Apache License V2.0,ICU License,zlib/libpng License,BSD 2-Clause License,BSD 3-Clause License",
+        "License File": "LICENSE",
+        "Version Number": "14.21.2",
+        "Owner": "sunbingxin@huawei.com",
+        "Upstream URL": "http://www.nodejs.org/",
+        "Description": "Node.js is an open-source, cross-platform, JavaScript runtime environment. It executes JavaScript code outside of a browser."
+    },
+    {
+        "Name": "Khronos Group - OpenSL ES",
+        "License": "null",
+        "License File": "NOTICE",
+        "Version Number": "1.0.1",
+        "Owner": "yangshuai67@huawei.com",
+        "Upstream URL": "https://github.com/KhronosGroup/OpenSL-ES-Registry.git",
+        "Description": "OpenSL ES™ is a royalty-free, cross-platform, hardware-accelerated audio API tuned for embedded systems."
+    }
+]
