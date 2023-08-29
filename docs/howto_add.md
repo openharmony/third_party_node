@@ -8,7 +8,7 @@
 
 ## 需要了解的基础知识：
 
-GN语法，http://3ms.huawei.com/km/groups/3814407/blogs/details/5963185
+GN语法，https://zhuanlan.zhihu.com/p/136954435
 
 对json描述文件有一定了解
 
@@ -74,7 +74,7 @@ ohos_ndk_library("libsensor_ndk") {
  **min_compact_version** : 相当于Android的API level，当前library从哪个版本开始支持？如果没有设置，默认设置为从当前版本开始支持。
 
 为什么需要变量min_compact_version？
-一般地，操作系统的后期版本会提供比前期版本更多的library，比如Android-29提供23个NDK库，但是Android-16仅提供13个NDK库。所以需要提供一个变量来告知编译系统当前库是从哪个版本开始支持的。
+一般地，操作系统的后期版本会提供比前期版本更多的library，比如某个提供23个NDK库，但是前一个版本仅提供13个NDK库。所以需要提供一个变量来告知编译系统当前库是从哪个版本开始支持的。
 
  **ndk_description_file** : 当前library的符号描述文件json格式. 这个文件类似于镜像中的version script文件格式。Harmonyos上采用json格式。为统一起见，ndk_description_file的命名统一为libxxx.ndk.json。Json文件可以通过添加key来提供更丰富的属性，为未来的扩展留下空间。
 
