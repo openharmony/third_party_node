@@ -29,10 +29,14 @@
         </policylist>
         <filefilterlist>
             <filefilter name="defaultPolicyFilter" desc="compatibility,License Header Invalid">
-                <filteritem type="filepath" name="third_party/musl/ndk_musl_include/locale.h" desc="License matcher rules, NoLicenseHeader"/>
+                <filteritem type="filepath" name="third_party/musl/ndk_musl_include/*.h" desc="License matcher rules, NoLicenseHeader"/>
+                <filteritem type="filepath" name="third_party/musl/ndk_script/*.h" desc="License matcher rules, NoLicenseHeader"/>
+                <filteritem type="filepath" name="third_party/zlib/BUILD.gn" desc="License matcher rules, NoLicenseHeader"/>
+                <filteritem type="filepath" name="third_party/node/src/*.h" desc="License matcher rules, NoLicenseHeader"/>
             </filefilter>
             <filefilter name="copyrightPolicyFilter" desc="Copyright Header Invalid">
-                <filteritem type="filepath" name="third_party/musl/ndk_musl_include/locale.h" desc="Copyright matcher rules, NULL"/>
+                <filteritem type="filepath" name="third_party/musl/ndk_musl_include/*.h" desc="Copyright matcher rules, NULL"/>
+                <filteritem type="filepath" name="third_party/node/src/*.h" desc="Copyright matcher rules, NULL"/>
             </filefilter>
         </filefilterlist>
         <licensematcherlist>
