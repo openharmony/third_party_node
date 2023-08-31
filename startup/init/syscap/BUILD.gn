@@ -13,18 +13,6 @@
 
 import("//build/ohos.gni")
 
-ohos_shared_library("deviceinfo_ndk") {
-  cflags = [ "-fstack-protector-all" ]
-  sources = [
-    "src/deviceinfo.c",
-    "src/syscap_ndk.c",
-  ]
-  include_dirs = [ "./include" ]
-  deps = [ "//base/startup/init/interfaces/innerkits:libbegetutil" ]
-  part_name = "init"
-  subsystem_name = "startup"
-}
-
 ohos_ndk_library("libdeviceinfo_ndk") {
   cflags = [ "-fstack-protector-all" ]
   output_name = "deviceinfo_ndk"

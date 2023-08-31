@@ -52,5 +52,32 @@
         "Owner": "yangshuai67@huawei.com",
         "Upstream URL": "https://github.com/KhronosGroup/OpenSL-ES-Registry.git",
         "Description": "OpenSL ES™ is a royalty-free, cross-platform, hardware-accelerated audio API tuned for embedded systems."
+    },
+    {
+        "Name": "EGL",
+        "License": "MIT License",
+        "License File": "LICENSE",
+        "Version Number": "1.5",
+        "Owner": "lizheng2@huawei.com",
+        "Upstream URL": "https://github.com/KhronosGroup/EGL-Registry.git",
+        "Description": "EGL is an interface between Khronos rendering APIs such as OpenGL ES or OpenVG and the underlying native platform window system."
+    },
+    {
+        "Name": "openGLES",
+        "License": "Apache-2.0",
+        "License File": "NOTICE",
+        "Version Number": "a301c9b4600e4074008b93fba17744a859fb763b",
+        "Owner": "lizheng2@huawei.com",
+        "Upstream URL": "https://github.com/KhronosGroup/OpenGL-Registry.git",
+        "Description": "The OpenGL ES registry contains specifications of the core API and shading language; specifications of Khronos- and vendor-approved OpenGL ES extensions; header files corresponding to the specificatio"
+    },
+    {
+        "Name": "Vulkan",
+        "License": "Apache-2.0",
+        "License File": "LICENSE",
+        "Version Number": "v1.3.231",
+        "Owner": "mengzhaobing@huawei.com",
+        "Upstream URL": "https://github.com/KhronosGroup/Vulkan-Headers.git",
+        "Description": "Vulkan header files and API registry"
     }
 ]

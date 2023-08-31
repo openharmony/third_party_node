@@ -29,14 +29,26 @@
         </policylist>
         <filefilterlist>
             <filefilter name="defaultPolicyFilter" desc="compatibility,License Header Invalid">
-                <filteritem type="filepath" name="third_party/musl/ndk_musl_include/*.h" desc="License matcher rules, NoLicenseHeader"/>
-                <filteritem type="filepath" name="third_party/musl/ndk_script/*.h" desc="License matcher rules, NoLicenseHeader"/>
-                <filteritem type="filepath" name="third_party/zlib/BUILD.gn" desc="License matcher rules, NoLicenseHeader"/>
-                <filteritem type="filepath" name="third_party/node/src/*.h" desc="License matcher rules, NoLicenseHeader"/>
+                <filteritem type="filepath" name="third_party/musl/.*" desc="License matcher rules, 三方软件不检查许可头"/>
+                <filteritem type="filepath" name="third_party/libuv/.*" desc="License matcher rules, 三方软件不检查许可头"/>
+                <filteritem type="filepath" name="third_party/zlib/.*" desc="License matcher rules, 三方软件不检查许可头"/>
+                <filteritem type="filepath" name="third_party/node/.*" desc="License matcher rules, 三方软件不检查许可头"/>
+                <filteritem type="filepath" name="third_party/openSLES/.*" desc="License matcher rules, 三方软件不检查许可头"/>
+                <filteritem type="filepath" name="third_party/mindspore/.*" desc="License matcher rules, 三方软件不检查许可头"/>
+                <filteritem type="filepath" name="third_party/egl/.*" desc="License matcher rules, 三方软件不检查许可头"/>
+                <filteritem type="filepath" name="third_party/openGLES/.*" desc="License matcher rules, 三方软件不检查许可头"/>
+                <filteritem type="filepath" name="third_party/vulkan-headers/.*" desc="License matcher rules, 三方软件不检查许可头"/>
             </filefilter>
             <filefilter name="copyrightPolicyFilter" desc="Copyright Header Invalid">
-                <filteritem type="filepath" name="third_party/musl/ndk_musl_include/*.h" desc="Copyright matcher rules, NULL"/>
-                <filteritem type="filepath" name="third_party/node/src/*.h" desc="Copyright matcher rules, NULL"/>
+                <filteritem type="filepath" name="third_party/musl/.*" desc="Copyright matcher rules, 三方软件不检查版权"/>
+                <filteritem type="filepath" name="third_party/libuv/.*" desc="Copyright matcher rules, 三方软件不检查版权"/>
+                <filteritem type="filepath" name="third_party/zlib/.*" desc="Copyright matcher rules, 三方软件不检查版权"/>
+                <filteritem type="filepath" name="third_party/node/.*" desc="Copyright matcher rules, 三方软件不检查版权"/>
+                <filteritem type="filepath" name="third_party/openSLES/.*" desc="Copyright matcher rules, 三方软件不检查版权"/>
+                <filteritem type="filepath" name="third_party/mindspore/.*" desc="Copyright matcher rules, 三方软件不检查版权"/>
+                <filteritem type="filepath" name="third_party/egl/.*" desc="Copyright matcher rules, 三方软件不检查版权"/>
+                <filteritem type="filepath" name="third_party/openGLES/.*" desc="Copyright matcher rules, 三方软件不检查版权"/>
+                <filteritem type="filepath" name="third_party/vulkan-headers/.*" desc="Copyright matcher rules, 三方软件不检查版权"/>
             </filefilter>
         </filefilterlist>
         <licensematcherlist>

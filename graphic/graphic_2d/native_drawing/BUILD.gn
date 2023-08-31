@@ -17,16 +17,16 @@ import("//build/ohos/ndk/ndk.gni")
 ohos_ndk_headers("native_drawing_header") {
   dest_dir = "$ndk_headers_out_dir/native_drawing"
   sources = [
-    "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/include/c/drawing_bitmap.h",
-    "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/include/c/drawing_brush.h",
-    "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/include/c/drawing_canvas.h",
-    "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/include/c/drawing_color.h",
-    "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/include/c/drawing_font_collection.h",
-    "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/include/c/drawing_path.h",
-    "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/include/c/drawing_pen.h",
-    "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/include/c/drawing_text_declaration.h",
-    "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/include/c/drawing_text_typography.h",
-    "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/include/c/drawing_types.h",
+    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_bitmap.h",
+    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_brush.h",
+    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_canvas.h",
+    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_color.h",
+    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_font_collection.h",
+    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_path.h",
+    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_pen.h",
+    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_text_declaration.h",
+    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_text_typography.h",
+    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_types.h",
   ]
 }
 
