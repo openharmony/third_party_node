@@ -17,10 +17,10 @@ import("//build/ohos/ndk/ndk.gni")
 ohos_ndk_headers("vulkan_header") {
   dest_dir = "$ndk_headers_out_dir/vulkan"
   sources = [
-    "//third_party/vulkan-headers/include/vulkan/vk_platform.h",
-    "//third_party/vulkan-headers/include/vulkan/vulkan.h",
-    "//third_party/vulkan-headers/include/vulkan/vulkan_core.h",
-    "//third_party/vulkan-headers/include/vulkan/vulkan_ohos.h",
+    "//interface/sdk_c/third_party/vulkan-headers/vulkan/vk_platform.h",
+    "//interface/sdk_c/third_party/vulkan-headers/vulkan/vulkan.h",
+    "//interface/sdk_c/third_party/vulkan-headers/vulkan/vulkan_core.h",
+    "//interface/sdk_c/third_party/vulkan-headers/vulkan/vulkan_ohos.h",
   ]
 }
 

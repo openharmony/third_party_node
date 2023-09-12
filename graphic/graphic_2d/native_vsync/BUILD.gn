@@ -16,7 +16,7 @@ import("//build/ohos/ndk/ndk.gni")
 
 ohos_ndk_headers("native_vsync_header") {
   dest_dir = "$ndk_headers_out_dir/native_vsync"
-  sources = [ "//foundation/graphic/graphic_2d/interfaces/inner_api/composer/native_vsync.h" ]
+  sources = [ "//interface/sdk_c/graphic/graphic_2d/native_vsync/native_vsync.h" ]
 }
 
 ohos_ndk_library("libnative_vsync_ndk") {

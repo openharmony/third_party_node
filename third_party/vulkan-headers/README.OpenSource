@@ -1,0 +1,11 @@
+[
+    {
+        "Name": "Vulkan",
+        "License": "Apache-2.0",
+        "License File": "LICENSE",
+        "Version Number": "v1.3.231",
+        "Owner": "mengzhaobing@huawei.com",
+        "Upstream URL": "https://github.com/KhronosGroup/Vulkan-Headers.git",
+        "Description": "Vulkan header files and API registry"
+    }
+]
