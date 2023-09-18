@@ -93,7 +93,7 @@ json描述文件的例子如下：
 ]
 ```
 
-### ohos_ndk_headers(目标名）
+### ohos_ndk_headers(目标名)
 输入参数：
  **sources** ：想拷贝的文件或目录列表
  **dest_dir** ：目标目录，默认值为$ndk_headers_out_dir，$ndk_headers_out_dir为$root_out_dir/sdk-native/sysroot/usr/include。
@@ -115,6 +115,6 @@ sources = [
 
 
 ## 文档
-CAPI的文档生成在docs目录，需要安装doxygen工具，在ubuntu上使用`sudo apt-get install doxygen`即可安装。如果编译机上没有安装doxygen，文档将无法生成。
+C API的文档生成在docs目录，需要安装doxygen工具，在ubuntu上使用`sudo apt-get install doxygen`即可安装。如果编译机上没有安装doxygen，文档将无法生成。
 
 
