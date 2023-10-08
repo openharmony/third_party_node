@@ -13,6 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * @addtogroup MindSpore
+ * @{
+ *
+ * @brief 提供MindSpore Lite的模型推理相关接口。
+ *
+ * @Syscap SystemCapability.Ai.MindSpore
+ * @since 9
+ */
+
+/**
+ * @file context.h
+ *
+ * @brief 提供了Context相关的接口，可以配置运行时信息。
+ *
+ * @library libmindspore_lite_ndk.so
+ * @since 9
+ */
 #ifndef MINDSPORE_INCLUDE_C_API_CONTEXT_C_H
 #define MINDSPORE_INCLUDE_C_API_CONTEXT_C_H
 
@@ -112,7 +131,7 @@ OH_AI_API void OH_AI_ContextSetEnableParallel(OH_AI_ContextHandle context, bool 
  * @return Bool value that indicates whether in parallel.
  * @since 9
  */
- OH_AI_API bool OH_AI_ContextGetEnableParallel(const OH_AI_ContextHandle context);
+OH_AI_API bool OH_AI_ContextGetEnableParallel(const OH_AI_ContextHandle context);
 
 /**
  * @brief Add device info to context object.

@@ -13,6 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * @addtogroup MindSpore
+ * @{
+ *
+ * @brief 提供MindSpore Lite的模型推理相关接口。
+ *
+ * @Syscap SystemCapability.Ai.MindSpore
+ * @since 9
+ */
+
+/**
+ * @file tensor.h
+ *
+ * @brief 提供了张量相关的接口，可用于创建和修改张量信息。
+ *
+ * @library libmindspore_lite_ndk.so
+ * @since 9
+ */
 #ifndef MINDSPORE_INCLUDE_C_API_TENSOE_C_H
 #define MINDSPORE_INCLUDE_C_API_TENSOE_C_H
 
