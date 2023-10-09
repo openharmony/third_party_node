@@ -13,25 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * @addtogroup MindSpore
- * @{
- *
- * @brief 提供MindSpore Lite的模型推理相关接口。
- *
- * @Syscap SystemCapability.Ai.MindSpore
- * @since 9
- */
-
-/**
- * @file types.h
- *
- * @brief 提供了MindSpore Lite支持的模型文件类型和设备类型。
- *
- * @library libmindspore_lite_ndk.so
- * @since 9
- */
 #ifndef MINDSPORE_INCLUDE_C_API_TYPES_C_H
 #define MINDSPORE_INCLUDE_C_API_TYPES_C_H
 

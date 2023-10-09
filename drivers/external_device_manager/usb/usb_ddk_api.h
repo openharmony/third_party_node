@@ -47,7 +47,6 @@ extern "C" {
 /**
  * @brief Initializes the DDK.
  *
- * @permission ohos.permission.ACCESS_DDK_USB
  * @return <b>0</b> if the operation is successful; a negative value otherwise.
  * @since 10
  * @version 1.0
@@ -57,7 +56,6 @@ int32_t OH_Usb_Init(void);
 /**
  * @brief Releases the DDK.
  *
- * @permission ohos.permission.ACCESS_DDK_USB
  * @since 10
  * @version 1.0
  */
@@ -66,7 +64,6 @@ void OH_Usb_Release(void);
 /**
  * @brief Obtains the USB device descriptor.
  *
- * @permission ohos.permission.ACCESS_DDK_USB
  * @param deviceId ID of the device whose descriptor is to be obtained.
  * @param desc Standard device descriptor defined in the USB protocol.
  * @return <b>0</b> if the operation is successful; a negative value otherwise.
@@ -79,7 +76,6 @@ int32_t OH_Usb_GetDeviceDescriptor(uint64_t deviceId, struct UsbDeviceDescriptor
  * @brief Obtains the configuration descriptor. To avoid memory leakage, use <b>OH_Usb_FreeConfigDescriptor</b>\n
  * to release a descriptor after use.
  *
- * @permission ohos.permission.ACCESS_DDK_USB
  * @param deviceId ID of the device whose configuration descriptor is to be obtained.
  * @param configIndex Configuration index, which corresponds to <b>bConfigurationValue</b> in the USB protocol.
  * @param config Configuration descriptor, which includes the standard configuration descriptor defined in the\n
@@ -95,7 +91,6 @@ int32_t OH_Usb_GetConfigDescriptor(
  * @brief Releases the configuration descriptor. To avoid memory leakage, use <b>OH_Usb_FreeConfigDescriptor</b>\n
  * to release a descriptor after use.
  *
- * @permission ohos.permission.ACCESS_DDK_USB
  * @param config Configuration descriptor obtained by calling <b>OH_Usb_GetConfigDescriptor</b>.
  * @since 10
  * @version 1.0
@@ -105,7 +100,6 @@ void OH_Usb_FreeConfigDescriptor(struct UsbDdkConfigDescriptor * const config);
 /**
  * @brief Claims a USB interface.
  *
- * @permission ohos.permission.ACCESS_DDK_USB
  * @param deviceId ID of the device to be operated.
  * @param interfaceIndex Interface index, which corresponds to <b>bInterfaceNumber</b> in the USB protocol.
  * @param interfaceHandle Interface operation handle. After the interface is claimed successfully, a value will be\n
@@ -119,7 +113,6 @@ int32_t OH_Usb_ClaimInterface(uint64_t deviceId, uint8_t interfaceIndex, uint64_
 /**
  * @brief Releases a USB interface.
  *
- * @permission ohos.permission.ACCESS_DDK_USB
  * @param interfaceHandle Interface operation handle.
  * @return <b>0</b> if the operation is successful; a negative value otherwise.
  * @since 10
@@ -130,7 +123,6 @@ int32_t OH_Usb_ReleaseInterface(uint64_t interfaceHandle);
 /**
  * @brief Activates the alternate setting of the USB interface.
  *
- * @permission ohos.permission.ACCESS_DDK_USB
  * @param interfaceHandle Interface operation handle.
  * @param settingIndex Index of the alternate setting, which corresponds to <b>bAlternateSetting</b>\n
  * in the USB protocol.
@@ -143,7 +135,6 @@ int32_t OH_Usb_SelectInterfaceSetting(uint64_t interfaceHandle, uint8_t settingI
 /**
  * @brief Obtains the activated alternate setting of the USB interface.
  *
- * @permission ohos.permission.ACCESS_DDK_USB
  * @param interfaceHandle Interface operation handle.
  * @param settingIndex Index of the alternate setting, which corresponds to <b>bAlternateSetting</b>\n
  * in the USB protocol.
@@ -156,7 +147,6 @@ int32_t OH_Usb_GetCurrentInterfaceSetting(uint64_t interfaceHandle, uint8_t *set
 /**
  * @brief Sends a control read transfer request. This API works in a synchronous manner.
  *
- * @permission ohos.permission.ACCESS_DDK_USB
  * @param interfaceHandle Interface operation handle.
  * @param setup Request data, which corresponds to <b>Setup Data</b> in the USB protocol.
  * @param timeout Timeout duration, in milliseconds.
@@ -172,7 +162,6 @@ int32_t OH_Usb_SendControlReadRequest(uint64_t interfaceHandle, const struct Usb
 /**
  * @brief Sends a control write transfer request. This API works in a synchronous manner.
  *
- * @permission ohos.permission.ACCESS_DDK_USB
  * @param interfaceHandle Interface operation handle.
  * @param setup Request data, which corresponds to <b>Setup Data</b> in the USB protocol.
  * @param timeout Timeout duration, in milliseconds.
@@ -189,7 +178,6 @@ int32_t OH_Usb_SendControlWriteRequest(uint64_t interfaceHandle, const struct Us
  * @brief Sends a pipe request. This API works in a synchronous manner. This API applies to interrupt transfer\n
  * and bulk transfer.
  *
- * @permission ohos.permission.ACCESS_DDK_USB
  * @param pipe Pipe used to transfer data.
  * @param devMmap Device memory map, which can be obtained by calling <b>OH_Usb_CreateDeviceMemMap</b>.
  * @return <b>0</b> if the operation is successful; a negative value otherwise.
@@ -202,7 +190,6 @@ int32_t OH_Usb_SendPipeRequest(const struct UsbRequestPipe *pipe, UsbDeviceMemMa
  * @brief Creates a buffer. To avoid resource leakage, destroy a buffer by calling\n
  * <b>OH_Usb_DestroyDeviceMemMap</b> after use.
  *
- * @permission ohos.permission.ACCESS_DDK_USB
  * @param deviceId ID of the device for which the buffer is to be created.
  * @param size Buffer size.
  * @param devMmap Data memory map, through which the created buffer is returned to the caller.
@@ -215,7 +202,6 @@ int32_t OH_Usb_CreateDeviceMemMap(uint64_t deviceId, size_t size, UsbDeviceMemMa
 /**
  * @brief Destroys a buffer. To avoid resource leakage, destroy a buffer in time after use.
  *
- * @permission ohos.permission.ACCESS_DDK_USB
  * @param devMmap Device memory map created by calling <b>OH_Usb_CreateDeviceMemMap</b>.
  * @since 10
  * @version 1.0

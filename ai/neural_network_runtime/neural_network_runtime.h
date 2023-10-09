@@ -31,7 +31,6 @@
  *        to construct and compile models and perform inference and computing on acceleration hardware.
  * Note: Currently, the APIs of Neural Network Runtime do not support multi-thread calling. \n
  *
- * @library libneural_network_runtime.so
  * @since 9
  * @version 1.0
  */
