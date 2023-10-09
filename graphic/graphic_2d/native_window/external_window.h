@@ -32,7 +32,6 @@
  *
  * @brief Defines the functions for obtaining and using a native window.
  *
- * @library libnative_window.so
  * @since 8
  * @version 1.0
  */
