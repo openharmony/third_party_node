@@ -45,8 +45,13 @@
 
 
 ```
+
 ## 相关仓
 
 [interface_sdk_c](https://gitee.com/openharmony-sig/interface_sdk_c/)
+
 [C API编码规范](https://gitee.com/openharmony-sig/interface_sdk_c/blob/master/docs/capi_naming.md): 描述了OpenHarmony C API的设计规范，指导开发者如何设计发布一个接口。
+
 [C API构建指南](https://gitee.com/openharmony-sig/interface_sdk_c/blob/master/docs/howto_add.md)：描述了如何在build.gn中添加C API的构建目标。
+
+
