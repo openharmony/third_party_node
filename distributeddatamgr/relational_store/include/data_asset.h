@@ -28,7 +28,7 @@
  */
 
 /**
- * @file oh_asset.h
+ * @file data_asset.h
  *
  * @brief Provides the data type of asset.
  * @library libnative_rdb_ndk.z.so
