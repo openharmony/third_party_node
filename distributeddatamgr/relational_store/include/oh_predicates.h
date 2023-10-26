@@ -39,7 +39,7 @@
 
 #include <cstdint>
 #include <stddef.h>
-#include "oh_value_object.h"
+#include "database/rdb/oh_value_object.h"
 
 #ifdef __cplusplus
 extern "C" {
