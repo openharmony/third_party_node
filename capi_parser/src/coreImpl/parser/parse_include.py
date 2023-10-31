@@ -4,8 +4,7 @@ from clang.cindex import Config             # 配置
 from clang.cindex import Index              # 主要API
 from clang.cindex import CursorKind         # 索引结点的类别
 from clang.cindex import TypeKind           # 节点的语义类别
-
-import json
+import os
 
 
 def find_parent(cursor):                               # 获取父节点
@@ -14,7 +13,7 @@ def find_parent(cursor):                               # 获取父节点
         if cursor_parent.kind == CursorKind.VAR_DECL:  # 父节点为VAR_DECL 用于整型变量节点
             return cursor_parent.kind
 
-        if cursor_parent.kind == CursorKind.STRUCT_DECL or cursor_parent.kind == CursorKind.UNION_DECL:  # 用于判断里面成员属于那类
+        elif cursor_parent.kind == CursorKind.STRUCT_DECL or cursor_parent.kind == CursorKind.UNION_DECL:  # 用于判断里面成员属于那类
             return cursor_parent.kind
         else:
             parent = cursor_parent.semantic_parent
@@ -25,7 +24,7 @@ def find_parent(cursor):                               # 获取父节点
 
 
 def processing_no_child(cursor, data):  # 处理没有子节点的节点
-    if cursor.kind.name == CursorKind.INTEGER_LITERAL:  # 整型字面量类型节点，没有子节点
+    if cursor.kind == CursorKind.INTEGER_LITERAL:  # 整型字面量类型节点，没有子节点
         parent_kind = find_parent(cursor)  # 判断是属于那类的
         if parent_kind == CursorKind.STRUCT_DECL:
             data["name"] = 'struct_int_no_spelling'
@@ -46,7 +45,10 @@ def processing_complex_def(tokens, data):  # 处理复合型宏
     tokens_new = tokens[1:]  # 跳过正常宏名
     logo_com = 0  # 记录复合型，复合型文本也得根据这个
     count_com = 0
+    count_token = len(tokens_new)               # value ()
     for token in tokens_new:
+        if token.kind.name == 'KEYWORD':
+            break
         if token.kind.name == 'IDENTIFIER':
             count = 1
             logo = 0
@@ -56,7 +58,9 @@ def processing_complex_def(tokens, data):  # 处理复合型宏
                     break
                 else:
                     count += 1
-            if logo == 1:  # 获取复合型宏定义宏名
+            if count_token == count:
+                pass
+            elif logo == 1:  # 获取复合型宏定义宏名
                 logo_com = logo
                 count_com = count + 1
                 tokens_name = tokens[:count + 1]
@@ -79,12 +83,32 @@ def get_def_text(tokens, data, logo_compose, count_compose):                    
             pass
 
 
-def judgment_extern(cursor, data):                                                       # 判断是否带有extern
-    is_extern = False
+def get_token(cursor):
+    tokens = []
     for token in cursor.get_tokens():
-        if token.spelling == 'extern':
+        tokens.append(token.spelling)
+
+    return tokens
+
+
+def judgment_extern(cursor, data):                                                       # 判断是否带有extern
+    is_extern = None
+    tokens = get_token(cursor)
+    if cursor.kind == CursorKind.FUNCTION_DECL:
+        if 'static' in tokens:
+            is_extern = False
+        # elif 'deprecated' in tokens and ('attribute' in tokens or '__declspec' in tokens):
+        elif 'deprecated' in tokens:
+            is_extern = False
+        else:
             is_extern = True
-            break
+    elif cursor.kind == CursorKind.VAR_DECL:
+        if 'extern' in tokens:
+            is_extern = True
+        else:
+            is_extern = False
+    else:
+        is_extern = True
     if is_extern:
         data["is_extern"] = is_extern
     else:
@@ -175,30 +199,39 @@ special_node_process = {
 }
 
 
-def processing_special_node(cursor, data):                                           # 处理需要特殊处理的节点
+def processing_special_node(cursor, data, gn_path=None):                       # 处理需要特殊处理的节点
+    loc = {
+        "location_path": '{}'.format(cursor.location.file.name),
+        "location_line": cursor.location.line,
+        "location_column": cursor.location.column
+    }
+    relative_path = os.path.relpath(cursor.location.file.name, gn_path)                   # 获取头文件相对路
+    loc["location_path"] = relative_path
+    data["location"] = loc
     if cursor.kind.name in special_node_process.keys():
         node_process = special_node_process[cursor.kind.name]
         node_process(cursor, data)                                                   # 调用对应节点处理函数
 
 
-def ast_to_dict(cursor, comment=None):  # 解析数据的整理
+def ast_to_dict(cursor, current_file, gn_path=None, comment=None):  # 解析数据的整理
     data = {  # 通用
         "name": cursor.spelling,
         "kind": cursor.kind.name,
         "type": cursor.type.spelling,
+        "gn_path": gn_path
     }
 
     if cursor.raw_comment:  # 是否有注释信息，有就取，没有过
         data["comment"] = cursor.raw_comment
     else:
-        pass
+        data["comment"] = 'none_comment'
 
     if cursor.kind == CursorKind.TRANSLATION_UNIT:  # 把最开始的注释放在根节点这，如果有的话
         if comment:
             data["comment"] = comment[0]
 
     else:
-        processing_special_node(cursor, data)  # 节点处理
+        processing_special_node(cursor, data, gn_path)  # 节点处理
 
     children = list(cursor.get_children())  # 判断是否有子节点，有就追加children，没有根据情况来
     if len(children) > 0:
@@ -211,15 +244,18 @@ def ast_to_dict(cursor, comment=None):  # 解析数据的整理
         data[name] = []
         for child in children:
             if child.location.file is not None and child.kind != CursorKind.UNEXPOSED_ATTR:  # 剔除多余宏定义和跳过UNEXPOSED_ATTR节点
-                child_data = ast_to_dict(child)
-                data[name].append(child_data)
+                if child.location.file.name == current_file:
+                    child_data = ast_to_dict(child, current_file, gn_path)
+                    data[name].append(child_data)
+                else:
+                    pass
     else:
         processing_no_child(cursor, data)  # 处理没有子节点的节点
     return data
 
 
-def preorder_travers_ast(cursor, total, comment):  # 获取属性
-    ast_dict = ast_to_dict(cursor, comment)  # 获取节点属性
+def preorder_travers_ast(cursor, total, comment, current_file, gn_path=None):  # 获取属性
+    ast_dict = ast_to_dict(cursor, current_file, gn_path, comment)  # 获取节点属性
     total.append(ast_dict)  # 追加到数据统计列表里面
 
 
@@ -232,12 +268,11 @@ def get_start_comments(include_path):  # 获取每个头文件的最开始注释
         if matches is None:
             pattern = r'/\*[^/]*\*/\s*(?=#ifndef)'
             matches = re.findall(pattern, content, re.DOTALL | re.MULTILINE)
-            return matches
-        else:
-            return None
+
+        return matches
 
 
-def api_entrance(share_lib, include_path=None, link_path=None):  # 统计入口
+def api_entrance(share_lib, include_path, gn_path, link_path=None):  # 统计入口
     # clang.cindex需要用到libclang.dll共享库   所以配置共享库
     if Config.loaded:
         print("config.loaded == true")
@@ -250,13 +285,12 @@ def api_entrance(share_lib, include_path=None, link_path=None):  # 统计入口
     print('=' * 50)
     # options赋值为如下，代表宏定义解析数据也要
     args = ['-I{}'.format(path) for path in link_path]
+    args.append('-std=c99')
     options = clang.cindex.TranslationUnit.PARSE_DETAILED_PROCESSING_RECORD
     print(args)
 
     data_total = []  # 列表对象-用于统计
     for i in range(len(include_path)):  # 对每个头文件做处理
-        file = r'{}'.format(include_path[i])
-        print('文件名：{}'.format(file))
         tu = index.parse(include_path[i], args=args, options=options)
         print(tu)
         print('=' * 50)
@@ -264,20 +298,20 @@ def api_entrance(share_lib, include_path=None, link_path=None):  # 统计入口
         print(ast_root_node)
         matches = get_start_comments(include_path[i])  # 接收文件最开始的注释
         # 前序遍历AST
-        preorder_travers_ast(ast_root_node, data_total, matches)  # 调用处理函数
+        preorder_travers_ast(ast_root_node, data_total, matches, include_path[i], gn_path)  # 调用处理函数
         print('=' * 50)
 
     return data_total
 
 
-def get_include_file(libclang, include_file_path, link_path):  # 库路径、.h文件路径、链接头文件路径
+def get_include_file(libclang, include_file_path, link_path, gn_path=None):  # 库路径、.h文件路径、链接头文件路径
     # libclang.dll库路径
     libclang_path = libclang
     # c头文件的路径
     file_path = include_file_path
+
     # 头文件链接路径
     link_include_path = link_path  # 可以通过列表传入
-    data = api_entrance(libclang_path, file_path, link_include_path)  # 调用接口
+    data = api_entrance(libclang_path, file_path, gn_path, link_include_path)  # 调用接口
 
     return data
-

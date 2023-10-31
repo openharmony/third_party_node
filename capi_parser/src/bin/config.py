@@ -3,7 +3,7 @@ from coreImpl.parser import parser
 
 
 class ToolNameType(enum.Enum):
-    COOLLECT = 'collect'
+    COLLECT = 'collect'
     DIFF = 'diff'
 
 
@@ -22,7 +22,7 @@ formatSet = [member.value for name,
 
 def run_tools(options):
     tool_name = options.tool_name
-    if tool_name == ToolNameType["COOLLECT"].value:
+    if tool_name == ToolNameType["COLLECT"].value:
         parser.parser(options.parser_path)
     elif tool_name == ToolNameType["DIFF"].value:
         print("开发中。。。")
@@ -34,5 +34,5 @@ class Config(object):
     name = 'parser'
     version = '0.1.0'
     description = 'Compare the parser the NDKS'
-    commands = [{"name": "--tool-name", "abbr": "-N", "required": True, "choices": toolNameTypeSet, "type": str, "default": ToolNameType["COOLLECT"], "help":"工具名称"},
+    commands = [{"name": "--tool-name", "abbr": "-N", "required": True, "choices": toolNameTypeSet, "type": str, "default": ToolNameType["COLLECT"], "help":"工具名称"},
                 {"name": "--parser-path", "abbr": "-P", "required": True, "type": str,  "help": "解析路径"}]
