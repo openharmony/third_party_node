@@ -125,6 +125,7 @@ extern int optind, opterr, optopt;
 long pathconf(const char *, int);
 long fpathconf(int, int);
 long sysconf(int);
+size_t confstr(int, char *, size_t);
 
 #if defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
 #define F_ULOCK 0
