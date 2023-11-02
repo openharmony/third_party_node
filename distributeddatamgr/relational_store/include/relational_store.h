@@ -37,10 +37,10 @@
  * @since 10
  */
 
-#include "oh_cursor.h"
-#include "oh_predicates.h"
-#include "oh_value_object.h"
-#include "oh_values_bucket.h"
+#include "database/rdb/oh_cursor.h"
+#include "database/rdb/oh_predicates.h"
+#include "database/rdb/oh_value_object.h"
+#include "database/rdb/oh_values_bucket.h"
 
 #ifdef __cplusplus
 extern "C" {
