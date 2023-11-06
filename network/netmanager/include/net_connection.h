@@ -51,8 +51,8 @@ extern "C" {
  * @param hint Pointer to the addrinfo structure.
  * @param res Store DNS query results and return them in a linked list format.
  * @param netId DNS query netId, 0 is used for default netid query.
- * @return 0 - Success. 201 - Missing permissions. 
- *         401 - Parameter error. 2100002 - Unable to connect to service. 
+ * @return 0 - Success. 201 - Missing permissions.
+ *         401 - Parameter error. 2100002 - Unable to connect to service.
  *         2100003 - Internal error.
  * @permission ohos.permission.INTERNET
  * @syscap SystemCapability.Communication.NetManager.Core
