@@ -65,9 +65,9 @@ int32_t OH_NetConn_GetAddrInfo(char *host, char *serv, struct addrinfo *hint, st
  * @brief Free DNS result.
  *
  * @param res DNS query result chain header.
- * @return 0 - Success. 
- *         201 - Missing permissions. 401 - Parameter error. 
- *         2100002 - Unable to connect to service. 2100003 - Internal error.
+ * @return 0 - Success. 201 - Missing permissions.
+ *         401 - Parameter error. 2100002 - Unable to connect to service.
+ *         2100003 - Internal error.
  * @permission ohos.permission.INTERNET
  * @syscap SystemCapability.Communication.NetManager.Core
  * @since 11
