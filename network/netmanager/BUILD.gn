@@ -20,10 +20,10 @@ ohos_ndk_library("libnet_connection") {
   ndk_description_file = "./libnet_connection.ndk.json"
   min_compact_version = "1"
   system_capability = "SystemCapability.Communication.NetManager.Core"
-  system_capability_headers = [ "./include/native_net_conn_api.h" ]
+  system_capability_headers = [ "./include/net_connection.h" ]
 }
 
 ohos_ndk_headers("netconn_header") {
   dest_dir = "$ndk_headers_out_dir/network/netmanager"
-  sources = [ "./include/native_net_conn_api.h" ]
+  sources = [ "./include/net_connection.h" ]
 }
