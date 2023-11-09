@@ -46,10 +46,28 @@ extern "C" {
 struct OH_NativeImage;
 typedef struct OH_NativeImage OH_NativeImage;
 typedef struct NativeWindow OHNativeWindow;
+/**
+ * @brief The callback function of frame available.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeImage
+ * @param context User defined context, returned to the user in the callback function
+ * @since 11
+ * @version 1.0
+ */
 typedef void (*OH_OnFrameAvailable)(void *context);
+
+/**
+ * @brief A listener for native image, use <b>OH_NativeImage_SetOnFrameAvailableListener</b> to register \n
+ * the listener object to <b>OH_NativeImage</b>, the callback will be triggered when there is available frame
+ *
+ * @since 11
+ * @version 1.0
+ */
 typedef struct OH_OnFrameAvailableListener
 {
+    /** User defined context, returned to the user in the callback function*/
     void *context;
+    /** The callback function of frame available.*/
     OH_OnFrameAvailable onFrameAvailable;
 } OH_OnFrameAvailableListener;
 
