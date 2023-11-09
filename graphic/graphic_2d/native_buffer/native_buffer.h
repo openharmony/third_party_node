@@ -63,7 +63,7 @@ enum OH_NativeBuffer_Usage {
  * @brief Indicates the format of a native buffer.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeBuffer
- * @since 10
+ * @since 11
  * @version 1.0
  */
 enum OH_NativeBuffer_Format {
@@ -92,7 +92,7 @@ enum OH_NativeBuffer_Format {
  * @brief Indicates the color space of a native buffer.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeBuffer
- * @since 10
+ * @since 11
  * @version 1.0
  */
 enum OH_NativeBuffer_ColorSpace {
@@ -236,7 +236,7 @@ uint32_t OH_NativeBuffer_GetSeqNum(OH_NativeBuffer *buffer);
  * @param buffer Indicates the pointer to a <b>OH_NativeBuffer</b> instance.
  * @param colorSpace Indicates the color space of native buffer, see <b>OH_NativeBuffer_ColorSpace</b>.
  * @return Returns the sequence number, which is unique for each OH_NativeBuffer.
- * @since 10
+ * @since 11
  * @version 1.0
  */
 int32_t OH_NativeBuffer_SetColorSpace(OH_NativeBuffer *buffer, OH_NativeBuffer_ColorSpace colorSpace);

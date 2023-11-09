@@ -145,7 +145,7 @@ int32_t OH_NativeImage_GetTransformMatrix(OH_NativeImage* image, float matrix[16
  * @param image Indicates the pointer to a <b>OH_NativeImage</b> instance.
  * @param surfaceId Indicates the surface id.
  * @return Returns an error code, 0 is success, otherwise, failed.
- * @since 10
+ * @since 11
  * @version 1.0
  */
 int32_t OH_NativeImage_GetSurfaceId(OH_NativeImage* image, uint64_t* surfaceId);
@@ -157,7 +157,7 @@ int32_t OH_NativeImage_GetSurfaceId(OH_NativeImage* image, uint64_t* surfaceId);
  * @param image Indicates the pointer to a <b>OH_NativeImage</b> instance.
  * @param listener Indicates the callback function.
  * @return Returns an error code, 0 is success, otherwise, failed.
- * @since 10
+ * @since 11
  * @version 1.0
  */
 int32_t OH_NativeImage_SetOnFrameAvailableListener(OH_NativeImage* image, OH_OnFrameAvailableListener listener);
@@ -168,7 +168,7 @@ int32_t OH_NativeImage_SetOnFrameAvailableListener(OH_NativeImage* image, OH_OnF
  * @syscap SystemCapability.Graphic.Graphic2D.NativeImage
  * @param image Indicates the pointer to a <b>OH_NativeImage</b> instance.
  * @return Returns an error code, 0 is success, otherwise, failed.
- * @since 10
+ * @since 11
  * @version 1.0
  */
 int32_t OH_NativeImage_UnsetOnFrameAvailableListener(OH_NativeImage* image);
