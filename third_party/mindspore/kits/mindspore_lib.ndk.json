@@ -250,5 +250,81 @@
   {
       "first_introduced": "10",
       "name": "OH_AI_TensorSetUserData"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_TrainCfgCreate"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_TrainCfgDestroy"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_TrainCfgGetLossName"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_TrainCfgSetLossName"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_TrainCfgGetOptimizationLevel"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_TrainCfgSetOptimizationLevel"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_TrainModelBuild"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_TrainModelBuildFromFile"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_RunStep"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_ModelSetLearningRate"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_ModelGetLearningRate"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_ModelGetWeights"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_ModelUpdateWeights"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_ModelGetTrainMode"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_ModelSetTrainMode"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_ModelSetupVirtualBatch"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_ExportModel"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_ExportModelBuffer"
+  },
+  {
+    "first_introduced": "11",
+    "name": "OH_AI_ExportWeightsCollaborateWithMicro"
   }
 ]
