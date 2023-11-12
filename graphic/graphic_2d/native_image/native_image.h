@@ -144,7 +144,7 @@ int32_t OH_NativeImage_UpdateSurfaceImage(OH_NativeImage* image);
 int64_t OH_NativeImage_GetTimestamp(OH_NativeImage* image);
 
 /**
- * @brief Return the transform matrix of the texture image set by the most recent call to \n
+ * @brief Obtains the transform matrix of the texture image set by the most recent call to \n
  * OH_NativeImage_UpdateSurfaceImage.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeImage
@@ -157,7 +157,7 @@ int64_t OH_NativeImage_GetTimestamp(OH_NativeImage* image);
 int32_t OH_NativeImage_GetTransformMatrix(OH_NativeImage* image, float matrix[16]);
 
 /**
- * @brief Return the native image's surface id.
+ * @brief Obtains the native image's surface id.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeImage
  * @param image Indicates the pointer to a <b>OH_NativeImage</b> instance.
@@ -173,7 +173,7 @@ int32_t OH_NativeImage_GetSurfaceId(OH_NativeImage* image, uint64_t* surfaceId);
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeImage
  * @param image Indicates the pointer to a <b>OH_NativeImage</b> instance.
- * @param listener Indicates the callback function.
+ * @param listener Indicates the callback listener.
  * @return Returns an error code, 0 is success, otherwise, failed.
  * @since 11
  * @version 1.0
