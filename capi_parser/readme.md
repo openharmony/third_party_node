@@ -1,6 +1,8 @@
-1.使用该工具前需要修改[constants.py](./src/utils/constants.py)文件下的StringConstant.LIB_CLANG_PATH和StringConstant.REPLACE_WAREHOUSE；
-StringConstant.LIB_CLANG_PATH:libclang.dll共享库(本地的)
+1.使用该工具前需要修改[constants.py](./src/utils/constants.py)
+文件下的StringConstant.LIB_CLG_PATH、StringConstant.REPLACE_WAREHOUSE、StringConstant.INCLUDE_LIB；
+StringConstant.LIB_CLG_PATH:共享库(本地的)
 REPLACE_WAREHOUSE：拉下来的interface_sdk_c仓的目录(本地的路径) --例如：(去掉磁盘的路径)\\interface_sdk_c
+StringConstant.INCLUDE_LIB：# 拉到本地仓的三方库路径
 
 2.环境：
 1)python-3.11.4-amd64
@@ -11,7 +13,7 @@ REPLACE_WAREHOUSE：拉下来的interface_sdk_c仓的目录(本地的路径) --�
 
 4)需要把src目录设置为sources root(找到src目录，点击右键，将目标标记为里面)
 
-5)运行的是src目录下的mian.py文件
+5)在interface_sdk_c目录下运行的是src目录下的mian.py文件
 
 3.终端指令
 options:
