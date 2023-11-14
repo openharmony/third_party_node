@@ -15,6 +15,7 @@
 
 import enum
 from coreImpl.parser import parser
+from coreImpl.check import check
 
 
 class ToolNameType(enum.Enum):
