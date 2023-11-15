@@ -47,6 +47,8 @@ def check_file_name(file_path):
         error_info = ErrorMessage.TRANSLATION_UNIT.value
         api_result_info = ApiResultInfo(ErrorType.NAMING_ERRORS.value, error_info, '')
         api_result_info.set_type(LogType.LOG_FILE.value)
+        api_result_info.set_file_name(file_path)
+        api_result_info.set_location(file_path)
         api_result_info.set_level(2)
         api_result_info_list.append(api_result_info)
     return api_result_info_list
@@ -70,8 +72,8 @@ def processing_check_data(function_type, api_info):
 
 
 class CheckName(enum.Enum):
-    LARGE_HUMP = r'^([A-Z][a-z0-9]*)*$'
-    SMALL_HUMP = r'^([a-z][A-Z0-9]*)*$'
+    LARGE_HUMP = r'^([A-Z][a-z0-9]*)*([\_]([A-Z][a-z0-9]*)*)*$'
+    SMALL_HUMP = r'^([a-z][A-Z0-9]*)*([\_]([a-z][A-Z0-9]*)*)*$'
     ALL_UPPERCASE_HUMP = r'^[A-Z]+[0-9]*([\_][A-Z0-9]+)*$'
     GLOBAL_VARIABLE = r'^g_([a-z][A-Z0-9]*)*$'
     FILE_NAME = r'^[a-z]+[a-z0-9]+([\_][a-z0-9]+)*\.h$'
