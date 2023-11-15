@@ -37,7 +37,11 @@ class ErrorType(enum.Enum):
     }
     EMPTY_TAG = {
         'id': 0,
-        'description': "空标签",
+        'description': "miss tag value",
+    }
+    ERROR_TAG = {
+        'id': 1,
+        'description': 'error tag name',
     }
     MISSPELL_WORDS = {
         'id': 1,
@@ -76,6 +80,7 @@ class ErrorLevel(enum.Enum):
 
 class ErrorMessage(enum.Enum):
     EMPTY_TAG = 'the [$$] tag value is empty. Please supplement the default value'
+    USE_UPPER_TAG = "the [$$] tag is upper. Should use lower: [$$]"
     REPEAT_FILE_TAG = 'the [$$] tag is repeat. Please check the tag in file'
     ERROR_INFO_VALUE_TAG = 'the [$$] tag value is incorrect. Please check the usage method'
     ERROR_INFO_VALUE_LIBRARY = 'the [library] tag value is incorrect. This tag must be end with .so or .a, or is NA. Please check the usage method'
