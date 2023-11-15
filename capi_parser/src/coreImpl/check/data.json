@@ -1,0 +1,1387 @@
+[
+    {
+        "name": "C:\\Users\\Administrator\\Desktop\\test\\drawing_aypes.h",
+        "kind": "TRANSLATION_UNIT",
+        "type": "",
+        "children": [
+            {
+                "name": "C_INCLUDE_DRAWING_TYPES_H",
+                "kind": "FUNCTION_DECL",
+                "type": "def_no_type",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 17,
+                    "location_column": 9
+                }
+            },
+            {
+                "name": "stdint.h",
+                "kind": "INCLUSION_DIRECTIVE",
+                "type": "inclusion_no_type",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 46,
+                    "location_column": 1
+                }
+            },
+            {
+                "name": "VN_LIST",
+                "kind": "VAR_DECL",
+                "type": "const int",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 20,
+                    "location_column": 11
+                },
+                "is_extern": false,
+                "children": [
+                    {
+                        "name": "var_int_no_spelling",
+                        "kind": "INTEGER_LITERAL",
+                        "type": "int",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 20,
+                            "location_column": 21
+                        },
+                        "integer_value": "5"
+                    }
+                ]
+            },
+            {
+                "name": "g_xxxBaseValue",
+                "kind": "VAR_DECL",
+                "type": "const int[4]",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 23,
+                    "location_column": 11
+                },
+                "is_extern": false,
+                "children": [
+                    {
+                        "name": "var_int_no_spelling",
+                        "kind": "INTEGER_LITERAL",
+                        "type": "int",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 23,
+                            "location_column": 26
+                        },
+                        "integer_value": "4"
+                    },
+                    {
+                        "name": "",
+                        "kind": "INIT_LIST_EXPR",
+                        "type": "const int[4]",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 23,
+                            "location_column": 31
+                        },
+                        "children": [
+                            {
+                                "name": "integer_no_spelling",
+                                "kind": "INTEGER_LITERAL",
+                                "type": "int",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 23,
+                                    "location_column": 33
+                                },
+                                "integer_value": "1"
+                            },
+                            {
+                                "name": "integer_no_spelling",
+                                "kind": "INTEGER_LITERAL",
+                                "type": "int",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 23,
+                                    "location_column": 36
+                                },
+                                "integer_value": "2"
+                            },
+                            {
+                                "name": "integer_no_spelling",
+                                "kind": "INTEGER_LITERAL",
+                                "type": "int",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 23,
+                                    "location_column": 39
+                                },
+                                "integer_value": "4"
+                            },
+                            {
+                                "name": "integer_no_spelling",
+                                "kind": "INTEGER_LITERAL",
+                                "type": "int",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 23,
+                                    "location_column": 42
+                                },
+                                "integer_value": "8"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "OSIdleCtr",
+                "kind": "VAR_DECL",
+                "type": "int",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 53,
+                    "location_column": 12
+                },
+                "is_extern": true
+            },
+            {
+                "name": "_Node",
+                "kind": "STRUCT_DECL",
+                "type": "struct _Node",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 56,
+                    "location_column": 16
+                },
+                "members": [
+                    {
+                        "name": "dataParse",
+                        "kind": "FIELD_DECL",
+                        "type": "int",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 58,
+                            "location_column": 7
+                        },
+                        "member": "struct_member"
+                    },
+                    {
+                        "name": "next",
+                        "kind": "FIELD_DECL",
+                        "type": "struct _Node *",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 59,
+                            "location_column": 16
+                        },
+                        "member": "struct_member",
+                        "children": [
+                            {
+                                "name": "struct _Node",
+                                "kind": "TYPE_REF",
+                                "type": "struct _Node",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 59,
+                                    "location_column": 9
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Node",
+                "kind": "TYPEDEF_DECL",
+                "type": "Node",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 60,
+                    "location_column": 2
+                },
+                "children": [
+                    {
+                        "name": "_Node",
+                        "kind": "STRUCT_DECL",
+                        "type": "struct _Node",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 56,
+                            "location_column": 16
+                        },
+                        "members": [
+                            {
+                                "name": "dataParse",
+                                "kind": "FIELD_DECL",
+                                "type": "int",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 58,
+                                    "location_column": 7
+                                },
+                                "member": "struct_member"
+                            },
+                            {
+                                "name": "next",
+                                "kind": "FIELD_DECL",
+                                "type": "struct _Node *",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 59,
+                                    "location_column": 16
+                                },
+                                "member": "struct_member",
+                                "children": [
+                                    {
+                                        "name": "struct _Node",
+                                        "kind": "TYPE_REF",
+                                        "type": "struct _Node",
+                                        "location": {
+                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                            "location_line": 59,
+                                            "location_column": 9
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Un",
+                "kind": "UNION_DECL",
+                "type": "union Un",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 63,
+                    "location_column": 7
+                },
+                "members": [
+                    {
+                        "name": "numSize",
+                        "kind": "FIELD_DECL",
+                        "type": "int",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 65,
+                            "location_column": 6
+                        },
+                        "member": "union_member"
+                    }
+                ]
+            },
+            {
+                "name": "NoteCome",
+                "kind": "FUNCTION_DECL",
+                "type": "int (char)",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 69,
+                    "location_column": 5
+                },
+                "return_type": "int",
+                "is_extern": false,
+                "parm": [
+                    {
+                        "name": "AgetNote",
+                        "kind": "PARM_DECL",
+                        "type": "char",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 69,
+                            "location_column": 19
+                        }
+                    },
+                    {
+                        "name": "",
+                        "kind": "COMPOUND_STMT",
+                        "type": "",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 69,
+                            "location_column": 28
+                        },
+                        "children": [
+                            {
+                                "name": "",
+                                "kind": "DECL_STMT",
+                                "type": "",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 71,
+                                    "location_column": 5
+                                },
+                                "children": [
+                                    {
+                                        "name": "PowerBoardStatus",
+                                        "kind": "ENUM_DECL",
+                                        "type": "enum PowerBoardStatus",
+                                        "location": {
+                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                            "location_line": 71,
+                                            "location_column": 10
+                                        }
+                                    },
+                                    {
+                                        "name": "powerBoardStatusOfSlot",
+                                        "kind": "VAR_DECL",
+                                        "type": "enum PowerBoardStatus",
+                                        "location": {
+                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                            "location_line": 71,
+                                            "location_column": 27
+                                        },
+                                        "is_extern": false,
+                                        "children": [
+                                            {
+                                                "name": "enum PowerBoardStatus",
+                                                "kind": "TYPE_REF",
+                                                "type": "enum PowerBoardStatus",
+                                                "location": {
+                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                    "location_line": 71,
+                                                    "location_column": 10
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "",
+                                "kind": "DECL_STMT",
+                                "type": "",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 72,
+                                    "location_column": 5
+                                },
+                                "children": [
+                                    {
+                                        "name": "name",
+                                        "kind": "VAR_DECL",
+                                        "type": "char[17]",
+                                        "location": {
+                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                            "location_line": 72,
+                                            "location_column": 10
+                                        },
+                                        "is_extern": false,
+                                        "children": [
+                                            {
+                                                "name": "\"CSDN_Author:Xa_L\"",
+                                                "kind": "STRING_LITERAL",
+                                                "type": "char[17]",
+                                                "location": {
+                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                    "location_line": 72,
+                                                    "location_column": 17
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "",
+                                "kind": "DECL_STMT",
+                                "type": "",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 73,
+                                    "location_column": 2
+                                },
+                                "children": [
+                                    {
+                                        "name": "ch",
+                                        "kind": "VAR_DECL",
+                                        "type": "char",
+                                        "location": {
+                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                            "location_line": 73,
+                                            "location_column": 7
+                                        },
+                                        "is_extern": false,
+                                        "children": [
+                                            {
+                                                "name": "unexposed_expr_no_spelling",
+                                                "kind": "UNEXPOSED_EXPR",
+                                                "type": "char",
+                                                "location": {
+                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                    "location_line": 73,
+                                                    "location_column": 10
+                                                },
+                                                "children": [
+                                                    {
+                                                        "name": "A",
+                                                        "kind": "CHARACTER_LITERAL",
+                                                        "type": "int",
+                                                        "location": {
+                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                            "location_line": 73,
+                                                            "location_column": 10
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "",
+                                "kind": "DECL_STMT",
+                                "type": "",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 74,
+                                    "location_column": 2
+                                },
+                                "children": [
+                                    {
+                                        "name": "ret",
+                                        "kind": "VAR_DECL",
+                                        "type": "char",
+                                        "location": {
+                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                            "location_line": 74,
+                                            "location_column": 7
+                                        },
+                                        "is_extern": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "binary_ope_no_spelling",
+                                "kind": "BINARY_OPERATOR",
+                                "type": "char",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 75,
+                                    "location_column": 2
+                                },
+                                "children": [
+                                    {
+                                        "name": "ret",
+                                        "kind": "DECL_REF_EXPR",
+                                        "type": "char",
+                                        "location": {
+                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                            "location_line": 75,
+                                            "location_column": 2
+                                        }
+                                    },
+                                    {
+                                        "name": "unexposed_expr_no_spelling",
+                                        "kind": "UNEXPOSED_EXPR",
+                                        "type": "char",
+                                        "location": {
+                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                            "location_line": 75,
+                                            "location_column": 8
+                                        },
+                                        "children": [
+                                            {
+                                                "name": "memchr",
+                                                "kind": "CALL_EXPR",
+                                                "type": "void *",
+                                                "location": {
+                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                    "location_line": 75,
+                                                    "location_column": 8
+                                                },
+                                                "children": [
+                                                    {
+                                                        "name": "unexposed_expr_no_spelling",
+                                                        "kind": "UNEXPOSED_EXPR",
+                                                        "type": "void *(*)(const void *, int, unsigned long long)",
+                                                        "location": {
+                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                            "location_line": 75,
+                                                            "location_column": 8
+                                                        },
+                                                        "children": [
+                                                            {
+                                                                "name": "memchr",
+                                                                "kind": "DECL_REF_EXPR",
+                                                                "type": "void *(const void *, int, unsigned long long)",
+                                                                "location": {
+                                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                    "location_line": 75,
+                                                                    "location_column": 8
+                                                                }
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "name": "unexposed_expr_no_spelling",
+                                                        "kind": "UNEXPOSED_EXPR",
+                                                        "type": "const void *",
+                                                        "location": {
+                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                            "location_line": 75,
+                                                            "location_column": 15
+                                                        },
+                                                        "children": [
+                                                            {
+                                                                "name": "unexposed_expr_no_spelling",
+                                                                "kind": "UNEXPOSED_EXPR",
+                                                                "type": "char *",
+                                                                "location": {
+                                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                    "location_line": 75,
+                                                                    "location_column": 15
+                                                                },
+                                                                "children": [
+                                                                    {
+                                                                        "name": "name",
+                                                                        "kind": "DECL_REF_EXPR",
+                                                                        "type": "char[17]",
+                                                                        "location": {
+                                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                            "location_line": 75,
+                                                                            "location_column": 15
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "name": "unexposed_expr_no_spelling",
+                                                        "kind": "UNEXPOSED_EXPR",
+                                                        "type": "int",
+                                                        "location": {
+                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                            "location_line": 75,
+                                                            "location_column": 21
+                                                        },
+                                                        "children": [
+                                                            {
+                                                                "name": "unexposed_expr_no_spelling",
+                                                                "kind": "UNEXPOSED_EXPR",
+                                                                "type": "char",
+                                                                "location": {
+                                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                    "location_line": 75,
+                                                                    "location_column": 21
+                                                                },
+                                                                "children": [
+                                                                    {
+                                                                        "name": "ch",
+                                                                        "kind": "DECL_REF_EXPR",
+                                                                        "type": "char",
+                                                                        "location": {
+                                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                            "location_line": 75,
+                                                                            "location_column": 21
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "name": "strlen",
+                                                        "kind": "CALL_EXPR",
+                                                        "type": "unsigned long long",
+                                                        "location": {
+                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                            "location_line": 75,
+                                                            "location_column": 25
+                                                        },
+                                                        "children": [
+                                                            {
+                                                                "name": "unexposed_expr_no_spelling",
+                                                                "kind": "UNEXPOSED_EXPR",
+                                                                "type": "unsigned long long (*)(const char *)",
+                                                                "location": {
+                                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                    "location_line": 75,
+                                                                    "location_column": 25
+                                                                },
+                                                                "children": [
+                                                                    {
+                                                                        "name": "strlen",
+                                                                        "kind": "DECL_REF_EXPR",
+                                                                        "type": "unsigned long long (const char *)",
+                                                                        "location": {
+                                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                            "location_line": 75,
+                                                                            "location_column": 25
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "name": "unexposed_expr_no_spelling",
+                                                                "kind": "UNEXPOSED_EXPR",
+                                                                "type": "const char *",
+                                                                "location": {
+                                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                    "location_line": 75,
+                                                                    "location_column": 32
+                                                                },
+                                                                "children": [
+                                                                    {
+                                                                        "name": "unexposed_expr_no_spelling",
+                                                                        "kind": "UNEXPOSED_EXPR",
+                                                                        "type": "char *",
+                                                                        "location": {
+                                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                            "location_line": 75,
+                                                                            "location_column": 32
+                                                                        },
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "name",
+                                                                                "kind": "DECL_REF_EXPR",
+                                                                                "type": "char[17]",
+                                                                                "location": {
+                                                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                                    "location_line": 75,
+                                                                                    "location_column": 32
+                                                                                }
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "",
+                                "kind": "IF_STMT",
+                                "type": "",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 76,
+                                    "location_column": 2
+                                },
+                                "children": [
+                                    {
+                                        "name": "unexposed_expr_no_spelling",
+                                        "kind": "UNEXPOSED_EXPR",
+                                        "type": "_Bool",
+                                        "location": {
+                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                            "location_line": 76,
+                                            "location_column": 5
+                                        }
+                                    },
+                                    {
+                                        "name": "",
+                                        "kind": "COMPOUND_STMT",
+                                        "type": "",
+                                        "location": {
+                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                            "location_line": 77,
+                                            "location_column": 2
+                                        },
+                                        "children": [
+                                            {
+                                                "name": "printf",
+                                                "kind": "CALL_EXPR",
+                                                "type": "int",
+                                                "location": {
+                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                    "location_line": 78,
+                                                    "location_column": 3
+                                                },
+                                                "children": [
+                                                    {
+                                                        "name": "unexposed_expr_no_spelling",
+                                                        "kind": "UNEXPOSED_EXPR",
+                                                        "type": "int (*)(const char *, ...)",
+                                                        "location": {
+                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                            "location_line": 78,
+                                                            "location_column": 3
+                                                        },
+                                                        "children": [
+                                                            {
+                                                                "name": "printf",
+                                                                "kind": "DECL_REF_EXPR",
+                                                                "type": "int (const char *, ...)",
+                                                                "location": {
+                                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                    "location_line": 78,
+                                                                    "location_column": 3
+                                                                }
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "name": "unexposed_expr_no_spelling",
+                                                        "kind": "UNEXPOSED_EXPR",
+                                                        "type": "const char *",
+                                                        "location": {
+                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                            "location_line": 78,
+                                                            "location_column": 10
+                                                        },
+                                                        "children": [
+                                                            {
+                                                                "name": "unexposed_expr_no_spelling",
+                                                                "kind": "UNEXPOSED_EXPR",
+                                                                "type": "char *",
+                                                                "location": {
+                                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                    "location_line": 78,
+                                                                    "location_column": 10
+                                                                },
+                                                                "children": [
+                                                                    {
+                                                                        "name": "\"Success found %c\"",
+                                                                        "kind": "STRING_LITERAL",
+                                                                        "type": "char[17]",
+                                                                        "location": {
+                                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                            "location_line": 78,
+                                                                            "location_column": 10
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "name": "unexposed_expr_no_spelling",
+                                                        "kind": "UNEXPOSED_EXPR",
+                                                        "type": "int",
+                                                        "location": {
+                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                            "location_line": 78,
+                                                            "location_column": 29
+                                                        },
+                                                        "children": [
+                                                            {
+                                                                "name": "unexposed_expr_no_spelling",
+                                                                "kind": "UNEXPOSED_EXPR",
+                                                                "type": "char",
+                                                                "location": {
+                                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                    "location_line": 78,
+                                                                    "location_column": 29
+                                                                },
+                                                                "children": [
+                                                                    {
+                                                                        "name": "ch",
+                                                                        "kind": "DECL_REF_EXPR",
+                                                                        "type": "char",
+                                                                        "location": {
+                                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                            "location_line": 78,
+                                                                            "location_column": 29
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "",
+                                        "kind": "COMPOUND_STMT",
+                                        "type": "",
+                                        "location": {
+                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                            "location_line": 81,
+                                            "location_column": 2
+                                        },
+                                        "children": [
+                                            {
+                                                "name": "printf",
+                                                "kind": "CALL_EXPR",
+                                                "type": "int",
+                                                "location": {
+                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                    "location_line": 82,
+                                                    "location_column": 3
+                                                },
+                                                "children": [
+                                                    {
+                                                        "name": "unexposed_expr_no_spelling",
+                                                        "kind": "UNEXPOSED_EXPR",
+                                                        "type": "int (*)(const char *, ...)",
+                                                        "location": {
+                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                            "location_line": 82,
+                                                            "location_column": 3
+                                                        },
+                                                        "children": [
+                                                            {
+                                                                "name": "printf",
+                                                                "kind": "DECL_REF_EXPR",
+                                                                "type": "int (const char *, ...)",
+                                                                "location": {
+                                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                    "location_line": 82,
+                                                                    "location_column": 3
+                                                                }
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "name": "unexposed_expr_no_spelling",
+                                                        "kind": "UNEXPOSED_EXPR",
+                                                        "type": "const char *",
+                                                        "location": {
+                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                            "location_line": 82,
+                                                            "location_column": 10
+                                                        },
+                                                        "children": [
+                                                            {
+                                                                "name": "unexposed_expr_no_spelling",
+                                                                "kind": "UNEXPOSED_EXPR",
+                                                                "type": "char *",
+                                                                "location": {
+                                                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                    "location_line": 82,
+                                                                    "location_column": 10
+                                                                },
+                                                                "children": [
+                                                                    {
+                                                                        "name": "\"No success\"",
+                                                                        "kind": "STRING_LITERAL",
+                                                                        "type": "char[11]",
+                                                                        "location": {
+                                                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                                                            "location_line": 82,
+                                                                            "location_column": 10
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "",
+                                "kind": "RETURN_STMT",
+                                "type": "",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 84,
+                                    "location_column": 2
+                                },
+                                "children": [
+                                    {
+                                        "name": "integer_no_spelling",
+                                        "kind": "INTEGER_LITERAL",
+                                        "type": "int",
+                                        "location": {
+                                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                            "location_line": 84,
+                                            "location_column": 9
+                                        },
+                                        "integer_value": "0"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "OH_Drawing_Canvas",
+                "kind": "STRUCT_DECL",
+                "type": "struct OH_Drawing_Canvas",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 95,
+                    "location_column": 16
+                }
+            },
+            {
+                "name": "OH_Drawing_Canvas",
+                "kind": "TYPEDEF_DECL",
+                "type": "OH_Drawing_Canvas",
+                "comment": "/**\n * @brief Defines a rectangular canvas on which various shapes, images,\n * and texts can be drawn by using the brush and pen.\n * \n * @since 8\n * @version 1.0\n */",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 95,
+                    "location_column": 34
+                },
+                "children": [
+                    {
+                        "name": "struct OH_Drawing_Canvas",
+                        "kind": "TYPE_REF",
+                        "type": "struct OH_Drawing_Canvas",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 95,
+                            "location_column": 16
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "OH_Drawing_Pen",
+                "kind": "STRUCT_DECL",
+                "type": "struct OH_Drawing_Pen",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 103,
+                    "location_column": 16
+                }
+            },
+            {
+                "name": "OH_Drawing_Pen",
+                "kind": "TYPEDEF_DECL",
+                "type": "OH_Drawing_Pen",
+                "comment": "/**\n * @brief Defines a pen, which is used to describe the style and color to outline a shape.\n * \n * @since 8\n * @version 1.0\n */",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 103,
+                    "location_column": 31
+                },
+                "children": [
+                    {
+                        "name": "struct OH_Drawing_Pen",
+                        "kind": "TYPE_REF",
+                        "type": "struct OH_Drawing_Pen",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 103,
+                            "location_column": 16
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "OH_Drawing_Brush",
+                "kind": "STRUCT_DECL",
+                "type": "struct OH_Drawing_Brush",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 111,
+                    "location_column": 16
+                }
+            },
+            {
+                "name": "OH_Drawing_Brush",
+                "kind": "TYPEDEF_DECL",
+                "type": "OH_Drawing_Brush",
+                "comment": "/**\n * @brief Defines as a brush, which is used to describe the style and color to fill in a shape.\n * \n * @since 8\n * @version 1.0\n */",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 111,
+                    "location_column": 33
+                },
+                "children": [
+                    {
+                        "name": "struct OH_Drawing_Brush",
+                        "kind": "TYPE_REF",
+                        "type": "struct OH_Drawing_Brush",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 111,
+                            "location_column": 16
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "OH_Drawing_Path",
+                "kind": "STRUCT_DECL",
+                "type": "struct OH_Drawing_Path",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 119,
+                    "location_column": 16
+                }
+            },
+            {
+                "name": "OH_Drawing_Path",
+                "kind": "FUNCTION_DECL",
+                "type": "OH_Drawing_Path",
+                "parm": [{"name": "AAA",
+                "kind": "param_DECL",
+                "type": "AAA"
+                }],
+                "comment": "/**\n * @param name Defines a path, which is used to customize various shapes.\n * \n * @since 8\n * @version 1.0\n */",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 119,
+                    "location_column": 32
+                },
+                "children": [
+                    {
+                        "name": "struct OH_Drawing_Path",
+                        "kind": "TYPE_REF",
+                        "type": "struct OH_Drawing_Path",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 119,
+                            "location_column": 16
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "OH_Drawing_Bitmap",
+                "kind": "STRUCT_DECL",
+                "type": "struct OH_Drawing_Bitmap",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 127,
+                    "location_column": 16
+                }
+            },
+            {
+                "name": "OH_Drawing_Bitmap",
+                "kind": "TYPEDEF_DECL",
+                "type": "OH_Drawing_Bitmap",
+                "comment": "/**\n * @brief Defines a bitmap, which is a memory that contains the pixel data of a shape.\n * \n * @since 8\n * @version 1.0\n */",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 127,
+                    "location_column": 34
+                },
+                "children": [
+                    {
+                        "name": "struct OH_Drawing_Bitmap",
+                        "kind": "TYPE_REF",
+                        "type": "struct OH_Drawing_Bitmap",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 127,
+                            "location_column": 16
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "OH_Drawing_ColorFormat",
+                "kind": "ENUM_DECL",
+                "type": "OH_Drawing_ColorFormat",
+                "comment": "/**\n * @brief Enumerates storage formats of bitmap pixels.\n * \n * @since 8\n * @version 1.0\n */",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 135,
+                    "location_column": 9
+                },
+                "members": [
+                    {
+                        "name": "COLOR_FORMAT_UNKNOWN",
+                        "kind": "ENUM_CONSTANT_DECL",
+                        "type": "int",
+                        "comment": "/** Unknown format. */",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 137,
+                            "location_column": 5
+                        },
+                        "value": 0
+                    },
+                    {
+                        "name": "COLOR_FORMAT_ALPHA_8",
+                        "kind": "ENUM_CONSTANT_DECL",
+                        "type": "int",
+                        "comment": "/** Each pixel is represented by 8 bits, which together indicate alpha. */",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 139,
+                            "location_column": 5
+                        },
+                        "value": 1
+                    },
+                    {
+                        "name": "COLOR_FORMAT_RGB_565",
+                        "kind": "ENUM_CONSTANT_DECL",
+                        "type": "int",
+                        "comment": "/**\n     * Each pixel is represented by 16 bits. From the most significant bit to the least significant bit,\n     * the first 5 bits indicate red, the subsequent 6 bits indicate green, and the last 5 bits indicate blue.\n     */",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 144,
+                            "location_column": 5
+                        },
+                        "value": 2
+                    },
+                    {
+                        "name": "COLOR_FORMAT_ARGB_4444",
+                        "kind": "ENUM_CONSTANT_DECL",
+                        "type": "int",
+                        "comment": "/**\n     * Each pixel is represented by 16 bits. From the most significant bit to the least significant bit,\n     * every 4 bits indicate alpha, red, green, and blue, respectively.\n     */",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 149,
+                            "location_column": 5
+                        },
+                        "value": 3
+                    },
+                    {
+                        "name": "COLOR_FORMAT_RGBA_8888",
+                        "kind": "ENUM_CONSTANT_DECL",
+                        "type": "int",
+                        "comment": "/**\n     * Each pixel is represented by 32 bits. From the most significant bit to the least significant bit,\n     * every 8 bits indicate alpha, red, green, and blue, respectively.\n     */",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 154,
+                            "location_column": 5
+                        },
+                        "value": 4
+                    },
+                    {
+                        "name": "COLOR_FORMAT_BGRA_8888",
+                        "kind": "ENUM_CONSTANT_DECL",
+                        "type": "int",
+                        "comment": "/**\n     * Each pixel is represented by 32 bits. From the most significant bit to the least significant bit,\n     * every 8 bits indicate blue, green, red, and alpha, respectively.\n     */",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 159,
+                            "location_column": 5
+                        },
+                        "value": 5
+                    }
+                ]
+            },
+            {
+                "name": "OH_Drawing_ColorFormat",
+                "kind": "TYPEDEF_DECL",
+                "type": "OH_Drawing_ColorFormat",
+                "comment": "/**\n * @brief Enumerates storage formats of bitmap pixels.\n * \n * @since 8\n * @version 1.0\n */",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 160,
+                    "location_column": 3
+                },
+                "children": [
+                    {
+                        "name": "OH_Drawing_ColorFormat",
+                        "kind": "ENUM_DECL",
+                        "type": "OH_Drawing_ColorFormat",
+                        "comment": "/**\n * @brief Enumerates storage formats of bitmap pixels.\n * \n * @since 8\n * @version 1.0\n */",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 135,
+                            "location_column": 9
+                        },
+                        "members": [
+                            {
+                                "name": "COLOR_FORMAT_UNKNOWN",
+                                "kind": "ENUM_CONSTANT_DECL",
+                                "type": "int",
+                                "comment": "/** Unknown format. */",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 137,
+                                    "location_column": 5
+                                },
+                                "value": 0
+                            },
+                            {
+                                "name": "COLOR_FORMAT_ALPHA_8",
+                                "kind": "ENUM_CONSTANT_DECL",
+                                "type": "int",
+                                "comment": "/** Each pixel is represented by 8 bits, which together indicate alpha. */",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 139,
+                                    "location_column": 5
+                                },
+                                "value": 1
+                            },
+                            {
+                                "name": "COLOR_FORMAT_RGB_565",
+                                "kind": "ENUM_CONSTANT_DECL",
+                                "type": "int",
+                                "comment": "/**\n     * Each pixel is represented by 16 bits. From the most significant bit to the least significant bit,\n     * the first 5 bits indicate red, the subsequent 6 bits indicate green, and the last 5 bits indicate blue.\n     */",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 144,
+                                    "location_column": 5
+                                },
+                                "value": 2
+                            },
+                            {
+                                "name": "COLOR_FORMAT_ARGB_4444",
+                                "kind": "ENUM_CONSTANT_DECL",
+                                "type": "int",
+                                "comment": "/**\n     * Each pixel is represented by 16 bits. From the most significant bit to the least significant bit,\n     * every 4 bits indicate alpha, red, green, and blue, respectively.\n     */",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 149,
+                                    "location_column": 5
+                                },
+                                "value": 3
+                            },
+                            {
+                                "name": "COLOR_FORMAT_RGBA_8888",
+                                "kind": "ENUM_CONSTANT_DECL",
+                                "type": "int",
+                                "comment": "/**\n     * Each pixel is represented by 32 bits. From the most significant bit to the least significant bit,\n     * every 8 bits indicate alpha, red, green, and blue, respectively.\n     */",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 154,
+                                    "location_column": 5
+                                },
+                                "value": 4
+                            },
+                            {
+                                "name": "COLOR_FORMAT_BGRA_8888",
+                                "kind": "ENUM_CONSTANT_DECL",
+                                "type": "int",
+                                "comment": "/**\n     * Each pixel is represented by 32 bits. From the most significant bit to the least significant bit,\n     * every 8 bits indicate blue, green, red, and alpha, respectively.\n     */",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 159,
+                                    "location_column": 5
+                                },
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "OH_Drawing_AlphaFormat",
+                "kind": "ENUM_DECL",
+                "type": "OH_Drawing_AlphaFormat",
+                "comment": "/**\n * @brief Enumerates alpha formats of bitmap pixels.\n * \n * @since 8\n * @version 1.0\n */",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 168,
+                    "location_column": 9
+                },
+                "members": [
+                    {
+                        "name": "ALPHA_FORMAT_UNKNOWN",
+                        "kind": "ENUM_CONSTANT_DECL",
+                        "type": "int",
+                        "comment": "/** Unknown format. */",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 170,
+                            "location_column": 5
+                        },
+                        "value": 0
+                    },
+                    {
+                        "name": "ALPHA_FORMAT_OPAQUE",
+                        "kind": "ENUM_CONSTANT_DECL",
+                        "type": "int",
+                        "comment": "/** The bitmap does not have the alpha component. */",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 172,
+                            "location_column": 5
+                        },
+                        "value": 1
+                    },
+                    {
+                        "name": "ALPHA_FORMAT_PREMUL",
+                        "kind": "ENUM_CONSTANT_DECL",
+                        "type": "int",
+                        "comment": "/** The color component of each pixel is premultiplied by the alpha component. */",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 174,
+                            "location_column": 5
+                        },
+                        "value": 2
+                    },
+                    {
+                        "name": "ALPHA_FORMAT_UNPREMUL",
+                        "kind": "ENUM_CONSTANT_DECL",
+                        "type": "int",
+                        "comment": "/** The color component of each pixel is not premultiplied by the alpha component. */",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 176,
+                            "location_column": 5
+                        },
+                        "value": 3
+                    }
+                ]
+            },
+            {
+                "name": "OH_Drawing_AlphaFormat",
+                "kind": "TYPEDEF_DECL",
+                "type": "OH_Drawing_AlphaFormat",
+                "comment": "/**\n * @brief Enumerates alpha formats of bitmap pixels.\n * \n * @since 8\n * @version 1.0\n */",
+                "location": {
+                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                    "location_line": 177,
+                    "location_column": 3
+                },
+                "children": [
+                    {
+                        "name": "OH_Drawing_AlphaFormat",
+                        "kind": "ENUM_DECL",
+                        "type": "OH_Drawing_AlphaFormat",
+                        "comment": "/**\n * @brief Enumerates alpha formats of bitmap pixels.\n * \n * @since 8\n * @version 1.0\n */",
+                        "location": {
+                            "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                            "location_line": 168,
+                            "location_column": 9
+                        },
+                        "members": [
+                            {
+                                "name": "ALPHA_FORMAT_UNKNOWN",
+                                "kind": "ENUM_CONSTANT_DECL",
+                                "type": "int",
+                                "comment": "/** Unknown format. */",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 170,
+                                    "location_column": 5
+                                },
+                                "value": 0
+                            },
+                            {
+                                "name": "ALPHA_FORMAT_OPAQUE",
+                                "kind": "ENUM_CONSTANT_DECL",
+                                "type": "int",
+                                "comment": "/** The bitmap does not have the alpha component. */",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 172,
+                                    "location_column": 5
+                                },
+                                "value": 1
+                            },
+                            {
+                                "name": "ALPHA_FORMAT_PREMUL",
+                                "kind": "ENUM_CONSTANT_DECL",
+                                "type": "int",
+                                "comment": "/** The color component of each pixel is premultiplied by the alpha component. */",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 174,
+                                    "location_column": 5
+                                },
+                                "value": 2
+                            },
+                            {
+                                "name": "ALPHA_FORMAT_UNPREMUL",
+                                "kind": "ENUM_CONSTANT_DECL",
+                                "type": "int",
+                                "comment": "/** The color component of each pixel is not premultiplied by the alpha component. */",
+                                "location": {
+                                    "location_path": "C:\\Users\\Administrator\\Desktop\\test\\drawing_types.h",
+                                    "location_line": 176,
+                                    "location_column": 5
+                                },
+                                "value": 3
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
