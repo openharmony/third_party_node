@@ -143,7 +143,7 @@ int32_t OH_NativeImage_UpdateSurfaceImage(OH_NativeImage* image);
 int64_t OH_NativeImage_GetTimestamp(OH_NativeImage* image);
 
 /**
- * @brief Obtains the transform matrix of the texture image set by the most recent call to \n
+ * @brief Return the transform matrix of the texture image set by the most recent call to \n
  * OH_NativeImage_UpdateSurfaceImage.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeImage
