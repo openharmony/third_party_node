@@ -300,7 +300,8 @@ void OH_NativeWindow_DestroyNativeWindow(OHNativeWindow* window);
 OHNativeWindowBuffer* OH_NativeWindow_CreateNativeWindowBufferFromSurfaceBuffer(void* pSurfaceBuffer);
 
 /**
- * @brief Creates a <b>OHNativeWindowBuffer</b> instance. A new <b>OHNativeWindowBuffer</b> instance is created each time this function is called.
+ * @brief Creates a <b>OHNativeWindowBuffer</b> instance.
+ A new <b>OHNativeWindowBuffer</b> instance is created each time this function is called.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeWindow
  * @param nativeBuffer Indicates the pointer to a native buffer. The type is <b>OH_NativeBuffer*</b>.
