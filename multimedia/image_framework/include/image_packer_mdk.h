@@ -35,10 +35,10 @@
  *
  * The following steps are recommended for packing process:
  * Create a image packer object by calling OH_ImagePacker_Create function.
- * And then covert the image packer object to ImagePakcerNative by OH_ImagePacker_InitNative.
+ * And then covert the image packer object to ImagePacker_Native by OH_ImagePacker_InitNative.
  * Next using OH_ImagePacker_PackToData or OH_ImagePacker_PackToFile to pack source to target area with
  * requird packing options.
- * Finally, release the ImagePakcerNative by OH_ImagePacker_Release.
+ * Finally, release the ImagePacker_Native by OH_ImagePacker_Release.
  *
  * @library libimage_packer_ndk.z.so
  * @syscap SystemCapability.Multimedia.Image
