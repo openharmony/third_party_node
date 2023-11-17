@@ -46,6 +46,29 @@ extern "C" {
 struct OH_NativeImage;
 typedef struct OH_NativeImage OH_NativeImage;
 typedef struct NativeWindow OHNativeWindow;
+/**
+ * @brief The callback function of frame available.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeImage
+ * @param context User defined context, returned to the user in the callback function
+ * @since 11
+ * @version 1.0
+ */
+typedef void (*OH_OnFrameAvailable)(void *context);
+
+/**
+ * @brief A listener for native image, use <b>OH_NativeImage_SetOnFrameAvailableListener</b> to register \n
+ * the listener object to <b>OH_NativeImage</b>, the callback will be triggered when there is available frame
+ *
+ * @since 11
+ * @version 1.0
+ */
+typedef struct OH_OnFrameAvailableListener {
+    /** User defined context, returned to the user in the callback function*/
+    void *context;
+    /** The callback function of frame available.*/
+    OH_OnFrameAvailable onFrameAvailable;
+} OH_OnFrameAvailableListener;
 
 /**
  * @brief Create a <b>OH_NativeImage</b> related to an Opengl ES texture and target. \n
@@ -131,6 +154,41 @@ int64_t OH_NativeImage_GetTimestamp(OH_NativeImage* image);
  * @version 1.0
  */
 int32_t OH_NativeImage_GetTransformMatrix(OH_NativeImage* image, float matrix[16]);
+
+/**
+ * @brief Return the native image's surface id.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeImage
+ * @param image Indicates the pointer to a <b>OH_NativeImage</b> instance.
+ * @param surfaceId Indicates the surface id.
+ * @return Returns an error code, 0 is success, otherwise, failed.
+ * @since 11
+ * @version 1.0
+ */
+int32_t OH_NativeImage_GetSurfaceId(OH_NativeImage* image, uint64_t* surfaceId);
+
+/**
+ * @brief Set the frame available callback.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeImage
+ * @param image Indicates the pointer to a <b>OH_NativeImage</b> instance.
+ * @param listener Indicates the callback function.
+ * @return Returns an error code, 0 is success, otherwise, failed.
+ * @since 11
+ * @version 1.0
+ */
+int32_t OH_NativeImage_SetOnFrameAvailableListener(OH_NativeImage* image, OH_OnFrameAvailableListener listener);
+
+/**
+ * @brief Unset the frame available callback.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeImage
+ * @param image Indicates the pointer to a <b>OH_NativeImage</b> instance.
+ * @return Returns an error code, 0 is success, otherwise, failed.
+ * @since 11
+ * @version 1.0
+ */
+int32_t OH_NativeImage_UnsetOnFrameAvailableListener(OH_NativeImage* image);
 
 /**
  * @brief Destroy the <b>OH_NativeImage</b> created by OH_NativeImage_Create, and the pointer to \n
