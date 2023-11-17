@@ -57,7 +57,7 @@ typedef struct NativeWindow OHNativeWindow;
 typedef void (*OH_OnFrameAvailable)(void *context);
 
 /**
- * @brief A listener for OH_NativeImage, use <b>OH_NativeImage_SetOnFrameAvailableListener</b> to register \n
+ * @brief A listener for native image, use <b>OH_NativeImage_SetOnFrameAvailableListener</b> to register \n
  * the listener object to <b>OH_NativeImage</b>, the callback will be triggered when there is available frame
  *
  * @since 11
