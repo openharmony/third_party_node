@@ -64,7 +64,7 @@ typedef void (*OH_OnFrameAvailable)(void *context);
  * @version 1.0
  */
 typedef struct OH_OnFrameAvailableListener {
-    /** User defined context, returned to the user in the callback function.*/
+    /** User defined context, returned to the user in the callback function*/
     void *context;
     /** The callback function of frame available.*/
     OH_OnFrameAvailable onFrameAvailable;
