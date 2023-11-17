@@ -64,9 +64,9 @@ typedef void (*OH_OnFrameAvailable)(void *context);
  * @version 1.0
  */
 typedef struct OH_OnFrameAvailableListener {
-    /** User defined context, returned to the user in the callback function. */
+    /** User defined context, returned to the user in the callback function.*/
     void *context;
-    /** The callback function of frame available. */
+    /** The callback function of frame available.*/
     OH_OnFrameAvailable onFrameAvailable;
 } OH_OnFrameAvailableListener;
 
@@ -156,7 +156,7 @@ int64_t OH_NativeImage_GetTimestamp(OH_NativeImage* image);
 int32_t OH_NativeImage_GetTransformMatrix(OH_NativeImage* image, float matrix[16]);
 
 /**
- * @brief Obtains the native image's surface id.
+ * @brief Return the native image's surface id.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeImage
  * @param image Indicates the pointer to a <b>OH_NativeImage</b> instance.
@@ -172,7 +172,7 @@ int32_t OH_NativeImage_GetSurfaceId(OH_NativeImage* image, uint64_t* surfaceId);
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeImage
  * @param image Indicates the pointer to a <b>OH_NativeImage</b> instance.
- * @param listener Indicates the callback listener.
+ * @param listener Indicates the callback function.
  * @return Returns an error code, 0 is success, otherwise, failed.
  * @since 11
  * @version 1.0
