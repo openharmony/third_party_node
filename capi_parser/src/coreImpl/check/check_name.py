@@ -24,7 +24,23 @@ def check_large_hump(api_info):
 
 
 def check_function_name(api_info):
-    return processing_check_data('CHECK_FUNCTION_NAME', api_info)
+    api_result_info_list = []
+    name = api_info['name']
+    self_developed_function_result = re.match(r'^[OH|OS]+([\_]([A-Z]+[a-z0-9]*)+)*$', name)
+    ordinary_function_result = re.match(r'^([A-Z][a-z0-9]*)*$', name)
+    if self_developed_function_result or ordinary_function_result is not None:
+        return api_result_info_list
+    else:
+        api_result_info = ApiResultInfo(ErrorType.NAMING_ERRORS.value,
+                                        ErrorMessage[api_info['kind']].value, name)
+        api_result_info.set_location_line(api_info['location']['location_line'])
+        api_result_info.set_location_column(api_info['location']['location_column'])
+        api_result_info.set_location(api_info['location']['location_path'])
+        api_result_info.set_type(LogType.LOG_API.value)
+        api_result_info.set_level(2)
+        api_result_info.set_file_name(api_info['location']['location_path'])
+        api_result_info_list.append(api_result_info)
+        return api_result_info_list
 
 
 def check_small_hump(api_info):
@@ -77,7 +93,6 @@ class CheckName(enum.Enum):
     ALL_UPPERCASE_HUMP = r'^[A-Z]+[0-9]*([\_][A-Z0-9]+)*$'
     GLOBAL_VARIABLE = r'^g_([a-z][A-Z0-9]*)*$'
     FILE_NAME = r'^[a-z]+[a-z0-9]+([\_][a-z0-9]+)*\.h$'
-    CHECK_FUNCTION_NAME = r'^([OH|OS]+([\_]([A-Z]+[a-z0-9]*)+)*)|(([A-Z][a-z0-9]*)*)$'
 
 
 process_tag_function = {
@@ -93,7 +108,7 @@ process_tag_function = {
 }
 
 
-def check_ndk_name(api_info) -> list[ApiResultInfo]:
+def check_ndk_name(api_info):
     api_result_info_list = []
     kind = api_info['kind']
     if kind not in process_tag_function.keys():

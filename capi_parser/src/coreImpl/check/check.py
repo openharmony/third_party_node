@@ -52,7 +52,7 @@ def process_file_json(file_info, api_result_info_list):
     api_result_info_list.extend(process_file_doc_info(file_doc_info, file_info))
 
 
-def process_all_json(python_obj) -> list[ApiResultInfo]:
+def process_all_json(python_obj):
     api_result_info_list = []
     for file_info in python_obj:
         process_file_json(file_info, api_result_info_list)
@@ -81,12 +81,12 @@ def curr_entry(pr_id):
     check_result = []
     for file in file_list:
         root_path = file.split('sdk_c')[0] + 'sdk_c'
-        python_obj = parser_include_ast(root_path, file)
+        python_obj = parser_include_ast(root_path, [file])
         check_result.extend(process_all_json(python_obj))
     write_in_txt(check_result)
 
 
-def get_md_files(url) -> list[str]:
+def get_md_files(url):
     file = open(url, "r")
     file_list = []
     line = file.readline()
