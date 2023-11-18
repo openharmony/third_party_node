@@ -43,6 +43,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+typedef struct OH_NativeBuffer OH_NativeBuffer;
 
 /**
  * @brief native window.
