@@ -20,16 +20,17 @@ import subprocess
 from clang.cindex import CursorKind
 from typedef.check.check import ApiResultInfo, DocInfo, ErrorType, ErrorMessage, FileDocInfo, LogType, TAGS
 
+# permission数据来源于https://gitee.com/openharmony/utils_system_resources/raw/master/systemres/main/config.json
 permission_tag_rules = ['ohos.permission.HEALTH_DATA', 'ohos.permission.HEART_RATE', 'ohos.permission.ACCELERATION']
 with open('./capi_parser/src/coreImpl/check/rules/perssion_rule.json') as json_file:
     permission_file_content = json.load(json_file)
     permission_tag_rules.extend([item['name'] for item in permission_file_content['module']['definePermissions']])
-syscap_tag_rules: list[str] = []
+syscap_tag_rules: list = []
 with open('./capi_parser/src/coreImpl/check/rules/syscap_rule.json') as json_file:
     syscap_tag_rules = json.load(json_file)
 
 
-def create_api_result_info_by_doc(error_type: ErrorType, error: ErrorMessage, params: list[str], api_info: object):
+def create_api_result_info_by_doc(error_type: ErrorType, error: ErrorMessage, params: list, api_info: object):
     error_info = str(error.value)
     for param in params:
         error_info = error_info.replace('$$', str(param), 1)
@@ -46,7 +47,7 @@ def create_api_result_info_by_doc(error_type: ErrorType, error: ErrorMessage, pa
     return api_result_info
 
 
-def create_api_result_info_by_file(error_type: ErrorType, error: ErrorMessage, params: list[str], file_info):
+def create_api_result_info_by_file(error_type: ErrorType, error: ErrorMessage, params: list, file_info):
     error_info = str(error.value)
     for param in params:
         error_info = error_info.replace('$$', str(param), 1)
@@ -55,7 +56,7 @@ def create_api_result_info_by_file(error_type: ErrorType, error: ErrorMessage, p
     return api_result_info
 
 
-def process_tag_addtogroup(tag_info, file_doc_info: FileDocInfo, api_info) -> list[ApiResultInfo]:
+def process_tag_addtogroup(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
     api_result_info_list = []
     group_name = tag_info['name']
     if group_name == "":
@@ -65,7 +66,7 @@ def process_tag_addtogroup(tag_info, file_doc_info: FileDocInfo, api_info) -> li
     return api_result_info_list
 
 
-def process_tag_brief(tag_info, file_doc_info: FileDocInfo, api_info) -> list[ApiResultInfo]:
+def process_tag_brief(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
     doc_info = file_doc_info.curr_doc_info
     api_result_info_list = []
     brief = tag_info['name'] + tag_info['description']
@@ -73,7 +74,7 @@ def process_tag_brief(tag_info, file_doc_info: FileDocInfo, api_info) -> list[Ap
     return api_result_info_list
 
 
-def process_tag_deprecated(tag_info, file_doc_info: FileDocInfo, api_info) -> list[ApiResultInfo]:
+def process_tag_deprecated(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
     doc_info = file_doc_info.curr_doc_info
     api_result_info_list = []
     name = tag_info['name']
@@ -86,7 +87,7 @@ def process_tag_deprecated(tag_info, file_doc_info: FileDocInfo, api_info) -> li
     return api_result_info_list
 
 
-def process_tag_file(tag_info, file_doc_info: FileDocInfo, api_info) -> list[ApiResultInfo]:
+def process_tag_file(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
     doc_info = file_doc_info.curr_doc_info
     api_result_info_list = []
     file_name = tag_info['name']
@@ -98,7 +99,7 @@ def process_tag_file(tag_info, file_doc_info: FileDocInfo, api_info) -> list[Api
     return api_result_info_list
 
 
-def process_tag_library(tag_info, file_doc_info: FileDocInfo, api_info) -> list[ApiResultInfo]:
+def process_tag_library(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
     api_result_info_list = []
     library: str = tag_info['name'] + tag_info['description']
     if not library.endswith(('.so', '.a')) and library != "NA":
@@ -108,11 +109,14 @@ def process_tag_library(tag_info, file_doc_info: FileDocInfo, api_info) -> list[
     return api_result_info_list
 
 
-def process_tag_param(tag_info, file_doc_info: FileDocInfo, api_info) -> list[ApiResultInfo]:
+def process_tag_param(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
     api_result_info_list = []
     if api_info['kind'] != CursorKind.FUNCTION_DECL.name:
         return api_result_info_list
     index = file_doc_info.curr_doc_info.param_index
+    params = api_info['parm']
+    if (len(params) < index+1):
+        return api_result_info_list
     param = api_info['parm'][index]
     if tag_info['name'] != param['name']:
         api_result_info = create_api_result_info_by_doc(
@@ -122,14 +126,18 @@ def process_tag_param(tag_info, file_doc_info: FileDocInfo, api_info) -> list[Ap
     return api_result_info_list
 
 
-def process_tag_permission(tag_info, file_doc_info: FileDocInfo, api_info) -> list[ApiResultInfo]:
+def process_tag_permission(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
     doc_info = file_doc_info.curr_doc_info
     api_result_info_list = []
-    permission: str = tag_info['name'] + ' ' + tag_info['description']
+    permission: str = ""
+    if tag_info['description'] == "":
+        permission: str = tag_info['name']
+    else:
+        permission: str = tag_info['name'] + ' ' + tag_info['description']
     permission_blank = re.sub(re.compile(r'\(|\)'), '', permission)
     permission_join = re.sub(re.compile(r'( or | and )'), '$', permission_blank)
     permission_list = permission_join.split('$')
-    error_permission_list = list(filter(lambda item: permission_tag_rules.index(item) == -1, permission_list))
+    error_permission_list = list(filter(lambda item: item not in permission_tag_rules, permission_list))
     if error_permission_list:
         api_result_info = create_api_result_info_by_doc(
             ErrorType.WRONG_VALUE, ErrorMessage.ERROR_INFO_VALUE_PERMISSION, [], api_info)
@@ -138,12 +146,12 @@ def process_tag_permission(tag_info, file_doc_info: FileDocInfo, api_info) -> li
     return api_result_info_list
 
 
-def process_tag_return(tag_info, file_doc_info: FileDocInfo, api_info) -> list[ApiResultInfo]:
+def process_tag_return(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
     api_result_info_list = []
     return api_result_info_list
 
 
-def process_tag_since(tag_info, file_doc_info: FileDocInfo, api_info) -> list[ApiResultInfo]:
+def process_tag_since(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
     doc_info = file_doc_info.curr_doc_info
     api_result_info_list = []
     value: str = tag_info['name'] + tag_info['description']
@@ -151,7 +159,7 @@ def process_tag_since(tag_info, file_doc_info: FileDocInfo, api_info) -> list[Ap
         api_result_info = create_api_result_info_by_doc(
             ErrorType.EMPTY_TAG, ErrorMessage.EMPTY_TAG, [tag_info['tag']], api_info)
         api_result_info_list.append(api_result_info)
-    if not value.isdigit():
+    elif not value.isdigit():
         api_result_info = create_api_result_info_by_doc(
             ErrorType.WRONG_VALUE, ErrorMessage.ERROR_INFO_VALUE_SINCE, [], api_info)
         api_result_info_list.append(api_result_info)
@@ -159,7 +167,7 @@ def process_tag_since(tag_info, file_doc_info: FileDocInfo, api_info) -> list[Ap
     return api_result_info_list
 
 
-def process_tag_syscap(tag_info, file_doc_info: FileDocInfo, api_info) -> list[ApiResultInfo]:
+def process_tag_syscap(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
     doc_info = file_doc_info.curr_doc_info
     api_result_info_list = []
     syscap = tag_info['name'] + tag_info['description']
@@ -175,7 +183,7 @@ def process_tag_syscap(tag_info, file_doc_info: FileDocInfo, api_info) -> list[A
     return api_result_info_list
 
 
-def process_tag_left_brace(tag_info, file_doc_info: FileDocInfo, api_info) -> list[ApiResultInfo]:
+def process_tag_left_brace(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
     api_result_info_list = []
     if not file_doc_info.is_in_group_tag:
         api_result_info = create_api_result_info_by_doc(
@@ -184,7 +192,7 @@ def process_tag_left_brace(tag_info, file_doc_info: FileDocInfo, api_info) -> li
     return api_result_info_list
 
 
-def process_tag_right_brace(tag_info, file_doc_info: FileDocInfo, api_info) -> list[ApiResultInfo]:
+def process_tag_right_brace(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
     api_result_info_list = []
     if not file_doc_info.has_group_end:
         file_doc_info.has_group_end = True
@@ -211,7 +219,7 @@ process_tag_function = {
 }
 
 
-def process_each_tags(tag_info, file_doc_info: FileDocInfo, api_info) -> list[ApiResultInfo]:
+def process_each_tags(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
     '''
     处理解析出来的每个tag标签
     '''
@@ -232,7 +240,7 @@ def process_each_tags(tag_info, file_doc_info: FileDocInfo, api_info) -> list[Ap
     return api_result_info_list
 
 
-def process_file_doc_group(file_doc_info: FileDocInfo, item, api_info) -> list[ApiResultInfo]:
+def process_file_doc_group(file_doc_info: FileDocInfo, item, api_info) -> list:
     '''
     处理每个文件中头文件中的addtogroup
     '''
@@ -256,7 +264,7 @@ def process_file_doc_group(file_doc_info: FileDocInfo, item, api_info) -> list[A
     return api_result_info_list
 
 
-def process_file_doc_file(file_doc_info: FileDocInfo, item, api_info) -> list[ApiResultInfo]:
+def process_file_doc_file(file_doc_info: FileDocInfo, item, api_info) -> list:
     '''
     处理每个文件中头文件中的file
     '''
@@ -278,7 +286,7 @@ def process_file_doc_file(file_doc_info: FileDocInfo, item, api_info) -> list[Ap
     return api_result_info_list
 
 
-def process_each_comment(comment_object, file_doc_info: FileDocInfo, api_info) -> list[ApiResultInfo]:
+def process_each_comment(comment_object, file_doc_info: FileDocInfo, api_info) -> list:
     '''
     检查单个comment对应的报错信息，不处理文件级别的校验
     '''
@@ -323,7 +331,7 @@ def process_each_comment(comment_object, file_doc_info: FileDocInfo, api_info) -
     return api_result_info_list
 
 
-def process_comment(comment: str, file_doc_info: FileDocInfo, api_info) -> list[ApiResultInfo]:
+def process_comment(comment: str, file_doc_info: FileDocInfo, api_info) -> list:
     '''
     处理comment数据，通过node调用comment-parser解析doc注释
     '''
@@ -340,7 +348,7 @@ def process_comment(comment: str, file_doc_info: FileDocInfo, api_info) -> list[
     return api_result_info_list
 
 
-def process_file_doc_info(file_doc_info: FileDocInfo, file_info) -> list[ApiResultInfo]:
+def process_file_doc_info(file_doc_info: FileDocInfo, file_info) -> list:
     '''
     根据文件信息校验文件级错误信息
     '''
