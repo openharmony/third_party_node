@@ -13,20 +13,22 @@
 
 import("//build/ohos.gni")
 import("//build/ohos/ndk/ndk.gni")
+import("//foundation/graphic/graphic_2d/graphic_config.gni")
 
 ohos_ndk_headers("native_drawing_header") {
   dest_dir = "$ndk_headers_out_dir/native_drawing"
   sources = [
-    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_bitmap.h",
-    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_brush.h",
-    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_canvas.h",
-    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_color.h",
-    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_font_collection.h",
-    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_path.h",
-    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_pen.h",
-    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_text_declaration.h",
-    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_text_typography.h",
-    "//interface/sdk_c/graphic/graphic_2d/native_drawing/drawing_types.h",
+    "$graphic_2d_root/rosen/modules/2d_graphics/include/c/drawing_bitmap.h",
+    "$graphic_2d_root/rosen/modules/2d_graphics/include/c/drawing_brush.h",
+    "$graphic_2d_root/rosen/modules/2d_graphics/include/c/drawing_canvas.h",
+    "$graphic_2d_root/rosen/modules/2d_graphics/include/c/drawing_color.h",
+    "$graphic_2d_root/rosen/modules/2d_graphics/include/c/drawing_font_collection.h",
+    "$graphic_2d_root/rosen/modules/2d_graphics/include/c/drawing_path.h",
+    "$graphic_2d_root/rosen/modules/2d_graphics/include/c/drawing_pen.h",
+    "$graphic_2d_root/rosen/modules/2d_graphics/include/c/drawing_register_font.h",
+    "$graphic_2d_root/rosen/modules/2d_graphics/include/c/drawing_text_declaration.h",
+    "$graphic_2d_root/rosen/modules/2d_graphics/include/c/drawing_text_typography.h",
+    "$graphic_2d_root/rosen/modules/2d_graphics/include/c/drawing_types.h",
   ]
 }
 
@@ -46,5 +48,6 @@ ohos_ndk_library("libnative_drawing_ndk") {
     "native_drawing/drawing_text_declaration.h",
     "native_drawing/drawing_text_typography.h",
     "native_drawing/drawing_types.h",
+    "native_drawing/drawing_register_font.h",
   ]
 }
