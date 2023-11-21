@@ -1,5 +1,23 @@
+#!/usr/bin/env python
+# coding=utf-8
+##############################################
+# Copyright (c) 2021-2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+##############################################
+
 import json
 import os
+import openpyxl
 import pandas as pd  # 用于生成表格
 
 
@@ -22,7 +40,8 @@ def compare_json_file(js_file1, js_file2):  # 获取对比结果
         if key == 0:
             only_file1.append(it)
     only_file2 = get_difference_data(compare_result, data2)  # 获取file2独有的
-
+    js1.close()
+    js2.close()
     return compare_result, only_file1, only_file2
 
 
@@ -65,6 +84,11 @@ def get_parm(item, parm):
 def filter_func(item):
     del item["is_extern"]  # 剔除is_extern键值对，过滤后都是extern
     del item["comment"]
+    if "type_ref" in list(item.keys()):
+        del item["type_ref"]
+    if "children" in list(item.keys()):
+        del item["children"]
+
     item["location_path"] = item["location"]["location_path"]
     item["location"] = item["location"]["location_line"]
     if item["kind"] == 'FUNCTION_DECL':
@@ -74,38 +98,67 @@ def filter_func(item):
             get_parm(item, parm)
     else:
         item["kind"] = '变量类型'
+        del item["is_const"]
     return item
 
 
 def generate_excel(array, name, only_file1, only_file2):
-    # 将列表转成DataFrame，并且按列的方式读取数据(orient='columns')
-    pf = pd.DataFrame.from_dict(array, orient='columns')
-    pf1 = pd.DataFrame(only_file1)
-    pf2 = pd.DataFrame(only_file2)
-
     # 将列名换为中文名
     columns_map = {
         'name': '名称',
         'kind': '节点类型',
         'type': '类型',
         'gn_path': 'gn文件路径',
-        'location_path': '文件相对路径',
+        "node_content": '节点内容',
         'location': '位置行',
         'return_type': '返回类型',
-        'parm': '参数'
+        'parm': '参数',
+        'location_path': '文件相对路径',
     }
 
-    pf.rename(columns=columns_map, inplace=True)
-    with pd.ExcelWriter(name) as writer:  # 生成该表格
-        pf.to_excel(writer, sheet_name='对比结果', index=False)
-        pf1.to_excel(writer, sheet_name='生成json独有', index=False)
-        pf2.to_excel(writer, sheet_name='原json独有', index=False)
+    workbook = openpyxl.Workbook()
+    work_sheet1 = workbook.active
+    work_sheet1.title = '对比结果'
+    write_dict_to_worksheet(work_sheet1, array, header=columns_map)
+
+    work_sheet2 = workbook.create_sheet('生成json独有')
+    write_dict_to_worksheet(work_sheet2, only_file1, header=columns_map)
+
+    work_sheet3 = workbook.create_sheet('原有json独有')
+    write_dict_to_worksheet(work_sheet3, only_file2, header=columns_map)
+    workbook.save(name)
 
 
-def increase_sheet(array, name, sheet):
-    pf = pd.DataFrame(array)
-    writer = pd.ExcelWriter(name, mode='a', engine='openpyxl', if_sheet_exists='new')
-    pf.to_excel(writer, sheet_name=sheet, index=False)
+def write_dict_to_worksheet(work_sheet, result_data, header=None):
+    if header is None:
+        header = {}
+    row_num = 1
+    for col_num, col_value in enumerate(header.values()):
+        work_sheet.cell(row_num, col_num + 1, col_value)
+
+    row_num = 2
+    for data in result_data:
+        for col_num, col_value in enumerate(data.values()):
+            if isinstance(col_value, dict):
+                param_data = []
+                for dict_value in col_value.values():
+                    if isinstance(dict_value, int):
+                        dict_value = str(dict_value)
+                    param_data.append(dict_value)
+                param_str = ','.join(param_data)
+                work_sheet.cell(row_num, col_num + 1, param_str)
+            elif isinstance(col_value, list):
+                list_data = ','.join(col_value)
+                work_sheet.cell(row_num, col_num + 1, list_data)
+            else:
+                work_sheet.cell(row_num, col_num + 1, col_value)
+        row_num += 1
+
+
+def del_repetition_value(data, result_list, compare_list):
+    for item in data:
+        if item not in result_list and item not in compare_list:
+            result_list.append(item)
 
 
 def get_json_file(json_file_new, json_file):  # 获取生成的json文件
@@ -118,6 +171,9 @@ def get_json_file(json_file_new, json_file):  # 获取生成的json文件
     only_file2 = []
     for item in json_file2:  # 对比每一个json(目录下的)
         # 对比两个json文件
-        result_list, only_file1, only_file2 = compare_json_file(json_file1, item)
+        result_list_part, only_file1_part, only_file2_part = compare_json_file(json_file1, item)
+        result_list.extend(result_list_part)
+        del_repetition_value(only_file1_part, only_file1, result_list)
+        only_file2.extend(only_file2_part)
 
     return result_list, head_name, only_file1, only_file2  # 返回对比数据，和所需表格名

@@ -1,9 +1,27 @@
+#!/usr/bin/env python
+# coding=utf-8
+##############################################
+# Copyright (c) 2021-2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+##############################################
+
 import json
 import os
 import glob
 import re
 import shutil
-from utils.constants import StringConstant
+from utils.constants import StringConstant, RegularExpressions
+from typedef.parser.parser import ParserGetResultTable
 from coreImpl.parser import parse_include, generating_tables  # 引入解析文件 # 引入得到结果表格文件
 
 
@@ -21,12 +39,12 @@ def find_h_file(matches, f, sources):
         # 匹配sources = \[[^\]]*\](匹配方括号内的内容，其中包括一个或多个非右括号字符),\s*：匹配0个或多个空白字符
         f.seek(mat.span()[0])
         content = f.read()
-        pattern = r'sources\s*=\s*\[[^\]]*\]'
+        pattern = RegularExpressions.SOURCES.value
         sources_match = re.search(pattern, content)
         if sources_match:
             sources_value = sources_match.group(0)  # 获取完整匹配的字符串
             sources_value = re.sub(r'\s', '', sources_value)  # 去除源字符串的空白字符(换行符)和空格
-            pattern = r'"([^"]+h)"'  # 匹配引号中的内容，找对应的.h
+            pattern = RegularExpressions.INCLUDE_H.value  # 匹配引号中的内容，找对应的.h
             source = re.findall(pattern, sources_value)
             sources.extend(source)
 
@@ -34,13 +52,13 @@ def find_h_file(matches, f, sources):
 def find_function_file(file, function_name):  # 在GN文件中查找指定函数并在有函数名，获取对应sources的值
     with open(file, 'r') as f:
         content = f.read()  # 获取文件内容
-        pattern = r'\b' + re.escape(function_name) + r'\b'  # '\b'确保函数名的完全匹配
+        pattern = ''.join([r'\b', re.escape(function_name), r'\b'])    # '\b'确保函数名的完全匹配
         matches = re.finditer(pattern, content)  # finditer会返回位置信息
         f.seek(0)  # 回到文件开始位置
         sources = []  # 装全部匹配的sources的.h(可能不止一个-headers函数)
         if matches:  # 是否匹配成功
             find_h_file(matches, f, sources)
-        print("where", sources)
+        f.close()
         return matches, sources
 
 
@@ -49,7 +67,7 @@ def find_dest_dir(matches, content, f):
     if matches:
         end = 0
         for _ in matches:
-            pattern = r'dest_dir\s*=\s*"([^"]*)"'
+            pattern = RegularExpressions.DEST_DIR.value
             source_match = re.search(pattern, content)
             if source_match:
                 con = source_match.group(1)
@@ -63,10 +81,11 @@ def find_dest_dir(matches, content, f):
 def get_dest_dir(file, function_name):  # 获取dest_dir
     with open(file, 'r') as f:
         content = f.read()  # 获取文件内容
-        pattern = r'\b' + re.escape(function_name) + r'\b'  # '\b'确保函数名的完全匹配
+        pattern = ''.join([r'\b', re.escape(function_name), r'\b'])  # '\b'确保函数名的完全匹配
         matches = re.findall(pattern, content)
         f.seek(0)
         sources_dir = find_dest_dir(matches, content, f)
+        f.close()
         return sources_dir
 
 
@@ -77,8 +96,6 @@ def find_json_file(gn_file_match):  # 找gn文件同级目录下的.json文件
         match_json_file.append(file)
     return match_json_file
 
-
-# def get_
 
 def dire_func(gn_file, func_name):  # 统计数据的
     matches_file_total = []  # 统计有ohos_ndk_headers函数的gn文件
@@ -98,7 +115,7 @@ def change_json_file(dict_data, name):  # 生成json文件
     with open(file_name, 'w', encoding='UTF-8') as f:  # encoding='UTF-8'能显示中文
         # ensure_ascii=False确保能显示中文，indent=4(格式控制)使生成的json样式跟字典一样
         json.dump(dict_data, f, ensure_ascii=False, indent=4)
-
+    f.close()
     return file_name
 
 
@@ -131,6 +148,7 @@ def get_result_table(json_files, abs_path, link_path, gn_path):  # 进行处理�
     head_name = ""
     only_file1 = []
     only_file2 = []
+    data = []
     if json_files:
         file_name = os.path.split(json_files[0])  # 取第一个json名，但我是用列表装的
         file_name = os.path.splitext(file_name[1])  # 取下标1对应的元素(元组)
@@ -139,7 +157,10 @@ def get_result_table(json_files, abs_path, link_path, gn_path):  # 进行处理�
         # 解析完后，传两个json文件，对比两个json文件，最后生成数据表格
         result_list, head_name, only_file1, only_file2 = generating_tables.get_json_file(parse_json_name,
                                                                                          json_files)
-    return result_list, head_name, only_file1, only_file2
+
+    obj_data = ParserGetResultTable(result_list, head_name, only_file1, only_file2, data)
+
+    return obj_data
 
 
 def create_dir(sources_dir, gn_file, function_name, link_include_file):
@@ -160,13 +181,17 @@ def create_dir(sources_dir, gn_file, function_name, link_include_file):
             match_files, json_files, include_files = dire_func(gn_file, function_name)
             dire_path = os.path.dirname(gn_file)  # 获取gn文件路径
             if match_files:
-                abs_path = change_abs(include_files, dire_path)  # 接收.h绝对路径
-                for j_item in abs_path:
-                    shutil.copy(j_item, new_dire)
+                dir_copy(include_files, dire_path, new_dire)
             else:
                 print("在create_dir函数中，原因：gn文件条件不满足")
     else:
         print("gn文件没有ohos_sdk_headers")
+
+
+def dir_copy(include_files, dire_path, new_dire):
+    abs_path = change_abs(include_files, dire_path)  # 接收.h绝对路径
+    for j_item in abs_path:
+        shutil.copy(j_item, new_dire)
 
 
 def link_include(directory_path, function_names, link_include_file):
@@ -182,6 +207,7 @@ def main_entrance(directory_path, function_names, link_path):  # 主入口
     result_list_total = []
     only_file1_total = []
     only_file2_total = []
+    data_total = []             # 总的解析数据
     for item in gn_file_total:  # 处理每个gn文件
         match_files, json_files, include_files = dire_func(item, function_names)
         dire_path = os.path.dirname(item)  # 获取gn文件路径
@@ -191,32 +217,38 @@ def main_entrance(directory_path, function_names, link_path):  # 主入口
         if include_files:  # 符合条件的gn文件
             abs_path = change_abs(include_files, dire_path)  # 接收.h绝对路径
             print("头文件绝对路径:\n", abs_path)
-            result_list, head_name, only_file1, only_file2 = get_result_table(json_files, abs_path,
-                                                                              link_path, dire_path)  # 接收对比结果信息
-            if len(result_list) != 0:
-                result_list_total.extend(result_list)
-                only_file1_total.extend(only_file1)
-                only_file2_total.extend(only_file2)
-            elif head_name == "":
+            # 接收对比结果信息
+            data_result = get_result_table(json_files, abs_path, link_path, dire_path)
+            data_total.append(data_result.data)
+            if len(data_result.result_list) != 0:
+                result_list_total.extend(data_result.result_list)
+                only_file1_total.extend(data_result.only_file1)
+                only_file2_total.extend(data_result.only_file2)
+            elif data_result.head_name == "":
                 print("gn文件下无json文件")
             else:
-                generating_tables.generate_excel(result_list, head_name, only_file1, only_file2)
+                generating_tables.generate_excel(data_result.result_list, data_result.head_name,
+                                                 data_result.only_file1, data_result.only_file2)
                 print("没有匹配项")
         else:
             print("gn文件无header函数")
-    head_name = "result_total.xlsx"         # 总结果表格
-    generating_tables.generate_excel(result_list_total, head_name, only_file1_total, only_file2_total)
+    generating_tables.generate_excel(result_list_total, StringConstant.RESULT_HEAD_NAME.value,
+                                     only_file1_total, only_file2_total)
+
+    obj_data_total = ParserGetResultTable(result_list_total, '', only_file1_total,
+                                          only_file2_total, data_total)
+    return obj_data_total
 
 
 def copy_std_lib(link_include_file):
-    std_include = r'sysroot\ndk_musl_include_files'
+    std_include = StringConstant.STD_INCLUDE.value
     if not os.path.exists(std_include):
         shutil.copytree(StringConstant.INCLUDE_LIB.value, std_include)
     link_include_file.append(std_include)
 
 
 def find_include(link_include_path):
-    for dir_path, _, _ in os.walk('sysroot\\$ndk_headers_out_dir'):
+    for dir_path, _, _ in os.walk(RegularExpressions.CREATE_LIB_PATH.value):
         link_include_path.append(dir_path)
 
 
@@ -228,10 +260,11 @@ def parser(directory_path):  # 目录路径
     find_include(link_include_path)
     link_include(directory_path, function_name, link_include_path)
 
-    main_entrance(directory_path, function_name, link_include_path)  # 调用入口函数
+    data_total = main_entrance(directory_path, function_name, link_include_path)  # 调用入口函数
+    return data_total
 
 
-def parser_include_ast(gn_file_path, include_path):
+def parser_include_ast(gn_file_path, include_path):        # 对于单独的.h解析接口
     link_path = [StringConstant.INCLUDE_LIB.value]
     data = parse_include.get_include_file(include_path, link_path, gn_file_path)
     return data
