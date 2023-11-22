@@ -17,16 +17,18 @@
 import json
 import re
 import subprocess
+import os
 from clang.cindex import CursorKind
-from typedef.check.check import ApiResultInfo, DocInfo, ErrorType, ErrorMessage, FileDocInfo, LogType, TAGS
+from typedef.check.check import ApiResultInfo, DocInfo, ErrorType, ErrorMessage, FileDocInfo, LogType, TAGS, ErrorLevel
 
+current_file = os.path.dirname(__file__)
 # permission数据来源于https://gitee.com/openharmony/utils_system_resources/raw/master/systemres/main/config.json
 permission_tag_rules = ['ohos.permission.HEALTH_DATA', 'ohos.permission.HEART_RATE', 'ohos.permission.ACCELERATION']
-with open('./capi_parser/src/coreImpl/check/rules/perssion_rule.json') as json_file:
+with open(os.path.abspath(os.path.join(current_file, "rules/perssion_rule.json"))) as json_file:
     permission_file_content = json.load(json_file)
     permission_tag_rules.extend([item['name'] for item in permission_file_content['module']['definePermissions']])
 syscap_tag_rules: list = []
-with open('./capi_parser/src/coreImpl/check/rules/syscap_rule.json') as json_file:
+with open(os.path.abspath(os.path.join(current_file, "rules/syscap_rule.json"))) as json_file:
     syscap_tag_rules = json.load(json_file)
 
 
@@ -36,23 +38,15 @@ def create_api_result_info_by_doc(error_type: ErrorType, error: ErrorMessage, pa
         error_info = error_info.replace('$$', str(param), 1)
     api_result_info = ApiResultInfo(error_type.value, error_info, api_info['name'])
     api_result_info.set_type(LogType.LOG_JSDOC.value)
+    api_result_info.set_level(ErrorLevel.MIDDLE.value)
     if 'location' in api_info.keys():
         api_result_info.set_location(api_info['location']['location_path'])
         api_result_info.set_location_line(api_info['location']['location_line'])
         api_result_info.set_location_column(api_info['location']['location_column'])
-        api_result_info.set_file_name(api_info['location'])
+        api_result_info.set_file_name(api_info['location']['location_path'])
     else:
         api_result_info.set_file_name(api_info['name'])
         api_result_info.set_location(api_info['name'])
-    return api_result_info
-
-
-def create_api_result_info_by_file(error_type: ErrorType, error: ErrorMessage, params: list, file_info):
-    error_info = str(error.value)
-    for param in params:
-        error_info = error_info.replace('$$', str(param), 1)
-    api_result_info = ApiResultInfo(error_type.value, error_info, file_info['name'])
-    api_result_info.set_type(LogType.LOG_FILE.value)
     return api_result_info
 
 
@@ -110,12 +104,19 @@ def process_tag_library(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
 
 
 def process_tag_param(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
+    file_doc_info.curr_doc_info.param_index += 1
     api_result_info_list = []
     if api_info['kind'] != CursorKind.FUNCTION_DECL.name:
         return api_result_info_list
+
+    if 'parm' not in api_info.keys():
+        api_result_info = create_api_result_info_by_doc(
+            ErrorType.WRONG_VALUE, ErrorMessage.ERROR_INFO_COUNT_PARAM, [], api_info)
+        api_result_info_list.append(api_result_info)
+        return api_result_info_list
     index = file_doc_info.curr_doc_info.param_index
     params = api_info['parm']
-    if (len(params) < index+1):
+    if (len(params) < index + 1):
         return api_result_info_list
     param = api_info['parm'][index]
     if tag_info['name'] != param['name']:
@@ -234,8 +235,6 @@ def process_each_tags(tag_info, file_doc_info: FileDocInfo, api_info) -> list:
     if tag not in process_tag_function.keys():
         return []
     tag_process = process_tag_function[tag]
-    if tag == TAGS['PARAM'].value:
-        doc_info.param_index += 1
     api_result_info_list.extend(tag_process(tag_info, file_doc_info, api_info))
     return api_result_info_list
 
@@ -303,7 +302,8 @@ def process_each_comment(comment_object, file_doc_info: FileDocInfo, api_info) -
         api_result_info_list.extend(process_each_tags(item, file_doc_info, api_info))
     # 判断param标签的数量和方法参数的数量是否对应
     param_tag_count = file_doc_info.curr_doc_info.param_index + 1
-    if api_info['kind'] == CursorKind.FUNCTION_DECL.name and len(api_info['parm']) != param_tag_count:
+    if api_info['kind'] == CursorKind.FUNCTION_DECL.name and \
+            'parm' in api_info.keys() and len(api_info['parm']) != param_tag_count:
         api_result_info = create_api_result_info_by_doc(
             ErrorType.WRONG_SCENE, ErrorMessage.ERROR_INFO_COUNT_PARAM, [], api_info)
         api_result_info_list.append(api_result_info)
@@ -339,7 +339,7 @@ def process_comment(comment: str, file_doc_info: FileDocInfo, api_info) -> list:
     if comment == "none_comment":
         return api_result_info_list
     result = subprocess.check_output(
-        ['node', './capi_parser/src/coreImpl/check/comment_parser.js', comment])   # 解析comment
+        ['node', os.path.abspath(os.path.join(current_file, "comment_parser.js")), comment])   # 解析comment
     result_json = json.loads(result.decode('utf-8'))
     for item in result_json:
         api_result_info_list.extend(process_each_comment(item, file_doc_info, api_info))
@@ -355,19 +355,19 @@ def process_file_doc_info(file_doc_info: FileDocInfo, file_info) -> list:
     api_result_info_list = []
     # 处理group说明
     if file_doc_info.group_name is None:
-        api_result_info = create_api_result_info_by_file(
+        api_result_info = create_api_result_info_by_doc(
             ErrorType.WRONG_SCENE, ErrorMessage.ERROR_FILE_LOSE_ONE, ['group doc'], file_info)
         api_result_info_list.append(api_result_info)
     else:
         # 判断group标签的结尾
         if not file_doc_info.has_group_end:
-            api_result_info = create_api_result_info_by_file(
+            api_result_info = create_api_result_info_by_doc(
                 ErrorType.WRONG_SCENE, ErrorMessage.ERROR_FILE_HAS_ONE_LOSE_OTHER,
                 ['group tag', 'end tag }'], file_info)
             api_result_info_list.append(api_result_info)
     # 处理file说明
     if file_doc_info.file_name is None:
-        api_result_info = create_api_result_info_by_file(
+        api_result_info = create_api_result_info_by_doc(
             ErrorType.WRONG_SCENE, ErrorMessage.ERROR_FILE_LOSE_ONE, ['file doc'], file_info)
         api_result_info_list.append(api_result_info)
 
