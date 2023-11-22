@@ -19,6 +19,7 @@ from typedef.check.check import ApiResultInfo, FileDocInfo, OutputTxt
 from coreImpl.check.check_doc import process_comment, process_file_doc_info
 from coreImpl.check.check_name import check_file_name, check_ndk_name
 from coreImpl.parser.parser import parser_include_ast
+from coreImpl.check.check_syntax import check_syntax
 
 
 def process_api_json(api_info, file_doc_info: FileDocInfo, api_result_info_list):
@@ -59,31 +60,41 @@ def process_all_json(python_obj):
     return api_result_info_list
 
 
-def write_in_txt(check_result):
+def write_in_txt(check_result, output_path):
+    result_json = result_to_json(check_result)
+    fs = open(output_path, 'w', encoding='utf-8')
+    fs.write(result_json)
+    fs.close()
+
+
+def result_to_json(check_result):
     txtResul = []
     if len(check_result) == 0:
         txtResul.append('api_check: false')
     else:
         for result in check_result:
-            location = '{}(line:{}, col:{})'.format(result.location, result.locationLine, result.locationColumn)
+            location = f'{result.location}(line:{result.locationLine}, col:{result.locationColumn})'
             message = 'API check error of [{}]:{}'.format(result.errorType['description'], result.errorInfo)
             txtResul.append(OutputTxt(result.errorType['id'], result.level, location, result.fileName, message))
         txtResul.append('api_check: false')
-    result_json = json.dumps(txtResul, default=lambda obj: obj.__dict__, indent=4)
-    fs = open(r'./Error.txt', 'w', encoding='utf-8')
-    fs.write(result_json)
-    fs.close()
+    return json.dumps(txtResul, default=lambda obj: obj.__dict__, indent=4)
 
 
 def curr_entry(pr_id):
-    file_path = os.path.abspath(os.path.join(os.getcwd(), "..{}..{}all_files.txt".format(os.sep, os.sep)))
+    file_path = os.path.abspath(os.path.join(os.getcwd(), f'..{os.sep}..{os.sep}all_files.txt'))
     file_list = get_md_files(file_path)
-    check_result = []
+    check_result_list = get_check_result_list(file_list)
+    write_in_txt(check_result_list, r'./Error.txt')
+
+
+def get_check_result_list(file_list):
+    check_result_list = []
     for file in file_list:
         root_path = file.split('sdk_c')[0] + 'sdk_c'
         python_obj = parser_include_ast(root_path, [file])
-        check_result.extend(process_all_json(python_obj))
-    write_in_txt(check_result)
+        check_result_list.extend(process_all_json(python_obj))
+        check_result_list.extend(check_syntax(file))
+    return check_result_list
 
 
 def get_md_files(url):
