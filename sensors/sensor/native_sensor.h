@@ -21,7 +21,7 @@
  * @since 11
  */
 /**
- * @file sensor.h
+ * @file native_sensor.h
  *
  * @brief 声明操作传感器的常用api，用于获取传感器信息、订阅或取消订阅传感器数据等。
  * @library libsensor_native.z.so
@@ -32,7 +32,7 @@
 #ifndef OH_NATIVE_SENSOR_H
 #define OH_NATIVE_SENSOR_H
 
-#include "sensor_type.h"
+#include "native_sensor_type.h"
 
 #ifdef __cplusplus
 extern "C" {
