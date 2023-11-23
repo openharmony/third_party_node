@@ -51,6 +51,10 @@ class ErrorType(enum.Enum):
         'id': 2,
         'description': 'naming errors',
     }
+    SYNTAX_ERRORS = {
+        'id': 3,
+        'description': 'syntax errors',
+    }
     UNKNOW_DEPRECATED = {
         'id': 5,
         'description': 'unknow deprecated',
