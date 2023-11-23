@@ -32,8 +32,8 @@
  * @since 11
  */
 
-#ifndef OH_SENSOR_TYPE_H
-#define OH_SENSOR_TYPE_H
+#ifndef OH_NATIVE_SENSOR_TYPE_H
+#define OH_NATIVE_SENSOR_TYPE_H
 
 #include <stdint.h>
 
@@ -420,4 +420,4 @@ int32_t OH_Sensor_GetSensorCallback(Sensor_SubscribeAttribute* attribute, Sensor
 #ifdef __cplusplus
 }
 #endif
-#endif // OH_SENSOR_TYPE_H
+#endif // OH_NATIVE_SENSOR_TYPE_H

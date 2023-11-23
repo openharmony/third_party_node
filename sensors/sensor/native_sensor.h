@@ -29,8 +29,8 @@
  * @since 11
  */
 
-#ifndef OH_SENSOR_H
-#define OH_SENSOR_H
+#ifndef OH_NATIVE_SENSOR_H
+#define OH_NATIVE_SENSOR_H
 
 #include "sensor_type.h"
 
@@ -74,4 +74,4 @@ Sensor_Result OH_Sensor_UnsubscribeSensor(const Sensor_SubscribeId *subscribeId,
 #ifdef __cplusplus
 }
 #endif
-#endif // OH_SENSOR_H
+#endif // OH_NATIVE_SENSOR_H

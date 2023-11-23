@@ -17,8 +17,8 @@ import("//build/ohos/ndk/ndk.gni")
 ohos_ndk_headers("oh_sensor_header") {
   dest_dir = "$ndk_headers_out_dir/sensors/sensor"
   sources = [
-    "./sensor.h",
-    ".sensor_type.h",
+    "./native_sensor.h",
+    "./native_sensor_type.h",
   ]
 }
 
