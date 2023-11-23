@@ -24,7 +24,7 @@
  * @file sensor.h
  *
  * @brief 声明操作传感器的常用api，用于获取传感器信息、订阅或取消订阅传感器数据等。
- * @library libohsensor.z.so
+ * @library libsensor_native.z.so
  * @syscap SystemCapability.Sensors.Sensor
  * @since 11
  */
