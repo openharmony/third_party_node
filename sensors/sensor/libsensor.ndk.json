@@ -1,0 +1,11 @@
+[
+    {
+        "name": "OH_Sensor_GetAllSensors"
+    },
+    {
+        "name": "OH_Sensor_SubscribeSensor"
+    },
+    {
+        "name": "OH_Sensor_UnsubscribeSensor"
+    }
+]

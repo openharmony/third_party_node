@@ -40,7 +40,7 @@ extern "C" {
 /**
  * @brief 获取设备上的所有传感器信息。
  *
- * @param sensorInfo - 出参，返回设备上的所有传感器信息，详情请参见{@Link Sensor_SensorInfo}。
+ * @param sensorInfo - 出参，返回设备上的所有传感器信息，详情请参见{@Link Sensor_Sensor}。
  * @param count - 出参，返回设备上的传感器数量。
  * @return 成功返回SENSOR_SUCCESS，否则返回对应的错误码，详情请参见{@Link Sensor_Result}。
  *
