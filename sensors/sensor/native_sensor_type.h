@@ -23,7 +23,7 @@
  */
 
 /**
- * @file sensor_type.h
+ * @file native_sensor_type.h
  *
  * @brief 定义常用传感器属性。
  * @library libohsensor.z.so
