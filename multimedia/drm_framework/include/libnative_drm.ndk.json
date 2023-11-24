@@ -1,0 +1,8 @@
+[
+    { "name": "OH_MediaKeySystem_Create" },
+    { "name": "OH_MediaKeySystem_Destroy" },
+    { "name": "OH_MediaKeySystem_CreateMediaKeySession" },
+    { "name": "OH_MediaKeySession_GenerateLicenseRequest" },
+    { "name": "OH_MediaKeySession_ProcessLicenseResponse" },
+    { "name": "OH_MediaKeySession_CheckLicenseStatus" }
+]
