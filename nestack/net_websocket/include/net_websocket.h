@@ -55,7 +55,6 @@ extern "C" {
  * @param onError Callback function invoked when a connection error message is received.
  * @param onOpen Callback function invoked when a connection setup message is received.
  * @return Pointer to the WebSocket client if success; NULL otherwise.
- * @permission ohos.permission.INTERNET
  * @syscap SystemCapability.Communication.NetStack
  * @since 11
  * @version 1.0
@@ -84,6 +83,7 @@ int OH_NetStack_WebSocketClient_AddHeader(struct OH_NetStack_WebsocketClient *cl
  * @param url URL for the client to connect to the server.
  * @param options Optional parameters.
  * @return 0 if success; non-0 otherwise. For details about error codes, see {@link OH_Websocket_ErrCode}.
+ * @permission ohos.permission.INTERNET
  * @syscap SystemCapability.Communication.NetStack
  * @since 11
  * @version 1.0
