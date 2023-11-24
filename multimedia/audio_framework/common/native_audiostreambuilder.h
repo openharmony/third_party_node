@@ -199,6 +199,22 @@ OH_AudioStream_Result OH_AudioStreamBuilder_GenerateRenderer(OH_AudioStreamBuild
  */
 OH_AudioStream_Result OH_AudioStreamBuilder_GenerateCapturer(OH_AudioStreamBuilder* builder,
     OH_AudioCapturer** audioCapturer);
+
+/*
+ * Set the data frame size for each callback, use this function if the application requires a specific number
+ * of frames for processing.
+ * The frame size should be at least the size device process at one time, and less than half the internal
+ * buffer capacity.
+ *
+ * @since 11
+ *
+ * @param builder Reference provided by OH_AudioStreamBuilder_Create()
+ * @param frameSize  The data frame size for each callback.
+ * @return {@link #AUDIOSTREAM_SUCCESS} or an undesired error.
+ */
+OH_AudioStream_Result OH_AudioStreamBuilder_SetFrameSizeInCallback(OH_AudioStreamBuilder* builder,
+    int32_t frameSize);
+
 #ifdef __cplusplus
 }
 #endif
