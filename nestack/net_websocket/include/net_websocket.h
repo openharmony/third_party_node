@@ -36,7 +36,7 @@
  * @brief Defines the APIs for the WebSocket client module.
  *
  * @library libnet_websocket.so
- * @syscap SystemCapability.Communication.Netstack
+ * @syscap SystemCapability.Communication.NetStack
  * @since 11
  * @version 1.0
  */
@@ -70,7 +70,6 @@ struct OH_NetStack_WebsocketClient *OH_NetStack_WebsocketClient_Construct(
  * @param client Pointer to the WebSocket client.
  * @param header Header information
  * @return 0 if success; non-0 otherwise. For details about error codes, see {@link OH_Websocket_ErrCode}.
- * @permission ohos.permission.INTERNET
  * @syscap SystemCapability.Communication.NetStack
  * @since 11
  * @version 1.0
@@ -85,7 +84,6 @@ int OH_NetStack_WebSocketClient_AddHeader(struct OH_NetStack_WebsocketClient *cl
  * @param url URL for the client to connect to the server.
  * @param options Optional parameters.
  * @return 0 if success; non-0 otherwise. For details about error codes, see {@link OH_Websocket_ErrCode}.
- * @permission ohos.permission.INTERNET
  * @syscap SystemCapability.Communication.NetStack
  * @since 11
  * @version 1.0
