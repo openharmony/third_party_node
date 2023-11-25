@@ -416,7 +416,7 @@ int32_t OH_Sensor_SetSensorCallback(Sensor_SubscribeUser* user, const Sensor_Rec
  * @return 成功返回SENSOR_SUCCESS，否则返回对应的错误码，详情请参见{@Link Sensor_Result}。
  * @since 11
  */
-int32_t OH_Sensor_GetSensorCallback(Sensor_SubscribeAttribute* attribute, Sensor_RecordSensorCallback *callback);
+int32_t OH_Sensor_GetSensorCallback(Sensor_SubscribeUser* user, Sensor_RecordSensorCallback *callback);
 #ifdef __cplusplus
 }
 #endif
