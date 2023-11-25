@@ -19,9 +19,9 @@ ohos_ndk_library("libnet_websocket") {
   ndk_description_file = "./libwebsocket.ndk.json"
   min_compact_version = "1"
   system_capability = "SystemCapability.Communication.NetStack"
-  system_capability_headers = [     
+  system_capability_headers = [
     "network/netstack/net_websocket/net_websocket.h",
-    "network/netstack/net_websocket/net_websocket_type.h", 
+    "network/netstack/net_websocket/net_websocket_type.h",
   ]
 }
 
