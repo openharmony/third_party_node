@@ -51,26 +51,26 @@ Sensor_Result OH_Sensor_GetAllSensors(Sensor_Sensor **sensors, int32_t *count);
 /**
  * @brief 订阅传感器数据，系统将按照用户指定的上报频率向用户报告传感器数据。
  *
- * @param id - 标识要订阅的传感器, 详情请参见{@link Sensor_SubscribeId}。
+ * @param id - 标识要订阅的传感器, 详情请参见{@link Sensor_SensorSubscribeId}。
  * @param attribute - 订阅属性，可用于指定传感器的上报频率等，详情请参见{@Link Sensor_SubscribeAttribute}。
  * @param user - 订阅者信息，用于指定传感器数据回调函数等，详情请参见{@Link Sensor_SubscribeUser}。
  * @return 成功返回SENSOR_SUCCESS，否则返回对应的错误码，详情请参见{@Link Sensor_Result}。
  *
  * @since 11
  */
-Sensor_Result OH_Sensor_SubscribeSensor(const Sensor_SubscribeId *id, const Sensor_SubscribeAttribute *attribute,
+Sensor_Result OH_Sensor_SubscribeSensor(const Sensor_SensorSubscribeId *id, const Sensor_SubscribeAttribute *attribute,
     const Sensor_SubscribeUser *user);
 
 /**
  * @brief 取消订阅传感器数据。
  *
- * @param id - 标识要订阅的传感器, 详情请参见{@link Sensor_SubscribeId}。
+ * @param id - 标识要订阅的传感器, 详情请参见{@link Sensor_SensorSubscribeId}。
  * @param user - 订阅者信息，用于指定传感器数据回调函数等，详情请参见{@Link Sensor_SubscribeUser}。
  * @return 成功返回SENSOR_SUCCESS，否则返回对应的错误码，详情请参见{@Link Sensor_Result}。
  *
  * @since 11
  */
-Sensor_Result OH_Sensor_UnsubscribeSensor(const Sensor_SubscribeId *subscribeId, const Sensor_SubscribeUser *user);
+Sensor_Result OH_Sensor_UnsubscribeSensor(const Sensor_SensorSubscribeId *subscribeId, const Sensor_SubscribeUser *user);
 #ifdef __cplusplus
 }
 #endif
