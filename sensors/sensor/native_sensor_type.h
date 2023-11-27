@@ -335,12 +335,21 @@ int32_t OH_Sensor_GetSensorData(Sensor_SensorEvent* sensorEvent, float **data, s
 typedef struct Sensor_SensorSubscribeId Sensor_SensorSubscribeId;
 
 /**
- * @brief 创建传感器订阅Id实例。
+ * @brief 创建指向{@link Sensor_SensorSubscribeId}实例的指针。
  *
  * @return 如果创建成功，则返回指向{@link Sensor_SensorSubscribeId} 结构实例的指针，否则返回NULL.
  * @since 11
  */
 Sensor_SensorSubscribeId *OH_Sensor_CreateSubscribeId();
+
+/**
+ * @brief 销毁{@link Sensor_SensorSubscribeId}实例并回收内存。
+ *
+ * @param subscribeId - 表示指向 {@link Sensor_SensorSubscribeId} 实例的指针.
+ * @return 成功返回SENSOR_SUCCESS，否则返回对应的错误码，详情请参见{@Link Sensor_Result}。
+ * @since 11
+ */
+int32_t OH_Sensor_DestroySubscribeId(Sensor_SensorSubscribeId *subscribeId);
 
 /**
  * @brief 获取传感器类型。
@@ -370,12 +379,21 @@ int32_t OH_Sensor_SetSubscribeSensorType(Sensor_SensorSubscribeId* subscribeId, 
 typedef struct Sensor_SubscribeAttribute Sensor_SubscribeAttribute;
 
 /**
- * @brief 创建传感器订阅属性实例。
+ * @brief 创建指向{@link Sensor_SubscribeAttribute}实例的指针。
  *
  * @return 如果创建成功，则返回指向{@link Sensor_SubscribeAttribute} 结构实例的指针，否则返回NULL.
  * @since 11
  */
 Sensor_SubscribeAttribute *OH_Sensor_CreateAttribute();
+
+/**
+ * @brief 销毁{@link Sensor_SubscribeAttribute}实例并回收内存。
+ *
+ * @param attribute - 表示指向 {@link Sensor_SubscribeAttribute} 实例的指针.
+ * @return 成功返回SENSOR_SUCCESS，否则返回对应的错误码，详情请参见{@Link Sensor_Result}。
+ * @since 11
+ */
+int32_t OH_Sensor_DestroyAttribute(Sensor_SubscribeAttribute *attribute);
 
 /**
  * @brief 设置上报时间间隔。
@@ -412,12 +430,21 @@ typedef void (*Sensor_RecordSensorCallback)(Sensor_SensorEvent *event);
 typedef struct Sensor_SubscribeUser Sensor_SubscribeUser;
 
 /**
- * @brief 传感器订阅者实例。
+ * @brief 创建指向{@link Sensor_SubscribeUser}实例的指针。
  *
  * @return 如果创建成功，则返回指向{@link Sensor_SubscribeUser} 结构实例的指针，否则返回NULL.
  * @since 11
  */
 Sensor_SubscribeUser *OH_Sensor_CreateUser();
+
+/**
+ * @brief 销毁{@link Sensor_SubscribeUser}实例并回收内存。
+ *
+ * @param user - 表示指向{@link Sensor_SubscribeUser}实例的指针.
+ * @return 成功返回SENSOR_SUCCESS，否则返回对应的错误码，详情请参见{@Link Sensor_Result}。
+ * @since 11
+ */
+int32_t OH_Sensor_DestroyUser(Sensor_SubscribeUser *user);
 
 /**
  * @brief 设置传感器数据的回调函数。
