@@ -56,7 +56,7 @@ def get_line_and_column(location):
     return ['', '']
 
 
-def get_original(result_child):
+def get_original(result_child: str):
     if len(result_child) == 0:
         return result_child
     original = result_child.lstrip().split("\r\n")
@@ -66,13 +66,13 @@ def get_original(result_child):
         return original[1]
     if len(original) == 4:
         return original[2]
+    return ''
 
 
 def get_specified_string(target_string):
     message_type = 'error'
     function_result = []
     pattern = r'error: (.*?)\r\n'
-    global matches
     matches = re.findall(pattern, target_string, re.DOTALL)
     if len(matches) == 0:
         pattern = r'warning: (.*?)\r\n'
@@ -90,7 +90,7 @@ def get_specified_string(target_string):
     return function_result
 
 
-def get_file_path(file_path):
+def get_file_path(file_path: str):
     if len(file_path) == 0:
         return file_path
     path_split_len = len(file_path.split('\r\n'))
@@ -101,3 +101,4 @@ def get_file_path(file_path):
         return path_list[1]
     if path_split_len == 3:
         return path_list[2]
+    return ''

@@ -68,16 +68,16 @@ def write_in_txt(check_result, output_path):
 
 
 def result_to_json(check_result):
-    txtResul = []
+    txt_resul = []
     if len(check_result) == 0:
-        txtResul.append('api_check: false')
+        txt_resul.append('api_check: false')
     else:
         for result in check_result:
             location = f'{result.location}(line:{result.locationLine}, col:{result.locationColumn})'
             message = 'API check error of [{}]:{}'.format(result.errorType['description'], result.errorInfo)
-            txtResul.append(OutputTxt(result.errorType['id'], result.level, location, result.fileName, message))
-        txtResul.append('api_check: false')
-    return json.dumps(txtResul, default=lambda obj: obj.__dict__, indent=4)
+            txt_resul.append(OutputTxt(result.errorType['id'], result.level, location, result.fileName, message))
+        txt_resul.append('api_check: false')
+    return json.dumps(txt_resul, default=lambda obj: obj.__dict__, indent=4)
 
 
 def curr_entry(pr_id):
@@ -90,7 +90,8 @@ def curr_entry(pr_id):
 def get_check_result_list(file_list):
     check_result_list = []
     for file in file_list:
-        root_path = file.split('sdk_c')[0] + 'sdk_c'
+        root_start = file.split('sdk_c')[0]
+        root_path = f'{root_start}sdk_c'
         python_obj = parser_include_ast(root_path, [file])
         check_result_list.extend(process_all_json(python_obj))
         check_result_list.extend(check_syntax(file))

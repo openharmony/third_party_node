@@ -1,3 +1,20 @@
+#!/usr/bin/env python
+# coding=utf-8
+##############################################
+# Copyright (c) 2021-2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+##############################################
+
 import re
 import os
 import clang.cindex
@@ -6,6 +23,7 @@ from clang.cindex import Index
 from clang.cindex import CursorKind
 from clang.cindex import TypeKind
 from utils.constants import StringConstant
+from utils.constants import RegularExpressions
 
 
 def find_parent(cursor):  # 获取父节点
@@ -18,27 +36,39 @@ def find_parent(cursor):  # 获取父节点
         elif cursor_parent.kind == CursorKind.STRUCT_DECL or cursor_parent.kind == CursorKind.UNION_DECL:
             return cursor_parent.kind
         else:
-            parent = cursor_parent.semantic_parent
-            if parent is not None:
-                return parent.kind
+            parent_kind = processing_root_parent(cursor_parent)
+            return parent_kind
+    return None
+
+
+def processing_root_parent(cursor_parent):
+    parent = cursor_parent.semantic_parent
+    if parent is not None:
+        if parent.type.kind == TypeKind.INVALID:
+            parent_kind = CursorKind.TRANSLATION_UNIT
+            return parent_kind
+        else:
+            return parent.kind
+    return None
 
 
 def processing_no_child(cursor, data):  # 处理没有子节点的节点
     if cursor.kind == CursorKind.INTEGER_LITERAL:  # 整型字面量类型节点，没有子节点
         parent_kind = find_parent(cursor)  # 判断是属于那类的
-        if parent_kind == CursorKind.STRUCT_DECL:
-            data["name"] = 'struct_int_no_spelling'
-        elif parent_kind == CursorKind.UNION_DECL:
-            data["name"] = 'union_int_no_spelling'
-        elif parent_kind == CursorKind.ENUM_DECL:
-            data["name"] = 'enum_int_no_spelling'
-        elif parent_kind == CursorKind.VAR_DECL:
-            data["name"] = 'var_int_no_spelling'
-        else:
-            data["name"] = "integer_no_spelling"
-        tokens = cursor.get_tokens()
-        for token in tokens:
-            data["integer_value"] = token.spelling  # 获取整型变量值
+        if parent_kind:
+            if parent_kind == CursorKind.STRUCT_DECL:
+                data["name"] = 'struct_int_no_spelling'
+            elif parent_kind == CursorKind.UNION_DECL:
+                data["name"] = 'union_int_no_spelling'
+            elif parent_kind == CursorKind.ENUM_DECL:
+                data["name"] = 'enum_int_no_spelling'
+            elif parent_kind == CursorKind.VAR_DECL:
+                data["name"] = 'var_int_no_spelling'
+            else:
+                data["name"] = "integer_no_spelling"
+            tokens = cursor.get_tokens()
+            for token in tokens:
+                data["integer_value"] = token.spelling  # 获取整型变量值
 
 
 def get_complex_def(tokens_new, count_token, tokens, data):
@@ -101,9 +131,7 @@ def get_token(cursor):
 def judgment_extern(cursor, data):  # 判断是否带有extern
     tokens = get_token(cursor)
     if cursor.kind == CursorKind.FUNCTION_DECL:
-        if 'static' in tokens:
-            is_extern = False
-        elif 'deprecated' in tokens:
+        if 'static' in tokens or 'deprecated' in tokens:
             is_extern = False
         else:
             is_extern = True
@@ -112,6 +140,10 @@ def judgment_extern(cursor, data):  # 判断是否带有extern
             is_extern = True
         else:
             is_extern = False
+        if 'const' in tokens:
+            data["is_const"] = True
+        else:
+            data["is_const"] = False
     else:
         is_extern = True
 
@@ -129,10 +161,11 @@ def binary_operator(cursor, data):  # 二元操作符处理
 
 def distinction_member(cursor, data):  # 区别结构体和联合体成员
     parent_kind = find_parent(cursor)  # 查找父节点类型
-    if parent_kind == CursorKind.UNION_DECL:
-        data["member"] = "union_member"
-    elif parent_kind == CursorKind.STRUCT_DECL:
-        data["member"] = "struct_member"
+    if parent_kind:
+        if parent_kind == CursorKind.UNION_DECL:
+            data["member"] = "union_member"
+        elif parent_kind == CursorKind.STRUCT_DECL:
+            data["member"] = "struct_member"
 
 
 def processing_parm(cursor, data):  # 函数参数节点处理
@@ -201,68 +234,103 @@ special_node_process = {
 }
 
 
-def processing_special_node(cursor, data, gn_path=None):  # 处理需要特殊处理的节点
+def processing_special_node(cursor, data, key, gn_path=None):  # 处理需要特殊处理的节点
+    if key == 0:
+        location_path = cursor.spelling
+        kind_name = CursorKind.TRANSLATION_UNIT.name
+    else:
+        location_path = cursor.location.file.name
+        kind_name = cursor.kind.name
+
     loc = {
-        "location_path": '{}'.format(cursor.location.file.name),
+        "location_path": '{}'.format(location_path),
         "location_line": cursor.location.line,
         "location_column": cursor.location.column
     }
     if gn_path:
-        relative_path = os.path.relpath(cursor.location.file.name, gn_path)  # 获取头文件相对路
+        relative_path = os.path.relpath(location_path, gn_path)  # 获取头文件相对路
         loc["location_path"] = relative_path
     data["location"] = loc
-    if cursor.kind.name in special_node_process.keys():
-        node_process = special_node_process[cursor.kind.name]
+    if kind_name in special_node_process.keys():
+        node_process = special_node_process[kind_name]
         node_process(cursor, data)  # 调用对应节点处理函数
 
 
-def ast_to_dict(cursor, current_file, gn_path=None, comment=None):  # 解析数据的整理
+def node_extent(cursor, current_file):
+    start_offset = cursor.extent.start.offset
+    end_offset = cursor.extent.end.offset
+    with open(current_file, 'r', encoding='utf=8') as f:
+        f.seek(start_offset)
+        content = f.read(end_offset - start_offset)
+
+    extent = {
+        "start_offset": start_offset,
+        "end_offset": end_offset,
+        "content": content
+    }
+    f.close()
+    return extent
+
+
+def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解析数据的整理
     # 通用
     data = {
         "name": cursor.spelling,
-        "kind": cursor.kind.name,
+        "kind": '',
         "type": cursor.type.spelling,
-        "gn_path": gn_path
+        "gn_path": gn_path,
+        "node_content": {},
+        "comment": ''
     }
-
     if cursor.raw_comment:  # 是否有注释信息，有就取，没有过
         data["comment"] = cursor.raw_comment
     else:
         data["comment"] = 'none_comment'
 
-    if cursor.kind == CursorKind.TRANSLATION_UNIT:  # 把最开始的注释放在根节点这，如果有的话
+    if key == 0:
+        data["kind"] = CursorKind.TRANSLATION_UNIT.name
         if comment:
-            data["comment"] = comment[0]
-
+            data["comment"] = comment
+        if gn_path:
+            relative_path = os.path.relpath(cursor.spelling, gn_path)
+            data["name"] = relative_path
     else:
-        processing_special_node(cursor, data, gn_path)  # 节点处理
+        content = node_extent(cursor, current_file)
+        data["node_content"] = content
+        data["kind"] = cursor.kind.name
 
+    processing_special_node(cursor, data, key, gn_path)  # 节点处理
     children = list(cursor.get_children())  # 判断是否有子节点，有就追加children，没有根据情况来
     if len(children) > 0:
-        if cursor.kind == CursorKind.FUNCTION_DECL:  # 函数参数
-            name = "parm"
-        elif (cursor.kind == CursorKind.ENUM_DECL
-              or cursor.kind == CursorKind.STRUCT_DECL
-              or cursor.kind == CursorKind.UNION_DECL):
-            name = "members"
+        if key != 0:
+            if cursor.kind == CursorKind.FUNCTION_DECL:  # 函数参数
+                name = "parm"
+            elif (cursor.kind == CursorKind.ENUM_DECL
+                  or cursor.kind == CursorKind.STRUCT_DECL
+                  or cursor.kind == CursorKind.UNION_DECL):
+                name = "members"
+            else:
+                name = "children"
         else:
             name = "children"
         data[name] = []
-        processing_ast_node(children, current_file, data, name, gn_path)
+
+        for child in children:
+            # 剔除多余宏定义和跳过UNEXPOSED_ATTR节点
+            if child.location.file is not None and child.kind != CursorKind.UNEXPOSED_ATTR \
+                    and child.location.file.name == current_file:
+                processing_ast_node(child, current_file, data, name, gn_path)
     else:
         processing_no_child(cursor, data)  # 处理没有子节点的节点
     return data
 
 
-def processing_ast_node(children, current_file, data, name, gn_path):
-    for child in children:
-        # 剔除多余宏定义和跳过UNEXPOSED_ATTR节点
-        if child.location.file is not None and child.kind != CursorKind.UNEXPOSED_ATTR:
-            if child.location.file.name == current_file:
-                child_data = ast_to_dict(child, current_file, gn_path)
-                data[name].append(child_data)
-            else:
-                pass
+def processing_ast_node(child, current_file, data, name, gn_path):
+    child_data = ast_to_dict(child, current_file, gn_path, key=1)
+    if child.kind == CursorKind.TYPE_REF:
+        data["type_ref"] = child_data
+    else:
+        data[name].append(child_data)
 
 
 def preorder_travers_ast(cursor, total, comment, current_file, gn_path=None):  # 获取属性
@@ -271,16 +339,41 @@ def preorder_travers_ast(cursor, total, comment, current_file, gn_path=None):  #
 
 
 def get_start_comments(include_path):  # 获取每个头文件的最开始注释
+    file_comment = []
+    content = open_file(include_path)
+    if content:
+        pattern = RegularExpressions.START_COMMENT.value
+        matches = re.findall(pattern, content, re.DOTALL | re.MULTILINE)
+        file_comment.extend(matches)
+
     with open(include_path, 'r', encoding='utf-8') as f:
         f.seek(0)
         content = f.read()
-        pattern = r'/\*[^/]*\*/\s*/\*[^/]*\*/\s*(?=#ifndef)'
-        matches = re.findall(pattern, content, re.DOTALL | re.MULTILINE)
-        if matches is None:
-            pattern = r'/\*[^/]*\*/\s*(?=#ifndef)'
-            matches = re.findall(pattern, content, re.DOTALL | re.MULTILINE)
+        pattern_high = RegularExpressions.END_COMMENT.value
+        matches_high = re.findall(pattern_high, content, re.DOTALL | re.MULTILINE)
+        if matches_high:
+            file_comment.extend(matches_high)
+        f.close()
+    return file_comment
 
-        return matches
+
+def open_file(include_path):
+    with open(include_path, 'r', encoding='utf-8') as f:
+        content = ''
+        loge = 0
+        for line in f:
+            if line.startswith('#ifdef __cplusplus'):
+                loge = 1
+                break
+            else:
+                inside_ifdef = True
+
+            if inside_ifdef:
+                content += line
+        if loge == 0:
+            content = ''
+        f.close()
+        return content
 
 
 def api_entrance(share_lib, include_path, gn_path=None, link_path=None):  # 统计入口
