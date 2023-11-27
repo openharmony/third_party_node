@@ -327,13 +327,20 @@ int32_t OH_Sensor_GetEventAccuracy(Sensor_SensorEvent* sensorEvent, Sensor_Senso
  */
 int32_t OH_Sensor_GetSensorData(Sensor_SensorEvent* sensorEvent, float **data, size_t *length);
 
-struct Sensor_SensorSubscribeId;
 /**
  * @brief 传感器订阅Id，唯一标识传感器。
  * @syscap SystemCapability.Sensors.Sensor
  * @since 11
  */
 typedef struct Sensor_SensorSubscribeId Sensor_SensorSubscribeId;
+
+/**
+ * @brief 创建传感器订阅Id实例。
+ *
+ * @return 如果创建成功，则返回指向{@link Sensor_SensorSubscribeId} 结构实例的指针，否则返回NULL.
+ * @since 11
+ */
+Sensor_SensorSubscribeId *OH_Sensor_CreateSubscribeId();
 
 /**
  * @brief 获取传感器类型。
@@ -355,13 +362,20 @@ int32_t OH_Sensor_GetSubscribeSensorType(Sensor_SensorSubscribeId* subscribeId, 
  */
 int32_t OH_Sensor_SetSubscribeSensorType(Sensor_SensorSubscribeId* subscribeId, const Sensor_SensorType sensorType);
 
-struct Sensor_SubscribeAttribute;
 /**
  * @brief 传感器订阅属性。
  * @syscap SystemCapability.Sensors.Sensor
  * @since 11
  */
 typedef struct Sensor_SubscribeAttribute Sensor_SubscribeAttribute;
+
+/**
+ * @brief 创建传感器订阅属性实例。
+ *
+ * @return 如果创建成功，则返回指向{@link Sensor_SubscribeAttribute} 结构实例的指针，否则返回NULL.
+ * @since 11
+ */
+Sensor_SubscribeAttribute *OH_Sensor_CreateAttribute();
 
 /**
  * @brief 设置上报时间间隔。
@@ -390,13 +404,20 @@ int32_t OH_Sensor_GetSamplingInterval(Sensor_SubscribeAttribute* attribute, int6
  */
 typedef void (*Sensor_RecordSensorCallback)(Sensor_SensorEvent *event);
 
-struct Sensor_SubscribeUser;
 /**
  * @brief 传感器订阅者信息。
  * @syscap SystemCapability.Sensors.Sensor
  * @since 11
  */
 typedef struct Sensor_SubscribeUser Sensor_SubscribeUser;
+
+/**
+ * @brief 传感器订阅者实例。
+ *
+ * @return 如果创建成功，则返回指向{@link Sensor_SubscribeUser} 结构实例的指针，否则返回NULL.
+ * @since 11
+ */
+Sensor_SubscribeUser *OH_Sensor_CreateUser();
 
 /**
  * @brief 设置传感器数据的回调函数。

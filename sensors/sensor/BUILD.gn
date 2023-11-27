@@ -14,7 +14,7 @@
 import("//build/ohos.gni")
 import("//build/ohos/ndk/ndk.gni")
 
-ohos_ndk_headers("sensor_native") {
+ohos_ndk_headers("sensor_ndk_header") {
   dest_dir = "$ndk_headers_out_dir/sensors/sensor"
   sources = [
     "./native_sensor.h",
@@ -22,7 +22,7 @@ ohos_ndk_headers("sensor_native") {
   ]
 }
 
-ohos_ndk_library("libsensor_native") {
+ohos_ndk_library("libsensor_ndk") {
   ndk_description_file = "./libsensor.ndk.json"
   output_name = "libsensor_native"
   output_extension = "z.so"
