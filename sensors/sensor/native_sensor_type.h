@@ -174,25 +174,25 @@ typedef enum Sensor_SensorAccuracy {
      * @syscap SystemCapability.Sensors.Sensor
      * @since 11
      */
-    ACCURACY_UNRELIABLE = 0,
+    SENSOR_ACCURACY_UNRELIABLE = 0,
     /**
      * The sensor data is at a low accuracy level. The data must be calibrated based on the environment before being used.
      * @syscap SystemCapability.Sensors.Sensor
      * @since 11
      */
-    ACCURACY_LOW = 1,
+    SENSOR_ACCURACY_LOW = 1,
     /**
      * The sensor data is at a medium accuracy level. You are advised to calibrate the data based on the environment before using it.
      * @syscap SystemCapability.Sensors.Sensor
      * @since 11
      */
-    ACCURACY_MEDIUM = 2,
+    SENSOR_ACCURACY_MEDIUM = 2,
     /**
      * The sensor data is at a high accuracy level. The data can be used directly.
      * @syscap SystemCapability.Sensors.Sensor
      * @since 11
      */
-    ACCURACY_HIGH = 3
+    SENSOR_ACCURACY_HIGH = 3
 } Sensor_SensorAccuracy;
 
 struct Sensor_Sensor;
