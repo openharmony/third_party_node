@@ -26,6 +26,27 @@ extern "C" {
 #endif
 
 /**
+ * @addtogroup Drm
+ * @{
+ *
+ * @brief Provides APIs of Drm.
+ *
+ * @Syscap SystemCapability.Multimedia.Drm.Core
+ * @since 11
+ * @version 1.0
+ */
+
+/**
+ * @file native_drm_common.h
+ *
+ * @brief Defines the Drm common struct.
+ *
+ * @library libdrm_framework.z.so
+ * @since 11
+ * @version 1.0
+ */
+
+/**
  * @brief Content potection level.
  * @syscap SystemCapability.Multimedia.Drm.Core
  * @since 11
@@ -59,50 +80,54 @@ typedef enum OH_DRM_ContentProtectionLevel {
 } OH_DRM_ContentProtectionLevel;
 
 /**
- * @brief License type.
+ * @brief Media key type.
  * @syscap SystemCapability.Multimedia.Drm.Core
  * @since 11
  * @version 1.0
  */
-typedef enum OH_DRM_LicenseType {
+typedef enum OH_DRM_MediaKeyType {
     /**
-     * License type online
+     * Media key type offline.
      */
-    LICENSE_TYPE_ONLINE = 0,
+    MEDIA_KEY_TYPE_OFFLINE = 0,
     /**
-     * License type offline.
+     * Media key type online
      */
-    LICENSE_TYPE_OFFLINE,
-} OH_DRM_LicenseType;
+    MEDIA_KEY_TYPE_ONLINE,
+} OH_DRM_MediaKeyType;
 
 /**
- * @brief License request type.
+ * @brief Media key request type.
  * @syscap SystemCapability.Multimedia.Drm.Core
  * @since 11
  * @version 1.0
  */
-typedef enum OH_DRM_LicenseRequestType {
+typedef enum OH_DRM_MediaKeyRequestType {
     /**
-     * License request type unknown.
+     * Media key request type unknown.
      */
-    REQUEST_TYPE_UNKNOWN = 0,
+    MEDIA_KEY_REQUEST_TYPE_UNKNOWN = 0,
     /**
-     * License request type initial.
+     * Media key request type initial.
      */
-    REQUEST_TYPE_INITIAL = 1,
+    MEDIA_KEY_REQUEST_TYPE_INITIAL,
     /**
-     * License request type renewal.
+     * Media key request type renewal.
      */
-    REQUEST_TYPE_RENEWAL = 2,
+    MEDIA_KEY_REQUEST_TYPE_RENEWAL,
     /**
-     * License request type release.
+     * Media key request type release.
      */
-    REQUEST_TYPE_RELEASE = 3,
+    MEDIA_KEY_REQUEST_TYPE_RELEASE,
     /**
-     * License request type none.
+     * Media key request type none.
      */
-    REQUEST_TYPE_NONE = 4,
-} OH_DRM_LicenseRequestType;
+    MEDIA_KEY_REQUEST_TYPE_NONE,
+    /**
+     * Media key request type update.
+     */
+    MEDIA_KEY_REQUEST_TYPE_UPDATE,
+} OH_DRM_MediaKeyRequestType;
 
 /**
  * @brief Offline media key status.
@@ -126,7 +151,7 @@ typedef enum OH_DRM_OfflineMediaKeyStatus {
 } OH_DRM_OfflineMediaKeyStatus;
 
 /**
- * @brief Offline media key status.
+ * @brief Certificate status.
  * @syscap SystemCapability.Multimedia.Drm.Core
  * @since 11
  * @version 1.0
@@ -160,16 +185,16 @@ typedef enum OH_DRM_CertificateStatus {
  * @since 11
  * @version 1.0
  */
-typedef enum OH_DRM_LicenseStatus {
+typedef enum OH_DRM_MediaKeyStatus {
     /**
-     * License status OK.
+     * Media key status OK.
      */
-    LICENSE_STATUS_OK = 0,
+    MEDIA_KEY_STATUS_OK = 0,
     /**
-     * License is invalid e.g. not exist.
+     * Media key is invalid e.g. not exist.
      */
-    LICENSE_STATUS_NOT_EXIST = 1,
-} OH_DRM_LicenseStatus;
+    MEDIA_KEY_STATUS_NOT_EXIST = 1,
+} OH_DRM_MediaKeyStatus;
 
 /**
  * @brief Unsigned char buffer.
@@ -177,7 +202,7 @@ typedef enum OH_DRM_LicenseStatus {
  * @since 11
  * @version 1.0
  */
-struct OH_DRM_Uint8Buffer {
+typedef struct OH_DRM_Uint8Buffer {
     /**
      * Unsigned char buffer addr.
      */
@@ -186,7 +211,7 @@ struct OH_DRM_Uint8Buffer {
      * Unsigned char buffer len.
      */
     uint32_t bufferLen;
-};
+} OH_DRM_Uint8Buffer;
 
 /**
  * @brief Char buffer.
@@ -194,7 +219,7 @@ struct OH_DRM_Uint8Buffer {
  * @since 11
  * @version 1.0
  */
-struct OH_DRM_CharBuffer {
+typedef struct OH_DRM_CharBuffer {
     /**
      * Char buffer addr.
      */
@@ -203,7 +228,7 @@ struct OH_DRM_CharBuffer {
      * Char buffer len.
      */
     uint32_t bufferLen;
-};
+} OH_DRM_CharBuffer;
 
 /**
  * @brief Char-char buffer pair.
@@ -211,12 +236,12 @@ struct OH_DRM_CharBuffer {
  * @since 11
  * @version 1.0
  */
-struct OH_DRM_CharBufferPair {
+typedef struct OH_DRM_CharBufferPair {
     /* Name buffer in chars.*/
     OH_DRM_CharBuffer name;
     /* Value buffer in chars.*/
     OH_DRM_CharBuffer value;
-};
+} OH_DRM_CharBufferPair;
 
 /**
  * @brief Unsignedchar-char buffer.
@@ -224,24 +249,24 @@ struct OH_DRM_CharBufferPair {
  * @since 11
  * @version 1.0
  */
-struct OH_DRM_Uint8CharBufferPair {
+typedef struct OH_DRM_Uint8CharBufferPair {
     /* Key buffer in Uint8Array.*/
     OH_DRM_Uint8Buffer key;
     /* Value buffer in chars.*/
     OH_DRM_CharBuffer value;
-};
+} OH_DRM_Uint8CharBufferPair;
 
 /**
- * @brief Defines the handles of models for Neural Network Runtime.
+ * @brief Media key request info.
  *
  * @since 11
  * @version 1.0
  */
-struct OH_DRM_LicenseRequestInfo {
+typedef struct OH_DRM_MediaKeyRequestInfo {
     /**
-     * Offline or online license type.
+     * Offline or online media key type.
      */
-    OH_DRM_LicenseType type;
+    OH_DRM_MediaKeyType type;
     /**
      * Initial data format as PSSH after base64 encoding.
      */
@@ -258,7 +283,7 @@ struct OH_DRM_LicenseRequestInfo {
      * Options data the application set to drm framework.
      */
     OH_DRM_CharBufferPair *optionsData;
-};
+} OH_DRM_MediaKeyRequestInfo;
 
 /**
  * @brief Statistics of OH_MediaKeySystem.
@@ -266,25 +291,25 @@ struct OH_DRM_LicenseRequestInfo {
  * @since 11
  * @version 1.0
  */
-struct OH_DRM_Statistics {
+typedef struct OH_DRM_Statistics {
     /* Statistics count.*/
     uint32_t statisticsCount;
     /* Statistics info.*/
     OH_DRM_CharBufferPair *info;
-};
+} OH_DRM_Statistics;
 
 /**
- * @brief License Ids.
+ * @brief MediaKeyIds array.
  *
  * @since 11
  * @version 1.0
  */
-struct OH_DRM_LicenseIdArray {
-    /* License Id count.*/
-    uint32_t licenseIdCount;
-    /* License Ids.*/
-    OH_DRM_Uint8Buffer *licenseIds;
-};
+typedef struct OH_DRM_MediakeyIdArray {
+    /* MediaKeyId count.*/
+    uint32_t mediaKeyIdCount;
+    /* MediaKeyIds.*/
+    OH_DRM_Uint8Buffer *mediaKeyIds;
+} OH_DRM_MediakeyIdArray;
 
 /**
  * @brief Media key info.
@@ -292,36 +317,60 @@ struct OH_DRM_LicenseIdArray {
  * @since 11
  * @version 1.0
  */
-struct OH_DRM_KeysInfo {
+typedef struct OH_DRM_KeysInfo {
     /* Keys count.*/
     uint32_t keysCount;
     /* Keys info.*/
     OH_DRM_Uint8CharBufferPair *keysInfo;
-};
+} OH_DRM_KeysInfo;
 
 /**
- * @brief License description
+ * @brief MediaKeydescription
  *
  * @since 11
  * @version 1.0
  */
-struct OH_DRM_LicenseDescription {
-    /* License count.*/
-    uint32_t licenseCount;
-    /* License info.*/
+typedef struct OH_DRM_MediaKeyDescription {
+    /* MediaKeycount.*/
+    uint32_t mediaKeyCount;
+    /* MediaKeyinfo.*/
     OH_DRM_CharBufferPair *description;
-};
+} OH_DRM_MediaKeyDescription;
 
-typedef struct OH_DRM_Uint8Buffer OH_DRM_Uint8Buffer;
-typedef struct OH_DRM_CharBuffer OH_DRM_CharBuffer;
-typedef struct OH_DRM_CharBufferPair OH_DRM_CharBufferPair;
-typedef struct OH_DRM_Uint8CharBufferPair OH_DRM_Uint8CharBufferPair;
-typedef struct OH_DRM_LicenseRequestInfo OH_DRM_LicenseRequestInfo;
-typedef struct OH_DRM_MetricInfo OH_DRM_MetricInfo;
-typedef struct OH_DRM_Metrics OH_DRM_Metrics;
-typedef struct OH_DRM_LicenseIdArray OH_DRM_LicenseIdArray;
-typedef struct OH_DRM_LicenseDescription OH_DRM_LicenseDescription;
-typedef struct OH_DRM_KeysInfo OH_DRM_KeysInfo;
+/**
+ * @brief PSSH info by uuid.
+ *
+ * @since 11
+ * @version 1.0
+ */
+#define UUID_LEN 16
+typedef struct OH_DRM_PsshInfo {
+    /**
+     * Uuid.
+     */
+    char uuid[UUID_LEN];
+    /**
+     * Unsigned char PSSH len.
+     */
+    uint32_t dataLen;
+    /**
+     * Unsigned char PSSH data.
+     */
+    unsigned char *data;
+} OH_DRM_PsshInfo;
+
+/**
+ * @brief DrmInfo used for player to get DRM info from media source.
+ *
+ * @since 11
+ * @version 1.0
+ */
+typedef struct OH_DRM_DrmInfo {
+    /* PSSH count.*/
+    uint32_t psshCount;
+    /* PSSH info.*/
+    OH_DRM_PsshInfo *psshInfo;
+} OH_DRM_DrmInfo;
 
 #ifdef __cplusplus
 }

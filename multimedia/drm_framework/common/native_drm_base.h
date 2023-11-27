@@ -24,38 +24,26 @@
 extern "C" {
 #endif
 /**
- * @brief OH_MediaKeySystem
- * @syscap SystemCapability.Multimedia.Drm.Core
- * @since 9
+ * @brief MediaKeySystem struct.
+ *
+ * @since 11
  * @version 1.0
  */
-struct OH_MediaKeySystem : public OHOS::RefBase {
+typedef struct OH_MediaKeySystem : public OHOS::RefBase {
     OH_MediaKeySystem() = default;
     virtual ~OH_MediaKeySystem() = default;
-};
+} OH_MediaKeySystem;
 
 /**
- * @brief OH_MediaKeySession
- * @syscap SystemCapability.Multimedia.Drm.Core
- * @since 9
+ * @brief MediaKeySession struct.
+ *
+ * @since 11
  * @version 1.0
  */
-struct OH_MediaKeySession : public OHOS::RefBase {
+typedef struct OH_MediaKeySession : public OHOS::RefBase {
     OH_MediaKeySession() = default;
     virtual ~OH_MediaKeySession() = default;
-};
-
-/**
- * @brief OH_MediaDecryptModule
- * @syscap SystemCapability.Multimedia.Drm.Core
- * @since 9
- * @version 1.0
- */
-struct OH_MediaDecryptModule : public OHOS::RefBase {
-    OH_MediaDecryptModule() = default;
-    virtual ~OH_MediaDecryptModule() = default;
-};
-
+} OH_MediaKeySession;
 
 #ifdef __cplusplus
 }
