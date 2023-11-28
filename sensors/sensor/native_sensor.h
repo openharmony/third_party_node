@@ -50,7 +50,7 @@ extern "C" {
  *
  * @since 11
  */
-Sensor_Result OH_Sensor_GetAllSensors(Sensor_Sensor **sensors, int32_t *count);
+Sensor_Result OH_Sensor_GetAllSensors(Sensor_Sensor **sensors, uint32_t *count);
 
 /**
  * @brief Subscribes to sensor data. The system will report sensor data to the subscriber at the specified frequency.
