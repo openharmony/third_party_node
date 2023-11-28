@@ -237,9 +237,9 @@ typedef struct OH_DRM_CharBuffer {
  * @version 1.0
  */
 typedef struct OH_DRM_CharBufferPair {
-    /* Name buffer in chars.*/
+    /* Name buffer in chars. */
     OH_DRM_CharBuffer name;
-    /* Value buffer in chars.*/
+    /* Value buffer in chars. */
     OH_DRM_CharBuffer value;
 } OH_DRM_CharBufferPair;
 
@@ -250,9 +250,9 @@ typedef struct OH_DRM_CharBufferPair {
  * @version 1.0
  */
 typedef struct OH_DRM_Uint8CharBufferPair {
-    /* Key buffer in Uint8Array.*/
+    /* Key buffer in Uint8Array. */
     OH_DRM_Uint8Buffer key;
-    /* Value buffer in chars.*/
+    /* Value buffer in chars. */
     OH_DRM_CharBuffer value;
 } OH_DRM_Uint8CharBufferPair;
 
@@ -292,9 +292,9 @@ typedef struct OH_DRM_MediaKeyRequestInfo {
  * @version 1.0
  */
 typedef struct OH_DRM_Statistics {
-    /* Statistics count.*/
+    /* Statistics count. */
     uint32_t statisticsCount;
-    /* Statistics info.*/
+    /* Statistics info. */
     OH_DRM_CharBufferPair *info;
 } OH_DRM_Statistics;
 
@@ -305,9 +305,9 @@ typedef struct OH_DRM_Statistics {
  * @version 1.0
  */
 typedef struct OH_DRM_MediakeyIdArray {
-    /* MediaKeyId count.*/
+    /* MediaKeyId count. */
     uint32_t mediaKeyIdCount;
-    /* MediaKeyIds.*/
+    /* MediaKeyIds. */
     OH_DRM_Uint8Buffer *mediaKeyIds;
 } OH_DRM_MediakeyIdArray;
 
@@ -318,9 +318,9 @@ typedef struct OH_DRM_MediakeyIdArray {
  * @version 1.0
  */
 typedef struct OH_DRM_KeysInfo {
-    /* Keys count.*/
+    /* Keys count. */
     uint32_t keysCount;
-    /* Keys info.*/
+    /* Keys info. */
     OH_DRM_Uint8CharBufferPair *keysInfo;
 } OH_DRM_KeysInfo;
 
@@ -331,9 +331,9 @@ typedef struct OH_DRM_KeysInfo {
  * @version 1.0
  */
 typedef struct OH_DRM_MediaKeyDescription {
-    /* MediaKeycount.*/
+    /* MediaKeycount. */
     uint32_t mediaKeyCount;
-    /* MediaKeyinfo.*/
+    /* MediaKeyinfo. */
     OH_DRM_CharBufferPair *description;
 } OH_DRM_MediaKeyDescription;
 
@@ -366,9 +366,9 @@ typedef struct OH_DRM_PsshInfo {
  * @version 1.0
  */
 typedef struct OH_DRM_DrmInfo {
-    /* PSSH count.*/
+    /* PSSH count. */
     uint32_t psshCount;
-    /* PSSH info.*/
+    /* PSSH info. */
     OH_DRM_PsshInfo *psshInfo;
 } OH_DRM_DrmInfo;
 

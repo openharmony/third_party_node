@@ -75,7 +75,8 @@ bool OH_MediaKeySystem_IsSupported2(const char *name, const char *mimeType);
  * @since 11
  * @version 1.0
  */
-bool OH_MediaKeySystem_IsSupported3(const char *name, const char *mimeType, OH_DRM_ContentProtectionLevel contentProtectionLevel);
+bool OH_MediaKeySystem_IsSupported3(const char *name, const char *mimeType,
+    OH_DRM_ContentProtectionLevel contentProtectionLevel);
 
 /**
  * @brief Creates a media key system instance from the name.
@@ -158,7 +159,7 @@ OH_DrmErrCode OH_MediaKeySystem_GetMaxContentProtectionLevel(OH_MediaKeySystem *
  * @version 1.0
  */
 OH_DrmErrCode OH_MediaKeySystem_SetMediaKeySystemCallback(OH_MediaKeySystem *mediaKeySystem,
-        OH_MediaKeySystemCallback callback);
+    OH_MediaKeySystemCallback callback);
 
 /**
  * @brief Create a media key session instance.
@@ -182,7 +183,7 @@ OH_DrmErrCode OH_MediaKeySystem_CreateMediaKeySession(OH_MediaKeySystem *mediaKe
  * @version 1.0
  */
 OH_DrmErrCode OH_MediaKeySystem_GenerateKeySystemRequest(OH_MediaKeySystem *mediaKeySystem, unsigned char **request,
-     int32_t *requestLen, char **defaultUrl, int32_t *defaultUrlLen);
+    int32_t *requestLen, char **defaultUrl, int32_t *defaultUrlLen);
 
 /**
  * @brief Process a media key system provision response.

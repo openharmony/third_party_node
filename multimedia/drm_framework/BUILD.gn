@@ -12,74 +12,24 @@
 # limitations under the License.
 
 import("//build/ohos.gni")
-import("//build/ohos/ace/ace.gni")
-
-DRM_ROOT_DIR = "//foundation/multimedia/drm_framework"
-
-group("drm_capi_package") {
-    deps = []
-    deps += [
-        "$DRM_ROOT_DIR/interfaces/kits/c/drm_capi:native_drm",
-    ]
+import("//build/ohos/ndk/ndk.gni")
+ohos_ndk_headers("native_drm_header") {
+  dest_dir = "$ndk_headers_out_dir/multimedia/drm_framework"
+  sources = [
+        "./native_mediakeysession.h",
+        "./native_mediakeysystem.h"
+       ]
 }
 
-config("drm_capi_common_config") {
-    include_dirs = [
-        "$DRM_ROOT_DIR/interfaces/kits/c/drm_capi/include",
-        "$DRM_ROOT_DIR/interfaces/kits/c/drm_capi/common",
-        "$DRM_ROOT_DIR/interfaces/inner_api/native/drm",
-        "$DRM_ROOT_DIR/services/utils/include",
-        "//foundation//arkui/napi/interfaces/kits",
-        "//utils/system/safwk/native/include",
-        "//foundation/multimedia/drm_framework/frameworks/native/drm",
-    ]
-    cflags = [
-        "-fno-exceptions",
-        "-Wall",
-        "-fno-common",
-        "-fstack-protector-all",
-        "-Wshadow",
-        "-FPIC",
-        "-FS",
-        "-O2",
-        "-D_FORTIFY_SOURCE=2",
-        "-Wformat=2",
-        "-Wdate-time",
-    ]
+ohos_ndk_library("libnative_drm") {
+  ndk_description_file = "./libnativedrm.ndk.json"
+  min_compact_version = "1"
+  output_name = "native_drm"
+  output_extension = "so"
 
-    cflags_cc = [
-        "-std=c++17",
-        "-fno-rtti",
-    ]
+  system_capability = "SystemCapability.Multimedia.Drm.Core"
+  system_capability_headers = [
+        "multimedia/drm_framework/native_mediakeysession.h",
+        "multimedia/drm_framework/native_mediakeysystem.h",
+       ]
 }
-
-ohos_shared_library("native_drm") {
-    install_enable = true
-    configs = [ ":drm_capi_common_config" ]
-
-    sanitize = {
-        cfi = true
-        cfi_cross_dso = true
-        debug = true
-    }
-
-    sources = [
-        "$DRM_ROOT_DIR/frameworks/c/drm_capi/native_mediakeysystem.cpp",
-        "$DRM_ROOT_DIR/frameworks/c/drm_capi/native_mediakeysession.cpp",
-    ]
-
-    deps = [
-        "$DRM_ROOT_DIR/frameworks/native:drm_framework",
-    ]
-
-    external_deps = [
-        "c_utils:utils",
-        "hilog:libhilog",
-        "hitrace:hitrace_meter",
-        "napi:ace_napi",
-    ]
-    output_extension = "so"
-    subsystem_name = "multimedia"
-    part_name = "multimedia_drm_framework"
-}
-

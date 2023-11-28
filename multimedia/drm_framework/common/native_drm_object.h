@@ -24,10 +24,8 @@
 #include "key_session_impl.h"
 #include "media_key_system_impl.h"
 #include "media_key_system_factory_impl.h"
-#include "media_decrypt_module_impl.h"
 
-struct MediaKeySystemObject : public OH_MediaKeySystem
-{
+struct MediaKeySystemObject : public OH_MediaKeySystem {
     explicit MediaKeySystemObject(const OHOS::sptr<OHOS::DrmStandard::MediaKeySystemImpl> &impl)
         : systemImpl_(impl)
     {
@@ -37,8 +35,7 @@ struct MediaKeySystemObject : public OH_MediaKeySystem
     const OHOS::sptr<OHOS::DrmStandard::MediaKeySystemImpl> systemImpl_ = nullptr;
 };
 
-struct MediaKeySessionObject : public OH_MediaKeySession
-{
+struct MediaKeySessionObject : public OH_MediaKeySession {
     explicit MediaKeySessionObject(const OHOS::sptr<OHOS::DrmStandard::MediaKeySessionImpl> &impl)
         : sessionImpl_(impl)
     {

@@ -29,10 +29,10 @@ extern "C" {
  * @since 11
  * @version 1.0
  */
-typedef struct OH_MediaKeySystem : public OHOS::RefBase {
+struct OH_MediaKeySystem : public OHOS::RefBase {
     OH_MediaKeySystem() = default;
     virtual ~OH_MediaKeySystem() = default;
-} OH_MediaKeySystem;
+};
 
 /**
  * @brief MediaKeySession struct.
@@ -40,10 +40,13 @@ typedef struct OH_MediaKeySystem : public OHOS::RefBase {
  * @since 11
  * @version 1.0
  */
-typedef struct OH_MediaKeySession : public OHOS::RefBase {
+struct OH_MediaKeySession : public OHOS::RefBase {
     OH_MediaKeySession() = default;
     virtual ~OH_MediaKeySession() = default;
-} OH_MediaKeySession;
+};
+
+typedef struct OH_MediaKeySystem OH_MediaKeySystem;
+typedef struct OH_MediaKeySession OH_MediaKeySession;
 
 #ifdef __cplusplus
 }
