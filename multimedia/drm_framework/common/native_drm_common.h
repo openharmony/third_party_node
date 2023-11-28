@@ -343,12 +343,12 @@ typedef struct OH_DRM_MediaKeyDescription {
  * @since 11
  * @version 1.0
  */
-#define UUID_LEN 16
+#define OH_DRM_UUID_LEN 16
 typedef struct OH_DRM_PsshInfo {
     /**
      * Uuid.
      */
-    char uuid[UUID_LEN];
+    char uuid[OH_DRM_UUID_LEN];
     /**
      * Unsigned char PSSH len.
      */
@@ -371,6 +371,8 @@ typedef struct OH_DRM_DrmInfo {
     /* PSSH info. */
     OH_DRM_PsshInfo *psshInfo;
 } OH_DRM_DrmInfo;
+
+typedef void(*OH_DRM_DrmInfoCallback)(OH_DRM_DrmInfo* drmInfo);
 
 #ifdef __cplusplus
 }
