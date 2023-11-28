@@ -55,5 +55,29 @@
     },
     {
         "name": "OH_Sensor_GetSensorCallback"
+    },
+    {
+        "name": "OH_Sensor_CreateSensors"
+    },
+    {
+        "name": "OH_Sensor_DestroySensors"
+    },
+    {
+        "name": "OH_Sensor_CreateSubscribeId"
+    },
+    {
+        "name": "OH_Sensor_DestroySubscribeId"
+    },
+    {
+        "name": "OH_Sensor_CreateAttribute"
+    },
+    {
+        "name": "OH_Sensor_DestroyAttribute"
+    },
+    {
+        "name": "OH_Sensor_CreateUser"
+    },
+    {
+        "name": "OH_Sensor_DestroyUser"
     }
 ]
