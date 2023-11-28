@@ -74,8 +74,8 @@ def result_to_json(check_result):
     else:
         for result in check_result:
             location = f'{result.location}(line:{result.locationLine}, col:{result.locationColumn})'
-            message = 'API check error of [{}]:{}'.format(result.errorType['description'], result.errorInfo)
-            txt_resul.append(OutputTxt(result.errorType['id'], result.level, location, result.fileName, message))
+            message = 'API check error of [{}]:{}'.format(result.error_type['description'], result.error_info)
+            txt_resul.append(OutputTxt(result.error_type['id'], result.level, location, result.file_name, message))
         txt_resul.append('api_check: false')
     return json.dumps(txt_resul, default=lambda obj: obj.__dict__, indent=4)
 

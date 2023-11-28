@@ -343,8 +343,9 @@ def get_start_comments(include_path):  # 获取每个头文件的最开始注释
     content = open_file(include_path)
     if content:
         pattern = RegularExpressions.START_COMMENT.value
-        matches = re.findall(pattern, content, re.DOTALL | re.MULTILINE)
-        file_comment.extend(matches)
+        matches = re.finditer(pattern, content, re.DOTALL | re.MULTILINE)
+        for mat in matches:
+            file_comment.append(mat.group())
 
     with open(include_path, 'r', encoding='utf-8') as f:
         f.seek(0)

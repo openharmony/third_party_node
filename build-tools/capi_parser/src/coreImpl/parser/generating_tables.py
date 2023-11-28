@@ -18,7 +18,6 @@
 import json
 import os
 import openpyxl
-import pandas as pd  # 用于生成表格
 
 
 def compare_json_file(js_file1, js_file2):  # 获取对比结果
@@ -125,13 +124,15 @@ def generate_excel(array, name, only_file1, only_file2):
     write_dict_to_worksheet(work_sheet2, only_file1, header=columns_map)
 
     work_sheet3 = workbook.create_sheet('原有json独有')
-    write_dict_to_worksheet(work_sheet3, only_file2, header=columns_map)
+    write_dict_to_worksheet(work_sheet3, only_file2)
     workbook.save(name)
 
 
 def write_dict_to_worksheet(work_sheet, result_data, header=None):
     if header is None:
-        header = {}
+        header = {
+            'name': '名称'
+        }
     row_num = 1
     for col_num, col_value in enumerate(header.values()):
         work_sheet.cell(row_num, col_num + 1, col_value)
@@ -139,26 +140,32 @@ def write_dict_to_worksheet(work_sheet, result_data, header=None):
     row_num = 2
     for data in result_data:
         for col_num, col_value in enumerate(data.values()):
-            if isinstance(col_value, dict):
-                param_data = []
-                for dict_value in col_value.values():
-                    if isinstance(dict_value, int):
-                        dict_value = str(dict_value)
-                    param_data.append(dict_value)
-                param_str = ','.join(param_data)
-                work_sheet.cell(row_num, col_num + 1, param_str)
-            elif isinstance(col_value, list):
-                list_data = ','.join(col_value)
-                work_sheet.cell(row_num, col_num + 1, list_data)
-            else:
-                work_sheet.cell(row_num, col_num + 1, col_value)
+            processing_worksheet_data(work_sheet, col_value, row_num, col_num)
         row_num += 1
 
 
-def del_repetition_value(data, result_list, compare_list):
-    for item in data:
-        if item not in result_list and item not in compare_list:
-            result_list.append(item)
+def processing_worksheet_data(work_sheet, col_value, row_num, col_num):
+    if isinstance(col_value, dict):
+        param_data = []
+        for dict_value in col_value.values():
+            if isinstance(dict_value, int):
+                dict_value = str(dict_value)
+            param_data.append(dict_value)
+        param_str = ','.join(param_data)
+        work_sheet.cell(row_num, col_num + 1, param_str)
+    elif isinstance(col_value, list):
+        list_data = ','.join(col_value)
+        work_sheet.cell(row_num, col_num + 1, list_data)
+    else:
+        work_sheet.cell(row_num, col_num + 1, col_value)
+
+
+def del_repetition_value(only_file_list, compare_list):
+    data = []
+    for item in only_file_list:
+        if item not in compare_list:
+            data.append(item)
+    return data
 
 
 def get_json_file(json_file_new, json_file):  # 获取生成的json文件
@@ -173,7 +180,7 @@ def get_json_file(json_file_new, json_file):  # 获取生成的json文件
         # 对比两个json文件
         result_list_part, only_file1_part, only_file2_part = compare_json_file(json_file1, item)
         result_list.extend(result_list_part)
-        del_repetition_value(only_file1_part, only_file1, result_list)
+        only_file1.extend(only_file1_part)
         only_file2.extend(only_file2_part)
-
-    return result_list, head_name, only_file1, only_file2  # 返回对比数据，和所需表格名
+    only_file1_new = del_repetition_value(only_file1, result_list)
+    return result_list, head_name, only_file1_new, only_file2  # 返回对比数据，和所需表格名
