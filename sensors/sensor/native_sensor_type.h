@@ -195,13 +195,31 @@ typedef enum Sensor_SensorAccuracy {
     SENSOR_ACCURACY_HIGH = 3
 } Sensor_SensorAccuracy;
 
-struct Sensor_Sensor;
 /**
  * @brief 传感器信息。
  * @syscap SystemCapability.Sensors.Sensor
  * @since 11
  */
 typedef struct Sensor_Sensor Sensor_Sensor;
+
+/**
+ * @brief 创建给定个数{@link Sensor_Sensor}实例的数组。
+ *
+ * @param count - 表示要创建{@link Sensor_Sensor}实例的个数.
+ * @return 如果创建成功，则返回{@link Sensor_Sensor}实例的数组，否则返回 NULL。。
+ * @since 11
+ */
+Sensor_Sensor **OH_Sensor_CreateSensors(uint32_t count);
+
+/**
+ * @brief 销毁{@link Sensor_Sensor}实例的数组并回收内存。
+ *
+ * @param sensors - 表示要销毁的{@link Sensor_Sensor}实例的数组.
+ * @param count - 表示要销毁的{@link Sensor_Sensor}实例的个数.
+ * @return 成功返回SENSOR_SUCCESS，否则返回对应的错误码，详情请参见{@Link Sensor_Result}。
+ * @since 11
+ */
+int32_t OH_Sensor_DestroySensors(Sensor_Sensor **sensors, uint32_t count);
 
 /**
  * @brief 获取传感器名称.
@@ -265,7 +283,6 @@ int32_t OH_Sensor_GetSensorMinSamplePeriod(Sensor_Sensor* sensor, int64_t *minSa
  */
 int32_t OH_Sensor_GetSensorMaxSamplePeriod(Sensor_Sensor* sensor, int64_t *maxSamplePeriod);
 
-struct Sensor_SensorEvent;
 /**
  * @brief 传感器数据信息。
  * @syscap SystemCapability.Sensors.Sensor
