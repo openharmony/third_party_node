@@ -549,6 +549,33 @@ typedef struct OH_AudioCapturer_Callbacks_Struct {
             void* userData,
             OH_AudioStream_Result error);
 } OH_AudioCapturer_Callbacks;
+
+/**
+ * @brief Defines reason for device changes of one audio stream.
+ *
+ * @since 11
+ */
+typedef enum {
+    /*Unknown.*/
+    REASON_UNKNOWN = 0,
+    /*New Device become available.*/
+    REASON_NEW_DEVICE_BECOME_AVAILABLE = 1,
+    /*Old Device become unavailable. Applications should consider to pause the audio playback when this reason is 
+    reported.*/
+    REASON_OLD_DEVICE_BECOME_UNAVAILABLE = 2,
+    /*Device is overrode by user or system.*/
+    REASON_OVERRODE = 3,
+} OH_AudioStreamDeviceChangeReason;
+
+/**
+ * @brief Callback when the output device of an audio renderer changed.
+ *
+ * @param renderer AudioRenderer where this event occurs.
+ * @param userData User data which is passed by user.
+ * @param reason Indicates that why does the output device changes.
+ */
+typedef void (*OH_AudioRenderer_OutputDeviceChangeCallback)(OH_AudioRenderer* renderer, void* userData,
+    OH_AudioStreamDeviceChangeReason reason);
 #ifdef __cplusplus
 }
 #endif
