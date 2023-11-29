@@ -13,6 +13,25 @@
  * limitations under the License.
  */
 
+/**
+ * @addtogroup Drm
+ * @{
+ *
+ * @brief Provides APIs of Drm.
+ * @kit Drm.
+ * @since 11
+ * @version 1.0
+ */
+
+/**
+ * @file native_drm_err.h
+ * @brief Defines the Drm errors.
+ * @library libnative_drm.z.so
+ * @syscap SystemCapability.Multimedia.Drm.Core
+ * @since 11
+ * @version 1.0
+ */
+
 #ifndef NATIVE_DRM_ERR_H
 #define NATIVE_DRM_ERR_H
 
@@ -29,7 +48,7 @@ extern "C" {
  * @since 11
  * @version 1.0
  */
-typedef enum OH_DrmErrCode {
+typedef enum Drm_ErrCode {
     /**
      * the operation completed successfully.
      */
@@ -41,7 +60,7 @@ typedef enum OH_DrmErrCode {
     /**
      * opertation not be permitted.
      */
-    DRM_ERR_OPERATE_NOT_PERMIT,
+    DRM_ERR_OPERATION_NOT_PERMITTED,
     /**
      * invalid argument.
      */
@@ -69,7 +88,7 @@ typedef enum OH_DrmErrCode {
     /**
      * unsupport interface.
      */
-    DRM_ERR_UNSUPPORT,
+    DRM_ERR_UNSUPPORTED,
     /**
      * Meet max MediaKeySystem num limit.
      */
@@ -82,7 +101,7 @@ typedef enum OH_DrmErrCode {
      * extend err start.
      */
     DRM_ERR_EXTEND_START = 100,
-} OH_DrmErrCode;
+} Drm_ErrCode;
 
 #ifdef __cplusplus
 }

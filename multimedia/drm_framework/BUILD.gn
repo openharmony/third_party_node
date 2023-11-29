@@ -23,7 +23,7 @@ ohos_ndk_headers("native_drm_header") {
 
 ohos_ndk_library("libnative_drm") {
   ndk_description_file = "./libnativedrm.ndk.json"
-  min_compact_version = "1"
+  min_compact_version = "11"
   output_name = "native_drm"
   output_extension = "so"
 

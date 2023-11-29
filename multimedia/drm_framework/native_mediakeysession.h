@@ -18,178 +18,193 @@
  * @{
  *
  * @brief Provides APIs of Drm.
- *
- * @Syscap SystemCapability.Multimedia.Drm.Core
+ * @kit Drm.
  * @since 11
  * @version 1.0
  */
 
 /**
  * @file native_mediakeysession.h
- *
- * @brief Defines the Drm MediaKeySession APIs.
- *
- * @library libdrm_framework.z.so
+ * @brief Defines the Drm MediaKeySession APIs. Provide following function:
+ * generate media key request, process media key response, event listening,
+ * get content protection level, check media key status, remove media key etc..
+ * @library libnative_drm.z.so
+ * @syscap SystemCapability.Multimedia.Drm.Core
  * @since 11
  * @version 1.0
  */
 
-#ifndef OHOS_DRM_NATIVE_MEDIA_KEY_SYSTEM_H
-#define OHOS_DRM_NATIVE_MEDIA_KEY_SYSTEM_H
+#ifndef OHOS_DRM_NATIVE_MEDIA_KEY_SESSION_H
+#define OHOS_DRM_NATIVE_MEDIA_KEY_SESSION_H
 
 #include <stdint.h>
 #include <stdio.h>
-#include "native_drm_common.h"
-#include "native_drm_base.h"
 #include "native_drm_err.h"
+#include "native_drm_common.h"
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-typedef  OH_DrmErrCode (*OH_MediaKeySessionEventCallback)(OH_DRM_CharBufferPair *eventInfo);
-typedef  OH_DrmErrCode (*OH_MediaKeySessionKeyChangeCallback)(OH_DRM_CharBufferPair *OH_DRM_KeysInfo);
 /**
- * @brief OH_MediaKeySessionCallback struct, used to listen event like key expired and
- * key change etc..
- *
+ * @brief Call back will be invoked when event triggers.
+ * @param eventType Event type.
+ * @param eventInfo Event info gotten from media key system.
+ * @return Drm_ErrCode.
  * @since 11
  * @version 1.0
  */
-typedef struct OH_MediaKeySessionCallback {
+typedef  Drm_ErrCode (*MediaKeySession_EventCallback)(DRM_ListenerType eventType, DRM_Uint8CharBufferPair *eventInfo);
+
+/**
+ * @brief Call back will be invoked when key changes.
+ * @param keysInfo Key info gotten from media key system.
+ * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
+ * @since 11
+ * @version 1.0
+ */
+typedef  Drm_ErrCode (*MediaKeySession_KeyChangeCallback)(DRM_KeysInfo *keysInfo, bool newKeysAvailable);
+
+/**
+ * @brief MediaKeySession_Callback struct, used to listen event like key expired and key change etc..
+ * @since 11
+ * @version 1.0
+ */
+typedef struct MediaKeySession_Callback {
     /**
      * Normal event callback like key expired etc..
      */
-    OH_MediaKeySessionEventCallback eventCallback;
+    MediaKeySession_EventCallback eventCallback;
     /**
      * Key change callback for keys change event.
      */
-    OH_MediaKeySessionKeyChangeCallback keyChangeCallback;
-} OH_MediaKeySessionCallback;
+    MediaKeySession_KeyChangeCallback keyChangeCallback;
+} MediaKeySession_Callback;
 
 /**
  * @brief Generate media key request.
  * @param mediaKeySession Media key session instance.
- * if the function return DRM_ERR_OK.
  * @param info Media key request info.
  * @param mediaKeyRequest Media key request.
- * @return OH_DrmErrCode.
+ * @return Drm_ErrCode.
  * @since 11
  * @version 1.0
  */
-OH_DrmErrCode OH_MediaKeySession_GenerateMediaKeyRequest(OH_MediaKeySession *mediaKeySession,
-    OH_DRM_MediaKeyRequestInfo *info, unsigned char **mediaKeyRequest, int32_t *mediaKeyRequestLen);
+Drm_ErrCode OH_MediaKeySession_GenerateMediaKeyRequest(MediaKeySession *mediaKeySession,
+    DRM_MediaKeyRequestInfo *info, DRM_MediaKeyRequest **mediaKeyRequest);
 
 /**
  * @brief Process media key response.
  * @param mediaKeySession Media key session instance.
  * @param response Media Key resposne.
  * @param mediaKeyId Media key identifier.
- * @return OH_DrmErrCode.
+ * @param mediaKeyIdLen Media key identifier len.
+ * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
  */
-OH_DrmErrCode OH_MediaKeySession_ProcessMediaKeyResponse(OH_MediaKeySession *keySession,
-    OH_DRM_Uint8Buffer *response, unsigned char **mediaKeyId, int32_t *mediaKeyIdLen);
+Drm_ErrCode OH_MediaKeySession_ProcessMediaKeyResponse(MediaKeySession *keySession,
+    DRM_Uint8Buffer *response, unsigned char **mediaKeyId, int32_t *mediaKeyIdLen);
 
 /**
  * @brief Check media key status.
  * @param mediaKeySession Media key session instance.
  * @param mediaKeyDescription Media key status description.
- * @return OH_DrmErrCode.
+ * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
  */
-OH_DrmErrCode OH_MediaKeySession_CheckMediaKeyStatus(OH_MediaKeySession *mediaKeySessoin,
-    OH_DRM_MediaKeyDescription **mediaKeyDescription);
+Drm_ErrCode OH_MediaKeySession_CheckMediaKeyStatus(MediaKeySession *mediaKeySessoin,
+    DRM_MediaKeyDescription **mediaKeyDescription);
 
 /**
  * @brief Clear media keys of the current session .
  * @param mediaKeySession Media key session instance.
- * @return OH_DrmErrCode.
+ * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
  */
-OH_DrmErrCode OH_MediaKeySession_ClearMediaKeys(OH_MediaKeySession *mediaKeySessoin);
+Drm_ErrCode OH_MediaKeySession_ClearMediaKeys(MediaKeySession *mediaKeySessoin);
 
 /**
  * @brief Generate offline media key release request.
  * @param mediaKeySession Media key session instance.
  * @param mediaKeyId Media key identifier.
  * @param releaseRequest Media Key release request.
- * @return OH_DrmErrCode.
+ * @param releaseRequestLen Media Key release request len.
+ * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
  */
-OH_DrmErrCode OH_MediaKeySession_GenerateOfflineReleaseRequest(OH_MediaKeySession *mediaKeySessoin,
-    OH_DRM_Uint8Buffer *mediaKeyId, unsigned char **releaseRequest, int32_t *releaseRequestLen);
+Drm_ErrCode OH_MediaKeySession_GenerateOfflineReleaseRequest(MediaKeySession *mediaKeySessoin,
+    DRM_Uint8Buffer *mediaKeyId, unsigned char **releaseRequest, int32_t *releaseRequestLen);
 
 /**
  * @brief Process offline media key release response.
  * @param mediaKeySession Media key session instance.
  * @param mediaKeyId Media key identifier.
  * @param releaseReponse Media Key resposne.
- * @return OH_DrmErrCode.
+ * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
  */
-OH_DrmErrCode OH_MediaKeySession_ProcessOfflineReleaseResponse(OH_MediaKeySession *mediaKeySessoin,
-    OH_DRM_Uint8Buffer *mediaKeyId, OH_DRM_Uint8Buffer *releaseReponse);
+Drm_ErrCode OH_MediaKeySession_ProcessOfflineReleaseResponse(MediaKeySession *mediaKeySessoin,
+    DRM_Uint8Buffer *mediaKeyId, DRM_Uint8Buffer *releaseReponse);
 
 /**
  * @brief Restore offline media keys by ID.
  * @param mediaKeySession Media key session instance.
  * @param mediaKeyId Media key identifier.
- * @return OH_DrmErrCode.
+ * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
  */
-OH_DrmErrCode OH_MediaKeySession_RestoreOfflineMediaKeys(OH_MediaKeySession *mediaKeySessoin,
-    OH_DRM_Uint8Buffer *mediaKeyId);
+Drm_ErrCode OH_MediaKeySession_RestoreOfflineMediaKeys(MediaKeySession *mediaKeySessoin,
+    DRM_Uint8Buffer *mediaKeyId);
 
 /**
  * @brief Get content protection level of the session.
  * @param mediaKeySession Media key session instance.
  * @param contentProtectionLevel Content protection level.
- * @return OH_DrmErrCode.
+ * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
  */
-OH_DrmErrCode OH_MediaKeySession_GetContentProtectionLevel(OH_MediaKeySession *mediaKeySessoin,
-    OH_DRM_ContentProtectionLevel *contentProtectionLevel);
+Drm_ErrCode OH_MediaKeySession_GetContentProtectionLevel(MediaKeySession *mediaKeySessoin,
+    DRM_ContentProtectionLevel *contentProtectionLevel);
 
 /**
  * @brief Whether the encrypted content require a secure decoder or not.
  * @param mediaKeySession Media key session instance.
  * @param mimeType The media type.
  * @param status Whether secure decoder is required.
- * @return OH_DrmErrCode.
+ * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
  */
-OH_DrmErrCode OH_MediaKeySession_RequireSecureDecoderModule(OH_MediaKeySession *mediaKeySessoin,
+Drm_ErrCode OH_MediaKeySession_RequireSecureDecoderModule(MediaKeySession *mediaKeySessoin,
     const char *mimeType, bool *status);
 
 /**
  * @brief Set media key session event callback.
  * @param mediaKeySession Media key session instance.
  * @param callback Callback to be set to the media key session.
- * @return OH_DrmErrCode.
+ * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
  */
-OH_DrmErrCode OH_MediaKeySession_SetMediaKeySessionCallback(OH_MediaKeySession *mediaKeySessoin,
-    OH_MediaKeySessionCallback *callback);
+Drm_ErrCode OH_MediaKeySession_SetMediaKeySessionCallback(MediaKeySession *mediaKeySessoin,
+    MediaKeySession_Callback *callback);
 
 /**
  * @brief Release the resource before the session gonna be unused.
  * @param mediaKeySession Media key session instance.
- * @return OH_DrmErrCode.
+ * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
  */
-OH_DrmErrCode OH_MediaKeySession_Destroy(OH_MediaKeySession *mediaKeySessoin);
+Drm_ErrCode OH_MediaKeySession_Destroy(MediaKeySession *mediaKeySessoin);
 
 #ifdef __cplusplus
 }
