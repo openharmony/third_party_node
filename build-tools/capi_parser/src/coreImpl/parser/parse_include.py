@@ -355,7 +355,8 @@ def get_start_comments(include_path):  # 获取每个头文件的最开始注释
         if matches_high:
             file_comment.extend(matches_high)
         f.close()
-    return file_comment
+    str_file_comment = '\n'.join(file_comment)
+    return str_file_comment
 
 
 def open_file(include_path):
