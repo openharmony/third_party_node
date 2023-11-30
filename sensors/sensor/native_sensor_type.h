@@ -359,17 +359,17 @@ Sensor_SensorSubscriptionId *OH_Sensor_CreateSubscriptionId(void);
 /**
  * @brief Destroys a {@link Sensor_SensorSubscriptionId} instance and reclaims memory.
  *
- * @param subscribeId - Pointer to the {@link Sensor_SensorSubscriptionId} instance.
+ * @param id - Pointer to the {@link Sensor_SensorSubscriptionId} instance.
  * @return Returns <b>SENSOR_SUCCESS</b> if the operation is successful;
  * returns an error code defined in {@link Sensor_Result} otherwise.
  * @since 11
  */
-int32_t OH_Sensor_DestroySubscriptionId(Sensor_SensorSubscriptionId *subscribeId);
+int32_t OH_Sensor_DestroySubscriptionId(Sensor_SensorSubscriptionId *id);
 
 /**
  * @brief Obtains the sensor type.
  *
- * @param subscribeId - Pointer to the sensor subscription ID.
+ * @param id - Pointer to the sensor subscription ID.
  * @param id - Pointer to the sensor type.
  * @return Returns <b>SENSOR_SUCCESS</b> if the operation is successful;
  * returns an error code defined in {@link Sensor_Result} otherwise.
