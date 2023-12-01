@@ -52,4 +52,4 @@ typedef struct OH_AVCodecBufferAttr {
     uint32_t flags;
 } OH_AVCodecBufferAttr;
 
-#enfif // NATIVE_AVBUFFER_COMMON_H
+#endif // NATIVE_AVBUFFER_COMMON_H
