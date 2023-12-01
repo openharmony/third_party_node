@@ -22,7 +22,7 @@
  * @since 11
  */
 /**
- * @file native_sensor.h
+ * @file oh_sensor.h
  *
  * @brief Declares the APIs for operating sensors, including obtaining sensor information and subscribing to or
  * unsubscribing from sensor data.
@@ -31,10 +31,10 @@
  * @since 11
  */
 
-#ifndef OH_NATIVE_SENSOR_H
-#define OH_NATIVE_SENSOR_H
+#ifndef OH_SENSOR_H
+#define OH_SENSOR_H
 
-#include "native_sensor_type.h"
+#include "oh_sensor_type.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -96,4 +96,4 @@ Sensor_Result OH_Sensor_Unsubscribe(const Sensor_SubscriptionId *id, const Senso
 #ifdef __cplusplus
 }
 #endif
-#endif // OH_NATIVE_SENSOR_H
+#endif // OH_SENSOR_H

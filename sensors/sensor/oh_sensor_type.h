@@ -23,7 +23,7 @@
  */
 
 /**
- * @file native_sensor_type.h
+ * @file oh_sensor_type.h
  *
  * @brief Declares the common sensor attributes.
  * @library libohsensor.so
@@ -31,8 +31,8 @@
  * @since 11
  */
 
-#ifndef OH_NATIVE_SENSOR_TYPE_H
-#define OH_NATIVE_SENSOR_TYPE_H
+#ifndef OH_SENSOR_TYPE_H
+#define OH_SENSOR_TYPE_H
 
 #include <stdint.h>
 
@@ -493,4 +493,4 @@ int32_t OH_Sensor_Subscriber_GetCallback(Sensor_Subscriber* subscriber, Sensor_E
 #ifdef __cplusplus
 }
 #endif
-#endif // OH_NATIVE_SENSOR_TYPE_H
+#endif // OH_SENSOR_TYPE_H
