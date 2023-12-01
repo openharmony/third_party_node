@@ -17,14 +17,13 @@ import("//build/ohos/ndk/ndk.gni")
 ohos_ndk_headers("sensor_ndk_header") {
   dest_dir = "$ndk_headers_out_dir/sensors/sensor"
   sources = [
-    "./native_sensor.h",
-    "./native_sensor_type.h",
+    "./oh_sensor.h",
+    "./oh_sensor_type.h",
   ]
 }
 
 ohos_ndk_library("libsensor_ndk") {
   ndk_description_file = "./libsensor.ndk.json"
-  output_name = "sensor_native"
-  output_extension = "z.so"
+  output_name = "ohsensor"
   min_compact_version = "11"
 }
