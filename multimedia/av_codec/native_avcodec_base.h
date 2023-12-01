@@ -21,7 +21,7 @@
 #include "native_averrors.h"
 #include "native_avformat.h"
 #include "native_avmemory.h"
-#include "native_avbuffer.h"
+#include "native_avbuffer_info.h"
 
 #ifdef __cplusplus
 extern "C" {
