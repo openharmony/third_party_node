@@ -173,9 +173,16 @@ extern const char *OH_AVCODEC_MIMETYPE_VIDEO_HEVC;
 /**
  * @brief Enumerates the types of audio and video muxer
  * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @deprecated since 11
  * @since 10
  */
 extern const char *OH_AVCODEC_MIMETYPE_VIDEO_MPEG4;
+
+/**
+ * @brief Enumerates the types of audio and video muxer
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 10
+ */
 extern const char *OH_AVCODEC_MIMETYPE_IMAGE_JPG;
 extern const char *OH_AVCODEC_MIMETYPE_IMAGE_PNG;
 extern const char *OH_AVCODEC_MIMETYPE_IMAGE_BMP;
