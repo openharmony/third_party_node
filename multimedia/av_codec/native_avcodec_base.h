@@ -185,7 +185,7 @@ extern const char *OH_AVCODEC_MIMETYPE_IMAGE_BMP;
  * @syscap SystemCapability.Multimedia.Media.CodecBase
  * @since 11
  */
-extern const char *OH_AVCODEC_MIMETYPE_AUDIO_AVS3DA;
+extern const char *OH_AVCODEC_MIMETYPE_AUDIO_VIVID;
 extern const char *OH_AVCODEC_MIMETYPE_AUDIO_AMR_NB;
 extern const char *OH_AVCODEC_MIMETYPE_AUDIO_AMR_WB;
 extern const char *OH_AVCODEC_MIMETYPE_AUDIO_OPUS;
@@ -311,18 +311,6 @@ extern const char *OH_MD_MAX_OUTPUT_BUFFER_COUNT;
  * @syscap SystemCapability.Multimedia.Media.CodecBase
  * @since 11
  */
-/* Key for type of file, value type is int32_t, see @OH_FileType */
-extern const char *OH_MD_KEY_FILE_TYPE;
-/* Key for whether the file contains video tracks, value type is boolean */
-extern const char *OH_MD_KEY_HAS_VIDEO;
-/* Key for whether the file contains audio tracks, value type is boolean */
-extern const char *OH_MD_KEY_HAS_AUDIO;
-/* Key for author of file, value type is string */
-extern const char *OH_MD_KEY_AUTHOR;
-/* Key for composer of file, value type is string */
-extern const char *OH_MD_KEY_COMPOSER;
-/* Key for cover of file, value type is uint8_t pointer */
-extern const char *OH_MD_KEY_COVER;
 /* Key for codec compression level, value type is uint32_t */
 extern const char *OH_MD_KEY_COMPRESSION_LEVEL;
 /* Key for encode level, value type is int32_t. see @OH_HEVCLevel. */
@@ -337,25 +325,6 @@ extern const char *OH_MD_KEY_VIDEO_CUVV_CONFIG_BOX;
 extern const char *OH_MD_KEY_AUDIO_OBJECT_NUMBER;
 /* Key for meta data of audio vivid. value type is a uint8_t pointer */
 extern const char *OH_MD_KEY_AUDIO_VIVID_METADATA;
-
-/**
- * @brief File type.
- * @syscap SystemCapability.Multimedia.Media.CodecBase
- * @since 11
- */
-typedef enum OH_FileType {
-    FILE_TYPE_UNKNOW = 0,
-    FILE_TYPE_MP4    = 101,
-    FILE_TYPE_MPEGTS = 102,
-    FILE_TYPE_MKV    = 103,
-    FILE_TYPE_AMR    = 201,
-    FILE_TYPE_AAC    = 202,
-    FILE_TYPE_MP3    = 203,
-    FILE_TYPE_FLAC   = 204,
-    FILE_TYPE_OGG    = 205,
-    FILE_TYPE_M4A    = 206,
-    FILE_TYPE_WAV    = 207,
-} OH_FileType;
 
 /**
  * @brief Media type.
@@ -393,31 +362,6 @@ typedef enum OH_AVCProfile {
 } OH_AVCProfile;
 
 /**
- * @brief Enumerates the muxer output file format
- * @syscap SystemCapability.Multimedia.Media.CodecBase
- * @since 10
- */
-typedef enum OH_AVOutputFormat {
-    AV_OUTPUT_FORMAT_DEFAULT = 0,
-    AV_OUTPUT_FORMAT_MPEG_4 = 2,
-    AV_OUTPUT_FORMAT_M4A = 6,
-} OH_AVOutputFormat;
-
-/**
- * @brief Seek Mode
- * @syscap SystemCapability.Multimedia.Media.CodecBase
- * @since 10
- */
-typedef enum OH_AVSeekMode {
-    /* seek to sync sample after the time */
-    SEEK_MODE_NEXT_SYNC = 0,
-    /* seek to sync sample before the time */
-    SEEK_MODE_PREVIOUS_SYNC,
-    /* seek to sync sample closest to time */
-    SEEK_MODE_CLOSEST_SYNC,
-} OH_AVSeekMode;
-
-/**
  * @brief HEVC Profile
  * @syscap SystemCapability.Multimedia.Media.CodecBase
  * @since 10
@@ -450,6 +394,60 @@ typedef enum OH_HEVCLevel {
     HEVC_LEVEL_61 = 11,
     HEVC_LEVEL_62 = 12,
 };
+
+/**
+ * @brief Enumerates the muxer output file format
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 10
+ */
+typedef enum OH_AVOutputFormat {
+    AV_OUTPUT_FORMAT_DEFAULT = 0,
+    AV_OUTPUT_FORMAT_MPEG_4 = 2,
+    AV_OUTPUT_FORMAT_M4A = 6,
+} OH_AVOutputFormat;
+
+/**
+ * @brief Seek Mode
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 10
+ */
+typedef enum OH_AVSeekMode {
+    /* seek to sync sample after the time */
+    SEEK_MODE_NEXT_SYNC = 0,
+    /* seek to sync sample before the time */
+    SEEK_MODE_PREVIOUS_SYNC,
+    /* seek to sync sample closest to time */
+    SEEK_MODE_CLOSEST_SYNC,
+} OH_AVSeekMode;
+
+/**
+ * @brief Scaling Mode
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 10
+ */
+typedef enum OH_ScalingMode {
+    SCALING_MODE_SCALE_TO_WINDOW = 1,
+    SCALING_MODE_SCALE_CROP = 2,
+} OH_ScalingMode;
+
+/**
+ * @brief enum Audio Bits Per Coded Sample
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 10
+ */
+typedef enum OH_BitsPerSample {
+    SAMPLE_U8 = 0,
+    SAMPLE_S16LE = 1,
+    SAMPLE_S24LE = 2,
+    SAMPLE_S32LE = 3,
+    SAMPLE_F32LE = 4,
+    SAMPLE_U8P = 5,
+    SAMPLE_S16P = 6,
+    SAMPLE_S24P = 7,
+    SAMPLE_S32P = 8,
+    SAMPLE_F32P = 9,
+    INVALID_WIDTH = -1
+} OH_BitsPerSample;
 
 /**
  * @brief Color Primary
@@ -543,35 +541,6 @@ typedef struct OH_CUVVConfigBox {
     uint16_t terminal_provide_oriented_code;
 } OH_CUVVConfigBox;
 
-
-/**
- * @brief Scaling Mode
- * @syscap SystemCapability.Multimedia.Media.CodecBase
- * @since 10
- */
-typedef enum OH_ScalingMode {
-    SCALING_MODE_SCALE_TO_WINDOW = 1,
-    SCALING_MODE_SCALE_CROP = 2,
-} OH_ScalingMode;
-
-/**
- * @brief enum Audio Bits Per Coded Sample
- * @syscap SystemCapability.Multimedia.Media.CodecBase
- * @since 10
- */
-typedef enum OH_BitsPerSample {
-    SAMPLE_U8 = 0,
-    SAMPLE_S16LE = 1,
-    SAMPLE_S24LE = 2,
-    SAMPLE_S32LE = 3,
-    SAMPLE_F32LE = 4,
-    SAMPLE_U8P = 5,
-    SAMPLE_S16P = 6,
-    SAMPLE_S24P = 7,
-    SAMPLE_S32P = 8,
-    SAMPLE_F32P = 9,
-    INVALID_WIDTH = -1
-} OH_BitsPerSample;
 #ifdef __cplusplus
 }
 #endif

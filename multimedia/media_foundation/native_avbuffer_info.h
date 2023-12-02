@@ -19,6 +19,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 /**
  * @brief Enumerate the categories of OH_AVCodec's Buffer tags
  * @syscap SystemCapability.Multimedia.Media.Core
@@ -51,5 +54,9 @@ typedef struct OH_AVCodecBufferAttr {
     /* The flags this Buffer has, which is also a combination of multiple {@link OH_AVCodecBufferFlags}. */
     uint32_t flags;
 } OH_AVCodecBufferAttr;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // NATIVE_AVBUFFER_COMMON_H
