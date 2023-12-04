@@ -318,16 +318,12 @@ extern const char *OH_MD_MAX_OUTPUT_BUFFER_COUNT;
  * @syscap SystemCapability.Multimedia.Media.CodecBase
  * @since 11
  */
-/* Key for codec compression level, value type is uint32_t */
-extern const char *OH_MD_KEY_COMPRESSION_LEVEL;
-/* Key for encode level, value type is int32_t. see @OH_HEVCLevel. */
-extern const char *OH_MD_KEY_LEVEL;
+/* Key for audio codec compression level, value type is uint32_t */
+extern const char *OH_MD_KEY_AUDIO_COMPRESSION_LEVEL;
 /* Key for chroma location, value type is int32_t. see @OH_ChromaLocation. */
 extern const char *OH_MD_KEY_VIDEO_CHROMA_LOCATION;
 /* Key of the video is hdr vivid. value type is bool */
 extern const char *OH_MD_KEY_VIDEO_IS_HDR_VIVID;
-/* Key for HDRVivid video CUVV Configuration Box, value type is uint8_t pointer, see @OH_CUVVConfigBox. */
-extern const char *OH_MD_KEY_VIDEO_CUVV_CONFIG_BOX;
 /* Key for number of audio objects. value type is int32_t */
 extern const char *OH_MD_KEY_AUDIO_OBJECT_NUMBER;
 /* Key for meta data of audio vivid. value type is a uint8_t pointer */
@@ -380,27 +376,6 @@ typedef enum OH_HEVCProfile {
     HEVC_PROFILE_MAIN_10_HDR10 = 3,
     HEVC_PROFILE_MAIN_10_HDR10_PLUS = 4,
 } OH_HEVCProfile;
-
-/**
- * @brief HEVC Level
- * @syscap SystemCapability.Multimedia.Media.CodecBase
- * @since 11
- */
-typedef enum OH_HEVCLevel {
-    HEVC_LEVEL_1 = 0,
-    HEVC_LEVEL_2 = 1,
-    HEVC_LEVEL_21 = 2,
-    HEVC_LEVEL_3 = 3,
-    HEVC_LEVEL_31 = 4,
-    HEVC_LEVEL_4 = 5,
-    HEVC_LEVEL_41 = 6,
-    HEVC_LEVEL_5 = 7,
-    HEVC_LEVEL_51 = 8,
-    HEVC_LEVEL_52 = 9,
-    HEVC_LEVEL_6 = 10,
-    HEVC_LEVEL_61 = 11,
-    HEVC_LEVEL_62 = 12,
-};
 
 /**
  * @brief Enumerates the muxer output file format
@@ -536,17 +511,6 @@ typedef enum OH_ChromaLocation {
     CHROMA_LOC_BOTTOMLEFT = 5,
     CHROMA_LOC_BOTTOM = 6,
 };
-
-/**
- * @brief Cuvv Configuration Box
- * @syscap SystemCapability.Multimedia.Media.CodecBase
- * @since 11
- */
-typedef struct OH_CUVVConfigBox {
-    uint16_t cuva_version_map;
-    uint16_t terminal_provide_code;
-    uint16_t terminal_provide_oriented_code;
-} OH_CUVVConfigBox;
 
 #ifdef __cplusplus
 }
