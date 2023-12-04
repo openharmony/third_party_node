@@ -39,6 +39,10 @@
         "first_introduced": "10",
         "name": "OH_AudioStreamBuilder_SetRendererCallback"
     },
+    { 
+        "first_introduced": "11",
+        "name": "OH_AudioStreamBuilder_SetRendererOutputDeviceChangeCallback"
+    },
     {
         "first_introduced": "10",
         "name": "OH_AudioStreamBuilder_SetCapturerCallback"
