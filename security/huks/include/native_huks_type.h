@@ -399,7 +399,8 @@ enum  OH_Huks_ErrCode {
     /** The authentication credential does not exist. */
     OH_HUKS_ERR_CODE_CREDENTIAL_NOT_EXIST = 12000013,
 
-    /** Device password is required but not set. 
+    /** 
+     * Device password is required but not set. 
      * 
      * @since 11
      */
