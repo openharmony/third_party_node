@@ -320,8 +320,6 @@ extern const char *OH_MD_MAX_OUTPUT_BUFFER_COUNT;
  */
 /* Key for audio codec compression level, value type is uint32_t */
 extern const char *OH_MD_KEY_AUDIO_COMPRESSION_LEVEL;
-/* Key for chroma location, value type is int32_t. see @OH_ChromaLocation. */
-extern const char *OH_MD_KEY_VIDEO_CHROMA_LOCATION;
 /* Key of the video is hdr vivid. value type is bool */
 extern const char *OH_MD_KEY_VIDEO_IS_HDR_VIVID;
 /* Key for number of audio objects. value type is int32_t */
@@ -496,21 +494,6 @@ typedef enum OH_MatrixCoefficient {
     MATRIX_COEFFICIENT_CHROMATICITY_CL = 13,
     MATRIX_COEFFICIENT_ICTCP = 14,
 } OH_MatrixCoefficient;
-
-/**
- * @brief Chroma Location
- * @syscap SystemCapability.Multimedia.Media.CodecBase
- * @since 11
- */
-typedef enum OH_ChromaLocation {
-    CHROMA_LOC_UNSPECIFIED = 0,
-    CHROMA_LOC_LEFT = 1,    ///< MPEG-2/4 4:2:0, H.264 default for 4:2:0
-    CHROMA_LOC_CENTER = 2,  ///< MPEG-1 4:2:0, JPEG 4:2:0, H.263 4:2:0
-    CHROMA_LOC_TOPLEFT = 3, ///< ITU-R 601, SMPTE 274M 296M S314M(DV 4:1:1), mpeg2 4:2:2
-    CHROMA_LOC_TOP = 4,
-    CHROMA_LOC_BOTTOMLEFT = 5,
-    CHROMA_LOC_BOTTOM = 6,
-};
 
 #ifdef __cplusplus
 }

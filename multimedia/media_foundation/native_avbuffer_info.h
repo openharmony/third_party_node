@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef NATIVE_AVBUFFER_COMMON_H
-#define NATIVE_AVBUFFER_COMMON_H
+#ifndef NATIVE_AVBUFFER_INFO_H
+#define NATIVE_AVBUFFER_INFO_H
 
 #include <stdint.h>
 #include <stdio.h>
@@ -59,4 +59,4 @@ typedef struct OH_AVCodecBufferAttr {
 }
 #endif
 
-#endif // NATIVE_AVBUFFER_COMMON_H
+#endif // NATIVE_AVBUFFER_INFO_H
