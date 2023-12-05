@@ -29,6 +29,10 @@ class CalculateValue:
     pass_data = []
     fail_data = []
 
+    def __init__(self):
+        self.pass_data = []
+        self.fail_data = []
+
 
 class DiffProcessorPermission:
     # 转义规则
@@ -108,6 +112,12 @@ class CalculateRsesult:
     state_down = []
     state_up = []
     state_range = ''
+
+    def __init__(self):
+        self.variable_list = []
+        self.state_down = []
+        self.state_up = []
+        self.state_range = ''
 
 
 def compare_permission(old_str, new_str):
