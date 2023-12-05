@@ -48,7 +48,7 @@ extern "C" {
 /**
  * @brief Query whether there is a data network activated by default.
  *
- * @param hasDefaultNet Is there a default network
+ * @param hasDefaultNet Is there a default network.
  * @return 0 - Success. 201 - Missing permissions.
  *         401 - Parameter error. 2100002 - Unable to connect to service.
  *         2100003 - Internal error.
@@ -62,7 +62,7 @@ int32_t OH_NetConn_HasDefaultNet(int32_t *hasDefaultNet);
 /**
  * @brief Get the activated default data network.
  *
- * @param netHandle Store network ID
+ * @param netHandle Store network ID.
  * @return 0 - Success. 201 - Missing permissions.
  *         401 - Parameter error. 2100002 - Unable to connect to service.
  *         2100003 - Internal error.
@@ -76,7 +76,7 @@ int32_t OH_NetConn_GetDefaultNet(OH_NetConn_NetHandle *netHandle);
 /**
  * @brief Check whether the default data network is a metered network.
  *
- * @param isMetered 1:true, 0:false
+ * @param isMetered 1:true, 0:false.
  * @return 0 - Success. 201 - Missing permissions.
  *         401 - Parameter error. 2100002 - Unable to connect to service.
  *         2100003 - Internal error.
@@ -90,8 +90,8 @@ int32_t OH_NetConn_IsDefaultNetMetered(int32_t *isMetered);
 /**
  * @brief Query the link information of a data network.
  *
- * @param netHandle Store network ID
- * @param info Store link information
+ * @param netHandle Store network ID.
+ * @param info Store link information.
  * @return 0 - Success. 201 - Missing permissions.
  *         401 - Parameter error. 2100002 - Unable to connect to service.
  *         2100003 - Internal error.
@@ -105,8 +105,8 @@ int32_t OH_NetConn_GetConnectionProperties(OH_NetConn_NetHandle *netHandle, NetC
 /**
  * @brief Query the capability set of a network.
  *
- * @param netHandle Store network ID
- * @param netAllCapacities storage capability set
+ * @param netHandle Store network ID.
+ * @param netAllCapacities storage capability set.
  * @return 0 - Success. 201 - Missing permissions.
  *         401 - Parameter error. 2100002 - Unable to connect to service.
  *         2100003 - Internal error.
@@ -120,7 +120,7 @@ int32_t OH_NetConn_GetNetCapabilities(OH_NetConn_NetHandle *netHandle, NetConn_N
 /**
  * @brief Query the default HTTP proxy.
  *
- * @param httpProxy Store proxy configuration information
+ * @param httpProxy Store proxy configuration information.
  * @return 0 - Success. 201 - Missing permissions.
  *         401 - Parameter error. 2100002 - Unable to connect to service.
  *         2100003 - Internal error.
