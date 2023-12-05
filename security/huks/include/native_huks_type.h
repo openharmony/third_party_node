@@ -399,7 +399,10 @@ enum  OH_Huks_ErrCode {
     /** The authentication credential does not exist. */
     OH_HUKS_ERR_CODE_CREDENTIAL_NOT_EXIST = 12000013,
 
-    /** Device password is required but not set. */
+    /** Device password is required but not set. 
+     * 
+     * @since 11
+     */
     OH_HUKS_ERR_CODE_DEVICE_PASSWORD_UNSET = 12000016,
 };
 
@@ -631,6 +634,8 @@ enum OH_Huks_Tag {
     /**
      * Key access control based on device password setting status.
      * True means the key can only be generated and used when the password is set.
+     * 
+     * @since 11
      */
     OH_HUKS_TAG_IS_DEVICE_PASSWORD_SET = OH_HUKS_TAG_TYPE_BOOL | 1012,
 
