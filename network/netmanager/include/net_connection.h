@@ -67,7 +67,7 @@ int32_t OH_NetConn_HasDefaultNet(int32_t *hasDefaultNet);
  *         401 - Parameter error. 2100002 - Unable to connect to service.
  *         2100003 - Internal error.
  * @permission ohos.permission.GET_NETWORK_INFO
- * @syscap SystemCapability.Communication.NetManager.Core 
+ * @syscap SystemCapability.Communication.NetManager.Core
  * @since 11
  * @version 1.0
  */
