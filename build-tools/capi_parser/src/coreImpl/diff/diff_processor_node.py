@@ -422,7 +422,7 @@ process_data = {
 
 
 def judgment_entrance(old, new):
-    diff_info_list = [DiffInfo]
+    diff_info_list = []
     if old is None and new is None:
         return diff_info_list
     if old is None:
