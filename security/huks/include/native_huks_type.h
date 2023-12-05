@@ -451,6 +451,29 @@ enum OH_Huks_AuthAccessType {
 };
 
 /**
+ * @brief Enumerates key file storage authentication levels. 
+ * 
+ * @since 11
+ */
+enum OH_Huks_AuthStorageLevel {
+    /**
+     * Key file storage security level for device encryption standard.
+     * @since 11
+     */
+    OH_Huks_AUTH_STORAGE_LEVEL_DE = 0,
+    /**
+     * Key file storage security level for credential encryption standard.
+     * @since 11
+     */
+    OH_Huks_AUTH_STORAGE_LEVEL_CE = 1,
+    /**
+     * Key file storage security level for enhanced credential encryption standard.
+     * @since 11
+     */
+    OH_Huks_AUTH_STORAGE_LEVEL_ECE = 2,
+};
+
+/**
  * @brief Enumerates the types of the challenges generated when a key is used.
  * @see OH_Huks_ChallengePosition
  *
@@ -589,6 +612,13 @@ enum OH_Huks_Tag {
 
     /** Purpose of key authentication */
     OH_HUKS_TAG_KEY_AUTH_PURPOSE = OH_HUKS_TAG_TYPE_UINT | 311,
+
+    /**
+     * Security level of access control for key file storage, whose optional values are from enum OH_Huks_AuthStorageLevel.
+     *
+     * @since 11
+     */
+    OH_HUKS_TAG_AUTH_STORAGE_LEVEL = OH_HUKS_TAG_TYPE_UINT | 316,
 
     /** Tags for key attestation. The value range is 501 to 600. */
     /** Challenge value used in the attestation. */
