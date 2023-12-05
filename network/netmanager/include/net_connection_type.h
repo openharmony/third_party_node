@@ -55,7 +55,7 @@ extern "C" {
 /**
 * @brief Defines network capabilities.
 *
-* @since 10
+* @since 11
 * @version 1.0
 */
 
@@ -228,7 +228,7 @@ typedef struct OH_NetConn_NetHandleList {
  * @version 1.0
  */
 typedef int (*OH_NetConn_CustomDnsResolver)(const char *host, const char *serv,
-                                            const struct addrinfo *hint, struct addrinfo **res);
+    const struct addrinfo *hint, struct addrinfo **res);
 
 #ifdef __cplusplus
 }
