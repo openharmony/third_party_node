@@ -460,17 +460,17 @@ enum OH_Huks_AuthStorageLevel {
      * Key file storage security level for device encryption standard.
      * @since 11
      */
-    OH_Huks_AUTH_STORAGE_LEVEL_DE = 0,
+    OH_HUKS_AUTH_STORAGE_LEVEL_DE = 0,
     /**
      * Key file storage security level for credential encryption standard.
      * @since 11
      */
-    OH_Huks_AUTH_STORAGE_LEVEL_CE = 1,
+    OH_HUKS_AUTH_STORAGE_LEVEL_CE = 1,
     /**
      * Key file storage security level for enhanced credential encryption standard.
      * @since 11
      */
-    OH_Huks_AUTH_STORAGE_LEVEL_ECE = 2,
+    OH_HUKS_AUTH_STORAGE_LEVEL_ECE = 2,
 };
 
 /**
