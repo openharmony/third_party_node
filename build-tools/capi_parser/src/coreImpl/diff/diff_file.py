@@ -12,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import filecmp
 import json
 import os
@@ -45,11 +46,7 @@ def generate_excel(result_info_list):
         info_data.append(diff_info.diff_message)
         info_data.append(diff_info.old_api_full_text)
         info_data.append(diff_info.new_api_full_text)
-        result = ''
-        if (diff_info.is_compatible):
-            result = '是'
-        else:
-            result = '否'
+        result = '是' if diff_info.is_compatible else '否'
         info_data.append(result)
         data.append(info_data)
     wb = op.Workbook()
@@ -62,6 +59,8 @@ def generate_excel(result_info_list):
 
 
 def global_assignment(old_dir, new_dir):
+    global diff_info_list
+    diff_info_list = []
     global global_old_dir
     global_old_dir = old_dir
     global global_new_dir
@@ -104,14 +103,30 @@ def diff_list(old_file_list, new_file_list, old_dir, new_dir):
         if (target_file in old_file_list
                 and target_file not in new_file_list):
             diff_file_path = os.path.join(old_dir, target_file)
-            if os.path.isdir(diff_file_path):
-                del_file(diff_file_path)
+            del_old_file(diff_file_path)
         if (target_file in new_file_list
                 and target_file not in old_file_list):
             diff_file_path = os.path.join(new_dir, target_file)
-            if os.path.isdir(diff_file_path):
-                add_file(diff_file_path)
+            add_new_file(diff_file_path)
         get_same_file_diff(target_file, old_file_list, new_file_list, old_dir, new_dir)
+
+
+def add_new_file(diff_file_path):
+    if os.path.isdir(diff_file_path):
+        add_file(diff_file_path)
+    else:
+        result_map = parse_file_result(parser_include_ast(global_new_dir, [diff_file_path]))
+        for new_info in result_map.values():
+            diff_info_list.extend(judgment_entrance(None, new_info))
+
+
+def del_old_file(diff_file_path):
+    if os.path.isdir(diff_file_path):
+        del_file(diff_file_path)
+    else:
+        result_map = parse_file_result(parser_include_ast(global_old_dir, [diff_file_path]))
+        for old_info in result_map.values():
+            diff_info_list.extend(judgment_entrance(old_info, None))
 
 
 def get_same_file_diff(target_file, old_file_list, new_file_list, old_dir, new_dir):
