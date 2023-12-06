@@ -46,23 +46,9 @@ extern "C" {
 #endif
 
 /**
- * @brief Query whether there is a data network activated by default.
+ * @brief Checks whether a default activated data network is available.
  *
- * @param hasDefaultNet Is there a default network.
- * @return 0 - Success. 201 - Missing permissions.
- *         401 - Parameter error. 2100002 - Unable to connect to service.
- *         2100003 - Internal error.
- * @permission ohos.permission.GET_NETWORK_INFO
- * @syscap SystemCapability.Communication.NetManager.Core
- * @since 11
- * @version 1.0
-*/
-int32_t OH_NetConn_HasDefaultNet(int32_t *hasDefaultNet);
-
-/**
- * @brief Get the activated default data network.
- *
- * @param netHandle Store network ID.
+ * @param hasDefaultNet Pointer to the result that specifies whether a default activated data network is available.
  * @return 0 - Success. 201 - Missing permissions.
  *         401 - Parameter error. 2100002 - Unable to connect to service.
  *         2100003 - Internal error.
@@ -71,12 +57,26 @@ int32_t OH_NetConn_HasDefaultNet(int32_t *hasDefaultNet);
  * @since 11
  * @version 1.0
  */
-int32_t OH_NetConn_GetDefaultNet(OH_NetConn_NetHandle *netHandle);
+int32_t OH_NetConn_HasDefaultNet(int32_t *hasDefaultNet);
 
 /**
- * @brief Check whether the default data network is a metered network.
+ * @brief Obtains the default activated data network.
  *
- * @param isMetered 1:true, 0:false.
+ * @param netHandle Pointer to the network handle that contains the network ID.
+ * @return 0 - Success. 201 - Missing permissions.
+ *         401 - Parameter error. 2100002 - Unable to connect to service.
+ *         2100003 - Internal error.
+ * @permission ohos.permission.GET_NETWORK_INFO
+ * @syscap SystemCapability.Communication.NetManager.Core
+ * @since 11
+ * @version 1.0
+ */
+int32_t OH_NetConn_GetDefaultNet(NetConn_NetHandle *netHandle);
+
+/**
+ * @brief Checks whether metering is enabled for the default data network.
+ *
+ * @param isMetered Pointer to the result that specifies whether metering is enabled.
  * @return 0 - Success. 201 - Missing permissions.
  *         401 - Parameter error. 2100002 - Unable to connect to service.
  *         2100003 - Internal error.
@@ -88,10 +88,10 @@ int32_t OH_NetConn_GetDefaultNet(OH_NetConn_NetHandle *netHandle);
 int32_t OH_NetConn_IsDefaultNetMetered(int32_t *isMetered);
 
 /**
- * @brief Query the link information of a data network.
+ * @brief Obtains the connection properties of a data network.
  *
- * @param netHandle Store network ID.
- * @param info Store link information.
+ * @param netHandle Pointer to the network handle that contains the network ID.
+ * @param prop Pointer to the connection properties.
  * @return 0 - Success. 201 - Missing permissions.
  *         401 - Parameter error. 2100002 - Unable to connect to service.
  *         2100003 - Internal error.
@@ -100,13 +100,13 @@ int32_t OH_NetConn_IsDefaultNetMetered(int32_t *isMetered);
  * @since 11
  * @version 1.0
  */
-int32_t OH_NetConn_GetConnectionProperties(OH_NetConn_NetHandle *netHandle, NetConn_NetLinkInfo *info);
+int32_t OH_NetConn_GetConnectionProperties(NetConn_NetHandle *netHandle, NetConn_ConnectionProperties *prop);
 
 /**
- * @brief Query the capability set of a network.
+ * @brief Obtains the capabilities of a data network.
  *
- * @param netHandle Store network ID.
- * @param netAllCapacities storage capability set.
+ * @param netHandle Pointer to the network handle that contains the network ID.
+ * @param netCapacities Pointer to the network capabilities.
  * @return 0 - Success. 201 - Missing permissions.
  *         401 - Parameter error. 2100002 - Unable to connect to service.
  *         2100003 - Internal error.
@@ -115,12 +115,12 @@ int32_t OH_NetConn_GetConnectionProperties(OH_NetConn_NetHandle *netHandle, NetC
  * @since 11
  * @version 1.0
  */
-int32_t OH_NetConn_GetNetCapabilities(OH_NetConn_NetHandle *netHandle, NetConn_NetAllCapabilities *netAllCapacities);
+int32_t OH_NetConn_GetNetCapabilities(NetConn_NetHandle *netHandle, NetConn_NetCapabilities *netCapacities);
 
 /**
- * @brief Query the default HTTP proxy.
+ * @brief Obtains the default http proxy.
  *
- * @param httpProxy Store proxy configuration information.
+ * @param httpProxy Pointer to the HTTP proxy.
  * @return 0 - Success. 201 - Missing permissions.
  *         401 - Parameter error. 2100002 - Unable to connect to service.
  *         2100003 - Internal error.
@@ -145,7 +145,7 @@ int32_t OH_NetConn_GetDefaultHttpProxy(NetConn_HttpProxy *httpProxy);
  * @syscap SystemCapability.Communication.NetManager.Core
  * @since 11
  * @version 1.0
-*/
+ */
 int32_t OH_NetConn_GetAddrInfo(char *host, char *serv, struct addrinfo *hint, struct addrinfo **res, int32_t netId);
 
 /**
@@ -159,7 +159,7 @@ int32_t OH_NetConn_GetAddrInfo(char *host, char *serv, struct addrinfo *hint, st
  * @syscap SystemCapability.Communication.NetManager.Core
  * @since 11
  * @version 1.0
-*/
+ */
 int32_t OH_NetConn_FreeDnsResult(struct addrinfo *res);
 
 /**
@@ -174,7 +174,7 @@ int32_t OH_NetConn_FreeDnsResult(struct addrinfo *res);
  * @since 11
  * @version 1.0
  */
-int32_t OH_NetConn_GetAllNets(OH_NetConn_NetHandleList *netHandleList);
+int32_t OH_NetConn_GetAllNets(NetConn_NetHandleList *netHandleList);
 
 /**
  * @brief Registers a custom DNS resolver.
@@ -187,7 +187,7 @@ int32_t OH_NetConn_GetAllNets(OH_NetConn_NetHandleList *netHandleList);
  * @syscap SystemCapability.Communication.NetManager.Core
  * @since 11
  * @version 1.0
-*/
+ */
 int32_t OHOS_NetConn_RegisterDnsResolver(OH_NetConn_CustomDnsResolver resolver);
 
 /**
@@ -200,7 +200,7 @@ int32_t OHOS_NetConn_RegisterDnsResolver(OH_NetConn_CustomDnsResolver resolver);
  * @syscap SystemCapability.Communication.NetManager.Core
  * @since 11
  * @version 1.0
-*/
+ */
 int32_t OHOS_NetConn_UnregisterDnsResolver(void);
 
 #ifdef __cplusplus
