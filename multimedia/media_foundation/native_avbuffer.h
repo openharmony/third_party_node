@@ -30,7 +30,7 @@ typedef struct OH_NativeBuffer OH_NativeBuffer;
 
 /**
  * @brief Create an OH_AVBuffer instance, It should be noted that the life cycle of the OH_AVBuffer instance pointed to
- * by the return value * needs to be manually released by OH_AVBuffer_Destroy
+ * by the return value * needs to be manually released by {@link OH_AVBuffer_Destroy}
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param capacity the buffer's capacity, bytes
  * @return Returns a pointer to an OH_AVBuffer instance if the execution is successful, otherwise returns nullptr
@@ -74,7 +74,7 @@ OH_AVErrCode OH_AVBuffer_SetBufferAttr(OH_AVBuffer *buffer, const OH_AVCodecBuff
 
 /**
  * @brief Get the buffer's parameter. It should be noted that the life cycle of the OH_AVFormat instance pointed to
- * by the return value * needs to be manually released by OH_AVFormat_Destroy
+ * by the return value * needs to be manually released by {@link OH_AVFormat_Destroy}
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
  * @return Returns Encapsulate OH_AVFormat structure instance pointer if the execution is successful,
@@ -114,7 +114,7 @@ int32_t OH_AVBuffer_GetCapacity(OH_AVBuffer *buffer);
 
 /**
  * @brief Get the OH_NativeBuffer instance pointer,It should be noted that the life cycle of the OH_AVBuffer
- * instance pointed to by the return value * needs to be manually released by OH_NativeBuffer_Unreference
+ * instance pointed to by the return value * needs to be manually released by {@link OH_NativeBuffer_Unreference}
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
  * @return Returns Encapsulate OH_NativeBuffer structure instance pointer is successful,
