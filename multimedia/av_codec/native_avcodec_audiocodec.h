@@ -143,7 +143,7 @@ OH_AVErrCode OH_AudioCodec_Reset(OH_AVCodec *codec);
 /**
  * @brief Get the description information of the output data of the codec, refer to {@link OH_AVFormat} for details.
  * It should be noted that the life cycle of the OH_AVFormat instance pointed to by the return value * needs to
- * be manually released by the caller calling OH_AVFormat_Destroy.
+ * be manually released by the caller calling {@link OH_AVFormat_Destroy}.
  * @syscap SystemCapability.Multimedia.Media.AudioCodec
  * @param codec Pointer to an OH_AVCodec instance
  * @return Returns the OH_AVFormat handle pointer, the life cycle is refreshed with the next GetOutputMediaDescription,
