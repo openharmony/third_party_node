@@ -80,7 +80,7 @@ OH_AVErrCode OH_AudioCodec_RegisterCallback(OH_AVCodec *codec, OH_AVCodecCallbac
  * otherwise returns a specific error code, refer to {@link OH_AVErrCode}
  * @since 11
  */
-OH_AVErrCode OH_AudioCodec_Configure(OH_AVCodec *codec, OH_AVFormat *format);
+OH_AVErrCode OH_AudioCodec_Configure(OH_AVCodec *codec, const OH_AVFormat *format);
 
 /**
  * @brief To prepare the internal resources of the codec, the Configure interface must be called
@@ -143,7 +143,7 @@ OH_AVErrCode OH_AudioCodec_Reset(OH_AVCodec *codec);
 /**
  * @brief Get the description information of the output data of the codec, refer to {@link OH_AVFormat} for details.
  * It should be noted that the life cycle of the OH_AVFormat instance pointed to by the return value * needs to
- * be manually released by the caller
+ * be manually released by the caller calling OH_AVFormat_Destroy.
  * @syscap SystemCapability.Multimedia.Media.AudioCodec
  * @param codec Pointer to an OH_AVCodec instance
  * @return Returns the OH_AVFormat handle pointer, the life cycle is refreshed with the next GetOutputMediaDescription,
@@ -162,7 +162,7 @@ OH_AVFormat *OH_AudioCodec_GetOutputDescription(OH_AVCodec *codec);
  * otherwise returns a specific error code, refer to {@link OH_AVErrCode}
  * @since 11
  */
-OH_AVErrCode OH_AudioCodec_SetParameter(OH_AVCodec *codec, OH_AVFormat *format);
+OH_AVErrCode OH_AudioCodec_SetParameter(OH_AVCodec *codec, const OH_AVFormat *format);
 
 /**
  * @brief Submit the input buffer filled with data to the audio codec. The {@link OH_AVCodecOnNeedInputData} callback
