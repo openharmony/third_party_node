@@ -20,6 +20,7 @@ import os
 import glob
 import re
 import shutil
+import stat
 from utils.constants import StringConstant, RegularExpressions
 from typedef.parser.parser import ParserGetResultTable
 from coreImpl.parser import parse_include, generating_tables  # 引入解析文件 # 引入得到结果表格文件
@@ -265,6 +266,17 @@ def parser(directory_path):  # 目录路径
 
 
 def parser_include_ast(gn_file_path, include_path):        # 对于单独的.h解析接口
+    correct_include_path = []
     link_path = [StringConstant.INCLUDE_LIB.value]
-    data = parse_include.get_include_file(include_path, link_path, gn_file_path)
+    modes = stat.S_IRWXO | stat.S_IRWXG | stat.S_IRWXU
+    fd = os.open('include_file_suffix.txt', os.O_WRONLY | os.O_CREAT, mode=modes)
+    for item in include_path:
+        split_path = os.path.splitext(item)
+        if split_path[1] == '.h':   # 判断.h结尾
+            correct_include_path.append(item)
+        else:
+            exc = 'The file does not end with.h: {}\n'.format(item)
+            os.write(fd, exc.encode())
+    os.close(fd)
+    data = parse_include.get_include_file(correct_include_path, link_path, gn_file_path)
     return data

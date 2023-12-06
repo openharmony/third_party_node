@@ -16,10 +16,10 @@
 import json
 import subprocess
 import os
+from collections import OrderedDict
 from clang.cindex import CursorKind
 from coreImpl.diff.diff_processor_permission import compare_permission, RangeChange
 from typedef.diff.diff import TAGS, DiffType, DiffInfo, Scene
-from collections import OrderedDict
 
 current_file = os.path.dirname(__file__)
 
