@@ -115,7 +115,7 @@ OH_AVErrCode OH_AVMuxer_WriteSample(OH_AVMuxer *muxer,
  */
 OH_AVErrCode OH_AVMuxer_WriteSampleBuffer(OH_AVMuxer *muxer, 
                                           uint32_t trackIndex,
-                                          OH_AVBuffer *sample);
+                                          const OH_AVBuffer *sample);
 
 /**
  * @brief Stop the muxer.
