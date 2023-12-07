@@ -29,8 +29,8 @@ typedef struct OH_AVBuffer OH_AVBuffer;
 typedef struct OH_NativeBuffer OH_NativeBuffer;
 
 /**
- * @brief Create an OH_AVBuffer instance, It should be noted that the life cycle of the OH_AVBuffer instance pointed to
- * by the return value * needs to be manually released by {@link OH_AVBuffer_Destroy}.
+ * @brief Create an OH_AVBuffer instance, It should be noted that the life cycle of the OH_AVBuffer instance pointed
+ * to by the return value * needs to be manually released by {@link OH_AVBuffer_Destroy}.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param capacity the buffer's capacity, bytes
  * @return Returns a pointer to an OH_AVBuffer instance if the execution is successful, otherwise returns nullptr
@@ -42,8 +42,8 @@ OH_AVBuffer *OH_AVBuffer_Create(int32_t capacity);
  * @brief Clear the internal resources of the buffer and destroy the buffer instance.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
- * @return Returns AV_ERR_OK if the execution is successful, otherwise returns a specific error code, refer to {@link
- * OH_AVErrCode}
+ * @return Returns AV_ERR_OK if the execution is successful, otherwise returns a specific error code, refer to
+ * {@link OH_AVErrCode}
  * @since 11
  */
 OH_AVErrCode OH_AVBuffer_Destroy(OH_AVBuffer *buffer);
@@ -54,8 +54,8 @@ OH_AVErrCode OH_AVBuffer_Destroy(OH_AVBuffer *buffer);
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
  * @param attr Encapsulate OH_AVCodecBufferAttr structure instance pointer, please refer to
  * {@link OH_AVCodecBufferAttr}
- * @return Returns AV_ERR_OK if the execution is successful, otherwise returns a specific error code, refer to {@link
- * OH_AVErrCode}
+ * @return Returns AV_ERR_OK if the execution is successful, otherwise returns a specific error code, refer to
+ * {@link OH_AVErrCode}
  * @since 11
  */
 OH_AVErrCode OH_AVBuffer_GetBufferAttr(OH_AVBuffer *buffer, OH_AVCodecBufferAttr *attr);
@@ -66,8 +66,8 @@ OH_AVErrCode OH_AVBuffer_GetBufferAttr(OH_AVBuffer *buffer, OH_AVCodecBufferAttr
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
  * @param attr Encapsulate OH_AVCodecBufferAttr structure instance pointer, please refer to
  * {@link OH_AVCodecBufferAttr}
- * @return Returns AV_ERR_OK if the execution is successful, otherwise returns a specific error code, refer to {@link
- * OH_AVErrCode}
+ * @return Returns AV_ERR_OK if the execution is successful, otherwise returns a specific error code, refer to
+ * {@link OH_AVErrCode}
  * @since 11
  */
 OH_AVErrCode OH_AVBuffer_SetBufferAttr(OH_AVBuffer *buffer, const OH_AVCodecBufferAttr *attr);
@@ -88,8 +88,8 @@ OH_AVFormat *OH_AVBuffer_GetParameter(OH_AVBuffer *buffer);
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
  * @param format Encapsulate OH_AVFormat structure instance pointer
- * @return Returns AV_ERR_OK if the execution is successful, otherwise returns a specific error code, refer to {@link
- * OH_AVErrCode}
+ * @return Returns AV_ERR_OK if the execution is successful, otherwise returns a specific error code, refer to
+ * {@link OH_AVErrCode}
  * @since 11
  */
 OH_AVErrCode OH_AVBuffer_SetParameter(OH_AVBuffer *buffer, const OH_AVFormat *format);
