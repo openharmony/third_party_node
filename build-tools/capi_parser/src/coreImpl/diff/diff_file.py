@@ -16,9 +16,8 @@
 import filecmp
 import json
 import os
-
+from collections import OrderedDict
 import openpyxl as op
-
 from coreImpl.parser.parser import parser_include_ast
 from coreImpl.diff.diff_processor_node import judgment_entrance
 from typedef.diff.diff import OutputJson
@@ -148,7 +147,8 @@ def get_same_file_diff(target_file, old_file_list, new_file_list, old_dir, new_d
 def get_file_result_diff(old_target_file, new_target_file):
     old_file_result_map = parse_file_result(parser_include_ast(global_old_dir, [old_target_file]))
     new_file_result_map = parse_file_result(parser_include_ast(global_new_dir, [new_target_file]))
-    all_key_list = old_file_result_map.keys() | new_file_result_map.keys()
+    merged_dict = OrderedDict(list(old_file_result_map.items()) + list(new_file_result_map.items()))
+    all_key_list = merged_dict.keys()
     for key in all_key_list:
         diff_info_list.extend(judgment_entrance(old_file_result_map.get(key), new_file_result_map.get(key)))
 

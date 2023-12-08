@@ -16,6 +16,7 @@
 import json
 import subprocess
 import os
+from collections import OrderedDict
 from clang.cindex import CursorKind
 from coreImpl.diff.diff_processor_permission import compare_permission, RangeChange
 from typedef.diff.diff import TAGS, DiffType, DiffInfo, Scene
@@ -38,18 +39,28 @@ def wrap_diff_info(old_info, new_info, diff_info: DiffInfo):
     return diff_info
 
 
+def parse_file_result(result):
+    result_map = {}
+    for member in result:
+        if member["name"] == '':
+            continue
+        result_map.setdefault(f'{member["name"]}-{member["kind"]}', member)
+    return result_map
+
+
+def get_member_result_diff(old_target, new_target):
+    old_member_result_map = parse_file_result(old_target)
+    new_member_result_map = parse_file_result(new_target)
+    merged_dict = OrderedDict(list(old_member_result_map.items()) + list(new_member_result_map.items()))
+    all_key_list = merged_dict.keys()
+    return old_member_result_map, new_member_result_map, all_key_list
+
+
 def process_function(old, new):
     diff_info_list = []
-    process_func_name(old, new, diff_info_list)  # 处理name
     process_func_return(old, new, diff_info_list)   # 处理返回值
     process_func_param(old, new, diff_info_list)    # 处理参数
     return diff_info_list
-
-
-def process_func_name(old, new, diff_info_list):
-    if old['name'] != new['name']:
-        diff_info = wrap_diff_info(old, new, DiffInfo(DiffType.FUNCTION_NAME_CHANGE))
-        diff_info_list.append(diff_info)
 
 
 def process_func_return(old, new, diff_info_list):
@@ -136,19 +147,20 @@ def process_struct_name(old, new, diff_struct_list):
 
 def process_struct_member(old, new, diff_struct_list):
     if 'members' in old and 'members' in new:   # 都有
-        old_len = len(old['members'])
-        new_len = len(new['members'])
-        for i in range(max(old_len, new_len)):  # 处理type和name
-            if (i + 1) > new_len:  # 减少成员
-                diff_info = wrap_diff_info(old['members'][i], new,
-                                           DiffInfo(DiffType.STRUCT_MEMBER_REDUCE))
-                diff_struct_list.append(diff_info)
-            elif (i + 1) > old_len:  # 增加成员
-                diff_info = wrap_diff_info(old, new['members'][i],
+        old_member_result, new_member_result, all_key_result = get_member_result_diff(old['members'],
+                                                                                      new['members'])
+        for key in all_key_result:
+            if old_member_result.get(key) is None:
+                diff_info = wrap_diff_info(old_member_result.get(key), new_member_result.get(key),
                                            DiffInfo(DiffType.STRUCT_MEMBER_ADD))
                 diff_struct_list.append(diff_info)
+            elif new_member_result.get(key) is None:
+                diff_info = wrap_diff_info(old_member_result.get(key), new_member_result.get(key),
+                                           DiffInfo(DiffType.STRUCT_MEMBER_REDUCE))
+                diff_struct_list.append(diff_info)
             else:
-                process_struct_member_scene(old['members'], new['members'], i, diff_struct_list)
+                process_struct_member_scene(old_member_result.get(key),
+                                            new_member_result.get(key), diff_struct_list)
 
     elif 'members' not in old and 'members' in new:    # 旧无新有
         diff_info = wrap_diff_info(old, new, DiffInfo(DiffType.STRUCT_MEMBER_ADD))
@@ -159,28 +171,28 @@ def process_struct_member(old, new, diff_struct_list):
         diff_struct_list.append(diff_info)
 
 
-def process_struct_member_scene(old_member, new_member, index, diff_struct_list):
+def process_struct_member_scene(old_member, new_member, diff_struct_list):
     special_data = []   # 存储嵌套的体系
-    if (old_member[index]['kind'] == Scene.STRUCT_DECL.value) and \
-            (new_member[index]['kind'] == Scene.STRUCT_DECL.value):  # 结构体套结构体
-        special_data = process_struct(old_member[index], new_member[index])
+    if (old_member['kind'] == Scene.STRUCT_DECL.value) and \
+            (new_member['kind'] == Scene.STRUCT_DECL.value):  # 结构体套结构体
+        special_data = process_struct(old_member, new_member)
 
-    elif (old_member[index]['kind'] == Scene.UNION_DECL.value) and \
-            (new_member[index]['kind'] == Scene.UNION_DECL.value):  # 结构体套联合体
-        special_data = process_union(old_member[index], new_member[index])
+    elif (old_member['kind'] == Scene.UNION_DECL.value) and \
+            (new_member['kind'] == Scene.UNION_DECL.value):  # 结构体套联合体
+        special_data = process_union(old_member, new_member)
 
-    elif (old_member[index]['kind'] == Scene.ENUM_DECL.value) and \
-            (new_member[index]['kind'] == Scene.ENUM_DECL.value):  # 结构体套枚举
-        special_data = process_enum(old_member[index], new_member[index])
+    elif (old_member['kind'] == Scene.ENUM_DECL.value) and \
+            (new_member['kind'] == Scene.ENUM_DECL.value):  # 结构体套枚举
+        special_data = process_enum(old_member, new_member)
     diff_struct_list.extend(special_data)
 
-    if old_member[index]['type'] != new_member[index]['type']:
-        diff_info = wrap_diff_info(old_member[index], new_member[index],
+    if old_member['type'] != new_member['type']:
+        diff_info = wrap_diff_info(old_member, new_member,
                                    DiffInfo(DiffType.STRUCT_MEMBER_TYPE_CHANGE))
         diff_struct_list.append(diff_info)
 
-    if old_member[index]['name'] != new_member[index]['name']:
-        diff_info = wrap_diff_info(old_member[index], new_member[index],
+    if old_member['name'] != new_member['name']:
+        diff_info = wrap_diff_info(old_member, new_member,
                                    DiffInfo(DiffType.STRUCT_MEMBER_NAME_CHANGE))
         diff_struct_list.append(diff_info)
 
@@ -200,19 +212,20 @@ def process_union_name(old, new, diff_union_list):
 
 def process_union_member(old, new, diff_union_list):
     if 'members' in old and 'members' in new:   # 都有
-        old_len = len(old['members'])
-        new_len = len(new['members'])
-        for i in range(max(old_len, new_len)):  # 处理type和name
-            if (i + 1) > new_len:  # 减少成员
-                diff_info = wrap_diff_info(old['members'][i], new,
-                                           DiffInfo(DiffType.UNION_MEMBER_REDUCE))
-                diff_union_list.append(diff_info)
-            elif (i + 1) > old_len:  # 增加成员
-                diff_info = wrap_diff_info(old, new['members'][i],
+        old_member_result, new_member_result, all_key_result = get_member_result_diff(old['members'],
+                                                                                      new['members'])
+        for key in all_key_result:
+            if old_member_result.get(key) is None:
+                diff_info = wrap_diff_info(old_member_result.get(key), new_member_result.get(key),
                                            DiffInfo(DiffType.UNION_MEMBER_ADD))
                 diff_union_list.append(diff_info)
+            elif new_member_result.get(key) is None:
+                diff_info = wrap_diff_info(old_member_result.get(key), new_member_result.get(key),
+                                           DiffInfo(DiffType.UNION_MEMBER_REDUCE))
+                diff_union_list.append(diff_info)
             else:
-                process_union_member_scene(old['members'], new['members'], i, diff_union_list)
+                process_union_member_scene(old_member_result.get(key),
+                                           new_member_result.get(key), diff_union_list)
 
     elif 'members' not in old and 'members' in new:    # 旧无新有
         diff_info = wrap_diff_info(old, new, DiffInfo(DiffType.UNION_MEMBER_ADD))
@@ -223,28 +236,28 @@ def process_union_member(old, new, diff_union_list):
         diff_union_list.append(diff_info)
 
 
-def process_union_member_scene(old_member, new_member, i, diff_union_list):
+def process_union_member_scene(old_member, new_member, diff_union_list):
     special_data = []   # 存储嵌套的体系
-    if (old_member[i]['kind'] == Scene.STRUCT_DECL.value) and \
-            (new_member[i]['kind'] == Scene.STRUCT_DECL.value):     # 联合体套结构体
-        special_data = process_struct(old_member[i], new_member[i])
+    if (old_member['kind'] == Scene.STRUCT_DECL.value) and \
+            (new_member['kind'] == Scene.STRUCT_DECL.value):     # 联合体套结构体
+        special_data = process_struct(old_member, new_member)
 
-    elif (old_member[i]['kind'] == Scene.UNION_DECL.value) and \
-            (new_member[i]['kind'] == Scene.UNION_DECL.value):     # 联合体套联合体
-        special_data = process_union(old_member[i], new_member[i])
+    elif (old_member['kind'] == Scene.UNION_DECL.value) and \
+            (new_member['kind'] == Scene.UNION_DECL.value):     # 联合体套联合体
+        special_data = process_union(old_member, new_member)
 
-    elif (old_member[i]['kind'] == Scene.ENUM_DECL.value) and \
-            (new_member[i]['kind'] == Scene.ENUM_DECL.value):     # 联合体套枚举
-        special_data = process_enum(old_member[i], new_member[i])
+    elif (old_member['kind'] == Scene.ENUM_DECL.value) and \
+            (new_member['kind'] == Scene.ENUM_DECL.value):     # 联合体套枚举
+        special_data = process_enum(old_member, new_member)
     diff_union_list.extend(special_data)
 
-    if old_member[i]['type'] != new_member[i]['type']:
-        diff_info = wrap_diff_info(old_member[i], new_member[i],
+    if old_member['type'] != new_member['type']:
+        diff_info = wrap_diff_info(old_member, new_member,
                                    DiffInfo(DiffType.UNION_MEMBER_TYPE_CHANGE))
         diff_union_list.append(diff_info)
 
-    if old_member[i]['name'] != new_member[i]['name']:
-        diff_info = wrap_diff_info(old_member[i], new_member[i],
+    if old_member['name'] != new_member['name']:
+        diff_info = wrap_diff_info(old_member, new_member,
                                    DiffInfo(DiffType.UNION_MEMBER_NAME_CHANGE))
         diff_union_list.append(diff_info)
 
@@ -264,19 +277,20 @@ def process_enum_name(old, new, diff_enum_list):
 
 def process_enum_member(old, new, diff_enum_list):
     if 'members' in old and 'members' in new:   # 都有
-        old_len = len(old['members'])
-        new_len = len(new['members'])
-        for i in range(max(old_len, new_len)):   # 处理value和name
-            if (i + 1) > new_len:  # 减少成员
-                diff_info = wrap_diff_info(old['members'][i], new,
-                                           DiffInfo(DiffType.ENUM_MEMBER_REDUCE))
-                diff_enum_list.append(diff_info)
-            elif (i + 1) > old_len:  # 增加成员
-                diff_info = wrap_diff_info(old, new['members'][i],
+        old_member_result, new_member_result, all_key_result = get_member_result_diff(old['members'],
+                                                                                      new['members'])
+        for key in all_key_result:
+            if old_member_result.get(key) is None:
+                diff_info = wrap_diff_info(old_member_result.get(key), new_member_result.get(key),
                                            DiffInfo(DiffType.ENUM_MEMBER_ADD))
                 diff_enum_list.append(diff_info)
+            elif new_member_result.get(key) is None:
+                diff_info = wrap_diff_info(old_member_result.get(key), new_member_result.get(key),
+                                           DiffInfo(DiffType.ENUM_MEMBER_REDUCE))
+                diff_enum_list.append(diff_info)
             else:
-                process_enum_member_scene(old['members'], new['members'], i, diff_enum_list)
+                process_enum_member_scene(old_member_result.get(key),
+                                          new_member_result.get(key), diff_enum_list)
 
     elif 'members' not in old and 'members' in new:    # 旧无新有
         diff_info = wrap_diff_info(old, new, DiffInfo(DiffType.ENUM_MEMBER_ADD))
@@ -287,14 +301,14 @@ def process_enum_member(old, new, diff_enum_list):
         diff_enum_list.append(diff_info)
 
 
-def process_enum_member_scene(old_member, new_member, i, diff_union_list):
-    if old_member[i]['value'] != new_member[i]['value']:
-        diff_info = wrap_diff_info(old_member[i], new_member[i],
+def process_enum_member_scene(old_member, new_member, diff_union_list):
+    if old_member['value'] != new_member['value']:
+        diff_info = wrap_diff_info(old_member, new_member,
                                    DiffInfo(DiffType.ENUM_MEMBER_VALUE_CHANGE))
         diff_union_list.append(diff_info)
 
-    if old_member[i]['name'] != new_member[i]['name']:
-        diff_info = wrap_diff_info(old_member[i], new_member[i],
+    if old_member['name'] != new_member['name']:
+        diff_info = wrap_diff_info(old_member, new_member,
                                    DiffInfo(DiffType.ENUM_MEMBER_NAME_CHANGE))
         diff_union_list.append(diff_info)
 
