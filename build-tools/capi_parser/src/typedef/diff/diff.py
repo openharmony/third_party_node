@@ -43,89 +43,115 @@ class TAGS(enum.Enum):
 
 class DiffType(enum.Enum):
     DEFAULT = ''
-    ADD_API = '新增api'
-    REDUCE_API = '删除api'
-    ADD_DOC = '新增doc'
-    REDUCE_DOC = '删除doc'
-    ADD_DOC_TAG = '添加doc标签'
-    REDUCE_DOC_TAG = '删除doc标签'
-    FUNCTION_PARAM_POS_CHANGE = '修改函数参数位置'    # 我觉得可以理解为函数参数类型改变
+    ADD_API = 'add api'
+    REDUCE_API = 'delete api'
+    ADD_DOC = 'add doc'
+    REDUCE_DOC = 'delete doc'
+    ADD_DOC_TAG = 'add doc tag'
+    REDUCE_DOC_TAG = 'delete doc tag'
+    FUNCTION_PARAM_POS_CHANGE = 'change param site in function'    # 我觉得可以理解为函数参数类型改变
 
-    DEFINE_NAME_CHANGE = '宏名改变'
-    DEFINE_TEXT_CHANGE = '宏文本改变'
+    DEFINE_NAME_CHANGE = 'change define name'
+    DEFINE_TEXT_CHANGE = 'change define text'
 
-    FUNCTION_NAME_CHANGE = '函数名改变'
-    FUNCTION_RETURN_CHANGE = '函数返回类型改变'
-    FUNCTION_PARAM_NAME_CHANGE = '函数参数名改变'    # 这个我觉得不考虑
-    FUNCTION_PARAM_TYPE_CHANGE = '函数参数类型改变'
-    FUNCTION_PARAM_ADD = '添加函数参数'
-    FUNCTION_PARAM_REDUCE = '删除函数参数'
+    FUNCTION_NAME_CHANGE = 'change function name'
+    FUNCTION_RETURN_CHANGE = 'change function return value'
+    FUNCTION_PARAM_NAME_CHANGE = 'change param name in function'    # 这个我觉得不考虑
+    FUNCTION_PARAM_TYPE_CHANGE = 'change param type in function'
+    FUNCTION_PARAM_ADD = 'add param in function'
+    FUNCTION_PARAM_REDUCE = 'delete param in function'
 
-    STRUCT_NAME_CHANGE = '结构体名改变'
-    STRUCT_MEMBER_NAME_CHANGE = '结构体成员名改变'
-    STRUCT_MEMBER_TYPE_CHANGE = '结构体成员类型改变'
-    STRUCT_MEMBER_ADD = '添加结构体成员'
-    STRUCT_MEMBER_REDUCE = '删除结构体成员'
+    STRUCT_NAME_CHANGE = 'change struct name'
+    STRUCT_MEMBER_NAME_CHANGE = 'change member name in struct'
+    STRUCT_MEMBER_TYPE_CHANGE = 'change member type in struct'
+    STRUCT_MEMBER_ADD = 'add member in struct'
+    STRUCT_MEMBER_REDUCE = 'delete member in struct'
 
-    UNION_NAME_CHANGE = '联合体名改变'
-    UNION_MEMBER_NAME_CHANGE = '联合体成员名改变'
-    UNION_MEMBER_TYPE_CHANGE = '联合体成员类型改变'
-    UNION_MEMBER_ADD = '添加联合体成员'
-    UNION_MEMBER_REDUCE = '删除联合体成员'
+    UNION_NAME_CHANGE = 'change union name'
+    UNION_MEMBER_NAME_CHANGE = 'change member name in union'
+    UNION_MEMBER_TYPE_CHANGE = 'change member type in union'
+    UNION_MEMBER_ADD = 'add member in union'
+    UNION_MEMBER_REDUCE = 'delete member in union'
 
-    ENUM_NAME_CHANGE = '枚举名改变'
-    ENUM_MEMBER_NAME_CHANGE = '枚举成员名改变'
-    ENUM_MEMBER_VALUE_CHANGE = '枚举成员值改变'
-    ENUM_MEMBER_ADD = '添加枚举成员'
-    ENUM_MEMBER_REDUCE = '删除枚举成员'
+    ENUM_NAME_CHANGE = 'change enum name'
+    ENUM_MEMBER_NAME_CHANGE = 'change member name in enum'
+    ENUM_MEMBER_VALUE_CHANGE = 'change member value in enum'
+    ENUM_MEMBER_ADD = 'add member in enum'
+    ENUM_MEMBER_REDUCE = 'delete member in enum'
 
-    VARIABLE_NAME_CHANGE = '变量名改变'
-    VARIABLE_TYPE_CHANGE = '变量类型改变'
-    VARIABLE_VALUE_CHANGE = '变量值的改变'
+    VARIABLE_NAME_CHANGE = 'change variable name'
+    VARIABLE_TYPE_CHANGE = 'change variable type'
+    VARIABLE_VALUE_CHANGE = 'change variable value'
 
-    CONSTANT_NAME_CHANGE = '常量名改变'
-    CONSTANT_TYPE_CHANGE = '常量类型改变'
-    CONSTANT_VALUE_CHANGE = '常量值的改变'
+    CONSTANT_NAME_CHANGE = 'change constant name'
+    CONSTANT_TYPE_CHANGE = 'change constant type'
+    CONSTANT_VALUE_CHANGE = 'change constant value'
 
-    TYPEDEF_NAME_TYPE_CHANGE = '重命名类型和命名改变'
+    TYPEDEF_NAME_TYPE_CHANGE = 'change typedef name type'
 
-    DOC_TAG_ADDTOGROUP_NA_TO_HAVE = '新增addtogroup标签'
-    DOC_TAG_ADDTOGROUP_HAVE_TO_NA = '删除addtogroup标签'
-    DOC_TAG_ADDTOGROUP_A_TO_B = '修改addtogroup标签'
-    DOC_TAG_BRIEF_NA_TO_HAVE = '新增brief标签'
-    DOC_TAG_BRIEF_HAVE_TO_NA = '删除brief标签'
-    DOC_TAG_BRIEF_A_TO_B = '修改brief标签'
-    DOC_TAG_DEPRECATED_NA_TO_HAVE = '接口变更为废弃'
-    DOC_TAG_DEPRECATED_HAVE_TO_NA = '废弃接口变更为不废弃'
-    DOC_TAG_DEPRECATED_A_TO_B = '接口废弃版本发生变化'
-    DOC_TAG_FILE_NA_TO_HAVE = '新增file标签'
-    DOC_TAG_FILE_HAVE_TO_NA = '删除file标签'
-    DOC_TAG_FILE_A_TO_B = '修改file标签'
-    DOC_TAG_LIBRARY_NA_TO_HAVE = '新增library'
-    DOC_TAG_LIBRARY_HAVE_TO_NA = '删除library'
-    DOC_TAG_LIBRARY_A_TO_B = '变更library'
-    DOC_TAG_PARAM_NA_TO_HAVE = '新增param标签'
-    DOC_TAG_PARAM_HAVE_TO_NA = '删除param标签'
-    DOC_TAG_PARAM_NAME_A_TO_B = '修改param标签描述信息'
-    DOC_TAG_PARAM_A_TO_B = '修改param标签描述信息'
-    DOC_TAG_PERMISSION_NA_TO_HAVE = '权限从无到有'
-    DOC_TAG_PERMISSION_HAVE_TO_NA = '权限从有到无'
-    DOC_TAG_PERMISSION_RANGE_BIGGER = '增加or或减少and权限'
-    DOC_TAG_PERMISSION_RANGE_SMALLER = '减少or或增加and权限'
-    DOC_TAG_PERMISSION_RANGE_CHANGE = '权限发送改变无法判断范围变化'
-    DOC_TAG_SINCE_NA_TO_HAVE = '新增since标签'
-    DOC_TAG_SINCE_HAVE_TO_NA = '删除since标签'
-    DOC_TAG_SINCE_A_TO_B = '修改since标签'
-    DOC_TAG_SYSCAP_NA_TO_HAVE = '从没有syscap到有syscap'
-    DOC_TAG_SYSCAP_HAVE_TO_NA = '从有syscap到没有syscap'
-    DOC_TAG_SYSCAP_A_TO_B = 'syscap发生改变'
-    DOC_TAG_LEFT_BRACE_NA_TO_HAVE = '新增左括号'
-    DOC_TAG_LEFT_BRACE_HAVE_TO_NA = '删除左括号'
-    DOC_TAG_RIGHT_BRACE_NA_TO_HAVE = '新增右括号'
-    DOC_TAG_RIGHT_BRACE_HAVE_TO_NA = '删除右括号'
+    DOC_TAG_ADDTOGROUP_NA_TO_HAVE = 'add addtogroup tag'
+    DOC_TAG_ADDTOGROUP_HAVE_TO_NA = 'delete addtogroup tag'
+    DOC_TAG_ADDTOGROUP_A_TO_B = 'change addtogroup tag'
+    DOC_TAG_BRIEF_NA_TO_HAVE = 'add brief tag'
+    DOC_TAG_BRIEF_HAVE_TO_NA = 'delete brief tag'
+    DOC_TAG_BRIEF_A_TO_B = 'change brief tag'
+    DOC_TAG_DEPRECATED_NA_TO_HAVE = 'add deprecated tag'
+    DOC_TAG_DEPRECATED_HAVE_TO_NA = 'delete deprecated tag'
+    DOC_TAG_DEPRECATED_A_TO_B = 'change deprecated tag'
+    DOC_TAG_FILE_NA_TO_HAVE = 'add file tag'
+    DOC_TAG_FILE_HAVE_TO_NA = 'delete file tag'
+    DOC_TAG_FILE_A_TO_B = 'change file tag'
+    DOC_TAG_LIBRARY_NA_TO_HAVE = 'add library tag'
+    DOC_TAG_LIBRARY_HAVE_TO_NA = 'delete library tag'
+    DOC_TAG_LIBRARY_A_TO_B = 'change library tag'
+    DOC_TAG_PARAM_NA_TO_HAVE = 'add param tag'
+    DOC_TAG_PARAM_HAVE_TO_NA = 'delete param tag'
+    DOC_TAG_PARAM_NAME_A_TO_B = 'change param tag name'
+    DOC_TAG_PARAM_A_TO_B = 'change param tag value'
+    DOC_TAG_PERMISSION_NA_TO_HAVE = 'add permission tag'
+    DOC_TAG_PERMISSION_HAVE_TO_NA = 'delete permission tag'
+    DOC_TAG_PERMISSION_RANGE_BIGGER = 'increased permissions, ex: add "or" or remove "and"'
+    DOC_TAG_PERMISSION_RANGE_SMALLER = 'reduced permissions, ex: add "and" or remove "or"'
+    DOC_TAG_PERMISSION_RANGE_CHANGE = 'change permissions, before not included after and after not included before'
+    DOC_TAG_SINCE_NA_TO_HAVE = 'add since tag'
+    DOC_TAG_SINCE_HAVE_TO_NA = 'delete since tag'
+    DOC_TAG_SINCE_A_TO_B = 'change since tag'
+    DOC_TAG_SYSCAP_NA_TO_HAVE = 'add syscap tag'
+    DOC_TAG_SYSCAP_HAVE_TO_NA = 'delete syscap tag'
+    DOC_TAG_SYSCAP_A_TO_B = 'change syscap tag'
+    DOC_TAG_LEFT_BRACE_NA_TO_HAVE = 'add { tag'
+    DOC_TAG_LEFT_BRACE_HAVE_TO_NA = 'delete { tag'
+    DOC_TAG_RIGHT_BRACE_NA_TO_HAVE = 'add } tag'
+    DOC_TAG_RIGHT_BRACE_HAVE_TO_NA = 'delete } tag'
 
 
-compatible_list = [DiffType.FUNCTION_PARAM_NAME_CHANGE]
+compatible_list = [
+    DiffType.ADD_API,
+    DiffType.ADD_DOC,
+    DiffType.ADD_DOC_TAG,
+    DiffType.FUNCTION_PARAM_NAME_CHANGE,
+    DiffType.DOC_TAG_ADDTOGROUP_NA_TO_HAVE,
+    DiffType.DOC_TAG_ADDTOGROUP_HAVE_TO_NA,
+    DiffType.DOC_TAG_ADDTOGROUP_A_TO_B,
+    DiffType.DOC_TAG_BRIEF_NA_TO_HAVE,
+    DiffType.DOC_TAG_BRIEF_HAVE_TO_NA,
+    DiffType.DOC_TAG_BRIEF_A_TO_B,
+    DiffType.DOC_TAG_DEPRECATED_NA_TO_HAVE,
+    DiffType.DOC_TAG_DEPRECATED_HAVE_TO_NA,
+    DiffType.DOC_TAG_DEPRECATED_A_TO_B,
+    DiffType.DOC_TAG_FILE_NA_TO_HAVE,
+    DiffType.DOC_TAG_FILE_HAVE_TO_NA,
+    DiffType.DOC_TAG_FILE_A_TO_B,
+    DiffType.DOC_TAG_PARAM_A_TO_B,
+    DiffType.DOC_TAG_PERMISSION_HAVE_TO_NA,
+    DiffType.DOC_TAG_PERMISSION_RANGE_BIGGER,
+    DiffType.DOC_TAG_SINCE_NA_TO_HAVE,
+    DiffType.DOC_TAG_SINCE_A_TO_B,
+    DiffType.DOC_TAG_LEFT_BRACE_NA_TO_HAVE,
+    DiffType.DOC_TAG_LEFT_BRACE_HAVE_TO_NA,
+    DiffType.DOC_TAG_RIGHT_BRACE_NA_TO_HAVE,
+    DiffType.DOC_TAG_RIGHT_BRACE_HAVE_TO_NA,
+]
 
 
 class DiffInfo:
