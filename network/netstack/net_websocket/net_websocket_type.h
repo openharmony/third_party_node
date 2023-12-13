@@ -178,7 +178,7 @@ struct Websocket {
     Websocket_RequestOptions requestOptions;
 };
 
-typedef enum OH_Websocket_ErrCode {
+typedef enum Websocket_ErrCode {
     /**
      * Operation success.
      */
@@ -273,7 +273,7 @@ typedef enum OH_Websocket_ErrCode {
      * @brief The websocket client does not have the connection context.
      */
     WEBSOCKET_ERROR_HAVE_NO_CONNECT_CONTEXT = (E_BASE + 18),
-} OH_Websocket_ErrCode;
+} Websocket_ErrCode;
 
 #ifdef __cplusplus
 }
