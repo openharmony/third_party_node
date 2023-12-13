@@ -20,7 +20,7 @@
  * @addtogroup netstack
  * @{
  *
- * @brief Provides C APIs for the WebSocket client module.
+ * @brief Provides C APIs for the websocket client module.
  *
  * @since 11
  * @version 1.0
@@ -28,7 +28,7 @@
 
 /**
  * @file net_websocket_type.h
- * @brief Defines the data structure for the C APIs of the WebSocket client module.
+ * @brief Defines the data structure for the C APIs of the websocket client module.
  *
  * @library libnet_websocket.so
  * @syscap SystemCapability.Communication.NetStack
@@ -46,7 +46,7 @@ extern "C" {
  * @since 11
  * @version 1.0
  */
-struct OH_NetStack_WebsocketClient_CloseResult {
+struct Websocket_CloseResult {
     /** Error code */
     uint32_t code;
     /** Error cause */
@@ -59,7 +59,7 @@ struct OH_NetStack_WebsocketClient_CloseResult {
  * @since 11
  * @version 1.0
  */
-struct OH_NetStack_WebsocketClient_CloseOption {
+struct Websocket_CloseOption {
     /** Error code */
     uint32_t code;
     /** Error cause */
@@ -72,7 +72,7 @@ struct OH_NetStack_WebsocketClient_CloseOption {
  * @since 11
  * @version 1.0
  */
-struct OH_NetStack_WebsocketClient_ErrorResult {
+struct Websocket_ErrorResult {
     /** Error code */
     uint32_t errorCode;
     /** Error message */
@@ -85,7 +85,7 @@ struct OH_NetStack_WebsocketClient_ErrorResult {
  * @since 11
  * @version 1.0
  */
-struct OH_NetStack_WebsocketClient_OpenResult {
+struct Websocket_OpenResult {
     /** Connection success code */
     uint32_t code;
     /** Connection success reason */
@@ -95,91 +95,87 @@ struct OH_NetStack_WebsocketClient_OpenResult {
 /**
  * @brief Defines the callback function invoked when an <b>open</b> message is received.
  *
- * @param client WebSocket client.
- * @param openResult Content of the <b>open</b> message received by the WebSocket client.
+ * @param client websocket client.
+ * @param openResult Content of the <b>open</b> message received by the websocket client.
  * @since 11
  * @version 1.0
  */
-typedef void (*OH_NetStack_WebsocketClient_OnOpenCallback)(struct OH_NetStack_WebsocketClient *client,
-                                                           OH_NetStack_WebsocketClient_OpenResult openResult);
+typedef void (*Websocket_OnOpenCallback)(struct Websocket *client, Websocket_OpenResult openResult);
 
 /**
  * @brief Defines the callback function invoked when data is received.
  *
- * @param client WebSocket client.
- * @param data Data received by the WebSocket client.
- * @param length Length of the data received by the WebSocket client.
+ * @param client websocket client.
+ * @param data Data received by the websocket client.
+ * @param length Length of the data received by the websocket client.
  * @since 11
  * @version 1.0
  */
-typedef void (*OH_NetStack_WebsocketClient_OnMessageCallback)(struct OH_NetStack_WebsocketClient *client, char *data,
-                                                              uint32_t length);
+typedef void (*Websocket_OnMessageCallback)(struct Websocket *client, char *data, uint32_t length);
 
 /**
  * @brief Defines the callback function invoked when an error message is received.
  *
- * @param client WebSocket client.
- * @param errorResult Content of the connection error message received by the WebSocket client.
+ * @param client websocket client.
+ * @param errorResult Content of the connection error message received by the websocket client.
  * @since 11
  * @version 1.0
  */
-typedef void (*OH_NetStack_WebsocketClient_OnErrorCallback)(struct OH_NetStack_WebsocketClient *client,
-                                                            OH_NetStack_WebsocketClient_ErrorResult errorResult);
+typedef void (*Websocket_OnErrorCallback)(struct Websocket *client, Websocket_ErrorResult errorResult);
 
 /**
  * @brief Defines the callback function invoked when a <b>close</b> message is received.
  *
- * @param client WebSocket client.
- * @param closeResult Content of the <b>close</b> message received by the WebSocket client.
+ * @param client webSocket client.
+ * @param closeResult Content of the <b>close</b> message received by the webSocket client.
  * @since 11
  * @version 1.0
  */
-typedef void (*OH_NetStack_WebsocketClient_OnCloseCallback)(struct OH_NetStack_WebsocketClient *client,
-                                                            OH_NetStack_WebsocketClient_CloseResult closeResult);
+typedef void (*Websocket_OnCloseCallback)(struct Websocket *client, Websocket_CloseResult closeResult);
 
 /**
- * @brief Adds the header linked list to the WebSocket client.
+ * @brief Adds the header linked list to the websocket client.
  *
  * @since 11
  * @version 1.0
  */
-struct OH_NetStack_WebsocketClient_Slist {
+struct Websocket_HeaderNode {
     /** Header field name */
     const char *fieldName;
     /** Header field content */
     const char *fieldValue;
     /** Next pointer of the header linked list */
-    struct OH_NetStack_WebsocketClient_Slist *next;
+    struct Websocket_HeaderNode *next;
 };
 
 /**
- * @brief Defines the parameters for the connection between the WebSocket client and server.
+ * @brief Defines the parameters for the connection between the websocket client and server.
  *
  * @param headers Header information.
  * @since 11
  * @version 1.0
  */
-struct OH_NetStack_WebsocketClient_RequestOptions {
-    struct OH_NetStack_WebsocketClient_Slist *headers;
+struct Websocket_RequestOptions {
+    struct Websocket_HeaderNode *headers;
 };
 
 /**
- * @brief Defines the WebSocket client structure.
+ * @brief Defines the websocket client structu re.
  *
  * @since 11
  * @version 1.0
  */
-struct OH_NetStack_WebsocketClient {
+struct Websocket {
     /** Pointer to the callback invoked when a connection message is received */
-    OH_NetStack_WebsocketClient_OnOpenCallback onOpen;
+    Websocket_OnOpenCallback onOpen;
     /** Pointer to the callback invoked when a message is received */
-    OH_NetStack_WebsocketClient_OnMessageCallback onMessage;
+    Websocket_OnMessageCallback onMessage;
     /** Pointer to the callback invoked when an error message is received */
-    OH_NetStack_WebsocketClient_OnErrorCallback onError;
+    Websocket_OnErrorCallback onError;
     /** Pointer to the callback invoked when a close message is received */
-    OH_NetStack_WebsocketClient_OnCloseCallback onClose;
+    Websocket_OnCloseCallback onClose;
     /** Content of the request for establishing a connection on the client */
-    OH_NetStack_WebsocketClient_RequestOptions requestOptions;
+    Websocket_RequestOptions requestOptions;
 };
 
 typedef enum OH_Websocket_ErrCode {
@@ -194,87 +190,87 @@ typedef enum OH_Websocket_ErrCode {
     E_BASE = 1000,
 
     /**
-     * @brief The WebSocket client is null.
+     * @brief The websocket client is null.
      */
     WEBSOCKET_CLIENT_IS_NULL = (E_BASE + 1),
 
     /**
-     * @brief A WebSocket client is not created.
+     * @brief A webSocket client is not created.
      */
     WEBSOCKET_CLIENT_IS_NOT_CREAT = (E_BASE + 2),
 
     /**
-     * @brief An error occurs while setting up a WebSocket connection.
+     * @brief An error occurs while setting up a websocket connection.
      */
     WEBSOCKET_CONNECTION_ERROR = (E_BASE + 3),
 
     /**
-     * @brief An error occurs while parsing WebSocket connection parameters.
+     * @brief An error occurs while parsing websocket connection parameters.
      */
     WEBSOCKET_CONNECTION_PARSEURL_ERROR = (E_BASE + 5),
 
     /**
-     * @brief The memory is insufficient for creating a context during WebSocket connection setup.
+     * @brief The memory is insufficient for creating a context during websocket connection setup.
      */
     WEBSOCKET_CONNECTION_NO_MEMOERY = (E_BASE + 6),
 
     /**
-     * @brief The WebSocket connection is closed by the peer.
+     * @brief The websocket connection is closed by the peer.
      */
     WEBSOCKET_PEER_INITIATED_CLOSE = (E_BASE + 7),
 
     /**
-     * @brief The WebSocket connection is destroyed.
+     * @brief The websocket connection is destroyed.
      */
     WEBSOCKET_DESTROY = (E_BASE + 8),
 
     /**
-     * @brief An incorrect protocol is used for WebSocket connection.
+     * @brief An incorrect protocol is used for websocket connection.
      */
     WEBSOCKET_PROTOCOL_ERROR = (E_BASE + 9),
 
     /**
-     * @brief The memory for the WebSocket client to send data is insufficient.
+     * @brief The memory for the websocket client to send data is insufficient.
      */
     WEBSOCKET_SEND_NO_MEMOERY_ERROR = (E_BASE + 10),
 
     /**
-     * @brief The data sent by the WebSocket client is null.
+     * @brief The data sent by the websocket client is null.
      */
     WEBSOCKET_SEND_DATA_NULL = (E_BASE + 11),
 
     /**
-     * @brief The length of the data sent by the WebSocket client exceeds the limit.
+     * @brief The length of the data sent by the websocket client exceeds the limit.
      */
     WEBSOCKET_DATA_LENGTH_EXCEEDS = (E_BASE + 12),
 
     /**
-     * @brief The queue length of the data sent by the WebSocket client exceeds the limit.
+     * @brief The queue length of the data sent by the websocket client exceeds the limit.
      */
     WEBSOCKET_QUEUE_LENGTH_EXCEEDS = (E_BASE + 13),
 
     /**
-     * @brief The context of the WebSocket client is null.
+     * @brief The context of the websocket client is null.
      */
     WEBSOCKET_ERROR_NO_CLIENTCONTEX = (E_BASE + 14),
 
     /**
-     * @brief The header of the WebSocket client is null.
+     * @brief The header of the webSocket client is null.
      */
     WEBSOCKET_ERROR_NO_HEADR_CONTEXT = (E_BASE + 15),
 
     /**
-     * @brief The header of the WebSocket client exceeds the limit.
+     * @brief The header of the websocket client exceeds the limit.
      */
     WEBSOCKET_ERROR_NO_HEADR_EXCEEDS = (E_BASE + 16),
 
     /**
-     * @brief The WebSocket client is not connected.
+     * @brief The websocket client is not connected.
      */
     WEBSOCKET_ERROR_HAVE_NO_CONNECT = (E_BASE + 17),
 
     /**
-     * @brief The WebSocket client does not have the connection context.
+     * @brief The websocket client does not have the connection context.
      */
     WEBSOCKET_ERROR_HAVE_NO_CONNECT_CONTEXT = (E_BASE + 18),
 } OH_Websocket_ErrCode;

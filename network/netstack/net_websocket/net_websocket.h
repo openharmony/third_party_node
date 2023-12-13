@@ -24,7 +24,7 @@
  * @addtogroup netstack
  * @{
  *
- * @brief Provides C APIs for the WebSocket client module.
+ * @brief Provides C APIs for the websocket client module.
 
  * @since 11
  * @version 1.0
@@ -33,7 +33,7 @@
 /**
  * @file net_websocket.h
  *
- * @brief Defines the APIs for the WebSocket client module.
+ * @brief Defines the APIs for the websocket client module.
  *
  * @library libnet_websocket.so
  * @syscap SystemCapability.Communication.NetStack
@@ -48,38 +48,38 @@ extern "C" {
 #endif
 
 /**
- * @brief Constructor of OH_NetStack_WebsocketClient.
+ * @brief Constructor of websocket.
  *
  * @param onMessage Callback function invoked when a message is received.
  * @param onClose Callback function invoked when a connection closing message is closed.
  * @param onError Callback function invoked when a connection error message is received.
  * @param onOpen Callback function invoked when a connection setup message is received.
- * @return Pointer to the WebSocket client if success; NULL otherwise.
+ * @return Pointer to the websocket client if success; NULL otherwise.
  * @syscap SystemCapability.Communication.NetStack
  * @since 11
  * @version 1.0
  */
-struct OH_NetStack_WebsocketClient *OH_NetStack_WebsocketClient_Construct(
-    OH_NetStack_WebsocketClient_OnOpenCallback onOpen, OH_NetStack_WebsocketClient_OnMessageCallback onMessage,
-    OH_NetStack_WebsocketClient_OnErrorCallback onError, OH_NetStack_WebsocketClient_OnCloseCallback onclose);
+struct Websocket *OH_NetStack_WebsocketClient_Construct(Websocket_OnOpenCallback onOpen,
+                                                        Websocket_OnMessageCallback onMessage,
+                                                        Websocket_OnErrorCallback onError,
+                                                        Websocket_OnCloseCallback onclose);
 
 /**
  * @brief Adds the header information to the client request.
  *
- * @param client Pointer to the WebSocket client.
+ * @param client Pointer to the websocket client.
  * @param header Header information
  * @return 0 if success; non-0 otherwise. For details about error codes, see {@link OH_Websocket_ErrCode}.
  * @syscap SystemCapability.Communication.NetStack
  * @since 11
  * @version 1.0
  */
-int OH_NetStack_WebSocketClient_AddHeader(struct OH_NetStack_WebsocketClient *client,
-                                          struct OH_NetStack_WebsocketClient_Slist header);
+int OH_NetStack_WebsocketClient_AddHeader(struct Websocket *client, struct Websocket_HeaderNode header);
 
 /**
  * @brief Connects the client to the server.
  *
- * @param client Pointer to the WebSocket client.
+ * @param client Pointer to the websocket client.
  * @param url URL for the client to connect to the server.
  * @param options Optional parameters.
  * @return 0 if success; non-0 otherwise. For details about error codes, see {@link OH_Websocket_ErrCode}.
@@ -88,13 +88,13 @@ int OH_NetStack_WebSocketClient_AddHeader(struct OH_NetStack_WebsocketClient *cl
  * @since 11
  * @version 1.0
  */
-int OH_NetStack_WebSocketClient_Connect(struct OH_NetStack_WebsocketClient *client, const char *url,
-                                        struct OH_NetStack_WebsocketClient_RequestOptions options);
+int OH_NetStack_WebsocketClient_Connect(struct Websocket *client, const char *url,
+                                        struct Websocket_RequestOptions options);
 
 /**
  * @brief Sends data from the client to the server.
  *
- * @param client Pointer to the WebSocket client.
+ * @param client Pointer to the websocket client.
  * @param data Data sent by the client.
  * @param length Length of the data sent by the client.
  * @return 0 if success; non-0 otherwise. For details about error codes, see {@link OH_Websocket_ErrCode}.
@@ -103,12 +103,12 @@ int OH_NetStack_WebSocketClient_Connect(struct OH_NetStack_WebsocketClient *clie
  * @since 11
  * @version 1.0
  */
-int OH_NetStack_WebSocketClient_Send(struct OH_NetStack_WebsocketClient *client, char *data, size_t length);
+int OH_NetStack_WebsocketClient_Send(struct Websocket *client, char *data, size_t length);
 
 /**
- * @brief Closes a WebSocket connection.
+ * @brief Closes a webSocket connection.
  *
- * @param client Pointer to the WebSocket client.
+ * @param client Pointer to the websocket client.
  * @param url URL for the client to connect to the server.
  * @param options Optional parameters.
  * @return 0 if success; non-0 otherwise. For details about error codes, see {@link OH_Websocket_ErrCode}.
@@ -117,20 +117,19 @@ int OH_NetStack_WebSocketClient_Send(struct OH_NetStack_WebsocketClient *client,
  * @since 11
  * @version 1.0
  */
-int OH_NetStack_WebSocketClient_Close(struct OH_NetStack_WebsocketClient *client,
-                                      struct OH_NetStack_WebsocketClient_CloseOption options);
+int OH_NetStack_WebsocketClient_Close(struct Websocket *client, struct Websocket_CloseOption options);
 
 /**
- * @brief Releases the context and resources of the WebSocket connection.
+ * @brief Releases the context and resources of the websocket connection.
  *
- * @param client Pointer to the WebSocket client.
+ * @param client Pointer to the websocket client.
  * @return 0 if success; non-0 otherwise. For details about error codes, see {@link OH_Websocket_ErrCode}.
  * @permission ohos.permission.INTERNET
  * @syscap SystemCapability.Communication.NetStack
  * @since 11
  * @version 1.0
  */
-int OH_NetStack_WebsocketClient_Destroy(struct OH_NetStack_WebsocketClient *client);
+int OH_NetStack_WebsocketClient_Destroy(struct Websocket *client);
 
 #ifdef __cplusplus
 }
