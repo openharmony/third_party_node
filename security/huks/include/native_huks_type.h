@@ -175,7 +175,7 @@ enum OH_Huks_KeySize {
     OH_HUKS_RSA_KEY_SIZE_3072 = 3072,
     /** RSA key of 4096 bits. */
     OH_HUKS_RSA_KEY_SIZE_4096 = 4096,
-    
+
     /** Elliptic Curve Cryptography (ECC) key of 224 bits. */
     OH_HUKS_ECC_KEY_SIZE_224 = 224,
     /** ECC key of 256 bits. */
@@ -451,8 +451,8 @@ enum OH_Huks_AuthAccessType {
 };
 
 /**
- * @brief Enumerates key file storage authentication levels. 
- * 
+ * @brief Enumerates key file storage authentication levels.
+ *
  * @since 11
  */
 enum OH_Huks_AuthStorageLevel {
@@ -614,7 +614,7 @@ enum OH_Huks_Tag {
     OH_HUKS_TAG_KEY_AUTH_PURPOSE = OH_HUKS_TAG_TYPE_UINT | 311,
 
     /**
-     * Security level of access control for key file storage, whose optional values are from enum OH_Huks_AuthStorageLevel.
+     * Security level of access control for key file storage, whose optional values are from OH_Huks_AuthStorageLevel.
      *
      * @since 11
      */
@@ -709,7 +709,7 @@ struct OH_Huks_Blob {
 struct OH_Huks_Param {
     /** Tag value. */
     uint32_t tag;
-    
+
     union {
         /** Parameter of the Boolean type. */
         bool boolParam;
