@@ -59,10 +59,8 @@ extern "C" {
  * @since 11
  * @version 1.0
  */
-struct WebSocket *OH_NetStack_WebSocketClient_Constructor(WebSocket_OnOpenCallback onOpen,
-                                                          WebSocket_OnMessageCallback onMessage,
-                                                          WebSocket_OnErrorCallback onError,
-                                                          WebSocket_OnCloseCallback onclose);
+struct WebSocket *OH_WebSocketClient_Constructor(WebSocket_OnOpenCallback onOpen, WebSocket_OnMessageCallback onMessage,
+                                                 WebSocket_OnErrorCallback onError, WebSocket_OnCloseCallback onclose);
 
 /**
  * @brief Adds the header information to the client request.
@@ -74,7 +72,7 @@ struct WebSocket *OH_NetStack_WebSocketClient_Constructor(WebSocket_OnOpenCallba
  * @since 11
  * @version 1.0
  */
-int OH_NetStack_WebSocketClient_AddHeader(struct WebSocket *client, struct WebSocket_Header header);
+int OH_WebSocketClient_AddHeader(struct WebSocket *client, struct WebSocket_Header header);
 
 /**
  * @brief Connects the client to the server.
@@ -88,8 +86,7 @@ int OH_NetStack_WebSocketClient_AddHeader(struct WebSocket *client, struct WebSo
  * @since 11
  * @version 1.0
  */
-int OH_NetStack_WebSocketClient_Connect(struct WebSocket *client, const char *url,
-                                        struct WebSocket_RequestOptions options);
+int OH_WebSocketClient_Connect(struct WebSocket *client, const char *url, struct WebSocket_RequestOptions options);
 
 /**
  * @brief Sends data from the client to the server.
@@ -103,7 +100,7 @@ int OH_NetStack_WebSocketClient_Connect(struct WebSocket *client, const char *ur
  * @since 11
  * @version 1.0
  */
-int OH_NetStack_WebSocketClient_Send(struct WebSocket *client, char *data, size_t length);
+int OH_WebSocketClient_Send(struct WebSocket *client, char *data, size_t length);
 
 /**
  * @brief Closes a webSocket connection.
@@ -117,7 +114,7 @@ int OH_NetStack_WebSocketClient_Send(struct WebSocket *client, char *data, size_
  * @since 11
  * @version 1.0
  */
-int OH_NetStack_WebSocketClient_Close(struct WebSocket *client, struct WebSocket_CloseOption options);
+int OH_WebSocketClient_Close(struct WebSocket *client, struct WebSocket_CloseOption options);
 
 /**
  * @brief Releases the context and resources of the websocket connection.
@@ -129,7 +126,7 @@ int OH_NetStack_WebSocketClient_Close(struct WebSocket *client, struct WebSocket
  * @since 11
  * @version 1.0
  */
-int OH_NetStack_WebSocketClient_Destroy(struct WebSocket *client);
+int OH_WebSocketClient_Destroy(struct WebSocket *client);
 
 #ifdef __cplusplus
 }
