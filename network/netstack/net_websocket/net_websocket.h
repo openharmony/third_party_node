@@ -74,7 +74,7 @@ struct WebSocket *OH_NetStack_WebSocketClient_Constructor(WebSocket_OnOpenCallba
  * @since 11
  * @version 1.0
  */
-int OH_NetStack_WebSocketClient_AddHeader(struct WebSocket *client, struct WebSocket_HeaderNode header);
+int OH_NetStack_WebSocketClient_AddHeader(struct WebSocket *client, struct WebSocket_Header header);
 
 /**
  * @brief Connects the client to the server.

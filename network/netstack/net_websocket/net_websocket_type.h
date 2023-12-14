@@ -139,13 +139,13 @@ typedef void (*WebSocket_OnCloseCallback)(struct WebSocket *client, WebSocket_Cl
  * @since 11
  * @version 1.0
  */
-struct WebSocket_HeaderNode {
+struct WebSocket_Header {
     /** Header field name */
     const char *fieldName;
     /** Header field content */
     const char *fieldValue;
     /** Next pointer of the header linked list */
-    struct WebSocket_HeaderNode *next;
+    struct WebSocket_Header *next;
 };
 
 /**
@@ -156,7 +156,7 @@ struct WebSocket_HeaderNode {
  * @version 1.0
  */
 struct WebSocket_RequestOptions {
-    struct WebSocket_HeaderNode *headers;
+    struct WebSocket_Header *headers;
 };
 
 /**
