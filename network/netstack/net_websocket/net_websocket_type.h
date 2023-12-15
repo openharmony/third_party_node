@@ -134,7 +134,7 @@ typedef void (*WebSocket_OnErrorCallback)(struct WebSocket *client, WebSocket_Er
 typedef void (*WebSocket_OnCloseCallback)(struct WebSocket *client, WebSocket_CloseResult closeResult);
 
 /**
- * @brief Adds the header linked list to the WebSocket client.
+ * @brief Adds the header linked list to the websocket client.
  *
  * @since 11
  * @version 1.0
