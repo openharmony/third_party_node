@@ -117,7 +117,7 @@ typedef void (*WebSocket_OnMessageCallback)(struct WebSocket *client, char *data
  * @brief Defines the callback function invoked when an error message is received.
  *
  * @param client websocket client.
- * @param errorResult Content of the connection error message received by the webSocket client.
+ * @param errorResult Content of the connection error message received by the websocket client.
  * @since 11
  * @version 1.0
  */
@@ -126,8 +126,8 @@ typedef void (*WebSocket_OnErrorCallback)(struct WebSocket *client, WebSocket_Er
 /**
  * @brief Defines the callback function invoked when a <b>close</b> message is received.
  *
- * @param client websocket client.
- * @param closeResult Content of the <b>close</b> message received by the websocket client.
+ * @param client webSocket client.
+ * @param closeResult Content of the <b>close</b> message received by the webSocket client.
  * @since 11
  * @version 1.0
  */
