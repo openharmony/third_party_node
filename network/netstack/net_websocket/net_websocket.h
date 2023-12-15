@@ -103,7 +103,7 @@ int OH_WebSocketClient_Connect(struct WebSocket *client, const char *url, struct
 int OH_WebSocketClient_Send(struct WebSocket *client, char *data, size_t length);
 
 /**
- * @brief Closes a websocket connection.
+ * @brief Closes a webSocket connection.
  *
  * @param client Pointer to the websocket client.
  * @param url URL for the client to connect to the server.
