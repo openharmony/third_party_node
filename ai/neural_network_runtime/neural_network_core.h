@@ -434,7 +434,7 @@ OH_NN_ReturnCode OH_NNTensorDesc_GetDataType(const NN_TensorDesc *tensorDesc, OH
  *
  * After the {@link NN_TensorDesc} instance is created, call this method to set the tensor shape. \n
  * 
- * if <b>tensorDesc</b> or <b>shape</b> is a null pointer, or <b>shapeLength</b> is 0, this method will return error code. \n
+ * if <b>tensorDesc</b> or <b>shape</b> is a null pointer, or <b>shapeNum</b> is 0, this method will return error code. \n
  *
  * @param tensorDesc Pointer to the {@link NN_TensorDesc} instance.
  * @param shape The shape list of the tensor that needs to be set.
@@ -451,7 +451,7 @@ OH_NN_ReturnCode OH_NNTensorDesc_SetShape(NN_TensorDesc *tensorDesc, const int32
  *
  * Call this method to obtain the shape of the specified {@link NN_TensorDesc} instance. \n
  * 
- * if <b>tensorDesc</b>, <b>shape</b> or <b>shapeLength</b> is a null pointer, this method will return error code. 
+ * if <b>tensorDesc</b>, <b>shape</b> or <b>shapeNum</b> is a null pointer, this method will return error code. 
  * As an output parameter, <b>*shape</b> must be a null pointer, otherwise the method will return an error code. 
  * Fou example, you should define int32_t* tensorShape = NULL, and pass &tensorShape as the argument of <b>shape</b>. \n
  * 
