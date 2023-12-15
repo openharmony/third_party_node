@@ -32,41 +32,69 @@ class TAGS(enum.Enum):
 
 
 class ErrorType(enum.Enum):
-    DEFAULT = {
-        'id': -1,
-        'description': '',
+    UNKNOW_DECORATOR: {
+        id: 0,
+        'description': 'unknow decorator',
     }
-    EMPTY_TAG = {
-        'id': 0,
-        'description': "miss tag value",
-    }
-    ERROR_TAG = {
-        'id': 1,
-        'description': 'error tag name',
-    }
-    MISSPELL_WORDS = {
-        'id': 1,
+    MISSPELL_WORDS: {
+        id: 1,
         'description': 'misspell words',
     }
-    NAMING_ERRORS = {
-        'id': 2,
+    NAMING_ERRORS: {
+        id: 2,
         'description': 'naming errors',
     }
-    SYNTAX_ERRORS = {
-        'id': 3,
-        'description': 'syntax errors',
+    UNKNOW_PERMISSION: {
+        id: 3,
+        'description': 'unknow permission',
     }
-    UNKNOW_DEPRECATED = {
-        'id': 5,
+    UNKNOW_SYSCAP: {
+        id: 4,
+        'description': 'unknow syscap',
+    }
+    UNKNOW_DEPRECATED: {
+        id: 5,
         'description': 'unknow deprecated',
     }
-    WRONG_VALUE = {
-        'id': 7,
+    WRONG_ORDER: {
+        id: 6,
+        'description': 'wrong order',
+    }
+    WRONG_VALUE: {
+        id: 7,
         'description': 'wrong value',
     }
-    WRONG_SCENE = {
-        'id': 8,
+    WRONG_SCENE: {
+        id: 8,
         'description': 'wrong scene',
+    }
+    PARAMETER_ERRORS: {
+        id: 9,
+        'description': 'wrong parameter',
+    }
+    API_PAIR_ERRORS: {
+        id: 10,
+        'description': 'limited api pair errors',
+    }
+    ILLEGAL_ANY: {
+        id: 11,
+        'description': 'illegal any',
+    }
+    API_CHANGE_ERRORS: {
+        id: 12,
+        'description': 'api change errors',
+    }
+    EMPTY_TAG: {
+        id: 13,
+        'description': 'miss tag value',
+    }
+    ERROR_TAG: {
+        id: 14,
+        'description': 'error tag name',
+    }
+    SYNTAX_ERRORS: {
+        id: 15,
+        'description': 'syntax errors',
     }
 
 
@@ -105,23 +133,22 @@ reuse in Doc which has addtogroup tag.'
 be reused please delete the extra tags.'
     ERROR_FILE_HAS_ONE_LOSE_OTHER = 'the file has the $$, but do not has the $$.'
     ERROR_FILE_LOSE_ONE = 'the file missing $$'
-    FUNCTION_DECL = 'Function naming should use the big hump naming style or beginning with OH/OS,and \
-using "_" segmentation.'
-    STRUCT_DECL = 'Structure type naming should use the big hump naming style.'
-    ENUM_DECL = 'Enum type naming should use the big hump naming style.'
-    UNION_DECL = 'Consortium type naming should use the big hump naming style.'
-    VAR_DECL = 'Variable naming should use the small hump naming style.'
-    PARM_DECL = 'Function parameters naming should use the small hump naming style.'
-    MACRO_PARAMETERS_TYPE_NAMING_ERROR = 'Macro parameters naming should use the small hump naming style.'
-    FIELD_DECL = 'Fields in the structure naming should use the small hump naming style.'
-    MEMBERS_OF_THE_CONSORTIUM_TYPE_NAMING_ERROR = 'Members of the consortium naming should use the \
-small hump naming style.'
-    MACRO_DEFINITION = 'Macro naming should use all uppercase, separated by underscores naming style.'
-    ENUM_CONSTANT_DECL = 'Enum value naming should use all uppercase, separated by underscores naming style.'
-    GOTO_LABEL_TYPE_NAMING_ERROR = 'Goto label value naming should use all uppercase, separated by \
-underscores naming style.'
-    GLOBAL_VARIABLE_TYPE_NAMING_ERROR = 'Global variable should increase "g_" prefix.'
-    TRANSLATION_UNIT = 'File naming should be all lowercase, separated by underscores.'
+    FUNCTION_DECL = 'This name [$$] should use the big hump naming style or beginning with OH/OS,and \
+        using "_" segmentation.'
+    STRUCT_DECL = 'This name [$$] should use the big hump naming style.'
+    ENUM_DECL = 'This name [$$] should use the big hump naming style.'
+    UNION_DECL = 'This name [$$] should use the big hump naming style.'
+    VAR_DECL = 'This name [$$] should use the small hump naming style.'
+    PARM_DECL = 'This name [$$] should use the small hump naming style.'
+    MACRO_PARAMETERS_TYPE_NAMING_ERROR = 'This name [$$] should use the small hump naming style.'
+    FIELD_DECL = 'This name [$$] should use the small hump naming style.'
+    MEMBERS_OF_THE_CONSORTIUM_TYPE_NAMING_ERROR = 'This name [$$] should use the small hump naming style.'
+    MACRO_DEFINITION = 'This name [$$] should use all uppercase, separated by underscores naming style.'
+    ENUM_CONSTANT_DECL = 'This name [$$] should use all uppercase, separated by underscores naming style.'
+    GOTO_LABEL_TYPE_NAMING_ERROR = 'This name [$$] should use all uppercase, separated by \
+        underscores naming style.'
+    GLOBAL_VARIABLE_TYPE_NAMING_ERROR = 'This name [$$] should increase "g_" prefix.'
+    TRANSLATION_UNIT = 'This name [$$] should be all lowercase, separated by underscores.'
 
 
 class OutputTxt:
