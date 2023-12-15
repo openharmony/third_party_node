@@ -1,0 +1,152 @@
+[
+    {
+        "name": "OH_NNCompilation_Construct"
+    },
+    {
+        "name": "OH_NNCompilation_ConstructWithOfflineModelFile"
+    },
+    {
+        "name": "OH_NNCompilation_ConstructWithOfflineModelBuffer"
+    },
+    {
+        "name": "OH_NNCompilation_ConstructForCache"
+    },
+    {
+        "name": "OH_NNCompilation_ExportCacheToBuffer"
+    },
+    {
+        "name": "OH_NNCompilation_ImportCacheFromBuffer"
+    },
+    {
+        "name": "OH_NNCompilation_AddExtensionConfig"
+    },
+    {
+        "name": "OH_NNCompilation_SetDevice"
+    },
+    {
+        "name": "OH_NNCompilation_SetCache"
+    },
+    {
+        "name": "OH_NNCompilation_SetPerformanceMode"
+    },
+    {
+        "name": "OH_NNCompilation_SetPriority"
+    },
+    {
+        "name": "OH_NNCompilation_EnableFloat16"
+    },
+    {
+        "name": "OH_NNCompilation_Build"
+    },
+    {
+        "name": "OH_NNCompilation_Destroy"
+    },
+    {
+        "name": "OH_NNTensorDesc_Create"
+    },
+    {
+        "name": "OH_NNTensorDesc_Destroy"
+    },
+    {
+        "name": "OH_NNTensorDesc_SetName"
+    },
+    {
+        "name": "OH_NNTensorDesc_GetName"
+    },
+    {
+        "name": "OH_NNTensorDesc_SetDataType"
+    },
+    {
+        "name": "OH_NNTensorDesc_GetDataType"
+    },
+    {
+        "name": "OH_NNTensorDesc_SetShape"
+    },
+    {
+        "name": "OH_NNTensorDesc_GetShape"
+    },
+    {
+        "name": "OH_NNTensorDesc_SetFormat"
+    },
+    {
+        "name": "OH_NNTensorDesc_GetFormat"
+    },
+    {
+        "name": "OH_NNTensorDesc_GetElementCount"
+    },
+    {
+        "name": "OH_NNTensorDesc_GetByteSize"
+    },
+    {
+        "name": "OH_NNTensor_Create"
+    },
+    {
+        "name": "OH_NNTensor_CreateWithSize"
+    },
+    {
+        "name": "OH_NNTensor_CreateWithFd"
+    },
+    {
+        "name": "OH_NNTensor_Destroy"
+    },
+    {
+        "name": "OH_NNTensor_GetTensorDesc"
+    },
+    {
+        "name": "OH_NNTensor_GetDataBuffer"
+    },
+    {
+        "name": "OH_NNTensor_GetSize"
+    },
+    {
+        "name": "OH_NNTensor_GetFd"
+    },
+    {
+        "name": "OH_NNTensor_GetOffset"
+    },
+    {
+        "name": "OH_NNExecutor_Construct"
+    },
+    {
+        "name": "OH_NNExecutor_GetOutputShape"
+    },
+    {
+        "name": "OH_NNExecutor_Destroy"
+    },
+    {
+        "name": "OH_NNExecutor_GetInputCount"
+    },
+    {
+        "name": "OH_NNExecutor_GetOutputCount"
+    },
+    {
+        "name": "OH_NNExecutor_CreateInputTensorDesc"
+    },
+    {
+        "name": "OH_NNExecutor_CreateOutputTensorDesc"
+    },
+    {
+        "name": "OH_NNExecutor_GetInputDimRange"
+    },
+    {
+        "name": "OH_NNExecutor_SetOnRunDone"
+    },
+    {
+        "name": "OH_NNExecutor_SetOnServiceDied"
+    },
+    {
+        "name": "OH_NNExecutor_RunSync"
+    },
+    {
+        "name": "OH_NNExecutor_RunAsync"
+    },
+    {
+        "name": "OH_NNDevice_GetAllDevicesID"
+    },
+    {
+        "name": "OH_NNDevice_GetName"
+    },
+    {
+        "name": "OH_NNDevice_GetType"
+    }
+]
