@@ -190,67 +190,67 @@ typedef enum WebSocket_ErrCode {
     E_BASE = 1000,
 
     /**
-     * @brief The WebSocket client is null.
+     * @brief The websocket client is null.
      */
     WEBSOCKET_CLIENT_NULL = (E_BASE + 1),
 
     /**
-     * @brief A webSocket client is not created.
+     * @brief A websocket client is not created.
      */
     WEBSOCKET_CLIENT_NOT_CREATED = (E_BASE + 2),
 
     /**
-     * @brief An error occurs while setting up a WebSocket connection.
+     * @brief An error occurs while setting up a websocket connection.
      */
     WEBSOCKET_CONNECTION_ERROR = (E_BASE + 3),
 
     /**
-     * @brief An error occurs while parsing WebSocket connection parameters.
+     * @brief An error occurs while parsing websocket connection parameters.
      */
     WEBSOCKET_CONNECTION_PARSE_URL_ERROR = (E_BASE + 5),
 
     /**
-     * @brief The memory is insufficient for creating a context during WebSocket connection setup.
+     * @brief The memory is insufficient for creating a context during websocket connection setup.
      */
     WEBSOCKET_CONNECTION_NO_MEMORY = (E_BASE + 6),
 
     /**
-     * @brief The WebSocket connection is closed by the peer.
+     * @brief The websocket connection is closed by the peer.
      */
     WEBSOCKET_CONNECTION_CLOSED_BY_PEER = (E_BASE + 7),
 
     /**
-     * @brief The WebSocket connection is destroyed.
+     * @brief The websocket connection is destroyed.
      */
     WEBSOCKET_DESTROYED = (E_BASE + 8),
 
     /**
-     * @brief An incorrect protocol is used for WebSocket connection.
+     * @brief An incorrect protocol is used for websocket connection.
      */
     WEBSOCKET_PROTOCOL_ERROR = (E_BASE + 9),
 
     /**
-     * @brief The memory for the WebSocket client to send data is insufficient.
+     * @brief The memory for the websocket client to send data is insufficient.
      */
     WEBSOCKET_SEND_NO_MEMORY = (E_BASE + 10),
 
     /**
-     * @brief The data sent by the WebSocket client is null.
+     * @brief The data sent by the websocket client is null.
      */
     WEBSOCKET_SEND_DATA_NULL = (E_BASE + 11),
 
     /**
-     * @brief The length of the data sent by the WebSocket client exceeds the limit.
+     * @brief The length of the data sent by the websocket client exceeds the limit.
      */
     WEBSOCKET_DATA_LENGTH_EXCEEDED = (E_BASE + 12),
 
     /**
-     * @brief The queue length of the data sent by the WebSocket client exceeds the limit.
+     * @brief The queue length of the data sent by the websocket client exceeds the limit.
      */
     WEBSOCKET_QUEUE_LENGTH_EXCEEDED = (E_BASE + 13),
 
     /**
-     * @brief The context of the WebSocket client is null.
+     * @brief The context of the websocket client is null.
      */
     WEBSOCKET_NO_CLIENT_CONTEXT = (E_BASE + 14),
 
@@ -260,7 +260,7 @@ typedef enum WebSocket_ErrCode {
     WEBSOCKET_NO_HEADER_CONTEXT = (E_BASE + 15),
 
     /**
-     * @brief The header of the WebSocket client exceeds the limit.
+     * @brief The header of the websocket client exceeds the limit.
      */
     WEBSOCKET_HEADER_EXCEEDED = (E_BASE + 16),
 
@@ -270,7 +270,7 @@ typedef enum WebSocket_ErrCode {
     WEBSOCKET_NO_CONNECTION = (E_BASE + 17),
 
     /**
-     * @brief The WebSocket client does not have the connection context.
+     * @brief The websocket client does not have the connection context.
      */
     WEBSOCKET_NO_CONNECTION_CONTEXT = (E_BASE + 18),
 } WebSocket_ErrCode;
