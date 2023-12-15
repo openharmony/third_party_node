@@ -95,7 +95,7 @@ struct WebSocket_OpenResult {
 /**
  * @brief Defines the callback function invoked when an <b>open</b> message is received.
  *
- * @param client WebSocket client.
+ * @param client websocket client.
  * @param openResult Content of the <b>open</b> message received by the WebSocket client.
  * @since 11
  * @version 1.0
@@ -105,7 +105,7 @@ typedef void (*WebSocket_OnOpenCallback)(struct WebSocket *client, WebSocket_Ope
 /**
  * @brief Defines the callback function invoked when data is received.
  *
- * @param client WebSocket client.
+ * @param client websocket client.
  * @param data Data received by the WebSocket client.
  * @param length Length of the data received by the WebSocket client.
  * @since 11
@@ -116,7 +116,7 @@ typedef void (*WebSocket_OnMessageCallback)(struct WebSocket *client, char *data
 /**
  * @brief Defines the callback function invoked when an error message is received.
  *
- * @param client WebSocket client.
+ * @param client websocket client.
  * @param errorResult Content of the connection error message received by the WebSocket client.
  * @since 11
  * @version 1.0
@@ -126,7 +126,7 @@ typedef void (*WebSocket_OnErrorCallback)(struct WebSocket *client, WebSocket_Er
 /**
  * @brief Defines the callback function invoked when a <b>close</b> message is received.
  *
- * @param client webSocket client.
+ * @param client websocket client.
  * @param closeResult Content of the <b>close</b> message received by the webSocket client.
  * @since 11
  * @version 1.0
