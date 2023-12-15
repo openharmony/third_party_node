@@ -73,7 +73,7 @@ def result_to_json(check_result):
         txt_resul.append('api_check: false')
     else:
         for result in check_result:
-            location = f'{result.location}(line:{result.locationLine}, col:{result.locationColumn})'
+            location = f'{result.location}(line:{result.location_line}, col:{result.location_column})'
             message = 'API check error of [{}]:{}'.format(result.error_type['description'], result.error_info)
             txt_resul.append(OutputTxt(result.error_type['id'], result.level, location, result.file_name, message))
         txt_resul.append('api_check: false')

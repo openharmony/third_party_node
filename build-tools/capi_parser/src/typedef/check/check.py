@@ -117,20 +117,20 @@ class ErrorMessage(enum.Enum):
     REPEAT_FILE_TAG = 'the [$$] tag is repeat. Please check the tag in file'
     ERROR_INFO_VALUE_TAG = 'the [$$] tag value is incorrect. Please check the usage method'
     ERROR_INFO_VALUE_LIBRARY = 'the [library] tag value is incorrect. This tag must be end with .so or .a, \
-        or is NA. Please check the usage method'
+or is NA. Please check the usage method'
     ERROR_INFO_VALUE_PARAM = 'the value of the [$$] [param] tag is incorrect. Please check if it matches \
-        the [$$] parameter name'
+the [$$] parameter name'
     ERROR_INFO_COUNT_PARAM = 'the count of the [param] tag is wrong. Please check the parameters and Doc'
     ERROR_INFO_VALUE_PERMISSION = 'the [permission] tag value is incorrect. Please check if the permission \
-        field has been configured or update the configuration file'
+field has been configured or update the configuration file'
     ERROR_INFO_VALUE_SINCE = 'the [since] tag value is incorrect. Please check if the tag value is a numerical value'
     ERROR_INFO_VALUE_SYSCAP = 'the [syscap] tag value is incorrect. Please check if the syscap field is configured'
     ERROR_USE_LEFT_BRACE = 'the validity verification of the Doc tag failed. The [{] tag is not allowed to used \
-        in Doc which not has addtogroup tag, or used in the wrong place.'
+in Doc which not has addtogroup tag, or used in the wrong place.'
     ERROR_REPEAT_LEFT_BRACE = 'the validity verification of the Doc tag failed. The [{] tag is not allowed to \
-        reuse in Doc which has addtogroup tag.'
+reuse in Doc which has addtogroup tag.'
     ERROR_USE_RIGHT_BRACE = 'the validity verification of the JSDoc tag failed. The [}] tag is not allowed to \
-        be reused please delete the extra tags.'
+be reused please delete the extra tags.'
     ERROR_FILE_HAS_ONE_LOSE_OTHER = 'the file has the $$, but do not has the $$.'
     ERROR_FILE_LOSE_ONE = 'the file missing $$'
     FUNCTION_DECL = 'This name [$$] should use the big hump naming style or beginning with OH/OS,and \
