@@ -32,3 +32,4 @@ ohos_ndk_headers("websocket_header") {
     "net_websocket_type.h",
   ]
 }
+
