@@ -398,17 +398,9 @@ enum  OH_Huks_ErrCode {
     OH_HUKS_ERR_CODE_INTERNAL_ERROR = 12000012,
     /** The authentication credential does not exist. */
     OH_HUKS_ERR_CODE_CREDENTIAL_NOT_EXIST = 12000013,
-    /**
-     * The memory is not sufficient.
-     *
-     * @since 9
-     */
+    /** The memory is not sufficient. */
     OH_HUKS_ERR_CODE_INSUFFICIENT_MEMORY = 12000014,
-    /**
-     * Failed to call service.
-     *
-     * @since 9
-     */
+    /** Failed to call service. */
     OH_HUKS_ERR_CODE_CALL_SERVICE_FAILED = 12000015,
     /**
      * Device password is required but not set.
