@@ -258,8 +258,9 @@ def copy_self_include(link_include_file, self_include_file):
     if not os.path.exists(std_include):
         os.makedirs(std_include)
 
-    for item in self_include_file:
-        shutil.copyfile(item, std_include)
+    if self_include_file:
+        for item in self_include_file:
+            shutil.copy(item, std_include)
 
     link_include_file.append(std_include)
 
@@ -268,8 +269,8 @@ def delete_typedef_child(child):
     if child['kind'] == 'TYPEDEF_DECL':
         if 'children' in child and len(child['children']) \
                 and (child['children'][0]['kind'] == 'STRUCT_DECL'
-                    or child['children'][0]['kind'] == 'ENUM_DECL'
-                    or child['children'][0]['kind'] == 'UNION_DECL'):
+                     or child['children'][0]['kind'] == 'ENUM_DECL'
+                     or child['children'][0]['kind'] == 'UNION_DECL'):
             child['children'] = []
 
 
@@ -310,4 +311,6 @@ def parser_include_ast(gn_file_path, include_path, self_include=None):        # 
         if 'children' in item:
             for child in item['children']:
                 delete_typedef_child(child)
+
+    shutil.rmtree(StringConstant.SELF_INCLUDE.value)
     return data

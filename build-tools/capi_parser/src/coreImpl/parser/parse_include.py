@@ -189,10 +189,17 @@ def processing_enum(cursor, data):  # 获取枚举值
 def processing_def(cursor, data):  # 处理宏定义
     if data['node_content']['content']:
         split_data = data['node_content']['content'].split()
+        split_data_three = data['node_content']['content'].split('\t')
         if len(split_data) == 2:
             pattern = r'\((.*?), (.*?)\)'
             if re.search(pattern, data['node_content']['content']):
                 data['name'] = data['node_content']['content']
+            else:
+                data['name'] = split_data[0]
+                data['text'] = split_data[1]
+        elif len(split_data_three) == 2:
+            data['name'] = split_data[0]
+            data['text'] = split_data[1]
         else:
             marco_ext = cursor.extent
             tokens = cursor.translation_unit.get_tokens(extent=marco_ext)  # 找到对应的宏定义位置

@@ -80,8 +80,7 @@ def result_to_json(check_result):
     return json.dumps(txt_resul, default=lambda obj: obj.__dict__, indent=4)
 
 
-def curr_entry(pr_id):
-    file_path = os.path.abspath(os.path.join(os.getcwd(), f'..{os.sep}..{os.sep}all_files.txt'))
+def curr_entry(file_path):
     file_list = get_md_files(file_path)
     check_result_list = get_check_result_list(file_list)
     write_in_txt(check_result_list, r'./Error.txt')
