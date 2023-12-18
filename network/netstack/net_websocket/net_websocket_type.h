@@ -195,7 +195,7 @@ typedef enum WebSocket_ErrCode {
     WEBSOCKET_CLIENT_NULL = (E_BASE + 1),
 
     /**
-     * @brief A websocket client is not created.
+     * @brief A  webSocket client is not created.
      */
     WEBSOCKET_CLIENT_NOT_CREATED = (E_BASE + 2),
 
