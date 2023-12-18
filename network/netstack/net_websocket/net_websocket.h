@@ -59,8 +59,10 @@ extern "C" {
  * @since 11
  * @version 1.0
  */
-struct WebSocket *OH_WebSocketClient_Constructor(WebSocket_OnOpenCallback onOpen, WebSocket_OnMessageCallback onMessage,
-                                                 WebSocket_OnErrorCallback onError, WebSocket_OnCloseCallback onclose);
+struct Websocket *OH_WebSocketClient_Constructor(WebSocket_OnOpenCallback onOpen,
+                                                        WebSocket_OnMessageCallback onMessage,
+                                                        WebSocket_OnErrorCallback onError,
+                                                        WebSocket_OnCloseCallback onclose)
 
 /**
  * @brief Adds the header information to the client request.
