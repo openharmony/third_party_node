@@ -146,7 +146,7 @@ struct WebSocket_Header {
     const char *fieldValue;
     /** Next pointer of the header linked list */
     struct WebSocket_Header *next;
-}
+};
 
 /**
  * @brief Defines the parameters for the connection between the WebSocket client and server.
