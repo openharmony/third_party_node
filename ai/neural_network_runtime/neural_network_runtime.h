@@ -29,8 +29,10 @@
  *
  * @brief Defines the Neural Network Runtime APIs. The AI inference framework uses the Native APIs provided by Neural Network Runtime
  *        to construct models.
+ * 
  * Note: Currently, the APIs of Neural Network Runtime do not support multi-thread calling. \n
  *
+ * include "neural_network_runtime/neural_network_runtime.h"
  * @library libneural_network_runtime.so
  * @since 9
  * @version 2.0
@@ -50,18 +52,18 @@ extern "C" {
 /**
  * @brief Creates a {@link NN_QuantParam} instance.
  *
- * After the NN_QuantParam instance is created, call {@link OH_NNQuantParam_SetScales}, {@link OH_NNQuantParam_SetZeroPoints}, 
+ * After the {@link NN_QuantParam} instance is created, call {@link OH_NNQuantParam_SetScales}, {@link OH_NNQuantParam_SetZeroPoints}, 
  * {@link OH_NNQuantParam_SetNumBits} to set its attributes, and then call {@link OH_NNModel_SetTensorQuantParams} to set it 
  * to a tensor. After that you should destroy it by calling {@link OH_NNQuantParam_Destroy} to avoid memory leak. \n
  *
- * @return Pointer to a {@link NN_QuantParam} instance.
+ * @return Pointer to a {@link NN_QuantParam} instance, or NULL if it fails to create.
  * @since 11
  * @version 1.0
  */
 NN_QuantParam *OH_NNQuantParam_Create();
 
 /**
- * @brief Sets the scales of the quantization parameter instance.
+ * @brief Sets the scales of the {@link NN_QuantParam} instance.
  *
  * The parameter <b>quantCount<\b> is the number of quantization parameters of a tensor, e.g. the quantCount is the channel 
  * count if the tensor is per-channel quantized. \n
@@ -77,7 +79,7 @@ NN_QuantParam *OH_NNQuantParam_Create();
 OH_NN_ReturnCode OH_NNQuantParam_SetScales(NN_QuantParam *quantParams, const double *scales, size_t quantCount);
 
 /**
- * @brief Sets the zero points of the quantization parameter instance.
+ * @brief Sets the zero points of the {@link NN_QuantParam} instance.
  *
  * The parameter <b>quantCount<\b> is the number of quantization parameters of a tensor, e.g. the quantCount is the channel 
  * count if the tensor is per-channel quantized. \n
@@ -93,7 +95,7 @@ OH_NN_ReturnCode OH_NNQuantParam_SetScales(NN_QuantParam *quantParams, const dou
 OH_NN_ReturnCode OH_NNQuantParam_SetZeroPoints(NN_QuantParam *quantParams, const int32_t *zeroPoints, size_t quantCount);
 
 /**
- * @brief Sets the number bits of the quantization parameter instance.
+ * @brief Sets the number bits of the {@link NN_QuantParam} instance.
  *
  * The parameter <b>quantCount<\b> is the number of quantization parameters of a tensor, e.g. the quantCount is the channel 
  * count if the tensor is per-channel quantized. \n
@@ -109,9 +111,10 @@ OH_NN_ReturnCode OH_NNQuantParam_SetZeroPoints(NN_QuantParam *quantParams, const
 OH_NN_ReturnCode OH_NNQuantParam_SetNumBits(NN_QuantParam *quantParams, const uint32_t *numBits, size_t quantCount);
 
 /**
- * @brief Releases a quantization parameter instance.
+ * @brief Releases a {@link NN_QuantParam} instance.
  *
- * The {@link NN_QuantParam} instance needs to be released to avoid memory leak after it is set to a {@link NN_TensorDesc}. 
+ * The {@link NN_QuantParam} instance needs to be released to avoid memory leak after it is set to a {@link NN_TensorDesc}. \n
+ * 
  * If <b>quantParams</b> or <b>*quantParams</b> is a null pointer, this method only prints warning logs and does not 
  * execute the release. \n
  *
@@ -127,13 +130,13 @@ OH_NN_ReturnCode OH_NNQuantParam_Destroy(NN_QuantParam **quantParams);
  * @brief Creates a model instance of the {@link OH_NNModel} type and uses other APIs provided by OH_NNModel to construct the model instance.
  *
  * Before composition, call {@link OH_NNModel_Construct} to create a model instance. Based on the model topology, 
- * call the {@link OH_NNModel_AddTensor}, {@link OH_NNModel_AddOperation}, and {@link OH_NNModel_SetTensorData} methods 
+ * call the {@link OH_NNModel_AddTensorToModel}, {@link OH_NNModel_AddOperation}, and {@link OH_NNModel_SetTensorData} methods 
  * to fill in the data and operator nodes of the model, and then call {@link OH_NNModel_SpecifyInputsAndOutputs} to specify the inputs and outputs of the model. 
  * After the model topology is constructed, call {@link OH_NNModel_Finish} to build the model. \n
  *
  * After a model instance is no longer used, you need to destroy it by calling {@link OH_NNModel_Destroy} to avoid memory leak. \n
  *
- * @return Pointer to a {@link OH_NNModel} instance.
+ * @return Pointer to a {@link OH_NNModel} instance, or NULL if it fails to create.
  * @since 9
  * @version 1.0
  */
@@ -166,7 +169,7 @@ OH_NN_ReturnCode OH_NNModel_AddTensorToModel(OH_NNModel *model, const NN_TensorD
  *
  * For tensors with constant values (such as model weights), you need to use this method to set their data. 
  * The index of a tensor is determined by the order in which the tensor is added to the model. 
- * For details about how to add a tensor, see {@link OH_NNModel_AddTensor}. \n
+ * For details about how to add a tensor, see {@link OH_NNModel_AddTensorToModel}. \n
  *
  * @param model Pointer to the {@link OH_NNModel} instance.
  * @param index Index of a tensor.
@@ -211,12 +214,12 @@ OH_NN_ReturnCode OH_NNModel_SetTensorType(OH_NNModel *model, uint32_t index, OH_
  * This method is used to add an operator to a model instance. The operator type is specified by <b>op</b>, and 
  * the operator parameters, inputs, and outputs are specified by <b>paramIndices</b>, <b>inputIndices</b>, and <b>outputIndices</b> respectively. 
  * This method verifies the attributes of operator parameters and the number of input and output parameters. 
- * These attributes must be correctly set when {@link OH_NNModel_AddTensor} is called to add tensors. 
+ * These attributes must be correctly set when {@link OH_NNModel_AddTensorToModel} is called to add tensors. 
  * For details about the expected parameters, input attributes, and output attributes of each operator, see {@link OH_NN_OperationType}. \n
  *
  * <b>paramIndices</b>, <b>inputIndices</b>, and <b>outputIndices</b> store the indices of tensors. 
  * The indices are determined by the order in which tensors are added to the model. 
- * For details about how to add a tensor, see {@link OH_NNModel_AddTensor}. \n
+ * For details about how to add a tensor, see {@link OH_NNModel_AddTensorToModel}. \n
  *
  * If unnecessary parameters are added when adding an operator, this method returns {@link OH_NN_INVALID_PARAMETER}. 
  * If no operator parameter is set, the operator uses the default parameter value. 
@@ -245,7 +248,7 @@ OH_NN_ReturnCode OH_NNModel_AddOperation(OH_NNModel *model,
  * using {@link OH_NNModel_SetTensorData}. \n
  *
  * The index of a tensor is determined by the order in which the tensor is added to the model. 
- * For details about how to add a tensor, see {@link OH_NNModel_AddTensor}. \n
+ * For details about how to add a tensor, see {@link OH_NNModel_AddTensorToModel}. \n
  *
  * Currently, the model inputs and outputs cannot be set asynchronously. \n
  *
@@ -265,7 +268,7 @@ OH_NN_ReturnCode OH_NNModel_SpecifyInputsAndOutputs(OH_NNModel *model,
  * @brief Completes model composition.
  *
  * After the model topology is set up, call this method to indicate that the composition is complete. After this method is called, 
- * additional composition operations cannot be performed. If {@link OH_NNModel_AddTensor}, {@link OH_NNModel_AddOperation}, 
+ * additional composition operations cannot be performed. If {@link OH_NNModel_AddTensorToModel}, {@link OH_NNModel_AddOperation}, 
  * {@link OH_NNModel_SetTensorData}, and {@link OH_NNModel_SpecifyInputsAndOutputs} are called, 
  * {@link OH_NN_OPERATION_FORBIDDEN} is returned. \n
  *

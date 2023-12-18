@@ -20,8 +20,8 @@
  * @brief Provides APIs of Neural Network Runtime for accelerating the model inference.
  *
  * @Syscap SystemCapability.Ai.NeuralNetworkRuntime
- * @since 11
- * @version 1.0
+ * @since 9
+ * @version 2.0
  */
 
 /**
@@ -29,8 +29,10 @@
  *
  * @brief The APIs defined in this document are all compatible APIs of the previous version, which will be deprecated after five versions. 
  *        It is recommended to use the new APIs defined by neural_network_core.h and neural_network_runtime.h.
+ * 
  * Note: Currently, the APIs of Neural Network Runtime do not support multi-thread calling. \n
  *
+ * include "neural_network_runtime/neural_network_runtime_compat.h"
  * @library libneural_network_runtime.so
  * @since 11
  * @version 1.0
@@ -167,7 +169,7 @@ OH_NN_ReturnCode OH_NNExecutor_Run(OH_NNExecutor *executor);
  *                   Assume that the value of <b>inputIndices</b> is <b>{1, 5, 9}</b> when {@link OH_NNModel_SpecifyInputsAndOutputs} is called. 
  *                   In the memory input application, the index value for the three inputs is <b>{0, 1, 2}</b>.
  * @param length Memory size to be applied for, in bytes.
- * @return Pointer to a {@link OH_NN_Memory} instance.
+ * @return Pointer to a {@link OH_NN_Memory} instance, or NULL if it fails to create.
  * @deprecated since 11
  * @useinstead {@link OH_NNTensor_CreateWithSize}
  * @since 9
@@ -187,7 +189,7 @@ OH_NN_Memory *OH_NNExecutor_AllocateInputMemory(OH_NNExecutor *executor, uint32_
  *                    Assume that the value of <b>outputIndices</b> is <b>{4, 6, 8}</b> when {@link OH_NNModel_SpecifyInputsAndOutputs} is called. 
  *                    In output memory application, the index value for the three outputs is <b>{0, 1, 2}</b>.
  * @param length Memory size to be applied for, in bytes.
- * @return Pointer to a {@link OH_NN_Memory} instance.
+ * @return Pointer to a {@link OH_NN_Memory} instance, or NULL if it fails to create.
  * @deprecated since 11
  * @useinstead {@link OH_NNTensor_CreateWithSize}
  * @since 9

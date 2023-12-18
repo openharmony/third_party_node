@@ -19,8 +19,8 @@
  *
  * @brief Provides APIs of Neural Network Runtime for accelerating the model inference.
  *
- * @since 11
- * @version 1.0
+ * @since 9
+ * @version 2.0
  */
 
 /**
@@ -28,8 +28,10 @@
  *
  * @brief Defines the Neural Network Core APIs. The AI inference framework uses the Native APIs provided by Neural Network Core
  *        to compile models and perform inference and computing on acceleration hardware.
+ * 
  * Note: Currently, the APIs of Neural Network Core do not support multi-thread calling. \n
  *
+ * include "neural_network_runtime/neural_network_core.h"
  * @library libneural_network_core.so
  * @Syscap SystemCapability.Ai.NeuralNetworkRuntime
  * @since 11
@@ -63,7 +65,7 @@ extern "C" {
  * After {@link OH_NNCompilation_Build} is called, the {@link OH_NNModel} instance can be released. \n
  *
  * @param model Pointer to the {@link OH_NNModel} instance.
- * @return Returns the pointer to a {@link OH_NNCompilation} instance.
+ * @return Pointer to a {@link OH_NNCompilation} instance, or NULL if it fails to create.
  * @since 9
  * @version 1.0
  */
@@ -82,7 +84,7 @@ OH_NNCompilation *OH_NNCompilation_Construct(const OH_NNModel *model);
  * You should perform the offline compilation during your development and deploy the offline model in your app package. \n
  * 
  * @param modelPath Offline model file path.
- * @return Pointer to an {@link OH_NNCompilation} instance.
+ * @return Pointer to an {@link OH_NNCompilation} instance, or NULL if it fails to create.
  * @since 11
  * @version 1.0
  */
@@ -94,12 +96,12 @@ OH_NNCompilation *OH_NNCompilation_ConstructWithOfflineModelFile(const char *mod
  * This method conflicts with the way of passing an online built model or an offline model file path, 
  * and you have to choose only one of the three construction methods. \n
  * 
- * Note that the returned {@link OH_NNCompilation} instance only saves the <b>modelBuffer<\b> pointer inside, instead of 
- * copying its data. You should not release <b>modelBuffer<\b> before the {@link OH_NNCompilation} instance is destroied. \n
+ * Note that the returned {@link OH_NNCompilation} instance only saves the <b>modelBuffer</b> pointer inside, instead of 
+ * copying its data. You should not release <b>modelBuffer</b> before the {@link OH_NNCompilation} instance is destroied. \n
  *
  * @param modelBuffer Offline model file buffer.
  * @param modelSize Offfline model buffer size.
- * @return Pointer to an {@link OH_NNCompilation} instance.
+ * @return Pointer to an {@link OH_NNCompilation} instance, or NULL if it fails to create.
  * @since 11
  * @version 1.0
  */
@@ -113,6 +115,7 @@ OH_NNCompilation *OH_NNCompilation_ConstructWithOfflineModelBuffer(const void *m
  * You should call {@link OH_NNCompilation_SetCache} or {@link OH_NNCompilation_ImportCacheFromBuffer} first, 
  * and then call {@link OH_NNCompilation_Build} to complete the restoration. \n
  *
+ * @return Pointer to an {@link OH_NNCompilation} instance, or NULL if it fails to create.
  * @since 11
  * @version 1.0
  */
@@ -143,8 +146,8 @@ OH_NN_ReturnCode OH_NNCompilation_ExportCacheToBuffer(OH_NNCompilation *compilat
  *
  * {@link OH_NNCompilation_Build} should be called to complete the restoration after {@link OH_NNCompilation_ImportCacheFromBuffer} is called. \n
  * 
- * Note that <b>compilation<\b> only saves the <b>buffer<\b> pointer inside, instead of copying its data. You should not 
- * release <b>buffer<\b> before <b>compilation<\b> is destroied. \n
+ * Note that <b>compilation</b> only saves the <b>buffer</b> pointer inside, instead of copying its data. You should not 
+ * release <b>buffer</b> before <b>compilation</b> is destroied. \n
  *
  * @param compilation Pointer to the {@link OH_NNCompilation} instance.
  * @param buffer Pointer to the given buffer.
@@ -166,7 +169,7 @@ OH_NN_ReturnCode OH_NNCompilation_ImportCacheFromBuffer(OH_NNCompilation *compil
  * vendor's documents, and add them into compilation instance one by one. These attributes will be passed directly to device 
  * driver, and this method will return error code if the driver cannot parse them. \n
  * 
- * After {@link OH_NNCompilation_Build} is called, the <b>configName<\b> and <b>configValue<\b> can be released. \n
+ * After {@link OH_NNCompilation_Build} is called, the <b>configName</b> and <b>configValue</b> can be released. \n
  *
  * @param compilation Pointer to the {@link OH_NNCompilation} instance.
  * @param configName Config name.
@@ -191,7 +194,7 @@ OH_NN_ReturnCode OH_NNCompilation_AddExtensionConfig(OH_NNCompilation *compilati
  *
  * 
  * @param compilation Pointer to the {@link OH_NNCompilation} instance.
- * @param deviceID Device id. If it is 0, the 0th device in the current device list will be used.
+ * @param deviceID Device id. If it is 0, the first device in the current device list will be used by default.
  * @return Execution result of the function. If the operation is successful, <b>OH_NN_SUCCESS</b> is returned. 
  *         If the operation fails, an error code is returned. For details about the error codes, see {@link OH_NN_ReturnCode}.
  * @since 9
@@ -275,8 +278,10 @@ OH_NN_ReturnCode OH_NNCompilation_SetPriority(OH_NNCompilation *compilation, OH_
 /**
  * @brief Enables float16 for computing.
  *
- * Float32 or int8 are used by default. If this method is called on a device that supports float16, 
+ * Float32 is used by default for the model of float type. If this method is called on a device that supports float16, 
  * float16 will be used for computing the float32 model to reduce memory usage and execution time. \n
+ * 
+ * This option is useless for the model of int type, e.g. int8 type. \n
  *
  * If this method is called on the device that does not support float16, the {@link OH_NN_UNAVALIDABLE_DEVICE} error code is returned. \n
  *
@@ -337,7 +342,7 @@ void OH_NNCompilation_Destroy(OH_NNCompilation **compilation);
  * {@link NN_Tensor} instances with the same {@link NN_TensorDesc} instance. And you should destroy the {@link NN_TensorDesc} instance 
  * by {@link OH_NNTensorDesc_Destroy} when it is no longer used. \n
  *
- * @return Pointer to a {@link NN_TensorDesc} instance
+ * @return Pointer to a {@link NN_TensorDesc} instance, or NULL if it fails to create.
  * @since 11
  * @version 1.0
  */
@@ -434,7 +439,7 @@ OH_NN_ReturnCode OH_NNTensorDesc_GetDataType(const NN_TensorDesc *tensorDesc, OH
  *
  * After the {@link NN_TensorDesc} instance is created, call this method to set the tensor shape. \n
  * 
- * if <b>tensorDesc</b> or <b>shape</b> is a null pointer, or <b>shapeNum</b> is 0, this method will return error code. \n
+ * if <b>tensorDesc</b> or <b>shape</b> is a null pointer, or <b>shapeLength</b> is 0, this method will return error code. \n
  *
  * @param tensorDesc Pointer to the {@link NN_TensorDesc} instance.
  * @param shape The shape list of the tensor that needs to be set.
@@ -451,7 +456,7 @@ OH_NN_ReturnCode OH_NNTensorDesc_SetShape(NN_TensorDesc *tensorDesc, const int32
  *
  * Call this method to obtain the shape of the specified {@link NN_TensorDesc} instance. \n
  * 
- * if <b>tensorDesc</b>, <b>shape</b> or <b>shapeNum</b> is a null pointer, this method will return error code. 
+ * if <b>tensorDesc</b>, <b>shape</b> or <b>shapeLength</b> is a null pointer, this method will return error code. 
  * As an output parameter, <b>*shape</b> must be a null pointer, otherwise the method will return an error code. 
  * Fou example, you should define int32_t* tensorShape = NULL, and pass &tensorShape as the argument of <b>shape</b>. \n
  * 
@@ -549,15 +554,15 @@ OH_NN_ReturnCode OH_NNTensorDesc_GetByteSize(const NN_TensorDesc *tensorDesc, si
  * 
  * If the tensor shape is dynamic, this method will return error code. \n
  * 
- * <b>deviceID</b> indicates the selected device. If it is 0, the 0th device is used. \n
+ * <b>deviceID</b> indicates the selected device. If it is 0, the first device in the current device list will be used by default. \n
  * 
  * <b>tensorDesc</b> must be provided, and this method will return an error code if it is a null pointer. \n
  *
  * Call {@link OH_NNTensor_DestroyTensor} to release the {@link NN_Tensor} instance. \n
  *
- * @param deviceID Device id. If it is 0, the 0th device in the current device list will be used.
+ * @param deviceID Device id. If it is 0, the first device in the current device list will be used by default.
  * @param tensorDesc Pointer to the {@link NN_TensorDesc} instance.
- * @return Pointer to a {@link NN_Tensor} instance.
+ * @return Pointer to a {@link NN_Tensor} instance, or NULL if it fails to create.
  * @since 11
  * @version 1.0
  */
@@ -572,7 +577,7 @@ NN_Tensor* OH_NNTensor_Create(size_t deviceID, NN_TensorDesc *tensorDesc);
  * Note that this method will copy the <b>tensorDesc</b> into {@link NN_Tensor}. Therefore you should destroy <b>tensorDesc</b> 
  * by {@link OH_NNTensorDesc_Destroy} when it is no longer used. \n
  * 
- * <b>deviceID</b> indicates the selected device. If it is 0, the 0th device is used. \n
+ * <b>deviceID</b> indicates the selected device. If it is 0, the first device in the current device list will be used by default. \n
  * 
  * <b>tensorDesc</b> must be provided, if it is a null pointer, the method returns an error code. 
  * <b>size</b> must be no less than the byte size of tensorDesc. Otherwise, this method will return an error code. If the tensor 
@@ -580,10 +585,10 @@ NN_Tensor* OH_NNTensor_Create(size_t deviceID, NN_TensorDesc *tensorDesc);
  *
  * Call {@link OH_NNTensor_DestroyTensor} to release the {@link NN_Tensor} instance. \n
  *
- * @param deviceID Device id. If it is 0, the 0th device in the current device list will be used.
+ * @param deviceID Device id. If it is 0, the first device in the current device list will be used by default.
  * @param tensorDesc Pointer to the {@link NN_TensorDesc} instance.
  * @param size Size of tensor data that need to be allocated.
- * @return Pointer to a {@link NN_Tensor} instance.
+ * @return Pointer to a {@link NN_Tensor} instance, or NULL if it fails to create.
  * @since 11
  * @version 1.0
  */
@@ -602,18 +607,18 @@ NN_Tensor* OH_NNTensor_CreateWithSize(size_t deviceID, NN_TensorDesc *tensorDesc
  * instance you created must use a new <b>tensorDesc</b> that has not been used by another {@link NN_Tensor} instance. 
  * Otherwise, a <b>tensorDesc</b> will be released twice, which will bring a memory corruption of doulbe free. \n
  * 
- * <b>deviceID</b> indicates the selected device. If it is 0, the 0th device is used. \n 
+ * <b>deviceID</b> indicates the selected device. If it is 0, the first device in the current device list will be used by default. \n 
  * 
  * <b>tensorDesc</b> must be provided, if it is a null pointer, the method returns an error code. \n
  *
  * Call {@link OH_NNTensor_DestroyTensor} to release the {@link NN_Tensor} instance. \n
  *
- * @param deviceID Device id. If it is 0, the 0th device in the current device list will be used.
+ * @param deviceID Device id. If it is 0, the first device in the current device list will be used by default.
  * @param tensorDesc Pointer to the {@link NN_TensorDesc} instance.
  * @param fd Fd of the shared memory to be resued.
  * @param size Size of the shared memory to be resued.
  * @param offset Offset of the shared memory to be resued.
- * @return Pinter to a {@link NN_Tensor} instance.
+ * @return Pinter to a {@link NN_Tensor} instance, or NULL if it fails to create.
  * @since 11
  * @version 1.0
  */
@@ -651,7 +656,7 @@ OH_NN_ReturnCode OH_NNTensor_Destroy(NN_Tensor **tensor);
  * if <b>tensor</b> is a null pointer, this method will return null pointer. \n
  *
  * @param tensor Pointer to the {@link NN_Tensor} instance.
- * @return Pointer to the {@link NN_TensorDesc} instance. If the operation fails, a null pointer is returned.
+ * @return Pointer to the {@link NN_TensorDesc} instance, or NULL if it fails to create.
  * @since 11
  * @version 1.0
  */
@@ -668,7 +673,7 @@ NN_TensorDesc* OH_NNTensor_GetTensorDesc(const NN_Tensor *tensor);
  * if <b>tensor</b> is a null pointer, this method will return null pointer. \n
  *
  * @param tensor Pointer to the {@link NN_Tensor} instance.
- * @return Pointer to data buffer of the tensor. If the operation fails, a null pointer is returned.
+ * @return Pointer to data buffer of the tensor, or NULL if it fails to create.
  * @since 11
  * @version 1.0
  */
@@ -694,10 +699,10 @@ OH_NN_ReturnCode OH_NNTensor_GetFd(const NN_Tensor *tensor, int *fd);
 /**
  * @brief Gets the data size of a {@link NN_Tensor}.
  *
- * The tensor data size is as same as the argument <b>size</b> of {@link OH_NNTensor_CreateWithSize} and {@link OH_NNTensor_CreateWithFd}. 
+ * The <b>size</b> is as same as the argument <b>size</b> of {@link OH_NNTensor_CreateWithSize} and {@link OH_NNTensor_CreateWithFd}. 
  * But for a tensor created by {@link OH_NNTensor_Create}, it equals to the tensor byte size. \n
  * 
- * Note that you are only allowed to access the tensor data buffer with length of (size - offset), otherwise a heap corruption may occur. \n
+ * Note that the real tensor data just uses the buffer segment [offset, size] of the Fd. \n
  * 
  * if <b>tensor</b> or <b>size</b> is a null pointer, this method will return error code. \n
  *
@@ -716,9 +721,9 @@ OH_NN_ReturnCode OH_NNTensor_GetSize(const NN_Tensor *tensor, size_t *size);
  * The <b>offset</b> corresponds to the fd of the tensor data, and can be resued by another {@link NN_Tensor} through 
  * {@link OH_NNTensor_CreateWithFd}. \n
  * 
- * if <b>tensor</b> or <b>offset</b> is a null pointer, this method will return error code. \n
+ * Note that the real tensor data just uses the buffer segment [offset, size] of the Fd. \n
  * 
- * Note that you are only allowed to access the tensor data buffer with length of (size - offset), otherwise a heap corruption may occur. \n
+ * if <b>tensor</b> or <b>offset</b> is a null pointer, this method will return error code. \n
  *
  * @param tensor Pointer to the {@link NN_Tensor} instance.
  * @param offset The returned offset of tensor data.
@@ -732,13 +737,13 @@ OH_NN_ReturnCode OH_NNTensor_GetOffset(const NN_Tensor *tensor, size_t *offset);
 /**
  * @brief Creates an executor instance of the {@link OH_NNExecutor} type.
  *
- * This method constructs a model inference executor associated with the device based on the passed compiler. \n
+ * This method constructs a model inference executor associated with the device based on the passed compilation. \n
  *
  * After the {@link OH_NNExecutor} instance is created, you can release the {@link OH_NNCompilation} 
  * instance if you do not need to create any other executors. \n
  *
  * @param compilation Pointer to the {@link OH_NNCompilation} instance.
- * @return Pointer to a {@link OH_NNExecutor} instance.
+ * @return Pointer to a {@link OH_NNExecutor} instance, or NULL if it fails to create.
  * @since 9
  * @version 1.0
  */
@@ -825,7 +830,7 @@ OH_NN_ReturnCode OH_NNExecutor_GetOutputCount(const OH_NNExecutor *executor, siz
  *
  * @param executor Pointer to the {@link OH_NNExecutor} instance.
  * @param index Input tensor index.
- * @return Pointer to {@link NN_TensorDesc} instance.
+ * @return Pointer to {@link NN_TensorDesc} instance, or NULL if it fails to create.
  * @since 11
  * @version 1.0
  */
@@ -839,7 +844,7 @@ NN_TensorDesc* OH_NNExecutor_CreateInputTensorDesc(const OH_NNExecutor *executor
  *
  * @param executor Pointer to the {@link OH_NNExecutor} instance.
  * @param index Output tensor index.
- * @return Pointer to {@link NN_TensorDesc} instance.
+ * @return Pointer to {@link NN_TensorDesc} instance, or NULL if it fails to create.
  * @since 11
  * @version 1.0
  */
@@ -850,9 +855,9 @@ NN_TensorDesc* OH_NNExecutor_CreateOutputTensorDesc(const OH_NNExecutor *executo
  *
  * The supported dimension ranges of an input tensor with dynamic shape may be different among various devices. 
  * You can call this method to get the dimension ranges of the input tensor supported by the device. 
- * <b>*minInputDims<\b> contains the minimum demensions of the input tensor, and <b>*maxInputDims<\b> contains the maximum, 
- * e.g. if an input tensor has dynamic shape [-1, -1, -1, 3], its <b>*minInputDims<\b> may be [1, 10, 10, 3] and 
- * <b>*maxInputDims<\b> may be [100, 1024, 1024, 3] on the device. \n
+ * <b>*minInputDims</b> contains the minimum demensions of the input tensor, and <b>*maxInputDims</b> contains the maximum, 
+ * e.g. if an input tensor has dynamic shape [-1, -1, -1, 3], its <b>*minInputDims</b> may be [1, 10, 10, 3] and 
+ * <b>*maxInputDims</b> may be [100, 1024, 1024, 3] on the device. \n
  * 
  * If the index exceeds the inputCount - 1, this method will return error code. \n
  * 
@@ -880,7 +885,7 @@ OH_NN_ReturnCode OH_NNExecutor_GetInputDimRange(const OH_NNExecutor *executor,
 /**
  * @brief Sets the callback function handle for the post-process when the asynchronous execution has been done.
  *
- * The definition fo the callback function: {@link NN_OnRunDone} \n
+ * The definition fo the callback function: {@link NN_OnRunDone}. \n
  *
  * @param executor Pointer to the {@link OH_NNExecutor} instance.
  * @param onRunDone Callback function handle {@link NN_OnRunDone}.
@@ -894,7 +899,7 @@ OH_NN_ReturnCode OH_NNExecutor_SetOnRunDone(OH_NNExecutor *executor, NN_OnRunDon
 /**
  * @brief Sets the callback function handle for the post-process when the device driver service is dead during asynchronous execution.
  *
- * The definition fo the callback function: {@link NN_OnServiceDied} \n
+ * The definition fo the callback function: {@link NN_OnServiceDied}. \n
  *
  * @param executor Pointer to the {@link OH_NNExecutor} instance.
  * @param onServiceDied Callback function handle {@link NN_OnServiceDied}.
@@ -944,10 +949,10 @@ OH_NN_ReturnCode OH_NNExecutor_RunSync(OH_NNExecutor *executor,
  * by {@link OH_NNTensorDesc_GetShape}. \n
  * 
  * The method is non-blocked and will return immediately. The callback function handles are set by {@link OH_NNExecutor_SetOnRunDone} 
- * and {@link OH_NNExecutor_SetOnServiceDied}. If the execution time reaches the <b>timeout<\b>, the execution will be terminated 
+ * and {@link OH_NNExecutor_SetOnServiceDied}. If the execution time reaches the <b>timeout</b>, the execution will be terminated 
  * with no outputs, and the <b>errCode<b> returned in callback function {@link NN_OnRunDone} will be {@link OH_NN_TIMEOUT}. \n
  * 
- * The <b>userData<\b> is asynchronous execution identifier and will be returned as the first parameter of the callback function. 
+ * The <b>userData</b> is asynchronous execution identifier and will be returned as the first parameter of the callback function. 
  * You can input any value you want as long as it can identify different asynchronous executions. \n
  *
  * @param executor Pointer to the {@link OH_NNExecutor} instance.
@@ -992,13 +997,14 @@ OH_NN_ReturnCode OH_NNDevice_GetAllDevicesID(const size_t **allDevicesID, uint32
 /**
  * @brief Obtains the name of the specified device.
  *
- * <b>deviceID</b> specifies the device whose name will be obtained. The device ID needs to be obtained by calling {@link OH_NNDevice_GetAllDevicesID}. \n
+ * <b>deviceID</b> specifies the device whose name will be obtained. The device ID needs to be obtained by calling {@link OH_NNDevice_GetAllDevicesID}.
+ * If it is 0, the first device in the current device list will be used by default. \n
  * 
  * The value of <b>(*name)</b> is a C-style string ended with <b>'\0'</b>. <b>*name</b> must be a null pointer. 
  * Otherwise, {@link OH_NN_INVALID_PARAMETER} is returned. 
  * Fou example, you should define char* deviceName = NULL, and pass &deviceName as the argument of <b>name</b>. \n
  *
- * @param deviceID Device ID.
+ * @param deviceID Device ID. If it is 0, the first device in the current device list will be used by default.
  * @param name The device name returned.
 
  * @return Execution result of the function. If the operation is successful, <b>OH_NN_SUCCESS</b> is returned. If the operation fails, 
@@ -1011,13 +1017,14 @@ OH_NN_ReturnCode OH_NNDevice_GetName(size_t deviceID, const char **name);
 /**
  * @brief Obtains the type information of the specified device.
  *
- * <b>deviceID</b> specifies the device whose type will be obtained. Currently the following device types are supported:
+ * <b>deviceID</b> specifies the device whose type will be obtained. If it is 0, the first device in the current device 
+ * list will be used. Currently the following device types are supported:
  * - <b>OH_NN_CPU</b>: CPU device.
  * - <b>OH_NN_GPU</b>: GPU device.
  * - <b>OH_NN_ACCELERATOR</b>: machine learning dedicated accelerator.
  * - <b>OH_NN_OTHERS</b>: other hardware types. \n
  *
- * @param deviceID Device ID.
+ * @param deviceID Device ID. If it is 0, the first device in the current device list will be used by default.
  * @param deviceType The device type {@link OH_NN_DeviceType} returned.
  * @return Execution result of the function. If the operation is successful, <b>OH_NN_SUCCESS</b> is returned. If the operation fails, 
  *         an error code is returned. For details about the error codes, see {@link OH_NN_ReturnCode}.
