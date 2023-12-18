@@ -265,7 +265,7 @@ typedef enum WebSocket_ErrCode {
     WEBSOCKET_HEADER_EXCEEDED = (E_BASE + 16),
 
     /**
-     * @brief The WebSocket client is not connected.
+     * @brief The websocket client is not connected.
      */
     WEBSOCKET_NO_CONNECTION = (E_BASE + 17),
 
