@@ -38,7 +38,9 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#ifdef __cplusplus
 #include <vector>
+#endif
 
 #include "native_xcomponent_key_event.h"
 
