@@ -156,7 +156,7 @@ struct WebSocket_Header {
  * @version 1.0
  */
 struct WebSocket_RequestOptions {
-    struct WebSocket_Header *headers;
+struct WebSocket_Header *headers;
 };
 
 /**
