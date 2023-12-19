@@ -12,6 +12,7 @@
     { "name": "OH_AudioStreamBuilder_SetCapturerCallback" },
     { "name": "OH_AudioStreamBuilder_GenerateRenderer" },
     { "name": "OH_AudioStreamBuilder_GenerateCapturer" },
+    { "name": "OH_AudioStreamBuilder_SetFrameSizeInCallback" },
     { "name": "OH_AudioRenderer_Release" },
     { "name": "OH_AudioRenderer_Start" },
     { "name": "OH_AudioRenderer_Pause" },
