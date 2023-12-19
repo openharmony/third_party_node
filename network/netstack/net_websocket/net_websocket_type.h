@@ -155,9 +155,7 @@ struct WebSocket_Header {
  * @since 11
  * @version 1.0
  */
-struct WebSocket_RequestOptions {
-struct WebSocket_Header *headers;
-};
+struct WebSocket_RequestOptions { struct WebSocket_Header *headers; };
 
 /**
  * @brief Defines the WebSocket client structure.
