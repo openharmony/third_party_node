@@ -171,7 +171,7 @@ typedef struct NetConn_HttpProxy {
 } NetConn_HttpProxy;
 
 /**
- * @brief Defines the network link information.
+ * @brief Defines the network connection properties.
  *
  * @since 11
  * @version 1.0
