@@ -50,8 +50,6 @@ extern "C" {
  * @param caCert CA certificate specified by the user. If this parameter is left blank, the preset certificate is used.
  * @return 0 - success.
  * 2305001 - Unspecified error.
-
-
  * 2305002 - Unable to get issuer certificate.
  * 2305003 - Unable to get certificate revocation list (CRL).
  * 2305004 - Unable to decrypt certificate signature.
