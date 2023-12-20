@@ -106,6 +106,19 @@ NAPI_EXTERN napi_status napi_open_callback_scope(napi_env env,
                                                  napi_async_context context,
                                                  napi_callback_scope* result);
 NAPI_EXTERN napi_status node_api_get_module_file_name(napi_env env, const char** result);
+// Create JSObject with initial properties given by descriptors, note that property key must be String,
+// and must can not convert to element_index, also all keys must not duplicate.
+NAPI_EXTERN napi_status napi_create_object_with_properties(napi_env env,
+                                                           napi_value* result,
+                                                           size_t property_count,
+                                                           const napi_property_descriptor* properties);
+// Create JSObject with initial properties given by keys and values, note that property key must be String,
+// and must can not convert to element_index, also all keys must not duplicate.
+NAPI_EXTERN napi_status napi_create_object_with_named_properties(napi_env env,
+                                                                 napi_value* result,
+                                                                 size_t property_count,
+                                                                 const char** keys,
+                                                                 const napi_value* values);
 
 #ifdef __cplusplus
 }
