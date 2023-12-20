@@ -20,13 +20,13 @@ ohos_ndk_library("libnet_websocket") {
   min_compact_version = "1"
   system_capability = "SystemCapability.Communication.NetStack"
   system_capability_headers = [
-    "network/netstack/net_websocket/net_websocket.h",
-    "network/netstack/net_websocket/net_websocket_type.h",
+    "network/netstack/net_websocket.h",
+    "network/netstack/net_websocket_type.h",
   ]
 }
 
 ohos_ndk_headers("websocket_header") {
-  dest_dir = "$ndk_headers_out_dir/network/netstack/net_websocket"
+  dest_dir = "$ndk_headers_out_dir/network/netstack"
   sources = [
     "net_websocket.h",
     "net_websocket_type.h",
