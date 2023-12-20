@@ -14,17 +14,15 @@ if (isMainThread) {
   for (const execArgv of tests) {
     const worker = new Worker(__filename, { execArgv });
 
-    worker.on(
-      'message',
-      common.mustCall((message) => {
-        if (execArgv.length === 0) {
-          assert.strictEqual(message, 'using native addons');
-        } else {
-          assert.strictEqual(message, 'not using native addons');
-        }
-      })
-    );
+    worker.on('message', common.mustCall((message) => {
+      if (execArgv.length === 0) {
+        assert.strictEqual(message, 'using native addons');
+      } else {
+        assert.strictEqual(message, 'not using native addons');
+      }
+    }));
   }
+
 } else {
   const message = loadFixture('pkgexports/no-addons');
   parentPort.postMessage(message);
