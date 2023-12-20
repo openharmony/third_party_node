@@ -122,8 +122,6 @@ struct res_sym {
 #define RES_PRF_REPLY	0x00002000
 #define RES_PRF_INIT	0x00004000
 
-#define _res (*__res_state())
-
 int res_init(void);
 int res_query(const char *, int, int, unsigned char *, int);
 int res_querydomain(const char *, const char *, int, int, unsigned char *, int);
