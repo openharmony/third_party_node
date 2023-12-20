@@ -15,7 +15,7 @@
 
 import re
 import subprocess
-from typedef.check.check import ApiResultInfo, ErrorMessage, ErrorType, LogType
+from typedef.check.check import ApiResultInfo, ErrorMessage, ErrorType, LogType, ErrorLevel
 
 
 def check_syntax(file_path):
@@ -44,7 +44,7 @@ def processing_data(run_result, result_file):
             api_result_info.set_location_column(line_column[1])
             api_result_info.set_location(result_file)
             api_result_info.set_type(LogType.LOG_API.value)
-            api_result_info.set_level(2)
+            api_result_info.set_level(ErrorLevel.LOW.value)
             api_result_info.set_file_name(result_file)
             api_result_info_list.append(api_result_info)
     return api_result_info_list

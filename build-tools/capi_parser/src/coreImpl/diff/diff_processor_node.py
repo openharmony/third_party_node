@@ -343,17 +343,18 @@ def process_variable_type(old, new, diff_variable_list):
 
 def process_variable_value(old, new, diff_variable_list):
     if 'children' in old and 'children' in new:
-        if old['children'][0]['node_content']['content'] != new['children'][0]['node_content']['content']:
+        if len(old['children']) and len(new['children']) \
+                and old['children'][0]['node_content']['content'] != new['children'][0]['node_content']['content']:
             diff_info = wrap_diff_info(old['children'][0], new['children'][0],
                                        DiffInfo(DiffType.VARIABLE_VALUE_CHANGE))
             diff_variable_list.append(diff_info)
 
-    elif 'children' not in old and 'children' in new:
+    elif 'children' not in old and 'children' in new and len(new['children']):
         diff_info = wrap_diff_info(old, new['children'][0],
                                    DiffInfo(DiffType.VARIABLE_VALUE_CHANGE))
         diff_variable_list.append(diff_info)
 
-    elif 'children' in old and 'children' not in new:
+    elif 'children' in old and 'children' not in new and len(old['children']):
         diff_info = wrap_diff_info(old['children'][0], new,
                                    DiffInfo(DiffType.VARIABLE_VALUE_CHANGE))
         diff_variable_list.append(diff_info)
@@ -373,7 +374,8 @@ def process_constant_type(old, new, diff_constant_list):
 
 def process_constant_value(old, new, diff_constant_list):
     if 'children' in old and 'children' in new:
-        if old['children'][0]['node_content']['content'] != new['children'][0]['node_content']['content']:
+        if len(old['children']) and len(new['children']) \
+                and old['children'][0]['node_content']['content'] != new['children'][0]['node_content']['content']:
             diff_info = wrap_diff_info(old['children'][0], new['children'][0],
                                        DiffInfo(DiffType.CONSTANT_VALUE_CHANGE))
             diff_constant_list.append(diff_info)

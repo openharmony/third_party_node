@@ -80,7 +80,8 @@ def result_to_json(check_result):
     return json.dumps(txt_resul, default=lambda obj: obj.__dict__, indent=4)
 
 
-def curr_entry(file_list):
+def curr_entry(file_path):
+    file_list = get_md_files(file_path)
     check_result_list = get_check_result_list(file_list)
     write_in_txt(check_result_list, r'./Error.txt')
 
@@ -95,3 +96,13 @@ def get_check_result_list(file_list):
         check_result_list.extend(check_syntax(file))
     return check_result_list
 
+
+def get_md_files(url):
+    file = open(url, "r")
+    file_list = []
+    line = file.readline()
+    while line:
+        file_list.append(line.splitlines()[0])
+        line = file.readline()
+    file.close()
+    return file_list

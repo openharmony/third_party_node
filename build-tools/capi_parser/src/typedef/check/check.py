@@ -32,67 +32,71 @@ class TAGS(enum.Enum):
 
 
 class ErrorType(enum.Enum):
-    UNKNOW_DECORATOR: {
+    DEFAULT = {
+        'id': -1,
+        'description': '',
+    }
+    UNKNOW_DECORATOR = {
         id: 0,
         'description': 'unknow decorator',
     }
-    MISSPELL_WORDS: {
+    MISSPELL_WORDS = {
         id: 1,
         'description': 'misspell words',
     }
-    NAMING_ERRORS: {
+    NAMING_ERRORS = {
         id: 2,
         'description': 'naming errors',
     }
-    UNKNOW_PERMISSION: {
+    UNKNOW_PERMISSION = {
         id: 3,
         'description': 'unknow permission',
     }
-    UNKNOW_SYSCAP: {
+    UNKNOW_SYSCAP = {
         id: 4,
         'description': 'unknow syscap',
     }
-    UNKNOW_DEPRECATED: {
+    UNKNOW_DEPRECATED = {
         id: 5,
         'description': 'unknow deprecated',
     }
-    WRONG_ORDER: {
+    WRONG_ORDER = {
         id: 6,
         'description': 'wrong order',
     }
-    WRONG_VALUE: {
+    WRONG_VALUE = {
         id: 7,
         'description': 'wrong value',
     }
-    WRONG_SCENE: {
+    WRONG_SCENE = {
         id: 8,
         'description': 'wrong scene',
     }
-    PARAMETER_ERRORS: {
+    PARAMETER_ERRORS = {
         id: 9,
         'description': 'wrong parameter',
     }
-    API_PAIR_ERRORS: {
+    API_PAIR_ERRORS = {
         id: 10,
         'description': 'limited api pair errors',
     }
-    ILLEGAL_ANY: {
+    ILLEGAL_ANY = {
         id: 11,
         'description': 'illegal any',
     }
-    API_CHANGE_ERRORS: {
+    API_CHANGE_ERRORS = {
         id: 12,
         'description': 'api change errors',
     }
-    EMPTY_TAG: {
+    EMPTY_TAG = {
         id: 13,
         'description': 'miss tag value',
     }
-    ERROR_TAG: {
+    ERROR_TAG = {
         id: 14,
         'description': 'error tag name',
     }
-    SYNTAX_ERRORS: {
+    SYNTAX_ERRORS = {
         id: 15,
         'description': 'syntax errors',
     }

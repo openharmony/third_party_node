@@ -16,7 +16,7 @@
 import enum
 import os.path
 import re
-from typedef.check.check import ApiResultInfo, ErrorMessage, ErrorType, LogType
+from typedef.check.check import ApiResultInfo, ErrorMessage, ErrorType, LogType, ErrorLevel
 
 
 def check_large_hump(api_info):
@@ -37,7 +37,7 @@ def check_function_name(api_info):
         api_result_info.set_location_column(api_info['location']['location_column'])
         api_result_info.set_location(api_info['location']['location_path'])
         api_result_info.set_type(LogType.LOG_API.value)
-        api_result_info.set_level(2)
+        api_result_info.set_level(ErrorLevel.LOW.value)
         api_result_info.set_file_name(api_info['location']['location_path'])
         api_result_info_list.append(api_result_info)
         return api_result_info_list
@@ -73,7 +73,7 @@ def check_file_name(file_path):
         api_result_info.set_type(LogType.LOG_FILE.value)
         api_result_info.set_file_name(file_path)
         api_result_info.set_location(file_path)
-        api_result_info.set_level(2)
+        api_result_info.set_level(ErrorLevel.LOW.value)
         api_result_info_list.append(api_result_info)
     return api_result_info_list
 
@@ -89,7 +89,7 @@ def processing_check_data(function_type, api_info):
         api_result_info.set_location_column(api_info['location']['location_column'])
         api_result_info.set_location(api_info['location']['location_path'])
         api_result_info.set_type(LogType.LOG_API.value)
-        api_result_info.set_level(2)
+        api_result_info.set_level(ErrorLevel.LOW.value)
         api_result_info.set_file_name(api_info['location']['location_path'])
         api_result_info_list.append(api_result_info)
     return api_result_info_list

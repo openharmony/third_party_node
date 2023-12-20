@@ -38,7 +38,7 @@ def create_api_result_info_by_doc(error_type: ErrorType, error: ErrorMessage, pa
         error_info = error_info.replace('$$', str(param), 1)
     api_result_info = ApiResultInfo(error_type.value, error_info, api_info['name'])
     api_result_info.set_type(LogType.LOG_JSDOC.value)
-    api_result_info.set_level(ErrorLevel.MIDDLE.value)
+    api_result_info.set_level(ErrorLevel.LOW.value)
     if 'location' in api_info.keys():
         api_result_info.set_location(api_info['location']['location_path'])
         api_result_info.set_location_line(api_info['location']['location_line'])

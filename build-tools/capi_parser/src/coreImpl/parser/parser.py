@@ -253,6 +253,27 @@ def find_include(link_include_path):
         link_include_path.append(dir_path)
 
 
+def copy_self_include(link_include_file, self_include_file):
+    std_include = StringConstant.SELF_INCLUDE.value
+    if not os.path.exists(std_include):
+        os.makedirs(std_include)
+
+    if self_include_file:
+        for item in self_include_file:
+            shutil.copy(item, std_include)
+
+    link_include_file.append(std_include)
+
+
+def delete_typedef_child(child):
+    if child['kind'] == 'TYPEDEF_DECL':
+        if 'children' in child and len(child['children']) \
+                and (child['children'][0]['kind'] == 'STRUCT_DECL'
+                     or child['children'][0]['kind'] == 'ENUM_DECL'
+                     or child['children'][0]['kind'] == 'UNION_DECL'):
+            child['children'] = []
+
+
 def parser(directory_path):  # 目录路径
     function_name = StringConstant.FUNK_NAME.value  # 匹配的函数名
 
@@ -265,9 +286,14 @@ def parser(directory_path):  # 目录路径
     return data_total
 
 
-def parser_include_ast(gn_file_path, include_path):        # 对于单独的.h解析接口
+def parser_include_ast(gn_file_path, include_path, self_include=None):        # 对于单独的.h解析接口
     correct_include_path = []
-    link_path = [StringConstant.INCLUDE_LIB.value]
+
+    link_include_path = []
+    copy_std_lib(link_include_path)
+    find_include(link_include_path)
+    copy_self_include(link_include_path, self_include)
+
     modes = stat.S_IRWXO | stat.S_IRWXG | stat.S_IRWXU
     fd = os.open('include_file_suffix.txt', os.O_WRONLY | os.O_CREAT, mode=modes)
     for item in include_path:
@@ -278,5 +304,13 @@ def parser_include_ast(gn_file_path, include_path):        # 对于单独的.h�
             exc = 'The file does not end with.h: {}\n'.format(item)
             os.write(fd, exc.encode())
     os.close(fd)
-    data = parse_include.get_include_file(correct_include_path, link_path, gn_file_path)
+
+    data = parse_include.get_include_file(correct_include_path, link_include_path, gn_file_path)
+
+    for item in data:
+        if 'children' in item:
+            for child in item['children']:
+                delete_typedef_child(child)
+
+    shutil.rmtree(StringConstant.SELF_INCLUDE.value)
     return data

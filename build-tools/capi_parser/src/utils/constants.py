@@ -25,6 +25,7 @@ class StringConstant(enum.Enum):
     # 拉到本地仓的三方库绝对路径
     INCLUDE_LIB = r'.\third_party\musl\ndk_musl_include'
     STD_INCLUDE = r'.\sysroot\ndk_musl_include_files'
+    SELF_INCLUDE = r'.\sysroot\self_include_files'
     RESULT_HEAD_NAME = "result_total.xlsx"
 
 
