@@ -45,16 +45,29 @@ const { getSystemErrorName } = require('util');
     delete providers.STREAMPIPE;
     delete providers.MESSAGEPORT;
     delete providers.WORKER;
+    // TODO(danbev): Test for these
     delete providers.JSUDPWRAP;
     if (!common.isMainThread)
       delete providers.INSPECTORJSBINDING;
     delete providers.KEYPAIRGENREQUEST;
+    delete providers.KEYGENREQUEST;
+    delete providers.KEYEXPORTREQUEST;
+    delete providers.CIPHERREQUEST;
+    delete providers.DERIVEBITSREQUEST;
+    delete providers.SCRYPTREQUEST;
+    delete providers.SIGNREQUEST;
+    delete providers.VERIFYREQUEST;
+    delete providers.HASHREQUEST;
     delete providers.HTTPCLIENTREQUEST;
     delete providers.HTTPINCOMINGMESSAGE;
     delete providers.ELDHISTOGRAM;
     delete providers.SIGINTWATCHDOG;
     delete providers.WORKERHEAPSNAPSHOT;
     delete providers.FIXEDSIZEBLOBCOPY;
+    delete providers.RANDOMPRIMEREQUEST;
+    delete providers.CHECKPRIMEREQUEST;
+    delete providers.QUIC_LOGSTREAM;
+    delete providers.QUIC_PACKET;
 
     const objKeys = Object.keys(providers);
     if (objKeys.length > 0)
@@ -123,17 +136,17 @@ if (common.hasCrypto) { // eslint-disable-line node-core/crypto-check
   // so need to check it from the callback.
 
   const mc = common.mustCall(function pb() {
-    testInitialized(this, 'AsyncWrap');
+    testInitialized(this, 'PBKDF2Job');
   });
   crypto.pbkdf2('password', 'salt', 1, 20, 'sha256', mc);
 
   crypto.randomBytes(1, common.mustCall(function rb() {
-    testInitialized(this, 'AsyncWrap');
+    testInitialized(this, 'RandomBytesJob');
   }));
 
-  if (typeof internalBinding('crypto').scrypt === 'function') {
+  if (typeof internalBinding('crypto').ScryptJob === 'function') {
     crypto.scrypt('password', 'salt', 8, common.mustCall(function() {
-      testInitialized(this, 'AsyncWrap');
+      testInitialized(this, 'ScryptJob');
     }));
   }
 }
@@ -279,7 +292,7 @@ if (common.hasCrypto) { // eslint-disable-line node-core/crypto-check
 
   // TLSWrap is exposed, but needs to be instantiated via tls_wrap.wrap().
   const tls_wrap = internalBinding('tls_wrap');
-  testInitialized(tls_wrap.wrap(tcp, credentials.context, true), 'TLSWrap');
+  testInitialized(tls_wrap.wrap(tcp, credentials.context, true, false), 'TLSWrap');
 }
 
 {

@@ -1,6 +1,7 @@
-# Modules: `module` API
+# Modules: `node:module` API
 
 <!--introduced_in=v12.20.0-->
+
 <!-- YAML
 added: v0.3.7
 -->
@@ -11,9 +12,10 @@ added: v0.3.7
 
 Provides general utility methods when interacting with instances of
 `Module`, the [`module`][] variable often seen in [CommonJS][] modules. Accessed
-via `import 'module'` or `require('module')`.
+via `import 'node:module'` or `require('node:module')`.
 
 ### `module.builtinModules`
+
 <!-- YAML
 added:
   - v9.3.0
@@ -21,7 +23,7 @@ added:
   - v6.13.0
 -->
 
-* {string[]}
+* {string\[]}
 
 A list of the names of all modules provided by Node.js. Can be used to verify
 if a module is maintained by a third party or not.
@@ -32,16 +34,17 @@ by the [module wrapper][]. To access it, require the `Module` module:
 ```mjs
 // module.mjs
 // In an ECMAScript module
-import { builtinModules as builtin } from 'module';
+import { builtinModules as builtin } from 'node:module';
 ```
 
 ```cjs
 // module.cjs
 // In a CommonJS module
-const builtin = require('module').builtinModules;
+const builtin = require('node:module').builtinModules;
 ```
 
 ### `module.createRequire(filename)`
+
 <!-- YAML
 added: v12.2.0
 -->
@@ -52,34 +55,31 @@ added: v12.2.0
 * Returns: {require} Require function
 
 ```mjs
-import { createRequire } from 'module';
+import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 
 // sibling-module.js is a CommonJS module.
 const siblingModule = require('./sibling-module');
 ```
 
-### `module.createRequireFromPath(filename)`
+### `module.isBuiltin(moduleName)`
+
 <!-- YAML
-added: v10.12.0
-deprecated: v12.2.0
+added: v18.6.0
 -->
 
-> Stability: 0 - Deprecated: Please use [`createRequire()`][] instead.
+* `moduleName` {string} name of the module
+* Returns: {boolean} returns true if the module is builtin else returns false
 
-* `filename` {string} Filename to be used to construct the relative require
-  function.
-* Returns: {require} Require function
-
-```js
-const { createRequireFromPath } = require('module');
-const requireUtil = createRequireFromPath('../src/utils/');
-
-// Require `../src/utils/some-tool`
-requireUtil('./some-tool');
+```mjs
+import { isBuiltin } from 'node:module';
+isBuiltin('node:fs'); // true
+isBuiltin('fs'); // true
+isBuiltin('wss'); // false
 ```
 
 ### `module.syncBuiltinESMExports()`
+
 <!-- YAML
 added: v12.12.0
 -->
@@ -89,9 +89,9 @@ builtin [ES Modules][] to match the properties of the [CommonJS][] exports. It
 does not add or remove exported names from the [ES Modules][].
 
 ```js
-const fs = require('fs');
-const assert = require('assert');
-const { syncBuiltinESMExports } = require('module');
+const fs = require('node:fs');
+const assert = require('node:assert');
+const { syncBuiltinESMExports } = require('node:module');
 
 fs.readFile = newAPI;
 
@@ -105,7 +105,7 @@ fs.newAPI = newAPI;
 
 syncBuiltinESMExports();
 
-import('fs').then((esmFS) => {
+import('node:fs').then((esmFS) => {
   // It syncs the existing readFile property with the new value
   assert.strictEqual(esmFS.readFile, newAPI);
   // readFileSync has been deleted from the required fs
@@ -118,6 +118,7 @@ import('fs').then((esmFS) => {
 ```
 
 ## Source map v3 support
+
 <!-- YAML
 added:
  - v13.7.0
@@ -137,17 +138,19 @@ To enable source map parsing, Node.js must be run with the flag
 ```mjs
 // module.mjs
 // In an ECMAScript module
-import { findSourceMap, SourceMap } from 'module';
+import { findSourceMap, SourceMap } from 'node:module';
 ```
 
 ```cjs
 // module.cjs
 // In a CommonJS module
-const { findSourceMap, SourceMap } = require('module');
+const { findSourceMap, SourceMap } = require('node:module');
 ```
 
 <!-- Anchors to make sure old links find a target -->
+
 <a id="module_module_findsourcemap_path_error"></a>
+
 ### `module.findSourceMap(path)`
 
 <!-- YAML
@@ -157,12 +160,14 @@ added:
 -->
 
 * `path` {string}
-* Returns: {module.SourceMap}
+* Returns: {module.SourceMap|undefined} Returns `module.SourceMap` if a source
+  map is found, `undefined` otherwise.
 
 `path` is the resolved path for the file for which a corresponding source map
 should be fetched.
 
 ### Class: `module.SourceMap`
+
 <!-- YAML
 added:
  - v13.7.0
@@ -179,9 +184,9 @@ Creates a new `sourceMap` instance.
 
 * `file`: {string}
 * `version`: {number}
-* `sources`: {string[]}
-* `sourcesContent`: {string[]}
-* `names`: {string[]}
+* `sources`: {string\[]}
+* `sourcesContent`: {string\[]}
+* `names`: {string\[]}
 * `mappings`: {string}
 * `sourceRoot`: {string}
 
@@ -191,30 +196,73 @@ Creates a new `sourceMap` instance.
 
 Getter for the payload used to construct the [`SourceMap`][] instance.
 
-#### `sourceMap.findEntry(lineNumber, columnNumber)`
+#### `sourceMap.findEntry(lineOffset, columnOffset)`
 
-* `lineNumber` {number}
-* `columnNumber` {number}
+* `lineOffset` {number} The zero-indexed line number offset in
+  the generated source
+* `columnOffset` {number} The zero-indexed column number offset
+  in the generated source
 * Returns: {Object}
 
-Given a line number and column number in the generated source file, returns
-an object representing the position in the original file. The object returned
-consists of the following keys:
+Given a line offset and column offset in the generated source
+file, returns an object representing the SourceMap range in the
+original file if found, or an empty object if not.
 
-* generatedLine: {number}
-* generatedColumn: {number}
-* originalSource: {string}
-* originalLine: {number}
-* originalColumn: {number}
+The object returned contains the following keys:
+
+* generatedLine: {number} The line offset of the start of the
+  range in the generated source
+* generatedColumn: {number} The column offset of start of the
+  range in the generated source
+* originalSource: {string} The file name of the original source,
+  as reported in the SourceMap
+* originalLine: {number} The line offset of the start of the
+  range in the original source
+* originalColumn: {number} The column offset of start of the
+  range in the original source
 * name: {string}
+
+The returned value represents the raw range as it appears in the
+SourceMap, based on zero-indexed offsets, _not_ 1-indexed line and
+column numbers as they appear in Error messages and CallSite
+objects.
+
+To get the corresponding 1-indexed line and column numbers from a
+lineNumber and columnNumber as they are reported by Error stacks
+and CallSite objects, use `sourceMap.findOrigin(lineNumber,
+columnNumber)`
+
+#### `sourceMap.findOrigin(lineNumber, columnNumber)`
+
+* `lineNumber` {number} The 1-indexed line number of the call
+  site in the generated source
+* `columnOffset` {number} The 1-indexed column number
+  of the call site in the generated source
+* Returns: {Object}
+
+Given a 1-indexed lineNumber and columnNumber from a call site in
+the generated source, find the corresponding call site location
+in the original source.
+
+If the lineNumber and columnNumber provided are not found in any
+source map, then an empty object is returned.  Otherwise, the
+returned object contains the following keys:
+
+* name: {string | undefined} The name of the range in the
+  source map, if one was provided
+* fileName: {string} The file name of the original source, as
+  reported in the SourceMap
+* lineNumber: {number} The 1-indexed lineNumber of the
+  corresponding call site in the original source
+* columnNumber: {number} The 1-indexed columnNumber of the
+  corresponding call site in the original source
 
 [CommonJS]: modules.md
 [ES Modules]: esm.md
 [Source map v3 format]: https://sourcemaps.info/spec.html#h.mofvlxcwqzej
-[`--enable-source-maps`]: cli.md#cli_enable_source_maps
-[`NODE_V8_COVERAGE=dir`]: cli.md#cli_node_v8_coverage_dir
-[`SourceMap`]: #module_class_module_sourcemap
-[`createRequire()`]: #module_module_createrequire_filename
-[`module`]: modules.md#modules_the_module_object
-[module wrapper]: modules.md#modules_the_module_wrapper
+[`--enable-source-maps`]: cli.md#--enable-source-maps
+[`NODE_V8_COVERAGE=dir`]: cli.md#node_v8_coveragedir
+[`SourceMap`]: #class-modulesourcemap
+[`module`]: modules.md#the-module-object
+[module wrapper]: modules.md#the-module-wrapper
 [source map include directives]: https://sourcemaps.info/spec.html#h.lmz475t4mvbx
