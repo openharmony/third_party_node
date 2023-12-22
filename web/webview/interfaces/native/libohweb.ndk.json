@@ -1,0 +1,38 @@
+[
+    {
+        "first_introduced": "11",
+        "name": "OH_NativeArkWeb_RunJavaScript"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_NativeArkWeb_RegisterJavaScriptProxy"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_NativeArkWeb_UnregisterJavaScriptProxy"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_NativeArkWeb_SetJavaScriptProxyValidCallback"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_NativeArkWeb_GetJavaScriptProxyValidCallback"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_NativeArkWeb_SetDestroyCallback"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_NativeArkWeb_GetDestroyCallback"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_NativeArkWeb_BindWebTagToWebInstance"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_NativeArkWeb_GetWebInstanceByWebTag"
+    }
+]
