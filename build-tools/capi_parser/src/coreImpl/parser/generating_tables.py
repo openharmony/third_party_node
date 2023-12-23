@@ -62,11 +62,16 @@ def get_difference_data(compare_result, data2):
 def filter_compare(data1):  # 获取函数和变量
     result_api = []
     for it in data1:
-        for item1 in it["children"]:  # 抛开根节点
+        get_result_api(it, result_api)
+    return result_api
+
+
+def get_result_api(file_data, result_api):
+    if 'children' in file_data:
+        for item1 in file_data["children"]:  # 抛开根节点
             if (item1["kind"] == 'FUNCTION_DECL' or item1["kind"] == 'VAR_DECL') and item1["is_extern"]:
                 item = filter_func(item1)
                 result_api.append(item)
-    return result_api
 
 
 def get_parm(item, parm):

@@ -25,7 +25,11 @@ class StringConstant(enum.Enum):
     # 拉到本地仓的三方库绝对路径
     INCLUDE_LIB = r'.\third_party\musl\ndk_musl_include'
     STD_INCLUDE = r'.\sysroot\ndk_musl_include_files'
+    CREATE_LIB_PATH = r'.\sysroot\$ndk_headers_out_dir'
     SELF_INCLUDE = r'.\sysroot\self_include_files'
+    SELF_INCLUDE_OLD = r'.\sysroot\self_include_files_old'
+    SELF_INCLUDE_NEW = r'.\sysroot\self_include_files_new'
+    SYSROOT = r'.\sysroot'
     RESULT_HEAD_NAME = "result_total.xlsx"
 
 
@@ -35,4 +39,3 @@ class RegularExpressions(enum.Enum):
     SOURCES = r'sources\s*=\s*\[[^\]]*\]'
     DEST_DIR = r'dest_dir\s*=\s*"([^"]*)"'
     INCLUDE_H = r'"([^"]+h)"'
-    CREATE_LIB_PATH = r'sysroot\$ndk_headers_out_dir'

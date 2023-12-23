@@ -40,6 +40,9 @@ def generate_excel(result_info_list):
     for diff_info in result_info_list:
         info_data = []
         info_data.append(diff_info.api_name)
+        info_data.append(diff_info.api_line)
+        info_data.append(diff_info.api_column)
+        info_data.append(diff_info.api_file_path)
         info_data.append(diff_info.api_type)
         info_data.append(diff_info.diff_type.name)
         info_data.append(diff_info.diff_message)
@@ -50,9 +53,11 @@ def generate_excel(result_info_list):
         data.append(info_data)
     wb = op.Workbook()
     ws = wb['Sheet']
-    ws.append(['api名称', '节点类型', '变更类型', '变更信息', '旧版节点内容', '新版节点内容', '兼容'])
+    ws.append(['api名称', '所在行', '所在列', '所在文件', '节点类型',
+               '变更类型', '变更信息', '旧版节点内容', '新版节点内容', '兼容'])
     for i in range(len(data)):
-        d = data[i][0], data[i][1], data[i][2], data[i][3], data[i][4], data[i][5], data[i][6]
+        d = data[i][0], data[i][1], data[i][2], data[i][3], data[i][4],\
+            data[i][5], data[i][6], data[i][7], data[i][8], data[i][9]
         ws.append(d)
     wb.save('diff.xlsx')
 
@@ -114,7 +119,7 @@ def add_new_file(diff_file_path):
     if os.path.isdir(diff_file_path):
         add_file(diff_file_path)
     else:
-        result_map = parse_file_result(parser_include_ast(global_new_dir, [diff_file_path]))
+        result_map = parse_file_result(parser_include_ast(global_new_dir, [diff_file_path], flag=1))
         for new_info in result_map.values():
             diff_info_list.extend(judgment_entrance(None, new_info))
 
@@ -123,7 +128,7 @@ def del_old_file(diff_file_path):
     if os.path.isdir(diff_file_path):
         del_file(diff_file_path)
     else:
-        result_map = parse_file_result(parser_include_ast(global_old_dir, [diff_file_path]))
+        result_map = parse_file_result(parser_include_ast(global_old_dir, [diff_file_path], flag=0))
         for old_info in result_map.values():
             diff_info_list.extend(judgment_entrance(old_info, None))
 
@@ -145,8 +150,8 @@ def get_same_file_diff(target_file, old_file_list, new_file_list, old_dir, new_d
 
 
 def get_file_result_diff(old_target_file, new_target_file):
-    old_file_result_map = parse_file_result(parser_include_ast(global_old_dir, [old_target_file]))
-    new_file_result_map = parse_file_result(parser_include_ast(global_new_dir, [new_target_file]))
+    old_file_result_map = parse_file_result(parser_include_ast(global_old_dir, [old_target_file], flag=0))
+    new_file_result_map = parse_file_result(parser_include_ast(global_new_dir, [new_target_file], flag=1))
     merged_dict = OrderedDict(list(old_file_result_map.items()) + list(new_file_result_map.items()))
     all_key_list = merged_dict.keys()
     for key in all_key_list:
@@ -162,7 +167,7 @@ def del_file(dir_path):
         if os.path.isdir(file_path):
             del_file(file_path)
         if get_file_ext(i) == '.h':
-            result_map = parse_file_result(parser_include_ast(global_old_dir, [file_path]))
+            result_map = parse_file_result(parser_include_ast(global_old_dir, [file_path], flag=0))
             for old_info in result_map.values():
                 diff_info_list.extend(judgment_entrance(old_info, None))
 
@@ -176,7 +181,7 @@ def add_file(dir_path):
         if os.path.isdir(file_path):
             add_file(file_path)
         if get_file_ext(i) == '.h':
-            result_map = parse_file_result(parser_include_ast(global_new_dir, [file_path]))
+            result_map = parse_file_result(parser_include_ast(global_new_dir, [file_path], flag=1))
             for new_info in result_map.values():
                 diff_info_list.extend(judgment_entrance(None, new_info))
 

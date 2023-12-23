@@ -16,7 +16,10 @@
 ##############################################
 
 import argparse
+import shutil
+import os
 from bin import config
+from utils import constants
 
 
 def main_function():
@@ -38,3 +41,5 @@ def main_function():
 
 if __name__ == '__main__':
     main_function()
+    if os.path.exists(constants.StringConstant.SYSROOT.value):
+        shutil.rmtree(constants.StringConstant.SYSROOT.value)
