@@ -249,20 +249,23 @@ def copy_std_lib(link_include_file):
 
 
 def find_include(link_include_path):
-    for dir_path, _, _ in os.walk(RegularExpressions.CREATE_LIB_PATH.value):
+    for dir_path, _, _ in os.walk(StringConstant.CREATE_LIB_PATH.value):
         link_include_path.append(dir_path)
 
 
-def copy_self_include(link_include_file, self_include_file):
-    std_include = StringConstant.SELF_INCLUDE.value
-    if not os.path.exists(std_include):
-        os.makedirs(std_include)
+def copy_self_include(link_include_path, self_include_file, flag=-1):
+    if flag == 0:
+        std_include = StringConstant.SELF_INCLUDE_OLD.value
+    elif flag == 1:
+        std_include = StringConstant.SELF_INCLUDE_NEW.value
+    else:
+        std_include = StringConstant.SELF_INCLUDE.value
 
-    if self_include_file:
-        for item in self_include_file:
-            shutil.copy(item, std_include)
+    if std_include and not os.path.exists(std_include):
+        shutil.copytree(self_include_file, std_include)
 
-    link_include_file.append(std_include)
+    for dir_path, _, _ in os.walk(std_include):
+        link_include_path.append(dir_path)
 
 
 def delete_typedef_child(child):
@@ -286,13 +289,13 @@ def parser(directory_path):  # 目录路径
     return data_total
 
 
-def parser_include_ast(gn_file_path, include_path, self_include=None):        # 对于单独的.h解析接口
+def parser_include_ast(gn_file_path, include_path, flag=-1):        # 对于单独的.h解析接口
     correct_include_path = []
 
     link_include_path = []
     copy_std_lib(link_include_path)
     find_include(link_include_path)
-    copy_self_include(link_include_path, self_include)
+    copy_self_include(link_include_path, gn_file_path, flag)
 
     modes = stat.S_IRWXO | stat.S_IRWXG | stat.S_IRWXU
     fd = os.open('include_file_suffix.txt', os.O_WRONLY | os.O_CREAT, mode=modes)
@@ -312,5 +315,4 @@ def parser_include_ast(gn_file_path, include_path, self_include=None):        # 
             for child in item['children']:
                 delete_typedef_child(child)
 
-    shutil.rmtree(StringConstant.SELF_INCLUDE.value)
     return data

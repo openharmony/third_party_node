@@ -161,12 +161,33 @@ class DiffInfo:
     diff_message: str = ''
     old_api_full_text: str = ''
     new_api_full_text: str = ''
+    api_line: int = 0
+    api_column: int = 0
+    api_file_path: str = ''
     is_compatible = False
 
     def __init__(self, diff_type: DiffType):
         self.diff_type = diff_type
         self.diff_message = diff_type.value
         self.set_diff_type(diff_type)
+
+    def set_api_line(self, api_line):
+        self.api_line = api_line
+
+    def get_api_line(self):
+        return self.api_line
+
+    def set_api_column(self, api_column):
+        self.api_column = api_column
+
+    def get_api_column(self):
+        return self.api_column
+
+    def set_api_file_path(self, api_file_path):
+        self.api_file_path = api_file_path
+
+    def get_api_file_path(self):
+        return self.api_file_path
 
     def set_api_name(self, api_name):
         self.api_name = api_name
@@ -220,6 +241,9 @@ class OutputJson:
     diff_message: str = ''
     old_api_full_text: str = ''
     new_api_full_text: str = ''
+    api_line: int = 0
+    api_column: int = 0
+    api_file_path: str = ''
     is_compatible = False
 
     def __init__(self, diff_info):
@@ -229,4 +253,7 @@ class OutputJson:
         self.diff_message = diff_info.diff_message
         self.old_api_full_text = diff_info.old_api_full_text
         self.new_api_full_text = diff_info.new_api_full_text
+        self.api_line = diff_info.api_line
+        self.api_column = diff_info.api_column
+        self.api_file_path = diff_info.api_file_path
         self.is_compatible = diff_info.is_compatible

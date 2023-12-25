@@ -28,11 +28,17 @@ def wrap_diff_info(old_info, new_info, diff_info: DiffInfo):
     if old_info is not None:
         diff_info.set_api_name(old_info['name'])
         diff_info.set_api_type(old_info['kind'])
+        diff_info.set_api_line(old_info['location']['location_line'])
+        diff_info.set_api_column(old_info['location']['location_column'])
+        diff_info.set_api_file_path(old_info['location']['location_path'])
         if 'content' in old_info['node_content']:
             diff_info.set_old_api_full_text(old_info['node_content']['content'])
     if new_info is not None:
         diff_info.set_api_name(new_info['name'])
         diff_info.set_api_type(new_info['kind'])
+        diff_info.set_api_line(new_info['location']['location_line'])
+        diff_info.set_api_column(new_info['location']['location_column'])
+        diff_info.set_api_file_path(new_info['location']['location_path'])
         if 'content' in new_info['node_content']:
             diff_info.set_new_api_full_text(new_info['node_content']['content'])
 
@@ -380,12 +386,12 @@ def process_constant_value(old, new, diff_constant_list):
                                        DiffInfo(DiffType.CONSTANT_VALUE_CHANGE))
             diff_constant_list.append(diff_info)
 
-    elif 'children' not in old and 'children' in new:
+    elif 'children' not in old and 'children' in new and len(new['children']):
         diff_info = wrap_diff_info(old, new['children'][0],
                                    DiffInfo(DiffType.CONSTANT_VALUE_CHANGE))
         diff_constant_list.append(diff_info)
 
-    elif 'children' in old and 'children' not in new:
+    elif 'children' in old and 'children' not in new and len(old['children']):
         diff_info = wrap_diff_info(old['children'][0], new,
                                    DiffInfo(DiffType.CONSTANT_VALUE_CHANGE))
         diff_constant_list.append(diff_info)
