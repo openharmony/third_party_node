@@ -33,7 +33,6 @@ ohos_ndk_library("libneural_network_runtime_ndk") {
   system_capability = "SystemCapability.AI.NeuralNetworkRuntime"
   system_capability_headers = [
     "neural_network_runtime.h",
-    "neural_network_runtime_compat.h",
     "neural_network_runtime_type.h",
   ]
 }
@@ -43,7 +42,6 @@ ohos_ndk_headers("libneural_network_runtime_header") {
   sources = [
     "neural_network_core.h",
     "neural_network_runtime.h",
-    "neural_network_runtime_compat.h",
     "neural_network_runtime_type.h",
   ]
 }
