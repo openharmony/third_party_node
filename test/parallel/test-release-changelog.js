@@ -30,8 +30,7 @@ const patch = getDefine(versionText, 'NODE_PATCH_VERSION');
 const versionForRegex = `${major}\\.${minor}\\.${patch}`;
 
 const lts = getDefine(versionText, 'NODE_VERSION_IS_LTS') !== '0';
-const codename = getDefine(versionText, 'NODE_VERSION_LTS_CODENAME')
-  .slice(1, -1);
+const codename = getDefine(versionText, 'NODE_VERSION_LTS_CODENAME').slice(1, -1);
 // If the LTS bit is set there should be a codename.
 if (lts) {
   assert.notStrictEqual(codename, '');
@@ -40,8 +39,7 @@ if (lts) {
 const changelogPath = `doc/changelogs/CHANGELOG_V${major}.md`;
 // Check CHANGELOG_V*.md
 {
-  const changelog = fs.readFileSync(path.join(srcRoot, changelogPath),
-                                    { encoding: 'utf8' });
+  const changelog = fs.readFileSync(path.join(srcRoot, changelogPath), { encoding: 'utf8' });
   // Check title matches major version.
   assert.match(changelog, new RegExp(`# Node\\.js ${major} ChangeLog`));
   // Check table header
@@ -68,8 +66,7 @@ const changelogPath = `doc/changelogs/CHANGELOG_V${major}.md`;
 
 // Main CHANGELOG.md checks
 {
-  const mainChangelog = fs.readFileSync(mainChangelogFile,
-                                        { encoding: 'utf8' });
+  const mainChangelog = fs.readFileSync(mainChangelogFile, { encoding: 'utf8' });
   // Check for the link to the appropriate CHANGELOG_V*.md file.
   let linkToChangelog;
   if (lts) {
@@ -81,13 +78,12 @@ const changelogPath = `doc/changelogs/CHANGELOG_V${major}.md`;
   // Check table header.
   let tableHeader;
   if (lts) {
-    tableHeader = new RegExp(`<th title="LTS Until \\d{4}-\\d{2}"><a href="${changelogPath}">${major}</a><sup>LTS</sup></th>`);
+    tableHeader = new RegExp(`<th title="LTS Until \\d{4}-\\d{2}"><a href="${changelogPath}">${major}</a> \\(LTS\\)</th>`);
   } else {
     tableHeader = new RegExp(`<th title="Current"><a href="${changelogPath}">${major}</a> \\(Current\\)</th>`);
   }
   assert.match(mainChangelog, tableHeader);
-  // Check the table contains a link to the release in the appropriate
-  // CHANGELOG_V*.md file.
+  // Check the table contains a link to the release in the appropriate CHANGELOG_V*.md file.
   const linkToVersion = new RegExp(`<b><a href="${changelogPath}#${versionForRegex}">${versionForRegex}</a></b><br/>`);
   assert.match(mainChangelog, linkToVersion);
 }

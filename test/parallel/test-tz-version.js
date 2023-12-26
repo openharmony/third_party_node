@@ -14,8 +14,7 @@ if (process.config.variables.icu_path !== 'deps/icu-small') {
   // `./configure --with-intl=small-icu`. The latter only uses a subset of the
   // locales, i.e., it uses the English locale, `root,en`, by default and other
   // locales can also be specified using the `--with-icu-locales` option.
-  common.skip('not using the icu data file present in' +
-              ' deps/icu-small/source/data/in/icudt##l.dat.bz2');
+  common.skip('not using the icu data file present in deps/icu-small/source/data/in/icudt##l.dat.bz2');
 }
 
 const fixtures = require('../common/fixtures');
@@ -25,6 +24,5 @@ const fixtures = require('../common/fixtures');
 const { strictEqual } = require('assert');
 const { readFileSync } = require('fs');
 
-const expectedVersion = readFileSync(fixtures.path('tz-version.txt'),
-                                     'utf8').trim();
+const expectedVersion = readFileSync(fixtures.path('tz-version.txt'), 'utf8').trim();
 strictEqual(process.versions.tz, expectedVersion);

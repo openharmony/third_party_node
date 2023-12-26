@@ -183,14 +183,48 @@ Note:If the text contains special characters, please escape them according to th
                 <filteritem type="filepath" name="deps/.*.gz" desc="无关二进制"/>
                 <filteritem type="filepath" name="deps/.*.size" desc="无关二进制"/>
                 <filteritem type="filepath" name="deps/.*.exe" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.js" desc="无关编译文件"/>
                 <filteritem type="filepath" name="src/.*.ico" desc="无关二进制"/>
                 <filteritem type="filepath" name="deps/npm/node_modules/clone/LICENSE" desc="无关二进制"/>
             </filefilter>
         </filefilterlist>
         <filefilterlist>
             <filefilter name="defaultPolicyFilter" desc="compatibility，license文件头校验策略的过滤条件" >
-                <filteritem type="filepath" name="deps/zlib/contrib/minizip/unzip.c" desc="zlib LICENSE，文件未使用，不参与编译,不影响兼容性"/>
-                <filteritem type="filepath" name="deps/npm/node_modules/bcrypt-pbkdf/index.js" desc="BSD LICENSE，文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/zlib/contrib/minizip/unzip.c" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/bcrypt-pbkdf/index.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/lib/commands/dist-tag.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="tools/dep_updaters/update-postject.sh" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/npm-packlist/lib/index.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/base64/base64/cmake/test-arch.c" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/diff/LICENSE" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/init-package-json/lib/default-input.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/ieee754/index.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="tools/dep_updaters/update-brotli.sh" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="tools/dep_updaters/update-googletest.sh" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="test/fixtures/mime-whatwg.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/zlib/zlib.3" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="test/fixtures/wpt/common/third_party/reftest-analyzer.xhtml" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="test/parallel/test-single-executable-application.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/event-target-shim/dist/event-target-shim.mjs" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="tools/dep_updaters/update-minimatch.sh" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/@npmcli/arborist/lib/inventory.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/test/lib/commands/init.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/event-target-shim/dist/event-target-shim.umd.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/cares/src/lib/inet_net_pton.c" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/event-target-shim/dist/event-target-shim.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="tools/dep_updaters/update-undici.sh" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/man/man1/npm-publish.1" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="tools/license2rtf.mjs" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/diff/dist/diff.min.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/jackspeak/LICENSE.md" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/@npmcli/arborist/bin/index.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/node-gyp/gyp/pyproject.toml" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/tap-snapshots/test/lib/commands/view.js.test.cjs" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/path-scurry/LICENSE.md" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="test/fixtures/mime-whatwg-generated.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/diff/dist/diff.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/@npmcli/arborist/bin/license.js" desc="文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="test/parallel/test-cluster-accept-fail.js" desc="文件未使用，不参与编译,不影响兼容性"/>
                 <filteritem type="filepath" name="deps/npm/node_modules/init-package-json/default-input.js" desc="三方代码未写LICENSE头"/>
                 <filteritem type="filepath" name="deps/npm/node_modules/normalize-package-data/lib/fixer.js" desc="三方代码未写LICENSE头"/>
                 <filteritem type="filepath" name="deps/npm/node_modules/normalize-package-data/lib/normalize.js" desc="三方代码未写LICENSE头"/>
