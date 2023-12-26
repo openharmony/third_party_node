@@ -14,15 +14,15 @@
 # limitations under the License.
 
 import json
-import os
-from typedef.check.check import ApiResultInfo, FileDocInfo, OutputTxt
+from pathlib import Path
+from typedef.check.check import FileDocInfo, OutputTxt
 from coreImpl.check.check_doc import process_comment, process_file_doc_info
 from coreImpl.check.check_name import check_file_name, check_ndk_name
 from coreImpl.parser.parser import parser_include_ast
 from coreImpl.check.check_syntax import check_syntax
 
 
-def process_api_json(api_info, file_doc_info: FileDocInfo, api_result_info_list):
+def process_api_json(api_info, file_doc_info, api_result_info_list):
     api_result_info_list.extend(check_ndk_name(api_info))
     if 'comment' in api_info.keys():
         comment = api_info['comment']
@@ -69,20 +69,18 @@ def write_in_txt(check_result, output_path):
 
 def result_to_json(check_result):
     txt_resul = []
-    if len(check_result) == 0:
-        txt_resul.append('api_check: false')
-    else:
-        for result in check_result:
-            location = f'{result.location}(line:{result.location_line}, col:{result.location_column})'
-            message = 'API check error of [{}]:{}'.format(result.error_type['description'], result.error_info)
-            txt_resul.append(OutputTxt(result.error_type['id'], result.level, location, result.file_name, message))
-        txt_resul.append('api_check: false')
+    for result in check_result:
+        location = f'{result.location}(line:{result.location_line}, col:{result.location_column})'
+        message = 'API check error of [{}]:{}'.format(result.error_type['description'], result.error_info)
+        txt_resul.append(OutputTxt(result.error_type['id'], result.level, location, result.file_name, message))
     return json.dumps(txt_resul, default=lambda obj: obj.__dict__, indent=4)
 
 
-def curr_entry(file_path):
-    file_list = get_md_files(file_path)
-    check_result_list = get_check_result_list(file_list)
+def curr_entry(md_files_path):
+    file_list = get_md_files(md_files_path)
+    check_result_list = []
+    if len(file_list) > 0:
+        check_result_list = get_check_result_list(file_list)
     write_in_txt(check_result_list, r'./Error.txt')
 
 
@@ -97,12 +95,18 @@ def get_check_result_list(file_list):
     return check_result_list
 
 
-def get_md_files(url):
-    file = open(url, "r")
+def get_md_files(md_files_path):
+    file = open(md_files_path, "r")
     file_list = []
     line = file.readline()
     while line:
-        file_list.append(line.splitlines()[0])
+        file_path = line.splitlines()[0]
+        if file_path.find("sdk_c") != -1 and get_file_type(file_path) == '.h':
+            file_list.append(line.splitlines()[0])
         line = file.readline()
     file.close()
     return file_list
+
+
+def get_file_type(file_path):
+    return Path(file_path).suffix
