@@ -37,67 +37,67 @@ class ErrorType(enum.Enum):
         'description': '',
     }
     UNKNOW_DECORATOR = {
-        id: 0,
+        'id': 0,
         'description': 'unknow decorator',
     }
     MISSPELL_WORDS = {
-        id: 1,
+        'id': 1,
         'description': 'misspell words',
     }
     NAMING_ERRORS = {
-        id: 2,
+        'id': 2,
         'description': 'naming errors',
     }
     UNKNOW_PERMISSION = {
-        id: 3,
+        'id': 3,
         'description': 'unknow permission',
     }
     UNKNOW_SYSCAP = {
-        id: 4,
+        'id': 4,
         'description': 'unknow syscap',
     }
     UNKNOW_DEPRECATED = {
-        id: 5,
+        'id': 5,
         'description': 'unknow deprecated',
     }
     WRONG_ORDER = {
-        id: 6,
+        'id': 6,
         'description': 'wrong order',
     }
     WRONG_VALUE = {
-        id: 7,
+        'id': 7,
         'description': 'wrong value',
     }
     WRONG_SCENE = {
-        id: 8,
+        'id': 8,
         'description': 'wrong scene',
     }
     PARAMETER_ERRORS = {
-        id: 9,
+        'id': 9,
         'description': 'wrong parameter',
     }
     API_PAIR_ERRORS = {
-        id: 10,
+        'id': 10,
         'description': 'limited api pair errors',
     }
     ILLEGAL_ANY = {
-        id: 11,
+        'id': 11,
         'description': 'illegal any',
     }
     API_CHANGE_ERRORS = {
-        id: 12,
+        'id': 12,
         'description': 'api change errors',
     }
     EMPTY_TAG = {
-        id: 13,
+        'id': 13,
         'description': 'miss tag value',
     }
     ERROR_TAG = {
-        id: 14,
+        'id': 14,
         'description': 'error tag name',
     }
     SYNTAX_ERRORS = {
-        id: 15,
+        'id': 15,
         'description': 'syntax errors',
     }
 

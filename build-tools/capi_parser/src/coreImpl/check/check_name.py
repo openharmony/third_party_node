@@ -55,6 +55,25 @@ def check_small_hump(api_info):
     return processing_check_data('SMALL_HUMP', api_info)
 
 
+def check_macro_definition(api_info):
+    api_result_info_list = []
+    name = api_info['name']
+    if api_info['is_def_func']:
+        name = api_info['def_func_name']
+    result = re.match(CheckName['ALL_UPPERCASE_HUMP'].value, name)
+    if result is None:
+        api_result_info = ApiResultInfo(ErrorType.NAMING_ERRORS.value,
+                                        ErrorMessage[api_info['kind']].value.replace('$$', name), name)
+        api_result_info.set_location_line(api_info['location']['location_line'])
+        api_result_info.set_location_column(api_info['location']['location_column'])
+        api_result_info.set_location(api_info['location']['location_path'])
+        api_result_info.set_type(LogType.LOG_API.value)
+        api_result_info.set_level(ErrorLevel.LOW.value)
+        api_result_info.set_file_name(api_info['location']['location_path'])
+        api_result_info_list.append(api_result_info)
+    return api_result_info_list
+
+
 def check_all_uppercase_hump(api_info):
     return processing_check_data('ALL_UPPERCASE_HUMP', api_info)
 
@@ -111,7 +130,7 @@ process_tag_function = {
     'VAR_DECL': check_variable_name,
     'PARM_DECL': check_small_hump,
     'FIELD_DECL': check_small_hump,
-    'MACRO_DEFINITION': check_all_uppercase_hump,
+    'MACRO_DEFINITION': check_macro_definition,
     'ENUM_CONSTANT_DECL': check_all_uppercase_hump,
 }
 
