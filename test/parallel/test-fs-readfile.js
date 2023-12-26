@@ -1,4 +1,3 @@
-// Flags: --experimental-abortcontroller
 'use strict';
 const common = require('../common');
 
@@ -53,11 +52,32 @@ for (const e of fileInfo) {
     assert.deepStrictEqual(buf, e.contents);
   }));
 }
+
+// readFile() and readFileSync() should fail if the file is too big.
+{
+  const kIoMaxLength = 2 ** 31 - 1;
+
+  if (!tmpdir.hasEnoughSpace(kIoMaxLength)) {
+    // truncateSync() will fail with ENOSPC if there is not enough space.
+    common.printSkipMessage(`Not enough space in ${tmpdir.path}`);
+  } else {
+    const file = path.join(tmpdir.path, `${prefix}-too-large.txt`);
+    fs.writeFileSync(file, Buffer.from('0'));
+    fs.truncateSync(file, kIoMaxLength + 1);
+
+    fs.readFile(file, common.expectsError({
+      code: 'ERR_FS_FILE_TOO_LARGE',
+      name: 'RangeError',
+    }));
+    assert.throws(() => {
+      fs.readFileSync(file);
+    }, { code: 'ERR_FS_FILE_TOO_LARGE', name: 'RangeError' });
+  }
+}
+
 {
   // Test cancellation, before
-  const controller = new AbortController();
-  const signal = controller.signal;
-  controller.abort();
+  const signal = AbortSignal.abort();
   fs.readFile(fileInfo[0].name, { signal }, common.mustCall((err, buf) => {
     assert.strictEqual(err.name, 'AbortError');
   }));
@@ -75,7 +95,7 @@ for (const e of fileInfo) {
   // Verify that if something different than Abortcontroller.signal
   // is passed, ERR_INVALID_ARG_TYPE is thrown
   assert.throws(() => {
-    const callback = common.mustNotCall(() => {});
+    const callback = common.mustNotCall();
     fs.readFile(fileInfo[0].name, { signal: 'hello' }, callback);
   }, { code: 'ERR_INVALID_ARG_TYPE', name: 'TypeError' });
 }

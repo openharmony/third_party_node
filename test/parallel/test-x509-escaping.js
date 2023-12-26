@@ -5,6 +5,7 @@ if (!common.hasCrypto)
   common.skip('missing crypto');
 
 const assert = require('assert');
+const { X509Certificate } = require('crypto');
 const tls = require('tls');
 const fixtures = require('../common/fixtures');
 
@@ -65,44 +66,44 @@ const { hasOpenSSL3 } = common;
     'email:foo@example.com',
     // ... but should be escaped if they contain commas.
     'email:"foo@example.com\\u002c DNS:good.example.com"',
-    'DirName:/C=DE/L=Hannover',
-    // TODO(tniessen): support UTF8 in DirName
-    'DirName:"/C=DE/L=M\\\\xC3\\\\xBCnchen"',
-    'DirName:"/C=DE/L=Berlin\\u002c DNS:good.example.com"',
-    'DirName:"/C=DE/L=Berlin\\u002c DNS:good.example.com\\\\x00' +
-      'evil.example.com"',
-    'DirName:"/C=DE/L=Berlin\\u002c DNS:good.example.com\\\\\\\\x00' +
-      'evil.example.com"',
-    // These next two tests might be surprising. OpenSSL applies its own rules
-    // first, which introduce backslashes, which activate node's escaping.
-    // Unfortunately, there are also differences between OpenSSL 1.1.1 and 3.0.
-    'DirName:"/C=DE/L=Berlin\\\\x0D\\\\x0A"',
-    hasOpenSSL3 ?
-      'DirName:"/C=DE/L=Berlin\\\\/CN=good.example.com"' :
-      'DirName:/C=DE/L=Berlin/CN=good.example.com',
-    // TODO(tniessen): even OIDs that are well-known (such as the following,
-    // which is sha256WithRSAEncryption) should be represented numerically only.
-    'Registered ID:sha256WithRSAEncryption',
+    // New versions of Node.js use RFC2253 to print DirName entries, which
+    // almost always results in commas, which should be escaped properly.
+    'DirName:"L=Hannover\\u002cC=DE"',
+    // Node.js unsets ASN1_STRFLGS_ESC_MSB to prevent unnecessarily escaping
+    // Unicode characters, so Unicode characters should be preserved.
+    'DirName:"L=München\\u002cC=DE"',
+    'DirName:"L=Berlin\\\\\\u002c DNS:good.example.com\\u002cC=DE"',
+    // Node.js also unsets ASN1_STRFLGS_ESC_CTRL and relies on JSON-compatible
+    // escaping rules to safely escape control characters.
+    'DirName:"L=Berlin\\\\\\u002c DNS:good.example.com\\u0000' +
+      'evil.example.com\\u002cC=DE"',
+    'DirName:"L=Berlin\\\\\\u002c DNS:good.example.com\\\\\\\\\\u0000' +
+      'evil.example.com\\u002cC=DE"',
+    'DirName:"L=Berlin\\u000d\\u000a\\u002cC=DE"',
+    'DirName:"L=Berlin/CN=good.example.com\\u002cC=DE"',
+    // Even OIDs that are well-known (such as the following, which is
+    // sha256WithRSAEncryption) should be represented numerically only.
+    'Registered ID:1.2.840.113549.1.1.11',
     // This is an OID that will likely never be assigned to anything, thus
     // OpenSSL should not know it.
     'Registered ID:1.3.9999.12.34',
     hasOpenSSL3 ?
-      'othername: XmppAddr::abc123' :
+      'othername:XmppAddr:abc123' :
       'othername:<unsupported>',
     hasOpenSSL3 ?
-      'othername:" XmppAddr::abc123\\u002c DNS:good.example.com"' :
+      'othername:"XmppAddr:abc123\\u002c DNS:good.example.com"' :
       'othername:<unsupported>',
     hasOpenSSL3 ?
-      'othername:" XmppAddr::good.example.com\\u0000abc123"' :
+      'othername:"XmppAddr:good.example.com\\u0000abc123"' :
       'othername:<unsupported>',
     // This is unsupported because the OID is not recognized.
     'othername:<unsupported>',
-    hasOpenSSL3 ? 'othername: SRVName::abc123' : 'othername:<unsupported>',
+    hasOpenSSL3 ? 'othername:SRVName:abc123' : 'othername:<unsupported>',
     // This is unsupported because it is an SRVName with a UTF8String value,
     // which is not allowed for SRVName.
     'othername:<unsupported>',
     hasOpenSSL3 ?
-      'othername:" SRVName::abc\\u0000def"' :
+      'othername:"SRVName:abc\\u0000def"' :
       'othername:<unsupported>',
   ];
 
@@ -111,13 +112,9 @@ const { hasOpenSSL3 } = common;
   for (let i = 0; i < expectedSANs.length; i++) {
     const pem = fixtures.readSync(`x509-escaping/alt-${i}-cert.pem`, 'utf8');
 
-    // X509Certificate interface is not supported in v12.x & v14.x. Disable
-    // checks for subjectAltName with expectedSANs. The testcase is ported
-    // from v17.x
-    //
     // Test the subjectAltName property of the X509Certificate API.
-    // const cert = new X509Certificate(pem);
-    // assert.strictEqual(cert.subjectAltName, expectedSANs[i]);
+    const cert = new X509Certificate(pem);
+    assert.strictEqual(cert.subjectAltName, expectedSANs[i]);
 
     // Test that the certificate obtained by checkServerIdentity has the correct
     // subjectaltname property.
@@ -176,14 +173,14 @@ const { hasOpenSSL3 } = common;
       },
     },
     hasOpenSSL3 ? {
-      text: 'OCSP - othername: XmppAddr::good.example.com\n' +
+      text: 'OCSP - othername:XmppAddr:good.example.com\n' +
             'OCSP - othername:<unsupported>\n' +
-            'OCSP - othername: SRVName::abc123',
+            'OCSP - othername:SRVName:abc123',
       legacy: {
         'OCSP - othername': [
-          ' XmppAddr::good.example.com',
+          'XmppAddr:good.example.com',
           '<unsupported>',
-          ' SRVName::abc123',
+          'SRVName:abc123',
         ],
       },
     } : {
@@ -199,10 +196,10 @@ const { hasOpenSSL3 } = common;
       },
     },
     hasOpenSSL3 ? {
-      text: 'OCSP - othername:" XmppAddr::good.example.com\\u0000abc123"',
+      text: 'OCSP - othername:"XmppAddr:good.example.com\\u0000abc123"',
       legacy: {
         'OCSP - othername': [
-          ' XmppAddr::good.example.com\0abc123',
+          'XmppAddr:good.example.com\0abc123',
         ],
       },
     } : {
@@ -221,13 +218,10 @@ const { hasOpenSSL3 } = common;
     const pem = fixtures.readSync(`x509-escaping/info-${i}-cert.pem`, 'utf8');
     const expected = expectedInfoAccess[i];
 
-    // X509Certificate interface is not supported in v12.x & v14.x. Disable
-    // checks for cert.infoAccess with expected text. The testcase is ported
-    // from v17.x
     // Test the subjectAltName property of the X509Certificate API.
-    // const cert = new X509Certificate(pem);
-    // assert.strictEqual(cert.infoAccess,
-    //                   `${expected.text}${hasOpenSSL3 ? '' : '\n'}`);
+    const cert = new X509Certificate(pem);
+    assert.strictEqual(cert.infoAccess,
+                       `${expected.text}${hasOpenSSL3 ? '' : '\n'}`);
 
     // Test that the certificate obtained by checkServerIdentity has the correct
     // subjectaltname property.
@@ -247,6 +241,15 @@ const { hasOpenSSL3 } = common;
           assert.deepStrictEqual(peerCert.infoAccess,
                                  Object.assign(Object.create(null),
                                                expected.legacy));
+
+          // toLegacyObject() should also produce the same properties. However,
+          // the X509Certificate is not aware of the chain, so we need to add
+          // the circular issuerCertificate reference manually for the assertion
+          // to be true.
+          const obj = cert.toLegacyObject();
+          assert.strictEqual(obj.issuerCertificate, undefined);
+          obj.issuerCertificate = obj;
+          assert.deepStrictEqual(peerCert, obj);
         },
       }, common.mustCall());
     }));
@@ -328,15 +331,11 @@ const { hasOpenSSL3 } = common;
     const pem = fixtures.readSync(`x509-escaping/subj-${i}-cert.pem`, 'utf8');
     const expected = expectedSubjects[i];
 
-    // X509Certificate interface is not supported in v12.x & v14.x. Disable
-    // checks for certX509.subject and certX509.issuer with expected
-    // text. The testcase is ported from v17.x
-    //
     // Test the subject property of the X509Certificate API.
-    // const cert = new X509Certificate(pem);
-    // assert.strictEqual(cert.subject, expected.text);
+    const cert = new X509Certificate(pem);
+    assert.strictEqual(cert.subject, expected.text);
     // The issuer MUST be the same as the subject since the cert is self-signed.
-    // assert.strictEqual(cert.issuer, expected.text);
+    assert.strictEqual(cert.issuer, expected.text);
 
     // Test that the certificate obtained by checkServerIdentity has the correct
     // subject property.
@@ -360,6 +359,15 @@ const { hasOpenSSL3 } = common;
           // self-signed. Otherwise, OpenSSL would have already rejected the
           // certificate while connecting to the TLS server.
           assert.deepStrictEqual(peerCert.issuer, expectedObject);
+
+          // toLegacyObject() should also produce the same properties. However,
+          // the X509Certificate is not aware of the chain, so we need to add
+          // the circular issuerCertificate reference manually for the assertion
+          // to be true.
+          const obj = cert.toLegacyObject();
+          assert.strictEqual(obj.issuerCertificate, undefined);
+          obj.issuerCertificate = obj;
+          assert.deepStrictEqual(peerCert, obj);
         },
       }, common.mustCall());
     }));
@@ -430,14 +438,18 @@ const { hasOpenSSL3 } = common;
 
   // The hostname is the CN, but not a SAN entry.
   const servername = 'good.example.com';
+  const certX509 = new X509Certificate(cert);
+  assert.strictEqual(certX509.subject, `CN=${servername}`);
+  assert.strictEqual(certX509.subjectAltName, 'DNS:evil.example.com');
 
-  // X509Certificate interface is not supported in v12.x & v14.x. Disable
-  // checks for certX509.subject and certX509.subjectAltName with expected
-  // value. The testcase is ported from v17.x
-  //
-  // const certX509 = new X509Certificate(cert);
-  // assert.strictEqual(certX509.subject, `CN=${servername}`);
-  // assert.strictEqual(certX509.subjectAltName, 'DNS:evil.example.com');
+  // The newer X509Certificate API allows customizing this behavior:
+  assert.strictEqual(certX509.checkHost(servername), undefined);
+  assert.strictEqual(certX509.checkHost(servername, { subject: 'default' }),
+                     undefined);
+  assert.strictEqual(certX509.checkHost(servername, { subject: 'always' }),
+                     servername);
+  assert.strictEqual(certX509.checkHost(servername, { subject: 'never' }),
+                     undefined);
 
   // Try connecting to a server that uses the self-signed certificate.
   const server = tls.createServer({ key, cert }, common.mustNotCall());
@@ -465,14 +477,18 @@ const { hasOpenSSL3 } = common;
 
   // The hostname is the CN, but there is no dNSName SAN entry.
   const servername = 'good.example.com';
+  const certX509 = new X509Certificate(cert);
+  assert.strictEqual(certX509.subject, `CN=${servername}`);
+  assert.strictEqual(certX509.subjectAltName, 'IP Address:1.2.3.4');
 
-  // X509Certificate interface is not supported in v12.x & v14.x. Disable
-  // checks for certX509.subject and certX509.subjectAltName with expected
-  // value. The testcase is ported from v17.x
-  //
-  // const certX509 = new X509Certificate(cert);
-  // assert.strictEqual(certX509.subject, `CN=${servername}`);
-  // assert.strictEqual(certX509.subjectAltName, 'IP Address:1.2.3.4');
+  // The newer X509Certificate API allows customizing this behavior:
+  assert.strictEqual(certX509.checkHost(servername), servername);
+  assert.strictEqual(certX509.checkHost(servername, { subject: 'default' }),
+                     servername);
+  assert.strictEqual(certX509.checkHost(servername, { subject: 'always' }),
+                     servername);
+  assert.strictEqual(certX509.checkHost(servername, { subject: 'never' }),
+                     undefined);
 
   // Connect to a server that uses the self-signed certificate.
   const server = tls.createServer({ key, cert }, common.mustCall((socket) => {
@@ -483,8 +499,6 @@ const { hasOpenSSL3 } = common;
     tls.connect(port, {
       ca: cert,
       servername,
-    }, common.mustCall(() => {
-      // Do nothing, the server will close the connection.
-    }));
+    }, common.mustCall());
   }));
 }
