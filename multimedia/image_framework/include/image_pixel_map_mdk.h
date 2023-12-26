@@ -572,7 +572,8 @@ int32_t OH_PixelMap_GetImageInfo(const NativePixelMap* native, OhosPixelMapInfos
  * returns {@link IRNdkErrCode} IMAGE_RESULT_PLUGIN_CREATE_FAILED - if create plugin fail.
  * returns {@link IRNdkErrCode} IMAGE_RESULT_INDEX_INVALID - if invalid index.
  * returns {@link IRNdkErrCode} IMAGE_RESULT_ALPHA_TYPE_ERROR - if hard decode failed.
- * returns {@link IRNdkErrCode} IMAGE_RESULT_ALLOCATER_TYPE_ERROR - if hard decode failed. * @since 10
+ * returns {@link IRNdkErrCode} IMAGE_RESULT_ALLOCATER_TYPE_ERROR - if hard decode failed.
+ * @since 10
  * @version 2.0
  */
 int32_t OH_PixelMap_AccessPixels(const NativePixelMap* native, void** addr);
@@ -601,7 +602,8 @@ int32_t OH_PixelMap_AccessPixels(const NativePixelMap* native, void** addr);
  * returns {@link IRNdkErrCode} IMAGE_RESULT_PLUGIN_CREATE_FAILED - if create plugin fail.
  * returns {@link IRNdkErrCode} IMAGE_RESULT_INDEX_INVALID - if invalid index.
  * returns {@link IRNdkErrCode} IMAGE_RESULT_ALPHA_TYPE_ERROR - if hard decode failed.
- * returns {@link IRNdkErrCode} IMAGE_RESULT_ALLOCATER_TYPE_ERROR - if hard decode failed. * @see AccessPixels
+ * returns {@link IRNdkErrCode} IMAGE_RESULT_ALLOCATER_TYPE_ERROR - if hard decode failed.
+ * @see AccessPixels
  * @since 10
  * @version 2.0
  */
