@@ -43,6 +43,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+typedef struct OH_NativeBuffer OH_NativeBuffer;
 
 /**
  * @brief native window.
@@ -93,7 +94,7 @@ enum NativeWindowOperation {
     /**
      * set native window buffer geometry,
      * variable parameter in function is
-     * [in] int32_t height, [in] int32_t width
+     * [in] int32_t width, [in] int32_t height
      */
     SET_BUFFER_GEOMETRY,
     /**
@@ -355,12 +356,15 @@ int32_t OH_NativeWindow_NativeWindowFlushBuffer(OHNativeWindow *window, OHNative
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeWindow
  * @param window Indicates the pointer to a <b>OHNativeWindow</b> instance.
- * @param buffer Indicates the pointer to a <b>OHNativeWindowBuffer</b> instance.
+ * @param buffer Indicates the pointer to a <b>OHNativeWindowBuffer</b> pointer.
+ * @param fenceFd Indicates the pointer to a file descriptor handle.
+ * @param matrix Indicates the retrieved 4*4 transform matrix.
  * @return Returns an error code, 0 is success, otherwise, failed.
  * @since 11
  * @version 1.0
  */
-int32_t OH_NativeWindow_GetLastFlushedBuffer(OHNativeWindow *window, OHNativeWindowBuffer *buffer);
+int32_t OH_NativeWindow_GetLastFlushedBuffer(OHNativeWindow *window, OHNativeWindowBuffer **buffer,
+    int *fenceFd, float matrix[16]);
 
  /**
  * @brief Returns the <b>OHNativeWindowBuffer</b> to the buffer queue through a <b>OHNativeWindow</b> instance, without filling in any content. The <b>OHNativeWindowBuffer</b> can be used for another request.

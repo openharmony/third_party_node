@@ -1,0 +1,26 @@
+[
+    {
+        "first_introduced": "11",
+        "name": "OH_WebSocketClient_Constructor"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_WebSocketClient_AddHeader"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_WebSocketClient_Connect"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_WebSocketClient_Send"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_WebSocketClient_Close"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_WebSocketClient_Destroy"
+    }
+]

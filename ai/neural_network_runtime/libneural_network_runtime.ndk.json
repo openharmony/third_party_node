@@ -1,12 +1,36 @@
 [
     {
+        "name": "OH_NNQuantParam_Create"
+    },
+    {
+        "name": "OH_NNQuantParam_SetScales"
+    },
+    {
+        "name": "OH_NNQuantParam_SetZeroPoints"
+    },
+    {
+        "name": "OH_NNQuantParam_SetNumBits"
+    },
+    {
+        "name": "OH_NNQuantParam_Destroy"
+    },
+    {
         "name": "OH_NNModel_Construct"
     },
     {
         "name": "OH_NNModel_AddTensor"
     },
     {
+        "name": "OH_NNModel_AddTensorToModel"
+    },
+    {
         "name": "OH_NNModel_SetTensorData"
+    },
+    {
+        "name": "OH_NNModel_SetTensorQuantParams"
+    },
+    {
+        "name": "OH_NNModel_SetTensorType"
     },
     {
         "name": "OH_NNModel_AddOperation"
@@ -24,40 +48,10 @@
         "name": "OH_NNModel_GetAvailableOperations"
     },
     {
-        "name": "OH_NNCompilation_Construct"
-    },
-    {
-        "name": "OH_NNCompilation_SetDevice"
-    },
-    {
-        "name": "OH_NNCompilation_SetCache"
-    },
-    {
-        "name": "OH_NNCompilation_SetPerformanceMode"
-    },
-    {
-        "name": "OH_NNCompilation_SetPriority"
-    },
-    {
-        "name": "OH_NNCompilation_EnableFloat16"
-    },
-    {
-        "name": "OH_NNCompilation_Build"
-    },
-    {
-        "name": "OH_NNCompilation_Destroy"
-    },
-    {
-        "name": "OH_NNExecutor_Construct"
-    },
-    {
         "name": "OH_NNExecutor_SetInput"
     },
     {
         "name": "OH_NNExecutor_SetOutput"
-    },
-    {
-        "name": "OH_NNExecutor_GetOutputShape"
     },
     {
         "name": "OH_NNExecutor_Run"
@@ -79,17 +73,5 @@
     },
     {
         "name": "OH_NNExecutor_SetOutputWithMemory"
-    },
-    {
-        "name": "OH_NNExecutor_Destroy"
-    },
-    {
-        "name": "OH_NNDevice_GetAllDevicesID"
-    },
-    {
-        "name": "OH_NNDevice_GetName"
-    },
-    {
-        "name": "OH_NNDevice_GetType"
     }
 ]

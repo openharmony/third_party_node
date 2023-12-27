@@ -267,7 +267,7 @@ uint32_t OH_NativeBuffer_GetSeqNum(OH_NativeBuffer *buffer);
  * @syscap SystemCapability.Graphic.Graphic2D.NativeBuffer
  * @param buffer Indicates the pointer to a <b>OH_NativeBuffer</b> instance.
  * @param colorSpace Indicates the color space of native buffer, see <b>OH_NativeBuffer_ColorSpace</b>.
- * @return Returns the sequence number, which is unique for each OH_NativeBuffer.
+ * @return Returns an error code, 0 is success, otherwise, failed.
  * @since 11
  * @version 1.0
  */
