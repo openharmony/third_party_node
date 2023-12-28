@@ -19,17 +19,12 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "native_avcodec_base.h"
-#include "native_averrors.h"
-#include "native_avformat.h"
-#include "native_avmemory.h"
-
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 typedef struct OH_AVMuxer OH_AVMuxer;
-typedef struct OH_AVBuffer OH_AVBuffer;
 
 /**
  * @brief Create an OH_AVMuxer instance by output file description and format.
@@ -95,16 +90,14 @@ OH_AVErrCode OH_AVMuxer_Start(OH_AVMuxer *muxer);
  * @useinstead OH_AVMuxer_WriteSampleBuffer
  * @since 10
  */
-OH_AVErrCode OH_AVMuxer_WriteSample(OH_AVMuxer *muxer,
-                                    uint32_t trackIndex,
-                                    OH_AVMemory *sample,
+OH_AVErrCode OH_AVMuxer_WriteSample(OH_AVMuxer *muxer, uint32_t trackIndex, OH_AVMemory *sample,
                                     OH_AVCodecBufferAttr info);
 
 /**
  * @brief Write an encoded sample to the muxer.
  * Note: This interface can only be called after OH_AVMuxer_Start and before OH_AVMuxer_Stop. The application needs to
- * make sure that the samples are written to the right tracks. Also, it needs to make sure the samples for each track are
- * written in chronological order.
+ * make sure that the samples are written to the right tracks. Also, it needs to make sure the samples for each track
+ * are written in chronological order.
  * @syscap SystemCapability.Multimedia.Media.Muxer
  * @param muxer Pointer to an OH_AVMuxer instance
  * @param trackIndex The track index for this sample
@@ -113,9 +106,7 @@ OH_AVErrCode OH_AVMuxer_WriteSample(OH_AVMuxer *muxer,
  * otherwise returns a specific error code, refer to {@link OH_AVErrCode}
  * @since 11
  */
-OH_AVErrCode OH_AVMuxer_WriteSampleBuffer(OH_AVMuxer *muxer, 
-                                          uint32_t trackIndex,
-                                          const OH_AVBuffer *sample);
+OH_AVErrCode OH_AVMuxer_WriteSampleBuffer(OH_AVMuxer *muxer, uint32_t trackIndex, const OH_AVBuffer *sample);
 
 /**
  * @brief Stop the muxer.

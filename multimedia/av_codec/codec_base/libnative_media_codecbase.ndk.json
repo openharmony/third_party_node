@@ -56,6 +56,8 @@
     { "name": "OH_MD_KEY_DESCRIPTION" },
     { "name": "OH_MD_KEY_LYRICS" },
     { "name": "OH_MD_KEY_TRACK_COUNT" },
+    { "name": "OH_AVCodec_GetCapability" },
+    { "name": "OH_AVCodec_GetCapabilityByCategory" },
     { "name": "OH_AVCapability_IsHardware" },
     { "name": "OH_AVCapability_GetName" },
     { "name": "OH_AVCapability_GetMaxSupportedInstances" },
@@ -80,4 +82,3 @@
     { "name": "OH_AVCapability_GetSupportedLevelsForProfile" },
     { "name": "OH_AVCapability_AreProfileAndLevelSupported" }
 ]
-
