@@ -15,7 +15,7 @@ import("//build/ohos.gni")
 import("//build/ohos/ndk/ndk.gni")
 ohos_ndk_headers("native_media_avsource_header") {
   dest_dir = "$ndk_headers_out_dir/multimedia/player_framework"
-  sources = [ "//interface/sdk_c/multimedia/av_codec/native_avsource.h" ]
+  sources = [ "../native_avsource.h" ]
 }
 
 ohos_ndk_library("libnative_media_avsource") {
