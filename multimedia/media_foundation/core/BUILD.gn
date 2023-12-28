@@ -17,11 +17,11 @@ import("//build/ohos/ndk/ndk.gni")
 ohos_ndk_headers("native_media_core_header") {
   dest_dir = "$ndk_headers_out_dir/multimedia/player_framework"
   sources = [
-    "//interface/sdk_c/multimedia/media_foundation/native_avbuffer.h",
-    "//interface/sdk_c/multimedia/media_foundation/native_avbuffer_info.h",
-    "//interface/sdk_c/multimedia/media_foundation/native_averrors.h",
-    "//interface/sdk_c/multimedia/media_foundation/native_avformat.h",
-    "//interface/sdk_c/multimedia/media_foundation/native_avmemory.h",
+    "../native_avbuffer.h",
+    "../native_avbuffer_info.h",
+    "../native_averrors.h",
+    "../native_avformat.h",
+    "../native_avmemory.h",
   ]
 }
 
