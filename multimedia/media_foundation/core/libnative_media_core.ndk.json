@@ -21,6 +21,13 @@
     { "name": "OH_AVMemory_GetAddr" },
     { "name": "OH_AVMemory_GetSize" },
     { "name": "OH_AVMemory_Destroy" },
-    { "name": "OH_AVCodec_GetCapability" },
-    { "name": "OH_AVCodec_GetCapabilityByCategory" }
+    { "name": "OH_AVBuffer_Create" },
+    { "name": "OH_AVBuffer_Destroy" },
+    { "name": "OH_AVBuffer_GetBufferAttr" },
+    { "name": "OH_AVBuffer_SetBufferAttr" },
+    { "name": "OH_AVBuffer_GetParameter" },
+    { "name": "OH_AVBuffer_SetParameter" },
+    { "name": "OH_AVBuffer_GetAddr" },
+    { "name": "OH_AVBuffer_GetCapacity" },
+    { "name": "OH_AVBuffer_GetNativeBuffer" }
 ]
