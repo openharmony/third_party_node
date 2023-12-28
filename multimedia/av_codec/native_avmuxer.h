@@ -90,8 +90,8 @@ OH_AVErrCode OH_AVMuxer_Start(OH_AVMuxer *muxer);
  * @useinstead OH_AVMuxer_WriteSampleBuffer
  * @since 10
  */
-OH_AVErrCode OH_AVMuxer_WriteSample(OH_AVMuxer *muxer, uint32_t trackIndex, OH_AVMemory *sample,
-                                    OH_AVCodecBufferAttr info);
+OH_AVErrCode OH_AVMuxer_WriteSample(OH_AVMuxer *muxer, uint32_t trackIndex,
+    OH_AVMemory *sample, OH_AVCodecBufferAttr info);
 
 /**
  * @brief Write an encoded sample to the muxer.
@@ -106,7 +106,8 @@ OH_AVErrCode OH_AVMuxer_WriteSample(OH_AVMuxer *muxer, uint32_t trackIndex, OH_A
  * otherwise returns a specific error code, refer to {@link OH_AVErrCode}
  * @since 11
  */
-OH_AVErrCode OH_AVMuxer_WriteSampleBuffer(OH_AVMuxer *muxer, uint32_t trackIndex, const OH_AVBuffer *sample);
+OH_AVErrCode OH_AVMuxer_WriteSampleBuffer(OH_AVMuxer *muxer, uint32_t trackIndex,
+    const OH_AVBuffer *sample);
 
 /**
  * @brief Stop the muxer.
