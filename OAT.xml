@@ -186,6 +186,10 @@ Note:If the text contains special characters, please escape them according to th
                 <filteritem type="filepath" name="deps/.*.js" desc="无关编译文件"/>
                 <filteritem type="filepath" name="src/.*.ico" desc="无关二进制"/>
                 <filteritem type="filepath" name="deps/npm/node_modules/clone/LICENSE" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/.*/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/*/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/v8/third_party/*" desc="此为LICENSE文件"/>
             </filefilter>
         </filefilterlist>
         <filefilterlist>
@@ -273,6 +277,110 @@ Note:If the text contains special characters, please escape them according to th
                 <filteritem type="filepath" name="deps/cares/RELEASE-NOTES" desc="不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="deps/npm/man/man1/npm-dist-tag.1" desc="不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="deps/npm/man/man5/install.5" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/v8/LICENSE.strongtalk" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/v8/third_party/ittapi/include/fortran/win32/ittnotify.f90" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/mips64/assembler-mips64.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/arm/assembler-arm.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/ppc/assembler-ppc-inl.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/gzclose.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/openssl/config/archs/linux-armv4/asm/crypto/sha/sha512-armv4.S" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/gzguts.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/zutil.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/infback.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/arm/assembler-arm.cc" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/contrib/minizip/crypt.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/base/ieee754.cc" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/zconf.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/contrib/optimizations/inffast_chunk.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/openssl/openssl/crypto/camellia/asm/cmll-x86_64.pl" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/mips64/assembler-mips64.cc" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/ittapi/src/ittnotify/ittptmark64.S" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/assembler.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/inftrees.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/ia32/assembler-ia32-inl.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/openssl/openssl/external/perl/Text-Template-1.56/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/zlib.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/ia32/assembler-ia32.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/contrib/optimizations/inffast_chunk.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/adler32.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/riscv64/assembler-riscv64.cc" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/riscv64/assembler-riscv64.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/uv/m4/libuv-check-flags.m4" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/contrib/minizip/zip.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/inftrees.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/ppc/assembler-ppc.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/third_party/siphash/halfsiphash.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/ittapi/LICENSES/GPL-2.0-only.txt" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/uv/src/inet.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/gzwrite.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/ia32/assembler-ia32.cc" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/contrib/minizip/mztools.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/s390/assembler-s390.cc" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/README.chromium" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/inffast.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/openssl/openssl/crypto/sha/asm/sha256-armv4.pl" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/crc_folding.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/contrib/minizip/unzip.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/ittapi/src/ittnotify/ittptmark32.S" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/openssl/config/archs/linux-armv4/asm/crypto/sha/sha256-armv4.S" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/contrib/minizip/mztools.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/ittapi/src/ittnotify/ittptmark32.asm" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/assembler.cc" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/third_party/vtune/vtune-jit.cc" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/s390/assembler-s390.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/LICENSE.fdlibm" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/ppc/assembler-ppc.cc" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/third_party/vtune/v8-vtune.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/trees.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/riscv64/assembler-riscv64-inl.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/deflate.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/x64/assembler-x64.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/uncompr.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/third_party/siphash/halfsiphash.cc" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/mips64/assembler-mips64-inl.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/inflate.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/mips/assembler-mips-inl.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/deflate.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/uv/LICENSE-docs" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/uv/m4/ax_pthread.m4" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/arm/assembler-arm-inl.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/zutil.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/ittapi/src/ittnotify/ittptmark64.asm" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/mips/assembler-mips.cc" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/compress.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/gzread.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/ittapi/ittapi-rs/Cargo.toml" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/fill_window_sse.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/openssl/openssl/external/perl/Text-Template-1.56/Changes" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/contrib/minizip/unzip.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/gzlib.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/openssl/openssl/crypto/camellia/asm/cmll-x86.pl" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/third_party/valgrind/valgrind.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/wasm-api/README.v8" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/s390/assembler-s390-inl.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/contrib/optimizations/inflate.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/crc32.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/openssl/openssl/crypto/sha/asm/sha512-armv4.pl" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/markupsafe/get_markupsafe.sh" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/third_party/vtune/vtune-jit.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/openssl/openssl/external/perl/Text-Template-1.56/lib/Text/Template.pm" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/inffast.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/src/codegen/mips/assembler-mips.h" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/inflate.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/ittapi/include/fortran/posix/ittnotify.f90" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/openssl/config/archs/linux-armv4/asm_avx2/crypto/sha/sha256-armv4.S" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/openssl/config/archs/linux-armv4/asm_avx2/crypto/sha/sha512-armv4.S" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/v8/src/third_party/valgrind/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/v8/third_party/jsoncpp/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/v8/src/third_party/siphash/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/v8/src/third_party/vtune/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/v8/src/third_party/utf8-decoder/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/v8/third_party/markupsafe/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/v8/third_party/jinja2/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/v8/third_party/zlib/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/v8/third_party/ittapi/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/v8/third_party/v8/builtins/LICENSE" desc="此为LICENSE文件"/>
             </filefilter>
         </filefilterlist>
         <licensematcherlist>
