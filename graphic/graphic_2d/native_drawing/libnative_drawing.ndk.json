@@ -143,5 +143,125 @@
     { "name": "OH_Drawing_TypographyGetMinIntrinsicWidth" },
     { "name": "OH_Drawing_TypographyGetMaxIntrinsicWidth" },
     { "name": "OH_Drawing_TypographyGetAlphabeticBaseline" },
-    { "name": "OH_Drawing_TypographyGetIdeographicBaseline" }
+    { "name": "OH_Drawing_TypographyGetIdeographicBaseline" },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_TypographyHandlerAddPlaceholder"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_TypographyDidExceedMaxLines"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_TypographyGetRectsForRange"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_TypographyGetRectsForPlaceholders"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_GetLeftFromTextBox"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_GetRightFromTextBox"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_GetTopFromTextBox"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_GetBottomFromTextBox"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_GetTextDirectionFromTextBox"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_GetSizeOfTextBox"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_TypographyGetGlyphPositionAtCoordinate"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_TypographyGetGlyphPositionAtCoordinateWithCluster"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_GetPositionFromPositionAndAffinity"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_GetAffinityFromPositionAndAffinity"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_TypographyGetWordBoundary"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_GetStartFromRange"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_GetEndFromRange"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_TypographyGetLineCount"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_SetTextStyleDecorationStyle"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_SetTextStyleDecorationThicknessScale"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_SetTextStyleLetterSpacing"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_SetTextStyleWordSpacing"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_SetTextStyleHalfLeading"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_SetTextStyleEllipsis"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_SetTextStyleEllipsisModal"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_SetTypographyTextBreakStrategy"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_SetTypographyTextWordBreakType"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_SetTypographyTextEllipsisModal"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_TypographyGetLineHeight"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Drawing_TypographyGetLineWidth"
+    }
 ]
