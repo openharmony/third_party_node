@@ -71,59 +71,6 @@ def processing_no_child(cursor, data):  # 处理没有子节点的节点
                 data["integer_value"] = token.spelling  # 获取整型变量值
 
 
-def get_complex_def(tokens_new, count_token, tokens, data):
-    count = 1
-    logo = 0
-    logo_com = 0
-    count_com = 0
-    for token_2 in tokens_new:
-        if token_2.spelling == ')':
-            break
-        else:
-            count += 1
-    if count != count_token:
-        for token in tokens_new[count:]:
-            if token.spelling == '{' or token.spelling == '(' or token.spelling == '##':
-                logo = 1
-
-    if count_token == count:
-        pass
-    elif logo == 1:  # 获取复合型宏定义宏名
-        logo_com = logo
-        count_com = count + 1
-        tokens_name = tokens[:count + 1]
-        data["name"] = ''.join([token.spelling for token in tokens_name])
-    return logo_com, count_com
-
-
-def processing_complex_def(tokens, data):  # 处理复合型宏
-    tokens_new = tokens[1:]  # 跳过正常宏名
-    logo_com = 0  # 记录复合型，复合型文本也得根据这个
-    count_com = 0
-    count_token = len(tokens_new)  # value ()
-    for token in tokens_new:
-        if token.kind.name == 'KEYWORD':
-            break
-        if token.kind.name == 'IDENTIFIER':
-            logo_com, count_com = get_complex_def(tokens_new, count_token, tokens, data)
-    get_def_text(tokens, data, logo_com, count_com)  # 获取宏文本
-
-
-def get_def_text(tokens, data, logo_compose, count_compose):  # 获取宏文本
-    if logo_compose == 1:
-        marco_expansion = ''.join([token.spelling for token in tokens[count_compose:]])  # 获取宏文本,有就记录，没有不管
-        if marco_expansion:
-            data["text"] = marco_expansion
-        else:
-            pass
-    else:
-        marco_expansion = ''.join([token.spelling for token in tokens[1:]])  # 获取宏文本,有就记录，没有不管
-        if marco_expansion:
-            data["text"] = marco_expansion
-        else:
-            pass
-
-
 def get_token(cursor):
     tokens = []
     for token in cursor.get_tokens():
@@ -187,38 +134,29 @@ def processing_enum(cursor, data):  # 获取枚举值
 
 
 def processing_def(cursor, data):  # 处理宏定义
-    if data['node_content']['content']:
-        split_data = data['node_content']['content'].split()
-        split_data_three = data['node_content']['content'].split('\t')
-        if len(split_data) == 2:
-            pattern = r'\((.*?), (.*?)\)'
-            if re.search(pattern, data['node_content']['content']):
-                data['name'] = data['node_content']['content']
-            else:
-                data['name'] = split_data[0]
-                data['text'] = split_data[1]
-        elif len(split_data_three) == 2:
-            data['name'] = split_data_three[0]
-            data['text'] = split_data_three[1]
-        else:
-            marco_ext = cursor.extent
-            tokens = cursor.translation_unit.get_tokens(extent=marco_ext)  # 找到对应的宏定义位置
-            tokens = list(tokens)  # Generator转为list
-            processing_complex_def(tokens, data)  # 获取宏名和宏文本
-    else:
-        print('mar_define error, its content is none')
-    data["type"] = "def_no_type"
-
-    judgment_def_func(data)
-
-
-def judgment_def_func(data):
     data['is_def_func'] = False
-    if '(' in data['name'] and ')' in data['name']:
-        data['is_def_func'] = True
-        index = data['name'].index('(')
-        data['def_func_name'] = data['name'][:index]
-        data['def_func_param'] = data['name'][index:]
+    data['name'] = cursor.spelling
+    name_len = len(data['name'])
+    str1_len = len(data['node_content']['content'])
+    text = ''
+    if name_len != str1_len:
+        if data['node_content']['content']:
+            if data['node_content']['content'][name_len] == '(':
+                right_index = data['node_content']['content'].index(')')
+                param = data['node_content']['content'][name_len:right_index + 1]
+                text = data['node_content']['content'][right_index + 1:]
+                data['is_def_func'] = True
+                data['def_func_name'] = data['name']
+                data['def_func_param'] = param
+                data['name'] = ''.join(data['name'] + param)
+            else:
+                text = data['node_content']['content'][name_len:]
+        else:
+            print('mar_define error, its content is none')
+    if text:
+        text = text.strip()  # 删除两边的字符（默认是删除左右空格）
+        data['text'] = text
+    data["type"] = "def_no_type"
 
 
 def processing_func(cursor, data):  # 处理函数
