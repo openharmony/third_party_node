@@ -360,6 +360,7 @@ Note:If the text contains special characters, please escape them according to th
                 <filteritem type="filepath" name="deps/v8/src/codegen/s390/assembler-s390-inl.h" desc="三方代码未写LICENSE头"/>
                 <filteritem type="filepath" name="deps/v8/third_party/zlib/contrib/optimizations/inflate.c" desc="三方代码未写LICENSE头"/>
                 <filteritem type="filepath" name="deps/v8/third_party/zlib/crc32.c" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/v8/third_party/google_benchmark/README.v8" desc="不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="deps/openssl/openssl/crypto/sha/asm/sha512-armv4.pl" desc="三方代码未写LICENSE头"/>
                 <filteritem type="filepath" name="deps/v8/third_party/markupsafe/get_markupsafe.sh" desc="三方代码未写LICENSE头"/>
                 <filteritem type="filepath" name="deps/v8/src/third_party/vtune/vtune-jit.h" desc="三方代码未写LICENSE头"/>
