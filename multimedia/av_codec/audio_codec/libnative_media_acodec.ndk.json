@@ -1,17 +1,62 @@
 [
-    { "name": "OH_AudioCodec_CreateByMime" },
-    { "name": "OH_AudioCodec_CreateByName" },
-    { "name": "OH_AudioCodec_Destroy" },
-    { "name": "OH_AudioCodec_RegisterCallback" },
-    { "name": "OH_AudioCodec_Configure" },
-    { "name": "OH_AudioCodec_Prepare" },
-    { "name": "OH_AudioCodec_Start" },
-    { "name": "OH_AudioCodec_Stop" },
-    { "name": "OH_AudioCodec_Flush" },
-    { "name": "OH_AudioCodec_Reset" },
-    { "name": "OH_AudioCodec_GetOutputDescription" },
-    { "name": "OH_AudioCodec_SetParameter" },
-    { "name": "OH_AudioCodec_PushInputBuffer" },
-    { "name": "OH_AudioCodec_FreeOutputBuffer" },
-    { "name": "OH_AudioCodec_IsValid" }
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_CreateByMime"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_CreateByName"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_Destroy"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_RegisterCallback"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_Configure"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_Prepare"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_Start"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_Stop"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_Flush"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_Reset"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_GetOutputDescription"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_SetParameter"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_PushInputBuffer"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_FreeOutputBuffer"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_IsValid"
+    }
 ]
