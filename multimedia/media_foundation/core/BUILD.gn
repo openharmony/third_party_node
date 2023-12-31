@@ -13,18 +13,30 @@
 
 import("//build/ohos.gni")
 import("//build/ohos/ndk/ndk.gni")
-ohos_ndk_headers("native_media_vdec_header") {
+
+ohos_ndk_headers("native_media_core_header") {
   dest_dir = "$ndk_headers_out_dir/multimedia/player_framework"
-  sources = [ "../native_avcodec_videodecoder.h" ]
+  sources = [
+    "../native_avbuffer.h",
+    "../native_avbuffer_info.h",
+    "../native_averrors.h",
+    "../native_avformat.h",
+    "../native_avmemory.h",
+  ]
 }
 
-ohos_ndk_library("libnative_media_vdec") {
-  ndk_description_file = "./libnative_media_vdec.ndk.json"
+ohos_ndk_library("libnative_media_core") {
+  ndk_description_file = "./libnative_media_core.ndk.json"
   min_compact_version = "1"
-  output_name = "native_media_vdec"
+  output_name = "native_media_core"
   output_extension = "so"
 
-  system_capability = "SystemCapability.Multimedia.Media.VideoDecoder"
-  system_capability_headers =
-      [ "multimedia/player_framework/native_avcodec_videodecoder.h" ]
+  system_capability = "SystemCapability.Multimedia.Media.Core"
+  system_capability_headers = [
+    "multimedia/player_framework/native_avbuffer.h",
+    "multimedia/player_framework/native_avbuffer_info.h",
+    "multimedia/player_framework/native_averrors.h",
+    "multimedia/player_framework/native_avformat.h",
+    "multimedia/player_framework/native_avmemory.h",
+  ]
 }

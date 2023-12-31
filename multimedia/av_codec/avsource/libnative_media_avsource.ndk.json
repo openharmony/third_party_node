@@ -1,7 +1,22 @@
 [
-    { "name": "OH_AVSource_CreateWithURI" },
-    { "name": "OH_AVSource_CreateWithFD" },
-    { "name": "OH_AVSource_Destroy" },
-    { "name": "OH_AVSource_GetSourceFormat" },
-    { "name": "OH_AVSource_GetTrackFormat" }
+    {
+        "first_introduced": "10",
+        "name": "OH_AVSource_CreateWithURI"
+    },
+    {
+        "first_introduced": "10",
+        "name": "OH_AVSource_CreateWithFD"
+    },
+    {
+        "first_introduced": "10",
+        "name": "OH_AVSource_Destroy"
+    },
+    {
+        "first_introduced": "10",
+        "name": "OH_AVSource_GetSourceFormat"
+    },
+    {
+        "first_introduced": "10",
+        "name": "OH_AVSource_GetTrackFormat"
+    }
 ]

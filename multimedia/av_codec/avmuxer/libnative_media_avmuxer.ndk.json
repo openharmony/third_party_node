@@ -1,9 +1,34 @@
 [
-    { "name": "OH_AVMuxer_Create" },
-    { "name": "OH_AVMuxer_SetRotation" },
-    { "name": "OH_AVMuxer_AddTrack" },
-    { "name": "OH_AVMuxer_Start" },
-    { "name": "OH_AVMuxer_WriteSample" },
-    { "name": "OH_AVMuxer_Stop" },
-    { "name": "OH_AVMuxer_Destroy" }
+    {
+        "first_introduced": "10",
+        "name": "OH_AVMuxer_Create"
+    },
+    {
+        "first_introduced": "10",
+        "name": "OH_AVMuxer_SetRotation"
+    },
+    {
+        "first_introduced": "10",
+        "name": "OH_AVMuxer_AddTrack"
+    },
+    {
+        "first_introduced": "10",
+        "name": "OH_AVMuxer_Start"
+    },
+    {
+        "first_introduced": "10",
+        "name": "OH_AVMuxer_WriteSample"
+    },
+    {
+        "first_introduced": "10",
+        "name": "OH_AVMuxer_Stop"
+    },
+    {
+        "first_introduced": "10",
+        "name": "OH_AVMuxer_Destroy"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AVMuxer_WriteSampleBuffer"
+    }
 ]

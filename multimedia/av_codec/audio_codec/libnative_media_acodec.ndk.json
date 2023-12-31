@@ -1,0 +1,62 @@
+[
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_CreateByMime"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_CreateByName"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_Destroy"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_RegisterCallback"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_Configure"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_Prepare"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_Start"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_Stop"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_Flush"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_Reset"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_GetOutputDescription"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_SetParameter"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_PushInputBuffer"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_FreeOutputBuffer"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AudioCodec_IsValid"
+    }
+]
