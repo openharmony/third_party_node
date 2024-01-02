@@ -14,9 +14,20 @@
  */
 
 /**
+ * @addtogroup MediaFoundation
+ * @{
+ *
+ * @brief Provides APIs for media foundation.
+ *
+ * @since 11
+ */
+
+/**
  * @file native_audio_channel_layout.h
  *
  * @brief The channel layout indicates the appearance and order of the speakers for recording or playback.
+ *
+ * @library libnative_media_core.so
  * @syscap SystemCapability.Multimedia.Media.Core
  * @since 11
  */
@@ -32,7 +43,7 @@ extern "C" {
 
 /**
  * @brief Audio Channel Set
- * 
+ *
  * A 64-bit integer with bits set for each channel.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @since 11
@@ -131,7 +142,7 @@ typedef enum OH_AudioChannelSet {
 
 /**
  * @brief Ambisonic attribute set.
- * 
+ *
  * A set of 64-bit integers indicate the ambisonic attributes.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @since 11
@@ -164,7 +175,7 @@ typedef enum OH_AmbAttributeSet {
 
 /**
  * @brief Audio Channel Layout
- * 
+ *
  * A 64-bit integer indicates that the appearance and order of the speakers for recording or playback.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @since 11
@@ -335,3 +346,5 @@ typedef enum OH_AudioChannelLayout {
 #endif
 
 #endif // NATIVE_AUDIO_CHANNEL_LAYOUT_H
+
+/** @} */
