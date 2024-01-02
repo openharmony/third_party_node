@@ -175,7 +175,7 @@ enum OH_Huks_KeySize {
     OH_HUKS_RSA_KEY_SIZE_3072 = 3072,
     /** RSA key of 4096 bits. */
     OH_HUKS_RSA_KEY_SIZE_4096 = 4096,
-    
+
     /** Elliptic Curve Cryptography (ECC) key of 224 bits. */
     OH_HUKS_ECC_KEY_SIZE_224 = 224,
     /** ECC key of 256 bits. */
@@ -398,6 +398,16 @@ enum  OH_Huks_ErrCode {
     OH_HUKS_ERR_CODE_INTERNAL_ERROR = 12000012,
     /** The authentication credential does not exist. */
     OH_HUKS_ERR_CODE_CREDENTIAL_NOT_EXIST = 12000013,
+    /** The memory is not sufficient. */
+    OH_HUKS_ERR_CODE_INSUFFICIENT_MEMORY = 12000014,
+    /** Failed to call service. */
+    OH_HUKS_ERR_CODE_CALL_SERVICE_FAILED = 12000015,
+    /**
+     * Device password is required but not set.
+     *
+     * @since 11
+     */
+    OH_HUKS_ERR_CODE_DEVICE_PASSWORD_UNSET = 12000016,
 };
 
 /**
@@ -447,7 +457,36 @@ enum OH_Huks_AuthAccessType {
     /** The key is invalid after the password is cleared. */
     OH_HUKS_AUTH_ACCESS_INVALID_CLEAR_PASSWORD = 1 << 0,
     /** The key is invalid after a new biometric feature is enrolled. */
-    OH_HUKS_AUTH_ACCESS_INVALID_NEW_BIO_ENROLL = 1 << 1
+    OH_HUKS_AUTH_ACCESS_INVALID_NEW_BIO_ENROLL = 1 << 1,
+    /**
+     * The key is always valid.
+     *
+     * @since 11
+     */
+    OH_HUKS_AUTH_ACCESS_ALWAYS_VALID = 1 << 2,
+};
+
+/**
+ * @brief Enumerates key file storage authentication levels.
+ *
+ * @since 11
+ */
+enum OH_Huks_AuthStorageLevel {
+    /**
+     * Key file storage security level for device encryption standard.
+     * @since 11
+     */
+    OH_HUKS_AUTH_STORAGE_LEVEL_DE = 0,
+    /**
+     * Key file storage security level for credential encryption standard.
+     * @since 11
+     */
+    OH_HUKS_AUTH_STORAGE_LEVEL_CE = 1,
+    /**
+     * Key file storage security level for enhanced credential encryption standard.
+     * @since 11
+     */
+    OH_HUKS_AUTH_STORAGE_LEVEL_ECE = 2,
 };
 
 /**
@@ -590,6 +629,13 @@ enum OH_Huks_Tag {
     /** Purpose of key authentication */
     OH_HUKS_TAG_KEY_AUTH_PURPOSE = OH_HUKS_TAG_TYPE_UINT | 311,
 
+    /**
+     * Security level of access control for key file storage, whose optional values are from OH_Huks_AuthStorageLevel.
+     *
+     * @since 11
+     */
+    OH_HUKS_TAG_AUTH_STORAGE_LEVEL = OH_HUKS_TAG_TYPE_UINT | 316,
+
     /** Tags for key attestation. The value range is 501 to 600. */
     /** Challenge value used in the attestation. */
     OH_HUKS_TAG_ATTESTATION_CHALLENGE = OH_HUKS_TAG_TYPE_BYTES | 501,
@@ -625,6 +671,13 @@ enum OH_Huks_Tag {
     OH_HUKS_TAG_IS_ASYNCHRONIZED = OH_HUKS_TAG_TYPE_UINT | 1008,
     /** Key domain. */
     OH_HUKS_TAG_KEY_DOMAIN = OH_HUKS_TAG_TYPE_UINT | 1011,
+    /**
+     * Key access control based on device password setting status.
+     * True means the key can only be generated and used when the password is set.
+     *
+     * @since 11
+     */
+    OH_HUKS_TAG_IS_DEVICE_PASSWORD_SET = OH_HUKS_TAG_TYPE_BOOL | 1012,
 
     /** Authenticated Encryption. */
     OH_HUKS_TAG_AE_TAG = OH_HUKS_TAG_TYPE_BYTES | 10009,
@@ -679,7 +732,7 @@ struct OH_Huks_Blob {
 struct OH_Huks_Param {
     /** Tag value. */
     uint32_t tag;
-    
+
     union {
         /** Parameter of the Boolean type. */
         bool boolParam;

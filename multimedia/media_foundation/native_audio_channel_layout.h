@@ -32,6 +32,7 @@ extern "C" {
 
 /**
  * @brief Audio Channel Set
+ * 
  * A 64-bit integer with bits set for each channel.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @since 11
@@ -130,6 +131,7 @@ typedef enum OH_AudioChannelSet {
 
 /**
  * @brief Ambisonic attribute set.
+ * 
  * A set of 64-bit integers indicate the ambisonic attributes.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @since 11
@@ -162,6 +164,7 @@ typedef enum OH_AmbAttributeSet {
 
 /**
  * @brief Audio Channel Layout
+ * 
  * A 64-bit integer indicates that the appearance and order of the speakers for recording or playback.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @since 11

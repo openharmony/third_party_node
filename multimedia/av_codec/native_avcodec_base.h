@@ -18,8 +18,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include "native_averrors.h"
-#include "native_avformat.h"
+#include "native_avbuffer.h"
 #include "native_avmemory.h"
 
 #ifdef __cplusplus
@@ -28,41 +27,6 @@ extern "C" {
 
 typedef struct NativeWindow OHNativeWindow;
 typedef struct OH_AVCodec OH_AVCodec;
-
-/**
- * @brief Enumerate the categories of OH_AVCodec's Buffer tags
- * @syscap SystemCapability.Multimedia.Media.CodecBase
- * @since 9
- * @version 1.0
- */
-typedef enum OH_AVCodecBufferFlags {
-    AVCODEC_BUFFER_FLAGS_NONE = 0,
-    /* Indicates that the Buffer is an End-of-Stream frame */
-    AVCODEC_BUFFER_FLAGS_EOS = 1 << 0,
-    /* Indicates that the Buffer contains keyframes */
-    AVCODEC_BUFFER_FLAGS_SYNC_FRAME = 1 << 1,
-    /* Indicates that the data contained in the Buffer is only part of a frame */
-    AVCODEC_BUFFER_FLAGS_INCOMPLETE_FRAME = 1 << 2,
-    /* Indicates that the Buffer contains Codec-Specific-Data */
-    AVCODEC_BUFFER_FLAGS_CODEC_DATA = 1 << 3,
-} OH_AVCodecBufferFlags;
-
-/**
- * @brief Define the Buffer description information of OH_AVCodec
- * @syscap SystemCapability.Multimedia.Media.CodecBase
- * @since 9
- * @version 1.0
- */
-typedef struct OH_AVCodecBufferAttr {
-    /* Presentation timestamp of this Buffer in microseconds */
-    int64_t pts;
-    /* The size of the data contained in the Buffer in bytes */
-    int32_t size;
-    /* The starting offset of valid data in this Buffer */
-    int32_t offset;
-    /* The flags this Buffer has, which is also a combination of multiple {@link OH_AVCodecBufferFlags}. */
-    uint32_t flags;
-} OH_AVCodecBufferAttr;
 
 /**
  * @brief When an error occurs in the running of the OH_AVCodec instance, the function pointer will be called
@@ -97,6 +61,8 @@ typedef void (*OH_AVCodecOnStreamChanged)(OH_AVCodec *codec, OH_AVFormat *format
  * @param index The index corresponding to the newly available input buffer.
  * @param data New available input buffer.
  * @param userData User specific data
+ * @deprecated since 11
+ * @useinstead OH_AVCodecOnNeedInputBuffer
  * @since 9
  * @version 1.0
  */
@@ -113,11 +79,37 @@ typedef void (*OH_AVCodecOnNeedInputData)(OH_AVCodec *codec, uint32_t index, OH_
  * @param data Buffer containing the new output data
  * @param attr The description of the new output Buffer, please refer to {@link OH_AVCodecBufferAttr}
  * @param userData specified data
+ * @deprecated since 11
+ * @useinstead OH_AVCodecOnNewOutputBuffer
  * @since 9
  * @version 1.0
  */
 typedef void (*OH_AVCodecOnNewOutputData)(OH_AVCodec *codec, uint32_t index, OH_AVMemory *data,
-    OH_AVCodecBufferAttr *attr, void *userData);
+                                          OH_AVCodecBufferAttr *attr, void *userData);
+
+/**
+ * @brief When OH_AVCodec needs new input data during the running process,
+ * the function pointer will be called and carry an available Buffer to fill in the new input data.
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @param codec OH_AVCodec instance
+ * @param index The index corresponding to the newly available input buffer.
+ * @param buffer New available input buffer.
+ * @param userData User specific data
+ * @since 11
+ */
+typedef void (*OH_AVCodecOnNeedInputBuffer)(OH_AVCodec *codec, uint32_t index, OH_AVBuffer *buffer, void *userData);
+
+/**
+ * @brief When new output data is generated during the operation of OH_AVCodec, the function pointer will be
+ * called and carry a Buffer containing the new output data.
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @param codec OH_AVCodec instance
+ * @param index The index corresponding to the new output Buffer.
+ * @param buffer Buffer containing the new output buffer.
+ * @param userData specified data
+ * @since 11
+ */
+typedef void (*OH_AVCodecOnNewOutputBuffer)(OH_AVCodec *codec, uint32_t index, OH_AVBuffer *buffer, void *userData);
 
 /**
  * @brief A collection of all asynchronous callback function pointers in OH_AVCodec. Register an instance of this
@@ -127,7 +119,9 @@ typedef void (*OH_AVCodecOnNewOutputData)(OH_AVCodec *codec, uint32_t index, OH_
  * @param onError Monitor OH_AVCodec operation errors, refer to {@link OH_AVCodecOnError}
  * @param onStreamChanged Monitor codec stream information, refer to {@link OH_AVCodecOnStreamChanged}
  * @param onNeedInputData Monitoring codec requires input data, refer to {@link OH_AVCodecOnNeedInputData}
- * @param onNeedInputData Monitor codec to generate output data, refer to {@link onNeedInputData}
+ * @param onNeedOutputData Monitor codec to generate output data, refer to {@link OH_AVCodecOnNewOutputData}
+ * @deprecated since 11
+ * @useinstead OH_AVCodecCallback
  * @since 9
  * @version 1.0
  */
@@ -137,6 +131,24 @@ typedef struct OH_AVCodecAsyncCallback {
     OH_AVCodecOnNeedInputData onNeedInputData;
     OH_AVCodecOnNewOutputData onNeedOutputData;
 } OH_AVCodecAsyncCallback;
+
+/**
+ * @brief A collection of all asynchronous callback function pointers in OH_AVCodec. Register an instance of this
+ * structure to the OH_AVCodec instance, and process the information reported through the callback to ensure the
+ * normal operation of OH_AVCodec.
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @param onError Monitor OH_AVCodec operation errors, refer to {@link OH_AVCodecOnError}
+ * @param onStreamChanged Monitor codec stream information, refer to {@link OH_AVCodecOnStreamChanged}
+ * @param onNeedInputBuffer Monitoring codec requires input buffer, refer to {@link OH_AVCodecOnNeedInputBuffer}
+ * @param onNewOutputBuffer Monitor codec to generate output buffer, refer to {@link OH_AVCodecOnNewOutputBuffer}
+ * @since 11
+ */
+typedef struct OH_AVCodecCallback {
+    OH_AVCodecOnError onError;
+    OH_AVCodecOnStreamChanged onStreamChanged;
+    OH_AVCodecOnNeedInputBuffer onNeedInputBuffer;
+    OH_AVCodecOnNewOutputBuffer onNewOutputBuffer;
+} OH_AVCodecCallback;
 
 /**
  * @brief Enumerates the MIME types of audio and video codecs
@@ -156,14 +168,34 @@ extern const char *OH_AVCODEC_MIMETYPE_AUDIO_FLAC;
 extern const char *OH_AVCODEC_MIMETYPE_AUDIO_VORBIS;
 extern const char *OH_AVCODEC_MIMETYPE_AUDIO_MPEG;
 extern const char *OH_AVCODEC_MIMETYPE_VIDEO_HEVC;
+
+/**
+ * @brief Enumerates the types of audio and video muxer
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @deprecated since 11
+ * @since 10
+ */
 extern const char *OH_AVCODEC_MIMETYPE_VIDEO_MPEG4;
+
+/**
+ * @brief Enumerates the types of audio and video muxer
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 10
+ */
 extern const char *OH_AVCODEC_MIMETYPE_IMAGE_JPG;
 extern const char *OH_AVCODEC_MIMETYPE_IMAGE_PNG;
 extern const char *OH_AVCODEC_MIMETYPE_IMAGE_BMP;
-extern const char *OH_AVCODEC_MIMETYPE_AUDIO_AVS3DA;
+
+/**
+ * @brief Enumerates the MIME types of audio codecs
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 11
+ */
+extern const char *OH_AVCODEC_MIMETYPE_AUDIO_VIVID;
 extern const char *OH_AVCODEC_MIMETYPE_AUDIO_AMR_NB;
 extern const char *OH_AVCODEC_MIMETYPE_AUDIO_AMR_WB;
 extern const char *OH_AVCODEC_MIMETYPE_AUDIO_OPUS;
+extern const char *OH_AVCODEC_MIMETYPE_AUDIO_G711MU;
 
 /**
  * @brief The extra data's key of surface Buffer
@@ -177,7 +209,7 @@ extern const char *OH_ED_KEY_TIME_STAMP;
 extern const char *OH_ED_KEY_EOS;
 
 /**
- * @brief Provides the uniform container for storing the media description.
+ * @brief Provides the uniform key for storing the media description.
  * @syscap SystemCapability.Multimedia.Media.CodecBase
  * @since 9
  * @version 1.0
@@ -216,7 +248,7 @@ extern const char *OH_MD_KEY_I_FRAME_INTERVAL;
 extern const char *OH_MD_KEY_ROTATION;
 
 /**
- * @brief Provides the uniform container for storing the media description.
+ * @brief Provides the uniform key for storing the media description.
  * @syscap SystemCapability.Multimedia.Media.CodecBase
  * @since 10
  */
@@ -259,18 +291,6 @@ extern const char *OH_MD_KEY_DESCRIPTION;
 extern const char *OH_MD_KEY_LYRICS;
 /* source format Key for track count, value type is uint32_t */
 extern const char *OH_MD_KEY_TRACK_COUNT;
-/* Key for type of file, value type is int32_t, see @OH_FileType */
-extern const char *OH_MD_KEY_FILE_TYPE;
-/* Key for whether the file contains video tracks, value type is boolean */
-extern const char *OH_MD_KEY_HAS_VIDEO;
-/* Key for whether the file contains audio tracks, value type is boolean */
-extern const char *OH_MD_KEY_HAS_AUDIO;
-/* Key for author of file, value type is string */
-extern const char *OH_MD_KEY_AUTHOR;
-/* Key for composer of file, value type is string */
-extern const char *OH_MD_KEY_COMPOSER;
-/* Key for cover of file, value type is uint8_t pointer */
-extern const char *OH_MD_KEY_COVER;
 /* Key for the desired encoding channel layout, value type is int64_t, this key is only supported for encoders */
 extern const char *OH_MD_KEY_CHANNEL_LAYOUT;
 /* Key for bits per coded sample, value type is uint32_t, supported for flac encoder, see @OH_BitsPerSample */
@@ -291,32 +311,20 @@ extern const char *OH_MD_KEY_SCALING_MODE;
 extern const char *OH_MD_MAX_INPUT_BUFFER_COUNT;
 /* Key for max output buffer count, value type is int32_t */
 extern const char *OH_MD_MAX_OUTPUT_BUFFER_COUNT;
-/* Key for codec compression level, value type is uint32_t */
-extern const char *OH_MD_KEY_COMPRESSION_LEVEL;
-/* Key for encode level, value type is int32_t. see @OH_HEVCLevel. */
-extern const char *OH_MD_KEY_LEVEL;
-/* Key for chroma location, value type is int32_t. see @OH_ChromaLocation. */
-extern const char *OH_MD_KEY_VIDEO_CHROMA_LOCATION;
 
 /**
- * @brief File type.
+ * @brief Provides the uniform key for storing the media description.
  * @syscap SystemCapability.Multimedia.Media.CodecBase
- * @since 10
- * @version 1.0
+ * @since 11
  */
-typedef enum OH_FileType {
-    FILE_TYPE_UNKNOW = 0,
-    FILE_TYPE_MP4    = 101,
-    FILE_TYPE_MPEGTS = 102,
-    FILE_TYPE_MKV    = 103,
-    FILE_TYPE_AMR    = 201,
-    FILE_TYPE_AAC    = 202,
-    FILE_TYPE_MP3    = 203,
-    FILE_TYPE_FLAC   = 204,
-    FILE_TYPE_OGG    = 205,
-    FILE_TYPE_M4A    = 206,
-    FILE_TYPE_WAV    = 207,
-} OH_FileType;
+/* Key for audio codec compression level, value type is uint32_t */
+extern const char *OH_MD_KEY_AUDIO_COMPRESSION_LEVEL;
+/* Key of the video is hdr vivid. value type is bool */
+extern const char *OH_MD_KEY_VIDEO_IS_HDR_VIVID;
+/* Key for number of audio objects. value type is int32_t */
+extern const char *OH_MD_KEY_AUDIO_OBJECT_NUMBER;
+/* Key for meta data of audio vivid. value type is a uint8_t pointer */
+extern const char *OH_MD_KEY_AUDIO_VIVID_METADATA;
 
 /**
  * @brief Media type.
@@ -354,6 +362,19 @@ typedef enum OH_AVCProfile {
 } OH_AVCProfile;
 
 /**
+ * @brief HEVC Profile
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 10
+ */
+typedef enum OH_HEVCProfile {
+    HEVC_PROFILE_MAIN = 0,
+    HEVC_PROFILE_MAIN_10 = 1,
+    HEVC_PROFILE_MAIN_STILL = 2,
+    HEVC_PROFILE_MAIN_10_HDR10 = 3,
+    HEVC_PROFILE_MAIN_10_HDR10_PLUS = 4,
+} OH_HEVCProfile;
+
+/**
  * @brief Enumerates the muxer output file format
  * @syscap SystemCapability.Multimedia.Media.CodecBase
  * @since 10
@@ -379,38 +400,33 @@ typedef enum OH_AVSeekMode {
 } OH_AVSeekMode;
 
 /**
- * @brief HEVC Profile
+ * @brief Scaling Mode
  * @syscap SystemCapability.Multimedia.Media.CodecBase
  * @since 10
  */
-typedef enum OH_HEVCProfile {
-    HEVC_PROFILE_MAIN = 0,
-    HEVC_PROFILE_MAIN_10 = 1,
-    HEVC_PROFILE_MAIN_STILL = 2,
-    HEVC_PROFILE_MAIN_10_HDR10 = 3,
-    HEVC_PROFILE_MAIN_10_HDR10_PLUS = 4,
-} OH_HEVCProfile;
+typedef enum OH_ScalingMode {
+    SCALING_MODE_SCALE_TO_WINDOW = 1,
+    SCALING_MODE_SCALE_CROP = 2,
+} OH_ScalingMode;
 
 /**
- * @brief HEVC Level
+ * @brief enum Audio Bits Per Coded Sample
  * @syscap SystemCapability.Multimedia.Media.CodecBase
  * @since 10
  */
-enum OH_HEVCLevel {
-    HEVC_LEVEL_1 = 0,
-    HEVC_LEVEL_2 = 1,
-    HEVC_LEVEL_21 = 2,
-    HEVC_LEVEL_3 = 3,
-    HEVC_LEVEL_31 = 4,
-    HEVC_LEVEL_4 = 5,
-    HEVC_LEVEL_41 = 6,
-    HEVC_LEVEL_5 = 7,
-    HEVC_LEVEL_51 = 8,
-    HEVC_LEVEL_52 = 9,
-    HEVC_LEVEL_6 = 10,
-    HEVC_LEVEL_61 = 11,
-    HEVC_LEVEL_62 = 12,
-};
+typedef enum OH_BitsPerSample {
+    SAMPLE_U8 = 0,
+    SAMPLE_S16LE = 1,
+    SAMPLE_S24LE = 2,
+    SAMPLE_S32LE = 3,
+    SAMPLE_F32LE = 4,
+    SAMPLE_U8P = 5,
+    SAMPLE_S16P = 6,
+    SAMPLE_S24P = 7,
+    SAMPLE_S32P = 8,
+    SAMPLE_F32P = 9,
+    INVALID_WIDTH = -1
+} OH_BitsPerSample;
 
 /**
  * @brief Color Primary
@@ -478,49 +494,6 @@ typedef enum OH_MatrixCoefficient {
     MATRIX_COEFFICIENT_ICTCP = 14,
 } OH_MatrixCoefficient;
 
-/**
- * @brief Chroma Location
- * @syscap SystemCapability.Multimedia.Media.CodecBase
- * @since 10
- */
-enum OH_ChromaLocation {
-    CHROMA_LOC_UNSPECIFIED = 0,
-    CHROMA_LOC_LEFT = 1, ///< MPEG-2/4 4:2:0, H.264 default for 4:2:0
-    CHROMA_LOC_CENTER = 2, ///< MPEG-1 4:2:0, JPEG 4:2:0, H.263 4:2:0
-    CHROMA_LOC_TOPLEFT = 3, ///< ITU-R 601, SMPTE 274M 296M S314M(DV 4:1:1), mpeg2 4:2:2
-    CHROMA_LOC_TOP = 4,
-    CHROMA_LOC_BOTTOMLEFT = 5,
-    CHROMA_LOC_BOTTOM = 6,
-};
-
-/**
- * @brief Scaling Mode
- * @syscap SystemCapability.Multimedia.Media.CodecBase
- * @since 10
- */
-typedef enum OH_ScalingMode {
-    SCALING_MODE_SCALE_TO_WINDOW = 1,
-    SCALING_MODE_SCALE_CROP = 2,
-} OH_ScalingMode;
-
-/**
- * @brief enum Audio Bits Per Coded Sample
- * @syscap SystemCapability.Multimedia.Media.CodecBase
- * @since 10
- */
-typedef enum OH_BitsPerSample {
-    SAMPLE_U8 = 0,
-    SAMPLE_S16LE = 1,
-    SAMPLE_S24LE = 2,
-    SAMPLE_S32LE = 3,
-    SAMPLE_F32LE = 4,
-    SAMPLE_U8P = 5,
-    SAMPLE_S16P = 6,
-    SAMPLE_S24P = 7,
-    SAMPLE_S32P = 8,
-    SAMPLE_F32P = 9,
-    INVALID_WIDTH = -1
-} OH_BitsPerSample;
 #ifdef __cplusplus
 }
 #endif

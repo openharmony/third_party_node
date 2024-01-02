@@ -16,6 +16,7 @@
 import enum
 from coreImpl.parser import parser
 from coreImpl.check import check
+from coreImpl.diff import diff
 
 
 class ToolNameType(enum.Enum):
@@ -46,7 +47,7 @@ def run_tools(options):
     if tool_name == ToolNameType["COLLECT"].value:
         parser.parser(options.parser_path)
     elif tool_name == ToolNameType["DIFF"].value:
-        print("开发中。。。")
+        diff.process_dir(options.diff_path_old, options.diff_path_new)
     elif tool_name == ToolNameType['CHECK'].value:
         check.curr_entry(options.parser_path)
     else:
@@ -73,5 +74,20 @@ class Config(object):
             "required": True,
             "type": str,
             "help": "解析路径"
+        },
+        {
+            "name": "--diff-path-old",
+            "abbr": "-old",
+            "required": False,
+            "type": str,
+            "help": "旧文件路径"
+        },
+        {
+            "name": "--diff-path-new",
+            "abbr": "-new",
+            "required": False,
+            "type": str,
+            "help": "新文件路径"
         }
+
     ]

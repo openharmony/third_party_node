@@ -78,10 +78,14 @@ def get_complex_def(tokens_new, count_token, tokens, data):
     count_com = 0
     for token_2 in tokens_new:
         if token_2.spelling == ')':
-            logo = 1
             break
         else:
             count += 1
+    if count != count_token:
+        for token in tokens_new[count:]:
+            if token.spelling == '{' or token.spelling == '(' or token.spelling == '##':
+                logo = 1
+
     if count_token == count:
         pass
     elif logo == 1:  # 获取复合型宏定义宏名
@@ -183,11 +187,38 @@ def processing_enum(cursor, data):  # 获取枚举值
 
 
 def processing_def(cursor, data):  # 处理宏定义
-    marco_ext = cursor.extent
-    tokens = cursor.translation_unit.get_tokens(extent=marco_ext)  # 找到对应的宏定义位置
-    tokens = list(tokens)  # Generator转为list
-    processing_complex_def(tokens, data)  # 获取宏名和宏文本
+    if data['node_content']['content']:
+        split_data = data['node_content']['content'].split()
+        split_data_three = data['node_content']['content'].split('\t')
+        if len(split_data) == 2:
+            pattern = r'\((.*?), (.*?)\)'
+            if re.search(pattern, data['node_content']['content']):
+                data['name'] = data['node_content']['content']
+            else:
+                data['name'] = split_data[0]
+                data['text'] = split_data[1]
+        elif len(split_data_three) == 2:
+            data['name'] = split_data_three[0]
+            data['text'] = split_data_three[1]
+        else:
+            marco_ext = cursor.extent
+            tokens = cursor.translation_unit.get_tokens(extent=marco_ext)  # 找到对应的宏定义位置
+            tokens = list(tokens)  # Generator转为list
+            processing_complex_def(tokens, data)  # 获取宏名和宏文本
+    else:
+        print('mar_define error, its content is none')
     data["type"] = "def_no_type"
+
+    judgment_def_func(data)
+
+
+def judgment_def_func(data):
+    data['is_def_func'] = False
+    if '(' in data['name'] and ')' in data['name']:
+        data['is_def_func'] = True
+        index = data['name'].index('(')
+        data['def_func_name'] = data['name'][:index]
+        data['def_func_param'] = data['name'][index:]
 
 
 def processing_func(cursor, data):  # 处理函数
@@ -392,7 +423,6 @@ def api_entrance(share_lib, include_path, gn_path=None, link_path=None):  # 统�
     args = ['-I{}'.format(path) for path in link_path]
     args.append('-std=c99')
     options = clang.cindex.TranslationUnit.PARSE_DETAILED_PROCESSING_RECORD
-    print(args)
 
     data_total = []  # 列表对象-用于统计
     for item in include_path:  # 对每个头文件做处理
