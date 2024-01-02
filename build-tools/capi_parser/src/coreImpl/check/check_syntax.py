@@ -14,12 +14,17 @@
 # limitations under the License.
 
 import re
+import os
 import subprocess
 from typedef.check.check import ApiResultInfo, ErrorMessage, ErrorType, LogType, ErrorLevel
 
 
 def check_syntax(file_path):
-    cmd_list = ['clang', r'-I sysroot\ndk_musl_include_files', '-std=c99']
+    cmd_list = ['clang']
+    if os.path.exists(r'.\sysroot'):
+        args = ['-I{}'.format(dir_path) for dir_path, _, _ in os.walk(r'.\sysroot')]
+        cmd_list.extend(args)
+    cmd_list.append('-std=c99')
     result_list = []
     command = cmd_list + [file_path]
     run_result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

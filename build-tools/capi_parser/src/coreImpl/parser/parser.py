@@ -264,8 +264,12 @@ def copy_self_include(link_include_path, self_include_file, flag=-1):
     if std_include and not os.path.exists(std_include):
         shutil.copytree(self_include_file, std_include)
 
-    for dir_path, _, _ in os.walk(std_include):
-        link_include_path.append(dir_path)
+    for dir_path, _, files in os.walk(std_include):
+        for file in files:
+            if not file.endswith('.h'):
+                os.remove(os.path.join(dir_path, file))
+            elif dir_path not in link_include_path:
+                link_include_path.append(dir_path)
 
 
 def delete_typedef_child(child):
@@ -295,6 +299,7 @@ def parser_include_ast(gn_file_path, include_path, flag=-1):        # 对于单�
     link_include_path = []
     copy_std_lib(link_include_path)
     find_include(link_include_path)
+    link_include(gn_file_path, StringConstant.FUNK_NAME.value, link_include_path)
     copy_self_include(link_include_path, gn_file_path, flag)
 
     modes = stat.S_IRWXO | stat.S_IRWXG | stat.S_IRWXU
