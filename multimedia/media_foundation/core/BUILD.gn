@@ -17,12 +17,18 @@ import("//build/ohos/ndk/ndk.gni")
 ohos_ndk_headers("native_media_core_header") {
   dest_dir = "$ndk_headers_out_dir/multimedia/player_framework"
   sources = [
-    "../native_audio_channel_layout.h",
     "../native_avbuffer.h",
     "../native_avbuffer_info.h",
     "../native_averrors.h",
     "../native_avformat.h",
     "../native_avmemory.h",
+  ]
+}
+
+ohos_ndk_headers("native_media_core_common_header") {
+  dest_dir = "$ndk_headers_out_dir/multimedia"
+  sources = [
+    "../native_audio_channel_layout.h",
   ]
 }
 
