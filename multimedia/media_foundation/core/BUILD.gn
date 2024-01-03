@@ -27,9 +27,7 @@ ohos_ndk_headers("native_media_core_header") {
 
 ohos_ndk_headers("native_media_core_common_header") {
   dest_dir = "$ndk_headers_out_dir/multimedia"
-  sources = [
-    "../native_audio_channel_layout.h",
-  ]
+  sources = [ "../native_audio_channel_layout.h" ]
 }
 
 ohos_ndk_library("libnative_media_core") {

@@ -27,7 +27,7 @@
  *
  * @brief The channel layout indicates the appearance and order of the speakers for recording or playback.
  *
- * @library libnative_media_core.so
+ * @library NA
  * @syscap SystemCapability.Multimedia.Media.Core
  * @since 11
  */
