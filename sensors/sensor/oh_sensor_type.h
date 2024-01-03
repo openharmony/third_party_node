@@ -277,35 +277,35 @@ typedef struct Sensor_Event Sensor_Event;
 /**
  * @brief Obtains the sensor type.
  *
- * @param Sensor_Event - Pointer to the sensor data information.
+ * @param sensorEvent - Pointer to the sensor data information.
  * @param sensorType - Pointer to the sensor type.
  * @return Returns <b>SENSOR_SUCCESS</b> if the operation is successful;
  * returns an error code defined in {@link Sensor_Result} otherwise.
  * @since 11
  */
-int32_t OH_SensorEvent_GetType(Sensor_Event* Sensor_Event, Sensor_Type *sensorType);
+int32_t OH_SensorEvent_GetType(Sensor_Event* sensorEvent, Sensor_Type *sensorType);
 
 /**
  * @brief Obtains the timestamp of sensor data.
  *
- * @param Sensor_Event - Pointer to the sensor data information.
+ * @param sensorEvent - Pointer to the sensor data information.
  * @param timestamp - Pointer to the timestamp.
  * @return Returns <b>SENSOR_SUCCESS</b> if the operation is successful;
  * returns an error code defined in {@link Sensor_Result} otherwise.
  * @since 11
  */
-int32_t OH_SensorEvent_GetTimestamp(Sensor_Event* Sensor_Event, int64_t *timestamp);
+int32_t OH_SensorEvent_GetTimestamp(Sensor_Event* sensorEvent, int64_t *timestamp);
 
 /**
  * @brief Obtains the accuracy of sensor data.
  *
- * @param Sensor_Event - Pointer to the sensor data information.
+ * @param sensorEvent - Pointer to the sensor data information.
  * @param accuracy - Pointer to the accuracy.
  * @return Returns <b>SENSOR_SUCCESS</b> if the operation is successful;
  * returns an error code defined in {@link Sensor_Result} otherwise.
  * @since 11
  */
-int32_t OH_SensorEvent_GetAccuracy(Sensor_Event* Sensor_Event, Sensor_Accuracy *accuracy);
+int32_t OH_SensorEvent_GetAccuracy(Sensor_Event* sensorEvent, Sensor_Accuracy *accuracy);
 
 /**
  * @brief Obtains sensor data. The data length and content depend on the sensor type.
@@ -333,14 +333,14 @@ int32_t OH_SensorEvent_GetAccuracy(Sensor_Event* Sensor_Event, Sensor_Accuracy *
  * SENSOR_TYPE_PEDOMETER: data[0], indicating the number of steps a user has walked.
  * SENSOR_TYPE_HEART_RATE: data[0], indicating the heart rate value.
  *
- * @param Sensor_Event - Pointer to the sensor data information.
+ * @param sensorEvent - Pointer to the sensor data information.
  * @param data - Double pointer to the sensor data.
  * @param length - Pointer to the array length.
  * @return Returns <b>SENSOR_SUCCESS</b> if the operation is successful;
  * returns an error code defined in {@link Sensor_Result} otherwise.
  * @since 11
  */
-int32_t OH_SensorEvent_GetData(Sensor_Event* Sensor_Event, float **data, uint32_t *length);
+int32_t OH_SensorEvent_GetData(Sensor_Event* sensorEvent, float **data, uint32_t *length);
 
 /**
  * @brief Defines the sensor subscription ID, which uniquely identifies a sensor.
@@ -371,7 +371,7 @@ int32_t OH_Sensor_DestroySubscriptionId(Sensor_SubscriptionId *id);
  * @brief Obtains the sensor type.
  *
  * @param id - Pointer to the sensor subscription ID.
- * @param id - Pointer to the sensor type.
+ * @param sensorType - Pointer to the sensor type.
  * @return Returns <b>SENSOR_SUCCESS</b> if the operation is successful;
  * returns an error code defined in {@link Sensor_Result} otherwise.
  * @since 11
