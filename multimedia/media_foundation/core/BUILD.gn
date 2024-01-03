@@ -25,6 +25,11 @@ ohos_ndk_headers("native_media_core_header") {
   ]
 }
 
+ohos_ndk_headers("native_media_core_common_header") {
+  dest_dir = "$ndk_headers_out_dir/multimedia"
+  sources = [ "../native_audio_channel_layout.h" ]
+}
+
 ohos_ndk_library("libnative_media_core") {
   ndk_description_file = "./libnative_media_core.ndk.json"
   min_compact_version = "1"
@@ -38,5 +43,6 @@ ohos_ndk_library("libnative_media_core") {
     "multimedia/player_framework/native_averrors.h",
     "multimedia/player_framework/native_avformat.h",
     "multimedia/player_framework/native_avmemory.h",
+    "multimedia/player_framework/native_audio_channel_layout.h",
   ]
 }
