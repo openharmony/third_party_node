@@ -13,6 +13,11 @@
  * limitations under the License.
  */
 
+ /**
+ * @file
+ * @kit Universal Keystore Kit
+ */
+
 #ifndef NATIVE_HUKS_PARAM_H
 #define NATIVE_HUKS_PARAM_H
 
