@@ -13,6 +13,11 @@
  * limitations under the License.
  */
 
+ /**
+ * @file
+ * @kit Universal Keystore Kit
+ */
+
 #ifndef NATIVE_OH_HUKS_TYPE_H
 #define NATIVE_OH_HUKS_TYPE_H
 
