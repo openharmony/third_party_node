@@ -32,8 +32,10 @@
 /**
  * @file native_huks_api.h
  *
- * @brief Declares the APIs used to access the HUKS.
+ * @brief Defines the Universal Keystore Kit APIs.
  *
+ * include "huks/include/native_huks_type.h"
+ * @kit Universal Keystore Kit
  * @since 9
  * @version 1.0
  */

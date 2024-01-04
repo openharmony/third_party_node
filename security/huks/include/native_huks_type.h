@@ -31,8 +31,9 @@
 /**
  * @file native_huks_type.h
  *
- * @brief Defines the enumerated variables, structures, and macros used in the HUKS APIs.
+ * @brief Defines the structure and enumeration.
  *
+ * @kit Universal Keystore Kit
  * @since 9
  * @version 1.0
  */
