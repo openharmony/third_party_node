@@ -34,8 +34,7 @@
  *
  * @brief Defines the Universal Keystore Kit APIs.
  *
- * include "huks/includenative_huks_type.h"
- * @library libhuks_ndk.so
+ * include "huks/include/native_huks_type.h"
  * @kit Universal Keystore Kit
  * @since 9
  * @version 1.0

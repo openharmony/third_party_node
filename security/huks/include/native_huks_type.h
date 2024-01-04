@@ -33,7 +33,6 @@
  *
  * @brief Defines the structure and enumeration.
  *
- * @library libhuks_ndk.so
  * @kit Universal Keystore Kit
  * @since 9
  * @version 1.0
