@@ -14,8 +14,15 @@
  */
 
 /**
- * @file
+ * @file native_huks_api.h
+ *
+ * @brief Defines the Universal Keystore Kit APIs.
+ * 
+ * include "huks/includenative_huks_type.h"
+ * @library libneural_network_runtime.so
  * @kit Universal Keystore Kit
+ * @since 9
+ * @version 1.0
  */
  
 #ifndef NATIVE_HUKS_API_H

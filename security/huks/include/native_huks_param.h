@@ -13,11 +13,6 @@
  * limitations under the License.
  */
 
- /**
- * @file
- * @kit Universal Keystore Kit
- */
-
 #ifndef NATIVE_HUKS_PARAM_H
 #define NATIVE_HUKS_PARAM_H
 
@@ -32,6 +27,9 @@
  *    They can also be used to obtain parameters, copy parameter sets, and check parameter validity.
  *
  * @syscap SystemCapability.Security.Huks
+ * include "huks/include/native_huks_type.h"
+ * @library libhuks_ndk.so
+ * @kit Universal Keystore Kit
  * @since 9
  * @version 1.0
  */
