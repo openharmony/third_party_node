@@ -13,17 +13,6 @@
  * limitations under the License.
  */
 
-/**
- * @file native_huks_type.h
- *
- * @brief Defines the structure and enumeration.
- * 
- * @library libhuks_ndk.so
- * @kit Universal Keystore Kit
- * @since 9
- * @version 1.0
- */
-
 #ifndef NATIVE_OH_HUKS_TYPE_H
 #define NATIVE_OH_HUKS_TYPE_H
 
@@ -42,8 +31,10 @@
 /**
  * @file native_huks_type.h
  *
- * @brief Defines the enumerated variables, structures, and macros used in the HUKS APIs.
+ * @brief Defines the structure and enumeration.
  *
+ * @library libhuks_ndk.so
+ * @kit Universal Keystore Kit
  * @since 9
  * @version 1.0
  */

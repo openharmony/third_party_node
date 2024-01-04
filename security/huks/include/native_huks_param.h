@@ -27,9 +27,6 @@
  *    They can also be used to obtain parameters, copy parameter sets, and check parameter validity.
  *
  * @syscap SystemCapability.Security.Huks
- * include "huks/include/native_huks_type.h"
- * @library libhuks_ndk.so
- * @kit Universal Keystore Kit
  * @since 9
  * @version 1.0
  */
@@ -39,6 +36,9 @@
  *
  * @brief Provides APIs for constructing, using, and destroying parameter sets.
  *
+ * include "huks/include/native_huks_type.h"
+ * @library libhuks_ndk.so
+ * @kit Universal Keystore Kit
  * @since 9
  * @version 1.0
  */
