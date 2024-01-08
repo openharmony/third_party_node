@@ -75,8 +75,8 @@
 #include "v8-platform.h"  // NOLINT(build/include_order)
 #include "node_version.h"  // NODE_MODULE_VERSION
 
-#define NAPI_EXPERIMENTAL
-#include "node_api.h"
+#define JSVM_EXPERIMENTAL
+#include "jsvm_node_api.h"
 
 #include <functional>
 #include <memory>
@@ -1093,7 +1093,7 @@ extern "C" NODE_EXTERN void node_module_register(void* mod);
 // the time during which the Environment exists.
 NODE_EXTERN void AddLinkedBinding(Environment* env, const node_module& mod);
 NODE_EXTERN void AddLinkedBinding(Environment* env,
-                                  const struct napi_module& mod);
+                                  const struct jsvm_module& mod);
 NODE_EXTERN void AddLinkedBinding(Environment* env,
                                   const char* name,
                                   addon_context_register_func fn,
@@ -1101,7 +1101,7 @@ NODE_EXTERN void AddLinkedBinding(Environment* env,
 NODE_EXTERN void AddLinkedBinding(
     Environment* env,
     const char* name,
-    napi_addon_register_func fn,
+    jsvm_addon_register_func fn,
     int32_t module_api_version = NODE_API_DEFAULT_MODULE_API_VERSION);
 
 /* Registers a callback with the passed-in Environment instance. The callback
