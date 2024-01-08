@@ -8,8 +8,8 @@
 #endif
 
 #include "node.h"
-#define NAPI_EXPERIMENTAL
-#include "node_api.h"
+#define JSVM_EXPERIMENTAL
+#include "jsvm_node_api.h"
 #include "uv.h"
 
 enum {
@@ -37,11 +37,11 @@ static_assert(static_cast<int>(NM_F_LINKED) ==
       nullptr};                                                                \
   void _register_##modname() { node_module_register(&_module); }
 
-void napi_module_register_by_symbol(
+void jsvm_module_register_by_symbol(
     v8::Local<v8::Object> exports,
     v8::Local<v8::Value> module,
     v8::Local<v8::Context> context,
-    napi_addon_register_func init,
+    jsvm_addon_register_func init,
     int32_t module_api_version = NODE_API_DEFAULT_MODULE_API_VERSION);
 
 node::addon_context_register_func get_node_api_context_register_func(

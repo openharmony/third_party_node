@@ -1,9 +1,9 @@
 #include "async_wrap-inl.h"
 #include "env-inl.h"
-#define NAPI_EXPERIMENTAL
+#define JSVM_EXPERIMENTAL
 #include "js_native_api_v8.h"
 #include "memory_tracker-inl.h"
-#include "node_api.h"
+#include "jsvm_node_api.h"
 #include "node_api_internals.h"
 #include "node_binding.h"
 #include "node_buffer.h"
@@ -19,41 +19,41 @@
 #include <cstring>
 #include <memory>
 
-node_napi_env__::node_napi_env__(v8::Local<v8::Context> context,
+node_jsvm_env__::node_jsvm_env__(v8::Local<v8::Context> context,
                                  const std::string& module_filename,
                                  int32_t module_api_version)
-    : napi_env__(context, module_api_version), filename(module_filename) {
+    : JSVM_Env__(context, module_api_version), filename(module_filename) {
   CHECK_NOT_NULL(node_env());
 }
 
-void node_napi_env__::DeleteMe() {
+void node_jsvm_env__::DeleteMe() {
   destructing = true;
   DrainFinalizerQueue();
-  napi_env__::DeleteMe();
+  JSVM_Env__::DeleteMe();
 }
 
-bool node_napi_env__::can_call_into_js() const {
+bool node_jsvm_env__::can_call_into_js() const {
   return node_env()->can_call_into_js();
 }
 
-void node_napi_env__::CallFinalizer(napi_finalize cb, void* data, void* hint) {
+void node_jsvm_env__::CallFinalizer(JSVM_Finalize cb, void* data, void* hint) {
   CallFinalizer<true>(cb, data, hint);
 }
 
 template <bool enforceUncaughtExceptionPolicy>
-void node_napi_env__::CallFinalizer(napi_finalize cb, void* data, void* hint) {
+void node_jsvm_env__::CallFinalizer(JSVM_Finalize cb, void* data, void* hint) {
   v8::HandleScope handle_scope(isolate);
   v8::Context::Scope context_scope(context());
   CallbackIntoModule<enforceUncaughtExceptionPolicy>(
-      [&](napi_env env) { cb(env, data, hint); });
+      [&](JSVM_Env env) { cb(env, data, hint); });
 }
 
-void node_napi_env__::EnqueueFinalizer(v8impl::RefTracker* finalizer) {
-  napi_env__::EnqueueFinalizer(finalizer);
+void node_jsvm_env__::EnqueueFinalizer(v8impl::RefTracker* finalizer) {
+  JSVM_Env__::EnqueueFinalizer(finalizer);
   // Schedule a second pass only when it has not been scheduled, and not
   // destructing the env.
   // When the env is being destructed, queued finalizers are drained in the
-  // loop of `node_napi_env__::DrainFinalizerQueue`.
+  // loop of `node_jsvm_env__::DrainFinalizerQueue`.
   if (!finalization_scheduled && !destructing) {
     finalization_scheduled = true;
     Ref();
@@ -65,7 +65,7 @@ void node_napi_env__::EnqueueFinalizer(v8impl::RefTracker* finalizer) {
   }
 }
 
-void node_napi_env__::DrainFinalizerQueue() {
+void node_jsvm_env__::DrainFinalizerQueue() {
   // As userland code can delete additional references in one finalizer,
   // the list of pending finalizers may be mutated as we execute them, so
   // we keep iterating it until it is empty.
@@ -76,7 +76,7 @@ void node_napi_env__::DrainFinalizerQueue() {
   }
 }
 
-void node_napi_env__::trigger_fatal_exception(v8::Local<v8::Value> local_err) {
+void node_jsvm_env__::trigger_fatal_exception(v8::Local<v8::Value> local_err) {
   v8::Local<v8::Message> local_msg =
       v8::Exception::CreateMessage(isolate, local_err);
   node::errors::TriggerUncaughtException(isolate, local_err, local_msg);
@@ -86,9 +86,9 @@ void node_napi_env__::trigger_fatal_exception(v8::Local<v8::Value> local_err) {
 // running n-api add-ons, and should be deprecated in the next major Node.js
 // release.
 template <bool enforceUncaughtExceptionPolicy, typename T>
-void node_napi_env__::CallbackIntoModule(T&& call) {
-  CallIntoModule(call, [](napi_env env_, v8::Local<v8::Value> local_err) {
-    node_napi_env__* env = static_cast<node_napi_env__*>(env_);
+void node_jsvm_env__::CallbackIntoModule(T&& call) {
+  CallIntoModule(call, [](JSVM_Env env_, v8::Local<v8::Value> local_err) {
+    node_jsvm_env__* env = static_cast<node_jsvm_env__*>(env_);
     if (env->terminatedOrTerminating()) {
       return;
     }
@@ -116,12 +116,12 @@ namespace {
 
 class BufferFinalizer : private Finalizer {
  public:
-  static BufferFinalizer* New(napi_env env,
-                              napi_finalize finalize_callback = nullptr,
-                              void* finalize_data = nullptr,
-                              void* finalize_hint = nullptr) {
+  static BufferFinalizer* New(JSVM_Env env,
+                              JSVM_Finalize finalizeCallback = nullptr,
+                              void* finalizeData = nullptr,
+                              void* finalizeHint = nullptr) {
     return new BufferFinalizer(
-        env, finalize_callback, finalize_data, finalize_hint);
+        env, finalizeCallback, finalizeData, finalizeHint);
   }
   // node::Buffer::FreeCallback
   static void FinalizeBufferCallback(char* data, void* hint) {
@@ -141,11 +141,11 @@ class BufferFinalizer : private Finalizer {
   };
 
  private:
-  BufferFinalizer(napi_env env,
-                  napi_finalize finalize_callback,
-                  void* finalize_data,
-                  void* finalize_hint)
-      : Finalizer(env, finalize_callback, finalize_data, finalize_hint) {
+  BufferFinalizer(JSVM_Env env,
+                  JSVM_Finalize finalizeCallback,
+                  void* finalizeData,
+                  void* finalizeHint)
+      : Finalizer(env, finalizeCallback, finalizeData, finalizeHint) {
     env_->Ref();
   }
 
@@ -155,25 +155,25 @@ class BufferFinalizer : private Finalizer {
 void ThrowNodeApiVersionError(node::Environment* node_env,
                               const char* module_name,
                               int32_t module_api_version) {
-  std::string error_message;
-  error_message += module_name;
-  error_message += " requires Node-API version ";
-  error_message += std::to_string(module_api_version);
-  error_message += ", but this version of Node.js only supports version ";
-  error_message += NODE_STRINGIFY(NAPI_VERSION) " add-ons.";
-  node_env->ThrowError(error_message.c_str());
+  std::string errorMessage;
+  errorMessage += module_name;
+  errorMessage += " requires Node-API version ";
+  errorMessage += std::to_string(module_api_version);
+  errorMessage += ", but this version of Node.js only supports version ";
+  errorMessage += NODE_STRINGIFY(NAPI_VERSION) " add-ons.";
+  node_env->ThrowError(errorMessage.c_str());
 }
 
-inline napi_env NewEnv(v8::Local<v8::Context> context,
+inline JSVM_Env NewEnv(v8::Local<v8::Context> context,
                        const std::string& module_filename,
                        int32_t module_api_version) {
-  node_napi_env result;
+  node_jsvm_env result;
 
   // Validate module_api_version.
   if (module_api_version < NODE_API_DEFAULT_MODULE_API_VERSION) {
     module_api_version = NODE_API_DEFAULT_MODULE_API_VERSION;
   } else if (module_api_version > NAPI_VERSION &&
-             module_api_version != NAPI_VERSION_EXPERIMENTAL) {
+             module_api_version != JSVM_VERSION_EXPERIMENTAL) {
     node::Environment* node_env = node::Environment::GetCurrent(context);
     CHECK_NOT_NULL(node_env);
     ThrowNodeApiVersionError(
@@ -181,16 +181,16 @@ inline napi_env NewEnv(v8::Local<v8::Context> context,
     return nullptr;
   }
 
-  result = new node_napi_env__(context, module_filename, module_api_version);
+  result = new node_jsvm_env__(context, module_filename, module_api_version);
   // TODO(addaleax): There was previously code that tried to delete the
-  // napi_env when its v8::Context was garbage collected;
-  // However, as long as N-API addons using this napi_env are in place,
+  // JSVM_Env when its v8::Context was garbage collected;
+  // However, as long as N-API addons using this JSVM_Env are in place,
   // the Context needs to be accessible and alive.
   // Ideally, we'd want an on-addon-unload hook that takes care of this
-  // once all N-API addons using this napi_env are unloaded.
+  // once all N-API addons using this JSVM_Env are unloaded.
   // For now, a per-Environment cleanup hook is the best we can do.
   result->node_env()->AddCleanupHook(
-      [](void* arg) { static_cast<napi_env>(arg)->Unref(); },
+      [](void* arg) { static_cast<JSVM_Env>(arg)->Unref(); },
       static_cast<void*>(result));
 
   return result;
@@ -204,10 +204,10 @@ class ThreadSafeFunction : public node::AsyncResource {
                      size_t thread_count_,
                      void* context_,
                      size_t max_queue_size_,
-                     node_napi_env env_,
+                     node_jsvm_env env_,
                      void* finalize_data_,
-                     napi_finalize finalize_cb_,
-                     napi_threadsafe_function_call_js call_js_cb_)
+                     JSVM_Finalize finalize_cb_,
+                     jsvm_threadsafe_function_call_js call_js_cb_)
       : AsyncResource(env_->isolate,
                       resource,
                       *v8::String::Utf8Value(env_->isolate, name)),
@@ -217,8 +217,8 @@ class ThreadSafeFunction : public node::AsyncResource {
         context(context_),
         max_queue_size(max_queue_size_),
         env(env_),
-        finalize_data(finalize_data_),
-        finalize_cb(finalize_cb_),
+        finalizeData(finalize_data_),
+        finalizeCb(finalize_cb_),
         call_js_cb(call_js_cb_ == nullptr ? CallJs : call_js_cb_),
         handles_closing(false) {
     ref.Reset(env->isolate, func);
@@ -233,55 +233,55 @@ class ThreadSafeFunction : public node::AsyncResource {
 
   // These methods can be called from any thread.
 
-  napi_status Push(void* data, napi_threadsafe_function_call_mode mode) {
+  JSVM_Status Push(void* data, jsvm_threadsafe_function_call_mode mode) {
     node::Mutex::ScopedLock lock(this->mutex);
 
     while (queue.size() >= max_queue_size && max_queue_size > 0 &&
            !is_closing) {
-      if (mode == napi_tsfn_nonblocking) {
-        return napi_queue_full;
+      if (mode == jsvm_tsfn_nonblocking) {
+        return JSVM_QUEUE_FULL;
       }
       cond->Wait(lock);
     }
 
     if (is_closing) {
       if (thread_count == 0) {
-        return napi_invalid_arg;
+        return JSVM_INVALID_ARG;
       } else {
         thread_count--;
-        return napi_closing;
+        return JSVM_CLOSING;
       }
     } else {
       queue.push(data);
       Send();
-      return napi_ok;
+      return JSVM_OK;
     }
   }
 
-  napi_status Acquire() {
+  JSVM_Status Acquire() {
     node::Mutex::ScopedLock lock(this->mutex);
 
     if (is_closing) {
-      return napi_closing;
+      return JSVM_CLOSING;
     }
 
     thread_count++;
 
-    return napi_ok;
+    return JSVM_OK;
   }
 
-  napi_status Release(napi_threadsafe_function_release_mode mode) {
+  JSVM_Status Release(jsvm_threadsafe_function_release_mode mode) {
     node::Mutex::ScopedLock lock(this->mutex);
 
     if (thread_count == 0) {
-      return napi_invalid_arg;
+      return JSVM_INVALID_ARG;
     }
 
     thread_count--;
 
-    if (thread_count == 0 || mode == napi_tsfn_abort) {
+    if (thread_count == 0 || mode == jsvm_tsfn_abort) {
       if (!is_closing) {
-        is_closing = (mode == napi_tsfn_abort);
+        is_closing = (mode == jsvm_tsfn_abort);
         if (is_closing && max_queue_size > 0) {
           cond->Signal(lock);
         }
@@ -289,7 +289,7 @@ class ThreadSafeFunction : public node::AsyncResource {
       }
     }
 
-    return napi_ok;
+    return JSVM_OK;
   }
 
   void EmptyQueueAndDelete() {
@@ -301,7 +301,7 @@ class ThreadSafeFunction : public node::AsyncResource {
 
   // These methods must only be called from the loop thread.
 
-  napi_status Init() {
+  JSVM_Status Init() {
     ThreadSafeFunction* ts_fn = this;
     uv_loop_t* loop = env->node_env()->event_loop();
 
@@ -310,7 +310,7 @@ class ThreadSafeFunction : public node::AsyncResource {
         cond = std::make_unique<node::ConditionVariable>();
       }
       if (max_queue_size == 0 || cond) {
-        return napi_ok;
+        return JSVM_OK;
       }
 
       env->node_env()->CloseHandle(
@@ -329,19 +329,19 @@ class ThreadSafeFunction : public node::AsyncResource {
 
     delete ts_fn;
 
-    return napi_generic_failure;
+    return JSVM_GENERIC_FAILURE;
   }
 
-  napi_status Unref() {
+  JSVM_Status Unref() {
     uv_unref(reinterpret_cast<uv_handle_t*>(&async));
 
-    return napi_ok;
+    return JSVM_OK;
   }
 
-  napi_status Ref() {
+  JSVM_Status Ref() {
     uv_ref(reinterpret_cast<uv_handle_t*>(&async));
 
-    return napi_ok;
+    return JSVM_OK;
   }
 
   inline void* Context() { return context; }
@@ -406,14 +406,14 @@ class ThreadSafeFunction : public node::AsyncResource {
     if (popped_value) {
       v8::HandleScope scope(env->isolate);
       CallbackScope cb_scope(this);
-      napi_value js_callback = nullptr;
+      JSVM_Value js_callback = nullptr;
       if (!ref.IsEmpty()) {
         v8::Local<v8::Function> js_cb =
             v8::Local<v8::Function>::New(env->isolate, ref);
         js_callback = v8impl::JsValueFromV8LocalValue(js_cb);
       }
       env->CallbackIntoModule<false>(
-          [&](napi_env env) { call_js_cb(env, js_callback, context, data); });
+          [&](JSVM_Env env) { call_js_cb(env, js_callback, context, data); });
     }
 
     return has_more;
@@ -421,9 +421,9 @@ class ThreadSafeFunction : public node::AsyncResource {
 
   void Finalize() {
     v8::HandleScope scope(env->isolate);
-    if (finalize_cb) {
+    if (finalizeCb) {
       CallbackScope cb_scope(this);
-      env->CallFinalizer<false>(finalize_cb, finalize_data, context);
+      env->CallFinalizer<false>(finalizeCb, finalizeData, context);
     }
     EmptyQueueAndDelete();
   }
@@ -463,23 +463,23 @@ class ThreadSafeFunction : public node::AsyncResource {
 
   // Default way of calling into JavaScript. Used when ThreadSafeFunction is
   //  without a call_js_cb_.
-  static void CallJs(napi_env env, napi_value cb, void* context, void* data) {
+  static void CallJs(JSVM_Env env, JSVM_Value cb, void* context, void* data) {
     if (!(env == nullptr || cb == nullptr)) {
-      napi_value recv;
-      napi_status status;
+      JSVM_Value recv;
+      JSVM_Status status;
 
-      status = napi_get_undefined(env, &recv);
-      if (status != napi_ok) {
-        napi_throw_error(env,
-                         "ERR_NAPI_TSFN_GET_UNDEFINED",
+      status = OH_JSVM_GetUndefined(env, &recv);
+      if (status != JSVM_OK) {
+        OH_JSVM_ThrowError(env,
+                         "ERR_JSVM_TSFN_GET_UNDEFINED",
                          "Failed to retrieve undefined value");
         return;
       }
 
-      status = napi_call_function(env, recv, cb, 0, nullptr, nullptr);
-      if (status != napi_ok && status != napi_pending_exception) {
-        napi_throw_error(
-            env, "ERR_NAPI_TSFN_CALL_JS", "Failed to call JS callback");
+      status = OH_JSVM_CallFunction(env, recv, cb, 0, nullptr, nullptr);
+      if (status != JSVM_OK && status != JSVM_PENDING_EXCEPTION) {
+        OH_JSVM_ThrowError(
+            env, "ERR_JSVM_TSFN_CALL_JS", "Failed to call JS callback");
         return;
       }
     }
@@ -519,10 +519,10 @@ class ThreadSafeFunction : public node::AsyncResource {
 
   // These are variables accessed only from the loop thread.
   v8impl::Persistent<v8::Function> ref;
-  node_napi_env env;
-  void* finalize_data;
-  napi_finalize finalize_cb;
-  napi_threadsafe_function_call_js call_js_cb;
+  node_jsvm_env env;
+  void* finalizeData;
+  JSVM_Finalize finalizeCb;
+  jsvm_threadsafe_function_call_js call_js_cb;
   bool handles_closing;
 };
 
@@ -534,7 +534,7 @@ class ThreadSafeFunction : public node::AsyncResource {
  */
 class AsyncContext {
  public:
-  AsyncContext(node_napi_env env,
+  AsyncContext(node_jsvm_env env,
                v8::Local<v8::Object> resource_object,
                const v8::Local<v8::String> resource_name,
                bool externally_managed_resource)
@@ -576,10 +576,10 @@ class AsyncContext {
                                       {async_id_, trigger_async_id_});
   }
 
-  inline napi_callback_scope OpenCallbackScope() {
+  inline jsvm_callback_scope OpenCallbackScope() {
     EnsureReference();
-    napi_callback_scope it =
-        reinterpret_cast<napi_callback_scope>(new CallbackScope(this));
+    jsvm_callback_scope it =
+        reinterpret_cast<jsvm_callback_scope>(new CallbackScope(this));
     env_->open_callback_scopes++;
     return it;
   }
@@ -601,8 +601,8 @@ class AsyncContext {
     return {async_id_, trigger_async_id_};
   }
 
-  static inline void CloseCallbackScope(node_napi_env env,
-                                        napi_callback_scope s) {
+  static inline void CloseCallbackScope(node_jsvm_env env,
+                                        jsvm_callback_scope s) {
     CallbackScope* callback_scope = reinterpret_cast<CallbackScope*>(s);
     delete callback_scope;
     env->open_callback_scopes--;
@@ -624,7 +624,7 @@ class AsyncContext {
                               async_context->async_context()) {}
   };
 
-  node_napi_env env_;
+  node_jsvm_env env_;
   double async_id_;
   double trigger_async_id_;
   v8::Global<v8::Object> resource_;
@@ -638,15 +638,15 @@ class AsyncContext {
 // Intercepts the Node-V8 module registration callback. Converts parameters
 // to NAPI equivalents and then calls the registration callback specified
 // by the NAPI module.
-static void napi_module_register_cb(v8::Local<v8::Object> exports,
+static void jsvm_module_register_cb(v8::Local<v8::Object> exports,
                                     v8::Local<v8::Value> module,
                                     v8::Local<v8::Context> context,
                                     void* priv) {
-  napi_module_register_by_symbol(
+  jsvm_module_register_by_symbol(
       exports,
       module,
       context,
-      static_cast<const napi_module*>(priv)->nm_register_func);
+      static_cast<const jsvm_module*>(priv)->nm_register_func);
 }
 
 template <int32_t module_api_version>
@@ -654,11 +654,11 @@ static void node_api_context_register_func(v8::Local<v8::Object> exports,
                                            v8::Local<v8::Value> module,
                                            v8::Local<v8::Context> context,
                                            void* priv) {
-  napi_module_register_by_symbol(
+  jsvm_module_register_by_symbol(
       exports,
       module,
       context,
-      reinterpret_cast<napi_addon_register_func>(priv),
+      reinterpret_cast<jsvm_addon_register_func>(priv),
       module_api_version);
 }
 
@@ -680,18 +680,18 @@ node::addon_context_register_func get_node_api_context_register_func(
     return node_api_context_register_func<NODE_API_DEFAULT_MODULE_API_VERSION>;
   } else if (module_api_version == 9) {
     return node_api_context_register_func<9>;
-  } else if (module_api_version == NAPI_VERSION_EXPERIMENTAL) {
-    return node_api_context_register_func<NAPI_VERSION_EXPERIMENTAL>;
+  } else if (module_api_version == JSVM_VERSION_EXPERIMENTAL) {
+    return node_api_context_register_func<JSVM_VERSION_EXPERIMENTAL>;
   } else {
     v8impl::ThrowNodeApiVersionError(node_env, module_name, module_api_version);
     return nullptr;
   }
 }
 
-void napi_module_register_by_symbol(v8::Local<v8::Object> exports,
+void jsvm_module_register_by_symbol(v8::Local<v8::Object> exports,
                                     v8::Local<v8::Value> module,
                                     v8::Local<v8::Context> context,
-                                    napi_addon_register_func init,
+                                    jsvm_addon_register_func init,
                                     int32_t module_api_version) {
   node::Environment* node_env = node::Environment::GetCurrent(context);
   std::string module_filename = "";
@@ -719,11 +719,11 @@ void napi_module_register_by_symbol(v8::Local<v8::Object> exports,
     module_filename = node::url::FromFilePath(filename.ToStringView());
   }
 
-  // Create a new napi_env for this specific module.
-  napi_env env = v8impl::NewEnv(context, module_filename, module_api_version);
+  // Create a new JSVM_Env for this specific module.
+  JSVM_Env env = v8impl::NewEnv(context, module_filename, module_api_version);
 
-  napi_value _exports = nullptr;
-  env->CallIntoModule([&](napi_env env) {
+  JSVM_Value _exports = nullptr;
+  env->CallIntoModule([&](JSVM_Env env) {
     _exports = init(env, v8impl::JsValueFromV8LocalValue(exports));
   });
 
@@ -732,140 +732,140 @@ void napi_module_register_by_symbol(v8::Local<v8::Object> exports,
   // the module.
   if (_exports != nullptr &&
       _exports != v8impl::JsValueFromV8LocalValue(exports)) {
-    napi_value _module = v8impl::JsValueFromV8LocalValue(module);
-    napi_set_named_property(env, _module, "exports", _exports);
+    JSVM_Value _module = v8impl::JsValueFromV8LocalValue(module);
+    OH_JSVM_SetNamedProperty(env, _module, "exports", _exports);
   }
 }
 
 namespace node {
-node_module napi_module_to_node_module(const napi_module* mod) {
+node_module jsvm_module_to_node_module(const jsvm_module* mod) {
   return {
       -1,
       mod->nm_flags | NM_F_DELETEME,
       nullptr,
       mod->nm_filename,
       nullptr,
-      napi_module_register_cb,
+      jsvm_module_register_cb,
       mod->nm_modname,
-      const_cast<napi_module*>(mod),  // priv
+      const_cast<jsvm_module*>(mod),  // priv
       nullptr,
   };
 }
 }  // namespace node
 
 // Registers a NAPI module.
-void NAPI_CDECL napi_module_register(napi_module* mod) {
+void JSVM_CDECL jsvm_module_register(jsvm_module* mod) {
   node::node_module* nm =
-      new node::node_module(node::napi_module_to_node_module(mod));
+      new node::node_module(node::jsvm_module_to_node_module(mod));
   node::node_module_register(nm);
 }
 
-napi_status NAPI_CDECL napi_add_env_cleanup_hook(napi_env env,
-                                                 napi_cleanup_hook fun,
+JSVM_Status JSVM_CDECL jsvm_add_env_cleanup_hook(JSVM_Env env,
+                                                 jsvm_cleanup_hook fun,
                                                  void* arg) {
   CHECK_ENV(env);
   CHECK_ARG(env, fun);
 
   node::AddEnvironmentCleanupHook(env->isolate, fun, arg);
 
-  return napi_ok;
+  return JSVM_OK;
 }
 
-napi_status NAPI_CDECL napi_remove_env_cleanup_hook(napi_env env,
-                                                    napi_cleanup_hook fun,
+JSVM_Status JSVM_CDECL jsvm_remove_env_cleanup_hook(JSVM_Env env,
+                                                    jsvm_cleanup_hook fun,
                                                     void* arg) {
   CHECK_ENV(env);
   CHECK_ARG(env, fun);
 
   node::RemoveEnvironmentCleanupHook(env->isolate, fun, arg);
 
-  return napi_ok;
+  return JSVM_OK;
 }
 
-struct napi_async_cleanup_hook_handle__ {
-  napi_async_cleanup_hook_handle__(napi_env env,
-                                   napi_async_cleanup_hook user_hook,
+struct jsvm_async_cleanup_hook_handle__ {
+  jsvm_async_cleanup_hook_handle__(JSVM_Env env,
+                                   jsvm_async_cleanup_hook user_hook,
                                    void* user_data)
       : env_(env), user_hook_(user_hook), user_data_(user_data) {
     handle_ = node::AddEnvironmentCleanupHook(env->isolate, Hook, this);
     env->Ref();
   }
 
-  ~napi_async_cleanup_hook_handle__() {
+  ~jsvm_async_cleanup_hook_handle__() {
     node::RemoveEnvironmentCleanupHook(std::move(handle_));
     if (done_cb_ != nullptr) done_cb_(done_data_);
 
     // Release the `env` handle asynchronously since it would be surprising if
     // a call to a N-API function would destroy `env` synchronously.
-    static_cast<node_napi_env>(env_)->node_env()->SetImmediate(
+    static_cast<node_jsvm_env>(env_)->node_env()->SetImmediate(
         [env = env_](node::Environment*) { env->Unref(); });
   }
 
   static void Hook(void* data, void (*done_cb)(void*), void* done_data) {
-    napi_async_cleanup_hook_handle__* handle =
-        static_cast<napi_async_cleanup_hook_handle__*>(data);
+    jsvm_async_cleanup_hook_handle__* handle =
+        static_cast<jsvm_async_cleanup_hook_handle__*>(data);
     handle->done_cb_ = done_cb;
     handle->done_data_ = done_data;
     handle->user_hook_(handle, handle->user_data_);
   }
 
   node::AsyncCleanupHookHandle handle_;
-  napi_env env_ = nullptr;
-  napi_async_cleanup_hook user_hook_ = nullptr;
+  JSVM_Env env_ = nullptr;
+  jsvm_async_cleanup_hook user_hook_ = nullptr;
   void* user_data_ = nullptr;
   void (*done_cb_)(void*) = nullptr;
   void* done_data_ = nullptr;
 };
 
-napi_status NAPI_CDECL
-napi_add_async_cleanup_hook(napi_env env,
-                            napi_async_cleanup_hook hook,
+JSVM_Status JSVM_CDECL
+jsvm_add_async_cleanup_hook(JSVM_Env env,
+                            jsvm_async_cleanup_hook hook,
                             void* arg,
-                            napi_async_cleanup_hook_handle* remove_handle) {
+                            jsvm_async_cleanup_hook_handle* remove_handle) {
   CHECK_ENV(env);
   CHECK_ARG(env, hook);
 
-  napi_async_cleanup_hook_handle__* handle =
-      new napi_async_cleanup_hook_handle__(env, hook, arg);
+  jsvm_async_cleanup_hook_handle__* handle =
+      new jsvm_async_cleanup_hook_handle__(env, hook, arg);
 
   if (remove_handle != nullptr) *remove_handle = handle;
 
-  return napi_clear_last_error(env);
+  return jsvm_clear_last_error(env);
 }
 
-napi_status NAPI_CDECL
-napi_remove_async_cleanup_hook(napi_async_cleanup_hook_handle remove_handle) {
-  if (remove_handle == nullptr) return napi_invalid_arg;
+JSVM_Status JSVM_CDECL
+jsvm_remove_async_cleanup_hook(jsvm_async_cleanup_hook_handle remove_handle) {
+  if (remove_handle == nullptr) return JSVM_INVALID_ARG;
 
   delete remove_handle;
 
-  return napi_ok;
+  return JSVM_OK;
 }
 
-napi_status NAPI_CDECL napi_fatal_exception(napi_env env, napi_value err) {
-  NAPI_PREAMBLE(env);
+JSVM_Status JSVM_CDECL jsvm_fatal_exception(JSVM_Env env, JSVM_Value err) {
+  JSVM_PREAMBLE(env);
   CHECK_ARG(env, err);
 
   v8::Local<v8::Value> local_err = v8impl::V8LocalValueFromJsValue(err);
-  static_cast<node_napi_env>(env)->trigger_fatal_exception(local_err);
+  static_cast<node_jsvm_env>(env)->trigger_fatal_exception(local_err);
 
-  return napi_clear_last_error(env);
+  return jsvm_clear_last_error(env);
 }
 
-NAPI_NO_RETURN void NAPI_CDECL napi_fatal_error(const char* location,
+JSVM_NO_RETURN void JSVM_CDECL jsvm_fatal_error(const char* location,
                                                 size_t location_len,
                                                 const char* message,
                                                 size_t message_len) {
   std::string location_string;
   std::string message_string;
 
-  if (location_len != NAPI_AUTO_LENGTH) {
+  if (location_len != JSVM_AUTO_LENGTH) {
     location_string.assign(const_cast<char*>(location), location_len);
   } else {
     location_string.assign(const_cast<char*>(location), strlen(location));
   }
 
-  if (message_len != NAPI_AUTO_LENGTH) {
+  if (message_len != JSVM_AUTO_LENGTH) {
     message_string.assign(const_cast<char*>(message), message_len);
   } else {
     message_string.assign(const_cast<char*>(message), strlen(message));
@@ -874,12 +874,12 @@ NAPI_NO_RETURN void NAPI_CDECL napi_fatal_error(const char* location,
   node::OnFatalError(location_string.c_str(), message_string.c_str());
 }
 
-napi_status NAPI_CDECL
-napi_open_callback_scope(napi_env env,
-                         napi_value /** ignored */,
-                         napi_async_context async_context_handle,
-                         napi_callback_scope* result) {
-  // Omit NAPI_PREAMBLE and GET_RETURN_STATUS because V8 calls here cannot throw
+JSVM_Status JSVM_CDECL
+jsvm_open_callback_scope(JSVM_Env env,
+                         JSVM_Value /** ignored */,
+                         jsvm_async_context async_context_handle,
+                         jsvm_callback_scope* result) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8 calls here cannot throw
   // JS exceptions.
   CHECK_ENV(env);
   CHECK_ARG(env, result);
@@ -889,29 +889,29 @@ napi_open_callback_scope(napi_env env,
 
   *result = node_async_context->OpenCallbackScope();
 
-  return napi_clear_last_error(env);
+  return jsvm_clear_last_error(env);
 }
 
-napi_status NAPI_CDECL napi_close_callback_scope(napi_env env,
-                                                 napi_callback_scope scope) {
-  // Omit NAPI_PREAMBLE and GET_RETURN_STATUS because V8 calls here cannot throw
+JSVM_Status JSVM_CDECL jsvm_close_callback_scope(JSVM_Env env,
+                                                 jsvm_callback_scope scope) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8 calls here cannot throw
   // JS exceptions.
   CHECK_ENV(env);
   CHECK_ARG(env, scope);
   if (env->open_callback_scopes == 0) {
-    return napi_callback_scope_mismatch;
+    return JSVM_CALLBACK_SCOPE_MISMATCH;
   }
 
-  v8impl::AsyncContext::CloseCallbackScope(reinterpret_cast<node_napi_env>(env),
+  v8impl::AsyncContext::CloseCallbackScope(reinterpret_cast<node_jsvm_env>(env),
                                            scope);
 
-  return napi_clear_last_error(env);
+  return jsvm_clear_last_error(env);
 }
 
-napi_status NAPI_CDECL napi_async_init(napi_env env,
-                                       napi_value async_resource,
-                                       napi_value async_resource_name,
-                                       napi_async_context* result) {
+JSVM_Status JSVM_CDECL jsvm_async_init(JSVM_Env env,
+                                       JSVM_Value async_resource,
+                                       JSVM_Value async_resource_name,
+                                       jsvm_async_context* result) {
   CHECK_ENV(env);
   CHECK_ARG(env, async_resource_name);
   CHECK_ARG(env, result);
@@ -933,18 +933,18 @@ napi_status NAPI_CDECL napi_async_init(napi_env env,
   CHECK_TO_STRING(env, context, v8_resource_name, async_resource_name);
 
   v8impl::AsyncContext* async_context =
-      new v8impl::AsyncContext(reinterpret_cast<node_napi_env>(env),
+      new v8impl::AsyncContext(reinterpret_cast<node_jsvm_env>(env),
                                v8_resource,
                                v8_resource_name,
                                externally_managed_resource);
 
-  *result = reinterpret_cast<napi_async_context>(async_context);
+  *result = reinterpret_cast<jsvm_async_context>(async_context);
 
-  return napi_clear_last_error(env);
+  return jsvm_clear_last_error(env);
 }
 
-napi_status NAPI_CDECL napi_async_destroy(napi_env env,
-                                          napi_async_context async_context) {
+JSVM_Status JSVM_CDECL jsvm_async_destroy(JSVM_Env env,
+                                          jsvm_async_context async_context) {
   CHECK_ENV(env);
   CHECK_ARG(env, async_context);
 
@@ -953,17 +953,17 @@ napi_status NAPI_CDECL napi_async_destroy(napi_env env,
 
   delete node_async_context;
 
-  return napi_clear_last_error(env);
+  return jsvm_clear_last_error(env);
 }
 
-napi_status NAPI_CDECL napi_make_callback(napi_env env,
-                                          napi_async_context async_context,
-                                          napi_value recv,
-                                          napi_value func,
+JSVM_Status JSVM_CDECL jsvm_make_callback(JSVM_Env env,
+                                          jsvm_async_context async_context,
+                                          JSVM_Value recv,
+                                          JSVM_Value func,
                                           size_t argc,
-                                          const napi_value* argv,
-                                          napi_value* result) {
-  NAPI_PREAMBLE(env);
+                                          const JSVM_Value* argv,
+                                          JSVM_Value* result) {
+  JSVM_PREAMBLE(env);
   CHECK_ARG(env, recv);
   if (argc > 0) {
     CHECK_ARG(env, argv);
@@ -985,7 +985,7 @@ napi_status NAPI_CDECL napi_make_callback(napi_env env,
         v8recv,
         v8func,
         argc,
-        reinterpret_cast<v8::Local<v8::Value>*>(const_cast<napi_value*>(argv)),
+        reinterpret_cast<v8::Local<v8::Value>*>(const_cast<JSVM_Value*>(argv)),
         {0, 0});
   } else {
     v8impl::AsyncContext* node_async_context =
@@ -994,13 +994,13 @@ napi_status NAPI_CDECL napi_make_callback(napi_env env,
         v8recv,
         v8func,
         argc,
-        reinterpret_cast<v8::Local<v8::Value>*>(const_cast<napi_value*>(argv)));
+        reinterpret_cast<v8::Local<v8::Value>*>(const_cast<JSVM_Value*>(argv)));
   }
 
   if (try_catch.HasCaught()) {
-    return napi_set_last_error(env, napi_pending_exception);
+    return jsvm_set_last_error(env, JSVM_PENDING_EXCEPTION);
   } else {
-    CHECK_MAYBE_EMPTY(env, callback_result, napi_generic_failure);
+    CHECK_MAYBE_EMPTY(env, callback_result, JSVM_GENERIC_FAILURE);
     if (result != nullptr) {
       *result =
           v8impl::JsValueFromV8LocalValue(callback_result.ToLocalChecked());
@@ -1010,16 +1010,16 @@ napi_status NAPI_CDECL napi_make_callback(napi_env env,
   return GET_RETURN_STATUS(env);
 }
 
-napi_status NAPI_CDECL napi_create_buffer(napi_env env,
+JSVM_Status JSVM_CDECL jsvm_create_buffer(JSVM_Env env,
                                           size_t length,
                                           void** data,
-                                          napi_value* result) {
-  NAPI_PREAMBLE(env);
+                                          JSVM_Value* result) {
+  JSVM_PREAMBLE(env);
   CHECK_ARG(env, result);
 
   v8::MaybeLocal<v8::Object> maybe = node::Buffer::New(env->isolate, length);
 
-  CHECK_MAYBE_EMPTY(env, maybe, napi_generic_failure);
+  CHECK_MAYBE_EMPTY(env, maybe, JSVM_GENERIC_FAILURE);
 
   v8::Local<v8::Object> buffer = maybe.ToLocalChecked();
 
@@ -1032,24 +1032,24 @@ napi_status NAPI_CDECL napi_create_buffer(napi_env env,
   return GET_RETURN_STATUS(env);
 }
 
-napi_status NAPI_CDECL napi_create_external_buffer(napi_env env,
+JSVM_Status JSVM_CDECL OH_JSVM_CreateExternal_buffer(JSVM_Env env,
                                                    size_t length,
                                                    void* data,
-                                                   napi_finalize finalize_cb,
-                                                   void* finalize_hint,
-                                                   napi_value* result) {
-  NAPI_PREAMBLE(env);
+                                                   JSVM_Finalize finalizeCb,
+                                                   void* finalizeHint,
+                                                   JSVM_Value* result) {
+  JSVM_PREAMBLE(env);
   CHECK_ARG(env, result);
 
 #if defined(V8_ENABLE_SANDBOX)
-  return napi_set_last_error(env, napi_no_external_buffers_allowed);
+  return jsvm_set_last_error(env, JSVM_NO_EXTERNAL_BUFFERS_ALLOWED);
 #endif
 
   v8::Isolate* isolate = env->isolate;
 
   // The finalizer object will delete itself after invoking the callback.
   v8impl::BufferFinalizer* finalizer =
-      v8impl::BufferFinalizer::New(env, finalize_cb, nullptr, finalize_hint);
+      v8impl::BufferFinalizer::New(env, finalizeCb, nullptr, finalizeHint);
 
   v8::MaybeLocal<v8::Object> maybe =
       node::Buffer::New(isolate,
@@ -1058,7 +1058,7 @@ napi_status NAPI_CDECL napi_create_external_buffer(napi_env env,
                         v8impl::BufferFinalizer::FinalizeBufferCallback,
                         finalizer);
 
-  CHECK_MAYBE_EMPTY(env, maybe, napi_generic_failure);
+  CHECK_MAYBE_EMPTY(env, maybe, JSVM_GENERIC_FAILURE);
 
   *result = v8impl::JsValueFromV8LocalValue(maybe.ToLocalChecked());
   return GET_RETURN_STATUS(env);
@@ -1068,18 +1068,18 @@ napi_status NAPI_CDECL napi_create_external_buffer(napi_env env,
   // coverity[leaked_storage]
 }
 
-napi_status NAPI_CDECL napi_create_buffer_copy(napi_env env,
+JSVM_Status JSVM_CDECL jsvm_create_buffer_copy(JSVM_Env env,
                                                size_t length,
                                                const void* data,
                                                void** result_data,
-                                               napi_value* result) {
-  NAPI_PREAMBLE(env);
+                                               JSVM_Value* result) {
+  JSVM_PREAMBLE(env);
   CHECK_ARG(env, result);
 
   v8::MaybeLocal<v8::Object> maybe =
       node::Buffer::Copy(env->isolate, static_cast<const char*>(data), length);
 
-  CHECK_MAYBE_EMPTY(env, maybe, napi_generic_failure);
+  CHECK_MAYBE_EMPTY(env, maybe, JSVM_GENERIC_FAILURE);
 
   v8::Local<v8::Object> buffer = maybe.ToLocalChecked();
   *result = v8impl::JsValueFromV8LocalValue(buffer);
@@ -1091,19 +1091,19 @@ napi_status NAPI_CDECL napi_create_buffer_copy(napi_env env,
   return GET_RETURN_STATUS(env);
 }
 
-napi_status NAPI_CDECL napi_is_buffer(napi_env env,
-                                      napi_value value,
+JSVM_Status JSVM_CDECL jsvm_is_buffer(JSVM_Env env,
+                                      JSVM_Value value,
                                       bool* result) {
   CHECK_ENV(env);
   CHECK_ARG(env, value);
   CHECK_ARG(env, result);
 
   *result = node::Buffer::HasInstance(v8impl::V8LocalValueFromJsValue(value));
-  return napi_clear_last_error(env);
+  return jsvm_clear_last_error(env);
 }
 
-napi_status NAPI_CDECL napi_get_buffer_info(napi_env env,
-                                            napi_value value,
+JSVM_Status JSVM_CDECL jsvm_get_buffer_info(JSVM_Env env,
+                                            JSVM_Value value,
                                             void** data,
                                             size_t* length) {
   CHECK_ENV(env);
@@ -1118,43 +1118,43 @@ napi_status NAPI_CDECL napi_get_buffer_info(napi_env env,
     *length = node::Buffer::Length(buffer);
   }
 
-  return napi_clear_last_error(env);
+  return jsvm_clear_last_error(env);
 }
 
-napi_status NAPI_CDECL napi_get_node_version(napi_env env,
-                                             const napi_node_version** result) {
+JSVM_Status JSVM_CDECL jsvm_get_node_version(JSVM_Env env,
+                                             const jsvm_node_version** result) {
   CHECK_ENV(env);
   CHECK_ARG(env, result);
-  static const napi_node_version version = {
+  static const jsvm_node_version version = {
       NODE_MAJOR_VERSION, NODE_MINOR_VERSION, NODE_PATCH_VERSION, NODE_RELEASE};
   *result = &version;
-  return napi_clear_last_error(env);
+  return jsvm_clear_last_error(env);
 }
 
 namespace {
 namespace uvimpl {
 
-static napi_status ConvertUVErrorCode(int code) {
+static JSVM_Status ConvertUVErrorCode(int code) {
   switch (code) {
     case 0:
-      return napi_ok;
+      return JSVM_OK;
     case UV_EINVAL:
-      return napi_invalid_arg;
+      return JSVM_INVALID_ARG;
     case UV_ECANCELED:
-      return napi_cancelled;
+      return JSVM_CANCELLED;
     default:
-      return napi_generic_failure;
+      return JSVM_GENERIC_FAILURE;
   }
 }
 
 // Wrapper around uv_work_t which calls user-provided callbacks.
 class Work : public node::AsyncResource, public node::ThreadPoolWork {
  private:
-  explicit Work(node_napi_env env,
+  explicit Work(node_jsvm_env env,
                 v8::Local<v8::Object> async_resource,
                 v8::Local<v8::String> async_resource_name,
-                napi_async_execute_callback execute,
-                napi_async_complete_callback complete = nullptr,
+                jsvm_async_execute_callback execute,
+                jsvm_async_complete_callback complete = nullptr,
                 void* data = nullptr)
       : AsyncResource(
             env->isolate,
@@ -1169,11 +1169,11 @@ class Work : public node::AsyncResource, public node::ThreadPoolWork {
   ~Work() override = default;
 
  public:
-  static Work* New(node_napi_env env,
+  static Work* New(node_jsvm_env env,
                    v8::Local<v8::Object> async_resource,
                    v8::Local<v8::String> async_resource_name,
-                   napi_async_execute_callback execute,
-                   napi_async_complete_callback complete,
+                   jsvm_async_execute_callback execute,
+                   jsvm_async_complete_callback complete,
                    void* data) {
     return new Work(
         env, async_resource, async_resource_name, execute, complete, data);
@@ -1192,7 +1192,7 @@ class Work : public node::AsyncResource, public node::ThreadPoolWork {
 
     CallbackScope callback_scope(this);
 
-    _env->CallbackIntoModule<true>([&](napi_env env) {
+    _env->CallbackIntoModule<true>([&](JSVM_Env env) {
       _complete(env, ConvertUVErrorCode(status), _data);
     });
 
@@ -1201,10 +1201,10 @@ class Work : public node::AsyncResource, public node::ThreadPoolWork {
   }
 
  private:
-  node_napi_env _env;
+  node_jsvm_env _env;
   void* _data;
-  napi_async_execute_callback _execute;
-  napi_async_complete_callback _complete;
+  jsvm_async_execute_callback _execute;
+  jsvm_async_complete_callback _complete;
 };
 
 }  // end of namespace uvimpl
@@ -1213,20 +1213,20 @@ class Work : public node::AsyncResource, public node::ThreadPoolWork {
 #define CALL_UV(env, condition)                                                \
   do {                                                                         \
     int result = (condition);                                                  \
-    napi_status status = uvimpl::ConvertUVErrorCode(result);                   \
-    if (status != napi_ok) {                                                   \
-      return napi_set_last_error(env, status, result);                         \
+    JSVM_Status status = uvimpl::ConvertUVErrorCode(result);                   \
+    if (status != JSVM_OK) {                                                   \
+      return jsvm_set_last_error(env, status, result);                         \
     }                                                                          \
   } while (0)
 
-napi_status NAPI_CDECL
-napi_create_async_work(napi_env env,
-                       napi_value async_resource,
-                       napi_value async_resource_name,
-                       napi_async_execute_callback execute,
-                       napi_async_complete_callback complete,
+JSVM_Status JSVM_CDECL
+jsvm_create_async_work(JSVM_Env env,
+                       JSVM_Value async_resource,
+                       JSVM_Value async_resource_name,
+                       jsvm_async_execute_callback execute,
+                       jsvm_async_complete_callback complete,
                        void* data,
-                       napi_async_work* result) {
+                       jsvm_async_work* result) {
   CHECK_ENV(env);
   CHECK_ARG(env, execute);
   CHECK_ARG(env, result);
@@ -1243,52 +1243,52 @@ napi_create_async_work(napi_env env,
   v8::Local<v8::String> resource_name;
   CHECK_TO_STRING(env, context, resource_name, async_resource_name);
 
-  uvimpl::Work* work = uvimpl::Work::New(reinterpret_cast<node_napi_env>(env),
+  uvimpl::Work* work = uvimpl::Work::New(reinterpret_cast<node_jsvm_env>(env),
                                          resource,
                                          resource_name,
                                          execute,
                                          complete,
                                          data);
 
-  *result = reinterpret_cast<napi_async_work>(work);
+  *result = reinterpret_cast<jsvm_async_work>(work);
 
-  return napi_clear_last_error(env);
+  return jsvm_clear_last_error(env);
 }
 
-napi_status NAPI_CDECL napi_delete_async_work(napi_env env,
-                                              napi_async_work work) {
+JSVM_Status JSVM_CDECL jsvm_delete_async_work(JSVM_Env env,
+                                              jsvm_async_work work) {
   CHECK_ENV(env);
   CHECK_ARG(env, work);
 
   uvimpl::Work::Delete(reinterpret_cast<uvimpl::Work*>(work));
 
-  return napi_clear_last_error(env);
+  return jsvm_clear_last_error(env);
 }
 
-napi_status NAPI_CDECL napi_get_uv_event_loop(napi_env env, uv_loop_t** loop) {
+JSVM_Status JSVM_CDECL jsvm_get_uv_event_loop(JSVM_Env env, uv_loop_t** loop) {
   CHECK_ENV(env);
   CHECK_ARG(env, loop);
-  *loop = reinterpret_cast<node_napi_env>(env)->node_env()->event_loop();
-  return napi_clear_last_error(env);
+  *loop = reinterpret_cast<node_jsvm_env>(env)->node_env()->event_loop();
+  return jsvm_clear_last_error(env);
 }
 
-napi_status NAPI_CDECL napi_queue_async_work(napi_env env,
-                                             napi_async_work work) {
+JSVM_Status JSVM_CDECL jsvm_queue_async_work(JSVM_Env env,
+                                             jsvm_async_work work) {
   CHECK_ENV(env);
   CHECK_ARG(env, work);
 
   uv_loop_t* event_loop = nullptr;
-  STATUS_CALL(napi_get_uv_event_loop(env, &event_loop));
+  STATUS_CALL(jsvm_get_uv_event_loop(env, &event_loop));
 
   uvimpl::Work* w = reinterpret_cast<uvimpl::Work*>(work);
 
   w->ScheduleWork();
 
-  return napi_clear_last_error(env);
+  return jsvm_clear_last_error(env);
 }
 
-napi_status NAPI_CDECL napi_cancel_async_work(napi_env env,
-                                              napi_async_work work) {
+JSVM_Status JSVM_CDECL jsvm_cancel_async_work(JSVM_Env env,
+                                              jsvm_async_work work) {
   CHECK_ENV(env);
   CHECK_ARG(env, work);
 
@@ -1296,27 +1296,27 @@ napi_status NAPI_CDECL napi_cancel_async_work(napi_env env,
 
   CALL_UV(env, w->CancelWork());
 
-  return napi_clear_last_error(env);
+  return jsvm_clear_last_error(env);
 }
 
-napi_status NAPI_CDECL
-napi_create_threadsafe_function(napi_env env,
-                                napi_value func,
-                                napi_value async_resource,
-                                napi_value async_resource_name,
+JSVM_Status JSVM_CDECL
+jsvm_create_threadsafe_function(JSVM_Env env,
+                                JSVM_Value func,
+                                JSVM_Value async_resource,
+                                JSVM_Value async_resource_name,
                                 size_t max_queue_size,
                                 size_t initial_thread_count,
                                 void* thread_finalize_data,
-                                napi_finalize thread_finalize_cb,
+                                JSVM_Finalize thread_finalize_cb,
                                 void* context,
-                                napi_threadsafe_function_call_js call_js_cb,
-                                napi_threadsafe_function* result) {
+                                jsvm_threadsafe_function_call_js call_js_cb,
+                                jsvm_threadsafe_function* result) {
   CHECK_ENV(env);
   CHECK_ARG(env, async_resource_name);
-  RETURN_STATUS_IF_FALSE(env, initial_thread_count > 0, napi_invalid_arg);
+  RETURN_STATUS_IF_FALSE(env, initial_thread_count > 0, JSVM_INVALID_ARG);
   CHECK_ARG(env, result);
 
-  napi_status status = napi_ok;
+  JSVM_Status status = JSVM_OK;
 
   v8::Local<v8::Function> v8_func;
   if (func == nullptr) {
@@ -1344,71 +1344,71 @@ napi_create_threadsafe_function(napi_env env,
                                      initial_thread_count,
                                      context,
                                      max_queue_size,
-                                     reinterpret_cast<node_napi_env>(env),
+                                     reinterpret_cast<node_jsvm_env>(env),
                                      thread_finalize_data,
                                      thread_finalize_cb,
                                      call_js_cb);
 
   if (ts_fn == nullptr) {
-    status = napi_generic_failure;
+    status = JSVM_GENERIC_FAILURE;
   } else {
     // Init deletes ts_fn upon failure.
     status = ts_fn->Init();
-    if (status == napi_ok) {
-      *result = reinterpret_cast<napi_threadsafe_function>(ts_fn);
+    if (status == JSVM_OK) {
+      *result = reinterpret_cast<jsvm_threadsafe_function>(ts_fn);
     }
   }
 
-  return napi_set_last_error(env, status);
+  return jsvm_set_last_error(env, status);
 }
 
-napi_status NAPI_CDECL napi_get_threadsafe_function_context(
-    napi_threadsafe_function func, void** result) {
+JSVM_Status JSVM_CDECL jsvm_get_threadsafe_function_context(
+    jsvm_threadsafe_function func, void** result) {
   CHECK_NOT_NULL(func);
   CHECK_NOT_NULL(result);
 
   *result = reinterpret_cast<v8impl::ThreadSafeFunction*>(func)->Context();
-  return napi_ok;
+  return JSVM_OK;
 }
 
-napi_status NAPI_CDECL
-napi_call_threadsafe_function(napi_threadsafe_function func,
+JSVM_Status JSVM_CDECL
+jsvm_call_threadsafe_function(jsvm_threadsafe_function func,
                               void* data,
-                              napi_threadsafe_function_call_mode is_blocking) {
+                              jsvm_threadsafe_function_call_mode is_blocking) {
   CHECK_NOT_NULL(func);
   return reinterpret_cast<v8impl::ThreadSafeFunction*>(func)->Push(data,
                                                                    is_blocking);
 }
 
-napi_status NAPI_CDECL
-napi_acquire_threadsafe_function(napi_threadsafe_function func) {
+JSVM_Status JSVM_CDECL
+jsvm_acquire_threadsafe_function(jsvm_threadsafe_function func) {
   CHECK_NOT_NULL(func);
   return reinterpret_cast<v8impl::ThreadSafeFunction*>(func)->Acquire();
 }
 
-napi_status NAPI_CDECL napi_release_threadsafe_function(
-    napi_threadsafe_function func, napi_threadsafe_function_release_mode mode) {
+JSVM_Status JSVM_CDECL jsvm_release_threadsafe_function(
+    jsvm_threadsafe_function func, jsvm_threadsafe_function_release_mode mode) {
   CHECK_NOT_NULL(func);
   return reinterpret_cast<v8impl::ThreadSafeFunction*>(func)->Release(mode);
 }
 
-napi_status NAPI_CDECL
-napi_unref_threadsafe_function(napi_env env, napi_threadsafe_function func) {
+JSVM_Status JSVM_CDECL
+jsvm_unref_threadsafe_function(JSVM_Env env, jsvm_threadsafe_function func) {
   CHECK_NOT_NULL(func);
   return reinterpret_cast<v8impl::ThreadSafeFunction*>(func)->Unref();
 }
 
-napi_status NAPI_CDECL
-napi_ref_threadsafe_function(napi_env env, napi_threadsafe_function func) {
+JSVM_Status JSVM_CDECL
+jsvm_ref_threadsafe_function(JSVM_Env env, jsvm_threadsafe_function func) {
   CHECK_NOT_NULL(func);
   return reinterpret_cast<v8impl::ThreadSafeFunction*>(func)->Ref();
 }
 
-napi_status NAPI_CDECL node_api_get_module_file_name(napi_env env,
+JSVM_Status JSVM_CDECL node_api_get_module_file_name(JSVM_Env env,
                                                      const char** result) {
   CHECK_ENV(env);
   CHECK_ARG(env, result);
 
-  *result = static_cast<node_napi_env>(env)->GetFilename();
-  return napi_clear_last_error(env);
+  *result = static_cast<node_jsvm_env>(env)->GetFilename();
+  return jsvm_clear_last_error(env);
 }

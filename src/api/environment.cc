@@ -782,8 +782,8 @@ void AddLinkedBinding(Environment* env, const node_module& mod) {
     prev_tail->nm_link = &env->extra_linked_bindings()->back();
 }
 
-void AddLinkedBinding(Environment* env, const napi_module& mod) {
-  node_module node_mod = napi_module_to_node_module(&mod);
+void AddLinkedBinding(Environment* env, const jsvm_module& mod) {
+  node_module node_mod = jsvm_module_to_node_module(&mod);
   node_mod.nm_flags = NM_F_LINKED;
   AddLinkedBinding(env, node_mod);
 }
@@ -808,7 +808,7 @@ void AddLinkedBinding(Environment* env,
 
 void AddLinkedBinding(Environment* env,
                       const char* name,
-                      napi_addon_register_func fn,
+                      jsvm_addon_register_func fn,
                       int32_t module_api_version) {
   node_module mod = {
       -1,           // nm_version for Node-API
