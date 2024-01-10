@@ -25,6 +25,8 @@ extern "C" {
 #endif
 
 typedef struct OH_AVDemuxer OH_AVDemuxer;
+typedef struct DRM_MediaKeySystemInfo DRM_MediaKeySystemInfo;
+typedef void (*DRM_MediaKeySystemInfoCallback)(DRM_MediaKeySystemInfo* mediaKeySystemInfo);
 
 /**
  * @brief Creates an OH_AVDemuxer instance for getting samples from source.
@@ -124,6 +126,32 @@ OH_AVErrCode OH_AVDemuxer_ReadSampleBuffer(OH_AVDemuxer *demuxer, uint32_t track
  * @since 10
 */
 OH_AVErrCode OH_AVDemuxer_SeekToTime(OH_AVDemuxer *demuxer, int64_t millisecond, OH_AVSeekMode mode);
+
+/**
+ * @brief Method to set player media key system info callback.
+ * @syscap SystemCapability.Multimedia.Media.Spliter
+ * @param demuxer Pointer to an OH_AVDemuxer instance
+ * @param callback object pointer.
+ * @return Returns {@link AV_ERR_OK} if the drm info callback is set; returns an error code defined
+ * in {@link native_averrors.h} otherwise.
+ * @since 11
+ * @version 1.0
+ */
+OH_AVErrCode OH_AVDemuxer_SetMediaKeySystemInfoCallback(OH_AVDemuxer *demuxer,
+    DRM_MediaKeySystemInfoCallback callback);
+
+/**
+ * @brief Obtains media key system info to create media key session.
+ * @syscap SystemCapability.Multimedia.Media.Spliter
+ * @param demuxer Pointer to an OH_AVDemuxer instance
+ * @param mediaKeySystemInfo Indicates the media key system info which ram space allocated by callee and
+ released by caller.
+ * @return Returns {@link AV_ERR_OK} if the current position is get; returns an error code defined
+ * in {@link native_averrors.h} otherwise.
+ * @since 11
+ * @version 1.0
+ */
+OH_AVErrCode OH_AVDemuxer_GetMediaKeySystemInfo(OH_AVDemuxer *demuxer, DRM_MediaKeySystemInfo *mediaKeySystemInfo);
 
 #ifdef __cplusplus
 }

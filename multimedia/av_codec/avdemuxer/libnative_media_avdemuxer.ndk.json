@@ -26,5 +26,13 @@
     {
         "first_introduced": "11",
         "name": "OH_AVDemuxer_ReadSampleBuffer"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AVDemuxer_SetMediaKeySystemInfoCallback"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_AVDemuxer_GetMediaKeySystemInfo"
     }
 ]
