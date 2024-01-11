@@ -85,7 +85,7 @@ int32_t OH_Vibrator_Cancel();
 } // namespace sensors
 } // namespace ohos
 #ifdef __cplusplus
-};
+}
 #endif
 /** @} */
 #endif // endif VIBRATOR_H
