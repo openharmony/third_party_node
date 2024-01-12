@@ -150,5 +150,9 @@
     {
         "first_introduced": "11",
         "name": "napi_add_finalizer"
+    },
+    {
+        "first_introduced": "11",
+        "name": "napi_make_callback"
     }
 ]
