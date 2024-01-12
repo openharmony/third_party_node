@@ -1,0 +1,5 @@
+[
+    { "name": "OH_QoS_SetThreadQoS" },
+    { "name": "OH_QoS_ResetThreadQoS" },
+    { "name": "OH_QoS_GetThreadQoS" }
+]
