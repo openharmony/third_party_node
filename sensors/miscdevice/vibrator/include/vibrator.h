@@ -41,8 +41,6 @@
 extern "C" {
 #endif
 
-namespace ohos {
-namespace sensors {
 /**
  * @brief Controls the vibrator to vibrate continuously for a given duration.
  *
@@ -82,8 +80,6 @@ int32_t OH_Vibrator_PlayVibrationCustom(Vibrator_FileDescription fileDescription
  * @since 11
  */
 int32_t OH_Vibrator_Cancel();
-} // namespace sensors
-} // namespace ohos
 #ifdef __cplusplus
 }
 #endif
