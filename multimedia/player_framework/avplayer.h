@@ -42,7 +42,7 @@
 #include <stdio.h>
 #include "native_averrors.h"
 #include "avplayer_base.h"
-#include "external_window.h"
+#include "native_window/external_window.h"
 
 #ifdef __cplusplus
 extern "C" {
