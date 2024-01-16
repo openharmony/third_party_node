@@ -80,7 +80,7 @@ def get_parm(item, parm):
             if item["parm"][i]["kind"] != 'PARM_DECL':
                 continue
             else:
-                str_parm = item["parm"][i]["type"] + ' ' + item["parm"][i]["name"]
+                str_parm = '{} {}'.format(item["parm"][i]["type"], item["parm"][i]["name"])
                 parm.append(str_parm)
         item["parm"] = parm
 

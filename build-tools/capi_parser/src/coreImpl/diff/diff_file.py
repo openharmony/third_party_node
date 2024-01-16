@@ -81,9 +81,9 @@ def result_to_json(result_info_list):
 
 
 def write_in_txt(check_result, output_path):
-    fs = open(output_path, 'w', encoding='utf-8')
-    fs.write(check_result)
-    fs.close()
+    with open(output_path, 'w', encoding='utf-8') as fs:
+        fs.write(check_result)
+        fs.close()
 
 
 def do_diff(old_dir, new_dir):
