@@ -173,10 +173,6 @@
     },
     {
         "first_introduced": "11",
-        "name": "OH_JSVM_CreateExternalArraybuffer"
-    },
-    {
-        "first_introduced": "11",
         "name": "OH_JSVM_CreateObject"
     },
     {
@@ -494,10 +490,6 @@
     {
         "first_introduced": "11",
         "name": "OH_JSVM_AddFinalizer"
-    },
-    {
-        "first_introduced": "11",
-        "name": "OH_JSVM_PostFinalizer"
     },
     {
         "first_introduced": "11",
