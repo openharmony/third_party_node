@@ -129,7 +129,8 @@ def change_abs(include_files, dire_path):  # 获取.h绝对路径
             head = os.path.splitdrive(dire_path)  # 获取windows盘路径
             include_file = os.path.normpath(j_item)
             if 'third_party/node/src' in j_item:
-                include_file = include_file.replace('\\\\', StringConstant.REPLACE_WAREHOUSE.value + '\\')
+                include_file = include_file.replace('\\\\',
+                                                    '{}{}'.format(StringConstant.REPLACE_WAREHOUSE.value, '\\'))
             else:
                 # 去掉绝对路径的双\\,替换为interface_sdk_c
                 include_file = include_file.replace('\\\\interface\\sdk_c',
