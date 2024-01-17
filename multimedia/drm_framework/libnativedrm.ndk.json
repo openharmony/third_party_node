@@ -1,0 +1,122 @@
+[
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_IsSupported"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_IsSupported2"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_IsSupported3"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_Create"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_SetConfigurationString"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_GetConfigurationString"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_SetConfigurationByteArray"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_GetConfigurationByteArray"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_GetStatistics"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_GetMaxContentProtectionLevel"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_SetMediaKeySystemCallback"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_CreateMediaKeySession"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_GenerateKeySystemRequest"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_ProcessKeySystemResponse"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_GetOfflineMediaKeyIds"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_GetOfflineMediaKeyStatus"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_ClearOfflineMediaKeys"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_GetCertificateStatus"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySystem_Destroy"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySession_GenerateMediaKeyRequest"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySession_ProcessMediaKeyResponse"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySession_CheckMediaKeyStatus"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySession_ClearMediaKeys"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySession_GenerateOfflineReleaseRequest"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySession_ProcessOfflineReleaseResponse"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySession_RestoreOfflineMediaKeys"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySession_GetContentProtectionLevel"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySession_RequireSecureDecoderModule"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySession_SetMediaKeySessionCallback"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_MediaKeySession_Destroy"
+    }
+]
