@@ -1,0 +1,538 @@
+[
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_Init"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateVM"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_DestroyVM"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_OpenVMScope"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CloseVMScope"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateEnv"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateEnvFromSnapshot"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_DestroyEnv"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_OpenEnvScope"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CloseEnvScope"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CompileScript"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateCodeCache"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_RunScript"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_SetInstanceData"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetInstanceData"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetLastErrorInfo"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_Throw"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_ThrowError"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_ThrowTypeError"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_ThrowRangeError"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_ThrowSyntaxError"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_IsError"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateError"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateTypeError"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateRangeError"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateSyntaxError"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetAndClearLastException"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_IsExceptionPending"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_OpenHandleScope"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CloseHandleScope"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_OpenEscapableHandleScope"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CloseEscapableHandleScope"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_EscapeHandle"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateReference"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_DeleteReference"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_ReferenceRef"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_ReferenceUnref"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetReferenceValue"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateArray"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateArrayWithLength"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateArraybuffer"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateDate"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateExternal"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateObject"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateSymbol"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_SymbolFor"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateTypedarray"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateDataview"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateInt32"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateUint32"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateInt64"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateDouble"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateBigintInt64"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateBigintUint64"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateBigintWords"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateStringLatin1"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateStringUtf16"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateStringUtf8"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetArrayLength"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetArraybufferInfo"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetPrototype"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetTypedarrayInfo"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetDataviewInfo"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetDateValue"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetValueBool"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetValueDouble"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetValueBigintInt64"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetValueBigintUint64"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetValueBigintWords"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetValueExternal"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetValueInt32"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetValueInt64"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetValueStringLatin1"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetValueStringUtf8"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetValueStringUtf16"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetValueUint32"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetBoolean"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetGlobal"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetNull"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetUndefined"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CoerceToBool"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CoerceToNumber"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CoerceToObject"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CoerceToString"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_Typeof"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_Instanceof"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_IsArray"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_IsArraybuffer"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_IsDate"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_IsTypedarray"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_IsDataview"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_StrictEquals"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_DetachArraybuffer"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_IsDetachedArraybuffer"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetPropertyNames"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetAllPropertyNames"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_SetProperty"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetProperty"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_HasProperty"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_DeleteProperty"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_HasOwnProperty"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_SetNamedProperty"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetNamedProperty"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_HasNamedProperty"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_SetElement"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetElement"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_HasElement"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_DeleteElement"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_DefineProperties"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_ObjectFreeze"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_ObjectSeal"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CallFunction"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateFunction"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetCbInfo"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetNewTarget"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_NewInstance"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_DefineClass"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_Wrap"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_Unwrap"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_RemoveWrap"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_TypeTagObject"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CheckObjectTypeTag"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_AddFinalizer"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetVersion"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_GetVMInfo"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_AdjustExternalMemory"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_MemoryPressureNotification"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreatePromise"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_ResolveDeferred"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_RejectDeferred"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_IsPromise"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_JsonParse"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_JsonStringify"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_JSVM_CreateSnapshot"
+    }
+]

@@ -62,9 +62,9 @@ def process_all_json(python_obj):
 
 def write_in_txt(check_result, output_path):
     result_json = result_to_json(check_result)
-    fs = open(output_path, 'w', encoding='utf-8')
-    fs.write(result_json)
-    fs.close()
+    with open(output_path, 'w', encoding='utf-8') as fs:
+        fs.write(result_json)
+        fs.close()
 
 
 def result_to_json(check_result):
@@ -96,16 +96,16 @@ def get_check_result_list(file_list):
 
 
 def get_md_files(md_files_path):
-    file = open(md_files_path, "r")
-    file_list = []
-    line = file.readline()
-    while line:
-        file_path = line.splitlines()[0]
-        if file_path.find("sdk_c") != -1 and get_file_type(file_path) == '.h':
-            file_list.append(line.splitlines()[0])
+    with open(md_files_path, 'r') as file:
+        file_list = []
         line = file.readline()
-    file.close()
-    return file_list
+        while line:
+            file_path = line.splitlines()[0]
+            if file_path.find("sdk_c") != -1 and get_file_type(file_path) == '.h':
+                file_list.append(line.splitlines()[0])
+            line = file.readline()
+        file.close()
+        return file_list
 
 
 def get_file_type(file_path):

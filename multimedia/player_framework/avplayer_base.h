@@ -42,7 +42,6 @@ extern "C" {
 #endif
 
 typedef struct OH_AVPlayer OH_AVPlayer;
-typedef struct NativeWindow OHNativeWindow;
 
 /**
  * @brief Player States

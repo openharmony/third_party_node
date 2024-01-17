@@ -171,6 +171,7 @@ struct OH_Huks_Result OH_Huks_IsKeyItemExist(const struct OH_Huks_Blob *keyAlias
 /**
  * @brief Obtain the key certificate chain.
  *
+ * @permission ohos.permission.ATTEST_KEY
  * @param keyAlias Indicates the pointer to the alias of the target key.
  * @param paramSet Indicates the pointer to the parameters required for obtaining the key certificate.
  * @param certChain Indicates the pointer to the key certificate chain obtained.
