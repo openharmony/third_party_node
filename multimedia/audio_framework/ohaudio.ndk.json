@@ -188,7 +188,7 @@
         "name": "OH_AudioCapturer_GetFramesRead"
     },
     {
-	"first_introduced": "11",
+	    "first_introduced": "11",
         "name": "OH_AudioRenderer_GetSpeed"
     },
     {
