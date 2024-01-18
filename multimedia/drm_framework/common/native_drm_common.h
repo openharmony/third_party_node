@@ -303,7 +303,7 @@ typedef struct DRM_MediaKeyRequestInfo {
     /**
      * Options data the application set to drm framework.
      */
-    DRM_CharBufferPair optionsData[0];
+    DRM_CharBufferPair *optionsData;
 } DRM_MediaKeyRequestInfo;
 
 /**
