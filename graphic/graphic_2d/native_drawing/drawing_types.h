@@ -21,7 +21,7 @@
  * @{
  *
  * @brief Provides functions such as 2D graphics rendering, text drawing, and image display.
- * 
+ *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  *
  * @since 8
@@ -197,6 +197,22 @@ typedef struct OH_Drawing_Typeface OH_Drawing_Typeface;
  * @version 1.0
  */
 typedef struct OH_Drawing_TextBlob OH_Drawing_TextBlob;
+
+/**
+ * @brief Defines a image, which is used to describe a two dimensional array of pixels to draw.
+ *
+ * @since 11
+ * @version 1.0
+ */
+typedef struct OH_Drawing_Image OH_Drawing_Image;
+
+/**
+ * @brief Defines a matrix, which is used to describe the transforming coordinates.
+ *
+ * @since 11
+ * @version 1.0
+ */
+typedef struct OH_Drawing_SamplingOptions OH_Drawing_SamplingOptions;
 
 /**
  * @brief Defines a textBlobBuilder, which is used to build the textBlob.
