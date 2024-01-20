@@ -366,54 +366,6 @@ void OH_Drawing_CanvasTranslate(OH_Drawing_Canvas*, float dx, float dy);
 void OH_Drawing_CanvasScale(OH_Drawing_Canvas*, float sx, float sy);
 
 /**
- * @brief Clears a canvas by using a specified color.
- *
- * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_Canvas Indicates the pointer to an <b>OH_Drawing_Canvas</b> object.
- * @param color Indicates the color, which is a 32-bit (ARGB) variable.
- * @since 8
- * @version 1.0
- */
-void OH_Drawing_CanvasClear(OH_Drawing_Canvas*, uint32_t color);
-
-/**
- * @brief Sets matrix of canvas.
- *
- * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_Canvas Indicates the pointer to an <b>OH_Drawing_Canvas</b> object.
- * @param OH_Drawing_Matrix Indicates the pointer to an <b>OH_Drawing_Canvas</b> object.
- * @since 12
- * @version 1.0
- */
-void OH_Drawing_CanvasSetMatrix(OH_Drawing_Canvas*, OH_Drawing_Matrix*);
-
-/**
- * @brief Draws the specified source rectangle of the image onto the canvas,
- * scaled and translated to the destination rectangle.
- *
- * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_Canvas Indicates the pointer to an <b>OH_Drawing_Canvas</b> object.
- * @param OH_Drawing_Matrix Indicates the pointer to an <b>OH_Drawing_Image</b> object.
- * @param OH_Drawing_Rect Indicates the pointer to an <b>OH_Drawing_Rect</b> object.
- * @param OH_Drawing_SamplingOptions Indicates the pointer to an <b>OH_Drawing_SamplingOptions</b> object.
- * @since 12
- * @version 1.0
- */
-void OH_Drawing_CanvasDrawImageRect(OH_Drawing_Canvas*, OH_Drawing_Image*, OH_Drawing_Rect* dst, OH_Drawing_SamplingOptions*);
-
-/**
- * @brief Read pixels data to a bitmap from canvas.
- *
- * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_Canvas Indicates the pointer to an <b>OH_Drawing_Canvas</b> object.
- * @param OH_Drawing_Bitmap Indicates the pointer to an <b>OH_Drawing_Bitmap</b> object.
- * @param srcX offset into SkCanvas writable pixels on x-axis.
- * @param srcY offset into SkCanvas writable pixels on y-axis.
- * @return true if pixels are copied to dstBitmap.
- * @since 12
- * @version 1.0
- */
-bool OH_Drawing_CanvasReadPixelsToBitmap(OH_Drawing_Canvas*, OH_Drawing_Bitmap*, int32_t srcX, int32_t srcY);
  * @brief Get the width of a canvas.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
@@ -513,6 +465,56 @@ typedef enum {
 void OH_Drawing_CanvasDrawShadow(OH_Drawing_Canvas*, OH_Drawing_Path*, OH_Drawing_Point3*,
     OH_Drawing_Point3*, float lightRadius, uint32_t ambientColor, uint32_t spotColor,
     OH_Drawing_CanvasShadowFlags flag);
+
+/**
+ * @brief Clears a canvas by using a specified color.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_Canvas Indicates the pointer to an <b>OH_Drawing_Canvas</b> object.
+ * @param color Indicates the color, which is a 32-bit (ARGB) variable.
+ * @since 8
+ * @version 1.0
+ */
+void OH_Drawing_CanvasClear(OH_Drawing_Canvas*, uint32_t color);
+
+/**
+ * @brief Sets matrix of canvas.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_Canvas Indicates the pointer to an <b>OH_Drawing_Canvas</b> object.
+ * @param OH_Drawing_Matrix Indicates the pointer to an <b>OH_Drawing_Canvas</b> object.
+ * @since 12
+ * @version 1.0
+ */
+void OH_Drawing_CanvasSetMatrix(OH_Drawing_Canvas*, OH_Drawing_Matrix*);
+
+/**
+ * @brief Draws the specified source rectangle of the image onto the canvas,
+ * scaled and translated to the destination rectangle.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_Canvas Indicates the pointer to an <b>OH_Drawing_Canvas</b> object.
+ * @param OH_Drawing_Matrix Indicates the pointer to an <b>OH_Drawing_Image</b> object.
+ * @param OH_Drawing_Rect Indicates the pointer to an <b>OH_Drawing_Rect</b> object.
+ * @param OH_Drawing_SamplingOptions Indicates the pointer to an <b>OH_Drawing_SamplingOptions</b> object.
+ * @since 12
+ * @version 1.0
+ */
+void OH_Drawing_CanvasDrawImageRect(OH_Drawing_Canvas*, OH_Drawing_Image*, OH_Drawing_Rect* dst, OH_Drawing_SamplingOptions*);
+
+/**
+ * @brief Read pixels data to a bitmap from canvas.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_Canvas Indicates the pointer to an <b>OH_Drawing_Canvas</b> object.
+ * @param OH_Drawing_Bitmap Indicates the pointer to an <b>OH_Drawing_Bitmap</b> object.
+ * @param srcX offset into SkCanvas writable pixels on x-axis.
+ * @param srcY offset into SkCanvas writable pixels on y-axis.
+ * @return true if pixels are copied to dstBitmap.
+ * @since 12
+ * @version 1.0
+ */
+bool OH_Drawing_CanvasReadPixelsToBitmap(OH_Drawing_Canvas*, OH_Drawing_Bitmap*, int32_t srcX, int32_t srcY);
 
 #ifdef __cplusplus
 }
