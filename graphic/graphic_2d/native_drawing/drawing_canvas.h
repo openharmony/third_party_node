@@ -368,7 +368,7 @@ void OH_Drawing_CanvasClear(OH_Drawing_Canvas*, uint32_t color);
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_Canvas Indicates the pointer to an <b>OH_Drawing_Canvas</b> object.
- * @param OH_Drawing_Matrix Indicates the pointer to an <b>OH_Drawing_Matrix</b> object.
+ * @param OH_Drawing_Matrix Indicates the pointer to an <b>OH_Drawing_Canvas</b> object.
  * @since 12
  * @version 1.0
  */
@@ -380,31 +380,13 @@ void OH_Drawing_CanvasSetMatrix(OH_Drawing_Canvas*, OH_Drawing_Matrix*);
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_Canvas Indicates the pointer to an <b>OH_Drawing_Canvas</b> object.
- * @param OH_Drawing_Image Indicates the pointer to an <b>OH_Drawing_Image</b> object.
+ * @param OH_Drawing_Matrix Indicates the pointer to an <b>OH_Drawing_Image</b> object.
  * @param OH_Drawing_Rect Indicates the pointer to an <b>OH_Drawing_Rect</b> object.
  * @param OH_Drawing_SamplingOptions Indicates the pointer to an <b>OH_Drawing_SamplingOptions</b> object.
  * @since 12
  * @version 1.0
  */
-void OH_Drawing_CanvasDrawImageRect(OH_Drawing_Canvas*, OH_Drawing_Image*,
-    OH_Drawing_Rect* dst, OH_Drawing_SamplingOptions*);
-
-/**
- * @brief Read pixels data from canvas.
- *
- * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_Canvas Indicates the pointer to an <b>OH_Drawing_Canvas</b> object.
- * @param OH_Drawing_Image_Info width, height, colorType, and alphaType of dstPixels.
- * @param dstPixels destination pixel storage.
- * @param dstRowBytes size of one row of pixels.
- * @param srcX offset into canvas writable pixels on x-axis.
- * @param srcY offset into canvas writable pixels on y-axis.
- * @return true if pixels are copied to dstPixels.
- * @since 12
- * @version 1.0
- */
-bool OH_Drawing_CanvasReadPixels(OH_Drawing_Canvas*, OH_Drawing_Image_Info*,
-    void* dstPixels, uint32_t dstRowBytes, int32_t srcX, int32_t srcY);
+void OH_Drawing_CanvasDrawImageRect(OH_Drawing_Canvas*, OH_Drawing_Image*, OH_Drawing_Rect* dst, OH_Drawing_SamplingOptions*);
 
 /**
  * @brief Read pixels data to a bitmap from canvas.
@@ -412,8 +394,8 @@ bool OH_Drawing_CanvasReadPixels(OH_Drawing_Canvas*, OH_Drawing_Image_Info*,
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_Canvas Indicates the pointer to an <b>OH_Drawing_Canvas</b> object.
  * @param OH_Drawing_Bitmap Indicates the pointer to an <b>OH_Drawing_Bitmap</b> object.
- * @param srcX offset into canvas writable pixels on x-axis.
- * @param srcY offset into canvas writable pixels on y-axis.
+ * @param srcX offset into SkCanvas writable pixels on x-axis.
+ * @param srcY offset into SkCanvas writable pixels on y-axis.
  * @return true if pixels are copied to dstBitmap.
  * @since 12
  * @version 1.0

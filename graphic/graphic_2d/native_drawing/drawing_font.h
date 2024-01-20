@@ -144,7 +144,6 @@ typedef struct {
  * @param OH_Drawing_Font Indicates the pointer to an <b>OH_Drawing_Font</b> object.
  * @param OH_Drawing_Font_Metrics Indicates the pointer to an <b>OH_Drawing_Font_Metrics</b> object.
  * @return Returns a float variable that recommended spacing between lines.
- * Returns -1 if OH_Drawing_Font or OH_Drawing_Font_Metrics is nullptr.
  * @since 12
  * @version 1.0
  */
