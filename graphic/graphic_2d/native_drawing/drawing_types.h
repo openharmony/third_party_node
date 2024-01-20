@@ -38,6 +38,7 @@
  */
 
 #include <stdint.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -171,6 +172,14 @@ typedef struct OH_Drawing_ColorFilter OH_Drawing_ColorFilter;
  * @version 1.0
  */
 typedef struct OH_Drawing_Font OH_Drawing_Font;
+
+/**
+ * @brief Defines a memoryStream, which is used to describe the memory stream.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct OH_Drawing_MemoryStream OH_Drawing_MemoryStream;
 
 /**
  * @brief Defines a typeface, which is used to describe the typeface.
