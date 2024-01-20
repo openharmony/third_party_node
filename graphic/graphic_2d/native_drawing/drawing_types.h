@@ -38,6 +38,7 @@
  */
 
 #include <stdint.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -91,6 +92,22 @@ typedef struct OH_Drawing_Bitmap OH_Drawing_Bitmap;
  * @version 1.0
  */
 typedef struct OH_Drawing_Point OH_Drawing_Point;
+
+/**
+ * @brief Defines a point of 3x3, which is used to describe the coordinate point.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct OH_Drawing_Point3 OH_Drawing_Point3;
+
+/**
+ * @brief Defines a pathEffect, which is used to affects stroked paths.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct OH_Drawing_PathEffect OH_Drawing_PathEffect;
 
 /**
  * @brief Defines a rect, which is used to describe the rectangle.
@@ -155,6 +172,14 @@ typedef struct OH_Drawing_ColorFilter OH_Drawing_ColorFilter;
  * @version 1.0
  */
 typedef struct OH_Drawing_Font OH_Drawing_Font;
+
+/**
+ * @brief Defines a memoryStream, which is used to describe the memory stream.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct OH_Drawing_MemoryStream OH_Drawing_MemoryStream;
 
 /**
  * @brief Defines a typeface, which is used to describe the typeface.
