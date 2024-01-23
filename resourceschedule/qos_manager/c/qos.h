@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef QOS_MANAGER_NDK_API_QOS_H
-#define QOS_MANAGER_NDK_API_QOS_H
+#ifndef QOS_MANAGER_NATIVE_API_QOS_H
+#define QOS_MANAGER_NATIVE_API_QOS_H
 /**
  * @addtogroup QoS
  * @{
@@ -105,4 +105,4 @@ int OH_QoS_GetThreadQoS(QoS_Level *level);
 #ifdef __cplusplus
 };
 #endif
-#endif //QOS_MANAGER_NDK_API_QOS_H
+#endif //QOS_MANAGER_NATIVE_API_QOS_H
