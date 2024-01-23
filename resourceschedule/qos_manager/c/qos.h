@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef QOS_MANAGER_NATIVE_API_QOS_H
-#define QOS_MANAGER_NATIVE_API_QOS_H
+#ifndef QOS_H
+#define QOS_H
 /**
  * @addtogroup QoS
  * @{
@@ -28,7 +28,13 @@
  * @file qos.h
  *
  * @brief Declares the QoS interfaces in C.
- * @library libqos.z.so
+ *
+ * Quality-of-service (QoS) refers to the priority scheduling attribute of tasks
+ * in OpenHarmony. Developers can use QoS to categorize tasks to be executed to
+ * indicate the degree of their relevance to user interactions, the system can
+ * schedule the time and running order of tasks according to the QoS set by the tasks.
+ *
+ * @library libqos.so
  * @syscap SystemCapability.Resourceschedule.QoS.Core
  * @since 12
  */
@@ -105,4 +111,4 @@ int OH_QoS_GetThreadQoS(QoS_Level *level);
 #ifdef __cplusplus
 };
 #endif
-#endif //QOS_MANAGER_NATIVE_API_QOS_H
+#endif //QOS_H

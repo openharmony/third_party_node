@@ -20,8 +20,9 @@ ohos_ndk_headers("qos_header") {
 }
 
 ohos_ndk_library("libqos_ndk") {
-  output_name = "qos_ndk"
+  output_name = "qos"
+  output_extension = "so"
   ndk_description_file = "./libqos.ndk.json"
   system_capability = "SystemCapability.Resourceschedule.QoS.Core"
-  system_capability_headers = [ "$ndk_headers_out_dir/qos/qos.h" ]
+  system_capability_headers = [ "qos/qos.h" ]
 }
