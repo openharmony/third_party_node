@@ -50,16 +50,20 @@ extern "C"
 /**
  * @brief Call back will be invoked when event triggers.
  * @param eventType Event type.
- * @param eventInfo Event info gotten from media key system.
+ * @param info Event info gotten from media key session.
+ * @param infoLen Event info len.
+ * @param extra Extra info gotten from media key session.
  * @return Drm_ErrCode.
  * @since 11
  * @version 1.0
  */
-typedef  Drm_ErrCode (*MediaKeySession_EventCallback)(DRM_ListenerType eventType, DRM_Uint8CharBufferPair *eventInfo);
+typedef  Drm_ErrCode (*MediaKeySession_EventCallback)(DRM_EventType eventType, uint8_t *info,
+    int32_t infoLen, char *extra);
 
 /**
  * @brief Call back will be invoked when key changes.
  * @param keysInfo Key info gotten from media key system.
+ * @param newKeysAvailable Whether new keys available.
  * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
@@ -92,31 +96,32 @@ typedef struct MediaKeySession_Callback {
  * @version 1.0
  */
 Drm_ErrCode OH_MediaKeySession_GenerateMediaKeyRequest(MediaKeySession *mediaKeySession,
-    DRM_MediaKeyRequestInfo *info, DRM_MediaKeyRequest **mediaKeyRequest);
+    DRM_MediaKeyRequestInfo *info, DRM_MediaKeyRequest *mediaKeyRequest);
 
 /**
  * @brief Process media key response.
  * @param mediaKeySession Media key session instance.
  * @param response Media Key resposne.
- * @param mediaKeyId Media key identifier.
- * @param mediaKeyIdLen Media key identifier len.
+ * @param responseLen Media Key resposne len.
+ * @param offlineMediaKeyId Offline media key identifier.
+ * @param offlineMediaKeyIdLen Offline media key identifier len for in buffer and out data.
  * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
  */
-Drm_ErrCode OH_MediaKeySession_ProcessMediaKeyResponse(MediaKeySession *keySession,
-    DRM_Uint8Buffer *response, unsigned char **mediaKeyId, int32_t *mediaKeyIdLen);
+Drm_ErrCode OH_MediaKeySession_ProcessMediaKeyResponse(MediaKeySession *mediaKeySession,
+    uint8_t *response, int32_t responseLen, uint8_t *offlineMediaKeyId, int32_t *offlineMediaKeyIdLen);
 
 /**
  * @brief Check media key status.
  * @param mediaKeySession Media key session instance.
- * @param mediaKeyDescription Media key status description.
+ * @param mediaKeyStatus Media key status.
  * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
  */
 Drm_ErrCode OH_MediaKeySession_CheckMediaKeyStatus(MediaKeySession *mediaKeySessoin,
-    DRM_MediaKeyDescription **mediaKeyDescription);
+    DRM_MediaKeyStatus *mediaKeyStatus);
 
 /**
  * @brief Clear media keys of the current session .
@@ -130,38 +135,44 @@ Drm_ErrCode OH_MediaKeySession_ClearMediaKeys(MediaKeySession *mediaKeySessoin);
 /**
  * @brief Generate offline media key release request.
  * @param mediaKeySession Media key session instance.
- * @param mediaKeyId Media key identifier.
+ * @param offlineMediaKeyId Offline media key identifier.
+ * @param offlineMediaKeyIdLen Offline media key identifier len.
  * @param releaseRequest Media Key release request.
- * @param releaseRequestLen Media Key release request len.
+ * @param releaseRequestLen Media Key release request len for in buffer and out data.
  * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
  */
 Drm_ErrCode OH_MediaKeySession_GenerateOfflineReleaseRequest(MediaKeySession *mediaKeySessoin,
-    DRM_Uint8Buffer *mediaKeyId, unsigned char **releaseRequest, int32_t *releaseRequestLen);
+    uint8_t *offlineMediaKeyId, int32_t offlineMediaKeyIdLen, uint8_t *releaseRequest,
+    int32_t *releaseRequestLen);
 
 /**
  * @brief Process offline media key release response.
  * @param mediaKeySession Media key session instance.
- * @param mediaKeyId Media key identifier.
+ * @param offlineMediaKeyId Offline media key identifier.
+ * @param offlineMediaKeyIdLen Offline media key identifier len.
  * @param releaseReponse Media Key resposne.
+ * @param releaseReponseLen Media Key resposne len.
  * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
  */
 Drm_ErrCode OH_MediaKeySession_ProcessOfflineReleaseResponse(MediaKeySession *mediaKeySessoin,
-    DRM_Uint8Buffer *mediaKeyId, DRM_Uint8Buffer *releaseReponse);
+    uint8_t *offlineMediaKeyId, int32_t offlineMediaKeyIdLen, uint8_t *releaseReponse,
+    int32_t releaseReponseLen);
 
 /**
  * @brief Restore offline media keys by ID.
  * @param mediaKeySession Media key session instance.
- * @param mediaKeyId Media key identifier.
+ * @param offlineMediaKeyId Offline media key identifier.
+ * @param offlineMediaKeyIdLen Offline media key identifier len.
  * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
  * @since 11
  * @version 1.0
  */
 Drm_ErrCode OH_MediaKeySession_RestoreOfflineMediaKeys(MediaKeySession *mediaKeySessoin,
-    DRM_Uint8Buffer *mediaKeyId);
+    uint8_t *offlineMediaKeyId, int32_t offlineMediaKeyIdLen);
 
 /**
  * @brief Get content protection level of the session.

@@ -54,53 +54,57 @@ typedef enum Drm_ErrCode {
      */
     DRM_ERR_OK = 0,
     /**
+     * DRM CAPI ERROR BASE.
+     */
+    DRM_CAPI_ERR_BASE = 24700500,
+    /**
      * no memory.
      */
-    DRM_ERR_NO_MEMORY,
+    DRM_ERR_NO_MEMORY = DRM_CAPI_ERR_BASE + 1,
     /**
      * opertation not be permitted.
      */
-    DRM_ERR_OPERATION_NOT_PERMITTED,
+    DRM_ERR_OPERATION_NOT_PERMITTED = DRM_CAPI_ERR_BASE + 2,
     /**
      * invalid argument.
      */
-    DRM_ERR_INVALID_VAL,
+    DRM_ERR_INVALID_VAL = DRM_CAPI_ERR_BASE + 3,
     /**
      * IO error.
      */
-    DRM_ERR_IO,
+    DRM_ERR_IO = DRM_CAPI_ERR_BASE + 4,
     /**
      * network timeout.
      */
-    DRM_ERR_TIMEOUT,
+    DRM_ERR_TIMEOUT = DRM_CAPI_ERR_BASE + 5,
     /**
      * unknown error.
      */
-    DRM_ERR_UNKNOWN,
+    DRM_ERR_UNKNOWN = DRM_CAPI_ERR_BASE + 6,
     /**
      * drm service died.
      */
-    DRM_ERR_SERVICE_DIED,
+    DRM_ERR_SERVICE_DIED = DRM_CAPI_ERR_BASE + 7,
     /**
      * not support this operation in this state.
      */
-    DRM_ERR_INVALID_STATE,
+    DRM_ERR_INVALID_STATE = DRM_CAPI_ERR_BASE + 8,
     /**
      * unsupport interface.
      */
-    DRM_ERR_UNSUPPORTED,
+    DRM_ERR_UNSUPPORTED = DRM_CAPI_ERR_BASE + 9,
     /**
      * Meet max MediaKeySystem num limit.
      */
-    DRM_ERR_MAX_SYSTEM_NUM_REACHED,
+    DRM_ERR_MAX_SYSTEM_NUM_REACHED = DRM_CAPI_ERR_BASE + 10,
     /**
      * Meet max MediaKeySession num limit.
      */
-    DRM_ERR_MAX_SESSION_NUM_REACHED,
+    DRM_ERR_MAX_SESSION_NUM_REACHED = DRM_CAPI_ERR_BASE + 11,
     /**
      * extend err start.
      */
-    DRM_ERR_EXTEND_START = 100,
+    DRM_ERR_EXTEND_START  = DRM_CAPI_ERR_BASE + 100,
 } Drm_ErrCode;
 
 #ifdef __cplusplus
