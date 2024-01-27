@@ -97,6 +97,17 @@ int32_t OH_Drawing_ImageGetWidth(OH_Drawing_Image*);
  */
 int32_t OH_Drawing_ImageGetHeight(OH_Drawing_Image*);
 
+/**
+ * @brief Gets the image info.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_Image Indicates the pointer to an <b>OH_Drawing_Image</b> object.
+ * @param OH_Drawing_Image_Info Indicates the pointer to an <b>OH_Drawing_Image_Info</b> object.
+ * @since 12
+ * @version 1.0
+ */
+void OH_Drawing_ImageGetImageInfo(OH_Drawing_Image*, OH_Drawing_Image_Info*);
+
 #ifdef __cplusplus
 }
 #endif

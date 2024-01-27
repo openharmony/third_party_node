@@ -94,12 +94,27 @@ typedef struct OH_Drawing_Bitmap OH_Drawing_Bitmap;
 typedef struct OH_Drawing_Point OH_Drawing_Point;
 
 /**
- * @brief Defines a point of 3x3, which is used to describe the coordinate point.
+ * @brief Defines a point of 2d.
  *
  * @since 12
  * @version 1.0
  */
-typedef struct OH_Drawing_Point3 OH_Drawing_Point3;
+typedef struct {
+    float x;
+    float y;
+} OH_Drawing_Point2D;
+
+/**
+ * @brief Defines a point of 3d, which is used to describe the coordinate point.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct {
+    float x;
+    float y;
+    float z;
+} OH_Drawing_Point3D;
 
 /**
  * @brief Defines a pathEffect, which is used to affects stroked paths.
@@ -201,15 +216,15 @@ typedef struct OH_Drawing_TextBlob OH_Drawing_TextBlob;
 /**
  * @brief Defines a image, which is used to describe a two dimensional array of pixels to draw.
  *
- * @since 11
+ * @since 12
  * @version 1.0
  */
 typedef struct OH_Drawing_Image OH_Drawing_Image;
 
 /**
- * @brief Defines a matrix, which is used to describe the transforming coordinates.
+ * @brief Defines a sampling options, which is used to describe the sampling mode.
  *
- * @since 11
+ * @since 12
  * @version 1.0
  */
 typedef struct OH_Drawing_SamplingOptions OH_Drawing_SamplingOptions;
@@ -273,7 +288,7 @@ typedef enum {
 } OH_Drawing_AlphaFormat;
 
 /**
- * @brief The blending operation generates a new color for the two colors (source, target).
+ * @brief The blending operation generates a new color for the two colors (source, destination).
  * These operations are the same on the 4 color channels: red, green, blue, alpha.
  * For these, we use alpha channel as an example, rather than naming each channel individually.
  *
@@ -351,6 +366,39 @@ typedef enum {
     /** luminosity of source with hue and saturation of destination. */
     BLEND_MODE_LUMINOSITY,
 } OH_Drawing_BlendMode;
+
+/**
+ * @brief Defines image info struct.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct {
+    /** storage for width of image */
+    int32_t width;
+    /** storage for height of image */
+    int32_t height;
+    /** storage for color formats */
+    OH_Drawing_ColorFormat colorType;
+    /** storage for alpha formats */
+    OH_Drawing_AlphaFormat alphaType;
+} OH_Drawing_Image_Info;
+
+/**
+ * @brief Enumerates text encoding types.
+ * @since 12
+ * @version 1.0
+ */
+typedef enum {
+    /** uses bytes to represent UTF-8 or ASCII */
+    TEXT_ENCODING_UTF8,
+    /** uses two byte words to represent most of Unicode */
+    TEXT_ENCODING_UTF16,
+    /** uses four byte words to represent all of Unicode */
+    TEXT_ENCODING_UTF32,
+    /** uses two byte words to represent glyph indices */
+    TEXT_ENCODING_GLYPH_ID,
+} OH_Drawing_TextEncoding;
 
 #ifdef __cplusplus
 }
