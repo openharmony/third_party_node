@@ -16,6 +16,8 @@ import("//build/ohos/ndk/ndk.gni")
 ohos_ndk_headers("native_drm_header") {
   dest_dir = "$ndk_headers_out_dir/multimedia/drm_framework"
   sources = [
+    "./common/native_drm_common.h",
+    "./common/native_drm_err.h",
     "./native_mediakeysession.h",
     "./native_mediakeysystem.h",
   ]
@@ -29,6 +31,8 @@ ohos_ndk_library("libnative_drm") {
 
   system_capability = "SystemCapability.Multimedia.Drm.Core"
   system_capability_headers = [
+    "multimedia/drm_framework/native_drm_common.h",
+    "multimedia/drm_framework/native_drm_err.h",
     "multimedia/drm_framework/native_mediakeysession.h",
     "multimedia/drm_framework/native_mediakeysystem.h",
   ]
