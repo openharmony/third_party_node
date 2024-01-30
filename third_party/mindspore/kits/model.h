@@ -181,7 +181,7 @@ OH_AI_API OH_AI_TensorHandle OH_AI_ModelGetOutputByTensorName(const OH_AI_ModelH
  * @return TrainCfg object handle.
  * @since 11
  */
-OH_AI_API OH_AI_TrainCfgHandle OH_AI_TrainCfgCreate(void);
+OH_AI_API OH_AI_TrainCfgHandle OH_AI_TrainCfgCreate();
 
 /**
  * @brief Destroy the train_cfg object. Only valid for Lite Train.
