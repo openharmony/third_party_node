@@ -403,10 +403,10 @@ inline InitializerCallback GetInitializerCallback(DLib* dlib) {
   return reinterpret_cast<InitializerCallback>(dlib->GetSymbolAddress(name));
 }
 
-inline napi_addon_register_func GetNapiInitializerCallback(DLib* dlib) {
+inline jsvm_addon_register_func GetNapiInitializerCallback(DLib* dlib) {
   const char* name =
-      STRINGIFY(NAPI_MODULE_INITIALIZER_BASE) STRINGIFY(NAPI_MODULE_VERSION);
-  return reinterpret_cast<napi_addon_register_func>(
+      STRINGIFY(JSVM_MODULE_INITIALIZER_BASE) STRINGIFY(JSVM_MODULE_VERSION);
+  return reinterpret_cast<jsvm_addon_register_func>(
       dlib->GetSymbolAddress(name));
 }
 
@@ -491,13 +491,13 @@ void DLOpen(const FunctionCallbackInfo<Value>& args) {
       if (auto callback = GetInitializerCallback(dlib)) {
         callback(exports, module, context);
         return true;
-      } else if (auto napi_callback = GetNapiInitializerCallback(dlib)) {
+      } else if (auto JSVM_Callback = GetNapiInitializerCallback(dlib)) {
         int32_t module_api_version = NODE_API_DEFAULT_MODULE_API_VERSION;
         if (auto get_version = GetNapiAddonGetApiVersionCallback(dlib)) {
           module_api_version = get_version();
         }
-        napi_module_register_by_symbol(
-            exports, module, context, napi_callback, module_api_version);
+        jsvm_module_register_by_symbol(
+            exports, module, context, JSVM_Callback, module_api_version);
         return true;
       } else {
         mp = dlib->GetSavedModuleFromGlobalHandleMap();

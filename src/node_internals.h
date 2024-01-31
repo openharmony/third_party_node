@@ -402,7 +402,7 @@ namespace fs {
 std::string Basename(const std::string& str, const std::string& extension);
 }  // namespace fs
 
-node_module napi_module_to_node_module(const napi_module* mod);
+node_module jsvm_module_to_node_module(const jsvm_module* mod);
 
 std::ostream& operator<<(std::ostream& output,
                          const std::vector<SnapshotIndex>& v);

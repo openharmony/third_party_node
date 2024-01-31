@@ -2,21 +2,21 @@
 #define SRC_NODE_API_INTERNALS_H_
 
 #include "v8.h"
-#define NAPI_EXPERIMENTAL
+#define JSVM_EXPERIMENTAL
 #include "env-inl.h"
 #include "js_native_api_v8.h"
-#include "node_api.h"
+#include "jsvm_node_api.h"
 #include "util-inl.h"
 
-struct node_napi_env__ : public napi_env__ {
-  node_napi_env__(v8::Local<v8::Context> context,
+struct node_jsvm_env__ : public JSVM_Env__ {
+  node_jsvm_env__(v8::Local<v8::Context> context,
                   const std::string& module_filename,
                   int32_t module_api_version);
 
   bool can_call_into_js() const override;
-  void CallFinalizer(napi_finalize cb, void* data, void* hint) override;
+  void CallFinalizer(JSVM_Finalize cb, void* data, void* hint) override;
   template <bool enforceUncaughtExceptionPolicy>
-  void CallFinalizer(napi_finalize cb, void* data, void* hint);
+  void CallFinalizer(JSVM_Finalize cb, void* data, void* hint);
 
   void EnqueueFinalizer(v8impl::RefTracker* finalizer) override;
   void DrainFinalizerQueue();
@@ -37,6 +37,6 @@ struct node_napi_env__ : public napi_env__ {
   bool finalization_scheduled = false;
 };
 
-using node_napi_env = node_napi_env__*;
+using node_jsvm_env = node_jsvm_env__*;
 
 #endif  // SRC_NODE_API_INTERNALS_H_

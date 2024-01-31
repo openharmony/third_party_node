@@ -1,10 +1,10 @@
 #ifndef SRC_JS_NATIVE_API_V8_H_
 #define SRC_JS_NATIVE_API_V8_H_
 
-#include "js_native_api_types.h"
+#include "jsvm_types.h"
 #include "js_native_api_v8_internals.h"
 
-inline napi_status napi_clear_last_error(napi_env env);
+inline JSVM_Status jsvm_clear_last_error(JSVM_Env env);
 
 namespace v8impl {
 
@@ -50,13 +50,20 @@ class RefTracker {
 class Finalizer;
 }  // end of namespace v8impl
 
-struct napi_env__ {
-  explicit napi_env__(v8::Local<v8::Context> context,
+struct JSVM_Env__ {
+  explicit JSVM_Env__(v8::Local<v8::Context> context,
                       int32_t module_api_version)
       : isolate(context->GetIsolate()),
         context_persistent(isolate, context),
         module_api_version(module_api_version) {
-    napi_clear_last_error(this);
+    jsvm_clear_last_error(this);
+  }
+
+  // Constructor for creating partial env.
+  explicit JSVM_Env__(v8::Isolate* isolate, int32_t module_api_version)
+      : isolate(isolate),
+ module_api_version(module_api_version) {
+    jsvm_clear_last_error(this);
   }
 
   inline v8::Local<v8::Context> context() const {
@@ -70,7 +77,7 @@ struct napi_env__ {
 
   virtual bool can_call_into_js() const { return true; }
 
-  static inline void HandleThrow(napi_env env, v8::Local<v8::Value> value) {
+  static inline void HandleThrow(JSVM_Env env, v8::Local<v8::Value> value) {
     if (env->terminatedOrTerminating()) {
       return;
     }
@@ -89,7 +96,7 @@ struct napi_env__ {
   inline void CallIntoModule(T&& call, U&& handle_exception = HandleThrow) {
     int open_handle_scopes_before = open_handle_scopes;
     int open_callback_scopes_before = open_callback_scopes;
-    napi_clear_last_error(this);
+    jsvm_clear_last_error(this);
     call(this);
     CHECK_EQ(open_handle_scopes, open_handle_scopes_before);
     CHECK_EQ(open_callback_scopes, open_callback_scopes_before);
@@ -100,12 +107,12 @@ struct napi_env__ {
   }
 
   // Call finalizer immediately.
-  virtual void CallFinalizer(napi_finalize cb, void* data, void* hint) {
+  virtual void CallFinalizer(JSVM_Finalize cb, void* data, void* hint) {
     v8::HandleScope handle_scope(isolate);
-    CallIntoModule([&](napi_env env) { cb(env, data, hint); });
+    CallIntoModule([&](JSVM_Env env) { cb(env, data, hint); });
   }
 
-  // Enqueue the finalizer to the napi_env's own queue of the second pass
+  // Enqueue the finalizer to the JSVM_Env's own queue of the second pass
   // weak callback.
   // Implementation should drain the queue at the time it is safe to call
   // into JavaScript.
@@ -120,11 +127,11 @@ struct napi_env__ {
   }
 
   virtual void DeleteMe() {
-    // First we must finalize those references that have `napi_finalizer`
+    // First we must finalize those references that have `JSVM_Finalizer`
     // callbacks. The reason is that addons might store other references which
-    // they delete during their `napi_finalizer` callbacks. If we deleted such
+    // they delete during their `JSVM_Finalizer` callbacks. If we deleted such
     // references here first, they would be doubly deleted when the
-    // `napi_finalizer` deleted them subsequently.
+    // `JSVM_Finalizer` deleted them subsequently.
     v8impl::RefTracker::FinalizeAll(&finalizing_reflist);
     v8impl::RefTracker::FinalizeAll(&reflist);
     delete this;
@@ -136,13 +143,13 @@ struct napi_env__ {
   v8impl::Persistent<v8::Value> last_exception;
 
   // We store references in two different lists, depending on whether they have
-  // `napi_finalizer` callbacks, because we must first finalize the ones that
-  // have such a callback. See `~napi_env__()` above for details.
+  // `JSVM_Finalizer` callbacks, because we must first finalize the ones that
+  // have such a callback. See `~JSVM_Env__()` above for details.
   v8impl::RefTracker::RefList reflist;
   v8impl::RefTracker::RefList finalizing_reflist;
   // The invocation order of the finalizers is not determined.
   std::unordered_set<v8impl::RefTracker*> pending_finalizers;
-  napi_extended_error_info last_error;
+  JSVM_ExtendedErrorInfo last_error;
   int open_handle_scopes = 0;
   int open_callback_scopes = 0;
   int refs = 1;
@@ -150,57 +157,57 @@ struct napi_env__ {
   int32_t module_api_version = NODE_API_DEFAULT_MODULE_API_VERSION;
 
  protected:
-  // Should not be deleted directly. Delete with `napi_env__::DeleteMe()`
+  // Should not be deleted directly. Delete with `JSVM_Env__::DeleteMe()`
   // instead.
-  virtual ~napi_env__() = default;
+  virtual ~JSVM_Env__() = default;
 };
 
-inline napi_status napi_clear_last_error(napi_env env) {
-  env->last_error.error_code = napi_ok;
-  env->last_error.engine_error_code = 0;
-  env->last_error.engine_reserved = nullptr;
-  env->last_error.error_message = nullptr;
-  return napi_ok;
+inline JSVM_Status jsvm_clear_last_error(JSVM_Env env) {
+  env->last_error.errorCode = JSVM_OK;
+  env->last_error.engineErrorCode = 0;
+  env->last_error.engineReserved = nullptr;
+  env->last_error.errorMessage = nullptr;
+  return JSVM_OK;
 }
 
-inline napi_status napi_set_last_error(napi_env env,
-                                       napi_status error_code,
-                                       uint32_t engine_error_code = 0,
-                                       void* engine_reserved = nullptr) {
-  env->last_error.error_code = error_code;
-  env->last_error.engine_error_code = engine_error_code;
-  env->last_error.engine_reserved = engine_reserved;
-  return error_code;
+inline JSVM_Status jsvm_set_last_error(JSVM_Env env,
+                                       JSVM_Status errorCode,
+                                       uint32_t engineErrorCode = 0,
+                                       void* engineReserved = nullptr) {
+  env->last_error.errorCode = errorCode;
+  env->last_error.engineErrorCode = engineErrorCode;
+  env->last_error.engineReserved = engineReserved;
+  return errorCode;
 }
 
 #define RETURN_STATUS_IF_FALSE(env, condition, status)                         \
   do {                                                                         \
     if (!(condition)) {                                                        \
-      return napi_set_last_error((env), (status));                             \
+      return jsvm_set_last_error((env), (status));                             \
     }                                                                          \
   } while (0)
 
 #define RETURN_STATUS_IF_FALSE_WITH_PREAMBLE(env, condition, status)           \
   do {                                                                         \
     if (!(condition)) {                                                        \
-      return napi_set_last_error(                                              \
-          (env), try_catch.HasCaught() ? napi_pending_exception : (status));   \
+      return jsvm_set_last_error(                                              \
+          (env), try_catch.HasCaught() ? JSVM_PENDING_EXCEPTION : (status));   \
     }                                                                          \
   } while (0)
 
 #define CHECK_ENV(env)                                                         \
   do {                                                                         \
     if ((env) == nullptr) {                                                    \
-      return napi_invalid_arg;                                                 \
+      return JSVM_INVALID_ARG;                                                 \
     }                                                                          \
   } while (0)
 
 #define CHECK_ARG(env, arg)                                                    \
-  RETURN_STATUS_IF_FALSE((env), ((arg) != nullptr), napi_invalid_arg)
+  RETURN_STATUS_IF_FALSE((env), ((arg) != nullptr), JSVM_INVALID_ARG)
 
 #define CHECK_ARG_WITH_PREAMBLE(env, arg)                                      \
   RETURN_STATUS_IF_FALSE_WITH_PREAMBLE(                                        \
-      (env), ((arg) != nullptr), napi_invalid_arg)
+      (env), ((arg) != nullptr), JSVM_INVALID_ARG)
 
 #define CHECK_MAYBE_EMPTY(env, maybe, status)                                  \
   RETURN_STATUS_IF_FALSE((env), !((maybe).IsEmpty()), (status))
@@ -208,17 +215,17 @@ inline napi_status napi_set_last_error(napi_env env,
 #define CHECK_MAYBE_EMPTY_WITH_PREAMBLE(env, maybe, status)                    \
   RETURN_STATUS_IF_FALSE_WITH_PREAMBLE((env), !((maybe).IsEmpty()), (status))
 
-// NAPI_PREAMBLE is not wrapped in do..while: try_catch must have function scope
-#define NAPI_PREAMBLE(env)                                                     \
+// JSVM_PREAMBLE is not wrapped in do..while: try_catch must have function scope
+#define JSVM_PREAMBLE(env)                                                     \
   CHECK_ENV((env));                                                            \
   RETURN_STATUS_IF_FALSE(                                                      \
-      (env), (env)->last_exception.IsEmpty(), napi_pending_exception);         \
+      (env), (env)->last_exception.IsEmpty(), JSVM_PENDING_EXCEPTION);         \
   RETURN_STATUS_IF_FALSE((env),                                                \
                          (env)->can_call_into_js(),                            \
-                         (env->module_api_version == NAPI_VERSION_EXPERIMENTAL \
-                              ? napi_cannot_run_js                             \
-                              : napi_pending_exception));                      \
-  napi_clear_last_error((env));                                                \
+                         (env->module_api_version == JSVM_VERSION_EXPERIMENTAL \
+                              ? JSVM_CANNOT_RUN_JS                             \
+                              : JSVM_PENDING_EXCEPTION));                      \
+  jsvm_clear_last_error((env));                                                \
   v8impl::TryCatch try_catch((env))
 
 #define CHECK_TO_TYPE(env, type, context, result, src, status)                 \
@@ -241,38 +248,38 @@ inline napi_status napi_set_last_error(napi_env env,
   do {                                                                         \
     CHECK_ARG((env), (src));                                                   \
     v8::Local<v8::Value> v8value = v8impl::V8LocalValueFromJsValue((src));     \
-    RETURN_STATUS_IF_FALSE((env), v8value->IsFunction(), napi_invalid_arg);    \
+    RETURN_STATUS_IF_FALSE((env), v8value->IsFunction(), JSVM_INVALID_ARG);    \
     (result) = v8value.As<v8::Function>();                                     \
   } while (0)
 
 #define CHECK_TO_OBJECT(env, context, result, src)                             \
-  CHECK_TO_TYPE((env), Object, (context), (result), (src), napi_object_expected)
+  CHECK_TO_TYPE((env), Object, (context), (result), (src), JSVM_OBJECT_EXPECTED)
 
 #define CHECK_TO_OBJECT_WITH_PREAMBLE(env, context, result, src)               \
   CHECK_TO_TYPE_WITH_PREAMBLE(                                                 \
-      (env), Object, (context), (result), (src), napi_object_expected)
+      (env), Object, (context), (result), (src), JSVM_OBJECT_EXPECTED)
 
 #define CHECK_TO_STRING(env, context, result, src)                             \
-  CHECK_TO_TYPE((env), String, (context), (result), (src), napi_string_expected)
+  CHECK_TO_TYPE((env), String, (context), (result), (src), JSVM_STRING_EXPECTED)
 
 #define GET_RETURN_STATUS(env)                                                 \
   (!try_catch.HasCaught()                                                      \
-       ? napi_ok                                                               \
-       : napi_set_last_error((env), napi_pending_exception))
+       ? JSVM_OK                                                               \
+       : jsvm_set_last_error((env), JSVM_PENDING_EXCEPTION))
 
 #define THROW_RANGE_ERROR_IF_FALSE(env, condition, error, message)             \
   do {                                                                         \
     if (!(condition)) {                                                        \
-      napi_throw_range_error((env), (error), (message));                       \
-      return napi_set_last_error((env), napi_generic_failure);                 \
+      OH_JSVM_ThrowRangeError((env), (error), (message));                       \
+      return jsvm_set_last_error((env), JSVM_GENERIC_FAILURE);                 \
     }                                                                          \
   } while (0)
 
 #define RETURN_STATUS_IF_FALSE_WITH_PREAMBLE(env, condition, status)           \
   do {                                                                         \
     if (!(condition)) {                                                        \
-      return napi_set_last_error(                                              \
-          (env), try_catch.HasCaught() ? napi_pending_exception : (status));   \
+      return jsvm_set_last_error(                                              \
+          (env), try_catch.HasCaught() ? JSVM_PENDING_EXCEPTION : (status));   \
     }                                                                          \
   } while (0)
 
@@ -281,34 +288,34 @@ inline napi_status napi_set_last_error(napi_env env,
 
 #define STATUS_CALL(call)                                                      \
   do {                                                                         \
-    napi_status status = (call);                                               \
-    if (status != napi_ok) return status;                                      \
+    JSVM_Status status = (call);                                               \
+    if (status != JSVM_OK) return status;                                      \
   } while (0)
 
 namespace v8impl {
 
-//=== Conversion between V8 Handles and napi_value ========================
+//=== Conversion between V8 Handles and JSVM_Value ========================
 
 // This asserts v8::Local<> will always be implemented with a single
 // pointer field so that we can pass it around as a void*.
-static_assert(sizeof(v8::Local<v8::Value>) == sizeof(napi_value),
-              "Cannot convert between v8::Local<v8::Value> and napi_value");
+static_assert(sizeof(v8::Local<v8::Value>) == sizeof(JSVM_Value),
+              "Cannot convert between v8::Local<v8::Value> and JSVM_Value");
 
-inline napi_value JsValueFromV8LocalValue(v8::Local<v8::Value> local) {
-  return reinterpret_cast<napi_value>(*local);
+inline JSVM_Value JsValueFromV8LocalValue(v8::Local<v8::Value> local) {
+  return reinterpret_cast<JSVM_Value>(*local);
 }
 
-inline v8::Local<v8::Value> V8LocalValueFromJsValue(napi_value v) {
+inline v8::Local<v8::Value> V8LocalValueFromJsValue(JSVM_Value v) {
   v8::Local<v8::Value> local;
   memcpy(static_cast<void*>(&local), &v, sizeof(v));
   return local;
 }
 
-// Adapter for napi_finalize callbacks.
+// Adapter for JSVM_Finalize callbacks.
 class Finalizer {
  protected:
-  Finalizer(napi_env env,
-            napi_finalize finalize_callback,
+  Finalizer(JSVM_Env env,
+            JSVM_Finalize finalize_callback,
             void* finalize_data,
             void* finalize_hint)
       : env_(env),
@@ -319,29 +326,29 @@ class Finalizer {
   virtual ~Finalizer() = default;
 
  public:
-  static Finalizer* New(napi_env env,
-                        napi_finalize finalize_callback = nullptr,
+  static Finalizer* New(JSVM_Env env,
+                        JSVM_Finalize finalize_callback = nullptr,
                         void* finalize_data = nullptr,
                         void* finalize_hint = nullptr) {
     return new Finalizer(env, finalize_callback, finalize_data, finalize_hint);
   }
 
-  napi_finalize callback() { return finalize_callback_; }
+  JSVM_Finalize callback() { return finalize_callback_; }
   void* data() { return finalize_data_; }
   void* hint() { return finalize_hint_; }
 
   void ResetFinalizer();
 
  protected:
-  napi_env env_;
-  napi_finalize finalize_callback_;
+  JSVM_Env env_;
+  JSVM_Finalize finalize_callback_;
   void* finalize_data_;
   void* finalize_hint_;
 };
 
 class TryCatch : public v8::TryCatch {
  public:
-  explicit TryCatch(napi_env env) : v8::TryCatch(env->isolate), _env(env) {}
+  explicit TryCatch(JSVM_Env env) : v8::TryCatch(env->isolate), _env(env) {}
 
   ~TryCatch() {
     if (HasCaught()) {
@@ -350,7 +357,7 @@ class TryCatch : public v8::TryCatch {
   }
 
  private:
-  napi_env _env;
+  JSVM_Env _env;
 };
 
 // Ownership of a reference.
@@ -366,20 +373,20 @@ enum class Ownership {
 // Wrapper around Finalizer that implements reference counting.
 class RefBase : public Finalizer, public RefTracker {
  protected:
-  RefBase(napi_env env,
-          uint32_t initial_refcount,
+  RefBase(JSVM_Env env,
+          uint32_t initialRefcount,
           Ownership ownership,
-          napi_finalize finalize_callback,
-          void* finalize_data,
-          void* finalize_hint);
+          JSVM_Finalize finalizeCallback,
+          void* finalizeData,
+          void* finalizeHint);
 
  public:
-  static RefBase* New(napi_env env,
-                      uint32_t initial_refcount,
+  static RefBase* New(JSVM_Env env,
+                      uint32_t initialRefcount,
                       Ownership ownership,
-                      napi_finalize finalize_callback,
-                      void* finalize_data,
-                      void* finalize_hint);
+                      JSVM_Finalize finalizeCallback,
+                      void* finalizeData,
+                      void* finalizeHint);
   virtual ~RefBase();
 
   void* Data();
@@ -401,16 +408,16 @@ class RefBase : public Finalizer, public RefTracker {
 class Reference : public RefBase {
  protected:
   template <typename... Args>
-  Reference(napi_env env, v8::Local<v8::Value> value, Args&&... args);
+  Reference(JSVM_Env env, v8::Local<v8::Value> value, Args&&... args);
 
  public:
-  static Reference* New(napi_env env,
+  static Reference* New(JSVM_Env env,
                         v8::Local<v8::Value> value,
-                        uint32_t initial_refcount,
+                        uint32_t initialRefcount,
                         Ownership ownership,
-                        napi_finalize finalize_callback = nullptr,
-                        void* finalize_data = nullptr,
-                        void* finalize_hint = nullptr);
+                        JSVM_Finalize finalizeCallback = nullptr,
+                        void* finalizeData = nullptr,
+                        void* finalizeHint = nullptr);
 
   virtual ~Reference();
   uint32_t Ref();

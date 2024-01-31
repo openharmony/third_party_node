@@ -19,13 +19,13 @@
 #include "gtest/gtest_prod.h"
 #include "node_internals.h"
 
-#define NAPI_ARRAYSIZE(array) node::arraysize((array))
+#define JSVM_ARRAYSIZE(array) node::arraysize((array))
 
-#define NAPI_FIXED_ONE_BYTE_STRING(isolate, string)                            \
+#define JSVM_FIXED_ONE_BYTE_STRING(isolate, string)                            \
   node::FIXED_ONE_BYTE_STRING((isolate), (string))
 
-#define NAPI_PRIVATE_KEY(context, suffix)                                      \
-  (node::Environment::GetCurrent((context))->napi_##suffix())
+#define JSVM_PRIVATE_KEY(isolate, suffix)                                      \
+    (v8impl::GetIsolateData(isolate)->jsvm_##suffix##_key.Get(isolate))
 
 namespace v8impl {
 
