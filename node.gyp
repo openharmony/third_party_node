@@ -26,7 +26,7 @@
     'node_v8_options%': '',
     'node_enable_v8_vtunejit%': 'false',
     'node_core_target_name%': 'node',
-    'node_lib_target_name%': 'libnode',
+    'node_lib_target_name%': 'libjsvm',
     'node_intermediate_lib_type%': 'static_library',
     'node_builtin_modules_path%': '',
     # We list the deps/ files out instead of globbing them in js2c.py since we
@@ -118,9 +118,9 @@
           '-Wl,-bnoerrmsg',
         ],
       }],
-      ['OS == "linux" and llvm_version != "0.0"', {
-        'libraries': ['-latomic'],
-      }],
+      #['OS == "linux" and llvm_version != "0.0"', {
+      #  'libraries': ['-latomic'],
+      #}],
     ],
   },
 
@@ -493,8 +493,8 @@
         'src/handle_wrap.cc',
         'src/heap_utils.cc',
         'src/histogram.cc',
-        'src/js_native_api.h',
-        'src/js_native_api_types.h',
+        'src/jsvm.h',
+        'src/jsvm_types.h',
         'src/js_native_api_v8.cc',
         'src/js_native_api_v8.h',
         'src/js_native_api_v8_internals.h',
@@ -606,8 +606,8 @@
         'src/memory_tracker-inl.h',
         'src/module_wrap.h',
         'src/node.h',
-        'src/node_api.h',
-        'src/node_api_types.h',
+        'src/jsvm_node_api.h',
+        'src/jsvm_node_api_types.h',
         'src/node_binding.h',
         'src/node_blob.h',
         'src/node_buffer.h',
@@ -1209,173 +1209,173 @@
         }],
       ],
     }, # fuzz_env
-    {
-      'target_name': 'cctest',
-      'type': 'executable',
+    #{
+    #  'target_name': 'cctest',
+    #  'type': 'executable',
 
-      'dependencies': [
-        '<(node_lib_target_name)',
-        'deps/base64/base64.gyp:base64',
-        'deps/googletest/googletest.gyp:gtest',
-        'deps/googletest/googletest.gyp:gtest_main',
-        'deps/histogram/histogram.gyp:histogram',
-        'deps/uvwasi/uvwasi.gyp:uvwasi',
-        'node_dtrace_header',
-        'node_dtrace_ustack',
-        'node_dtrace_provider',
-        'deps/simdutf/simdutf.gyp:simdutf',
-        'deps/ada/ada.gyp:ada',
-      ],
+    #  'dependencies': [
+    #    '<(node_lib_target_name)',
+    #    'deps/base64/base64.gyp:base64',
+    #    'deps/googletest/googletest.gyp:gtest',
+    #    'deps/googletest/googletest.gyp:gtest_main',
+    #    'deps/histogram/histogram.gyp:histogram',
+    #    'deps/uvwasi/uvwasi.gyp:uvwasi',
+    #    'node_dtrace_header',
+    #    'node_dtrace_ustack',
+    #    'node_dtrace_provider',
+    #    'deps/simdutf/simdutf.gyp:simdutf',
+    #    'deps/ada/ada.gyp:ada',
+    #  ],
 
-      'includes': [
-        'node.gypi'
-      ],
+    #  'includes': [
+    #    'node.gypi'
+    #  ],
 
-      'include_dirs': [
-        'src',
-        'tools/msvs/genfiles',
-        'deps/v8/include',
-        'deps/cares/include',
-        'deps/uv/include',
-        'deps/uvwasi/include',
-        'test/cctest',
-      ],
+    #  'include_dirs': [
+    #    'src',
+    #    'tools/msvs/genfiles',
+    #    'deps/v8/include',
+    #    'deps/cares/include',
+    #    'deps/uv/include',
+    #    'deps/uvwasi/include',
+    #    'test/cctest',
+    #  ],
 
-      'defines': [
-        'NODE_ARCH="<(target_arch)"',
-        'NODE_PLATFORM="<(OS)"',
-        'NODE_WANT_INTERNALS=1',
-      ],
+    #  'defines': [
+    #    'NODE_ARCH="<(target_arch)"',
+    #    'NODE_PLATFORM="<(OS)"',
+    #    'NODE_WANT_INTERNALS=1',
+    #  ],
 
-      'sources': [
-        'src/node_snapshot_stub.cc',
-        'test/cctest/node_test_fixture.cc',
-        'test/cctest/node_test_fixture.h',
-        'test/cctest/test_aliased_buffer.cc',
-        'test/cctest/test_base64.cc',
-        'test/cctest/test_base_object_ptr.cc',
-        'test/cctest/test_node_postmortem_metadata.cc',
-        'test/cctest/test_environment.cc',
-        'test/cctest/test_linked_binding.cc',
-        'test/cctest/test_node_api.cc',
-        'test/cctest/test_per_process.cc',
-        'test/cctest/test_platform.cc',
-        'test/cctest/test_report.cc',
-        'test/cctest/test_json_utils.cc',
-        'test/cctest/test_sockaddr.cc',
-        'test/cctest/test_traced_value.cc',
-        'test/cctest/test_util.cc',
-      ],
+    #  'sources': [
+    #    'src/node_snapshot_stub.cc',
+    #    'test/cctest/node_test_fixture.cc',
+    #    'test/cctest/node_test_fixture.h',
+    #    'test/cctest/test_aliased_buffer.cc',
+    #    'test/cctest/test_base64.cc',
+    #    'test/cctest/test_base_object_ptr.cc',
+    #    'test/cctest/test_node_postmortem_metadata.cc',
+    #    'test/cctest/test_environment.cc',
+    #    'test/cctest/test_linked_binding.cc',
+    #    'test/cctest/test_node_api.cc',
+    #    'test/cctest/test_per_process.cc',
+    #    'test/cctest/test_platform.cc',
+    #    'test/cctest/test_report.cc',
+    #    'test/cctest/test_json_utils.cc',
+    #    'test/cctest/test_sockaddr.cc',
+    #    'test/cctest/test_traced_value.cc',
+    #    'test/cctest/test_util.cc',
+    #  ],
 
-      'conditions': [
-        [ 'node_use_openssl=="true"', {
-          'defines': [
-            'HAVE_OPENSSL=1',
-          ],
-          'sources': [
-            'test/cctest/test_crypto_clienthello.cc',
-            'test/cctest/test_node_crypto.cc',
-            'test/cctest/test_node_crypto_env.cc',
-          ]
-        }],
-        ['v8_enable_inspector==1', {
-          'sources': [
-            'test/cctest/test_inspector_socket.cc',
-            'test/cctest/test_inspector_socket_server.cc'
-          ],
-          'defines': [
-            'HAVE_INSPECTOR=1',
-          ],
-        }, {
-           'defines': [
-             'HAVE_INSPECTOR=0',
-           ]
-        }],
-        ['OS=="solaris"', {
-          'ldflags': [ '-I<(SHARED_INTERMEDIATE_DIR)' ]
-        }],
+    #  'conditions': [
+    #    [ 'node_use_openssl=="true"', {
+    #      'defines': [
+    #        'HAVE_OPENSSL=1',
+    #      ],
+    #      'sources': [
+    #        'test/cctest/test_crypto_clienthello.cc',
+    #        'test/cctest/test_node_crypto.cc',
+    #        'test/cctest/test_node_crypto_env.cc',
+    #      ]
+    #    }],
+    #    ['v8_enable_inspector==1', {
+    #      'sources': [
+    #        'test/cctest/test_inspector_socket.cc',
+    #        'test/cctest/test_inspector_socket_server.cc'
+    #      ],
+    #      'defines': [
+    #        'HAVE_INSPECTOR=1',
+    #      ],
+    #    }, {
+    #       'defines': [
+    #         'HAVE_INSPECTOR=0',
+    #       ]
+    #    }],
+    #    ['OS=="solaris"', {
+    #      'ldflags': [ '-I<(SHARED_INTERMEDIATE_DIR)' ]
+    #    }],
         # Skip cctest while building shared lib node for Windows
-        [ 'OS=="win" and node_shared=="true"', {
-          'type': 'none',
-        }],
-        [ 'node_shared=="true"', {
-          'xcode_settings': {
-            'OTHER_LDFLAGS': [ '-Wl,-rpath,@loader_path', ],
-          },
-        }],
-        ['OS=="win"', {
-          'libraries': [
-            'Dbghelp.lib',
-            'winmm.lib',
-            'Ws2_32.lib',
-          ],
-        }],
+    #    [ 'OS=="win" and node_shared=="true"', {
+    #      'type': 'none',
+    #    }],
+    #    [ 'node_shared=="true"', {
+    #      #'xcode_settings': {
+    #        'OTHER_LDFLAGS': [ '-Wl,-rpath,@loader_path', ],
+    #      },
+    #    }],
+    #    ['OS=="win"', {
+    #      'libraries': [
+    #        'Dbghelp.lib',
+    #        'winmm.lib',
+    #        'Ws2_32.lib',
+    #      ],
+    #    }],
         # Avoid excessive LTO
-        ['enable_lto=="true"', {
-          'ldflags': [ '-fno-lto' ],
-        }],
-      ],
-    }, # cctest
+    #    ['enable_lto=="true"', {
+    #      'ldflags': [ '-fno-lto' ],
+    #    }],
+    #  ],
+    #}, # cctest
 
-    {
-      'target_name': 'embedtest',
-      'type': 'executable',
+    #{
+    #  'target_name': 'embedtest',
+    #  'type': 'executable',
 
-      'dependencies': [
-        '<(node_lib_target_name)',
-        'deps/histogram/histogram.gyp:histogram',
-        'deps/uvwasi/uvwasi.gyp:uvwasi',
-        'node_dtrace_header',
-        'node_dtrace_ustack',
-        'node_dtrace_provider',
-        'deps/ada/ada.gyp:ada',
-      ],
+    #  'dependencies': [
+    #    '<(node_lib_target_name)',
+    #    'deps/histogram/histogram.gyp:histogram',
+    #    'deps/uvwasi/uvwasi.gyp:uvwasi',
+    #    'node_dtrace_header',
+    #    'node_dtrace_ustack',
+    #    'node_dtrace_provider',
+    #    'deps/ada/ada.gyp:ada',
+    #  ],
 
-      'includes': [
-        'node.gypi'
-      ],
+    #  'includes': [
+    #    'node.gypi'
+    #  ],
 
-      'include_dirs': [
-        'src',
-        'tools/msvs/genfiles',
-        'deps/v8/include',
-        'deps/cares/include',
-        'deps/uv/include',
-        'deps/uvwasi/include',
-        'test/embedding',
-      ],
+    #  'include_dirs': [
+    #    'src',
+    #    'tools/msvs/genfiles',
+    #    'deps/v8/include',
+    #    'deps/cares/include',
+    #    'deps/uv/include',
+    #    'deps/uvwasi/include',
+    #    'test/embedding',
+    #  ],
 
-      'sources': [
-        'src/node_snapshot_stub.cc',
-        'test/embedding/embedtest.cc',
-      ],
+    #  'sources': [
+    #    'src/node_snapshot_stub.cc',
+    #    'test/embedding/embedtest.cc',
+    #  ],
 
-      'conditions': [
-        ['OS=="solaris"', {
-          'ldflags': [ '-I<(SHARED_INTERMEDIATE_DIR)' ]
-        }],
+    #  'conditions': [
+    #    ['OS=="solaris"', {
+    #      'ldflags': [ '-I<(SHARED_INTERMEDIATE_DIR)' ]
+    #    }],
         # Skip cctest while building shared lib node for Windows
-        [ 'OS=="win" and node_shared=="true"', {
-          'type': 'none',
-        }],
-        [ 'node_shared=="true"', {
-          'xcode_settings': {
-            'OTHER_LDFLAGS': [ '-Wl,-rpath,@loader_path', ],
-          },
-        }],
-        ['OS=="win"', {
-          'libraries': [
-            'Dbghelp.lib',
-            'winmm.lib',
-            'Ws2_32.lib',
-          ],
-        }],
+    #    [ 'OS=="win" and node_shared=="true"', {
+    #      'type': 'none',
+    #    }],
+    #    [ 'node_shared=="true"', {
+    #      'xcode_settings': {
+    #        'OTHER_LDFLAGS': [ '-Wl,-rpath,@loader_path', ],
+    #      },
+    #    }],
+    #    ['OS=="win"', {
+    #      'libraries': [
+    #        'Dbghelp.lib',
+    #        'winmm.lib',
+    #        'Ws2_32.lib',
+    #      ],
+    #    }],
         # Avoid excessive LTO
-        ['enable_lto=="true"', {
-          'ldflags': [ '-fno-lto' ],
-        }],
-      ],
-    }, # embedtest
+    #    ['enable_lto=="true"', {
+    #      'ldflags': [ '-fno-lto' ],
+    #    }],
+    #  ],
+    #}, # embedtest
 
     {
       'target_name': 'overlapped-checker',

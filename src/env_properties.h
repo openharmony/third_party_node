@@ -21,8 +21,8 @@
   V(arrow_message_private_symbol, "node:arrowMessage")                         \
   V(contextify_context_private_symbol, "node:contextify:context")              \
   V(decorated_private_symbol, "node:decorated")                                \
-  V(napi_type_tag, "node:napi:type_tag")                                       \
-  V(napi_wrapper, "node:napi:wrapper")                                         \
+  V(jsvm_type_tag, "node:napi:type_tag")                                       \
+  V(jsvm_wrapper, "node:napi:wrapper")                                         \
   V(untransferable_object_private_symbol, "node:untransferableObject")         \
   V(exiting_aliased_Uint32Array, "node:exiting_aliased_Uint32Array")           \
   V(require_private_symbol, "node:require_private_symbol")
