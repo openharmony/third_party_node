@@ -2144,25 +2144,25 @@ JSVM_EXTERN JSVM_Status OH_JSVM_StartCPUProfiler(JSVM_VM vm,
  * @param vm: THe VM to start CPU profiler for.
  * @param profiler: The CPU profiler to stop.
  * @param stream: The output stream callback for receiving the data.
- * @param stream_data: Optional data to be passed to the stream callback.
+ * @param streamData: Optional data to be passed to the stream callback.
  * @return Returns JSVM_ok if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_StopCPUProfiler(JSVM_VM vm,
                                                 JSVM_CPUProfiler profiler,
                                                 JSVM_OutputStream stream,
-                                                void* stream_data);
+                                                void* streamData);
 /**
  * @brief This funciton takes the current heap snapshot and output to the stream.
  * @param vm: The VM whose heap snapshot is taken.
  * @param stream: The output stream callback for receiving the data.
- * @param stream_data: Optional data to be passed to the stream callback.
+ * @param streamData: Optional data to be passed to the stream callback.
  * @return Returns JSVM_ok if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_TakeHeapSnapshot(JSVM_VM vm,
                                                  JSVM_OutputStream stream,
-                                                 void* stream_data);
+                                                 void* streamData);
 
 /**
  * @brief This functiong activates insepctor on host and port.
@@ -2188,12 +2188,12 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CloseInspector(JSVM_Env env);
  * @brief This function will block until a client (existing or connected later)
  * has sent Runtime.runIfWaitingForDebugger command.
  * @param env: The environment that the API is invoked under.
- * @param break_next_line: Whether break on the next line of JavaScript code.
+ * @param breakNextLine: Whether break on the next line of JavaScript code.
  * @return Returns JSVM_ok if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_WaitForDebugger(JSVM_Env env,
-                                                bool break_next_line);
+                                                bool breakNextLine);
 
 EXTERN_C_END
 
