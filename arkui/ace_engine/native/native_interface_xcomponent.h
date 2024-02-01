@@ -354,7 +354,7 @@ typedef struct {
  *        Notice that a null-terminator will be appended to the char buffer, so the size of the\n
  *        char buffer should be at least as large as the size of the real id length plus 1.\n
  *        It is recommended that the size of the char buffer be [OH_XCOMPONENT_ID_LEN_MAX + 1].
- * @param size Indicates the pointer to the length of <b>id</b>, which you can set and receive.
+ * @param size Indicates the pointer to the length of <b>id</b>, which you can receive.
  * @return Returns the status code of the execution.
  * @since 8
  * @version 1.0
