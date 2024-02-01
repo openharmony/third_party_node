@@ -93,6 +93,13 @@ typedef struct JSVM_Script__* JSVM_Script;
 typedef struct JSVM_Env__* JSVM_Env;
 
 /**
+ * @brief To represent a JavaScript profiler.
+ *
+ * @since 11
+ */
+typedef struct JSVM_CPUProfiler__* JSVM_CPUProfiler;
+
+/**
  * @brief To represent a JavaScript VM environment.
  *
  * @since 11
@@ -161,6 +168,15 @@ typedef JSVM_CallbackStruct* JSVM_Callback;
 typedef void(JSVM_CDECL* JSVM_Finalize)(JSVM_Env env,
                                         void* finalizeData,
                                         void* finalizeHint);
+
+/**
+ * @brief Function pointer type for callback of ASCII output stream.
+ *
+ * @since 11
+ */
+typedef bool(JSVM_CDECL* JSVM_OutputStream)(const char* data,
+                                            int size,
+                                            void* stream_data);
 
 /**
  * @brief JSVM_PropertyAttributes are flag used to control the behavior of properties set on a js object.
@@ -355,6 +371,40 @@ typedef enum {
     /** critical pressure. */
     JSVM_MEMORY_PRESSURE_LEVEL_CRITICAL,
 } JSVM_MemoryPressureLevel;
+
+/**
+ * @brief Heap statisics.
+ *
+ * @since 11
+ */
+typedef struct {
+    /** the size of the total heap. */
+    size_t total_heap_size;
+    /** the executable size of the total heap. */
+    size_t total_heap_size_executable;
+    /** the physical size of the total heap. */
+    size_t total_physical_size;
+    /** the available size of the total heap. */
+    size_t total_available_size;
+    /** used size of the heap. */
+    size_t used_heap_size;
+    /** heap size limit. */
+    size_t heap_size_limit;
+    /** memory requested by the heap. */
+    size_t malloced_memory;
+    /** heap-requested external memory. */
+    size_t external_memory;
+    /** peak memory requested by the heap. */
+    size_t peak_malloced_memory;
+    /** the number of native contexts. */
+    size_t number_of_native_contexts;
+    /** the number of detached contexts. */
+    size_t number_of_detached_contexts;
+    /** the size of the total global handles. */
+    size_t total_global_handles_size;
+    /** the size of the used global handles. */
+    size_t used_global_handles_size;
+} JSVM_HeapStatistics;
 
 /**
  * @brief Init the JavaScript VM with init option.
