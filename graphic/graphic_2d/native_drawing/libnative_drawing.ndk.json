@@ -130,6 +130,10 @@
     { "name": "OH_Drawing_PenSetJoin" },
     { "name": "OH_Drawing_PenSetFilter" },
     { "name": "OH_Drawing_PenSetShaderEffect" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_PenSetPathEffect"
+    },
     { "name": "OH_Drawing_PointCreate" },
     { "name": "OH_Drawing_PointDestroy" },
     { "name": "OH_Drawing_ColorSetArgb" },
