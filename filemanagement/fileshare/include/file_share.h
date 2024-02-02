@@ -70,7 +70,12 @@ typedef enum OH_PolicyErrorCode  {
     /**
      * @brief Indicates that the path of this policy is invalid.
      */
-    INVALID_PATH = 3
+    INVALID_PATH = 3,
+
+    /**
+     * @brief Indicates that the policy is no persistence capability.
+     */
+    PERSISTENCE_WITHOUT = 4
 } OH_PolicyErrorCode;
 
 /**
@@ -179,7 +184,7 @@ int OH_FileShare_DeactivatePermission(const OH_PolicyInfo *policies, int policyN
  * @see OH_PolicyInfo, OH_PolicyErrorResult
  * @since 12
  */
-int OH_FileShare_CheckPersistPermission(const OH_PolicyInfo *policies, int policyNum, bool **result);
+int OH_FileShare_CheckPersistentPermission(const OH_PolicyInfo *policies, int policyNum, bool **result);
 #ifdef __cplusplus
 };
 #endif
