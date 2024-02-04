@@ -1,0 +1,6 @@
+[
+    {"name":"OH_Environment_GetUserDownloadDir" },
+    {"name":"OH_Environment_GetUserDesktopDir" },
+    {"name":"OH_Environment_GetUserDownloadDir" },
+    {"name":"OH_Environment_GetFileLocation" }
+]
