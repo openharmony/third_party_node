@@ -56,7 +56,7 @@ typedef enum OH_OperationMode {
  *
  * @since 12
  */
-typedef enum OH_PolicyErrorCode  {
+typedef enum OH_PolicyErrorCode {
     /**
      * @brief Indicates that the policy is not allowed to be persisted.
      */
@@ -133,7 +133,7 @@ typedef struct OH_PolicyInfo {
  * @see OH_PolicyInfo, OH_PolicyErrorResult
  * @since 12
  */
-int OH_FileShare_PersistPermission(const OH_PolicyInfo *policies, int policyNum, OH_PolicyErrorResult **result, int *resultNum);
+int OH_FileShare_PersistPermission(const OH_PolicyInfo *policies, unsigned int policyNum, OH_PolicyErrorResult **result, unsigned int *resultNum);
 
 /**
  * @brief Revoke persistence permissions for the URI.
@@ -146,7 +146,7 @@ int OH_FileShare_PersistPermission(const OH_PolicyInfo *policies, int policyNum,
  * @see OH_PolicyInfo, OH_PolicyErrorResult
  * @since 12
  */
-int OH_FileShare_RevokePermission(const OH_PolicyInfo *policies, int policyNum, OH_PolicyErrorResult **result, int *resultNum);
+int OH_FileShare_RevokePermission(const OH_PolicyInfo *policies, unsigned int policyNum, OH_PolicyErrorResult **result, unsigned int *resultNum);
 
 /**
  * @brief Enable the URI that have been permanently authorized.
@@ -159,7 +159,7 @@ int OH_FileShare_RevokePermission(const OH_PolicyInfo *policies, int policyNum, 
  * @see OH_PolicyInfo, OH_PolicyErrorResult
  * @since 12
  */
-int OH_FileShare_ActivatePermission(const OH_PolicyInfo *policies, int policyNum, OH_PolicyErrorResult **result, int *resultNum);
+int OH_FileShare_ActivatePermission(const OH_PolicyInfo *policies, unsigned int policyNum, OH_PolicyErrorResult **result, unsigned int *resultNum);
 
 /**
  * @brief Stop the authorized URI that has been enabled.
@@ -172,7 +172,7 @@ int OH_FileShare_ActivatePermission(const OH_PolicyInfo *policies, int policyNum
  * @see OH_PolicyInfo, OH_PolicyErrorResult
  * @since 12
  */
-int OH_FileShare_DeactivatePermission(const OH_PolicyInfo *policies, int policyNum, OH_PolicyErrorResult **result, int *resultNum);
+int OH_FileShare_DeactivatePermission(const OH_PolicyInfo *policies, unsigned int policyNum, OH_PolicyErrorResult **result, unsigned int *resultNum);
 
 /**
  * @brief Check persistence permissions for the URI..
@@ -184,7 +184,7 @@ int OH_FileShare_DeactivatePermission(const OH_PolicyInfo *policies, int policyN
  * @see OH_PolicyInfo, OH_PolicyErrorResult
  * @since 12
  */
-int OH_FileShare_CheckPersistentPermission(const OH_PolicyInfo *policies, int policyNum, bool **result);
+int OH_FileShare_CheckPersistentPermission(const OH_PolicyInfo *policies, unsigned int policyNum, bool **result,  unsigned int *resultNum);
 #ifdef __cplusplus
 };
 #endif
