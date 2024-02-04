@@ -158,6 +158,43 @@ NAPI_EXTERN napi_status napi_create_ark_runtime(napi_env* env);
  */
 NAPI_EXTERN napi_status napi_destroy_ark_runtime(napi_env* env);
 
+/*
+ * @brief Defines a sendable class.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param utf8name: Name of the ArkTS constructor function.
+ * @param length: The length of the utf8name in bytes, or NAPI_AUTO_LENGTH if it is null-terminated.
+ * @param constructor: Callback function that handles constructing instances of the class.
+ * @param data: Optional data to be passed to the constructor callback as the data property of the callback info.
+ * @param property_count: Number of items in the properties array argument.
+ * @param properties: Array of property descriptors describing static and instance data properties, accessors, and
+ * methods on the class. See napi_property_descriptor.
+ * @param parent: A napi_value representing the Superclass.
+ * @param result: A napi_value representing the constructor function for the class.
+ * @return Return the function execution status.
+ * @since 12
+ */
+NAPI_EXTERN napi_status napi_define_sendable_class(napi_env env,
+                                                   const char* utf8name,
+                                                   size_t length,
+                                                   napi_callback constructor,
+                                                   void* data,
+                                                   size_t property_count,
+                                                   const napi_property_descriptor* properties,
+                                                   napi_value parent,
+                                                   napi_value* result);
+
+/**
+ * @brief Queries a napi_value to check if it is sendable.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param value The napi_value to be checked.
+ * @param result Boolean value that is set to true if napi_value is sendable, false otherwise.
+ * @return Return the function execution status.
+ * @since 12
+ */
+NAPI_EXTERN napi_status napi_is_sendable(napi_env env, napi_value value, bool* result);
+
 /**
  * @brief Run the event loop by the given env and running mode in current thread.
  *

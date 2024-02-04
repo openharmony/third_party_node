@@ -157,6 +157,14 @@
     },
     {
         "first_introduced": "12",
+        "name": "napi_define_sendable_class"
+    },
+    {
+        "first_introduced": "12",
+        "name": "napi_is_sendable"
+    },
+    {
+        "first_introduced": "12",
         "name": "napi_create_ark_runtime"
     },
     {
