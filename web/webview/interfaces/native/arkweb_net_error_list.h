@@ -31,23 +31,7 @@
 #ifndef ARKWEB_NET_ERROR_LIST_H
 #define ARKWEB_NET_ERROR_LIST_H
 
-enum ArkWeb_NetError {
-    /*
-     * @brief Invalid param.
-     *
-     * @syscap SystemCapability.Web.Webview.Core
-     * @since 12
-     */
-    ARKWEB_NET_INVALID_PARAM = 2,
-
-    /*
-     * @brief Unknown error.
-     *
-     * @syscap SystemCapability.Web.Webview.Core
-     * @since 12
-     */
-    ARKWEB_NET_UNKNOWN = 1,
-
+typedef enum ArkWeb_NetError {
     /*
      * @brief Normal.
      *
@@ -2134,6 +2118,6 @@ enum ArkWeb_NetError {
      * @since 12
      */
     ARKWEB_ERR_DNS_NO_MATCHING_SUPPORTED_ALPN = -811,
-};
+} ArkWeb_NetError;
 
 #endif // ARKWEB_NET_ERROR_LIST_H
