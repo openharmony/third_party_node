@@ -1,7 +1,22 @@
 [
-    {"name":"OH_FileShare_PersistPermission" },
-    {"name":"OH_FileShare_RevokePermission" },
-    {"name":"OH_FileShare_ActivatePermission" },
-    {"name":"OH_FileShare_DeactivatePermission" },
-    {"name":"OH_FileShare_CheckPersistPermission" }
+    {
+        "first_introduced": "12",
+        "name": "OH_FileShare_PersistPermission"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_FileShare_RevokePermission"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_FileShare_ActivatePermission"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_FileShare_DeactivatePermission"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_FileShare_CheckPersistPermission"
+    }
 ]

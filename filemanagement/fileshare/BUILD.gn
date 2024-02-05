@@ -14,7 +14,7 @@
 import("//build/ohos.gni")
 import("//build/ohos/ndk/ndk.gni")
 
-ohos_ndk_library("libfileshare_ndk") {
+ohos_ndk_library("libfile_share") {
   ndk_description_file = "./libfileshare.ndk.json"
   min_compact_version = "12"
   output_name = "fileshare"
