@@ -12,6 +12,7 @@
 # limitations under the License.
 
 import("//build/ohos.gni")
+import("//build/ohos/ndk/ndk.gni")
 
 ohos_ndk_library("libicu_ndk") {
   ndk_description_file = "./libicu.ndk.json"
