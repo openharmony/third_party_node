@@ -14,20 +14,19 @@
 import("//build/ohos.gni")
 import("//build/ohos/ndk/ndk.gni")
 
-ohos_ndk_library("libohenvironment") {
-  ndk_description_file = "./libenvironment.ndk.json"
+ohos_ndk_library("libohfileio") {
+  ndk_description_file = "./libfileio.ndk.json"
   min_compact_version = "12"
-  output_name = "ohenvironment"
+  output_name = "ohfileio"
   output_extension = "so"
-  system_capability =
-      "SystemCapability.FileManagement.File.Environment.FolderObtain"
-  system_capability_headers = [ "filemanagement/environment/oh_environment.h" ]
+  system_capability = "SystemCapability.FileManagement.File.FileIO"
+  system_capability_headers = [ "filemanagement/fileio/oh_fileio.h" ]
 }
 
-ohos_ndk_headers("oh_environment_header") {
-  dest_dir = "$ndk_headers_out_dir/filemanagement/environment/"
+ohos_ndk_headers("oh_fileio_header") {
+  dest_dir = "$ndk_headers_out_dir/filemanagement/fileio/"
   sources = [
-    "../fileio/include/error_code.h",
-    "./include/oh_environment.h",
+    "./include/error_code.h",
+    "./include/oh_fileio.h",
   ]
 }
