@@ -17,7 +17,8 @@
 #define FILE_SHARE_H
 /**
  * @addtogroup fileShare
- *
+ * @{
+ * 
  * @brief This module provides file sharing capabilities and provides an interface for system applications to authorize
  * the Uniform Resource Identifier (URI) of public directory files with read and write permissions to other applications.
  * @since 12
@@ -131,7 +132,6 @@ typedef struct FileShare_PolicyInfo {
  * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance.
  * @param resultNum Indicates the size of the result array.
  * @return Returns the status code of the execution.
- * @see FileShare_PolicyInfo, FileShare_PolicyErrorResult
  * @since 12
  */
 int OH_FileShare_PersistPermission(const FileShare_PolicyInfo *policies, unsigned int policyNum, FileShare_PolicyErrorResult **result, unsigned int *resultNum);
@@ -145,7 +145,6 @@ int OH_FileShare_PersistPermission(const FileShare_PolicyInfo *policies, unsigne
  * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance.
  * @param resultNum Indicates the size of the result array.
  * @return Returns the status code of the execution.
- * @see FileShare_PolicyInfo, FileShare_PolicyErrorResult
  * @since 12
  */
 int OH_FileShare_RevokePermission(const FileShare_PolicyInfo *policies, unsigned int policyNum, FileShare_PolicyErrorResult **result, unsigned int *resultNum);
@@ -159,7 +158,6 @@ int OH_FileShare_RevokePermission(const FileShare_PolicyInfo *policies, unsigned
  * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance.
  * @param resultNum Indicates the size of the result array.
  * @return Returns the status code of the execution.
- * @see FileShare_PolicyInfo, FileShare_PolicyErrorResult
  * @since 12
  */
 int OH_FileShare_ActivatePermission(const FileShare_PolicyInfo *policies, unsigned int policyNum, FileShare_PolicyErrorResult **result, unsigned int *resultNum);
@@ -173,7 +171,6 @@ int OH_FileShare_ActivatePermission(const FileShare_PolicyInfo *policies, unsign
  * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance.
  * @param resultNum Indicates the size of the result array.
  * @return Returns the status code of the execution.
- * @see FileShare_PolicyInfo, FileShare_PolicyErrorResult
  * @since 12
  */
 int OH_FileShare_DeactivatePermission(const FileShare_PolicyInfo *policies, unsigned int policyNum, FileShare_PolicyErrorResult **result, unsigned int *resultNum);
@@ -186,11 +183,11 @@ int OH_FileShare_DeactivatePermission(const FileShare_PolicyInfo *policies, unsi
  * @param policyNum Indicates the size of the policies array.
  * @param result Represents a pointer to an bool instance.
  * @return Returns the status code of the execution.
- * @see FileShare_PolicyInfo, FileShare_PolicyErrorResult
  * @since 12
  */
 int OH_FileShare_CheckPersistentPermission(const FileShare_PolicyInfo *policies, unsigned int policyNum, bool **result,  unsigned int *resultNum);
 #ifdef __cplusplus
 };
 #endif
+/** @} */
 #endif //FILE_SHARE_H
