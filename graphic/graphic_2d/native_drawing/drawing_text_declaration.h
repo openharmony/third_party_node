@@ -105,6 +105,7 @@ typedef struct OH_Drawing_PositionAndAffinity OH_Drawing_PositionAndAffinity;
  * @version 1.0
  */
 typedef struct OH_Drawing_Range OH_Drawing_Range;
+
 /**
  * @brief Defines an <b>OH_Drawing_FontParser</b>, which is used to parse system font files.
  *
