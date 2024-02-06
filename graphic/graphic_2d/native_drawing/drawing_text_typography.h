@@ -1316,7 +1316,7 @@ void OH_Drawing_SetTypographyTextLocale(OH_Drawing_TypographyStyle*, const char*
  * @since 12
  * @version 1.0
  */
-void OH_Drawing_SetTypographyTextSplitRatio(OH_Drawing_TypographyStyle*,  float);
+void OH_Drawing_SetTypographyTextSplitRatio(OH_Drawing_TypographyStyle*, float);
 
 /**
  * @brief Gets the TextStyle of lines in a text file.
@@ -1327,7 +1327,7 @@ void OH_Drawing_SetTypographyTextSplitRatio(OH_Drawing_TypographyStyle*,  float)
  * @since 12
  * @version 1.0
  */
-OH_Drawing_TextStyle* OH_Drawing_TypographyGetLineTextStyle(OH_Drawing_TypographyStyle*);
+OH_Drawing_TextStyle* OH_Drawing_TypographyGetTextStyle(OH_Drawing_TypographyStyle*);
 
 /**
  * @brief Gets the EffectiveAlign of lines in a text file.

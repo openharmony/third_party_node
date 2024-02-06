@@ -384,6 +384,34 @@
     },
     {
         "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextEllipsis"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextLocale"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextSplitRatio"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyGetTextStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyGetEffectiveAlign"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyIsUnlimitedLines"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyIsEllipsized"
+    },
+    {
+        "first_introduced": "12",
         "name": "OH_Drawing_SetTypographyTextStyle"
     },
     {
