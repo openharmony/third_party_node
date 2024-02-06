@@ -287,41 +287,6 @@ typedef enum {
 } OH_Drawing_RectWidthStyle;
 
 /**
- * @brief Text line position information
- *
- * @since 12
- * @version 1.0
- */
-typedef struct {
-    /** Text ascender height */
-    double ascender;
-    /** Tex descender height */
-    double descender;
-    /** The height of a capital letter */
-    double capHeight;
-    /** The height of a lowercase letter */
-    double xHeight;
-    /** Text width */
-    double width;
-    /** Line height */
-    double height;
-    /**
-     * The distance from the left end of the text to the left end of the container,
-     * aligned to 0, is the width of the container minus the width of the line of text
-     */
-    double x;
-    /**
-     * The height from the top of the text to the top of the container, the first line is 0,
-     *  and the second line is the height of the first line
-     */
-    double y;
-    /** Line start character index */
-    size_t startIndex;
-    /** End of line character index */
-    size_t endIndex;
-} OH_Drawing_LineInfo;
-
-/**
  * @brief Describes the font information.
  *
  * @since 12
@@ -397,7 +362,7 @@ typedef struct {
  * @since 12
  * @version 1.0
  */
-struct OH_Drawing_LineMetrics {
+typedef struct {
     /** Text ascender height */
     double ascender;
     /** Tex descender height */
@@ -424,10 +389,9 @@ struct OH_Drawing_LineMetrics {
     size_t startIndex;
     /** End Index */
     size_t endIndex;
-
     /** The metrics information of the first character.*/
     OH_Drawing_FontMetrics firstCharMetrics;
-};
+} OH_Drawing_LineMetrics;
 
 /**
  * @brief Creates an <b>OH_Drawing_TypographyStyle</b> object.
@@ -1475,7 +1439,7 @@ OH_Drawing_FontMetrics* OH_Drawing_TextStyleGetFontMetrics(OH_Drawing_TextStyle*
  * @since 12
  * @version 1.0
  */
-OH_Drawing_LineInfo* OH_Drawing_TypographyGetLineInfo(OH_Drawing_Typography*, int, bool, bool);
+OH_Drawing_LineMetrics* OH_Drawing_TypographyGetMetrics(OH_Drawing_Typography*, int, bool, bool);
 
 /**
  * @brief Sets the font weight of text typography.
