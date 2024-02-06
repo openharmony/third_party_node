@@ -392,6 +392,44 @@ typedef struct {
 } OH_Drawing_FontMetrics;
 
 /**
+ * @brief The metrics of line.
+ *
+ * @since 12
+ * @version 1.0
+ */
+struct OH_Drawing_LineMetrics {
+    /** Text ascender height */
+    double ascender;
+    /** Tex descender height */
+    double descender;
+    /** The height of a capital letter */
+    double capHeight;
+    /** The height of a lowercase letter */
+    double xHeight;
+    /** Text width */
+    double width;
+    /** Line height */
+    double height;
+    /**
+     * The distance from the left end of the text to the left end of the container,
+     * aligned to 0, is the width of the container minus the width of the line of text
+     */
+    double x;
+    /**
+     * The height from the top of the text to the top of the container, the first line is 0,
+     * and the second line is the height of the first line
+     */
+    double y;
+    /** Start Index */
+    size_t startIndex;
+    /** End Index */
+    size_t endIndex;
+
+    /** The metrics information of the first character.*/
+    OH_Drawing_FontMetrics firstCharMetrics;
+};
+
+/**
  * @brief Creates an <b>OH_Drawing_TypographyStyle</b> object.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
