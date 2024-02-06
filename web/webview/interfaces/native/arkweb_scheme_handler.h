@@ -219,16 +219,6 @@ typedef void (*ArkWeb_PostDataReadCallback)(const ArkWeb_PostDataStream* postDat
 typedef void (*ArkWeb_PostDataStreamInitCallback)(const ArkWeb_PostDataStream* postDataStream, ArkWeb_NetError result);
 
 /*
- * @brief The request header list.
- * @param requestHeaderList The created ArkWeb_RequestHeaderList.
- *
- * @syscap SystemCapability.Web.Webview.Core
- * @since 12
- */
-void OH_ArkWebRequestHeaderList_Create(const ArkWeb_ResourceRequest* resourceRequest,
-                                       ArkWeb_RequestHeaderList** requestHeaderList);
-
-/*
  * @brief Destroy the ArkWeb_RequestHeaderList.
  * @param requestHeaderList The ArkWeb_RequestHeaderList to be destroyed.
  *
