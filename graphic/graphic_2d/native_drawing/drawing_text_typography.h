@@ -293,26 +293,26 @@ typedef enum {
  * @version 1.0
  */
 typedef struct {
-        /** The file path of System font */
-        char* path;
-        /** The postScript name of the system font */
-        char* postScriptName;
-        /** The name of System font */
-        char* fullName;
-        /** The family of System font */
-        char* fontFamily;
-        /** The subfont family of the system font */
-        char* fontSubfamily;
-        /** The weight of System font */
-        int weight;
-        /** The width of System font */
-        int width;
-        /** Whether the system font is tilted */
-        int italic;
-        /** Whether the system font is compact */
-        bool monoSpace;
-        /** whether symbolic fonts are supported */
-        bool symbolic;
+    /** The file path of System font */
+    char* path;
+    /** The postScript name of the system font */
+    char* postScriptName;
+    /** The name of System font */
+    char* fullName;
+    /** The family of System font */
+    char* fontFamily;
+    /** The subfont family of the system font */
+    char* fontSubfamily;
+    /** The weight of System font */
+    int weight;
+    /** The width of System font */
+    int width;
+    /** Whether the system font is tilted */
+    int italic;
+    /** Whether the system font is compact */
+    bool monoSpace;
+    /** whether symbolic fonts are supported */
+    bool symbolic;
 } OH_Drawing_FontDescriptor;
 
 /**
@@ -1181,7 +1181,7 @@ void OH_Drawing_DestroyFontParser(OH_Drawing_FontParser*);
  * @since 12
  * @version 1.0
  */
-char** OH_Drawing_GetSystemFontList(OH_Drawing_FontParser*, size_t*);
+char** OH_Drawing_FontParserGetSystemFontList(OH_Drawing_FontParser*, size_t*);
 
 /**
  * @brief Releases the memory occupied by a list of system font names.
@@ -1192,7 +1192,7 @@ char** OH_Drawing_GetSystemFontList(OH_Drawing_FontParser*, size_t*);
  * @since 12
  * @version 1.0
  */
-void OH_Drawing_DestorySystemFontList(char**, size_t);
+void OH_Drawing_DestroySystemFontList(char**, size_t);
 
 /**
  * @brief Gets information about the system font by font name.
@@ -1215,7 +1215,7 @@ OH_Drawing_FontDescriptor* OH_Drawing_FontParserGetFontByName(OH_Drawing_FontPar
  * @since 12
  * @version 1.0
  */
-OH_Drawing_LineMetrics* OH_Drawing_GetLineMetrics(OH_Drawing_Typography*);
+OH_Drawing_LineMetrics* OH_Drawing_TypographyGetLineMetrics(OH_Drawing_Typography*);
 
 /**
  * @brief Get the number of lines.
@@ -1226,7 +1226,7 @@ OH_Drawing_LineMetrics* OH_Drawing_GetLineMetrics(OH_Drawing_Typography*);
  * @since 12
  * @version 1.0
  */
-size_t OH_Drawing_GetLineMetricsSize(OH_Drawing_LineMetrics*);
+size_t OH_Drawing_LineMetricsGetSize(OH_Drawing_LineMetrics*);
 
 /**
  * @brief Releases the memory occupied by line metrics.
@@ -1236,7 +1236,7 @@ size_t OH_Drawing_GetLineMetricsSize(OH_Drawing_LineMetrics*);
  * @since 12
  * @version 1.0
  */
-void OH_Drawing_DestoryLineMetrics(OH_Drawing_LineMetrics*);
+void OH_Drawing_DestroyLineMetrics(OH_Drawing_LineMetrics*);
 
 /**
  * @brief Gets the specified line by line number.
@@ -1248,7 +1248,7 @@ void OH_Drawing_DestoryLineMetrics(OH_Drawing_LineMetrics*);
  * @since 12
  * @version 1.0
  */
-OH_Drawing_LineMetrics* OH_Drawing_GetLineMetricsAt(OH_Drawing_Typography*, int);
+OH_Drawing_LineMetrics* OH_Drawing_TypographyGetLineMetricsAt(OH_Drawing_Typography*, int);
 
 /**
  * @brief  Sets the ellipsis of lines in a text file.
@@ -1519,7 +1519,81 @@ void OH_Drawing_SetTypographyTextLineStyleSpacingScale(OH_Drawing_TypographyStyl
  */
 void OH_Drawing_SetTypographyTextLineStyleOnly(OH_Drawing_TypographyStyle*, bool);
 
+/**
+ * @brief Creates an <b>OH_Drawing_TextShadow</b> object.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @return Returns the pointer to the <b>OH_Drawing_TextShadow</b> object created.
+ * @since 12
+ * @version 1.0
+ */
+OH_Drawing_TextShadow* OH_Drawing_CreateTextShadow(void);
 
+/**
+ * @brief Releases the memory occupied by an <b>OH_Drawing_TextShadow</b> object.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_TextShadow Indicates the pointer to an <b>OH_Drawing_TextShadow</b> object.
+ * @since 12
+ * @version 1.0
+ */
+void OH_Drawing_DestroyTextShadow(OH_Drawing_TextShadow*);
+
+/**
+ * @brief Gets the vector of TextShadow in TextStyle.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
+ * @param int Indicates the number in vector to set.
+ * @param OH_Drawing_TextShadow Indicates the pointer to an <b>OH_Drawing_TextShadow</b> object array.
+ * @return Returns the vector of TextShadow.
+ * @since 12
+ * @version 1.0
+ */
+OH_Drawing_TextShadow* OH_Drawing_TextStyleGetShadows(OH_Drawing_TextStyle*);
+
+/**
+ * @brief Gets the size of vector of TextShadow in TextStyle.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
+ * @return Returns the size of vector.
+ * @since 12
+ * @version 1.0
+ */
+int OH_Drawing_TextStyleGetShadowsCount(OH_Drawing_TextStyle*);
+
+/**
+ * @brief Adds element in vector of TextShadow in TextStyle.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
+ * @param OH_Drawing_TextShadow Indicates the pointer to an <b>OH_Drawing_TextShadow</b> object.
+ * @since 12
+ * @version 1.0
+ */
+void OH_Drawing_TextStyleAddShadow(OH_Drawing_TextStyle*, const OH_Drawing_TextShadow*);
+
+/**
+ * @brief clear elements in vector of TextShadow in TextStyle.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
+ * @since 12
+ * @version 1.0
+ */
+void OH_Drawing_TextStyleClearShadows(OH_Drawing_TextStyle*);
+
+/**
+ * @brief Set indents of the typography.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_Typography Indicates the pointer to an <b>OH_Drawing_Typography</b> object.
+ * @param float Indicates the pointer to the indents to set.
+ * @since 12
+ * @version 1.0
+ */
+void OH_Drawing_TypographySetIndents(OH_Drawing_Typography*, int, const float indents[]);
 #ifdef __cplusplus
 }
 #endif
