@@ -287,6 +287,41 @@ typedef enum {
 } OH_Drawing_RectWidthStyle;
 
 /**
+ * @brief Text line position information
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct {
+    /** Text ascender height */
+    double ascender;
+    /** Tex descender height */
+    double descender;
+    /** The height of a capital letter */
+    double capHeight;
+    /** The height of a lowercase letter */
+    double xHeight;
+    /** Text width */
+    double width;
+    /** Line height */
+    double height;
+    /**
+     * The distance from the left end of the text to the left end of the container,
+     * aligned to 0, is the width of the container minus the width of the line of text
+     */
+    double x;
+    /**
+     * The height from the top of the text to the top of the container, the first line is 0,
+     *  and the second line is the height of the first line
+     */
+    double y;
+    /** Line start character index */
+    size_t startIndex;
+    /** End of line character index */
+    size_t endIndex;
+} OH_Drawing_LineInfo;
+
+/**
  * @brief Describes the font information.
  *
  * @since 12
@@ -516,18 +551,18 @@ void OH_Drawing_SetTextStyleForegroundBrush(OH_Drawing_TextStyle*, OH_Drawing_Br
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
- * @return Indicates the pointer to an <b>OH_Drawing_Brush</b> object.
+ * @param OH_Drawing_Brush Indicates the pointer to an <b>OH_Drawing_Brush</b> object.
  * @since 12
  * @version 1.0
  */
-OH_Drawing_Brush* OH_Drawing_GetTextStyleForegroundBrush(OH_Drawing_TypographyStyle*);
+void OH_Drawing_TextStyleGetForegroundBrush(OH_Drawing_TextStyle*, OH_Drawing_Brush*);
 
 /**
  * @brief Sets the foreground pen style.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
- * @param OH_Drawing_Brush Indicates the pointer to an <b>OH_Drawing_Pen</b> object.
+ * @param OH_Drawing_Pen Indicates the pointer to an <b>OH_Drawing_Pen</b> object.
  * @since 12
  * @version 1.0
  */
@@ -538,11 +573,11 @@ void OH_Drawing_SetTextStyleForegroundPen(OH_Drawing_TextStyle*, OH_Drawing_Pen*
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
- * @return Indicates the pointer to an <b>OH_Drawing_Pen</b> object.
+ * @param OH_Drawing_Pen Indicates the pointer to an <b>OH_Drawing_Pen</b> object.
  * @since 12
  * @version 1.0
  */
-OH_Drawing_Pen* OH_Drawing_GetTextStyleForegroundPen(OH_Drawing_TypographyStyle*);
+void OH_Drawing_TextStyleGetForegroundPen(OH_Drawing_TextStyle*, OH_Drawing_Pen*);
 
 /**
  * @brief Sets the background brush style.
@@ -560,18 +595,18 @@ void OH_Drawing_SetTextStyleBackgroundBrush(OH_Drawing_TextStyle*, OH_Drawing_Br
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
- * @return Indicates the pointer to an <b>OH_Drawing_Brush</b> object.
+ * @param OH_Drawing_Brush Indicates the pointer to an <b>OH_Drawing_Brush</b> object.
  * @since 12
  * @version 1.0
  */
-OH_Drawing_Brush* OH_Drawing_GetTextStyleBackgroundBrush(OH_Drawing_TypographyStyle*);
+ void OH_Drawing_TextStyleGetBackgroundBrush(OH_Drawing_TextStyle*, OH_Drawing_Brush*);
 
 /**
  * @brief Sets the background pen style.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
- * @param OH_Drawing_Brush Indicates the pointer to an <b>OH_Drawing_Pen</b> object.
+ * @param OH_Drawing_Pen Indicates the pointer to an <b>OH_Drawing_Pen</b> object.
  * @since 12
  * @version 1.0
  */
@@ -582,11 +617,11 @@ void OH_Drawing_SetTextStyleBackgroundPen(OH_Drawing_TextStyle*, OH_Drawing_Pen*
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
- * @return Indicates the pointer to an <b>OH_Drawing_Pen</b> object.
+ * @param OH_Drawing_Pen Indicates the pointer to an <b>OH_Drawing_Pen</b> object.
  * @since 12
  * @version 1.0
  */
-OH_Drawing_Pen* OH_Drawing_GetTextStyleBackgroundPen(OH_Drawing_TypographyStyle*);
+void OH_Drawing_TextStyleGetBackgroundPen(OH_Drawing_TextStyle*, OH_Drawing_Pen*);
 
 /**
  * @brief Creates a pointer to an <b>OH_Drawing_TypographyCreate</b> object.
@@ -1331,12 +1366,23 @@ bool OH_Drawing_TypographyIsEllipsized(OH_Drawing_TypographyStyle*);
  * @brief set line textstyle.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_Typography Indicates the pointer to an <b>OH_Drawing_Typography</b> object.
+ * @param OH_Drawing_TypographyStyle Indicates the pointer to an <b>OH_Drawing_TypographyStyle</b> object.
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
  * @since 12
  * @version 1.0
  */
-void OH_Drawing_TypographySetTextStyle(OH_Drawing_TypographyStyle*, OH_Drawing_TextStyle* style);
+void OH_Drawing_SetTypographyTextStyle(OH_Drawing_TypographyStyle*, OH_Drawing_TextStyle*);
+
+/**
+ * @brief get line fontmetrics.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
+ * @return Returns the text FontMetrics
+ * @since 12
+ * @version 1.0
+ */
+OH_Drawing_FontMetrics* OH_Drawing_TextStyleGetFontMetrics(OH_Drawing_TextStyle*);
 
 /**
  * @brief Gets the position of the specified line or the first text of the specified line
