@@ -1674,6 +1674,18 @@ void OH_Drawing_TextStyleAddShadow(OH_Drawing_TextStyle*, const OH_Drawing_TextS
 void OH_Drawing_TextStyleClearShadows(OH_Drawing_TextStyle*);
 
 /**
+ * @brief Gets element in vector of TextShadow with index.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
+ * @param int Indicates the index to set.
+ * @return Returns the pointer to element with the index in vector of <b>OH_Drawing_TextShadow</b> objects.
+ * @since 12
+ * @version 1.0
+ */
+OH_Drawing_TextShadow* OH_Drawing_TextStyleGetShadowWithIndex(OH_Drawing_TextStyle*, int);
+
+/**
  * @brief Set indents of the typography.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
@@ -1683,6 +1695,18 @@ void OH_Drawing_TextStyleClearShadows(OH_Drawing_TextStyle*);
  * @version 1.0
  */
 void OH_Drawing_TypographySetIndents(OH_Drawing_Typography*, int, const float indents[]);
+
+/**
+ * @brief Gets element with index in vector of Indents.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_Typography Indicates the pointer to an <b>OH_Drawing_Typography</b> object.
+ * @param int Indicates the index to set.
+ * @return double Indicates the element with the index in vector of Indents.
+ * @since 12
+ * @version 1.0
+ */
+double OH_Drawing_TypographyGetIndentsWithIndex(OH_Drawing_Typography*, int);
 #ifdef __cplusplus
 }
 #endif
