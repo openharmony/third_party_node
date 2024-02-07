@@ -13,8 +13,11 @@
  * limitations under the License.
  */
 
-#ifndef FILE_SHARE_H
-#define FILE_SHARE_H
+#ifndef FILE_MANAGEMENT_APP_FILE_SERVICE_INTERFACE_OH_FILE_SHARE_H
+#define FILE_MANAGEMENT_APP_FILE_SERVICE_INTERFACE_OH_FILE_SHARE_H
+
+#include "../../common/errorcode.h"
+
 /**
  * @addtogroup fileShare
  * @{
@@ -25,10 +28,10 @@
  */
 
 /**
- * @file file_share.h
+ * @file oh_file_share.h
  *
- * @brief Provides fileshare APIS.
- * @library libfile_share.so
+ * @brief Provides fileShare APIS.
+ * @library liboh_file_share.so
  * @syscap SystemCapability.FileManagement.AppFileService.FolderAuthorization
  * @since 12
  */
@@ -44,12 +47,12 @@ typedef enum FileShare_OperationMode {
     /**
      * @brief Indicates read permissions.
      */
-    READ_MODE = 0b1,
+    READ_MODE = 1 << 0,
 
     /**
      * @brief Indicates write permissions.
      */
-    WRITE_MODE = 0b10
+    WRITE_MODE = 1 << 1
 } FileShare_OperationMode;
 
 /**
@@ -76,7 +79,7 @@ typedef enum FileShare_PolicyErrorCode {
     /**
      * @brief Indicates that the policy is no persistence capability.
      */
-    PERSISTENCE_WITHOUT = 4
+    PERMISSION_NOT_PERSISTED = 4
 } FileShare_PolicyErrorCode;
 
 /**
@@ -90,7 +93,7 @@ typedef struct FileShare_PolicyErrorResult {
     /**
      * Indicates the failed uri of the policy information.
      */
-    char* uri;
+    char *uri;
 
     /**
      * Indicates the error code of the failure in the policy information.
@@ -100,7 +103,7 @@ typedef struct FileShare_PolicyErrorResult {
     /**
      * Indicates the reason of the failure in the policy information.
      */
-    char* message;
+    char *message;
 } FileShare_PolicyErrorResult;
 
 /**
@@ -114,13 +117,18 @@ typedef struct FileShare_PolicyInfo {
     /**
      * Indicates the uri of the policy information.
      */
-    char* uri;
+    char *uri;
+
+    /**
+     * Indicates The length of the uri.
+     */
+    unsigned int length;
 
     /**
      * Indicates the mode of operation for the URI.
      * example { FileShare_OperationMode.READ_MODE } or { FileShare_OperationMode.READ_MODE | FileShare_OperationMode.WRITE_MODE }.
      */
-    int operationMode;
+    unsigned int operationMode;
 } FileShare_PolicyInfo;
 
 /**
@@ -129,12 +137,13 @@ typedef struct FileShare_PolicyInfo {
  * @permission ohos.permission.FILE_ACCESS_PERSIST
  * @param policies Represents a pointer to an {@link FileShare_PolicyInfo} instance.
  * @param policyNum Indicates the size of the policies array.
- * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance.
+ * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance. Please use OH_FileShare_ReleasePolicyErrorResult() to clear Resource.
  * @param resultNum Indicates the size of the result array.
  * @return Returns the status code of the execution.
  * @since 12
  */
-int OH_FileShare_PersistPermission(const FileShare_PolicyInfo *policies, unsigned int policyNum, FileShare_PolicyErrorResult **result, unsigned int *resultNum);
+OH_FileManagement_ErrCode OH_FileShare_PersistPermission(const FileShare_PolicyInfo *policies, unsigned int policyNum,
+    FileShare_PolicyErrorResult **result, unsigned int *resultNum);
 
 /**
  * @brief Revoke persistence permissions for the URI.
@@ -142,12 +151,13 @@ int OH_FileShare_PersistPermission(const FileShare_PolicyInfo *policies, unsigne
  * @permission ohos.permission.FILE_ACCESS_PERSIST
  * @param policies Represents a pointer to an {@link FileShare_PolicyInfo} instance.
  * @param policyNum Indicates the size of the policies array.
- * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance.
+ * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance. Please use OH_FileShare_ReleasePolicyErrorResult() to clear Resource.
  * @param resultNum Indicates the size of the result array.
  * @return Returns the status code of the execution.
  * @since 12
  */
-int OH_FileShare_RevokePermission(const FileShare_PolicyInfo *policies, unsigned int policyNum, FileShare_PolicyErrorResult **result, unsigned int *resultNum);
+OH_FileManagement_ErrCode OH_FileShare_RevokePermission(const FileShare_PolicyInfo *policies, unsigned int policyNum,
+    FileShare_PolicyErrorResult **result, unsigned int *resultNum);
 
 /**
  * @brief Enable the URI that have been permanently authorized.
@@ -155,12 +165,13 @@ int OH_FileShare_RevokePermission(const FileShare_PolicyInfo *policies, unsigned
  * @permission ohos.permission.FILE_ACCESS_PERSIST
  * @param policies Represents a pointer to an {@link FileShare_PolicyInfo} instance.
  * @param policyNum Indicates the size of the policies array.
- * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance.
+ * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance. Please use OH_FileShare_ReleasePolicyErrorResult() to clear Resource.
  * @param resultNum Indicates the size of the result array.
  * @return Returns the status code of the execution.
  * @since 12
  */
-int OH_FileShare_ActivatePermission(const FileShare_PolicyInfo *policies, unsigned int policyNum, FileShare_PolicyErrorResult **result, unsigned int *resultNum);
+OH_FileManagement_ErrCode OH_FileShare_ActivatePermission(const FileShare_PolicyInfo *policies, unsigned int policyNum,
+    FileShare_PolicyErrorResult **result, unsigned int *resultNum);
 
 /**
  * @brief Stop the authorized URI that has been enabled.
@@ -168,26 +179,38 @@ int OH_FileShare_ActivatePermission(const FileShare_PolicyInfo *policies, unsign
  * @permission ohos.permission.FILE_ACCESS_PERSIST
  * @param policies Represents a pointer to an {@link FileShare_PolicyInfo} instance.
  * @param policyNum Indicates the size of the policies array.
- * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance.
+ * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance. Please use OH_FileShare_ReleasePolicyErrorResult() to clear Resource.
  * @param resultNum Indicates the size of the result array.
  * @return Returns the status code of the execution.
  * @since 12
  */
-int OH_FileShare_DeactivatePermission(const FileShare_PolicyInfo *policies, unsigned int policyNum, FileShare_PolicyErrorResult **result, unsigned int *resultNum);
+OH_FileManagement_ErrCode OH_FileShare_DeactivatePermission(const FileShare_PolicyInfo *policies,
+    unsigned int policyNum, FileShare_PolicyErrorResult **result, unsigned int *resultNum);
 
 /**
- * @brief Check persistence permissions for the URI..
+ * @brief Check persistence permissions for the URI.
  *
  * @permission ohos.permission.FILE_ACCESS_PERSIST
  * @param policies Represents a pointer to an {@link FileShare_PolicyInfo} instance.
  * @param policyNum Indicates the size of the policies array.
- * @param result Represents a pointer to an bool instance.
+ * @param result Represents a pointer to an bool instance. Please use free() to clear Resource.
+ * @param resultNum Indicates the size of the result array.
  * @return Returns the status code of the execution.
  * @since 12
  */
-int OH_FileShare_CheckPersistentPermission(const FileShare_PolicyInfo *policies, unsigned int policyNum, bool **result,  unsigned int *resultNum);
+OH_FileManagement_ErrCode OH_FileShare_CheckPersistentPermission(
+    const FileShare_PolicyInfo *policies, unsigned int policyNum, bool **result, unsigned int *resultNum);
+
+/**
+ * @brief Free FileShare_PolicyErrorResult pointer points to address memory.
+ *
+ * @param errorResult Represents a pointer to an {@link FileShare_PolicyErrorResult} instance.
+ * @param resultNum Indicates the size of the errorResult array.
+ * @since 12
+ */
+void OH_FileShare_ReleasePolicyErrorResult(FileShare_PolicyErrorResult *errorResult, unsigned int resultNum);
 #ifdef __cplusplus
 };
 #endif
 /** @} */
-#endif //FILE_SHARE_H
+#endif // FILE_MANAGEMENT_APP_FILE_SERVICE_INTERFACE_OH_FILE_SHARE_H
