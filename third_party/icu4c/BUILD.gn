@@ -23,7 +23,7 @@ ohos_ndk_library("libicu_ndk") {
 
 ohos_ndk_headers("icu_header") {
   dest_dir = "$ndk_headers_out_dir"
-  sources = [ "ndk_hdaders/uconfig_local.h" ]
+  sources = [ "ndk_headers/uconfig_local.h" ]
 }
 
 ohos_ndk_headers("icu_unicode_header") {
