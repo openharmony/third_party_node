@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef FILE_MANAGEMENT_APP_FILE_SERVICE_INTERFACE_OH_FILE_SHARE_H
-#define FILE_MANAGEMENT_APP_FILE_SERVICE_INTERFACE_OH_FILE_SHARE_H
+#ifndef FILE_MANAGEMENT_OH_FILE_SHARE_H
+#define FILE_MANAGEMENT_OH_FILE_SHARE_H
 
 #include "../../common/errorcode.h"
 
@@ -213,4 +213,4 @@ void OH_FileShare_ReleasePolicyErrorResult(FileShare_PolicyErrorResult *errorRes
 };
 #endif
 /** @} */
-#endif // FILE_MANAGEMENT_APP_FILE_SERVICE_INTERFACE_OH_FILE_SHARE_H
+#endif // FILE_MANAGEMENT_OH_FILE_SHARE_H
