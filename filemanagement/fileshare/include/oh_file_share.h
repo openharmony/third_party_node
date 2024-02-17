@@ -77,7 +77,7 @@ typedef enum FileShare_PolicyErrorCode {
     INVALID_PATH = 3,
 
     /**
-     * @brief Indicates that the policy is no persistence capability.
+     * @brief Indicates that the policy is no persistent capability.
      */
     PERMISSION_NOT_PERSISTED = 4
 } FileShare_PolicyErrorCode;
@@ -132,7 +132,7 @@ typedef struct FileShare_PolicyInfo {
 } FileShare_PolicyInfo;
 
 /**
- * @brief Set persistence permissions for the URI.
+ * @brief Set persistent permissions for the URI.
  *
  * @permission ohos.permission.FILE_ACCESS_PERSIST
  * @param policies Represents a pointer to an {@link FileShare_PolicyInfo} instance.
@@ -146,7 +146,7 @@ OH_FileManagement_ErrCode OH_FileShare_PersistPermission(const FileShare_PolicyI
     FileShare_PolicyErrorResult **result, unsigned int *resultNum);
 
 /**
- * @brief Revoke persistence permissions for the URI.
+ * @brief Revoke persistent permissions for the URI.
  *
  * @permission ohos.permission.FILE_ACCESS_PERSIST
  * @param policies Represents a pointer to an {@link FileShare_PolicyInfo} instance.
@@ -188,7 +188,7 @@ OH_FileManagement_ErrCode OH_FileShare_DeactivatePermission(const FileShare_Poli
     unsigned int policyNum, FileShare_PolicyErrorResult **result, unsigned int *resultNum);
 
 /**
- * @brief Check persistence permissions for the URI.
+ * @brief Check persistent permissions for the URI.
  *
  * @permission ohos.permission.FILE_ACCESS_PERSIST
  * @param policies Represents a pointer to an {@link FileShare_PolicyInfo} instance.
