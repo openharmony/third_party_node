@@ -114,22 +114,6 @@ typedef struct OH_Drawing_Range OH_Drawing_Range;
  */
 typedef struct OH_Drawing_FontParser OH_Drawing_FontParser;
 
-/**
- * @brief Defines an <b>OH_Drawing_LineMetrics</b>, which is used to describes the information of lines.
- *
- * @since 12
- * @version 1.0
- */
-typedef struct OH_Drawing_LineMetrics OH_Drawing_LineMetrics;
-
-/**
- * @brief Defines an <b>OH_Drawing_FontMetrics</b>, which is used to create an <b>OH_Drawing_FontMetrics</b> object.
- *
- * @since 12
- * @version 1.0
- */
-typedef struct OH_Drawing_FontMetrics OH_Drawing_FontMetrics;
-
 #ifdef __cplusplus
 }
 #endif
