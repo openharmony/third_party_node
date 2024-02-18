@@ -114,6 +114,14 @@ typedef struct OH_Drawing_Range OH_Drawing_Range;
  */
 typedef struct OH_Drawing_FontParser OH_Drawing_FontParser;
 
+/**
+ * @brief Defines an <b>OH_Drawing_FontParser</b>, which is used to manage text shadow.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct OH_Drawing_TextShadow OH_Drawing_TextShadow;
+
 #ifdef __cplusplus
 }
 #endif
