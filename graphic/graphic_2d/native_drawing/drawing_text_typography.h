@@ -335,7 +335,7 @@ typedef struct {
     /** Distance to add between lines, typically positive or zero */
     float leading;
     /** Average character width, zero if unknown */
-    float avgCharWidth; 
+    float avgCharWidth;
     /** Maximum character width, zero if unknown */
     float maxCharWidth;
     /** Greatest extent to left of origin of any glyph bounding box, typically negative; deprecated with variable fonts */
@@ -1439,7 +1439,7 @@ OH_Drawing_FontMetrics* OH_Drawing_TextStyleGetFontMetrics(OH_Drawing_TextStyle*
  * @since 12
  * @version 1.0
  */
-OH_Drawing_LineMetrics* OH_Drawing_TypographyGetMetrics(OH_Drawing_Typography*, int, bool, bool);
+OH_Drawing_LineMetrics* OH_Drawing_TypographyGetLineInfo(OH_Drawing_Typography*, int, bool, bool);
 
 /**
  * @brief Sets the font weight of text typography.
