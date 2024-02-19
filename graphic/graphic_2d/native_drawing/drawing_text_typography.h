@@ -433,7 +433,7 @@ void OH_Drawing_SetTypographyTextDirection(OH_Drawing_TypographyStyle*, int /* O
  * @since 8
  * @version 1.0
  */
-void OH_Drawing_SetTypographyTextAlign(OH_Drawing_TypographyStyle*, int /* OH_Drawing_TextAlign */);
+void OH_Drawing_SetTypographyTextAlignment(OH_Drawing_TypographyStyle*, int /* OH_Drawing_TextAlign */);
 
 /**
  * @brief Sets the maximum number of lines in a text file.
@@ -1384,7 +1384,7 @@ OH_Drawing_TextStyle* OH_Drawing_TypographyGetTextStyle(OH_Drawing_TypographySty
 int OH_Drawing_TypographyGetEffectiveAlign(OH_Drawing_TypographyStyle*);
 
 /**
- * @brief Gets the IsUnlimitedLines of lines in a text file.
+ * @brief Gets the UnlimitedLines of lines in a text file.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TypographyStyle Indicates the pointer to an <b>OH_Drawing_TypographyStyle</b> object.
@@ -1392,7 +1392,7 @@ int OH_Drawing_TypographyGetEffectiveAlign(OH_Drawing_TypographyStyle*);
  * @since 12
  * @version 1.0
  */
-bool  OH_Drawing_TypographyIsUnlimitedLines(OH_Drawing_TypographyStyle*);
+bool  OH_Drawing_TypographyUnlimitedLines(OH_Drawing_TypographyStyle*);
 
 /**
  * @brief Gets the IsEllipsized of lines in a text file.
@@ -1651,7 +1651,7 @@ OH_Drawing_TextShadow* OH_Drawing_TextStyleGetShadows(OH_Drawing_TextStyle*);
  * @since 12
  * @version 1.0
  */
-int OH_Drawing_TextStyleGetShadowsCount(OH_Drawing_TextStyle*);
+int OH_Drawing_TextStyleGetShadowCount(OH_Drawing_TextStyle*);
 
 /**
  * @brief Adds element in vector of TextShadow in TextStyle.
