@@ -18,5 +18,9 @@
     {
         "first_introduced": "12",
         "name": "OH_FileShare_CheckPersistPermission"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_FileShare_ReleasePolicyErrorResult"
     }
 ]

@@ -16,7 +16,7 @@
 #ifndef FILE_MANAGEMENT_OH_FILE_SHARE_H
 #define FILE_MANAGEMENT_OH_FILE_SHARE_H
 
-#include "../../common/errorcode.h"
+#include "error_code.h"
 
 /**
  * @addtogroup fileShare
@@ -31,7 +31,7 @@
  * @file oh_file_share.h
  *
  * @brief Provides fileShare APIS.
- * @library liboh_file_share.so
+ * @library libohfileshare.so
  * @syscap SystemCapability.FileManagement.AppFileService.FolderAuthorization
  * @since 12
  */
@@ -135,76 +135,76 @@ typedef struct FileShare_PolicyInfo {
  * @brief Set persistent permissions for the URI.
  *
  * @permission ohos.permission.FILE_ACCESS_PERSIST
- * @param policies Represents a pointer to an {@link FileShare_PolicyInfo} instance.
+ * @param policies Input a pointer to an {@link FileShare_PolicyInfo} instance.
  * @param policyNum Indicates the size of the policies array.
- * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance. Please use OH_FileShare_ReleasePolicyErrorResult() to clear Resource.
- * @param resultNum Indicates the size of the result array.
+ * @param result Output a pointer to an {@link FileShare_PolicyErrorResult} instance. Please use OH_FileShare_ReleasePolicyErrorResult() to clear Resource.
+ * @param resultNum Output the size of the result array.
  * @return Returns the status code of the execution.
  * @since 12
  */
-OH_FileManagement_ErrCode OH_FileShare_PersistPermission(const FileShare_PolicyInfo *policies, unsigned int policyNum,
+FileManagement_ErrCode OH_FileShare_PersistPermission(const FileShare_PolicyInfo *policies, unsigned int policyNum,
     FileShare_PolicyErrorResult **result, unsigned int *resultNum);
 
 /**
  * @brief Revoke persistent permissions for the URI.
  *
  * @permission ohos.permission.FILE_ACCESS_PERSIST
- * @param policies Represents a pointer to an {@link FileShare_PolicyInfo} instance.
+ * @param policies Input a pointer to an {@link FileShare_PolicyInfo} instance.
  * @param policyNum Indicates the size of the policies array.
- * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance. Please use OH_FileShare_ReleasePolicyErrorResult() to clear Resource.
- * @param resultNum Indicates the size of the result array.
+ * @param result Output a pointer to an {@link FileShare_PolicyErrorResult} instance. Please use OH_FileShare_ReleasePolicyErrorResult() to clear Resource.
+ * @param resultNum Output the size of the result array.
  * @return Returns the status code of the execution.
  * @since 12
  */
-OH_FileManagement_ErrCode OH_FileShare_RevokePermission(const FileShare_PolicyInfo *policies, unsigned int policyNum,
+FileManagement_ErrCode OH_FileShare_RevokePermission(const FileShare_PolicyInfo *policies, unsigned int policyNum,
     FileShare_PolicyErrorResult **result, unsigned int *resultNum);
 
 /**
  * @brief Enable the URI that have been permanently authorized.
  *
  * @permission ohos.permission.FILE_ACCESS_PERSIST
- * @param policies Represents a pointer to an {@link FileShare_PolicyInfo} instance.
+ * @param policies Input a pointer to an {@link FileShare_PolicyInfo} instance.
  * @param policyNum Indicates the size of the policies array.
- * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance. Please use OH_FileShare_ReleasePolicyErrorResult() to clear Resource.
- * @param resultNum Indicates the size of the result array.
+ * @param result Output a pointer to an {@link FileShare_PolicyErrorResult} instance. Please use OH_FileShare_ReleasePolicyErrorResult() to clear Resource.
+ * @param resultNum Output the size of the result array.
  * @return Returns the status code of the execution.
  * @since 12
  */
-OH_FileManagement_ErrCode OH_FileShare_ActivatePermission(const FileShare_PolicyInfo *policies, unsigned int policyNum,
+FileManagement_ErrCode OH_FileShare_ActivatePermission(const FileShare_PolicyInfo *policies, unsigned int policyNum,
     FileShare_PolicyErrorResult **result, unsigned int *resultNum);
 
 /**
  * @brief Stop the authorized URI that has been enabled.
  *
  * @permission ohos.permission.FILE_ACCESS_PERSIST
- * @param policies Represents a pointer to an {@link FileShare_PolicyInfo} instance.
+ * @param policies Input a pointer to an {@link FileShare_PolicyInfo} instance.
  * @param policyNum Indicates the size of the policies array.
- * @param result Represents a pointer to an {@link FileShare_PolicyErrorResult} instance. Please use OH_FileShare_ReleasePolicyErrorResult() to clear Resource.
- * @param resultNum Indicates the size of the result array.
+ * @param result Output a pointer to an {@link FileShare_PolicyErrorResult} instance. Please use OH_FileShare_ReleasePolicyErrorResult() to clear Resource.
+ * @param resultNum Output the size of the result array.
  * @return Returns the status code of the execution.
  * @since 12
  */
-OH_FileManagement_ErrCode OH_FileShare_DeactivatePermission(const FileShare_PolicyInfo *policies,
+FileManagement_ErrCode OH_FileShare_DeactivatePermission(const FileShare_PolicyInfo *policies,
     unsigned int policyNum, FileShare_PolicyErrorResult **result, unsigned int *resultNum);
 
 /**
  * @brief Check persistent permissions for the URI.
  *
  * @permission ohos.permission.FILE_ACCESS_PERSIST
- * @param policies Represents a pointer to an {@link FileShare_PolicyInfo} instance.
+ * @param policies Input a pointer to an {@link FileShare_PolicyInfo} instance.
  * @param policyNum Indicates the size of the policies array.
- * @param result Represents a pointer to an bool instance. Please use free() to clear Resource.
- * @param resultNum Indicates the size of the result array.
+ * @param result Output a pointer to an bool instance. Please use free() to clear Resource.
+ * @param resultNum Output the size of the result array.
  * @return Returns the status code of the execution.
  * @since 12
  */
-OH_FileManagement_ErrCode OH_FileShare_CheckPersistentPermission(
+FileManagement_ErrCode OH_FileShare_CheckPersistentPermission(
     const FileShare_PolicyInfo *policies, unsigned int policyNum, bool **result, unsigned int *resultNum);
 
 /**
  * @brief Free FileShare_PolicyErrorResult pointer points to address memory.
  *
- * @param errorResult Represents a pointer to an {@link FileShare_PolicyErrorResult} instance.
+ * @param errorResult Input a pointer to an {@link FileShare_PolicyErrorResult} instance.
  * @param resultNum Indicates the size of the errorResult array.
  * @since 12
  */
