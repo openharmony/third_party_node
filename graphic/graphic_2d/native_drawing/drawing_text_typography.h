@@ -1420,12 +1420,13 @@ void OH_Drawing_SetTypographyTextStyle(OH_Drawing_TypographyStyle*, OH_Drawing_T
  * @brief get line fontmetrics.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_Typography Indicates the pointer to an <b>OH_Drawing_Typography</b> object.
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
- * @return Returns the text FontMetrics
+ * @return Returns the text FontMetrics.
  * @since 12
  * @version 1.0
  */
-OH_Drawing_FontMetrics* OH_Drawing_TextStyleGetFontMetrics(OH_Drawing_TextStyle*);
+OH_Drawing_FontMetrics* OH_Drawing_TextStyleGetFontMetrics(OH_Drawing_Typography*, OH_Drawing_TextStyle*);
 
 /**
  * @brief Gets the position of the specified line or the first text of the specified line
@@ -1708,17 +1709,6 @@ void OH_Drawing_TypographySetIndents(OH_Drawing_Typography*, int, const float in
  */
 double OH_Drawing_TypographyGetIndentsWithIndex(OH_Drawing_Typography*, int);
 
-/**
- * @brief get line fontmetrics.
- *
- * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_Typography Indicates the pointer to an <b>OH_Drawing_Typography</b> object.
- * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
- * @return Returns the text FontMetrics
- * @since 12
- * @version 1.0
- */
-OH_Drawing_FontMetrics* OH_Drawing_TextStyleGetFontMetrics(OH_Drawing_Typography*, OH_Drawing_TextStyle*);
 #ifdef __cplusplus
 }
 #endif
