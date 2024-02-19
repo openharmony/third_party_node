@@ -1850,5 +1850,25 @@
     {
         "first_introduced": "12",
         "name":"ucnv_isFixedWidth"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uenum_close"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uenum_count"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uenum_unext"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uenum_next"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uenum_reset"
     }
 ]
