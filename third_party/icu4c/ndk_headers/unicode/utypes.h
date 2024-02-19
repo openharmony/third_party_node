@@ -59,14 +59,7 @@
  * \def U_SHOW_CPLUSPLUS_API
  * @internal
  */
-#ifdef __cplusplus
-#   ifndef U_SHOW_CPLUSPLUS_API
-#       define U_SHOW_CPLUSPLUS_API 1
-#   endif
-#else
-#   undef U_SHOW_CPLUSPLUS_API
-#   define U_SHOW_CPLUSPLUS_API 0
-#endif
+#define U_SHOW_CPLUSPLUS_API 0
 
 /** @{ API visibility control */
 
