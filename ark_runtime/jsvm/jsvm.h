@@ -2124,7 +2124,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateSnapshot(JSVM_VM vm,
  *
  * @param vm: The VM whose heap statistics are returned.
  * @param result: The heap statistics data.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetHeapStatistics(JSVM_VM vm,
@@ -2155,6 +2155,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_StopCPUProfiler(JSVM_VM vm,
                                                 JSVM_CPUProfiler profiler,
                                                 JSVM_OutputStream stream,
                                                 void* streamData);
+
 /**
  * @brief This funciton takes the current heap snapshot and output to the stream.
  *
