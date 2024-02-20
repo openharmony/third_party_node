@@ -1392,7 +1392,7 @@ int OH_Drawing_TypographyGetEffectiveAlignment(OH_Drawing_TypographyStyle*);
  * @since 12
  * @version 1.0
  */
-bool OH_Drawing_TypographyUnlimitedLines(OH_Drawing_TypographyStyle*);
+bool OH_Drawing_TypographyIsUnlimitedLines(OH_Drawing_TypographyStyle*);
 
 /**
  * @brief Gets the IsEllipsized of lines in a text file.
