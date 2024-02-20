@@ -23,7 +23,7 @@ typedef enum {
 
 typedef enum {
   jsvm_tsfn_nonblocking,
-  napi_tsfn_blocking
+  jsvm_tsfn_blocking
 } jsvm_threadsafe_function_call_mode;
 #endif  // NAPI_VERSION >= 4
 

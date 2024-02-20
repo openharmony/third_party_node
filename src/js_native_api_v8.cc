@@ -3,11 +3,13 @@
 #include <cmath>
 #include "v8-internal.h"
 #include "v8-primitive.h"
+#include "v8-statistics.h"
 #include "v8-version-string.h"
 #define JSVM_EXPERIMENTAL
 #include "env-inl.h"
 #include "jsvm.h"
 #include "js_native_api_v8.h"
+#include "js_native_api_v8_inspector.h"
 #include "libplatform/libplatform.h"
 #include "util-inl.h"
 
@@ -61,6 +63,44 @@
     (out) = v8::type::New((buffer), (byteOffset), (length));                  \
   } while (0)
 
+JSVM_Env__::JSVM_Env__(v8::Isolate* isolate, int32_t module_api_version)
+    : isolate(isolate), module_api_version(module_api_version) {
+  inspector_agent_ = new v8impl::Agent(this);
+  jsvm_clear_last_error(this);
+}
+
+void JSVM_Env__::DeleteMe() {
+   // First we must finalize those references that have `napi_finalizer`
+   // callbacks. The reason is that addons might store other references which
+   // they delete during their `napi_finalizer` callbacks. If we deleted such
+   // references here first, they would be doubly deleted when the
+   // `napi_finalizer` deleted them subsequently.
+   v8impl::RefTracker::FinalizeAll(&finalizing_reflist);
+   v8impl::RefTracker::FinalizeAll(&reflist);
+   {
+       v8::Context::Scope context_scope(context());
+       if (inspector_agent_->IsActive()) {
+           inspector_agent_->WaitForDisconnect();
+       }
+       delete inspector_agent_;
+   }
+   delete this;
+}
+
+void JSVM_Env__::RunAndClearInterrupts() {
+  while (native_immediates_interrupts_.size() > 0) {
+    NativeImmediateQueue queue;
+    {
+      node::Mutex::ScopedLock lock(native_immediates_threadsafe_mutex_);
+      queue.ConcatMove(std::move(native_immediates_interrupts_));
+    }
+    node::DebugSealHandleScope seal_handle_scope(isolate);
+
+    while (auto head = queue.Shift())
+      head->Call(this);
+  }
+}
+
 namespace v8impl {
 
 namespace {
@@ -87,12 +127,12 @@ struct IsolateData {
 };
 
 static void CreateIsolateData(v8::Isolate* isolate, v8::StartupData* blob) {
-  auto data = new v8impl::IsolateData(blob);
+  auto data = new IsolateData(blob);
   v8::Isolate::Scope isolate_scope(isolate);
   v8::HandleScope handle_scope(isolate);
   if (blob) {
     // NOTE: The order of getting the data must be consistent with the order of
-    // adding data in napi_create_snapshot.
+    // adding data in OH_JSVM_CreateSnapshot.
       auto wrapper_key = isolate->GetDataFromSnapshotOnce<v8::Private>(0);
       auto type_tag_key = isolate->GetDataFromSnapshotOnce<v8::Private>(1);
       data->jsvm_wrapper_key.Set(isolate, wrapper_key.ToLocalChecked());
@@ -127,6 +167,29 @@ static JSVM_Env GetContextEnv(v8::Local<v8::Context> context) {
   auto data = context->GetAlignedPointerFromEmbedderData(kContextEnvIndex);
   return reinterpret_cast<JSVM_Env>(data);
 }
+
+class OutputStream : public v8::OutputStream {
+ public:
+  OutputStream(JSVM_OutputStream stream, void* data, int chunk_size = 65536)
+    : stream_(stream), stream_data_(data), chunk_size_(chunk_size) {}
+
+  int GetChunkSize() override { return chunk_size_; }
+
+  void EndOfStream() override {
+    stream_(nullptr, 0, stream_data_);
+  }
+
+  WriteResult WriteAsciiChunk(char* data, const int size) override {
+    return stream_(data, size, stream_data_) ? kContinue : kAbort;
+  }
+
+ private:
+  JSVM_OutputStream stream_;
+  void* stream_data_;
+  int chunk_size_;
+};
+
+static std::unique_ptr<v8::Platform> g_platform = v8::platform::NewDefaultPlatform();
 
 static std::vector<intptr_t> externalReferenceRegistry;
 
@@ -833,10 +896,13 @@ void Reference::WeakCallback(const v8::WeakCallbackInfo<Reference>& data) {
 
 }  // end of namespace v8impl
 
+v8::Platform* JSVM_Env__::platform() {
+  return v8impl::g_platform.get();
+}
+
 JSVM_Status JSVM_CDECL
 OH_JSVM_Init(const JSVM_InitOptions* options) {
-  static std::unique_ptr<v8::Platform> platform = v8::platform::NewDefaultPlatform();
-  v8::V8::InitializePlatform(platform.get());
+  v8::V8::InitializePlatform(v8impl::g_platform.get());
 
   if (options && options->argc && options->argv) {
     v8::V8::SetFlagsFromCommandLine(options->argc, options->argv, options->removeFlags);
@@ -851,6 +917,12 @@ OH_JSVM_Init(const JSVM_InitOptions* options) {
     }
   }
   v8impl::externalReferenceRegistry.push_back(0);
+  return JSVM_OK;
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_GetVM(JSVM_Env env,
+				      JSVM_VM* result) {
+  *result = reinterpret_cast<JSVM_VM>(env->isolate);
   return JSVM_OK;
 }
 
@@ -1176,6 +1248,111 @@ OH_JSVM_MemoryPressureNotification(JSVM_Env env,
   return jsvm_clear_last_error(env);
 }
 
+JSVM_EXTERN JSVM_Status JSVM_CDECL
+OH_JSVM_GetHeapStatistics(JSVM_VM vm, JSVM_HeapStatistics* result) {
+  auto isolate = reinterpret_cast<v8::Isolate*>(vm);
+  v8::HeapStatistics stats;
+  isolate->GetHeapStatistics(&stats);
+  result->totalHeapSize = stats.total_heap_size();
+  result->totalHeapSizeExecutable = stats.total_heap_size_executable();
+  result->totalPhysicalSize = stats.total_physical_size();
+  result->totalAvailableSize = stats.total_available_size();
+  result->usedHeapSize = stats.used_heap_size();
+  result->heapSizeLimit = stats.heap_size_limit();
+  result->mallocedMemory = stats.malloced_memory();
+  result->externalMemory = stats.external_memory();
+  result->peakMallocedMemory = stats.peak_malloced_memory();
+  result->numberOfNativeContexts = stats.number_of_native_contexts();
+  result->numberOfDetachedContexts = stats.number_of_detached_contexts();
+  result->totalGlobalHandlesSize = stats.total_global_handles_size();
+  result->usedGlobalHandlesSize = stats.used_global_handles_size();
+  return JSVM_OK;
+}
+
+JSVM_EXTERN JSVM_Status JSVM_CDECL
+OH_JSVM_StartCPUProfiler(JSVM_VM vm, JSVM_CPUProfiler* result) {
+  auto isolate = reinterpret_cast<v8::Isolate*>(vm);
+  auto profiler = v8::CpuProfiler::New(isolate);
+  v8::HandleScope scope(isolate);
+  v8::CpuProfilingOptions options;
+  profiler->Start(v8::String::Empty(isolate), std::move(options));
+  *result = reinterpret_cast<JSVM_CPUProfiler>(profiler);
+  return JSVM_OK;
+}
+
+JSVM_EXTERN JSVM_Status JSVM_CDECL
+OH_JSVM_StopCPUProfiler(JSVM_VM vm, JSVM_CPUProfiler profiler,
+                        JSVM_OutputStream stream, void* streamData) {
+  auto isolate = reinterpret_cast<v8::Isolate*>(vm);
+  auto v8profiler = reinterpret_cast<v8::CpuProfiler*>(profiler);
+  v8::HandleScope scope(isolate);
+  auto profile = v8profiler->StopProfiling(v8::String::Empty(isolate));
+  v8impl::OutputStream os(stream, streamData);
+  profile->Serialize(&os);
+  return JSVM_OK;
+}
+
+JSVM_EXTERN JSVM_Status JSVM_CDECL
+OH_JSVM_TakeHeapSnapshot(JSVM_VM vm,
+                         JSVM_OutputStream stream, void* streamData) {
+  auto isolate = reinterpret_cast<v8::Isolate*>(vm);
+  auto profiler = isolate->GetHeapProfiler();
+  auto snapshot = profiler->TakeHeapSnapshot();
+  v8impl::OutputStream os(stream, streamData);
+  snapshot->Serialize(&os);
+  return JSVM_OK;
+}
+
+JSVM_EXTERN JSVM_Status JSVM_CDECL
+OH_JSVM_OpenInspector(JSVM_Env env, const char* host, uint16_t port) {
+  JSVM_PREAMBLE(env);
+
+  std::string inspectorPath;
+  std::string hostName(host);
+  auto hostPort =
+      std::make_shared<node::ExclusiveAccess<node::HostPort>>(hostName, port);
+  env->inspector_agent()->Start(inspectorPath, hostPort, true, false);
+
+  return GET_RETURN_STATUS(env);
+}
+
+JSVM_EXTERN JSVM_Status JSVM_CDECL OH_JSVM_CloseInspector(JSVM_Env env) {
+  JSVM_PREAMBLE(env);
+  auto agent = env->inspector_agent();
+  if (!agent->IsActive()) {
+    return JSVM_GENERIC_FAILURE;
+  }
+  agent->Stop();
+  return GET_RETURN_STATUS(env);
+}
+
+JSVM_EXTERN JSVM_Status JSVM_CDECL OH_JSVM_WaitForDebugger(JSVM_Env env, bool breakNextLine) {
+  JSVM_PREAMBLE(env);
+  auto agent = env->inspector_agent();
+  if (!agent->IsActive()) {
+    return JSVM_GENERIC_FAILURE;
+  }
+
+  agent->WaitForConnect();
+  if (breakNextLine) {
+    agent->PauseOnNextJavascriptStatement("Break on debugger attached");
+  }
+
+  return GET_RETURN_STATUS(env);
+}
+
+JSVM_EXTERN JSVM_Status JSVM_CDECL OH_JSVM_PumpMessageLoop(JSVM_VM vm, bool *result) {
+  auto isolate = reinterpret_cast<v8::Isolate*>(vm);
+  *result = v8::platform::PumpMessageLoop(v8impl::g_platform.get(), isolate);
+  return JSVM_OK;
+}
+
+JSVM_EXTERN JSVM_Status JSVM_CDECL OH_JSVM_PerformMicrotaskCheckpoint(JSVM_VM vm) {
+  auto isolate = reinterpret_cast<v8::Isolate*>(vm);
+  isolate->PerformMicrotaskCheckpoint();
+  return JSVM_OK;
+}
+
 // Warning: Keep in-sync with JSVM_Status enum
 static const char* error_messages[] = {
     nullptr,
@@ -1211,7 +1388,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_GetLastErrorInfo(
 
   // The value of the constant below must be updated to reference the last
   // message in the `JSVM_Status` enum each time a new error message is added.
-  // We don't have a napi_status_last as this would result in an ABI
+  // We don't have a jsvm_status_last as this would result in an ABI
   // change each time a message was added.
   const int last_status = JSVM_CANNOT_RUN_JS;
 
@@ -2267,7 +2444,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_GetNull(JSVM_Env env, JSVM_Value* result) {
 
 // Gets all callback info in a single call. (Ugly, but faster.)
 JSVM_Status JSVM_CDECL OH_JSVM_GetCbInfo(
-    JSVM_Env env,               // [in] NAPI environment handle
+    JSVM_Env env,               // [in] JSVM environment handle
     JSVM_CallbackInfo cbinfo,  // [in] Opaque callback-info handle
     size_t* argc,      // [in-out] Specifies the size of the provided argv array
                        // and receives the actual count of args.

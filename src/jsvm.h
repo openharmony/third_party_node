@@ -102,7 +102,7 @@ EXTERN_C_START
  * @brief Init a JavaScript vm.
  *
  * @param  options: The options for initialize the JavaScript VM.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_Init(const JSVM_InitOptions* options);
@@ -112,7 +112,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_Init(const JSVM_InitOptions* options);
  *
  * @param options: The options for create the VM instance.
  * @param result: The new VM instance.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateVM(const JSVM_CreateVMOptions* options,
@@ -122,7 +122,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateVM(const JSVM_CreateVMOptions* options,
  * @brief Destroys VM instance.
  *
  * @param vm: The VM instance to be Destroyed.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_DestroyVM(JSVM_VM vm);
@@ -132,7 +132,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_DestroyVM(JSVM_VM vm);
  *
  * @param vm: The VM instance to open scope for.
  * @param result: The new VM scope.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_OpenVMScope(JSVM_VM vm,
@@ -143,7 +143,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_OpenVMScope(JSVM_VM vm,
  *
  * @param vm: The VM instance to close scope for.
  * @param scope: The VM scope to be closed.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CloseVMScope(JSVM_VM vm,
@@ -156,7 +156,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CloseVMScope(JSVM_VM vm,
  * @param propertyCount: The number of elements in the properties array.
  * @param properties: The array of property descriptor.
  * @param result: The new environment created.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateEnv(JSVM_VM vm,
@@ -170,7 +170,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateEnv(JSVM_VM vm,
  * @param vm: The VM instance that the env will be created in.
  * @param index: The index of the environment in the snapshot.
  * @param result: The new environment created.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateEnvFromSnapshot(JSVM_VM vm,
@@ -181,7 +181,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateEnvFromSnapshot(JSVM_VM vm,
  * @brief This function destroys the environment.
  *
  * @param env: The environment to be destroyed.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_DestroyEnv(JSVM_Env env);
@@ -191,7 +191,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_DestroyEnv(JSVM_Env env);
  *
  * @param env: The environment that the JSVM-API call is invoked under.
  * @param result: The new environment scope.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_OpenEnvScope(JSVM_Env env,
@@ -202,11 +202,22 @@ JSVM_EXTERN JSVM_Status OH_JSVM_OpenEnvScope(JSVM_Env env,
  *
  * @param env: The environment that the JSVM-API call is invoked under.
  * @param scope: The environment scope to be closed.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CloseEnvScope(JSVM_Env env,
                                               JSVM_EnvScope scope);
+
+/**
+ * @brief This function retrieves the VM instance of the given environment.
+ *
+ * @param env: The environment that the JSVM-API call is invoked under.
+ * @param result: The VM instance of the environment.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_GetVM(JSVM_Env env,
+                                      JSVM_VM* result);
 
 /**
  * @brief This function compiles a string of JavaScript code and returns the compiled script.
@@ -218,7 +229,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CloseEnvScope(JSVM_Env env,
  * @param eagerCompile: Whether to compile the script eagerly.
  * @param cacheRejected: Whether the code cache rejected by compilation.
  * @param result: The compiled script.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CompileScript(JSVM_Env env,
@@ -236,7 +247,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CompileScript(JSVM_Env env,
  * @param script: A compiled script to create code cache for.
  * @param data: The data of the code cache.
  * @param length: The length of the code cache data.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateCodeCache(JSVM_Env env,
@@ -270,7 +281,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_RunScript(JSVM_Env env,
  * @param finalizeCb: The function to call when the environment is being torn down. The function receives
  * data so that it might free it. JSVM_Finalize provides more details.
  * @param finalizeHint: Optional hint to pass to the finalize callback during collection.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_SetInstanceData(JSVM_Env env,
@@ -285,7 +296,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_SetInstanceData(JSVM_Env env,
  * @param env: The environment that the JSVM-API call is invoked under.
  * @param data: The data item that was previously associated with the currently running JSVM environment by
  * a call to OH_JSVM_SetInstanceData().
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetInstanceData(JSVM_Env env,
@@ -297,7 +308,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetInstanceData(JSVM_Env env,
  *
  * @param env: The environment that the JSVM-API call is invoked under.
  * @param result: The JSVM_ExtendedErrorInfo structure with more information about the error.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetLastErrorInfo(JSVM_Env env,
@@ -308,7 +319,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetLastErrorInfo(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param error: The JavaScript value to be thrown.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_Throw(JSVM_Env env,
@@ -320,7 +331,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_Throw(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param code: Optional error code to be set on the error.
  * @param msg: C string representing the text to be associated with the error.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_ThrowError(JSVM_Env env,
@@ -333,7 +344,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_ThrowError(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param code: Optional error code to be set on the error.
  * @param msg: C string representing the text to be associated with the error.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_ThrowTypeError(JSVM_Env env,
@@ -346,7 +357,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_ThrowTypeError(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param code: Optional error code to be set on the error.
  * @param msg: C string representing the text to be associated with the error.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_ThrowRangeError(JSVM_Env env,
@@ -359,7 +370,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_ThrowRangeError(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param code: Optional error code to be set on the error.
  * @param msg: C string representing the text to be associated with the error.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_ThrowSyntaxError(JSVM_Env env,
@@ -373,7 +384,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_ThrowSyntaxError(JSVM_Env env,
  * @param value: The JSVM_Value to be checked.
  * @param result: Boolean value that is set to true if JSVM_Value represents an error,
  * false otherwise.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_IsError(JSVM_Env env,
@@ -387,7 +398,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsError(JSVM_Env env,
  * @param code: Optional JSVM_Value with the string for the error code to be associated with the error.
  * @param msg: JSVM_Value that references a JavaScript string to be used as the message for the Error.
  * @param result: JSVM_Value representing the error created.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateError(JSVM_Env env,
@@ -402,7 +413,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateError(JSVM_Env env,
  * @param code: Optional JSVM_Value with the string for the error code to be associated with the error.
  * @param msg: JSVM_Value that references a JavaScript string to be used as the message for the Error.
  * @param result: JSVM_Value representing the error created.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateTypeError(JSVM_Env env,
@@ -417,7 +428,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateTypeError(JSVM_Env env,
  * @param code: Optional JSVM_Value with the string for the error code to be associated with the error.
  * @param msg: JSVM_Value that references a JavaScript string to be used as the message for the Error.
  * @param result: JSVM_Value representing the error created.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateRangeError(JSVM_Env env,
@@ -426,13 +437,13 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateRangeError(JSVM_Env env,
                                                  JSVM_Value* result);
 
 /**
- * @brief This API can be called even if there is a pending JavaScript exception.
+ * @brief This API returns a JavaScript SyntaxError with the text provided.
  *
  * @param env: The environment that the API is invoked under.
  * @param code: Optional JSVM_Value with the string for the error code to be associated with the error.
  * @param msg: JSVM_Value that references a JavaScript string to be used as the message for the Error.
  * @param result: JSVM_Value representing the error created.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateSyntaxError(JSVM_Env env,
@@ -441,22 +452,22 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateSyntaxError(JSVM_Env env,
                                                   JSVM_Value* result);
 
 /**
- * @brief This API returns a JavaScript SyntaxError with the text provided.
+ * @brief This API returns a JavaScript exception if one is pending, NULL otherwise.
  *
  * @param env: The environment that the API is invoked under.
  * @param result: The exception if one is pending, NULL otherwise.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetAndClearLastException(JSVM_Env env,
                                                          JSVM_Value* result);
 
 /**
- * @brief This API returns a JavaScript SyntaxError with the text provided.
+ * @brief This API returns true if an exception is pending, false otherwise.
  *
  * @param env: The environment that the API is invoked under.
  * @param result: Boolean value that is set to true if an exception is pending.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_IsExceptionPending(JSVM_Env env,
@@ -467,7 +478,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsExceptionPending(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param result: JSVM_Value representing the new scope.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_OpenHandleScope(JSVM_Env env,
@@ -479,7 +490,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_OpenHandleScope(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param scope: JSVM_Value representing the scope to be closed.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CloseHandleScope(JSVM_Env env,
@@ -490,7 +501,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CloseHandleScope(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param result: JSVM_Value representing the new scope.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_OpenEscapableHandleScope(JSVM_Env env,
@@ -502,7 +513,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_OpenEscapableHandleScope(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param scope: JSVM_Value representing the scope to be closed.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CloseEscapableHandleScope(JSVM_Env env,
@@ -517,7 +528,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CloseEscapableHandleScope(JSVM_Env env,
  * @param scope: JSVM_Value representing the current scope.
  * @param escapee: JSVM_Value representing the JavaScript Object to be escaped.
  * @param result: JSVM_Value representing the handle to the escaped Object in the outer scope.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_EscapeHandle(JSVM_Env env,
@@ -530,9 +541,9 @@ JSVM_EXTERN JSVM_Status OH_JSVM_EscapeHandle(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param value: The JSVM_Value for which a reference is being created.
- * @param initial_refcount: Initial reference count for the new reference.
+ * @param initialRefcount: Initial reference count for the new reference.
  * @param result: JSVM_Ref pointing to the new reference.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateReference(JSVM_Env env,
@@ -545,7 +556,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateReference(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param ref: JSVM_Ref to be deleted.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_DeleteReference(JSVM_Env env,
@@ -558,7 +569,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_DeleteReference(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param ref: JSVM_Ref for which the reference count will be incremented.
  * @param result: The new reference count.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_ReferenceRef(JSVM_Env env,
@@ -572,7 +583,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_ReferenceRef(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param ref: JSVM_Ref for which the reference count will be decremented.
  * @param result: The new reference count.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_ReferenceUnref(JSVM_Env env,
@@ -586,7 +597,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_ReferenceUnref(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param ref: The JSVM_Ref for which the corresponding value is being requested.
  * @param result: The JSVM_Value referenced by the JSVM_Ref.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetReferenceValue(JSVM_Env env,
@@ -598,7 +609,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetReferenceValue(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param result: A JSVM_Value representing a JavaScript Array.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateArray(JSVM_Env env,
@@ -613,7 +624,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateArray(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param length: The initial length of the Array.
  * @param result: A JSVM_Value representing a JavaScript Array.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateArrayWithLength(JSVM_Env env,
@@ -632,7 +643,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateArrayWithLength(JSVM_Env env,
  * @param byteLength: The length in bytes of the array buffer to create.
  * @param data: Pointer to the underlying byte buffer of the ArrayBuffer.data can optionally be ignored by passing NULL.
  * @param result: A JSVM_Value representing a JavaScript Array.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateArraybuffer(JSVM_Env env,
@@ -647,7 +658,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateArraybuffer(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param time: ECMAScript time value in milliseconds since 01 January, 1970 UTC.
  * @param result: A JSVM_Value representing a JavaScript Date.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateDate(JSVM_Env env,
@@ -656,18 +667,18 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateDate(JSVM_Env env,
 
 /**
  * @brief This API allocates a JavaScript value with external data attached to it. This is used to pass external
- * data through JavaScript code, so it can be retrieved later by native code using JSVM_get_value_external.
- * The API adds a JSVM_finalize callback which will be called when the JavaScript object just created has been garbage
+ * data through JavaScript code, so it can be retrieved later by native code using OH_JSVM_GetValueExternal.
+ * The API adds a JSVM_Finalize callback which will be called when the JavaScript object just created has been garbage
  * collected.The created value is not an object, and therefore does not support additional properties. It is considered
- * a distinct value type: calling JSVM_typeof() with an external value yields JSVM_external.
+ * a distinct value type: calling OH_JSVM_Typeof() with an external value yields JSVM_EXTERNAL.
  *
  * @param env: The environment that the API is invoked under.
  * @param data: Raw pointer to the external data.
- * @param finalizeCb: Optional callback to call when the external value is being collected. JSVM_finalize provides
+ * @param finalizeCb: Optional callback to call when the external value is being collected. JSVM_Finalize provides
  * more details.
  * @param finalizeHint: Optional hint to pass to the finalize callback during collection.
- * @param result: A JSVM_value representing an external value.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: A JSVM_Value representing an external value.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateExternal(JSVM_Env env,
@@ -677,33 +688,11 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateExternal(JSVM_Env env,
                                                JSVM_Value* result);
 
 /**
- * @brief This API returns a JSVM-API value corresponding to a JavaScript ArrayBuffer.
- * The underlying byte buffer of the ArrayBuffer is externally allocated and managed.
- * The caller must ensure that the byte buffer remains valid until the finalize callback is called.
- *
- * @param env: The environment that the API is invoked under.
- * @param externalData: Pointer to the underlying byte buffer of the ArrayBuffer.
- * @param byteLength: The length in bytes of the underlying buffer.
- * @param finalizeCb: Optional callback to call when the ArrayBuffer is being collected.
- * JSVM_finalize provides more details.
- * @param finalizeHint: Optional hint to pass to the finalize callback during collection.
- * @param result: A JSVM_value representing a JavaScript ArrayBuffer.
- * @return Returns JSVM_ok if the API succeeded.
- * @since 11
- */
-JSVM_EXTERN JSVM_Status OH_JSVM_CreateExternalArraybuffer(JSVM_Env env,
-                                                          void* externalData,
-                                                          size_t byteLength,
-                                                          JSVM_Finalize finalizeCb,
-                                                          void* finalizeHint,
-                                                          JSVM_Value* result);
-
-/**
  * @brief This API allocates a default JavaScript Object. It is the equivalent of doing new Object() in JavaScript.
  *
  * @param env: The environment that the API is invoked under.
- * @param result:  A JSVM_value representing a JavaScript Object.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result:  A JSVM_Value representing a JavaScript Object.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateObject(JSVM_Env env,
@@ -713,10 +702,10 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateObject(JSVM_Env env,
  * @brief This API creates a JavaScript symbol value from a UTF8-encoded C string.
  *
  * @param env: The environment that the API is invoked under.
- * @param description: Optional JSVM_value which refers to a JavaScript string to be set as the description
+ * @param description: Optional JSVM_Value which refers to a JavaScript string to be set as the description
  * for the symbol.
- * @param result: A JSVM_value representing a JavaScript symbol.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: A JSVM_Value representing a JavaScript symbol.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateSymbol(JSVM_Env env,
@@ -730,8 +719,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateSymbol(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param utf8description: UTF-8 C string representing the text to be used as the description for the symbol.
  * @param length: The length of the description string in bytes, or JSVM_AUTO_LENGTH if it is null-terminated.
- * @param result: A JSVM_value representing a JavaScript symbol.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: A JSVM_Value representing a JavaScript symbol.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_SymbolFor(JSVM_Env env,
@@ -750,8 +739,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_SymbolFor(JSVM_Env env,
  * @param length: Number of elements in the TypedArray.
  * @param arraybuffer: ArrayBuffer underlying the typed array.
  * @param byteOffset: The byte offset within the ArrayBuffer from which to start projecting the TypedArray.
- * @param result: A JSVM_value representing a JavaScript TypedArray
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: A JSVM_Value representing a JavaScript TypedArray
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateTypedarray(JSVM_Env env,
@@ -772,8 +761,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateTypedarray(JSVM_Env env,
  * @param length: Number of elements in the DataView.
  * @param arraybuffer: ArrayBuffer underlying the DataView.
  * @param byteOffset: The byte offset within the ArrayBuffer from which to start projecting the DataView.
- * @param result:A JSVM_value representing a JavaScript DataView.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result:A JSVM_Value representing a JavaScript DataView.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateDataview(JSVM_Env env,
@@ -787,8 +776,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateDataview(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param value: Integer value to be represented in JavaScript.
- * @param result: A JSVM_value representing a JavaScript number.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: A JSVM_Value representing a JavaScript number.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateInt32(JSVM_Env env,
@@ -800,8 +789,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateInt32(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param value: Unsigned integer value to be represented in JavaScript.
- * @param result: A JSVM_value representing a JavaScript number.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: A JSVM_Value representing a JavaScript number.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateUint32(JSVM_Env env,
@@ -813,8 +802,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateUint32(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param value: Integer value to be represented in JavaScript.
- * @param result: A JSVM_value representing a JavaScript number.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: A JSVM_Value representing a JavaScript number.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateInt64(JSVM_Env env,
@@ -826,8 +815,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateInt64(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param value: Double-precision value to be represented in JavaScript.
- * @param result: A JSVM_value representing a JavaScript number.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: A JSVM_Value representing a JavaScript number.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateDouble(JSVM_Env env,
@@ -839,8 +828,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateDouble(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param value: Integer value to be represented in JavaScript.
- * @param result: A JSVM_value representing a JavaScript BigInt.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: A JSVM_Value representing a JavaScript BigInt.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateBigintInt64(JSVM_Env env,
@@ -852,8 +841,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateBigintInt64(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param value: Unsigned integer value to be represented in JavaScript.
- * @param result: A JSVM_value representing a JavaScript BigInt.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: A JSVM_Value representing a JavaScript BigInt.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateBigintUint64(JSVM_Env env,
@@ -868,8 +857,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateBigintUint64(JSVM_Env env,
  * @param signBit: Determines if the resulting BigInt will be positive or negative.
  * @param wordCount: The length of the words array.
  * @param words: An array of uint64_t little-endian 64-bit words.
- * @param result: A JSVM_value representing a JavaScript BigInt.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: A JSVM_Value representing a JavaScript BigInt.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateBigintWords(JSVM_Env env,
@@ -885,8 +874,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateBigintWords(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param str: Character buffer representing an ISO-8859-1-encoded string.
  * @param length: The length of the string in bytes, or JSVM_AUTO_LENGTH if it is null-terminated.
- * @param result: A JSVM_value representing a JavaScript string.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: A JSVM_Value representing a JavaScript string.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateStringLatin1(JSVM_Env env,
@@ -902,8 +891,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateStringLatin1(JSVM_Env env,
  * @param str: Character buffer representing a UTF16-LE-encoded string.
  * @param length: The length of the string in two-byte code units, or JSVM_AUTO_LENGTH
  * if it is null-terminated.
- * @param result: A JSVM_value representing a JavaScript string.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: A JSVM_Value representing a JavaScript string.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateStringUtf16(JSVM_Env env,
@@ -918,8 +907,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateStringUtf16(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param str: Character buffer representing a UTF8-encoded string.
  * @param length: The length of the string in bytes, or JSVM_AUTO_LENGTH if it is null-terminated.
- * @param result: A JSVM_value representing a JavaScript string.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: A JSVM_Value representing a JavaScript string.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateStringUtf8(JSVM_Env env,
@@ -931,9 +920,9 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateStringUtf8(JSVM_Env env,
  * @brief This API returns the length of an array.
  *
  * @param env: The environment that the API is invoked under.
- * @param value: JSVM_value representing the JavaScript Array whose length is being queried.
+ * @param value: JSVM_Value representing the JavaScript Array whose length is being queried.
  * @param result: uint32 representing length of the array.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetArrayLength(JSVM_Env env,
@@ -944,11 +933,11 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetArrayLength(JSVM_Env env,
  * @brief This API is used to retrieve the underlying data buffer of an ArrayBuffer and its length.
  *
  * @param env: The environment that the API is invoked under.
- * @param arraybuffer: JSVM_value representing the ArrayBuffer being queried.
+ * @param arraybuffer: JSVM_Value representing the ArrayBuffer being queried.
  * @param data: The underlying data buffer of the ArrayBuffer. If byte_length is 0, this may be NULL
  * or any other pointer value.
  * @param byteLength: Length in bytes of the underlying data buffer.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetArraybufferInfo(JSVM_Env env,
@@ -960,10 +949,10 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetArraybufferInfo(JSVM_Env env,
  * @brief This API returns the length of an array.
  *
  * @param env: The environment that the API is invoked under.
- * @param object: JSVM_value representing JavaScript Object whose prototype to return. This returns
+ * @param object: JSVM_Value representing JavaScript Object whose prototype to return. This returns
  * the equivalent of Object.getPrototypeOf (which is not the same as the function's prototype property).
- * @param result: JSVM_value representing prototype of the given object.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: JSVM_Value representing prototype of the given object.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetPrototype(JSVM_Env env,
@@ -974,7 +963,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetPrototype(JSVM_Env env,
  * @brief This API returns various properties of a typed array.
  *
  * @param env: The environment that the API is invoked under.
- * @param typedarray: JSVM_value representing the TypedArray whose properties to query.
+ * @param typedarray: JSVM_Value representing the TypedArray whose properties to query.
  * @param type: Scalar datatype of the elements within the TypedArray.
  * @param length: The number of elements in the TypedArray.
  * @param data: The data buffer underlying the TypedArray adjusted by the byte_offset value so that it
@@ -984,7 +973,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetPrototype(JSVM_Env env,
  * @param byteOffset: The byte offset within the underlying native array at which the first element of
  * the arrays is located. The value for the data parameter has already been adjusted so that data points
  * to the first element in the array. Therefore, the first byte of the native array would be at data - byte_offset.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetTypedarrayInfo(JSVM_Env env,
@@ -1000,13 +989,13 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetTypedarrayInfo(JSVM_Env env,
  * This API returns various properties of a DataView.
  *
  * @param env: The environment that the API is invoked under.
- * @param dataview: JSVM_value representing the DataView whose properties to query.
+ * @param dataview: JSVM_Value representing the DataView whose properties to query.
  * @param bytelength: Number of bytes in the DataView.
  * @param data: The data buffer underlying the DataView.
  * If byte_length is 0, this may be NULL or any other pointer value.
  * @param arraybuffer: ArrayBuffer underlying the DataView.
  * @param byteOffset: The byte offset within the data buffer from which to start projecting the DataView.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetDataviewInfo(JSVM_Env env,
@@ -1017,15 +1006,15 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetDataviewInfo(JSVM_Env env,
                                                 size_t* byteOffset);
 
 /**
- * @brief Returns JSVM_ok if the API succeeded. If a non-date JSVM_value is
+ * @brief Returns JSVM_OK if the API succeeded. If a non-date JSVM_Value is
  * passed in it returns JSVM_date_expected.This API returns the C double
  * primitive of time value for the given JavaScript Date.
  *
  * @param env: The environment that the API is invoked under.
- * @param value: JSVM_value representing a JavaScript Date.
+ * @param value: JSVM_Value representing a JavaScript Date.
  * @param result: Time value as a double represented as milliseconds
  * since midnight at the beginning of 01 January, 1970 UTC.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetDateValue(JSVM_Env env,
@@ -1036,10 +1025,10 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetDateValue(JSVM_Env env,
  * @brief This API returns the C boolean primitive equivalent of the given JavaScript Boolean.
  *
  * @param env: The environment that the API is invoked under.
- * @param value: JSVM_value representing JavaScript Boolean.
+ * @param value: JSVM_Value representing JavaScript Boolean.
  * @param result: C boolean primitive equivalent of the given JavaScript Boolean.
- * @return Returns JSVM_ok if the API succeeded.
- * If a non-boolean JSVM_value is passed in it returns JSVM_boolean_expected.
+ * @return Returns JSVM_OK if the API succeeded.
+ * If a non-boolean JSVM_Value is passed in it returns JSVM_BOOLEAN_EXPECTED.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetValueBool(JSVM_Env env,
@@ -1047,13 +1036,13 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetValueBool(JSVM_Env env,
                                              bool* result);
 
 /**
- * @brief This API returns the C boolean primitive equivalent of the given JavaScript Boolean.
+ * @brief This API returns the C double primitive equivalent of the given JavaScript number.
  *
  * @param env: The environment that the API is invoked under.
- * @param value: JSVM_value representing JavaScript number.
+ * @param value: JSVM_Value representing JavaScript number.
  * @param result: C double primitive equivalent of the given JavaScript number.
- * @return Returns JSVM_ok if the API succeeded.
- * If a non-number JSVM_value is passed in it returns JSVM_number_expected.
+ * @return Returns JSVM_OK if the API succeeded.
+ * If a non-number JSVM_Value is passed in it returns JSVM_NUMBER_EXPECTED.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetValueDouble(JSVM_Env env,
@@ -1065,10 +1054,10 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetValueDouble(JSVM_Env env,
  * If needed it will truncate the value, setting lossless to false.
  *
  * @param env: The environment that the API is invoked under.
- * @param value: JSVM_value representing JavaScript BigInt.
+ * @param value: JSVM_Value representing JavaScript BigInt.
  * @param result: C int64_t primitive equivalent of the given JavaScript BigInt.
  * @param lossless: Indicates whether the BigInt value was converted losslessly.
- * @return Returns JSVM_ok if the API succeeded. If a non-BigInt is passed in it returns JSVM_bigint_expected.
+ * @return Returns JSVM_OK if the API succeeded. If a non-BigInt is passed in it returns JSVM_BIGINT_EXPECTED.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetValueBigintInt64(JSVM_Env env,
@@ -1081,10 +1070,10 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetValueBigintInt64(JSVM_Env env,
  * If needed it will truncate the value, setting lossless to false.
  *
  * @param env: The environment that the API is invoked under.
- * @param value: JSVM_value representing JavaScript BigInt.
+ * @param value: JSVM_Value representing JavaScript BigInt.
  * @param result: C uint64_t primitive equivalent of the given JavaScript BigInt.
  * @param lossless: Indicates whether the BigInt value was converted losslessly.
- * @return Returns JSVM_ok if the API succeeded. If a non-BigInt is passed in it returns JSVM_bigint_expected.
+ * @return Returns JSVM_OK if the API succeeded. If a non-BigInt is passed in it returns JSVM_BIGINT_EXPECTED.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetValueBigintUint64(JSVM_Env env,
@@ -1094,15 +1083,15 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetValueBigintUint64(JSVM_Env env,
 
 /**
  * @brief This API converts a single BigInt value into a sign bit, 64-bit little-endian array, and the number
- * of elements in the array. sign_bit and words may be both set to NULL, in order to get only word_count.
+ * of elements in the array. signBit and words may be both set to NULL, in order to get only wordCount.
  *
  * @param env: The environment that the API is invoked under.
- * @param value: JSVM_value representing JavaScript BigInt.
+ * @param value: JSVM_Value representing JavaScript BigInt.
  * @param signBit: Integer representing if the JavaScript BigInt is positive or negative.
  * @param wordCount: Must be initialized to the length of the words array. Upon return, it will be set to
  * the actual number of words that would be needed to store this BigInt.
  * @param words: Pointer to a pre-allocated 64-bit word array.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetValueBigintWords(JSVM_Env env,
@@ -1115,9 +1104,9 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetValueBigintWords(JSVM_Env env,
  * @brief This API retrieves the external data pointer that was previously passed to OH_JSVM_CreateExternal().
  *
  * @param env: The environment that the API is invoked under.
- * @param value: JSVM_value representing JavaScript external value.
+ * @param value: JSVM_Value representing JavaScript external value.
  * @param result: Pointer to the data wrapped by the JavaScript external value.
- * @return Returns JSVM_ok if the API succeeded. If a non-external JSVM_value is passed in it returns JSVM_invalid_arg.
+ * @return Returns JSVM_OK if the API succeeded. If a non-external JSVM_Value is passed in it returns JSVM_INVALID_ARG.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetValueExternal(JSVM_Env env,
@@ -1128,9 +1117,9 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetValueExternal(JSVM_Env env,
  * @brief This API returns the C int32 primitive equivalent of the given JavaScript number.
  *
  * @param env: The environment that the API is invoked under.
- * @param value: JSVM_value representing JavaScript number.
+ * @param value: JSVM_Value representing JavaScript number.
  * @param result: C int32 primitive equivalent of the given JavaScript number.
- * @return Returns JSVM_ok if the API succeeded. If a non-number JSVM_value is passed in JSVM_number_expected.
+ * @return Returns JSVM_OK if the API succeeded. If a non-number JSVM_Value is passed in JSVM_NUMBER_EXPECTED.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetValueInt32(JSVM_Env env,
@@ -1141,9 +1130,9 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetValueInt32(JSVM_Env env,
  * @brief This API returns the C int64 primitive equivalent of the given JavaScript number.
  *
  * @param env: The environment that the API is invoked under.
- * @param value: JSVM_value representing JavaScript number.
+ * @param value: JSVM_Value representing JavaScript number.
  * @param result: C int64 primitive equivalent of the given JavaScript number.
- * @return Returns JSVM_ok if the API succeeded. If a non-number JSVM_value is passed in JSVM_number_expected.
+ * @return Returns JSVM_OK if the API succeeded. If a non-number JSVM_Value is passed in JSVM_NUMBER_EXPECTED.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetValueInt64(JSVM_Env env,
@@ -1154,13 +1143,13 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetValueInt64(JSVM_Env env,
  * @brief This API returns the ISO-8859-1-encoded string corresponding the value passed in.
  *
  * @param env: The environment that the API is invoked under.
- * @param value: JSVM_value representing JavaScript string.
+ * @param value: JSVM_Value representing JavaScript string.
  * @param buf: Buffer to write the ISO-8859-1-encoded string into. If NULL is passed in, the
  * length of the string in bytes and excluding the null terminator is returned in result.
  * @param bufsize: Size of the destination buffer. When this value is insufficient, the returned string
  * is truncated and null-terminated.
  * @param result: Number of bytes copied into the buffer, excluding the null terminator.
- * @return Returns JSVM_ok if the API succeeded. If a non-number JSVM_value is passed in JSVM_number_expected.
+ * @return Returns JSVM_OK if the API succeeded. If a non-number JSVM_Value is passed in JSVM_NUMBER_EXPECTED.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetValueStringLatin1(JSVM_Env env,
@@ -1173,13 +1162,13 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetValueStringLatin1(JSVM_Env env,
  * @brief This API returns the UTF8-encoded string corresponding the value passed in.
  *
  * @param env: The environment that the API is invoked under.
- * @param value: JSVM_value representing JavaScript string.
+ * @param value: JSVM_Value representing JavaScript string.
  * @param buf: Buffer to write the UTF8-encoded string into. If NULL is passed in, the length
  * of the string in bytes and excluding the null terminator is returned in result.
  * @param bufsize: Size of the destination buffer. When this value is insufficient, the returned
  * string is truncated and null-terminated.
  * @param result: Number of bytes copied into the buffer, excluding the null terminator.
- * @return Returns JSVM_ok if the API succeeded. If a non-number JSVM_value is passed in JSVM_number_expected.
+ * @return Returns JSVM_OK if the API succeeded. If a non-number JSVM_Value is passed in JSVM_NUMBER_EXPECTED.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetValueStringUtf8(JSVM_Env env,
@@ -1192,13 +1181,13 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetValueStringUtf8(JSVM_Env env,
  * @brief This API returns the UTF16-encoded string corresponding the value passed in.
  *
  * @param env: The environment that the API is invoked under.
- * @param value: JSVM_value representing JavaScript string.
+ * @param value: JSVM_Value representing JavaScript string.
  * @param buf: Buffer to write the UTF16-LE-encoded string into. If NULL is passed in,
  * the length of the string in 2-byte code units and excluding the null terminator is returned.
  * @param bufsize: Size of the destination buffer. When this value is insufficient,
  * the returned string is truncated and null-terminated.
  * @param result: Number of 2-byte code units copied into the buffer, excluding the null terminator.
- * @return Returns JSVM_ok if the API succeeded. If a non-number JSVM_value is passed in JSVM_number_expected.
+ * @return Returns JSVM_OK if the API succeeded. If a non-number JSVM_Value is passed in JSVM_NUMBER_EXPECTED.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetValueStringUtf16(JSVM_Env env,
@@ -1208,13 +1197,13 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetValueStringUtf16(JSVM_Env env,
                                                     size_t* result);
 
 /**
- * @brief This API returns the C primitive equivalent of the given JSVM_value as a uint32_t.
+ * @brief This API returns the C primitive equivalent of the given JSVM_Value as a uint32_t.
  *
  * @param env: The environment that the API is invoked under.
- * @param value: JSVM_value representing JavaScript number.
- * @param result: C primitive equivalent of the given JSVM_value as a uint32_t.
- * @return Returns JSVM_ok if the API succeeded.
- * If a non-number JSVM_value is passed in it returns JSVM_number_expected.
+ * @param value: JSVM_Value representing JavaScript number.
+ * @param result: C primitive equivalent of the given JSVM_Value as a uint32_t.
+ * @return Returns JSVM_OK if the API succeeded.
+ * If a non-number JSVM_Value is passed in it returns JSVM_NUMBER_EXPECTED.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetValueUint32(JSVM_Env env,
@@ -1226,8 +1215,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetValueUint32(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param value: The value of the boolean to retrieve.
- * @param result: JSVM_value representing JavaScript Boolean singleton to retrieve.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: JSVM_Value representing JavaScript Boolean singleton to retrieve.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetBoolean(JSVM_Env env,
@@ -1238,8 +1227,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetBoolean(JSVM_Env env,
  * @brief This API returns the global object.
  *
  * @param env: The environment that the API is invoked under.
- * @param result: JSVM_value representing JavaScript global object.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: JSVM_Value representing JavaScript global object.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetGlobal(JSVM_Env env,
@@ -1249,8 +1238,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetGlobal(JSVM_Env env,
  * @brief This API returns the null object.
  *
  * @param env: The environment that the API is invoked under.
- * @param result: JSVM_value representing JavaScript null object.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: JSVM_Value representing JavaScript null object.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetNull(JSVM_Env env,
@@ -1260,8 +1249,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetNull(JSVM_Env env,
  * @brief This API returns the Undefined object.
  *
  * @param env: The environment that the API is invoked under.
- * @param result: JSVM_value representing JavaScript Undefined value.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: JSVM_Value representing JavaScript Undefined value.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetUndefined(JSVM_Env env,
@@ -1272,8 +1261,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetUndefined(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param value: The JavaScript value to coerce.
- * @param result: JSVM_value representing the coerced JavaScript Boolean.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: JSVM_Value representing the coerced JavaScript Boolean.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CoerceToBool(JSVM_Env env,
@@ -1286,8 +1275,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CoerceToBool(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param value: The JavaScript value to coerce.
- * @param result: JSVM_value representing the coerced JavaScript number.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: JSVM_Value representing the coerced JavaScript number.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CoerceToNumber(JSVM_Env env,
@@ -1299,8 +1288,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CoerceToNumber(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param value: The JavaScript value to coerce.
- * @param result: JSVM_value representing the coerced JavaScript Object.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: JSVM_Value representing the coerced JavaScript Object.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CoerceToObject(JSVM_Env env,
@@ -1313,8 +1302,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CoerceToObject(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param value: The JavaScript value to coerce.
- * @param result: JSVM_value representing the coerced JavaScript string.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: JSVM_Value representing the coerced JavaScript string.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CoerceToString(JSVM_Env env,
@@ -1331,7 +1320,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CoerceToString(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param value: The JavaScript value whose type to query.
  * @param result: The type of the JavaScript value.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_Typeof(JSVM_Env env,
@@ -1346,7 +1335,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_Typeof(JSVM_Env env,
  * @param constructor: The JavaScript function object of the constructor function
  * to check against.
  * @param result: Boolean that is set to true if object instanceof constructor is true.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_Instanceof(JSVM_Env env,
@@ -1360,7 +1349,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_Instanceof(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param value: The JavaScript value to check.
  * @param result: Whether the given object is an array.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_IsArray(JSVM_Env env,
@@ -1373,7 +1362,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsArray(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param value: The JavaScript value to check.
  * @param result: Whether the given object is an ArrayBuffer.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_IsArraybuffer(JSVM_Env env,
@@ -1385,8 +1374,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsArraybuffer(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param value: The JavaScript value to check.
- * @param result: Whether the given JSVM_value represents a JavaScript Date object.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: Whether the given JSVM_Value represents a JavaScript Date object.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_IsDate(JSVM_Env env,
@@ -1398,8 +1387,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsDate(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param value: The JavaScript value to check.
- * @param result: Whether the given JSVM_value represents a TypedArray.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: Whether the given JSVM_Value represents a TypedArray.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_IsTypedarray(JSVM_Env env,
@@ -1411,8 +1400,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsTypedarray(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param value: The JavaScript value to check.
- * @param result: Whether the given JSVM_value represents a DataView.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: Whether the given JSVM_Value represents a DataView.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_IsDataview(JSVM_Env env,
@@ -1425,8 +1414,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsDataview(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param lhs: The JavaScript value to check.
  * @param rhs: The JavaScript value to check against.
- * @param result: Whether the two JSVM_value objects are equal.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: Whether the two JSVM_Value objects are equal.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_StrictEquals(JSVM_Env env,
@@ -1439,8 +1428,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_StrictEquals(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param arraybuffer: The JavaScript ArrayBuffer to be detached.
- * @return Returns JSVM_ok if the API succeeded.If a non-detachable ArrayBuffer
- * is passed in it returns JSVM_detachable_arraybuffer_expected.
+ * @return Returns JSVM_OK if the API succeeded.If a non-detachable ArrayBuffer
+ * is passed in it returns JSVM_DETACHABLE_ARRAYBUFFER_EXPECTED.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_DetachArraybuffer(JSVM_Env env,
@@ -1452,7 +1441,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_DetachArraybuffer(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param value: The JavaScript ArrayBuffer to be checked.
  * @param result: Whether the arraybuffer is detached.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_IsDetachedArraybuffer(JSVM_Env env,
@@ -1465,10 +1454,10 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsDetachedArraybuffer(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param object: The object from which to retrieve the properties.
- * @param result: A JSVM_value representing an array of JavaScript values that represent
+ * @param result: A JSVM_Value representing an array of JavaScript values that represent
  * the property names of the object. The API can be used to iterate over result using
- OH_JSVM_GetArrayLength and OH_JSVM_GetElement.
- * @return Returns JSVM_ok if the API succeeded.
+ * OH_JSVM_GetArrayLength and OH_JSVM_GetElement.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetPropertyNames(JSVM_Env env,
@@ -1481,13 +1470,13 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetPropertyNames(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param object: The object from which to retrieve the properties.
- * @param key_mode: Whether to retrieve prototype properties as well.
- * @param key_filter: Which properties to retrieve (enumerable/readable/writable).
- * @param key_conversion: Whether to convert numbered property keys to strings.
- * @param result:  result: A JSVM_value representing an array of JavaScript values
+ * @param keyMode: Whether to retrieve prototype properties as well.
+ * @param keyFilter: Which properties to retrieve (enumerable/readable/writable).
+ * @param keyConversion: Whether to convert numbered property keys to strings.
+ * @param result:  result: A JSVM_Value representing an array of JavaScript values
  * that represent the property names of the object. OH_JSVM_GetArrayLength and
- * JOH_JSVM_GetElement can be used to iterate over result.
- * @return Returns JSVM_ok if the API succeeded.
+ * OH_JSVM_GetElement can be used to iterate over result.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetAllPropertyNames(JSVM_Env env,
@@ -1504,7 +1493,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetAllPropertyNames(JSVM_Env env,
  * @param object: The object on which to set the property.
  * @param key: The name of the property to set.
  * @param value: The property value.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_SetProperty(JSVM_Env env,
@@ -1519,7 +1508,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_SetProperty(JSVM_Env env,
  * @param object: The object from which to retrieve the property.
  * @param key: The name of the property to retrieve.
  * @param result: The value of the property.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetProperty(JSVM_Env env,
@@ -1534,7 +1523,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetProperty(JSVM_Env env,
  * @param object: The object to query.
  * @param key: The name of the property whose existence to check.
  * @param result: Whether the property exists on the object or not.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_HasProperty(JSVM_Env env,
@@ -1550,7 +1539,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_HasProperty(JSVM_Env env,
  * @param key: The name of the property to delete.
  * @param result: Whether the property deletion succeeded or not. result
  * can optionally be ignored by passing NULL.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_DeleteProperty(JSVM_Env env,
@@ -1567,7 +1556,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_DeleteProperty(JSVM_Env env,
  * @param object: The object to query.
  * @param key: The name of the own property whose existence to check.
  * @param result:  Whether the own property exists on the object or not.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_HasOwnProperty(JSVM_Env env,
@@ -1577,13 +1566,13 @@ JSVM_EXTERN JSVM_Status OH_JSVM_HasOwnProperty(JSVM_Env env,
 
 /**
  * @brief This method is equivalent to calling OH_JSVM_SetProperty with
- * a JSVM_value created from the string passed in as utf8Name.
+ * a JSVM_Value created from the string passed in as utf8Name.
  *
  * @param env: The environment that the API is invoked under.
  * @param object: The object on which to set the property.
  * @param utf8Name: The name of the property to set.
  * @param value: The property value.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_SetNamedProperty(JSVM_Env env,
@@ -1593,13 +1582,13 @@ JSVM_EXTERN JSVM_Status OH_JSVM_SetNamedProperty(JSVM_Env env,
 
 /**
  * @brief This method is equivalent to calling OH_JSVM_SetProperty with
- * a JSVM_value created from the string passed in as utf8Name.
+ * a JSVM_Value created from the string passed in as utf8Name.
  *
  * @param env: The environment that the API is invoked under.
  * @param object: The object from which to retrieve the property.
  * @param utf8Name: The name of the property to get.
  * @param result: The value of the property.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetNamedProperty(JSVM_Env env,
@@ -1609,13 +1598,13 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetNamedProperty(JSVM_Env env,
 
 /**
  * @brief This method is equivalent to calling OH_JSVM_SetProperty with
- * a JSVM_value created from the string passed in as utf8Name.
+ * a JSVM_Value created from the string passed in as utf8Name.
  *
  * @param env: The environment that the API is invoked under.
  * @param object: The object to query.
  * @param utf8Name: The name of the property whose existence to check.
  * @param result: Whether the property exists on the object or not.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_HasNamedProperty(JSVM_Env env,
@@ -1630,7 +1619,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_HasNamedProperty(JSVM_Env env,
  * @param object: The object from which to set the properties.
  * @param index: The index of the property to set.
  * @param value: The property value.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_SetElement(JSVM_Env env,
@@ -1645,7 +1634,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_SetElement(JSVM_Env env,
  * @param object: The object from which to retrieve the property.
  * @param index: The index of the property to get.
  * @param result: The value of the property.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetElement(JSVM_Env env,
@@ -1661,7 +1650,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetElement(JSVM_Env env,
  * @param object: The object to query.
  * @param index: The index of the property whose existence to check.
  * @param result: Whether the property exists on the object or not.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_HasElement(JSVM_Env env,
@@ -1677,7 +1666,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_HasElement(JSVM_Env env,
  * @param index: The index of the property to delete.
  * @param result: Whether the element deletion succeeded or not. result
  * can optionally be ignored by passing NULL.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_DeleteElement(JSVM_Env env,
@@ -1695,7 +1684,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_DeleteElement(JSVM_Env env,
  * @param object: The object from which to retrieve the properties.
  * @param propertyCount: The number of elements in the properties array.
  * @param properties: The array of property descriptors.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_DefineProperties(JSVM_Env env,
@@ -1712,7 +1701,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_DefineProperties(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param object: The object to freeze.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_ObjectFreeze(JSVM_Env env,
@@ -1724,7 +1713,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_ObjectFreeze(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param object: The object to seal.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_ObjectSeal(JSVM_Env env,
@@ -1737,11 +1726,11 @@ JSVM_EXTERN JSVM_Status OH_JSVM_ObjectSeal(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param recv: The this value passed to the called function.
- * @param func: JSVM_value representing the JavaScript function to be invoked.
+ * @param func: JSVM_Value representing the JavaScript function to be invoked.
  * @param argc: The count of elements in the argv array.
  * @param argv: Array of JSVM_values representing JavaScript values passed in as arguments to the function.
- * @param result: JSVM_value representing the JavaScript object returned.
- * @return Returns JSVM_ok if the API succeeded.
+ * @param result: JSVM_Value representing the JavaScript object returned.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CallFunction(JSVM_Env env,
@@ -1765,12 +1754,10 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CallFunction(JSVM_Env env,
  * @param length: The length of the utf8name in bytes, or JSVM_AUTO_LENGTH if it
  * is null-terminated.
  * @param cb: The native function which should be called when this function
- * object is invoked. JSVM_callback provides more details.
- * @param data: User-provided data context. This will be passed back into the
- * function when invoked later.
- * @param result: JSVM_value representing the JavaScript function object for the newly
+ * object is invoked and data. JSVM_Callback provides more details.
+ * @param result: JSVM_Value representing the JavaScript function object for the newly
  * created function.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateFunction(JSVM_Env env,
@@ -1790,13 +1777,13 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateFunction(JSVM_Env env,
  * @param argv: C array of JSVM_values to which the arguments will be copied. If
  * there are more arguments than the provided count, only the requested number of
  * arguments are copied. If there are fewer arguments provided than claimed, the
- * rest of argv is filled with JSVM_value values that represent undefined. argv
+ * rest of argv is filled with JSVM_Value values that represent undefined. argv
  * can optionally be ignored by passing NULL.
  * @param thisArg: Receives the JavaScript this argument for the call. thisArg
  * can optionally be ignored by passing NULL.
  * @param data: Receives the data pointer for the callback. data can optionally
  * be ignored by passing NULL.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetCbInfo(JSVM_Env env,
@@ -1813,7 +1800,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetCbInfo(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param cbinfo: The callback info passed into the callback function.
  * @param result: The new.target of the constructor call.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetNewTarget(JSVM_Env env,
@@ -1822,16 +1809,16 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetNewTarget(JSVM_Env env,
 
 /**
  * @brief his method is used to instantiate a new JavaScript value using
- * a given JSVM_value that represents the constructor for the object.
+ * a given JSVM_Value that represents the constructor for the object.
  *
  * @param env: The environment that the API is invoked under.
- * @param constructor: JSVM_value representing the JavaScript function to be invoked as a constructor.
+ * @param constructor: JSVM_Value representing the JavaScript function to be invoked as a constructor.
  * @param argc: The count of elements in the argv array.
- * @param argv: Array of JavaScript values as JSVM_value representing the arguments to
+ * @param argv: Array of JavaScript values as JSVM_Value representing the arguments to
  * the constructor. If argc is zero this parameter may be omitted by passing in NULL.
- * @param result: JSVM_value representing the JavaScript object returned, which
+ * @param result: JSVM_Value representing the JavaScript object returned, which
  * in this case is the constructed object.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_NewInstance(JSVM_Env env,
@@ -1850,16 +1837,16 @@ JSVM_EXTERN JSVM_Status OH_JSVM_NewInstance(JSVM_Env env,
  * recommended to use the C++ class name when wrapping a C++ class.
  * @param length: The length of the utf8name in bytes, or JSVM_AUTO_LENGTH if it
  * is null-terminated.
- * @param constructor: Callback function that handles constructing instances of the class.
- * When wrapping a C++ class, this method must be a static member with the JSVM_callback
- * signature. A C++ class constructor cannot be used. JSVM_callback provides more details.
- * @param data: Optional data to be passed to the constructor callback as the data
- * property of the callback info.
+ * @param constructor: Struct include callback function that handles constructing instances of the class.
+ * When wrapping a C++ class, this method must be a static member with the JSVM_Callback.callback
+ * signature. A C++ class constructor cannot be used. 
+ * Include Optional data to be passed to the constructor callback as the data
+ * property of the callback info. JSVM_Callback provides more details.
  * @param propertyCount: Number of items in the properties array argument.
  * @param properties: Array of property descriptors describing static and instance data
- * properties, accessors, and methods on the class See JSVM_property_descriptor.
- * @param result: A JSVM_value representing the constructor function for the class.
- * @return Returns JSVM_ok if the API succeeded.
+ * properties, accessors, and methods on the class See JSVM_PropertyDescriptor.
+ * @param result: A JSVM_Value representing the constructor function for the class.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_DefineClass(JSVM_Env env,
@@ -1872,7 +1859,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_DefineClass(JSVM_Env env,
 
 /**
  * @brief Wraps a native instance in a JavaScript object.  The native instance can
- * be retrieved later using JSVM_unwrap().
+ * be retrieved later using OH_JSVM_Unwrap().
  *
  * @param env: The environment that the API is invoked under.
  * @param jsObject: The JavaScript object that will be the wrapper for the native object.
@@ -1880,9 +1867,9 @@ JSVM_EXTERN JSVM_Status OH_JSVM_DefineClass(JSVM_Env env,
  * @param finalizeCb: Optional native callback that can be used to free the native instance
  * when the JavaScript object has been garbage-collected.
  * @param finalizeHint: Optional contextual hint that is passed to the finalize callback.
- * properties, accessors, and methods on the class See JSVM_property_descriptor.
+ * properties, accessors, and methods on the class See JSVM_PropertyDescriptor.
  * @param result: Optional reference to the wrapped object.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_Wrap(JSVM_Env env,
@@ -1894,14 +1881,14 @@ JSVM_EXTERN JSVM_Status OH_JSVM_Wrap(JSVM_Env env,
 
 /**
  * @brief When JavaScript code invokes a method or property accessor on the class, the corresponding
- * JSVM_callback is invoked. If the callback is for an instance method or accessor, then the this
+ * JSVM_Callback is invoked. If the callback is for an instance method or accessor, then the this
  * argument to the callback is the wrapper object; the wrapped C++ instance that is the target of
- * the call can be obtained then by calling JSVM_unwrap() on the wrapper object.
+ * the call can be obtained then by calling OH_JSVM_Unwrap() on the wrapper object.
  *
  * @param env: The environment that the API is invoked under.
  * @param jsObject: The object associated with the native instance.
  * @param result: Pointer to the wrapped native instance.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_Unwrap(JSVM_Env env,
@@ -1909,14 +1896,14 @@ JSVM_EXTERN JSVM_Status OH_JSVM_Unwrap(JSVM_Env env,
                                        void** result);
 
 /**
- * @brief Retrieves a native instance that was previously wrapped in the JavaScript object js_object
- * using JSVM_wrap() and removes the wrapping. If a finalize callback was associated with the wrapping,
+ * @brief Retrieves a native instance that was previously wrapped in the JavaScript object jsObject
+ * using OH_JSVM_Wrap() and removes the wrapping. If a finalize callback was associated with the wrapping,
  * it will no longer be called when the JavaScript object becomes garbage-collected.
  *
  * @param env: The environment that the API is invoked under.
  * @param jsObject: The object associated with the native instance.
  * @param result: Pointer to the wrapped native instance.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_RemoveWrap(JSVM_Env env,
@@ -1924,15 +1911,15 @@ JSVM_EXTERN JSVM_Status OH_JSVM_RemoveWrap(JSVM_Env env,
                                            void** result);
 
 /**
- * @brief Associates the value of the type_tag pointer with the JavaScript object or external.
- * JSVM_check_object_type_tag() can then be used to compare the tag that was attached to the
+ * @brief Associates the value of the typeTag pointer with the JavaScript object or external.
+ * OH_JSVM_CheckObjectTypeTag() can then be used to compare the tag that was attached to the
  * object with one owned by the addon to ensure that the object has the right type.
- * If the object already has an associated type tag, this API will return JSVM_invalid_arg.
+ * If the object already has an associated type tag, this API will return JSVM_INVALID_ARG.
  *
  * @param env: The environment that the API is invoked under.
  * @param value: The JavaScript object or external to be marked.
  * @param typeTag: The tag with which the object is to be marked.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_TypeTagObject(JSVM_Env env,
@@ -1940,16 +1927,16 @@ JSVM_EXTERN JSVM_Status OH_JSVM_TypeTagObject(JSVM_Env env,
                                               const JSVM_TypeTag* typeTag);
 
 /**
- * @brief Compares the pointer given as type_tag with any that can be found on js_object.
- * If no tag is found on js_object or, if a tag is found but it does not match type_tag,
- * then result is set to false. If a tag is found and it matches type_tag, then result is set to true.
+ * @brief Compares the pointer given as typeTag with any that can be found on js object.
+ * If no tag is found on js object or, if a tag is found but it does not match typeTag,
+ * then result is set to false. If a tag is found and it matches typeTag, then result is set to true.
  *
  * @param env: The environment that the API is invoked under.
  * @param value: The JavaScript object or external whose type tag to examine.
  * @param typeTag: The tag with which to compare any tag found on the object.
  * @param result: Whether the type tag given matched the type tag on the object. false is also returned
  * if no type tag was found on the object.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CheckObjectTypeTag(JSVM_Env env,
@@ -1962,12 +1949,12 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CheckObjectTypeTag(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param jsObject: The JavaScript object to which the native data will be attached.
- * @param finalizeData: Optional data to be passed to finalize_cb.
+ * @param finalizeData: Optional data to be passed to finalizeCb.
  * @param finalizeCb: Native callback that will be used to free the native data when the
- * JavaScript object has been garbage-collected. JSVM_finalize provides more details.
+ * JavaScript object has been garbage-collected. JSVM_Finalize provides more details.
  * @param finalizeHint: Optional contextual hint that is passed to the finalize callback.
  * @param result: Optional reference to the JavaScript object.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_AddFinalizer(JSVM_Env env,
@@ -1978,31 +1965,15 @@ JSVM_EXTERN JSVM_Status OH_JSVM_AddFinalizer(JSVM_Env env,
                                              JSVM_Ref* result);
 
 /**
- * @brief This API can be called multiple times on a single JavaScript object.
+ * @brief This API returns the highest JSVM-API version supported by the JSVM runtime.
  *
- * @param env: The environment that the API is invoked under.
- * @param finalizeCb: Native callback that will be used to free the native data when the
- * JavaScript object has been garbage-collected. JSVM_finalize provides more details.
- * @param finalizeData: Optional data to be passed to finalize_cb.
- * @param finalizeHint: Optional contextual hint that is passed to the finalize callback.
- * @return Returns JSVM_ok if the API succeeded.
- * @since 11
- */
-JSVM_EXTERN JSVM_Status OH_JSVM_PostFinalizer(JSVM_Env env,
-                                              JSVM_Finalize finalizeCb,
-                                              void* finalizeData,
-                                              void* finalizeHint);
-
-/**
- * @brief This API returns the highest JSVM-API version supported by the JSVM.js runtime.
- *
- * JSVM-API is planned to be additive such that newer releases of JSVM.js may support additional
+ * JSVM-API is planned to be additive such that newer releases of JSVM may support additional
  * API functions. In order to allow an addon to use a newer function when running with versions
- * of JSVM.js that support it, while providing fallback behavior when running with JSVM.js
+ * of JSVM that support it, while providing fallback behavior when running with JSVM
  * versions that don't support it.
  * @param env: The environment that the API is invoked under.
  * @param result: The highest version of JSVM-API supported.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetVersion(JSVM_Env env,
@@ -2012,7 +1983,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetVersion(JSVM_Env env,
  * @brief Return information of the VM.
  *
  * @param result: The information of the VM.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetVMInfo(JSVM_VMInfo* result);
@@ -2028,7 +1999,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetVMInfo(JSVM_VMInfo* result);
  * @param changeInBytes: The change in externally allocated memory that is kept
  * alive by JavaScript objects.
  * @param result: The adjusted value
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_AdjustExternalMemory(JSVM_Env env,
@@ -2041,7 +2012,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_AdjustExternalMemory(JSVM_Env env,
  *
  * @param env: The environment that the API is invoked under.
  * @param level: The memory pressure level set to the current VM.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_MemoryPressureNotification(JSVM_Env env,
@@ -2055,7 +2026,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_MemoryPressureNotification(JSVM_Env env,
  * passed to OH_JSVM_ResolveDeferred() or OH_JSVM_RejectDeferred() to resolve
  * resp. reject the associated promise.
  * @param promise: The JavaScript promise associated with the deferred object.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreatePromise(JSVM_Env env,
@@ -2072,7 +2043,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreatePromise(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param deferred: The deferred object whose associated promise to resolve.
  * @param resolution: The value with which to resolve the promise.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_ResolveDeferred(JSVM_Env env,
@@ -2089,7 +2060,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_ResolveDeferred(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param deferred: The deferred object whose associated promise to resolve.
  * @param rejection: The value with which to reject the promise.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_RejectDeferred(JSVM_Env env,
@@ -2101,7 +2072,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_RejectDeferred(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param value: The value to examine
  * @param isPromise: Flag indicating whether promise is a native promise object
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_IsPromise(JSVM_Env env,
@@ -2109,11 +2080,11 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsPromise(JSVM_Env env,
                                           bool* isPromise);
 
 /**
- * @brief This API return the parse object of json string.
+ * @brief This API parses a JSON string and returns it as value if successful.
  * @param env: The environment that the API is invoked under.
  * @param jsonString: The string to parse.
  * @param result: The parse value if successful.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_JsonParse(JSVM_Env env,
@@ -2121,11 +2092,11 @@ JSVM_EXTERN JSVM_Status OH_JSVM_JsonParse(JSVM_Env env,
                                           JSVM_Value* result);
 
 /**
- * @brief This API return the string stringified from object.
+ * @brief This API stringifies the object and returns it as string if successful.
  * @param env: The environment that the API is invoked under.
  * @param jsonObject: The object to stringify.
  * @param result: The string if successfully stringified.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_JsonStringify(JSVM_Env env,
@@ -2139,7 +2110,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_JsonStringify(JSVM_Env env,
  * @param contexts: The array of contexts to add to the snapshot.
  * @param blobData: The snapshot data.
  * @param blobSize: The size of snapshot data.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CreateSnapshot(JSVM_VM vm,
@@ -2147,6 +2118,90 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateSnapshot(JSVM_VM vm,
                                                const JSVM_Env* contexts,
                                                const char** blobData,
                                                size_t* blobSize);
+
+/**
+ * @brief This function returns a set of statistics data of the heap of the VM.
+ *
+ * @param vm: The VM whose heap statistics are returned.
+ * @param result: The heap statistics data.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_GetHeapStatistics(JSVM_VM vm,
+                                                  JSVM_HeapStatistics* result);
+
+/**
+ * @brief This function creates and starts a CPU profiler.
+ *
+ * @param vm: The VM to start CPU profiler for.
+ * @param result: The pointer to the CPU profiler.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_StartCPUProfiler(JSVM_VM vm,
+                                                 JSVM_CPUProfiler* result);
+
+/**
+ * @brief This function stops the CPU profiler and output to the stream.
+ *
+ * @param vm: THe VM to start CPU profiler for.
+ * @param profiler: The CPU profiler to stop.
+ * @param stream: The output stream callback for receiving the data.
+ * @param streamData: Optional data to be passed to the stream callback.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_StopCPUProfiler(JSVM_VM vm,
+                                                JSVM_CPUProfiler profiler,
+                                                JSVM_OutputStream stream,
+                                                void* streamData);
+
+/**
+ * @brief This funciton takes the current heap snapshot and output to the stream.
+ *
+ * @param vm: The VM whose heap snapshot is taken.
+ * @param stream: The output stream callback for receiving the data.
+ * @param streamData: Optional data to be passed to the stream callback.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_TakeHeapSnapshot(JSVM_VM vm,
+                                                 JSVM_OutputStream stream,
+                                                 void* streamData);
+
+/**
+ * @brief This functiong activates insepctor on host and port.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param host: The host to listen to for inspector connections.
+ * @param port: The port to listen to for inspector connections.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_OpenInspector(JSVM_Env env,
+                                              const char* host,
+                                              uint16_t port);
+
+/**
+ * @brief This function attempts to close all remaining inspector connections.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_CloseInspector(JSVM_Env env);
+
+/**
+ * @brief This function will block until a client (existing or connected later)
+ * has sent Runtime.runIfWaitingForDebugger command.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param breakNextLine: Whether break on the next line of JavaScript code.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_WaitForDebugger(JSVM_Env env,
+                                                bool breakNextLine);
 
 EXTERN_C_END
 

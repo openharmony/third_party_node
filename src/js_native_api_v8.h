@@ -48,6 +48,7 @@ class RefTracker {
 };
 
 class Finalizer;
+class Agent;
 }  // end of namespace v8impl
 
 struct JSVM_Env__ {
@@ -60,11 +61,26 @@ struct JSVM_Env__ {
   }
 
   // Constructor for creating partial env.
-  explicit JSVM_Env__(v8::Isolate* isolate, int32_t module_api_version)
-      : isolate(isolate),
- module_api_version(module_api_version) {
-    jsvm_clear_last_error(this);
+  explicit JSVM_Env__(v8::Isolate* isolate, int32_t module_api_version);
+
+  template <typename Fn>
+  inline void RequestInterrupt(Fn&& cb) {
+    auto callback = native_immediates_interrupts_.CreateCallback(
+        std::move(cb), node::CallbackFlags::kRefed);
+    {
+      node::Mutex::ScopedLock lock(native_immediates_threadsafe_mutex_);
+      native_immediates_interrupts_.Push(std::move(callback));
+    }
+    isolate->RequestInterrupt([](v8::Isolate* isolate, void* data) {
+      static_cast<JSVM_Env__*>(data)->RunAndClearInterrupts();
+    }, this);
   }
+
+  void RunAndClearInterrupts();
+
+  v8impl::Agent* inspector_agent() { return inspector_agent_; }
+
+  v8::Platform* platform();
 
   inline v8::Local<v8::Context> context() const {
     return v8impl::PersistentToLocal::Strong(context_persistent);
@@ -126,16 +142,7 @@ struct JSVM_Env__ {
     pending_finalizers.erase(finalizer);
   }
 
-  virtual void DeleteMe() {
-    // First we must finalize those references that have `JSVM_Finalizer`
-    // callbacks. The reason is that addons might store other references which
-    // they delete during their `JSVM_Finalizer` callbacks. If we deleted such
-    // references here first, they would be doubly deleted when the
-    // `JSVM_Finalizer` deleted them subsequently.
-    v8impl::RefTracker::FinalizeAll(&finalizing_reflist);
-    v8impl::RefTracker::FinalizeAll(&reflist);
-    delete this;
-  }
+  virtual void DeleteMe();
 
   v8::Isolate* const isolate;  // Shortcut for context()->GetIsolate()
   v8impl::Persistent<v8::Context> context_persistent;
@@ -155,6 +162,12 @@ struct JSVM_Env__ {
   int refs = 1;
   void* instance_data = nullptr;
   int32_t module_api_version = NODE_API_DEFAULT_MODULE_API_VERSION;
+
+ private:
+  v8impl::Agent* inspector_agent_;
+  typedef node::CallbackQueue<void, JSVM_Env__*> NativeImmediateQueue;
+  node::Mutex native_immediates_threadsafe_mutex_;
+  NativeImmediateQueue native_immediates_interrupts_;
 
  protected:
   // Should not be deleted directly. Delete with `JSVM_Env__::DeleteMe()`
