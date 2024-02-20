@@ -93,6 +93,13 @@ typedef struct JSVM_Script__* JSVM_Script;
 typedef struct JSVM_Env__* JSVM_Env;
 
 /**
+ * @brief To represent a JavaScript profiler.
+ *
+ * @since 12
+ */
+typedef struct JSVM_CPUProfiler__* JSVM_CPUProfiler;
+
+/**
  * @brief To represent a JavaScript VM environment.
  *
  * @since 11
@@ -161,6 +168,15 @@ typedef JSVM_CallbackStruct* JSVM_Callback;
 typedef void(JSVM_CDECL* JSVM_Finalize)(JSVM_Env env,
                                         void* finalizeData,
                                         void* finalizeHint);
+
+/**
+ * @brief Function pointer type for callback of ASCII output stream.
+ *
+ * @since 12
+ */
+typedef bool(JSVM_CDECL* JSVM_OutputStream)(const char* data,
+                                            int size,
+                                            void* streamData);
 
 /**
  * @brief JSVM_PropertyAttributes are flag used to control the behavior of properties set on a js object.
@@ -357,6 +373,40 @@ typedef enum {
 } JSVM_MemoryPressureLevel;
 
 /**
+ * @brief Heap statisics.
+ *
+ * @since 12
+ */
+typedef struct {
+    /** the size of the total heap. */
+    size_t totalHeapSize;
+    /** the executable size of the total heap. */
+    size_t totalHeapSizeExecutable;
+    /** the physical size of the total heap. */
+    size_t totalPhysicalSize;
+    /** the available size of the total heap. */
+    size_t totalAvailableSize;
+    /** used size of the heap. */
+    size_t usedHeapSize;
+    /** heap size limit. */
+    size_t heapSizeLimit;
+    /** memory requested by the heap. */
+    size_t mallocedMemory;
+    /** heap-requested external memory. */
+    size_t externalMemory;
+    /** peak memory requested by the heap. */
+    size_t peakMallocedMemory;
+    /** the number of native contexts. */
+    size_t numberOfNativeContexts;
+    /** the number of detached contexts. */
+    size_t numberOfDetachedContexts;
+    /** the size of the total global handles. */
+    size_t totalGlobalHandlesSize;
+    /** the size of the used global handles. */
+    size_t usedGlobalHandlesSize;
+} JSVM_HeapStatistics;
+
+/**
  * @brief Init the JavaScript VM with init option.
  *
  * @since 11
@@ -370,8 +420,8 @@ typedef struct {
     */
     const intptr_t* externalReferences;
 
-    /** 
-     * Flags for the VM. IF remove_flags is true, recognized flags will be removed
+    /**
+     * Flags for the VM. IF removeFlags is true, recognized flags will be removed
      * from (argc, argv). Note that these flags are specific to VM.
      * They are mainly used for development. Do not include them in production as
      * they might not take effect if the VM is different from the development
@@ -466,7 +516,7 @@ typedef struct {
 /**
  * @brief A 128-bit value stored as two unsigned 64-bit integers.
  * It serves as a UUID with which JavaScript objects or externals can be "tagged"
- * in order to ensure that they are of a certain type. .
+ * in order to ensure that they are of a certain type.
  *
  * @since 11
  */
