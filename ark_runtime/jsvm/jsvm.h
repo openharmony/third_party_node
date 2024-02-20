@@ -213,7 +213,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CloseEnvScope(JSVM_Env env,
  *
  * @param env: The environment that the JSVM-API call is invoked under.
  * @param result: The VM instance of the environment.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_GetVM(JSVM_Env env,
@@ -2121,6 +2121,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateSnapshot(JSVM_VM vm,
 
 /**
  * @brief This function returns a set of statistics data of the heap of the VM.
+ *
  * @param vm: The VM whose heap statistics are returned.
  * @param result: The heap statistics data.
  * @return Returns JSVM_ok if the API succeeded.
@@ -2131,9 +2132,10 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetHeapStatistics(JSVM_VM vm,
 
 /**
  * @brief This function creates and starts a CPU profiler.
+ *
  * @param vm: The VM to start CPU profiler for.
  * @param result: The pointer to the CPU profiler.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_StartCPUProfiler(JSVM_VM vm,
@@ -2141,11 +2143,12 @@ JSVM_EXTERN JSVM_Status OH_JSVM_StartCPUProfiler(JSVM_VM vm,
 
 /**
  * @brief This function stops the CPU profiler and output to the stream.
+ *
  * @param vm: THe VM to start CPU profiler for.
  * @param profiler: The CPU profiler to stop.
  * @param stream: The output stream callback for receiving the data.
  * @param streamData: Optional data to be passed to the stream callback.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_StopCPUProfiler(JSVM_VM vm,
@@ -2154,10 +2157,11 @@ JSVM_EXTERN JSVM_Status OH_JSVM_StopCPUProfiler(JSVM_VM vm,
                                                 void* streamData);
 /**
  * @brief This funciton takes the current heap snapshot and output to the stream.
+ *
  * @param vm: The VM whose heap snapshot is taken.
  * @param stream: The output stream callback for receiving the data.
  * @param streamData: Optional data to be passed to the stream callback.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_TakeHeapSnapshot(JSVM_VM vm,
@@ -2166,10 +2170,11 @@ JSVM_EXTERN JSVM_Status OH_JSVM_TakeHeapSnapshot(JSVM_VM vm,
 
 /**
  * @brief This functiong activates insepctor on host and port.
+ *
  * @param env: The environment that the API is invoked under.
  * @param host: The host to listen to for inspector connections.
  * @param port: The port to listen to for inspector connections.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_OpenInspector(JSVM_Env env,
@@ -2178,8 +2183,9 @@ JSVM_EXTERN JSVM_Status OH_JSVM_OpenInspector(JSVM_Env env,
 
 /**
  * @brief This function attempts to close all remaining inspector connections.
+ *
  * @param env: The environment that the API is invoked under.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_CloseInspector(JSVM_Env env);
@@ -2187,9 +2193,10 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CloseInspector(JSVM_Env env);
 /**
  * @brief This function will block until a client (existing or connected later)
  * has sent Runtime.runIfWaitingForDebugger command.
+ *
  * @param env: The environment that the API is invoked under.
  * @param breakNextLine: Whether break on the next line of JavaScript code.
- * @return Returns JSVM_ok if the API succeeded.
+ * @return Returns JSVM_OK if the API succeeded.
  * @since 11
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_WaitForDebugger(JSVM_Env env,
