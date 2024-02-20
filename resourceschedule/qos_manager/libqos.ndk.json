@@ -1,0 +1,14 @@
+[
+    { 
+        "first_introduced": "12",
+        "name": "OH_QoS_SetThreadQoS"
+    },
+    { 
+        "first_introduced": "12",
+        "name": "OH_QoS_ResetThreadQoS" 
+    },
+    { 
+        "first_introduced": "12",
+        "name": "OH_QoS_GetThreadQoS" 
+    }
+]
