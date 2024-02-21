@@ -95,7 +95,7 @@ typedef struct JSVM_Env__* JSVM_Env;
 /**
  * @brief To represent a JavaScript profiler.
  *
- * @since 11
+ * @since 12
  */
 typedef struct JSVM_CPUProfiler__* JSVM_CPUProfiler;
 
@@ -172,7 +172,7 @@ typedef void(JSVM_CDECL* JSVM_Finalize)(JSVM_Env env,
 /**
  * @brief Function pointer type for callback of ASCII output stream.
  *
- * @since 11
+ * @since 12
  */
 typedef bool(JSVM_CDECL* JSVM_OutputStream)(const char* data,
                                             int size,
@@ -375,7 +375,7 @@ typedef enum {
 /**
  * @brief Heap statisics.
  *
- * @since 11
+ * @since 12
  */
 typedef struct {
     /** the size of the total heap. */
