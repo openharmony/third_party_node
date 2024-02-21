@@ -18,10 +18,20 @@ ohos_ndk_library("libohweb") {
   output_name = "ohweb"
   output_extension = "so"
   ndk_description_file = "./libohweb.ndk.json"
+  system_capability = "SystemCapability.Web.Webview.Core"
+  system_capability_headers = [
+    "web/arkweb_net_error_list.h",
+    "web/arkweb_scheme_handler.h",
+    "web/native_interface_arkweb.h",
+  ]
   min_compact_version = "11"
 }
 
 ohos_ndk_headers("web_header") {
   dest_dir = "$ndk_headers_out_dir/web/"
-  sources = [ "native_interface_arkweb.h" ]
+  sources = [
+    "arkweb_net_error_list.h",
+    "arkweb_scheme_handler.h",
+    "native_interface_arkweb.h",
+  ]
 }

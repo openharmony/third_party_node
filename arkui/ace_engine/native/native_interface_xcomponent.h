@@ -42,6 +42,8 @@
 #include <vector>
 #endif
 
+#include "arkui/native_type.h"
+
 #include "native_xcomponent_key_event.h"
 
 #ifdef __cplusplus
@@ -624,6 +626,29 @@ int32_t OH_NativeXComponent_RegisterOnFrameCallback(OH_NativeXComponent* compone
  */
 int32_t OH_NativeXComponent_UnregisterOnFrameCallback(OH_NativeXComponent* component);
 
+/**
+ * @brief Mount the UI component created by using the native interface of the ArkUI to the current XComponent.
+ *
+ * @param component indicates the pointer that points to the OH_NativeXComponent instance.
+ * @param root Pointer that points to the component instance created by the Native interface.
+ * @return 0 - Success.
+ *         401: parameter exception.
+ *
+ * @since 12
+ */
+int32_t OH_NativeXComponent_AttachNativeRootNode(OH_NativeXComponent* component, ArkUI_NodeHandle root);
+
+/**
+ * @brief Uninstall the native component of the ArkUI from the current XComponent.
+ *
+ * @param component indicates the pointer that points to the OH_NativeXComponent instance.
+ * @param root Pointer that points to the component instance created by the Native interface.
+ * @return 0 - Success.
+ *         401: parameter error.
+ *
+ * @since 12
+ */
+int32_t OH_NativeXComponent_DetachNativeRootNode(OH_NativeXComponent* component, ArkUI_NodeHandle root);
 
 #ifdef __cplusplus
 };

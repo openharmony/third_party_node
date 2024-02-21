@@ -34,5 +34,285 @@
     {
         "first_introduced": "11",
         "name": "OH_NativeArkWeb_GetWebInstanceByWebTag"
+    },
+    {
+        "first_introduced": "12",
+        "name": "ArkWeb_SchemeHandler"
+    },
+    {
+        "first_introduced": "12",
+        "name": "ArkWeb_ResourceHandler"
+    },
+    {
+        "first_introduced": "12",
+        "name": "ArkWeb_Response"
+    },
+    {
+        "first_introduced": "12",
+        "name": "ArkWeb_ResourceRequest"
+    },
+    {
+        "first_introduced": "12",
+        "name": "ArkWeb_RequestHeaderList"
+    },
+    {
+        "first_introduced": "12",
+        "name": "ArkWeb_RequestHeader"
+    },
+    {
+        "first_introduced": "12",
+        "name": "ArkWeb_PostDataStream"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebRequestHeaderList_Create"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebRequestHeaderList_Destroy"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebRequestHeaderList_GetSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebRequestHeaderList_GetHeader"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebRequestHeader_Create"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebRequestHeader_Destroy"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebRequestHeader_GetName"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebRequestHeader_GetValue"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResourceRequest_GetMethod"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResourceRequest_GetUrl"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResourceRequest_GetPostData"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebPostDataStream_SetReadCallback"
+    },
+    {
+        "first_introduced": "12",
+        "name": "ArkWeb_PostDataStreamInitCallback"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebPostDataStream_SetUserData"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebPostDataStream_GetUserData"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebPostDataStream_Init"
+    },
+    {
+        "first_introduced": "12",
+        "name": "ArkWeb_PostDataReadCallback"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebPostDataStream_Read"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebPostDataStream_GetSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebPostDataStream_GetPosition"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebPostDataStream_IsChunked"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebPostDataStream_IsEof"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebPostDataStream_IsInMemory"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResourceRequest_SetUserData"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResourceRequest_GetUserData"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResourceRequest_GetReferrer"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResourceRequest_GetRequestHeaders"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResourceRequest_IsRedirect"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResourceRequest_IsMainFrame"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResourceRequest_HasGesture"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWeb_RegisterCustomSchemes"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWeb_SetSchemeHandler"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebServiceWorker_SetSchemeHandler"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWeb_ClearSchemeHandlers"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebServiceWorker_ClearSchemeHandlers"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWeb_CreateSchemeHandler"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWeb_DestroySchemeHandler"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebSchemeHandler_SetUserData"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebSchemeHandler_GetUserData"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebSchemeHandler_SetOnRequestStart"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebSchemeHandler_SetOnRequestStop"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWeb_CreateResponse"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWeb_DestroyResponse"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResponse_SetUrl"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResponse_GetUrl"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResponse_SetError"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResponse_GetError"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResponse_SetStatus"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResponse_GetStatus"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResponse_SetStatusText"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResponse_GetStatusText"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResponse_SetMimeType"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResponse_GetMimeType"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResponse_SetCharset"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResponse_GetCharset"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResponse_SetHeaderByName"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResponse_GetHeaderByName"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResourceHandler_DidReceiveResponse"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResourceHandler_DidReceiveData"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResourceHandler_DidFinish"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWebResourceHandler_DidFailWithError"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWeb_ReleaseString"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWeb_ReleaseByteArray"
     }
 ]

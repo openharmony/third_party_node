@@ -82,5 +82,10 @@
     {
         "first_introduced": "11",
         "name": "OH_VideoDecoder_RenderOutputBuffer"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_VideoDecoder_SetDecryptionConfig"
     }
+
 ]

@@ -33,7 +33,15 @@
     },
     {
         "first_introduced": "11",
+        "name": "OH_CameraManager_DeleteSupportedCameras"
+    },
+    {
+        "first_introduced": "11",
         "name": "OH_CameraManager_GetSupportedCameraOutputCapability"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_CameraManager_DeleteSupportedCameraOutputCapability"
     },
     {
         "first_introduced": "11",
@@ -70,6 +78,10 @@
     {
         "first_introduced": "11",
         "name": "OH_Camera_GetCameraManager"
+    },
+    {
+        "first_introduced": "11",
+        "name": "OH_Camera_DeleteCameraManager"
     },
     {
         "first_introduced": "11",

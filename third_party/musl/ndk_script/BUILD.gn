@@ -17,7 +17,9 @@ import("//third_party/musl/musl_config.gni")
 import("//third_party/musl/musl_src.gni")
 import("//third_party/musl/musl_template.gni")
 
-toolchains_dir = "//prebuilts/clang/ohos"
+declare_args() {
+  toolchains_dir = "//prebuilts/clang/ohos"
+}
 musl_target_out_dir = "${root_out_dir}/obj/third_party/musl"
 ndk_musl_include = "ndk_musl_include"
 interface_musl_dir = "//interface/sdk_c/third_party/musl"

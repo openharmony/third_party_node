@@ -263,11 +263,7 @@ def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解
         "comment": '',
         "syscap": ''
     }
-    if cursor.raw_comment:  # 是否有注释信息，有就取，没有过
-        data["comment"] = cursor.raw_comment
-    else:
-        data["comment"] = 'none_comment'
-
+    get_comment(cursor, data)
     if key == 0:
         data["kind"] = CursorKind.TRANSLATION_UNIT.name
         if comment:
@@ -281,13 +277,7 @@ def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解
         data["kind"] = cursor.kind.name
         if cursor.kind.name == CursorKind.MACRO_DEFINITION.name:
             define_comment(cursor, current_file, data)
-
-    if 'none_comment' != data["comment"]:
-        pattern = r'@([Ss]yscap).*?(?=\n)'
-        matches = re.search(pattern, data['comment'])
-        if matches:
-            data["syscap"] = matches.group(0)
-
+    get_syscap_value(data)
     processing_special_node(cursor, data, key, gn_path)  # 节点处理
     children = list(cursor.get_children())  # 判断是否有子节点，有就追加children，没有根据情况来
     if len(children) > 0:
@@ -312,6 +302,21 @@ def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解
     else:
         processing_no_child(cursor, data)  # 处理没有子节点的节点
     return data
+
+
+def get_syscap_value(data: dict):
+    if 'none_comment' != data["comment"]:
+        pattern = r'@([Ss]yscap).*?(?=\n)'
+        matches = re.search(pattern, data['comment'])
+        if matches:
+            data["syscap"] = matches.group(0)
+
+
+def get_comment(cursor, data: dict):
+    if cursor.raw_comment:  # 是否有注释信息，有就取，没有过
+        data["comment"] = cursor.raw_comment
+    else:
+        data["comment"] = 'none_comment'
 
 
 def processing_ast_node(child, current_file, data, name, gn_path):

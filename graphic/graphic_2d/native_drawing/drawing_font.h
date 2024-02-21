@@ -65,6 +65,17 @@ OH_Drawing_Font* OH_Drawing_FontCreate(void);
 void OH_Drawing_FontSetTypeface(OH_Drawing_Font*, OH_Drawing_Typeface*);
 
 /**
+ * @brief Gets an <b>OH_Drawing_Typeface</b> object from the <b>OH_Drawing_Typeface</b> object.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_Font Indicates the pointer to an <b>OH_Drawing_Font</b> object.
+ * @return OH_Drawing_Typeface Indicates the pointer to an <b>OH_Drawing_Typeface</b> object.
+ * @since 12
+ * @version 1.0
+ */
+OH_Drawing_Typeface* OH_Drawing_FontGetTypeface(OH_Drawing_Font*);
+
+/**
  * @brief Sets text size for an <b>OH_Drawing_Font</b> object.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
@@ -74,6 +85,20 @@ void OH_Drawing_FontSetTypeface(OH_Drawing_Font*, OH_Drawing_Typeface*);
  * @version 1.0
  */
 void OH_Drawing_FontSetTextSize(OH_Drawing_Font*, float textSize);
+
+/**
+ * @brief Calculate number of glyphs represented by text.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_Font Indicates the pointer to an <b>OH_Drawing_Font</b> object.
+ * @param text Indicates the character storage encoded with text encoding.
+ * @param byteLength Indicates the text length in bytes.
+ * @param encoding Indicates the text encoding.
+ * @since 12
+ * @version 1.0
+ */
+int OH_Drawing_FontCountText(OH_Drawing_Font*, const void* text, size_t byteLength,
+    OH_Drawing_TextEncoding encoding);
 
 /**
  * @brief Enables or disables linearly scalable font for an <b>OH_Drawing_Font</b> object.
@@ -117,6 +142,37 @@ void OH_Drawing_FontSetFakeBoldText(OH_Drawing_Font*, bool isFakeBoldText);
  * @version 1.0
  */
 void OH_Drawing_FontDestroy(OH_Drawing_Font*);
+
+/**
+ * @brief Defines a run, supplies storage for the metrics of an SkFont.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct {
+    /** storage for top in font metrics */
+    float top;
+    /** storage for ascent in font metrics */
+    float ascent;
+    /** storage for descent in font metrics */
+    float descent;
+    /** storage for bottom in font metrics */
+    float bottom;
+    /** storage for leading in font metrics */
+    float leading;
+} OH_Drawing_Font_Metrics;
+
+/**
+ * @brief Obtains the metrics of a font.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_Font Indicates the pointer to an <b>OH_Drawing_Font</b> object.
+ * @param OH_Drawing_Font_Metrics Indicates the pointer to an <b>OH_Drawing_Font_Metrics</b> object.
+ * @return Returns a float variable that recommended spacing between lines.
+ * @since 12
+ * @version 1.0
+ */
+float OH_Drawing_FontGetMetrics(OH_Drawing_Font*, OH_Drawing_Font_Metrics*);
 
 #ifdef __cplusplus
 }

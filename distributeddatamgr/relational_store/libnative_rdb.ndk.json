@@ -41,5 +41,9 @@
 	{"name":"OH_Data_Asset_CreateOne"},
 	{"name":"OH_Data_Asset_DestroyOne"},
 	{"name":"OH_Data_Asset_CreateMultiple"},
-	{"name":"OH_Data_Asset_DestroyMultiple"}
+	{"name":"OH_Data_Asset_DestroyMultiple"},
+	{"name":"OH_Rdb_Subscribe"},
+	{"name":"OH_Rdb_Unsubscribe"},
+	{"name":"OH_Rdb_SubscribeAutoSyncProgress"},
+	{"name":"OH_Rdb_UnsubscribeAutoSyncProgress"}
 ]
