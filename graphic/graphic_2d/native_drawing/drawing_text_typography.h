@@ -40,6 +40,7 @@
 #include "cstddef"
 #include "drawing_canvas.h"
 #include "drawing_color.h"
+#include "drawing_font.h"
 #include "drawing_text_declaration.h"
 #include "drawing_types.h"
 
@@ -316,47 +317,6 @@ typedef struct {
 } OH_Drawing_FontDescriptor;
 
 /**
- * @brief The metrics of font.
- *
- * @since 12
- * @version 1.0
- */
-typedef struct {
-    /** Indicating which metrics are valid */
-    uint32_t flags;
-    /** Greatest extent above origin of any glyph bounding box, typically negative; deprecated with variable fonts */
-    float top;
-    /** Distance to reserve above baseline, typically negative */
-    float ascent;
-    /** Distance to reserve below baseline, typically positive */
-    float descent;
-    /** Greatest extent below origin of any glyph bounding box, typically positive; deprecated with variable fonts */
-    float bottom;
-    /** Distance to add between lines, typically positive or zero */
-    float leading;
-    /** Average character width, zero if unknown */
-    float avgCharWidth;
-    /** Maximum character width, zero if unknown */
-    float maxCharWidth;
-    /** Greatest extent to left of origin of any glyph bounding box, typically negative; deprecated with variable fonts */
-    float xMin;
-    /** Greatest extent to right of origin of any glyph bounding box, typically positive; deprecated with variable fonts */
-    float xMax;
-    /** Height of lower-case 'x', zero if unknown, typically negative */
-    float xHeight;
-    /** Height of an upper-case letter, zero if unknown, typically negative */
-    float capHeight;
-    /** Underline thickness */
-    float underlineThickness;
-    /** Distance from baseline to top of stroke, typically positive */
-    float underlinePosition;
-    /** Strikeout thickness */
-    float strikeoutThickness;
-    /** Distance from baseline to bottom of stroke, typically negative */
-    float strikeoutPosition;
-} OH_Drawing_FontMetrics;
-
-/**
  * @brief The metrics of line.
  *
  * @since 12
@@ -390,7 +350,7 @@ typedef struct {
     /** End Index */
     size_t endIndex;
     /** The metrics information of the first character.*/
-    OH_Drawing_FontMetrics firstCharMetrics;
+    OH_Drawing_Font_Metrics firstCharMetrics;
 } OH_Drawing_LineMetrics;
 
 /**
@@ -1426,7 +1386,7 @@ void OH_Drawing_SetTypographyTextStyle(OH_Drawing_TypographyStyle*, OH_Drawing_T
  * @since 12
  * @version 1.0
  */
-OH_Drawing_FontMetrics* OH_Drawing_TextStyleGetFontMetrics(OH_Drawing_Typography*, OH_Drawing_TextStyle*);
+OH_Drawing_Font_Metrics* OH_Drawing_TextStyleGetFontMetrics(OH_Drawing_Typography*, OH_Drawing_TextStyle*);
 
 /**
  * @brief Gets the position of the specified line or the first text of the specified line
@@ -1436,11 +1396,11 @@ OH_Drawing_FontMetrics* OH_Drawing_TextStyleGetFontMetrics(OH_Drawing_Typography
  * @param int Line number
  * @param bool True is the information for the whole line, and false is the information to get the first character
  * @param bool Whether the text width contains whitespace
- * @return Returns the position information.
+ * @param OH_Drawing_LineMetrics Indicates the pointer to an <b>OH_Drawing_LineMetrics</b> object.
  * @since 12
  * @version 1.0
  */
-OH_Drawing_LineMetrics* OH_Drawing_TypographyGetLineInfo(OH_Drawing_Typography*, int, bool, bool);
+void OH_Drawing_TypographyGetLineInfo(OH_Drawing_Typography*, int, bool, bool, OH_Drawing_LineMetrics*);
 
 /**
  * @brief Sets the font weight of text typography.
@@ -1703,11 +1663,11 @@ void OH_Drawing_TypographySetIndents(OH_Drawing_Typography*, int, const float in
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_Typography Indicates the pointer to an <b>OH_Drawing_Typography</b> object.
  * @param int Indicates the index to set.
- * @return double Indicates the element with the index in vector of Indents.
+ * @return float Indicates the element with the index in vector of Indents.
  * @since 12
  * @version 1.0
  */
-double OH_Drawing_TypographyGetIndentsWithIndex(OH_Drawing_Typography*, int);
+float OH_Drawing_TypographyGetIndentsWithIndex(OH_Drawing_Typography*, int);
 
 #ifdef __cplusplus
 }
