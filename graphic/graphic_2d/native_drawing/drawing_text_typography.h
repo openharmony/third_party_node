@@ -1339,13 +1339,14 @@ void OH_Drawing_DestroyLineMetrics(OH_Drawing_LineMetrics*);
  * @brief Gets the specified line by line number.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_Typography Indicates the pointer to an <b>OH_Drawing_Typography</b> object.
- * @param int line number.
- * @return Returns the specified row information obtained.
+ * @param OH_Drawing_Typography Indicates the pointer to a typography object {@link OH_Drawing_Typography}.
+ * @param int Line number.
+ * @param OH_Drawing_LineMetrics Indicates the pointer to a lime metrics object {@link OH_Drawing_LineMetrics}.
+ * @return Whether the line metrics was obtained.
  * @since 12
  * @version 1.0
  */
-OH_Drawing_LineMetrics* OH_Drawing_TypographyGetLineMetricsAt(OH_Drawing_Typography*, int);
+bool OH_Drawing_TypographyGetLineMetricsAt(OH_Drawing_Typography*, int, OH_Drawing_LineMetrics*);
 
 /**
  * @brief  Sets the ellipsis of lines in a text file.
