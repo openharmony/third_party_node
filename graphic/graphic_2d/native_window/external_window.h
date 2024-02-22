@@ -496,6 +496,29 @@ int32_t OH_NativeWindow_NativeWindowSetMetaDataSet(OHNativeWindow *window, uint3
  */
 int32_t OH_NativeWindow_NativeWindowSetTunnelHandle(OHNativeWindow *window, const OHExtDataHandle *handle);
 
+/**
+ * @brief Get surfaceId from native window.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeWindow
+ * @param window Indicates the pointer to an <b>OHNativeWindow</b> instance.
+ * @param surfaceId Indicates the pointer to a surfaceId.
+ * @return Returns an error code, 0 is success, otherwise, failed.
+ * @since 12
+ * @version 1.0
+ */
+int32_t OH_NativeWindow_GetSurfaceId(OHNativeWindow *window, uint64_t *surfaceId);
+
+/**
+ * @brief Creates an <b>OHNativeWindow</b> instance.\n
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeWindow
+ * @param surfaceId Indicates the surfaceId to a surface.
+ * @param window indicates the pointer to an <b>OHNativeWindow</b> instance.
+ * @return Returns an error code, 0 is Success, otherwise, failed.
+ * @since 12
+ * @version 1.0
+ */
+int32_t OH_NativeWindow_CreateNativeWindowFromSurfaceId(uint64_t surfaceId, OHNativeWindow **window);
 #ifdef __cplusplus
 }
 #endif
