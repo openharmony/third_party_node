@@ -17,7 +17,8 @@
  * @addtogroup ArkUI_NativeModule
  * @{
  *
- * @brief Provides the UI capabilities of the ArkUI on the Native side, such as UI component creation and destruction, tree node operation, attribute setting, and event listening.
+ * @brief Provides UI capabilities of ArkUI on the native side, such as UI component creation and destruction,
+ * tree node operations, attribute setting, and event listening.
  *
  * @since 12
  */
@@ -25,7 +26,7 @@
 /**
  * @file native_node.h
  *
- * @brief Provides the type definition of the NativeNode interface.
+ * @brief Provides type definitions for <b>NativeNode</b> APIs.
  *
  * @library libace_ndk.z.so
  * @syscap SystemCapability.ArkUI.ArkUI.Full
@@ -45,29 +46,67 @@ extern "C" {
 #define MAX_NODE_SCOPE_NUM 1000
 
 /**
- * @brief This API is used to provide the ArkUI to create component types on the Native side.
+ * @brief Enumerates ArkUI component types that can be created on the native side.
  *
  * @since 12
  */
 typedef enum {
-    /** Text.*/
+    /** Custom node. */
+    ARKUI_NODE_CUSTOM = 0,
+    /** Text. */
     ARKUI_NODE_TEXT = 1,
-    /** Picture.*/
+    /** Text span. */
+    ARKUI_NODE_SPAN = 2,
+    /** Image span. */
+    ARKUI_NODE_IMAGE_SPAN = 3,
+    /** Image. */
     ARKUI_NODE_IMAGE = 4,
-    /** Status switch.*/
+    /** Toggle. */
     ARKUI_NODE_TOGGLE = 5,
-    /** Stack containers.*/
+    /** Loading icon. */
+    ARKUI_NODE_LOADING_PROGRESS = 6,
+    /** Single-line text input. */
+    ARKUI_NODE_TEXT_INPUT = 7,
+    /** Multi-line text input. */
+    ARKUI_NODE_TEXT_AREA = 8,
+    /** Button. */
+    ARKUI_NODE_BUTTON = 9,
+    /** Progress indicator. */
+    ARKUI_NODE_PROGRESS = 10,
+    /** Check box. */
+    ARKUI_NODE_CHECKBOX = 11,
+    /** XComponent. */
+    ARKUI_NODE_XCOMPONENT = 12,
+    /** Date picker. */
+    ARKUI_NODE_DATE_PICKER = 13,
+    /** Time picker. */
+    ARKUI_NODE_TIME_PICKER = 14,
+    /** Text picker. */
+    ARKUI_NODE_TEXT_PICKER = 15,
+    /** Calendar picker. */
+    ARKUI_NODE_CALENDAR_PICKER = 16,
+    /** Slider. */
+    ARKUI_NODE_SLIDER = 17,
+    /** Stack container. */
     ARKUI_NODE_STACK = MAX_NODE_SCOPE_NUM,
-    /** Paging container.*/
+    /** Swiper. */
     ARKUI_NODE_SWIPER,
-    /** Roll the container.*/
+    /** Scrolling container. */
     ARKUI_NODE_SCROLL,
-    /** List.*/
+    /** List. */
     ARKUI_NODE_LIST,
-    /** List item.*/
+    /** List item. */
     ARKUI_NODE_LIST_ITEM,
-    /** List item group.*/
+    /** List item group. */
     ARKUI_NODE_LIST_ITEM_GROUP,
+    /** Column container. */
+    ARKUI_NODE_COLUMN,
+    /** Row container. */
+    ARKUI_NODE_ROW,
+    /** Flex container. */
+    ARKUI_NODE_FLEX,
+    /** Refresh component. */
+    ARKUI_NODE_REFRESH,
 } ArkUI_NodeType;
 
 /**
@@ -76,99 +115,100 @@ typedef enum {
  * @since 12
  */
 typedef struct {
-    /** Number array.*/
+    /** Numeric array. */
     const ArkUI_NumberValue* value;
-    /** Size of a numeric array.*/
+    /** Size of the numeric array. */
     int32_t size;
-    /** Character string type.*/
+    /** String type. */
     const char* string;
-    /** Object type.*/
+    /** Object type. */
     void* object;
 } ArkUI_AttributeItem;
 
 /**
- * @brief Defines the set of attribute styles that can be set by the ArkUI on the Native side.
+ * @brief Defines the ArkUI style attributes that can be set on the native side.
  *
  * @since 12
  */
 typedef enum {
     /**
-     * @brief Width attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the width attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .value[0].f32: width, in vp.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
      * .value[0].f32: width, in vp.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {1.2};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 1.2 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_WIDTH, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_WIDTH);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_WIDTH);
      * auto nodeWidth = item->value[0].f32;
      * @endcode
      *
      */
     NODE_WIDTH = 0,
     /**
-     * @brief Height attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the height attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .value[0].f32: height, in vp.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
      * .value[0].f32: height, in vp.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {1.2};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 1.2 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_HEIGHT, &item);clang-tid
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_HEIGHT);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_HEIGHT);
      * auto nodeHeight = item->value[0].f32;
      * @endcode
      *
      */
     NODE_HEIGHT,
     /**
-     * @brief Background color attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the background color attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].u32: indicates the background color. The value is in the 0xargb format. For example, 0xFFFF0000 indicates red.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: background color. The value is in 0xARGB format. For example, 0xFFFF0000 indicates red.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].u32: indicates the background color. The value is in the 0xargb format. For example, 0xFFFF0000 indicates red.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: background color. The value is in 0xARGB format. For example, 0xFFFF0000 indicates red.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.u32=0xFFFF0000}};
-     * ArkUI_AttributeItem item = {value, 1};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.u32=0xFFFF0000} };
+     * ArkUI_AttributeItem item = { value, 1 };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_BACKGROUND_COLOR, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_BACKGROUND_COLOR);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_BACKGROUND_COLOR);
      * auto nodeBackgroundColor = item->value[0].u32;
      * @endcode
      *
      */
     NODE_BACKGROUND_COLOR,
     /**
-     * @brief Background color image attribute. The interface for setting, resetting, and obtaining attributes is supported.
+     * @brief Defines the background image attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .string: image address.\n
-     * .value[0]?.i32: optional, repeat parameter, parameter type {@link ArkUI_ImageRepeat}, default value is ARKUI_IMAGE_REPEAT_NO_REPEAT; \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: image address;\n
+     * .value[0]?.i32: whether to repeat the image. Optional. The parameter type is {@link ArkUI_ImageRepeat}.
+     * The default value is ARKUI_IMAGE_REPEAT_NONE.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .string: image address.\n
-     * .value[0].i32: repeat parameter, parameter type {@link ArkUI_ImageRepeat}.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: image address;\n
+     * .value[0].i32: whether to repeat the image. The parameter type is {@link ArkUI_ImageRepeat}.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_IMAGE_REPEAT_NO_REPEAT}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue), "/pages/icon.png"};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = ARKUI_IMAGE_REPEAT_NONE} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue), "/pages/icon.png" };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_BACKGROUND_IMAGE, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_BACKGROUND_IMAGE);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_BACKGROUND_IMAGE);
      * auto nodeBackgroundImageUrl = item->string;
      * auto nodeBackgroundImageRepeat = item->value[0].i32;
      * @endcode
@@ -176,124 +216,124 @@ typedef enum {
      */
     NODE_BACKGROUND_IMAGE,
     /**
-     * @brief Interspace attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the padding attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} has two formats:\n
-     * 1: The inner spacing values of the upper, lower, left, and right positions are equal.\n
-     * .value[0].f32: internal spacing, in vp.\n
-     * 2: Specify the inner spacing values of the upper, lower, left, and right positions.\n
-     * .value[0].f32: Value of the upper-inside spacing, in vp.\n
-     * .value[1].f32: indicates the inner right spacing, in vp.\n
-     * .value[2].f32: indicates the spacing between the bottom and the bottom, in vp.\n
-     * .value[3].f32: value of the inner-left spacing, in vp.\n
+     * There are two formats of {@link ArkUI_AttributeItem} for setting the attribute value:\n
+     * 1: Specify the same padding for the four directions. \n
+     * .value[0].f32: padding, in vp.\n
+     * 2: Specify different paddings for different directions. \n
+     * .value[0].f32: top padding, in vp.\n
+     * .value[1].f32: right padding, in vp.\n
+     * .value[2].f32: bottom padding, in vp.\n
+     * .value[3].f32: left padding, in vp.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: indicates the upper-inside spacing, in vp.\n
-     * .value[1].f32: right inner spacing, in vp.\n
-     * .value[2].f32: Value of the spacing between the bottom and the bottom, in vp.\n
-     * .value[3].f32: value of the inner-left spacing, in vp.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: top padding, in vp.\n
+     * .value[1].f32: right padding, in vp.\n
+     * .value[2].f32: bottom padding, in vp.\n
+     * .value[3].f32: left padding, in vp.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value1[] = {1, 2, 3, 4};
-     * ArkUI_AttributeItem item1 = {value1, sizeof(value1)/sizeof(ArkUI_NumberValue)};
-     * ArkUI_NumberValue value2[] = {10};
-     * ArkUI_AttributeItem item2 = {value2, sizeof(value2)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value1[] = { 1, 2, 3, 4};
+     * ArkUI_AttributeItem item1 = { value1, sizeof(value1)/sizeof(ArkUI_NumberValue) };
+     * ArkUI_NumberValue value2[] = { 10 };
+     * ArkUI_AttributeItem item2 = { value2, sizeof(value2)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_PADDING, &item1);
      * nativeNodeApi->setAttribute(nodeHandle, NODE_PADDING, &item2);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_PADDING);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_PADDING);
      * auto nodePaddingTop = item->value[0].f32;
      * @endcode
      *
      */
     NODE_PADDING,
     /**
-     * @brief Component ID attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the component ID attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .string: content of ID; \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: component ID.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .string: content of ID; \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: component ID.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_AttributeItem item = {.string = "test"};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_AttributeItem item = { .string = "test" };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_ID, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_ID);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_ID);
      * auto nodeId = item->string;
      * @endcode
      *
      */
     NODE_ID,
     /**
-     * @brief Use the {@link setAttribute} method to set whether the component can interact with each other. If the value is false, the component does not respond to operations such as clicking the component.
+     * @brief Defines the interactivity attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: false: non-interactive; true: interactive.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: The value <b>true</b> means that the component can interact with users, and <b>false</b> means the opposite.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: 0: non-interactive; 1: interactive.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: The value <b>1</b> means that the component can interact with users, and <b>0</b> means the opposite. \n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = false}};
-     * ArkUI_AttributeItem item = {value, 1};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = false} };
+     * ArkUI_AttributeItem item = { value, 1 };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_ENABLED, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_ENABLED);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_ENABLED);
      * auto nodeEnabled = item->value[0].i32;
      * @endcode
      */
     NODE_ENABLED,
     /**
-     * @brief Outer spacing attribute, which supports the attribute setting, attribute reset, and attribute obtaining interfaces.
+     * @brief Defines the margin attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * The attribute setting method parameter {@link ArkUI_AttributeItem} has two formats:\n
-     * 1: The outer spacing values of the upper, lower, left, and right positions are equal.\n
-     * .value[0].f32: value of the outer spacing, in vp.\n
-     * 2: Specify the outer spacing values of the upper, lower, left, and right positions.\n
-     * .value[0].f32: indicates the upper and outer spacing, in vp.\n
-     * .value[1].f32: indicates the value of the right outer space, in vp.\n
-     * .value[2].f32: Value of the spacing between the bottom and the outer, in vp.\n
-     * .value[3].f32: value of the outer left spacing, in vp.\n
+     * There are two formats of {@link ArkUI_AttributeItem} for setting the attribute value:\n
+     * 1: Specify the same margin for the four directions. \n
+     * .value[0].f32: margin, in vp.\n
+     * 2: Specify different margins for different directions. \n
+     * .value[0].f32: top margin, in vp.\n
+     * .value[1].f32: right margin, in vp.\n
+     * .value[2].f32: bottom margin, in vp.\n
+     * .value[3].f32: left margin, in vp.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: indicates the upper and outer spacing, in vp.\n
-     * .value[1].f32: indicates the value of the right outer space, in vp.\n
-     * .value[2].f32: Value of the spacing between the bottom and the outer, in vp.\n
-     * .value[3].f32: indicates the value of the outer-left spacing, in vp.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: top margin, in vp.\n
+     * .value[1].f32: right margin, in vp.\n
+     * .value[2].f32: bottom margin, in vp.\n
+     * .value[3].f32: left margin, in vp.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value1[] = {1, 2, 3, 4};
-     * ArkUI_AttributeItem item1 = {value1, sizeof(value1)/sizeof(ArkUI_NumberValue)};
-     * ArkUI_NumberValue value2[] = {10};
-     * ArkUI_AttributeItem item2 = {value2, sizeof(value2)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value1[] = { 1, 2, 3, 4};
+     * ArkUI_AttributeItem item1 = { value1, sizeof(value1)/sizeof(ArkUI_NumberValue) };
+     * ArkUI_NumberValue value2[] = { 10 };
+     * ArkUI_AttributeItem item2 = { value2, sizeof(value2)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_MARGIN, &item1);
      * nativeNodeApi->setAttribute(nodeHandle, NODE_MARGIN, &item2);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_MARGIN);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_MARGIN);
      * auto nodeMarginTop = item->value[0].f32;
      * @endcode
      *
      */
     NODE_MARGIN,
     /**
-     * @brief Component translation, which supports attribute setting, attribute reset, and attribute obtaining.
+     * @brief Defines the translate attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: moving distance on the x axis, in vp. The default value is 0. \n
-     * .value[1].f32: moving distance on the y axis, in vp. The default value is 0. \n
-     * .value[2].f32: Z-axis moving distance, in vp. The default value is 0. \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: distance to translate along the x-axis, in vp. The default value is <b>0</b>.\n
+     * .value[1].f32: distance to translate along the y-axis, in vp. The default value is <b>0</b>.\n
+     * .value[2].f32: distance to translate along the z-axis, in vp. The default value is <b>0</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: moving distance on the x axis, in vp.\n
-     * .value[1].f32: moving distance on the y axis, in vp.\n
-     * .value[2].f32: Z-axis moving distance, in vp.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: distance to translate along the x-axis, in vp.\n
+     * .value[1].f32: distance to translate along the y-axis, in vp.\n
+     * .value[2].f32: distance to translate along the z-axis, in vp. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {100, 20, 0};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_TRANSLATE, &item);
+     * ArkUI_NumberValue value[] = { 100, 20, 0 };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TRANSLATE, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TRANSLATE);
      * auto nodeTranslate = item->value[0].f32;
      * @endcode
@@ -301,171 +341,190 @@ typedef enum {
      */
     NODE_TRANSLATE,
     /**
-     * @brief Component scaling, which supports attribute setting, resetting, and obtaining.
+     * @brief Defines the scale attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: scaling coefficient of the x axis. The default value is 1. \n
-     * .value[1].f32: scaling factor of the y-axis. The default value is 1. \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: scale factor along the x-axis. The default value is <b>1</b>.\n
+     * .value[1].f32: scale factor along the y-axis. The default value is <b>1</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: scaling coefficient of the x axis.\n
-     * .value[1].f32: The scaling factor for the y-axis.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: scale factor along the x-axis.\n
+     * .value[1].f32: scale factor along the y-axis. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {1.0, 0.5};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_SCALE, &item);
-     * auto item = basicNodeApi->getAttribute(nodeHandle, NODE_SCALE);
+     * ArkUI_NumberValue value[] = { 1.0, 0.5 };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SCALE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SCALE);
      * auto nodeScale = item->value[0].f32;
      * @endcode
      *
      */
     NODE_SCALE,
     /**
-     * @brief Component rotation attribute, which supports attribute setting, resetting, and obtaining.
+     * @brief Defines the rotate attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: x-coordinate of the rotation axis vector. The default value is 0. \n
-     * .value[1].f32: y-coordinate of the rotation axis vector. The default value is 0. \n
-     * .value[2].f32: z coordinate of the rotation axis vector. The default value is 0. \n
-     * .value[3].f32: rotation angle. The default value is 0. \n
-     * .value[4].f32: line of sight distance, that is, the distance from the viewpoint to the z=0 plane, in vp. The default value is 0. \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: X coordinate of the rotation axis vector. The default value is <b>0</b>.\n
+     * .value[1].f32: Y coordinate of the rotation axis vector. The default value is <b>0</b>.\n
+     * .value[2].f32: Z coordinate of the rotation axis vector. The default value is <b>0</b>.\n
+     * .value[3].f32: rotation angle. The default value is <b>0</b>.\n
+     * .value[4].f32: line of sight, that is, the distance from the viewpoint to the z=0 plane, in vp.
+     * The default value is <b>0</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: x coordinate of the rotation axis vector.\n
-     * .value[1].f32: y-coordinate of the rotation axis vector.\n
-     * .value[2].f32: z coordinate of the rotation axis vector.\n
-     * .value[3].f32: rotation angle; \n
-     * .value[4].f32: line of sight distance, that is, the distance from the viewpoint to the z=0 plane, in vp.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: X coordinate of the rotation axis vector.\n
+     * .value[1].f32: Y coordinate of the rotation axis vector.\n
+     * .value[2].f32: Z coordinate of the rotation axis vector.\n
+     * .value[3].f32: rotation angle.\n
+     * .value[4].f32: line of sight, that is, the distance from the viewpoint to the z=0 plane, in vp. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {0, 0, 1, 300, 0};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_ROTATE, &item);
-     * auto item = basicNodeApi->getAttribute(nodeHandle, NODE_ROTATE);
+     * ArkUI_NumberValue value[] = { 0, 0, 1, 300, 0 };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_ROTATE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_ROTATE);
      * auto nodeRotate = item->value[0].f32;
      * @endcode
      *
      */
     NODE_ROTATE,
     /**
-     * @brief Highlight effect of the component. Attributes can be set, reset, and obtained.
+     * @brief Sets the brightness attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: luminance value. The default value is 1.0. The recommended value range is [0, 2]. \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: brightness value. The default value is <b>1.0</b>, and the recommended value range is [0, 2]. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: Luminance value.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: brightness value. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {1.2};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_BRIGHTNESS, &item);
-     * auto item = basicNodeApi->getAttribute(nodeHandle, NODE_BRIGHTNESS);
+     * ArkUI_NumberValue value[] = { 1.2 };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_BRIGHTNESS, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_BRIGHTNESS);
      * auto nodeBrightness = item->value[0].f32;
      * @endcode
      *
      */
     NODE_BRIGHTNESS,
     /**
-     * @brief Saturation effect of the component. Attributes can be set, reset, and obtained.
+     * @brief Sets the saturation attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: saturation value. The default value is 1.0. The recommended value range is [0, FLT_MAX]. \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute: \n
+     * .value[0].f32: saturation value. The default value is <b>1.0</b>, and the recommended value range is [0, 50]. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: Saturation value.\n
+     * Format of the return value {@link ArkUI_AttributeItem}: \n
+     * .value[0].f32: saturation value. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {1.0};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_SATURATION, &item);
-     * auto item = basicNodeApi->getAttribute(nodeHandle, NODE_SATURATION);
+     * ArkUI_NumberValue value[] = { 1.0 };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SATURATION, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SATURATION);
      * auto nodeSaturate = item->value[0].f32;
      * @endcode
      *
      */
     NODE_SATURATION,
     /**
-     * @brief Component content blur effect, which supports attribute setting, resetting, and obtaining.
+     * @brief Sets the blur attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: blur radius. The larger the blur radius, the more blurred the blur. If the parameter is set to 0, the blur is not blurred. The unit is vp. The default value is 0.0.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute: \n
+     * .value[0].f32: blur radius. A larger value indicates a higher blur degree. If the value is <b>0</b>,
+     * the component is not blurred. The unit is vp. The default value is <b>0.0</b>. \n
      * \n
-     * Format of the return value of the attribute obtaining method {@link ArkUI_AttributeItem}:\n
-     * .value[0].f32: blur radius. The larger the blur radius, the more blurred the blur. If the parameter is set to 0, the blur is not blurred. The unit is vp.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: blur radius. The larger the fuzzy radius, the more blurred the image. If the value is <b>0</b>,
+     * the image is not blurred. The unit is vp. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {1.0};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_BLUR, "1.0");
-     * auto item = basicNodeApi->getAttribute(nodeHandle, NODE_BLUR);
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 1.0 };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_BLUR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_BLUR);
      * auto nodeBlur = item->value[0].f32;
      * @endcode
      *
      */
     NODE_BLUR,
     /**
-     * @brief Linear color gradient effect of the component. Attribute setting, attribute reset, and attribute obtaining are supported.
+     * @brief Sets the gradient attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .string: character string combination parameter. Four input parameters are separated by semicolons (;). \n
-     * Input parameter 1: indicates the gradient color at a certain percentage position. If an invalid color is set, the gradient color is skipped. Color and position (unit: vp) array type, separated by commas.\n
-     * Input parameter 2: start angle of the linear gradient. 0 o'clock rotation is the positive angle. The default value is 180.\n
-     * Input parameter 3:
-     * Indicates the direction of the linear gradient. This parameter does not take effect after the angle is set. Value range: ("left","top","right","bottom","left-top","left-bottom","right-top",\n.
-     * "right-bottom", "none", default "bottom"); \n
-     * Input parameter 4: coloring for the gradient color. The default value is false.\n
-     * For example, "#ffff0000,0.0,#ff0000ff,0.3,#ffffff00,0.5;;left;true".
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: start angle of the linear gradient. A positive value indicates a clockwise rotation from the
+     * origin, (0, 0). The default value is <b>180</b>. \n
+     * .value[1].i32: direction of the linear gradient. It does not take effect when <b>angle</b> is set.
+     * Gridient direction {@link ArkUI_LinearGridientDirection}; \n
+     * .value[2].i32: whether the colors are repeated. The default value is <b>false</b>. \n
+     * .object: array of color stops, each of which consists of a color and its stop position.
+     * Invalid colors are automatically skipped. \n
+     * colors: colors of the color stops. \n
+     * stops: stop positions of the color stops. \n
+     * size: number of colors. \n
      * \n
-     * Format of the return value of the attribute obtaining method {@link ArkUI_AttributeItem}:\n
-     *  * .string: character string combination parameter. Four input parameters are separated by semicolons (;). \n
-     * Input parameter 1: indicates the gradient color at a certain percentage position. If an invalid color is set, the system skips the gradient color. Color and position (unit: vp) array type, separated by commas.\n
-     * Input parameter 2: start angle of the linear gradient. Rotate clockwise in the 0 o'clock direction as the positive angle; \n
-     * Input parameter 3: linear gradient direction. The setting of angle does not take effect.\n
-     * Input parameter 4: repeat coloring for the gradient color.\n
+     * Format of the return value {@link ArkUI_AttributeItem}: \n
+     * .value[0].f32: start angle of the linear gradient. \n
+     * .value[1].i32: direction of the linear gradient. It does not take effect when <b>angle</b> is set. \n
+     * .value[0].i32: whether the colors are repeated. \n
+     * .object: array of color stops, each of which consists of a color and its stop position.
+     * Invalid colors are automatically skipped. \n
+     * colors: colors of the color stops. \n
+     * stops: stop positions of the color stops. \n
+     * size: number of colors. \n
      * @code {.cpp}
-     * ARKUI_AttributeItem item = {.string = "#ffff0000,0.0,#ff0000ff,0.3,#ffffff00,0.5;;left;true"};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_LINEAR_GRADIENT, &item);
-     * auto item = basicNodeApi->getAttribute(nodeHandle, NODE_LINEAR_GRADIENT);
-     * auto nodeLinearGradient = item->string;
+     * unsigned int colors[] = { 0xFFFFFFFF,0xFF0000FF };
+     * float stops[] = { 0.0, 0.5 };
+     * ArkUIColorStop colorStop = { colors, stops, 2 };
+     * ArkUI_ColorStop* ptr = &colorStop;
+     * ArkUI_NumberValue value[] = {{ .f32 = 60 } ,  { .i32 = ARKUI_LINEAR_GRIDIENT_DIRECTION_LEFT } , { .i32 = true }};
+     * ArkUI_AttributeItem item =
+     * { value, sizeof(value)/sizeof(ArkUI_NumberValue), .object = reinterpret_cast<void*>(ptr) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_LINEAR_GRADIENT, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_LINEAR_GRADIENT);
+     * auto nodeLinearGradientStartAngel = item->value[0];
+     * auto nodeLinearGradientDirection = item->value[1];
+     * auto nodeLinearGradientFill = item->value[2];
+     * auto nodeLinearGradientColorStop = item->object;
      * @endcode
      *
      */
     NODE_LINEAR_GRADIENT,
     /**
-     * @brief Alignment mode of the component content in the element drawing area. Attributes can be set, reset, and obtained.
+     * @brief Sets the alignment attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: alignment mode. The data type is {@link ArkUI_Alignment}. The default value is AKUI_ALIGNMENT_CENTER.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: alignment mode. The data type is {@link ArkUI_Alignment}.
+     * The default value is <b>ARKUI_ALIGNMENT_CENTER</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: Alignment mode, data type {@link ArkUI_Alignment}.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: alignment mode. The data type is {@link ArkUI_Alignment}. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_ALIGNMENT_CENTER}};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_ALIGNMENT, "center");
-     * auto item = basicNodeApi->getAttribute(nodeHandle, NODE_ALIGNMENT);
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_ALIGNMENT_CENTER } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_ALIGNMENT, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_ALIGNMENT);
      * auto nodeAlign = item->value[0].i32;
      * @endcode
      *
      */
     NODE_ALIGNMENT,
     /**
-     * @brief Transparency attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the opacity attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: Transparency value, ranging from 0 to 1.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: opacity value. The value ranges from 0 to 1. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: Transparency numeric value, ranging from 0 to 1.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: opacity value. The value ranges from 0 to 1. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {0.5};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { 0.5 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_OPACITY, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_OPACITY);
      * auto nodeOpacity = item->value[0].f32;
@@ -474,60 +533,60 @@ typedef enum {
      */
     NODE_OPACITY,
     /**
-     * @brief Border width attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the border width attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * 1: .value[0].f32: Set the width of the four edges in a unified manner.\n
-     * 2: .value[0].f32: Sets the border width of the top border.\n
-     * .value[1].f32: Sets the border width of the right box.\n
-     * .value[2].f32: Sets the border width of the lower border.\n
-     * .value[3].f32: Sets the border width of the left border.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * 1: .value[0].f32: width of the four borders. \n
+     * 2: .value[0].f32: width of the top border. \n
+     * .value[1].f32: width of the right border. \n
+     * .value[2].f32: width of the bottom border. \n
+     * .value[3].f32: width of the left border. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: Sets the border width of the top border.\n
-     * .value[1].f32: Sets the border width of the right box.\n
-     * .value[2].f32: Sets the border width of the lower border.\n
-     * .value[3].f32: Sets the border width of the left border.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: width of the top border. \n
+     * .value[1].f32: width of the right border. \n
+     * .value[2].f32: width of the bottom border. \n
+     * .value[3].f32: width of the left border. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
-     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {5};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     *     reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 5 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_BORDER_WIDTH, &item);
-     * ArkUI_NumberValue value[] = {5, 5, 10, 10};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { 5, 5, 10, 10 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_BORDER_WIDTH, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_BORDER_WIDTH);
-     * auto nodeBorderWidth = item->value[0].f32;
+     * auto nodeBorderWitdh = item->value[0].f32;
      * @endcode
      *
      */
     NODE_BORDER_WIDTH,
     /**
-     * @brief Border rounded corner attribute, which supports attribute setting, attribute reset, and attribute obtaining interfaces.
+     * @brief Defines the border corner radius attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * 1: .value[0].f32: Set the border fillets of the four edges.\n
-     * 2: .value[0].f32: Set the radius of the upper left corner fillet.\n
-     * .value[1].f32: Sets the radius of the upper right corner fillet.\n
-     * .value[2].f32: Sets the radius of the lower left corner fillet.\n
-     * .value[3].f32: Sets the radius of the lower right corner fillet.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * 1: .value[0].f32: radius of the four corners. \n
+     * 2: .value[0].f32: radius of the upper left corner. \n
+     * .value[1].f32: radius of the upper right corner. \n
+     * .value[2].f32: radius of the lower left corner. \n
+     * .value[3].f32: radius of the lower right corner. \n
      * \n
-     * Format of the return value of the attribute obtaining method {@link ArkUI_AttributeItem}:\n
-     * .value[0].f32: Sets the radius of the upper left corner fillet.\n
-     * .value[1].f32: Sets the radius of the upper right corner fillet.\n
-     * .value[2].f32: Sets the radius of the lower left corner fillet.\n
-     * .value[3].f32: Sets the radius of the lower right corner fillet.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: radius of the upper left corner. \n
+     * .value[1].f32: radius of the upper right corner. \n
+     * .value[2].f32: radius of the lower left corner. \n
+     * .value[3].f32: radius of the lower right corner. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
-     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {5};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     *     reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 5 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_BORDER_RADIUS, &item);
-     * ArkUI_NumberValue value[] = {5, 5, 10, 10};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { 5, 5, 10, 10 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_BORDER_RADIUS, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_BORDER_RADIUS);
      * auto nodeBorderRadius = item->value[0].f32;
@@ -536,29 +595,29 @@ typedef enum {
      */
     NODE_BORDER_RADIUS,
     /**
-     * @brief Border color attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the border color attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * 1: .value[0].u32: Set the border color of the four edges, represented by 0xargb, for example, 0xFFFF11FF.\n
-     * 2: .value[0].u32: Set the color of the upper border, represented by 0xargb, for example, 0xFFFF11FF.\n
-     * .value[1].u32: sets the color of the right border, represented by 0xargb, for example, 0xFFFF11FF.\n
-     * .value[2].u32: sets the color of the lower border, represented by 0xargb, for example, 0xFFFF11FF.\n
-     * .value[3].u32: Sets the color of the left border, represented by 0xargb, for example, 0xFFFF11FF.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * 1: .value[0].u32: color of the four borders, in 0xARGB format, for example, <b>0xFFFF11FF</b>. \n
+     * 2: .value[0].u32: color of the top border, in 0xARGB format, for example, <b>0xFFFF11FF</b>. \n
+     * .value[1].u32: color of the right border, in 0xARGB format, for example, <b>0xFFFF11FF</b>. \n
+     * .value[2].u32: color of the lower border, in 0xARGB format, for example, <b>0xFFFF11FF</b>. \n
+     * .value[3].u32: color of the left border, in 0xARGB format, for example, <b>0xFFFF11FF</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].u32: Sets the upper border color, represented by 0xargb, for example, 0xFFFF11FF.\n
-     * .value[1].u32: sets the color of the right border, represented by 0xargb, for example, 0xFFFF11FF.\n
-     * .value[2].u32: sets the color of the lower border, represented by 0xargb, for example, 0xFFFF11FF.\n
-     * .value[3].u32: Sets the color of the left border, represented by 0xargb, for example, 0xFFFF11FF.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: color of the top border, in 0xARGB format, for example, <b>0xFFFF11FF</b>. \n
+     * .value[1].u32: color of the right border, in 0xARGB format, for example, <b>0xFFFF11FF</b>. \n
+     * .value[2].u32: color of the lower border, in 0xARGB format, for example, <b>0xFFFF11FF</b>. \n
+     * .value[3].u32: color of the left border, in 0xARGB format, for example, <b>0xFFFF11FF</b>. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
-     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.u32 = 0xFFFF11FF}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     *     reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.u32 = 0xFFFF11FF} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_BORDER_COLOR, &item);
-     * ArkUI_NumberValue value[] = {{.u32 = 0xFFFF11FF}, {.u32 = 0xFFFF11FF}, {.u32 = 0xFFFFFFFF}, {.u32 = 0x000000}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { {.u32 = 0xFFFF11FF}, {.u32 = 0xFFFF11FF}, {.u32 = 0xFFFFFFFF}, {.u32 = 0x000000} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_BORDER_COLOR, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_BORDER_COLOR);
      * auto nodeBorderColor = item->value[0].u32;
@@ -567,30 +626,35 @@ typedef enum {
      */
     NODE_BORDER_COLOR,
     /**
-     * @brief Border line style attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the border line style attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * 1: .value[0].i32: Set the border line style of the four edges in a unified manner. Parameter type {@link ArkUI_BorderStyle}. The default value is AKUI_BORDER_:00-19:00_SOLID.\n
-     * 2:.value[0].i32: Sets the upper border line style. Parameter type {@linkArkUI_BorderStyle}. The default value is AKUI_BORDER_:00-20:00_SOLID.\n
-     * .value[1].i32: Sets the line style of the right border. Parameter type {@link ArkUI_BorderStyle}. The default value is ARKUI_BORDER_:00-19:00_SOLID.\n
-     * .value[2].i32: Sets the lower border line style. Parameter type {@link ArkUI_BorderStyle}. The default value is AKUI_BORDER_:00-20:00_SOLID.\n
-     * .value[3].i32: Sets the left border line style. Parameter type {@link ArkUI_BorderStyle}. The default value is ARKUI_BORDER_:00-19:00_SOLID.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * 1: .value[0].i32: line style of the four borders. The parameter type is {@link ArkUI_BorderStyle}.
+     * The default value is <b>ARKUI_BORDER_STYLE_SOLID</b>. \n
+     * 2: .value[0].i32: line style of the top border. The parameter type is {@link ArkUI_BorderStyle}.
+     * The default value is <b>ARKUI_BORDER_STYLE_SOLID</b>. \n
+     * .value[1].i32: line style of the right border. The parameter type is {@link ArkUI_BorderStyle}.
+     * The default value is <b>ARKUI_BORDER_STYLE_SOLID</b>. \n
+     * .value[2].i32: line style of the bottom border. The parameter type is {@link ArkUI_BorderStyle}.
+     * The default value is <b>ARKUI_BORDER_STYLE_SOLID</b>. \n
+     * .value[3].i32: line style of the left border. The parameter type is {@link ArkUI_BorderStyle}.
+     * The default value is <b>ARKUI_BORDER_STYLE_SOLID</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: Value corresponding to the top border line style.\n
-     * .value[1].i32: Value corresponding to the right border line style.\n
-     * .value[2].i32: Value corresponding to the lower border line style.\n
-     * .value[3].i32: Value corresponding to the left border line style.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: line style of the top border. \n
+     * .value[1].i32: line style of the right border. \n
+     * .value[2].i32: line style of the bottom border. \n
+     * .value[3].i32: line style of the left border. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
-     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_BORDER_STYLE_DOTTED}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     *     reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = ARKUI_BORDER_STYLE_DOTTED} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_BORDER_STYLE, &item);
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_BORDER_STYLE_DOTTED}, {.i32 = ARKUI_BORDER_STYLE_SOLID},
-     * {.i32 = ARKUI_BORDER_STYLE_SOLID}, {.i32 = ARKUI_BORDER_STYLE_DOTTED}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { {.i32 = ARKUI_BORDER_STYLE_DOTTED}, {.i32 = ARKUI_BORDER_STYLE_SOLID},
+     * {.i32 = ARKUI_BORDER_STYLE_SOLID}, {.i32 = ARKUI_BORDER_STYLE_DOTTED} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_BORDER_STYLE, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_BORDER_STYLE);
      * auto nodeBorderStyle = item->value[0].i32;
@@ -599,19 +663,20 @@ typedef enum {
      */
     NODE_BORDER_STYLE,
     /**
-     * @brief Stack sequence attribute of the component. The interface for setting, resetting, and obtaining attributes is supported.
+     * @brief Defines the z-index attribute for the stack sequence.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: Stacking order value.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: z-index value. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: Stacking order value.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: z-index value. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
-     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {2};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     *     reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 2 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_Z_INDEX, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_Z_INDEX);
      * auto nodeZIndex = item->value[0].f32;
@@ -620,19 +685,21 @@ typedef enum {
      */
     NODE_Z_INDEX,
     /**
-     * @brief Whether the component is visible. The interface for setting, resetting, and obtaining attributes is supported.
+     * @brief Defines the visibility attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: controls whether the current component is displayed or hidden. Parameter type {@link ArkUI_Visibility}. The default value is ARKUI_VISIBGY_VISIBLE.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to show or hide the component. The parameter type is {@link ArkUI_Visibility}.
+     * The default value is <b>ARKUI_VISIBILITY_VISIBLE</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: controls whether the current component is displayed or hidden. Parameter type {@link ArkUI_Visibility}. The default value is ARKUI_VISIBGY_VISIBLE.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether to show or hide the component. The parameter type is {@link ArkUI_Visibility}.
+     * The default value is <b>ARKUI_VISIBILITY_VISIBLE</b>. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
-     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32=ARKUI_VISIBILITY_NONE}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     *     reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32=ARKUI_VISIBILITY_NONE} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_VISIBILITY, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_VISIBILITY);
      * auto nodeVisibility = item->value[0].i32;
@@ -641,19 +708,21 @@ typedef enum {
      */
     NODE_VISIBILITY,
     /**
-     * @brief The API for tailoring and masking the attributes of the component. The APIs for setting, resetting, and obtaining attributes are supported.
+     * @brief Defines the clip attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: specifies whether to crop the parent container according to the edge outline. The value 0 indicates no, and the value 1 indicates no.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to clip the component based on the parent container bounds.
+     * The value <b>0</b> means to clip the component, and <b>1</b> means the opposite. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: specifies whether to crop the parent container according to the edge outline. The value 0 indicates not to crop the parent container, and the value 1 indicates to crop the parent container.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether to clip the component based on the parent container bounds.
+     * The value <b>0</b> means to clip the component, and <b>1</b> means the opposite. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
-     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = 0}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     *     reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = 0} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_CLIP, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_CLIP);
      * auto nodeClip = item->value[0].i32;
@@ -662,48 +731,92 @@ typedef enum {
      */
     NODE_CLIP,
     /**
-     * @brief This API is used to tailor and mask the attributes of the component. The APIs for setting, resetting, and obtaining attributes are supported.
+     * @brief Defines the clipping region on the component.
+     * This attribute can be set and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .string: shape description, which is optional:\n
-     * "rect(10, 10, 10, 10)" is width, height, radiusWidth, and radiusHeight respectively in parentheses.\n
-     * "circle(10, 10)": width, height; \n
-     * "ellipse(10, 10)" is width and height respectively; \n
-     * "path(10, 10, M0 0 L600 0)" is width, height, commands; \n
-     * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .string: Shape description:\n
-     * "rect(10, 10, 10, 10)" is width, height, radiusWidth, and radiusHeight respectively in parentheses.\n
-     * "circle(10, 10)": width, height; \n
-     * "ellipse(10, 10)" is width and height respectively; \n
-     * "path(10, 10, M0 0 L600 0)" is width, height, and commands respectively; \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute,
+     * which supports five types of shapes:\n
+     * 1. Rectangle:\n
+     * .value[0].i32: type of shape. The parameter type is {@link ArkUI_ClipType}.
+     * The value is <b>ARKUI_CLIP_TYPE_RECT</b> for the rectangle shape.\n
+     * .value[1].f32: width of the rectangle.\n
+     * .value[2].f32: height of rectangle.\n
+     * .value[3].f32: width of the rounded corner of the rectangle.\n
+     * .value[4].f32: height of the rounded corner of the rectangle.\n
+     * 2. Circle:\n
+     * .value[0].i32: type of shape. The parameter type is {@link ArkUI_ClipType}.
+     * The value is <b>ARKUI_CLIP_TYPE_CIRCLE</b> for the circle shape.\n
+     * .value[1].f32: width of the circle.\n
+     * .value[2].f32: height of the circle.\n
+     * 3.Ellipse:\n
+     * .value[0].i32: type of shape. The parameter type is {@link ArkUI_ClipType}.
+     * The value is <b>ARKUI_CLIP_TYPE_ELLIPSE</b> for the ellipse shape.\n
+     * .value[1].f32: width of the ellipse.\n
+     * .value[2].f32: height of the ellipse.\n
+     * 4. Path:\n
+     * .value[0].i32: type of shape. The parameter type is {@link ArkUI_ClipType}.
+     * The value is <b>ARKUI_CLIP_TYPE_PATH</b> for the path shape.\n
+     * .value[1].f32: width of the path.\n
+     * .value[2].f32: height of the path.\n
+     * .string: command for drawing the path.\n
+     * Format of the return value {@link ArkUI_AttributeItem}, which supports five types of shapes:\n
+     * 1. Rectangle:\n
+     * .value[0].i32: type of shape. The parameter type is {@link ArkUI_ClipType}.
+     * The value is <b>ARKUI_CLIP_TYPE_RECT</b> for the rectangle shape.\n
+     * .value[1].f32: width of the rectangle.\n
+     * .value[2].f32: height of rectangle.\n
+     * .value[3].f32: width of the rounded corner of the rectangle.\n
+     * .value[4].f32: height of the rounded corner of the rectangle.\n
+     * 2. Circle:\n
+     * .value[0].i32: type of shape. The parameter type is {@link ArkUI_ClipType}.
+     * The value is <b>ARKUI_CLIP_TYPE_CIRCLE</b> for the circle shape.\n
+     * .value[1].f32: width of the circle.\n
+     * .value[2].f32: height of the circle.\n
+     * 3.Ellipse:\n
+     * .value[0].i32: type of shape. The parameter type is {@link ArkUI_ClipType}.
+     * The value is <b>ARKUI_CLIP_TYPE_ELLIPSE</b> for the ellipse shape.\n
+     * .value[1].f32: width of the ellipse.\n
+     * .value[2].f32: height of the ellipse.\n
+     * 4. Path:\n
+     * .value[0].i32: type of shape. The parameter type is {@link ArkUI_ClipType}.
+     * The value is <b>ARKUI_CLIP_TYPE_PATH</b> for the path shape.\n
+     * .value[1].f32: width of the path.\n
+     * .value[2].f32: height of the path.\n
+     * .string: command for drawing the path.\n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_AttributeItem item = {.string = "rect(10, 10, 10, 10)"};
+     * ArkUI_NumberValue value[] =
+     * { {.i32 = ARKUI_CLIP_TYPE_RECT}, 100, 100, 15, 15, { .u32 = 0xFFFF0000 }, { .u32 = 0xFFFF0000 }, 2 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_CLIP_SHAPE, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_CLIP);
-     * auto nodeClipShape = item->string;
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_CLIP_SHAPE);
+     * auto nodeClipType = item->value[0].i32;
+     * auto nodeClipWidth = item->value[1].f32;
+     * auto nodeClipHeight = item->value[2].f32;
+     * auto nodeClipRadiusWidth = item->value[3].f32;
+     * auto nodeClipRadiusHeight = item->value[4].f32;
      * @endcode
      *
      */
     NODE_CLIP_SHAPE,
     /**
-     * @brief Matrix transformation function, which can translate, rotate, and zoom in or out a chart, and supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the transform attribute, which can be used to translate, rotate, and scale images.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .data[0...15].f32:16 floating point numbers.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .data[0...15].f32: 16 floating-point numbers. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .data[0...15].f32:16 floating point numbers.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .data[0...15].f32: 16 floating-point numbers. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.f32 = 1}, {.f32 = 0}, {.f32 = 0}, {.f32 = 0}, {.f32 = 0}, {.f32 = 0}, {.f32 = 0},
-     * {.f32 = 0}, {.f32 = 0}, {.f32 = 1}, {.f32 = 0}, {.f32 = 0}, {.f32 = 0}, {.f32 = 0}, {.f32 = 0}, {.f32 = 1}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { {.f32 = 1}, {.f32 = 0}, {.f32 = 0}, {.f32 = 0}, {.f32 = 0}, {.f32 = 0}, {.f32 = 0},
+     * {.f32 = 0}, {.f32 = 0}, {.f32 = 1}, {.f32 = 0}, {.f32 = 0}, {.f32 = 0}, {.f32 = 0}, {.f32 = 0}, {.f32 = 1}  };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_TRANSFORM, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TRANSFORM);
      * auto nodeTransform = item[0].value;
@@ -712,19 +825,21 @@ typedef enum {
      */
     NODE_TRANSFORM,
     /**
-     * @brief Touch test type. Interfaces for setting, resetting, and obtaining attributes are supported.
+     * @brief Defines the hit test behavior attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: controls the touch test type of the current component. The parameter type is {@link ArkUI_HitTestMode}. The default value is ARKUI_HIT_TEST_MODE_DEFAULT. \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: hit test mode. The parameter type is {@link ArkUI_HitTestMode}.
+     * The default value is <b>ARKUI_HIT_TEST_MODE_DEFAULT</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: controls the touch test type of the current component. The parameter type is {@link ArkKUI_HitTestMode}. The default value is ARKUI_HIT_TEST_MODE_DEFAULT. \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: hit test mode. The parameter type is {@link ArkUI_HitTestMode}.
+     * The default value is <b>ARKUI_HIT_TEST_MODE_DEFAULT</b>. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32=ARKUI_HIT_TEST_MODE_BLOCK}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { {.i32=ARKUI_HIT_TEST_MODE_BLOCK} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_HIT_TEST_BEHAVIOR, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_HIT_TEST_BEHAVIOR);
      * auto nodeHitTestBehavior = item->value[0].i32;
@@ -733,21 +848,22 @@ typedef enum {
      */
     NODE_HIT_TEST_BEHAVIOR,
     /**
-     * @brief Offset of the upper left corner of the element relative to the upper left corner of the parent container. Attribute setting, attribute reset, and attribute obtaining interfaces are supported.
+     * @brief Defines the offset attribute, which specifies the offset of the component's upper left corner relative
+     * to the parent container's. This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: x-axis coordinate.\n
-     * .value[1].f32: y-axis coordinates.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: X coordinate. \n
+     * .value[1].f32: Y coordinate. \n
      * \n
-     * Format of the return value {@link ArkUI_AttributeItem} of the attribute obtaining method:\n
-     * .value[0].f32: x-axis coordinate.\n
-     * .value[1].f32: y-axis coordinates.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: X coordinate. \n
+     * .value[1].f32: Y coordinate. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {50, 50};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { 50, 50 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_POSITION, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_POSITION);
      * auto nodePositionX = item->value[0].f32;
@@ -757,19 +873,19 @@ typedef enum {
      */
     NODE_POSITION,
     /**
-     * @brief Shadow effect attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the shadow attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: Sets the shadow effect of the current component. Parameter type {@link ArkUI_ShadowStyle}.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: shadow effect. The parameter type is {@link ArkUI_ShadowStyle}. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: Sets the shadow effect of the current component. Parameter type {@link ArkUI_ShadowStyle}.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: shadow effect. The parameter type is {@link ArkUI_ShadowStyle}. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_SHADOW_STYLE_OUTER_DEFAULT_XS}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { {.i32 = ARKUI_SHADOW_STYLE_OUTER_DEFAULT_XS} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SHADOW, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SHADOW);
      * auto nodePositionX = item->value[0].i32;
@@ -778,301 +894,317 @@ typedef enum {
      */
     NODE_SHADOW,
     /**
-     * @brief Customize the shadow effect, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the custom shadow effect. This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .string: character string combination parameter. Six input parameters are separated by semicolons (;). \n
-     * Input parameter 1: shadow blur radius.\n
-     * Input parameter 2: X-axis offset of the shadow.\n
-     * Input parameter 3: Y-axis offset of the shadow.\n
-     * Input parameter 4: shadow type.\n
-     * Input parameter 5: shadow color.\n
-     * Input parameter 6: indicates whether the shadow is filled in.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0]?.f32: blur radius of the shadow, in vp.\n
+     * .value[1]?.i32: whether to enable the coloring strategy. The value <b>1</b> means to enable the coloring
+     * strategy, and <b>0</b> (default value) means the opposite.\n
+     * .value[2]?.f32: offset of the shadow along the x-axis, in vp.\n
+     * .value[3]?.f32: offset of the shadow along the y-axis, in vp.\n
+     * .value[4]?.i32: shadow type {@link ArkUI_ShadowType}. The default value is <b>ARKUI_SHADOW_TYPE_COLOR</b>.\n
+     * .value[5]?.u32: shadow color, in 0xARGB format. For example, 0xFFFF0000 indicates red.\n
+     * .value[6]?.u32: whether to fill the shadow. The value <b>1</b> means to fill the shadow, and <b>0</b>
+     * means the opposite.\n
+     *
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .string: character string combination parameter. Six input parameters are separated by semicolons (;). \n
-     * Input parameter 1: shadow blur radius.\n
-     * Input parameter 2: X-axis offset of the shadow.\n
-     * Input parameter 3: Y-axis offset of the shadow.\n
-     * Input parameter 4: shadow type.\n
-     * Input parameter 5: shadow color.\n
-     * Input parameter 6: indicates whether the shadow is filled in.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: blur radius of the shadow, in vp.\n
+     * .value[1].i32: whether to enable the coloring strategy.\n
+     * .value[2].f32: offset of the shadow along the x-axis, in vp.\n
+     * .value[3].f32: offset of the shadow along the y-axis, in vp.\n
+     * .value[4].i32: shadow type {@link ArkUI_ShadowType}. The default value is <b>ARKUI_SHADOW_TYPE_COLOR</b>.\n
+     * .value[5].u32: shadow color, in 0xARGB format. For example, 0xFFFF0000 indicates red.\n
+     * .value[6].u32: whether to fill the shadow. The value <b>1</b> means to fill the shadow, and <b>0</b>
+     * means the opposite.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
-     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_AttributeItem item = {.string = "5; 10; 10; COLOR; 0xACCCCC; true"};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] =
+     * { 10, {.i32 = 1},10, 10, {.i32=ARKUI_SHADOW_TYPE_COLOR}, {.u32=0xFFFF0000}, {.i32 = 1} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_CUSTOM_SHADOW, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_CUSTOM_SHADOW);
-     * auto nodeCustomShadow = item->string;
+     * auto nodeCustomShadowRadius = item->value[0].f32;
+     * auto nodeCustomShadowOffsetX = item->value[1].f32;
+     * auto nodeCustomShadowOffsetY = item->value[2].f32;
+     * auto nodeCustomShadowType = item->value[3].i32;
+     * auto nodeCustomShadowColor = item->value[4].u32;
      * @endcode
      *
      */
     NODE_CUSTOM_SHADOW,
     /**
-     * @brief Width and height attributes of the background image. Interfaces for setting, resetting, and obtaining attributes are supported.
+     * @brief Defines the background image width and height.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32 indicates the width of the image, in vp.\n
-     * .value[1].f32 indicates the image height, in vp.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: width of the image. The value range is [0, +∞), and the unit is vp. \n
+     * .value[1].f32: height of the image. The value range is [0, +∞), and the unit is vp. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32 indicates the width of the image, in vp.\n
-     * .value[1].f32 indicates the image height, in vp.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: width of the image, in vp. \n
+     * .value[1].f32: height of the image, in vp. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue sizeArray[] = {20, 0}
-     * ARKUI_AttributeItem item = {.value = sizeArray, .size = 2};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_BACKGROUND_IMAGE_SIZE, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_BACKGROUND_IMAGE_SIZE);
-     * auto width = item->value[0].f32;
+     * ArkUI_NumberValue sizeArray[] = { 20, 0 };
+     * ArkUI_AttributeItem item = { .value = sizeArray, .size = 2};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_BACKGROUND_IMAGE_SIZE , &item);
+     * auto imageSizeItem = nativeNodeApi->getAttribute(nodeHandle, NODE_BACKGROUND_IMAGE_SIZE);
+     * auto width = imageSizeItem->value[0].f32;
      * @endcode
      *
      */
     NODE_BACKGROUND_IMAGE_SIZE,
     /**
-     * @brief Attributes of the width and height of the background image. The attributes can be set, reset, and obtained.
+     * @brief Defines the background image size.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32 indicates the width and height of the background image. The enumerated values are {@link ArkUI_ImageSize}.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: size of the background image. The value is an enum of {@link ArkUI_ImageSize}. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32 indicates the width and height of the background image. The enumerated values are {@link ArkUI_ImageSize}.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: size of the background image. The value is an enum of {@link ArkUI_ImageSize}. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue imageSizeStyle[] = {{.i32 = static_cast<int32_t>(ArkUI_ImageSize.ARKUI_IMAGE_SIZE_COVER)}}
-     * ARKUI_AttributeItem item = {.value = imageSizeStyle, .size = 1};
+     * ArkUI_NumberValue imageSizeStyle[] = { {.i32 = static_cast<int32_t>(ARKUI_IMAGE_SIZE_COVER) } };
+     * ArkUI_AttributeItem item = { .value = imageSizeStyle, .size = 1};
      * nativeNodeApi->setAttribute(nodeHandle, NODE_BACKGROUND_IMAGE_SIZE_WITH_STYLE, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_BACKGROUND_IMAGE_SIZE_WITH_STYLE);
-     * auto blurStyle = item->value[0].i32
+     * auto imageSizeStyleItem = nativeNodeApi->getAttribute(nodeHandle, NODE_BACKGROUND_IMAGE_SIZE_WITH_STYLE);
+     * auto blurStyleValue = imageSizeStyleItem->value[0].i32;
      * @endcode
      */
     NODE_BACKGROUND_IMAGE_SIZE_WITH_STYLE,
     /**
-     * @brief Fuzzy attributes between the background and content. The interfaces for setting, resetting, and obtaining attributes are supported.
+     * @brief Defines the background blur attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32 indicates the fuzzy type. The enumerated value is {@link ArkUI_BlurStyle}.\n
-     * .value[1]?.i32 indicates the light/dark color mode, which uses the enumerated value {@link ArkUI_ColorMode}.\n
-     * .value[2]?.i32 indicates the color obtaining mode. The enumerated value of {@link ArkUI_AdaptiveColor} is used.\n
-     * .value[3]?.f32 indicates the blur effect degree, which is in the range [0.0, 1.0].\n
-     * .value[4]?.f32 indicates the grayscale blur start boundary.\n
-     * .value[5]?.f32 indicates the grayscale blur end boundary.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: blue type. The value is an enum of {@link ArkUI_BlurStyle}. \n
+     * .value[1]?.i32: color mode. The value is an enum of {@link ArkUI_ColorMode}. \n
+     * .value[2]?.i32: adaptive color mode. The value is an enum of {@link ArkUI_AdaptiveColor}. \n
+     * .value[3]?.f32: blur degree. The value range is [0.0, 1.0]. \n
+     * .value[4]?.f32: start boundary of grayscale blur. \n
+     * .value[5]?.f32: end boundary of grayscale blur. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32 indicates the fuzzy type, which uses the enumerated value {@link ArkUI_BlurStyle}.\n
-     * .value[1]?.i32 indicates the light/dark color mode, which uses the enumerated value {@link ArkUI_ColorMode}.\n
-     * .value[2]?.i32 indicates the color obtaining mode. The enumerated value of {@link ArkUI_AdaptiveColor} is used.\n
-     * .value[3]?.f32 indicates the blur effect degree, which is in the range [0.0, 1.0].\n
-     * .value[4]?.f32 indicates the grayscale blur start boundary.\n
-     * .value[5]?.f32 indicates the grayscale blur end boundary.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: blue type. The value is an enum of {@link ArkUI_BlurStyle}. \n
+     * .value[1].i32: color mode. The value is an enum of {@link ArkUI_ColorMode}. \n
+     * .value[2].i32: adaptive color mode. The value is an enum of {@link ArkUI_AdaptiveColor}. \n
+     * .value[3].f32: blur degree. The value range is [0.0, 1.0]. \n
+     * .value[4].f32: start boundary of grayscale blur. \n
+     * .value[5].f32: end boundary of grayscale blur. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue blurStyle[] = {{.i32 = static_cast<int32_t>(ArkUI_BlurStyle.ARKUI_BLUR_STYLE_THICK)}}
-     * ARKUI_AttributeItem item = {.value = blurStyle, .size = 1};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_BACKGROUND_BLUR_STYLE, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_BACKGROUND_BLUR_STYLE);
-     * auto blurStyle = item->value[0].i32
+     * ArkUI_NumberValue blurStyle[] = { { .i32 = static_cast<int32_t>(ARKUI_BLUR_STYLE_THICK)}};
+     * ArkUI_AttributeItem item = { .value = blurStyle, .size = 1};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_BACKGROUND_BLUR_STYLE , &item);
+     * auto blurStyleItem = nativeNodeApi->getAttribute(nodeHandle, NODE_BACKGROUND_BLUR_STYLE);
+     * auto blurStyleType = blurStyleItem->value[0].i32;
      * @endcode
      *
      */
     NODE_BACKGROUND_BLUR_STYLE,
     /**
-     * @brief Center point attribute of the graph transformation. Interfaces for setting, resetting, and obtaining attributes are supported.
+     * @brief Defines the transform center attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0]?.f32 indicates the X-axis coordinate value of the center point, in vp.\n
-     * .value[1]?.f32 indicates the Y-axis coordinate of the central point, in vp.\n
-     * .value[2]?.f32 indicates the Z-axis coordinate of the center point, in vp \n
-     * .value[3]?.f32 indicates the percentage position of the X-axis coordinate of the center point. For example, 0.2 indicates the position of 20%. This property overrides value[0].f32.\n
-     * .value[4]?.f32 indicates the percentage position of the Y axis coordinate of the center point, for example, 0.2 indicates the position of 20 percent. This property overrides value[1].f32.\n
-     * .value[5]?.f32 indicates the percentage position of the Z coordinate of the center point, for example, 0.2 indicates the position of 20 percent. This property overrides value[2].f32.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0]?.f32: X coordinate of the center point, in vp.\n
+     * .value[1]?.f32: Y coordinate of the center point, in vp.\n
+     * .value[2]?.f32: Z coordinate of the center point, in vp.\n
+     * .value[3]?.f32 : X coordinate of the center point, expressed in a number that represents a percentage.
+     * For example, 0.2 indicates 20%. This attribute overwrites value[0].f32. The default value is <b>0.5f</b>. \n
+     * .value[4]?.f32 : Y coordinate of the center point, expressed in a number that represents a percentage.
+     * For example, 0.2 indicates 20%. This attribute overwrites value[1].f32. The default value is <b>0.5f</b>. \n
+     * .value[5]?.f32 : Z coordinate of the center point, expressed in a number that represents a percentage.
+     * For example, 0.2 indicates 20%. This attribute overwrites value[2].f32. The default value is <b>0.0f</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0]?.f32 indicates the X-axis coordinate of the center point, in vp.\n
-     * .value[1]?.f32 indicates the Y-axis coordinate of the central point, in vp.\n
-     * .value[2]?.f32 indicates the Z-axis coordinate of the central point, in vp \n
-     * Note: If the coordinate percentage position is set, the attribute obtaining method returns the calculated vp value.
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: X coordinate of the center point, in vp.\n
+     * .value[1].f32: Y coordinate of the center point, in vp.\n
+     * .value[2].f32: Z coordinate of the center point, in vp.\n
+     * Note: If the coordinate is expressed in a number that represents a percentage, the attribute obtaining API
+     * returns the calculated value in vp.
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue centerPointArray[] = {20}
-     * ARKUI_AttributeItem item = {.value = centerPointArray, .size = 1};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_TRANSITION_CENTER, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TRANSITION_CENTER);
-     * auto centerX = item->value[0].f32
+     * ArkUI_NumberValue centerPointArray[] = { 20 };
+     * ArkUI_AttributeItem item = { .value = centerPointArray, .size = 1};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TRANSFORM_CENTER , &item);
+     * auto transformCenterItem = nativeNodeApi->getAttribute(nodeHandle, NODE_TRANSFORM_CENTER);
+     * auto centerX = transformCenterItem->value[0].f32;
      * @endcode
      */
     NODE_TRANSFORM_CENTER,
     /**
-     * @brief Transparency effect attribute during transition. The interface for setting, resetting, and obtaining attributes is supported.
+     * @brief Defines the transition opacity attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32 indicates the transparency value of the start and end points.\n
-     * .value[1].i32 indicates the animation duration, in ms.\n
-     * .value[2].i32 indicates the type of the animation curve. The enumerated value of {@link ArkUI_AnimationCurve} is used.\n
-     * .value[3]?.i32 indicates the animation delay, in ms.\n
-     * .value[4]?.i32 indicates the number of times the animation is played.\n
-     * .value[5]?.i32 indicates the animation playing mode. The enumerated value of {@link ArkUI_AnimationPlayMode} is used.\n
-     * .value[6]?.f32 indicates the animation playback speed.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: opacity values of the start and end points.\n
+     * .value[1].i32: animation duration, in milliseconds.\n
+     * .value[2].i32: animation curve type. The value is an enum of {@link ArkUI_AnimationCurve}.\n
+     * .value[3]?.i32: animation delay duration, in milliseconds.\n
+     * .value[4]?.i32: number of times that the animation is played.\n
+     * .value[5]?.i32: animation playback mode. The value is an enum of {@link ArkUI_AnimationPlayMode}.\n
+     * .value[6]?.f32: animation playback speed.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32 indicates the transparency value of the start and end points.\n
-     * .value[1].i32 indicates the animation duration, in ms.\n
-     * .value[2].i32 indicates the type of the animation curve. The enumerated value of {@link ArkUI_AnimationCurve} is used.\n
-     * .value[3]?.i32 indicates the animation delay, in ms.\n
-     * .value[4]?.i32 indicates the number of times the animation is played.\n
-     * .value[5]?.i32 indicates the animation playing mode. The enumerated value of {@link ArkUI_AnimationPlayMode} is used.\n
-     * .value[6]?.f32 indicates the animation playback speed.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: opacity values of the start and end points.\n
+     * .value[1].i32: animation duration, in milliseconds.\n
+     * .value[2].i32: animation curve type. The value is an enum of {@link ArkUI_AnimationCurve}.\n
+     * .value[3].i32: animation delay duration, in milliseconds.\n
+     * .value[4].i32: number of times that the animation is played.\n
+     * .value[5].i32: animation playback mode. The value is an enum of {@link ArkUI_AnimationPlayMode}.\n
+     * .value[6].f32: animation playback speed.\n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue opacityTransition[] = {20, {.i32 = 3000},
-     * {.i32 = static_cast<int32_t>(ArkUI_AnimationCurve.ARKUI_CURVE_EASE_IN_OUT)}}
-     * ARKUI_AttributeItem item = {.value = opacityTransition, .size = 3};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_OPACITY_TRANSITION, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_OPACITY_TRANSITION);
-     * auto opacity = item->value[0].f32
+     * ArkUI_NumberValue opacityTransition[] = { 20, { .i32 = 3000},
+     * { .i32 = static_cast<int32_t>(ARKUI_CURVE_EASE_IN_OUT)}};
+     * ArkUI_AttributeItem item = { .value = opacityTransition, .size = 3};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_OPACITY_TRANSITION , &item);
+     * auto opacityTransitionItem = nativeNodeApi->getAttribute(nodeHandle, NODE_OPACITY_TRANSITION);
+     * auto opacity = opacityTransitionItem->value[0].f32;
      * @endcode
      */
     NODE_OPACITY_TRANSITION,
     /**
-     * @brief Rotation effect attributes during transition. The interfaces for setting, resetting, and obtaining attributes are supported.
+     * @brief Defines the transition rotation attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32 represents the lateral rotation component.\n
-     * .value[1].f32 represents the vertical rotation component.\n
-     * .value[2].f32 represents a vertical rotation component.\n
-     * .value[3].f32 indicates the angle.\n
-     * .value[4].f32 for line of sight.\n
-     * .value[5].i32 indicates the animation duration, in ms.\n
-     * .value[6].i32 indicates the type of the animation curve. The enumerated value {@link ArkUI_AnimationCurve} is used.\n
-     * .value[7]?.i32 indicates the animation delay, in milliseconds.\n
-     * .value[8]?.i32 indicates the number of times the animation is played.\n
-     * .value[9]? .i32 indicates the animation playback mode, and the enumerated value {@link ArkUI_AnimationPlayMode} is used.\n
-     * .value[10]?.f32 indicates the animation playback speed.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: X-component of the rotation vector. \n
+     * .value[1].f32: Y-component of the rotation vector. \n
+     * .value[2].f32: Z-component of the rotation vector \n
+     * .value[3].f32: angle. \n
+     * .value[4].f32: line of sight. The default value is <b>0.0f</b>. \n
+     * .value[5].i32: animation duration, in milliseconds. \n
+     * .value[6].i32: animation curve type. The value is an enum of {@link ArkUI_AnimationCurve}.\n \n
+     * .value[7]?.i32: animation delay duration, in milliseconds. \n
+     * .value[8]?.i32: number of times that the animation is played. \n
+     * .value[9]?.i32: animation playback mode. The value is an enum of {@link ArkUI_AnimationPlayMode}. \n
+     * .value[10]?.f32: animation playback speed. \n
      * \n
-     * Format of the return value of the attribute obtaining method {@link ArkUI_AttributeItem}:\n
-     * .value[0].f32 represents the lateral rotation component.\n
-     * .value[1].f32 represents the vertical rotation component.\n
-     * .value[2].f32 represents a vertical rotation component.\n
-     * .value[3].f32 indicates the angle.\n
-     * .value[4].f32 for line of sight.\n
-     * .value[5].i32 indicates the animation duration, in ms.\n
-     * .value[6].i32 indicates the type of the animation curve, which is the enumerated value of {@link ArkUI_AnimationCurve}.\n
-     * .value[7]?.i32 indicates the animation delay, in ms.\n
-     * .value[8]?.i32 indicates the number of times the animation is played.\n
-     * .value[9]? .i32 indicates the animation mode, and the enumerated value {@link ArkUI_AnimationPlayMode} is used.\n
-     * .value[10]?.f32 indicates the animation playback speed.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: X-component of the rotation vector. \n
+     * .value[1].f32: Y-component of the rotation vector. \n
+     * .value[2].f32: Z-component of the rotation vector \n
+     * .value[3].f32: angle. \n
+     * .value[4].f32: line of sight. \n
+     * .value[5].i32: animation duration, in milliseconds. \n
+     * .value[6].i32: animation curve type. The value is an enum of {@link ArkUI_AnimationCurve}.\n \n
+     * .value[7].i32: animation delay duration, in milliseconds. \n
+     * .value[8].i32: number of times that the animation is played. \n
+     * .value[9].i32: animation playback mode. The value is an enum of {@link ArkUI_AnimationPlayMode}. \n
+     * .value[10].f32: animation playback speed. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue rotateTransition[] = {0.0f, 0.0f, 1.0f, 180, 0, {.i32 = 3000},
-     * {.i32 = static_cast<int32>(ArkUI_AnimationCurve.ARKUI_CURVE_SHARP)}}
-     * ARKUI_AttributeItem item = {.value = rotateTransition, .size = 7};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_ROTATE_TRANSITION, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_ROTATE_TRANSITION);
-     * auto rotateX = item->value[0].f32
+     * ArkUI_NumberValue rotateTransition[] = { 0.0f, 0.0f, 1.0f, 180, 0, { .i32 = 3000},
+     * { .i32 = static_cast<int32_t>(ARKUI_CURVE_SHARP)}};
+     * ArkUI_AttributeItem item = { .value = rotateTransition, .size = 7};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_ROTATE_TRANSITION , &item);
+     * auto rotateTransitionItem = nativeNodeApi->getAttribute(nodeHandle, NODE_ROTATE_TRANSITION);
+     * auto rotateX = rotateTransitionItem->value[0].f32;
      * @endcode
      */
     NODE_ROTATE_TRANSITION,
     /**
-     * @brief Zoom effect attributes during transition. The interfaces for setting, resetting, and obtaining attributes are supported.
+     * @brief Defines the transition scaling attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32 Landscape magnification.\n
-     * .value[1].f32 Vertical magnification.\n
-     * .value[2].f32 Vertical magnification.\n
-     * .value[3].i32 indicates the animation duration, in ms.\n
-     * .value[4].i32 indicates the type of the animation curve, which is the enumerated value of {@link ArkUI_AnimationCurve}.\n
-     * .value[5]?.i32 indicates the animation delay, in ms.\n
-     * .value[6]?.i32 indicates the number of times the animation is played.\n
-     * .value[7]? .i32 indicates the animation playback mode, and the enumerated value {@link ArkUI_AnimationPlayMode} is used.\n
-     * .value[8]?.f32 indicates the animation playback speed.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: scale factor along the x-axis. \n
+     * .value[1].f32: scale factor along the y-axis. \n
+     * .value[2].f32: scale factor along the z-axis. \n
+     * .value[3].i32: animation duration, in milliseconds. \n
+     * .value[4].i32: animation curve type. The value is an enum of {@link ArkUI_AnimationCurve}.\n \n
+     * .value[5]?.i32: animation delay duration, in milliseconds. \n
+     * .value[6]?.i32: number of times that the animation is played. \n
+     * .value[7]?.i32: animation playback mode. The value is an enum of {@link ArkUI_AnimationPlayMode}. \n
+     * .value[8]?.f32: animation playback speed. \n
      * \n
-     * Return value of the attribute obtaining method {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32 Landscape magnification.\n
-     * .value[1].f32 Vertical magnification.\n
-     * .value[2].f32 Vertical magnification.\n
-     * .value[3].i32 indicates the animation duration, in ms.\n
-     * .value[4].i32 indicates the type of the animation curve, which is the enumerated value of {@link ArkUI_AnimationCurve}.\n
-     * .value[5]?.i32 indicates the animation delay, in ms.\n
-     * .value[6]?.i32 indicates the number of times the animation is played.\n
-     * .value[7]? .i32 indicates the animation playback mode, which is the enumerated value of {@link ArkUI_AnimationPlayMode}.\n
-     * .value[8]?.f32 indicates the animation playback speed.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: scale factor along the x-axis. \n
+     * .value[1].f32: scale factor along the y-axis. \n
+     * .value[2].f32: scale factor along the z-axis. \n
+     * .value[3].i32: animation duration, in milliseconds. \n
+     * .value[4].i32: animation curve type. The value is an enum of {@link ArkUI_AnimationCurve}.\n \n
+     * .value[5].i32: animation delay duration, in milliseconds. \n
+     * .value[6].i32: number of times that the animation is played. \n
+     * .value[7].i32: animation playback mode. The value is an enum of {@link ArkUI_AnimationPlayMode}. \n
+     * .value[8].f32: animation playback speed. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue scaleTransition[] = {0.0f, 0.0f, 0.0f, {.i32 = 3000},
-     * {.i32 = static_cast<int32>(ArkUI_AnimationCurve.ARKUI_CURVE_SHARP)}}
-     * ARKUI_AttributeItem item = {.value = scaleTransition, .size = 5};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_SCALE_TRANSITION, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SCALE_TRANSITION);
-     * auto scaleX = item->value[0].f32
+     * ArkUI_NumberValue scaleTransition[] = { 0.0f, 0.0f, 0.0f, { .i32 = 3000},
+     * { .i32 = static_cast<int32_t>(ARKUI_CURVE_SHARP)}};
+     * ArkUI_AttributeItem item = { .value = scaleTransition, .size = 5};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SCALE_TRANSITION , &item);
+     * auto scaleTransitionItem = nativeNodeApi->getAttribute(nodeHandle, NODE_SCALE_TRANSITION);
+     * auto scaleX = scaleTransitionItem->value[0].f32;
      * @endcode
      */
     NODE_SCALE_TRANSITION,
     /**
-     * @brief Panning effect attribute during transition. The interface supports attribute setting, attribute reset, and attribute obtaining.
+     * @brief Defines the transition translation attribute.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * value[0].f32 indicates the horizontal translation distance, in vp.\n
-     * value[1].f32 indicates the vertical translation distance, in vp \n
-     * value[2].f32 indicates the vertical translation distance, in vp \n
-     * value[3].i32 indicates the animation duration, in milliseconds.\n
-     * value[4].i32 indicates the type of the animation curve. The enumerated value {@link ArkUI_AnimationCurve} is used.\n
-     * value[5]?.i32 indicates the animation delay, in ms.\n
-     * value[6]?.i32 indicates the number of times the animation is played.\n
-     * value[7]?.i32 indicates the animation playback mode, which is the enumerated value of {@link ArkUI_AnimationPlayMode}.\n
-     * value[8]?.f32 indicates the animation playback speed.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * value[0].f32: translation distance along the x-axis, in vp.\n
+     * value[1].f32: translation distance along the y-axis, in vp.\n
+     * value[2].f32: translation distance along the z-axis, in vp.\n
+     * value[3].i32: animation duration, in milliseconds. \n
+     * value[4].i32: animation curve type. The value is an enum of {@link ArkUI_AnimationCurve}.\n \n
+     * value[5]?.i32: animation delay duration, in milliseconds. \n
+     * value[6]?.i32: number of times that the animation is played. \n
+     * value[7]?.i32: animation playback mode. The value is an enum of {@link ArkUI_AnimationPlayMode}. \n
+     * value[8]?.f32: animation playback speed. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * value[0].f32 indicates the horizontal translation distance, in vp.\n
-     * value[1].f32 indicates the vertical translation distance, in vp.\n
-     * value[2].f32 indicates the vertical translation distance, in vp.\n
-     * value[3].i32 indicates the animation duration, in milliseconds.\n
-     * value[4].i32 indicates the type of the animation curve, and the enumerated value {@link ArkUI_AnimationCurve} is used.\n
-     * value[5]?.i32 indicates the animation delay duration, in ms.\n
-     * value[6]?.i32 indicates the number of times the animation is played.\n
-     * value[7]?.i32 indicates the animation playback mode, and the enumerated value {@link ArkUI_AnimationPlayMode} is used.\n
-     * value[8]?.f32 indicates the animation playback speed.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * value[0].f32: translation distance along the x-axis, in vp.\n
+     * value[1].f32: translation distance along the y-axis, in vp.\n
+     * value[2].f32: translation distance along the z-axis, in vp.\n
+     * value[3].i32: animation duration, in milliseconds. \n
+     * value[4].i32: animation curve type. The value is an enum of {@link ArkUI_AnimationCurve}.\n \n
+     * value[5].i32: animation delay duration, in milliseconds. \n
+     * value[6].i32: number of times that the animation is played. \n
+     * value[7].i32: animation playback mode. The value is an enum of {@link ArkUI_AnimationPlayMode}. \n
+     * value[8].f32: animation playback speed. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue translateTransition[] = {0.0f, 0.0f, 0.0f,
-     * {.i32 = 3000}, {.i32 = static_cast<int32>(ArkUI_AnimationCurve.ARKUI_CURVE_SHARP)}}
-     * ARKUI_AttributeItem item = {.value = translateTransition, .size = 5};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_TRANSLATE_TRANSITION, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TRANSLATE_TRANSITION);
-     * auto translateX = item->value[0].f32
+     * ArkUI_NumberValue translateTransition[] = { 0.0f, 0.0f, 0.0f,
+     * { .i32 = 3000}, { .i32 = static_cast<int32_t>(ARKUI_CURVE_SHARP)}};
+     * ArkUI_AttributeItem item = { .value = translateTransition, .size = 5};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TRANSLATE_TRANSITION , &item);
+     * auto translateTransitionItem = nativeNodeApi->getAttribute(nodeHandle, NODE_TRANSLATE_TRANSITION);
+     * auto translateX = translateTransitionItem->value[0].f32;
      * @endcode
      */
     NODE_TRANSLATE_TRANSITION,
 
     /**
-     * @brief Focus attribute, which supports attribute setting, resetting, and obtaining.
+     * @brief Defines the focus attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Parameter format of the attribute setting method {@link ArkUI_AttributeItem}:\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .value[0].i32: The parameter type is 1 or 0.
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
      * .value[0].i32: The parameter type is 1 or 0.
      *
      * @code {.c}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = 1}};
+     * ArkUI_NumberValue value[] = { { .i32 = 1 } };
      * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
      * nativeNodeApi->setAttribute(nodeHandle, NODE_FOCUSABLE, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_FOCUSABLE);
@@ -1083,18 +1215,18 @@ typedef enum {
     NODE_FOCUSABLE,
 
     /**
-     * @brief Default focus attribute, which supports attribute setting, resetting, and obtaining.
+     * @brief Defines the default focus attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Parameter format of the attribute setting method {@link ArkUI_AttributeItem}:\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * value[0].i32: The parameter type is 1 or 0.
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
      * value[0].i32: The parameter type is 1 or 0.
      *
      * @code {.c}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = 1}};
+     * ArkUI_NumberValue value[] = { { .i32 = 1 } };
      * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
      * nativeNodeApi->setAttribute(nodeHandle, NODE_DEFAULT_FOCUS, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_DEFAULT_FOCUS);
@@ -1105,30 +1237,30 @@ typedef enum {
     NODE_DEFAULT_FOCUS,
 
     /**
-     * @brief Touch hot zone attributes, which support attribute setting, attribute reset, and attribute obtaining.
+     * @brief Defines the touch target attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Parameter format of the attribute setting method {@link ArkUI_AttributeItem}:\n
-     * .data[0].f32: x-axis coordinate of the touch point relative to the upper left corner of the component, in vp.\n
-     * .data[1].f32: y-axis coordinate of the touch point relative to the upper left corner of the component, in vp.\n
-     * .data[2].f32: Width of the touch hot zone, in%.\n
-     * .data[3].f32: Height of the touch hot zone, in%.\n
-     * .data[4...].f32: Multiple gesture response areas can be set, and the sequence is the same as that described above.
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .data[0].f32: X coordinate of the touch point relative to the upper left corner of the component, in vp. \n
+     * .data[1].f32: Y coordinate of the touch point relative to the upper left corner of the component, in vp. \n
+     * .data[2].f32: width of the touch target, in %. \n
+     * .data[3].f32: height of the touch target, in %. \n
+     * .data[4...].f32: Multiple touch targets can be set. The sequence of the parameters is the same as the preceding.
      * \n
-     * Format of the return value of the attribute obtaining method {@link ArkUI_AttributeItem}:\n
-     * .data[0].f32: x-axis coordinate of the touch point relative to the upper left corner of the component, in vp.\n
-     * .data[1].f32: y-axis coordinate of the touch point relative to the upper left corner of the component, in vp.\n
-     * .data[2].f32: Width of the touch hot zone, in%.\n
-     * .data[3].f32: Height of the touch hot zone, in%.\n
-     * .data[4...].f32: Multiple gesture response areas can be set, and the sequence is the same as the preceding sequence.
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .data[0].f32: X coordinate of the touch point relative to the upper left corner of the component, in vp. \n
+     * .data[1].f32: Y coordinate of the touch point relative to the upper left corner of the component, in vp. \n
+     * .data[2].f32: width of the touch target, in %. \n
+     * .data[3].f32: height of the touch target, in %. \n
+     * .data[4...].f32: Multiple touch targets can be set. The sequence of the parameters is the same as the preceding.
      *
      * @code {.c}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {0, 0, 100, 100};
+     * ArkUI_NumberValue value[] = { 0, 0, 100, 100 };
      * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
      * nativeNodeApi->setAttribute(nodeHandle, NODE_RESPONSE_REGION, &item);
      *
-     * ArkUI_NumberValue value[] = {0, 0, 100, 100, 0, 0, 100, 100};
+     * ArkUI_NumberValue value[] = { 0, 0, 100, 100, 0, 0, 100, 100 };
      * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
      * nativeNodeApi->setAttribute(nodeHandle, NODE_RESPONSE_REGION, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_RESPONSE_REGION);
@@ -1140,27 +1272,30 @@ typedef enum {
      *
      */
     NODE_RESPONSE_REGION,
+
     /**
-     * @brief Mask text attribute, which supports attribute setting, attribute reset, and attribute obtaining.
+     * @brief Defines the overlay attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Parameter format of the attribute setting method {@link ArkUI_AttributeItem}:\n
-     * .string mask text; \n
-     * .value[0]?.i32: indicates the position of the floating layer relative to the component. The parameter type is {@link ArkUI_Alignment}. This parameter is optional,
-     * Default value is AKUI_ALIGNMENT_TOP_START.\n
-     * .value[1]?.i32: (Optional) Indicates the offset X of the floating layer based on the upper left corner of the floating layer. The unit is vp.\n
-     * .value[2]?.i32: (Optional) Indicates the offset Y of the floating layer based on the upper left corner of the floating layer. The unit is vp.
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: mask text.\n
+     * .value[0]?.i32: position of the overlay relative to the component. Optional.
+     * The value is an enum of {@link ArkUI_Alignment}.
+     * The default value is <b>ARKUI_ALIGNMENT_TOP_START.</b> \n
+     * .value[1]?.f32: offset of the overlay relative to the upper left corner of itself on the x-axis, in vp. Optional. \n
+     * .value[2]?.f32: offset of the overlay relative to the upper left corner of itself on the y-axis, in vp. Optional.
      * \n
-     * Format of the return value of the attribute obtaining method {@link ArkUI_AttributeItem}:\n
-     * .string mask text; \n
-     * .value[0]?.i32: indicates the position of the floating layer relative to the component. The parameter type is {@link ArkUI_Alignment}. This parameter is optional,
-     * Default value is AKUI_ALIGNMENT_TOP_START.\n
-     * .value[1]?.i32: indicates the offset X of the floating layer based on the upper left corner of the floating layer. The unit is vp.\n
-     * .value[2]?.i32: indicates the offset Y of the floating layer based on the upper left corner of the floating layer. The unit is vp.
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: mask text.\n
+     * .value[0].i32: position of the overlay relative to the component.
+     * The value is an enum of {@link ArkUI_Alignment}.
+     * The default value is <b>ARKUI_ALIGNMENT_TOP_START.</b> \n
+     * .value[1].f32: offset of the overlay relative to the upper left corner of itself on the x-axis, in vp. \n
+     * .value[2].f32: offset of the overlay relative to the upper left corner of itself on the y-axis, in vp.
      *
      * @code {.c}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_ALIGNMENT_TOP_START}, 1.2, 0.3};
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_ALIGNMENT_TOP_START }, 1.2, 0.3 };
      * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue), "test"};
      * nativeNodeApi->setAttribute(nodeHandle, NODE_OVERLAY, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_OVERLAY);
@@ -1169,169 +1304,289 @@ typedef enum {
      *
      */
     NODE_OVERLAY,
-
     /**
-     * @brief Angle gradient effect, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the sweep gradient effect.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .string: character string combination parameter. Six input parameters are separated by semicolons:\n
-     * Input parameter 1: indicates the center point of the angle gradient, that is, the coordinates relative to the upper left corner of the current component, separated by commas.\n
-     * Input parameter 2: start point of the angle gradient. The default value is 0. \n
-     * Input parameter 3: end point of the angle gradient. The default value is 0. \n
-     * Input parameter 4: rotation angle of the angle gradient. The default value is 0. \n
-     * Input parameter 5: specifies the gradient color at a certain percentage position. If an invalid color is set, the gradient color is skipped.\n
-     * Input parameter 6: coloring for the gradient color. The default value is false.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0]?.f32: X coordinate of the sweep gradient center relative to the upper left corner of the component.\n
+     * .value[1]?.f32: Y coordinate of the sweep gradient center relative to the upper left corner of the component.\n
+     * .value[2]?.f32: start point of the sweep gradient. The default value is <b>0</b>. \n
+     * .value[3]?.f32: end point of the sweep gradient. The default value is <b>0</b>. \n
+     * .value[4]?.f32: rotation angle of the sweep gradient. The default value is <b>0</b>. \n
+     * .value[5]?.i32: whether the colors are repeated. The value <b>1</b> means that the colors are repeated,
+     * and <b>0</b> means the opposite.\n
+     * .object: array of color stops, each of which consists of a color and its stop position. Invalid colors are
+     * automatically skipped.\n
+     * colors: colors of the color stops. \n
+     * stops: stop positions of the color stops. \n
+     * size: number of colors. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .string: character string combination parameter. Six input parameters are separated by semicolons:\n
-     * Input parameter 1: indicates the center point of the angle gradient, that is, the coordinates relative to the upper left corner of the current component. Separate the coordinates with commas (,). \n
-     * Input parameter 2: start point of the angle gradient. The default value is 0. \n
-     * Input parameter 3: end point of the angle gradient. The default value is 0. \n
-     * Input parameter 4: rotation angle of the angle gradient. The default value is 0. \n
-     * Input parameter 5: specifies the gradient color at a certain percentage position. If an invalid color is set, the gradient color is skipped.\n
-     * Input parameter 6: coloring for the gradient color. The default value is false.\n
-     *
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: X coordinate of the sweep gradient center relative to the upper left corner of the component.\n
+     * .value[1].f32: Y coordinate of the sweep gradient center relative to the upper left corner of the component.\n
+     * .value[2].f32: start point of the sweep gradient. The default value is <b>0</b>. \n
+     * .value[3].f32: end point of the sweep gradient. The default value is <b>0</b>. \n
+     * .value[4].f32: rotation angle of the sweep gradient. The default value is <b>0</b>. \n
+     * .value[5].i32: whether the colors are repeated. The value <b>1</b> means that the colors are repeated,
+     * and <b>0</b> means the opposite.\n
+     * .object: array of color stops, each of which consists of a color and its stop position. Invalid colors are
+     * automatically skipped.\n
+     * colors: colors of the color stops. \n
+     * stops: stop positions of the color stops. \n
+     * size: number of colors. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_AttributeItem item = {.string = "5,10;60;180;60;#ffff0000,0.0,#ff0000ff,0.3,#ffffff00,0.5;true"};
+     * unsigned int colors[] = { 0xFFFFFFFF,0xFF0000FF };
+     * float stops[] = { 0.0, 0.5 };
+     * ArkUIColorStop colorStop = { colors, stops, 2 };
+     * ArkUI_ColorStop* ptr = &colorStop;
+     * ArkUI_NumberValue value[] = { 50, 50, 60, 180, 180, {.i32 = 1}};
+     * ArkUI_AttributeItem item =
+     * { value, sizeof(value)/sizeof(ArkUI_NumberValue), .object = reinterpret_cast<void*>(ptr) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SWEEP_GRADIENT, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SWEEP_GRADIENT);
-     * auto nodeCustomShadow = item->string;
+     * auto nodeSweepGradientCeneterX = item->value[0];
+     * auto nodeSweepGradientCeneterY = item->value[1];
+     * auto nodeSweepGradientStart = item->value[2];
+     * auto nodeSweepGradientEnd = item->value[3];
+     * auto nodeSweepGradientRotation = item->value[4];
+     * auto nodeSweepGradientFill = item->value[5];
+     * auto nodeSweepGradientColorStop = item->object;
      * @endcode
      *
      */
     NODE_SWEEP_GRADIENT,
     /**
-     * @brief Angle gradient effect, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the radial gradient effect.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .string: character string combination parameter. Four input parameters are separated by semicolons (;). \n
-     * Input parameter 1: indicates the center point of the radial gradient, that is, the coordinates relative to the upper left corner of the current component, separated by commas.\n
-     * Input parameter 2: radius of the radial gradient. The default value is 0. \n
-     * Input parameter 3: Specify the gradient color at a certain percentage position. If an invalid color is set, skip this step.\n
-     * Input parameter 4: repeat coloring for the gradient color.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute: \n
+     * .value[0]?.f32: X coordinate of the radial gradient center relative to the upper left corner of the component. \n
+     * .value[1]?.f32: Y coordinate of the radial gradient center relative to the upper left corner of the component. \n
+     * .value[2]?.f32: radius of the radial gradient. The default value is <b>0</b>. \n
+     * .value[3]?.i32: whether the colors are repeated. The value <b>1</b> means that the colors are repeated,
+     * and <b>0</b> means the opposite. \n
+     * .object: array of color stops, each of which consists of a color and its stop position. Invalid colors are
+     * automatically skipped. \n
+     * colors: colors of the color stops. \n
+     * stops: stop positions of the color stops. \n
+     * size: number of colors. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .string: character string combination parameter. Four input parameters are separated by semicolons (;). \n
-     * Input parameter 1: indicates the center point of the radial gradient, that is, the coordinates relative to the upper left corner of the current component, separated by commas.\n
-     * Input parameter 2: radius of the radial gradient. The default value is 0. \n
-     * Input parameter 3: Specifies the gradient color at a certain percentage position. If an invalid color is set, skip the gradient color.\n
-     * Input parameter 4: repeat coloring for the gradient color.\n
-     *
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: X coordinate of the radial gradient center relative to the upper left corner of the component. \n
+     * .value[1].f32: Y coordinate of the radial gradient center relative to the upper left corner of the component. \n
+     * .value[2].f32: radius of the radial gradient. The default value is <b>0</b>. \n
+     * .value[3].i32: whether the colors are repeated. The value <b>1</b> means that the colors are repeated,
+     * and <b>0</b> means the opposite.\n
+     * .object: array of color stops, each of which consists of a color and its stop position. Invalid colors are
+     * automatically skipped. \n
+     * colors: colors of the color stops. \n
+     * stops: stop positions of the color stops. \n
+     * size: number of colors. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_AttributeItem item = {.string = "5,10;50;#ffff0000,0.0,#ff0000ff,0.3,#ffffff00,0.5;true"};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_RADIAL_GRADIENT, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_RADIAL_GRADIENT);
-     * auto nodeCustomShadow = item->string;
+     * unsigned int colors[] = { 0xFFFFFFFF,0xFF0000FF };
+     * float stops[] = { 0.0, 0.5 };
+     * ArkUIColorStop colorStop = { colors, stops, 2 };
+     * ArkUI_ColorStop* ptr = &colorStop;
+     * ArkUI_NumberValue value[] = { 50, 50, 20, {.i32 = 1}};
+     * ArkUI_AttributeItem item =
+     * { value, sizeof(value)/sizeof(ArkUI_NumberValue), .object = reinterpret_cast<void*>(ptr) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SWEEP_GRADIENT, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SWEEP_GRADIENT);
+     * auto nodeRadialGradientCeneterX = item->value[0];
+     * auto nodeRadialGradientCeneterY = item->value[1];
+     * auto nodeRadialGradientradius = item->value[2];
+     * auto nodeRadialGradientFill = item->value[3];
+     * auto nodeRadialGradientColorStop = item->object;
      * @endcode
      *
      */
     NODE_RADIAL_GRADIENT,
     /**
-     * @brief The mask of a specified shape is added to the component. The interface for setting and obtaining attributes is supported.
+     * @brief Adds a mask of the specified shape to the component.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .data[0]?.u32: shape filling color.\n
-     * .data[1]?.u32: stroke color of a shape.\n
-     * .data[2]?.f32: stroke width of a shape.\n
-     * .string: shape description, which is optional:\n
-     * "progressMask(10, 10, #ff0000ff)" is the current value of the progress mask, the maximum value of the progress mask, and the color of the progress mask.\n
-     * "rect(10, 10, 10, 10)" is width, height, radiusWidth, and radiusHeight respectively in parentheses.\n
-     * "circle(10, 10)": width, height; \n
-     * "ellipse(10, 10)" is width and height respectively; \n
-     * "path(10, 10, M0 0 L600 0)" is width, height, commands; \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute, which supports five types of
+     * shapes:\n
+     * 1. Rectangle:\n
+     * .value[0].u32: fill color, in 0xARGB format. Optional.\n
+     * .value[1].u32: stroke color, in 0xARGB format. Optional.\n
+     * .value[2].f32: stroke width, in vp. Optional.\n
+      * .value[3].i32: mask type. The parameter type is {@link ArkUI_MaskType}.
+      * The value is <b>ARKUI_MASK_TYPE_RECT</b> for the rectangle shape.\n
+     * .value[4].f32: width of the rectangle.\n
+     * .value[5].f32: height of the rectangle.\n
+     * .value[6].f32: width of the rounded corner of the rectangle.\n
+     * .value[7].f32: height of the rounded corner of the rectangle.\n
+     * 2. Circle:\n
+     * .value[0].u32: fill color, in 0xARGB format. Optional.\n
+     * .value[1].u32: stroke color, in 0xARGB format. Optional.\n
+     * .value[2].f32: stroke width, in vp. Optional.\n
+      * .value[3].i32: mask type. The parameter type is {@link ArkUI_MaskType}.
+      * The value is <b>ARKUI_MASK_TYPE_CIRCLE</b> for the circle shape.\n
+     * .value[4].f32: width of the circle.\n
+     * .value[5].f32: height of the circle.\n
+     * 3.Ellipse:\n
+     * .value[0].u32: fill color, in 0xARGB format. Optional.\n
+     * .value[1].u32: stroke color, in 0xARGB format. Optional.\n
+     * .value[2].f32: stroke width, in vp. Optional.\n
+      * .value[3].i32: mask type. The parameter type is {@link ArkUI_MaskType}.
+      * The value is <b>ARKUI_MASK_TYPE_ELLIPSE</b> for the ellipse shape.\n
+     * .value[4].f32: width of the ellipse.\n
+     * .value[5].f32: height of the ellipse.\n
+     * 4. Path:\n
+     * .value[0].u32: fill color, in 0xARGB format. Optional.\n
+     * .value[1].u32: stroke color, in 0xARGB format. Optional.\n
+     * .value[2].f32: stroke width, in vp. Optional.\n
+      * .value[3].i32: mask type. The parameter type is {@link ArkUI_MaskType}.
+      * The value is <b>ARKUI_MASK_TYPE_PATH</b> for the path shape.\n
+     * .value[4].f32: width of the path.\n
+     * .value[5].f32: height of the path.\n
+     * .string: command for drawing the path.\n
+     * 4. Progress:\n
+     * .value[0].u32: fill color, in 0xARGB format. Optional.\n
+     * .value[1].u32: stroke color, in 0xARGB format. Optional.\n
+     * .value[2].f32: stroke width, in vp. Optional.\n
+      * .value[3].i32: mask type. The parameter type is {@link ArkUI_MaskType}.
+      * The value is <b>ARKUI_MASK_TYPE_PROSGRESS</b> for the progress shape.\n
+     * .value[4].f32: current value of the progress indicator.\n
+     * .value[5].f32: maximum value of the progress indicator.\n
+     * .value[6].u32: color of the progress indicator.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .data[0].u32: shape filling color.\n
-     * .data[1].u32: stroke color of a shape.\n
-     * .data[2].f32: stroke width of a shape, in vp.\n
-     * .string: Shape description:\n
-     * "progressMask(10, 10, #ff0000ff)" is the current value of the progress mask, the maximum value of the progress mask, and the color of the progress mask.\n
-     * "rect(10, 10, 10, 10)" is width, height, radiusWidth, and radiusHeight respectively in parentheses.\n
-     * "circle(10, 10)": width, height; \n
-     * "ellipse(10, 10)" is width and height respectively; \n
-     * "path(10, 10, M0 0 L600 0)" is width, height, and commands respectively; \n
+     * Format of the return value {@link ArkUI_AttributeItem}, which supports five types of shapes:\n
+     * 1. Rectangle:\n
+     * .value[0].u32: fill color, in 0xARGB format. Optional.\n
+     * .value[1].u32: stroke color, in 0xARGB format. Optional.\n
+     * .value[2].f32: stroke width, in vp. Optional.\n
+     * .value[3].i32: mask type.\n
+     * .value[4].f32: width of the rectangle.\n
+     * .value[5].f32: height of the rectangle.\n
+     * .value[6].f32: width of the rounded corner of the rectangle.\n
+     * .value[7].f32: height of the rounded corner of the rectangle.\n
+     * 2. Circle:\n
+     * .value[0].u32: fill color, in 0xARGB format. Optional.\n
+     * .value[1].u32: stroke color, in 0xARGB format. Optional.\n
+     * .value[2].f32: stroke width, in vp. Optional.\n
+     * .value[3].i32: mask type.\n
+     * .value[4].f32: width of the circle.\n
+     * .value[5].f32: height of the circle.\n
+     * 3.Ellipse:\n
+     * .value[0].u32: fill color, in 0xARGB format. Optional.\n
+     * .value[1].u32: stroke color, in 0xARGB format. Optional.\n
+     * .value[2].f32: stroke width, in vp. Optional.\n
+     * .value[3].i32: mask type.\n
+     * .value[4].f32: width of the ellipse.\n
+     * .value[5].f32: height of the ellipse.\n
+     * 4. Path:\n
+     * .value[0].u32: fill color, in 0xARGB format. Optional.\n
+     * .value[1].u32: stroke color, in 0xARGB format. Optional.\n
+     * .value[2].f32: stroke width, in vp. Optional.\n
+     * .value[3].i32: mask type.\n
+     * .value[4].f32: width of the path.\n
+     * .value[5].f32: height of the path.\n
+     * .string: command for drawing the path.\n
+     * 4. Progress:\n
+     * .value[0].i32: mask type.\n
+     * .value[1].f32: current value of the progress indicator.\n
+     * .value[2].f32: maximum value of the progress indicator.\n
+     * .value[3].u32: color of the progress indicator.\n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_AttributeItem item = {.string = "rect(10, 10, 10, 10)"};
+     * ArkUI_NumberValue value[] =
+     * {{ .u32 = 0xFFFF0000 }, { .u32 = 0xFFFF0000 }, 2 , {.i32 = ARKUI_MASK_TYPE_RECT}, 100, 100, 15, 15 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_MASK, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_MASK);
-     * auto nodeClipShape = item->string;
+     * auto nodeMaskFill = item->value[0].u32;
+     * auto nodeMaskStrokeColor = item->value[1].u32;
+     * auto nodeMaskStrokeWidth = item->value[2].f32;
+     * auto nodeMaskType = item->value[3].i32;
+     * auto nodeMaskWidth = item->value[4].f32;
+     * auto nodeMaskHeight = item->value[5].f32;
+     * auto nodeMaskRadiusWidth = item->value[6].f32;
+     * auto nodeMaskradiusHeight = item->value[7].f32;
      * @endcode
      *
      */
     NODE_MASK,
     /**
-     * @brief Mix the current control background and subnode content. Interfaces for setting, resetting, and obtaining attributes are supported.
+     * @brief Blends the component's background with the content of the component's child node.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: specifies the hybrid mode type of the current component. The parameter type is {@link ArkUI_BlendMode}. The default value is AKUI_BLEND_MODE_NONE.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: blend mode. The parameter type is {@link ArkUI_BlendMode}.
+     * The default value is <b>ARKUI_BLEND_MODE_NONE</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: specifies the hybrid mode type of the current component. The parameter type is {@link ArkUI_BlendMode}. The default value is AKUI_BLEND_MODE_NONE.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: blend mode. The parameter type is {@link ArkUI_BlendMode}.
+     * The default value is <b>ARKUI_BLEND_MODE_NONE</b>. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32=ARKUI_BLEND_MODE_NONE}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { {.i32=ARKUI_BLEND_MODE_NONE} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_BLEND_MODE, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_BLEND_MODE);
-     * auto nodeHitTestBehavior = item->value[0].i32;
+     * auto nodeBlendMode = item->value[0].i32;
      * @endcode
      *
      */
     NODE_BLEND_MODE,
     /**
-     * @brief Sets the layout in the axis direction of a container element. The interface for setting, resetting, and obtaining attributes is supported.
+     * @brief Sets the direction of the main axis.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: Set the layout type in the axis direction of the container element.\n
-     * Parameter type {@link ArkUI_Direction}. The default value is ARKUI_DIRECTION_AUTO.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: direction of the main axis.\n
+     * The parameter type is {@link ArkUI_Direction}. The default value is <b>ARKUI_DIRECTION_AUTO</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: Set the layout type in the axis direction of the container element.\n
-     * Parameter type {@link ArkUI_Direction}. The default value is ARKUI_DIRECTION_AUTO.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: direction of the main axis.\n
+     * The parameter type is {@link ArkUI_Direction}. The default value is <b>ARKUI_DIRECTION_AUTO</b>. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32=ARKUI_DIRECTION_RTL}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { {.i32=ARKUI_DIRECTION_RTL} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_DIRECTION, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_DIRECTION);
-     * auto nodeHitTestBehavior = item->value[0].i32;
+     * auto nodeDirection = item->value[0].i32;
      * @endcode
      *
      */
     NODE_DIRECTION,
     /**
-     * @brief Constraint size attributes. During component layout, the size range is restricted. Attribute setting, attribute reset, and attribute obtaining interfaces are supported.
+     * @brief Defines the size constraints.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .value[0].f32: minimum width, in vp.\n
      * .value[1].f32: maximum width, in vp.\n
-     * .value[2].f32: Minimum height, in vp.\n
+     * .value[2].f32: minimum height, in vp.\n
      * .value[3].f32: maximum height, in vp.\n
      * \n
-     * Return value of the method for obtaining attributes {@link ArkUI_AttributeItem} Format:\n
-     * .value[0].f32: minimum width, in vp; \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: minimum width, in vp.\n
      * .value[1].f32: maximum width, in vp.\n
-     * .value[2].f32: Minimum height, in vp.\n
+     * .value[2].f32: minimum height, in vp.\n
      * .value[3].f32: maximum height, in vp.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_AttributeItem item = {0, 5, 0, 5};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 0, 5, 0, 5 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_CONSTRAINT_SIZE, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_CONSTRAINT_SIZE);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_CONSTRAINT_SIZE);
      * auto nodeMinWidth = item->value[0].f32;
      * auto nodeMaxWidth = item->value[1].f32;
      * auto nodeMinHeight = item->value[2].f32;
@@ -1341,395 +1596,702 @@ typedef enum {
      */
     NODE_CONSTRAINT_SIZE,
     /**
-     * @brief Grayscale effect attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the grayscale effect.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: grayscale conversion ratio, ranging from 0 to 1. For example, 0.5 indicates that the grayscale processing is 50%.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: grayscale conversion ratio. The value ranges from 0 to 1.
+     * For example, 0.5 indicates a 50% grayscale conversion ratio.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: grayscale conversion ratio, ranging from 0 to 1.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: grayscale conversion ratio. The value ranges from 0 to 1.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_AttributeItem item = {0.5};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 0.5 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_GRAY_SCALE, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_GRAY_SCALE);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_GRAY_SCALE);
      * auto nodeGrayScale = item->value[0].f32;
      * @endcode
      */
     NODE_GRAY_SCALE,
     /**
-     * @brief Inverts the image scale attributes of the input image. The interfaces for setting, resetting, and obtaining attributes are supported.
+     * @brief Inverts the image.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: image inversion ratio. The value ranges from 0 to 1. For example, 0.5 indicates that the image inversion ratio is 50%.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: image inversion ratio. The value ranges from 0 to 1.
+     * For example, 0.5 indicates a 50% image inversion ratio.\n
      * \n
-     * Format of the return value of the attribute obtaining method {@link ArkUI_AttributeItem}:\n
-     * .value[0].f32: image inversion ratio, ranging from 0 to 1.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: image inversion ratio. The value ranges from 0 to 1.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_AttributeItem item = {0.5};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 0.5 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_INVERT, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_INVERT);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_INVERT);
      * auto nodeInvert = item->value[0].f32;
      * @endcode
      */
     NODE_INVERT,
     /**
-     * @brief Converts an image to a dark brown proportion. The APIs for setting, resetting, and obtaining attributes are supported.
+     * @brief Defines the sepia conversion ratio.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: Convert the image to the dark brown ratio. The ratio ranges from 0 to 1. For example, 0.5 indicates that the dark brown ratio is 50%.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: sepia conversion ratio. The value ranges from 0 to 1.
+     * For example, 0.5 indicates that a 50% sepia conversion ratio.\n
      * \n
-     * Format of the return value of the attribute obtaining method {@link ArkUI_AttributeItem}:\n
-     * .value[0].f32: Convert the image to the sepia ratio, ranging from 0 to 1.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: sepia conversion ratio. The value ranges from 0 to 1.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_AttributeItem item = {0.5};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 0.5 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SEPIA, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_SEPIA);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SEPIA);
      * auto nodeSepia = item->value[0].f32;
      * @endcode
      */
     NODE_SEPIA,
     /**
-     * @brief Contrast attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the contrast attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: contrast. If the value is 1, the original image is used. A larger value indicates a higher contrast. \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: contrast. If the value is <b>1</b>, the source image is displayed.
+     * A larger value indicates a higher contrast. Value range: [0, 10).\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: Contrast; \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: contrast. Value range: [0, 10).\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_AttributeItem item = {10};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 10 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_CONTRAST, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_CONTRAST);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_CONTRAST);
      * auto nodeContrast = item->value[0].f32;
      * @endcode
      */
     NODE_CONTRAST,
     /**
-     * @brief Foreground color attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the foreground color attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format. Two input parameter formats are supported: \n
-     * 1: .value[0].u32: color value, 0xargb type, for example, 0xFFFF0000 indicates red.\n
-     * 2: .value[0].i32: color value enumeration {@link ArkUI_ColoringStrategy}.\n
+     * There are two formats of {@link ArkUI_AttributeItem} for setting the attribute value:\n
+     * 1: .value[0].u32: color value, in 0xARGB format. For example, 0xFFFF0000 indicates red.\n
+     * 2: .value[0].i32: color enum {@link ArkUI_ColoringStrategy}.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].u32: color value, 0xargb type; \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: color value, in 0xARGB format.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_AttributeItem item = {{.u32=0xFFFF0000}};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_AttributeItem item = { {.u32=0xFFFF0000} };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_FOREGROUND_COLOR, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_FOREGROUND_COLOR);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_FOREGROUND_COLOR);
      * auto nodeForegroundColor = item->value[0].u32;
      * @endcode
      */
     NODE_FOREGROUND_COLOR,
+
     /**
-     * @brief Additional offset attributes of a component's sub-element relative to the component itself. Attribute setting, resetting, and obtaining interfaces are supported.
+     * @brief Defines the offset of the component's child relative to the component.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32 indicates the offset in the x-axis direction, in vp.\n
-     * .value[1].f32 indicates the offset in the y-axis direction, in vp.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32 : offset along the x-axis, in vp. \n
+     * .value[1].f32 : offset along the y-axis, in vp. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32 indicates the offset in the x-axis direction, in vp.\n
-     * .value[1].f32 indicates the offset in the y-axis direction, in vp.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32 : offset along the x-axis, in vp. \n
+     * .value[1].f32 : offset along the y-axis, in vp. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue offsetArray[] = {20, 0}
-     * ARKUI_AttributeItem item = {.value = offsetArray, .size = 2};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_OFFSET, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_OFFSET);
-     * auto offsetX = item->value[0].f32
+     * ArkUI_NumberValue offsetArray[] = { 20, 0 };
+     * ArkUI_AttributeItem item = { .value = offsetArray, .size = 2};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_OFFSET , &item);
+     * auto offsetItem = nativeNodeApi->getAttribute(nodeHandle, NODE_OFFSET);
+     * auto offsetX = offsetItem->value[0].f32;
      * @endcode
      *
      */
     NODE_OFFSET,
     /**
-     * @brief Anchor attribute of a subelement of a component during location positioning. Attribute setting, attribute reset, and attribute obtaining interfaces are supported.
+     * @brief Sets the anchor for locating the component's child.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32 indicates the x-coordinate value of the anchor point, in vp.\n
-     * .value[1].f32 indicates the y-coordinate value of the anchor point, in vp.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: X coordinate of the anchor, in vp.\n
+     * .value[1].f32: Y coordinate of the anchor, in vp.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32 indicates the x-coordinate value of the anchor point, in vp.\n
-     * .value[1].f32 indicates the y coordinate value of the anchor point, in vp.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: X coordinate of the anchor, in vp.\n
+     * .value[1].f32: Y coordinate of the anchor, in vp.\n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue pointArray[] = {20, 0}
-     * ARKUI_AttributeItem item = {.value = pointArray, .size = 2};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_MARK_ANCHOR, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_MARK_ANCHOR);
-     * auto pointX = item->value[0].f32
+     * ArkUI_NumberValue pointArray[] = { 20, 0 };
+     * ArkUI_AttributeItem item = { .value = pointArray, .size = 2};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_MARK_ANCHOR , &item);
+     * auto anchorItem = nativeNodeApi->getAttribute(nodeHandle, NODE_MARK_ANCHOR);
+     * auto pointX = anchorItem->value[0].f32;
      * @endcode
      *
      */
     NODE_MARK_ANCHOR,
-
     /**
-     * @brief The text component sets the text content attributes. The interface supports the attribute setting, attribute reset, and attribute obtaining interfaces.
+     * @brief Defines the position of the background image in the component, that is, the coordinates relative to
+     * the upper left corner of the component. This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .string indicates the text content.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: position along the x-axis, in vp. \n
+     * .value[1].f32: position along the y-axis, in vp. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .string indicates the text content.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: position along the x-axis, in vp. \n
+     * .value[1].f32: position along the y-axis, in vp. \n
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue possitionArray[] = { 20, 0 };
+     * ArkUI_AttributeItem item = { .value = possitionArray, .size = 2};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_BACKGROUND_IMAGE_POSITION , &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_BACKGROUND_IMAGE_POSITION);
+     * auto offsetX = item->value[0].f32;
+     * @endcode
+     */
+    NODE_BACKGROUND_IMAGE_POSITION,
+    /**
+     * @brief Sets the alignment rules in the relative container.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0]?.i32: ID of the component that functions as the anchor point for left alignment. \n
+     * .value[1]?.i32: alignment mode relative to the anchor component for left alignment.
+     * The value is an enum of {@link ArkUI_HorizontalAlignment}. \n
+     * .value[2]?.i32: ID of the component that functions as the anchor point for center alignment. \n
+     * .value[3]?.i32: alignment mode relative to the anchor component for center alignment.
+     * The value is an enum of {@link ArkUI_HorizontalAlignment}. \n
+     * .value[4]?.i32: ID of the component that functions as the anchor point for right alignment. \n
+     * .value[5]?.i32: alignment mode relative to the anchor component for right alignment.
+     * The value is an enum of {@link ArkUI_HorizontalAlignment}. \n
+     * .value[6]?.i32: ID of the component that functions as the anchor point for top alignment. \n
+     * .value[7]?.i32: alignment mode relative to the anchor component for top alignment.
+     * The value is an enum of {@link ArkUI_VerticalAlignment}. \n
+     * .value[8]?.i32: ID of the component that functions as the anchor point for center alignment in the
+     * vertical direction. \n
+     * .value[9]?.i32: alignment mode relative to the anchor component forcenter alignment in the vertical direction.
+     * The value is an enum of {@link ArkUI_VerticalAlignment}. \n
+     * .value[10]?.i32: ID of the component that functions as the anchor point for bottom alignment. \n
+     * .value[11]?.i32: alignment mode relative to the anchor component for bottom alignment.
+     * The value is an enum of {@link ArkUI_VerticalAlignment}. \n
+     * .value[12]?.f32: bias value in the horizontal direction. \n
+     * .value[13]?.f32: bias value in the vertical direction. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: ID of the component that functions as the anchor point for left alignment. \n
+     * .value[1].i32: alignment mode relative to the anchor component for left alignment.
+     * The value is an enum of {@link ArkUI_HorizontalAlignment}. \n
+     * .value[2].i32: ID of the component that functions as the anchor point for center alignment. \n
+     * .value[3].i32: alignment mode relative to the anchor component for center alignment.
+     * The value is an enum of {@link ArkUI_HorizontalAlignment}. \n
+     * .value[4].i32: ID of the component that functions as the anchor point for right alignment. \n
+     * .value[5].i32: alignment mode relative to the anchor component for right alignment.
+     * The value is an enum of {@link ArkUI_HorizontalAlignment}. \n
+     * .value[6].i32: ID of the component that functions as the anchor point for top alignment. \n
+     * .value[7].i32: alignment mode relative to the anchor component for top alignment.
+     * The value is an enum of {@link ArkUI_VerticalAlignment}. \n
+     * .value[8].i32: ID of the component that functions as the anchor point for center alignment in the
+     * vertical direction. \n
+     * .value[9].i32: alignment mode relative to the anchor component forcenter alignment in the vertical direction.
+     * The value is an enum of {@link ArkUI_VerticalAlignment}. \n
+     * .value[10].i32: ID of the component that functions as the anchor point for bottom alignment. \n
+     * .value[11].i32: alignment mode relative to the anchor component for bottom alignment.
+     * The value is an enum of {@link ArkUI_VerticalAlignment}. \n
+     * .value[12].f32: bias value in the horizontal direction. \n
+     * .value[13].f32: bias value in the vertical direction. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ARKUI_AttributeItem item = {.string = "https://www.example.com/xxx.png"};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_CONTENT, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_CONTENT);
-     * auto content = item->string
+     * ArkUI_NumberValue alignRulesArray[] = { { .i32 = 2000}, { .i32 =
+     * static_cast<int32_t>(ARKUI_HORIZONTAL_ALIGNMENT_START)}};
+     * ArkUI_AttributeItem item = { .value = alignRulesArray, .size = 2};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_ALIGN_RULES , &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_ALIGNMENT_RULES);
+     * auto id = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_ALIGN_RULES,
+    /**
+     * @brief Sets the alignment mode of the child components along the cross axis of the parent container.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: alignment mode of the child components along the cross axis of the parent container.\n
+     * The parameter type is {@link ArkUI_ItemAlign}. The default value is <b>ARKUI_ITEM_ALIGN_AUTO</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: alignment mode of the child components along the cross axis of the parent container.\n
+     * The parameter type is {@link ArkUI_ItemAlign}. The default value is <b>ARKUI_ITEM_ALIGN_AUTO</b>. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32=ARKUI_ITEM_ALIGN_STRETCH} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_ALIGN_SELF, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_ALIGN_SELF);
+     * auto nodeHitTestBehavior = item->value[0].f32;
+     * @endcode
+     *
+     */
+    NODE_ALIGN_SELF,
+    /**
+     * @brief Sets the percentage of the parent container's remaining space that is allocated to the component.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: percentage of the parent container's remaining space that is allocated to the component. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: percentage of the parent container's remaining space that is allocated to the component. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 2 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_FLEX_GROW, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_FLEX_GROW);
+     * auto nodeFlexGrow = item->value[0].f32;
+     * @endcode
+     *
+     */
+    NODE_FLEX_GROW,
+    /**
+     * @brief Sets the percentage of the parent container's shrink size that is allocated to the component.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: percentage of the parent container's shrink size that is allocated to the component. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: percentage of the parent container's shrink size that is allocated to the component. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 2 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_FLEX_SHRINK, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_FLEX_SHRINK);
+     * auto nodeFlexShrink = item->value[0].f32;
+     * @endcode
+     *
+     */
+    NODE_FLEX_SHRINK,
+    /**
+     * @brief Sets the base size of the component.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: percentage of the parent container's remaining space that is allocated to the component. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: percentage of the parent container's remaining space that is allocated to the component. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 2 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_FLEX_BASIS, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_FLEX_BASIS);
+     * auto nodeFlexBasis = item->value[0].f32;
+     * @endcode
+     *
+     */
+    NODE_FLEX_BASIS,
+    /**
+     * @brief Sets the accessibility group. This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: Accessibility group. The value <b>1</b> means that the component and all its child components
+     * form an entire selectable component.
+     * In this case, the accessibility service will no longer be available for the content of its child components.
+     * The value is <b>1</b> or <b>0</b>.
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: Accessibility group. The value <b>1</b> means that the component and all its child components
+     * form an entire selectable component.
+     * In this case, the accessibility service will no longer be available for the content of its child components.
+     * The value is <b>1</b> or <b>0</b>.
+     *
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = 1 } };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_ACCESSIBILITY_GROUP, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_ACCESSIBILITY_GROUP);
+     * auto value = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_ACCESSIBILITY_GROUP,
+
+    /**
+     * @brief Sets the accessibility text. This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: accessibility text.
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: accessibility text.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_AttributeItem item = {.string = "test"};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_ACCESSIBILITY_TEXT, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_ACCESSIBILITY_TEXT);
+     * auto value = item->string;
+     * @endcode
+     *
+     */
+    NODE_ACCESSIBILITY_TEXT,
+
+    /**
+     * @brief Sets the accessibility level. This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: accessibility level. The parameter type is {@link ArkUI_AccessibilityLevel}.
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: accessibility level. The parameter type is {@link ArkUI_AccessibilityLevel}.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_ACCESSIBILITY_LEVEL_AUTO } };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_ACCESSIBILITY_LEVEL, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_ACCESSIBILITY_LEVEL);
+     * auto value = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_ACCESSIBILITY_LEVEL,
+
+    /**
+     * @brief Sets the accessibility description.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: accessibility description.
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: accessibility description.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_AttributeItem item = { .string = "test" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_ACCESSIBILITY_DESCRIPTION, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_ACCESSIBILITY_DESCRIPTION);
+     * auto value = item->string;
+     * @endcode
+     *
+     */
+    NODE_ACCESSIBILITY_DESCRIPTION,
+
+    /**
+     * @brief Defines the focused state. This attribute can be set and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: The parameter type is 1 or 0.
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: The parameter type is 1 or 0.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = 1 } };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_FOCUS_STATUS, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_FOCUS_STATUS);
+     * auto value = item->data[0].i32;
+     * @endcode
+     *
+     */
+    NODE_FOCUS_STATUS,
+
+    /**
+     * @brief Defines the text content attribute, which can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: text content.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: text content.\n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_AttributeItem item = { .string = "https://www.example.com/xxx.png" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_CONTENT , &item);
+     * auto textContentItem = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_CONTENT);
+     * auto content = textContentItem->string;
      * @endcode
      */
     NODE_TEXT_CONTENT = MAX_NODE_SCOPE_NUM * ARKUI_NODE_TEXT,
     /**
-     * @brief Component font color attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the font color attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].u32: indicates the font color. The value is in the 0xargb format. For example, 0xFFFF0000 indicates red.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: font color, in 0xARGB format. For example, 0xFFFF0000 indicates red.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].u32: font color value, in 0xargb format.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+      * .value[0].u32: font color value, in 0xARGB format.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.u32=0xFFFF0000}};
-     * ArkUI_AttributeItem item = {value, 1};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.u32=0xFFFF0000} };
+     * ArkUI_AttributeItem item = { value, 1 };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_FONT_COLOR, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_FONT_COLOR);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_FONT_COLOR);
      * auto nodeFontColor = item->value[0].u32;
      * @endcode
      *
      */
     NODE_FONT_COLOR,
     /**
-     * @brief Component font size attribute, which supports attribute setting, attribute reset, and attribute obtaining interfaces.
+     * @brief Defines the font size attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: indicates the font size, in fp.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: font size, in fp.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: indicates the font size, in fp.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: font size, in fp.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {10};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 10 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_FONT_SIZE, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_FONT_SIZE);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_FONT_SIZE);
      * auto nodeFontSize = item->value[0].f32;
      * @endcode
      *
      */
     NODE_FONT_SIZE,
     /**
-     * @brief Component font style attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the font style attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: font style {@link ArkUI_FontStyle}. The default value is AKUI_FONT_terrace_NORMAL.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: font style {@link ArkUI_FontStyle}. The default value is <b>ARKUI_FONT_STYLE_NORMAL</b>.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: font style {@link ArkUI_FontStyle}; \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: font style {@link ArkUI_FontStyle}.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_FONT_STYLE_NORMAL}};
-     * ArkUI_AttributeItem item = {value, 1};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = ARKUI_FONT_STYLE_NORMAL} };
+     * ArkUI_AttributeItem item = { value, 1 };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_FONT_STYLE, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_FONT_STYLE);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_FONT_STYLE);
      * auto nodeFontStyle = item->value[0].i32;
      * @endcode
      *
      */
     NODE_FONT_STYLE,
     /**
-     * @brief Component font thickness attribute, which supports attribute setting, attribute reset, and attribute obtaining interfaces.
+     * @brief Defines the font weight attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: font thickness style {@link ArkUI_FontWeight}. The default value is RKUI_FONT_WEIGHT_NORMAL.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: font weight {@link ArkUI_FontWeight}. The default value is <b>ARKUI_FONT_WEIGHT_NORMAL</b>.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: font weight {@link ArkUI_FontWeight}; \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: font weight {@link ArkUI_FontWeight}.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_FONT_WEIGHT_NORMAL}};
-     * ArkUI_AttributeItem item = {value, 1};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = ARKUI_FONT_WEIGHT_NORMAL} };
+     * ArkUI_AttributeItem item = { value, 1 };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_FONT_WEIGHT, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_FONT_WEIGHT);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_FONT_WEIGHT);
      * auto nodeFontWeight = item->value[0].i32;
      * @endcode
      *
      */
     NODE_FONT_WEIGHT,
     /**
-     * @brief Text line height attribute, which supports attribute setting, attribute reset, and attribute obtaining interfaces.
+     * @brief Defines the text line height attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32 indicates the value of lineHeight, in fp.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: line height, in fp.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32 indicates the value of lineHeight, in fp.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: line height, in fp.\n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue lineHeight[] = {20}
-     * ARKUI_AttributeItem item = {.value = lineHeight, .size = 1};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_LINE_HEIGHT, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_LINE_HEIGHT);
-     * auto pointX = item->value[0].f32
+     * ArkUI_NumberValue lineHeight[] = { 20 };
+     * ArkUI_AttributeItem item = { .value = lineHeight, .size = 1};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_LINE_HEIGHT , &item);
+     * auto lineHeightItem = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_LINE_HEIGHT);
+     * auto pointX = lineHeightItem->value[0].f32;
      * @endcode
      */
     NODE_TEXT_LINE_HEIGHT,
     /**
-     * @brief Sets the style and color attributes of the text decoration line. The interface supports attribute setting, attribute reset, and attribute obtaining.
+     * @brief Defines the text decoration style and color.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: Text decoration line style {@link ArkUI_TextDecorationType}. The default value is ARKUI_TEXT_DECORATION_TYPE_NONE. \n
-     * .value[1]?.u32: color of the decoration line. The value is in the format of 0xargb. For example, 0xFFFF0000 indicates red.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: text decoration style {@link ArkUI_TextDecorationType}.
+     * The default value is <b>ARKUI_TEXT_DECORATION_TYPE_NONE</b>.\n
+     * .value[1]?.u32: text decoration color, in 0xARGB format. For example, 0xFFFF0000 indicates red. Optional.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: Text decoration line style {@link ArkUI_TextDecorationType}; \n
-     * .value[1].u32: color of the decoration line, in the 0xargb format.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: text decoration style {@link ArkUI_TextDecorationType}.\n
+     * .value[1].u32: text decoration color, in 0xARGB format. \n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_TEXT_DECORATION_TYPE_NONE}, {.u32=0xFFFF0000}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = ARKUI_TEXT_DECORATION_TYPE_NONE}, {.u32=0xFFFF0000} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_DECORATION, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_TEXT_DECORATION);
-     * auto nodeDecorationStyle = item->value[0].i32;
-     * auto nodeDecorationColor = item->value[1].u32;
+     * auto decorationItem = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_DECORATION);
+     * auto nodeDecorationStyle = decorationItem->value[0].i32;
+     * auto nodeDecorationColor = decorationItem->value[1].u32;
      * @endcode
      *
      */
     NODE_TEXT_DECORATION,
     /**
-     * @brief The attributes of text are uppercase and lowercase. The interfaces for setting, resetting, and obtaining attributes are supported.
+     * @brief Defines the text case attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32 indicates that the text is case-sensitive.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: text case.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32 indicates that the text is case-sensitive.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: text case.\n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue textCase[] = {{.i32 = static_cast<int32>(ArkUI_TextCase.ARKUI_TEXT_CASE_LOWER)}}
-     * ARKUI_AttributeItem item = {.value = textCase, .size = 1};
+     * ArkUI_NumberValue textCase[] = { {.i32 = static_cast<int32_t>(ARKUI_TEXT_CASE_LOWER) } };
+     * ArkUI_AttributeItem item = { .value = textCase, .size = 1};
      * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_CASE, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_CASE);
-     * auto textCase = item->value[0].i32
+     * auto textCaseItem = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_CASE);
+     * auto textCase = textCaseItem->value[0].i32;
      * @endcode
      *
      */
     NODE_TEXT_CASE,
     /**
-     * @brief Character spacing attribute of the text. The interface for setting, resetting, and obtaining attributes is supported.
+     * @brief Defines the letter spacing attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32 indicates the character spacing, in fp \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: letter spacing, in fp.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32 indicates the character spacing, in fp \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: letter spacing, in fp.\n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue letterSpacing[] = {20}
-     * ARKUI_AttributeItem item = {.value = letterSpacing, .size = 1};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_LETTER_SPACING, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_LETTER_SPACING);
-     * auto letterSpacing = item->value[0].f32
+     * ArkUI_NumberValue letterSpacing[] = { 20 };
+     * ArkUI_AttributeItem item = { .value = letterSpacing, .size = 1};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_LETTER_SPACING , &item);
+     * auto letterSpacingItem = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_LETTER_SPACING);
+     * auto letterSpacing = letterSpacingItem->value[0].f32;
      * @endcode
      *
      */
     NODE_TEXT_LETTER_SPACING,
     /**
-     * @brief Attribute of the maximum number of text lines. The interface for setting, resetting, and obtaining attributes is supported.
+     * @brief Sets the maximum number of lines in the text.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32 indicates the maximum number of lines.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: maximum number of lines in the text.\n
      * \n
-     * Format of the return value {@link ArkUI_AttributeItem} of the attribute obtaining method:\n
-     * .value[0].i32 indicates the maximum number of lines.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: maximum number of lines in the text.\n
+
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue maxLine[] = {{.i32 = 2}};
-     * ARKUI_AttributeItem item = {.value = maxLine, .size = 1};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_MAX_LINES, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_MAX_LINES);
-     * auto maxLines = item->value[0].i32
+     * ArkUI_NumberValue maxLine[] = { { .i32 = 2 } };
+     * ArkUI_AttributeItem item = { .value = maxLine, .size = 1};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_MAX_LINES , &item);
+     * auto maxLinesItem = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_MAX_LINES);
+     * auto maxLines = maxLinesItem->value[0].i32;
      * @endcode
      */
     NODE_TEXT_MAX_LINES,
     /**
-     * @brief Text horizontal alignment mode, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Horizontal alignment mode of the text.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: indicates the horizontal alignment mode of the text. The value is the enumerated value of {@link ArkUI_TextAlign}.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: horizontal alignment mode of the text. The value is an enum of {@link ArkUI_TextAlignment}. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: indicates the horizontal alignment mode of the text. The value is the enumerated value of {@link ArkUI_TextAlign}.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: horizontal alignment mode of the text. The value is an enum of {@link ArkUI_TextAlignment}. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue alignMent[] = {{.i32 = static_cast<int_32>(ArkUI_TextAlign.ARKUI_TEXT_ALIGN_CENTER)}};
-     * ARKUI_AttributeItem item = {.value = alignMent, .size = 1};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_ALIGN, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_ALIGN);
-     * auto alignMent = item->value[0].i32
+     * ArkUI_NumberValue alignMent[] = {{.i32 = static_cast<int32_t>(ARKUI_TEXT_ALIGNMENT_CENTER)}};
+     * ArkUI_AttributeItem item = { .value = alignMent, .size = 1};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_ALIGN , &item);
+     * auto alignmentItem = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_ALIGN);
+     * auto alignMent = alignmentItem->value[0].i32;
      * @endcode
      */
     NODE_TEXT_ALIGN,
     /**
-     * @brief Display mode attribute when the text length is too long. The attribute setting, resetting, and obtaining interfaces are supported.
+     * @brief Defines the text overflow attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: Indicates the display mode when the text is too long.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: display mode when the text is too long. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: Indicates the display mode when the text is too long.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: display mode when the text is too long. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue textOverFlow[] = {{.i32 = static_cast<int_32>(ArkUI_TextOverFlow.ARKUI_TEXT_OVERFLOW_CLIP)}
-     *};
-    * ARKUI_AttributeItem item = {.value = textOverFlow, .size = 1};
-    * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_OVERFLOW, &item);
-    * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_OVERFLOW);
-    * auto textOverFlow = item->value[0].i32
-    * @endcode
-    */
+     * ArkUI_NumberValue textOverFlow[] = { { .i32 = static_cast<int32_t>(ARKUI_TEXT_OVERFLOW_CLIP) } };
+     * ArkUI_AttributeItem item = { .value = textOverFlow, .size = 1};
+     * nativeNodeApi->setAttribute(nodeHandle,NODE_TEXT_OVERFLOW , &item);
+     * auto textOverFlowItem = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_OVERFLOW);
+     * auto textOverFlow = textOverFlowItem->value[0].i32;
+     * @endcode
+     */
     NODE_TEXT_OVERFLOW,
     /**
-     * @brief Text Font list attribute, which supports attribute setting, resetting, and obtaining.
+     * @brief Defines the font family attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Parameter format of the attribute setting method {@link ArkUI_AttributeItem}:\n
-     * .string: character string. Separate multiple characters with commas (,).
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: fonts, separated by commas (,).
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .string: character string. Separate multiple characters with commas (,).
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: fonts, separated by commas (,).
      *
      * @code {.c}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
@@ -1743,68 +2305,69 @@ typedef enum {
      */
     NODE_FONT_FAMILY,
     /**
-     * @brief Text copy and paste attributes, which support the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the copy option attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: copy and paste mode {@link ArkUI_CopyOptions}. The default value is AKUI_COPY_OPTIONS_NONE.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: copy option {@link ArkUI_CopyOptions}. The default value is <b>ARKUI_COPY_OPTIONS_NONE</b>.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: copy and paste mode {@link ArkUI_CopyOptions}.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: copy option {@link ArkUI_CopyOptions. \n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_COPY_OPTIONS_NONE}};
-     * ArkUI_AttributeItem item = {value, 1};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = ARKUI_COPY_OPTIONS_NONE} };
+     * ArkUI_AttributeItem item = { value, 1 };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_COPY_OPTION, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_TEXT_COPY_OPTION);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_COPY_OPTION);
      * auto nodeTextCopyOption = item->value[0].i32;
      * @endcode
      *
      */
     NODE_TEXT_COPY_OPTION,
     /**
-     * @brief Offset attribute of the text baseline, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the text baseline offset attribute
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: offset value, in fp.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: baseline offset, in fp.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: offset value, in fp.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: baseline offset, in fp. \n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {10};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 10 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_BASELINE_OFFSET, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_TEXT_BASELINE_OFFSET);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_BASELINE_OFFSET);
      * auto nodeTextBaselineOffset = item->value[0].f32;
      * @endcode
      *
      */
     NODE_TEXT_BASELINE_OFFSET,
     /**
-     * @brief Text shadow effect attribute. The attribute setting, resetting, and obtaining interfaces are supported.
+     * @brief Defines the text shadow attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: shadow blur radius, in vp.\n
-     * .value[1].i32: shadow type {@link ArkUI_ShadowType}. The default value is AKUI_SHADOW_TYPE_COLOR.\n
-     * .value[2].u32: shadow color, in the format of 0xargb. For example, 0xFFFF0000 indicates red.\n
-     * .value[3].f32: X-axis offset of the shadow, in vp.\n
-     * .value[4].f32: offset of the Y axis of the shadow, in vp.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: blur radius of the shadow, in vp.\n
+     * .value[1].i32: shadow type {@link ArkUI_ShadowType}. The default value is <b>ARKUI_SHADOW_TYPE_COLOR</b>.\n
+     * .value[2].u32: shadow color, in 0xARGB format. For example, 0xFFFF0000 indicates red.\n
+     * .value[3].f32: offset of the shadow along the x-axis, in vp.\n
+     * .value[4].f32: offset of the shadow along the y-axis, in vp.\n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: shadow blur radius, in vp.\n
-     * .value[1].i32: shadow type {@link ArkUI_ShadowType}; \n
-     * .value[2].u32: shadow color, in 0xargb format.\n
-     * .value[3].f32: X-axis offset of the shadow, in vp.\n
-     * .value[4].f32: offset on the Y axis of the shadow, in vp.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: blur radius of the shadow, in vp.\n
+     * .value[1].i32: shadow type {@link ArkUI_ShadowType}.\n
+     * .value[2].u32: shadow color, in 0xARGB format.\n
+     * .value[3].f32: offset of the shadow along the x-axis, in vp.\n
+     * .value[4].f32: offset of the shadow along the y-axis, in vp.\n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {10, {.i32=ARKUI_SHADOW_TYPE_COLOR}, {.u32=0xFFFF0000}, 10, 10};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 10, {.i32=ARKUI_SHADOW_TYPE_COLOR}, {.u32=0xFFFF0000}, 10, 10 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_TEXT_SHADOW, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_TEXT_TEXT_SHADOW);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_TEXT_SHADOW);
      * auto nodeTextShadowRadius = item->value[0].f32;
      * auto nodeTextShadowType = item->value[1].i32;
      * auto nodeTextShadowColor = item->value[2].u32;
@@ -1814,20 +2377,19 @@ typedef enum {
      *
      */
     NODE_TEXT_TEXT_SHADOW,
-
     /**
-     * @brief Text Minimum display font size, which supports attribute setting, resetting, and obtaining.
+     * @brief Defines the minimum font size attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Parameter format of the attribute setting method {@link ArkUI_AttributeItem}:\n
-     * .value[0].f32: minimum font size, in FP.
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: minimum font size, in fp.
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: minimum font size, in FP.
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: minimum font size, in fp.
      *
      * @code {.c}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {20};
+     * ArkUI_NumberValue value[] = { 20 };
      * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
      * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_MIN_FONT_SIZE, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_MIN_FONT_SIZE);
@@ -1838,18 +2400,18 @@ typedef enum {
     NODE_TEXT_MIN_FONT_SIZE,
 
     /**
-     * @brief Text Maximum font size to be displayed. Attributes can be set, reset, and obtained.
+     * @brief Defines the maximum font size attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Parameter format of the attribute setting method {@link ArkUI_AttributeItem}:\n
-     * .value[0].f32: maximum font size of the text, in FP.
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: maximum font size, in fp.
      * \n
-     * Return value of the method for obtaining attributes {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: maximum font size of the text, in FP.
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: maximum font size, in fp.
      *
      * @code {.c}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {20};
+     * ArkUI_NumberValue value[] = { 20 };
      * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
      * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_MAX_FONT_SIZE, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_MAX_FONT_SIZE);
@@ -1860,29 +2422,29 @@ typedef enum {
     NODE_TEXT_MAX_FONT_SIZE,
 
     /**
-     * @brief Text, which supports attribute setting, attribute reset, and attribute obtaining.
+     * @brief Defines the text style attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Parameter format of the attribute setting method {@link ArkUI_AttributeItem}:\n
-     * .string?: list of optional value fonts. Use multiple fonts separated by commas.\n
-     * .value[0].f32: Text size unit FP.\n
-     * .value[1]?.i32: specifies the font thickness of the text. The parameter type is {@link ArkUI_FontWeight}. This parameter is optional.
-     * Default value is AKUI_FONT_WEIGHT_NORMAL.\n
-     * .value[2]?.i32: Optional. Font style. Parameter type {@link ArkUI_FontStyle}.
-     * The default value is ARKUI_TEXT_FONT_STYLE_NORMAL.
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string?: font family. Optional. Use commas (,) to separate multiple fonts. \n
+     * .value[0].f32: font size, in fp. \n
+     * .value[1]?.i32: font weight. Optional. The parameter type is {@link ArkUI_FontWeight}.
+     * The default value is <b>ARKUI_FONT_WEIGHT_NORMAL</b>. \n
+     * .value[2]?.i32: font style. Optional. The parameter type is {@link ArkUI_FontStyle}.
+     * The default value is <b>ARKUI_FONT_STYLE_NORMAL</b>.
      * \n
-     * Format of the return value of the attribute obtaining method {@link ArkUI_AttributeItem}:\n
-     * .string?: list of optional value fonts. Use multiple fonts separated by commas.\n
-     * .value[0].f32: text size unit FP.\n
-     * .value[1]?.i32: specifies the font thickness of the text. The parameter type is {@link ArkUI_FontWeight}. This parameter is optional.
-     * Default value is RKUI_FONT_WEIGHT_NORMAL.\n
-     * .value[2]?.i32: Optional. Font style. Parameter type {@link ArkUI_FontStyle}.
-     * The default value is ARKUI_TEXT_FONT_STYLE_NORMAL.
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: font family. Use commas (,) to separate multiple fonts. \n
+     * .value[0].f32: font size, in fp. \n
+     * .value[1].i32: font weight. The parameter type is {@link ArkUI_FontWeight}.
+     * The default value is <b>ARKUI_FONT_WEIGHT_NORMAL</b>. \n
+     * .value[2].i32: font style. The parameter type is {@link ArkUI_FontStyle}.
+     * The default value is <b>ARKUI_FONT_STYLE_NORMAL</b>.
      *
      * @code {.c}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {16, {.i32 = ARKUI_FONT_STYLE_NORMAL},
-     * {.i32 = ARKUI_TEXT_FONT_STYLE_NORMAL}};
+     * ArkUI_NumberValue value[] = { 16, { .i32 = ARKUI_FONT_WEIGHT_NORMAL },
+     * { .i32 = ARKUI_FONT_STYLE_NORMAL } };
      * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
      * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_FONT, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_FONT);
@@ -1893,227 +2455,297 @@ typedef enum {
     NODE_TEXT_FONT,
 
     /**
-     * @brief Text Height adaptation mode, which supports attribute setting, resetting, and obtaining.
+     * @brief Defines how the adaptive height is determined for the text.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Parameter format of the attribute setting method {@link ArkUI_AttributeItem}:\n
-     * .value[0].i32: parameter type {@link ArkUI_TextHeightAdaptivePolicy}.
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: how the adaptive height is determined for the text.
+     * The parameter type is {@link ArkUI_TextHeightAdaptivePolicy}.
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: parameter type {@link ArkUI_TextHeightAdaptivePolicy}.
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: how the adaptive height is determined for the text.
+     * The parameter type is {@link ArkUI_TextHeightAdaptivePolicy}
      *
      * @code {.c}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_TEXT_HEIGHT_ADAPTIVE_POLICY_MAX_LINES_FIRST}};
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_TEXT_HEIGHT_ADAPTIVE_POLICY_MAX_LINES_FIRST } };
      * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_TEXT_HEIGHT_ADAPTIVE_POLICY, &item);
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_HEIGHT_ADAPTIVE_POLICY, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_HEIGHT_ADAPTIVE_POLICY);
      * auto size = item->value[0].i32;
      * @endcode
      *
      */
     NODE_TEXT_HEIGHT_ADAPTIVE_POLICY,
-
     /**
-     * @brief Indent attribute of the first line of the text. The interface for setting, resetting, and obtaining attributes is supported.
+     * @brief Defines the indentation of the first line.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: Indicates the first line indented value.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: indentation of the first line. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: Indicates the first line indented value.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: indentation of the first line. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue textIndent[] = {20}
-     * ARKUI_AttributeItem item = {.value = textIndent, .size = 1};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INDENT, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INDENT);
-     * auto indentValue = item->value[0].f32
+     * ArkUI_NumberValue textIndent[] = { 20 };
+     * ArkUI_AttributeItem item = { .value = textIndent, .size = 1};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INDENT , &item);
+     * auto indentItem = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INDENT);
+     * auto indentValue = indentItem->value[0].f32;
      * @endcode
      */
     NODE_TEXT_INDENT,
-
     /**
-     * @brief This interface is used to set image address attributes for the image component. The interface supports attribute setting, attribute reset, and attribute obtaining.
+     * @brief Defines the text content attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .string indicates the address of the image component.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: content of the text span. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .string indicates the address of the image component.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: content of the text span. \n
+     *
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_AttributeItem item = { .string = "https://www.example.com/xxx.png" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SPAN_CONTENT , &item);
+     * auto spanContentItem = nativeNodeApi->getAttribute(nodeHandle, NODE_SPAN_CONTENT);
+     * auto spanContent = spanContentItem->string;
+     * @endcode
+     */
+    NODE_SPAN_CONTENT = MAX_NODE_SCOPE_NUM * ARKUI_NODE_SPAN,
+    /**
+     * @brief Defines the image source of the image span.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: image address of the image span.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: image address of the image span.\n
+     *
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_AttributeItem item = { .string = "https://www.example.com/xxx.png" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_SPAN_SRC , &item);
+     * auto srcItem = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_SPAN_SRC);
+     * auto spanScr = srcItem->string;
+     * @endcode
+     */
+    NODE_IMAGE_SPAN_SRC = MAX_NODE_SCOPE_NUM * ARKUI_NODE_IMAGE_SPAN,
+    /**
+     * @brief Defines the alignment mode of the image with the text.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: alignment mode of the image with the text.
+     * The value is an enum of {@link ArkUI_ImageSpanAlignment}. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: alignment mode of the image with the text.
+     * The value is an enum of {@link ArkUI_ImageSpanAlignment}. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ARKUI_AttributeItem item = {.string = "https://www.example.com/xxx.png"};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_SRC, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_SRC);
-     * auto imageSrc = item->string
+     * ArkUI_NumberValue alignValue[] = { {.i32 = static_cast<int32_t>(ARKUI_IMAGE_SPAN_ALIGNMENT_TOP) } };
+     * ArkUI_AttributeItem item = {.value = alignValue, .size = 1};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_SPAN_VERTICAL_ALIGN , &item);
+     * auto verticalAlignItem = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_SPAN_VERTICAL_ALIGN);
+     * auto verticalAlign = verticalAlignItem->value[0].i32;
+     * @endcode
+     */
+    NODE_IMAGE_SPAN_VERTICAL_ALIGN,
+    /**
+     * @brief Defines the image source of the <Image> component.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: image source.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: image source.\n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_AttributeItem item = { .string = "https://www.example.com/xxx.png" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_SRC , &item);
+     * auto imageSrcItem = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_SRC);
+     * auto imageSrc = imageSrcItem->string;
      * @endcode
      */
     NODE_IMAGE_SRC = MAX_NODE_SCOPE_NUM * ARKUI_NODE_IMAGE,
     /**
-     * @brief Image filling effect attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines how the image is resized to fit its container.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32 indicates the image filling effect, which is the enumerated value {@link ArkUI_ObjectFit}.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: how the image is resized to fit its container. The value is an enum of {@link ArkUI_ObjectFit}. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32 indicates the image filling effect, which is the enumerated value {@link ArkUI_ObjectFit}.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: how the image is resized to fit its container. The value is an enum of {@link ArkUI_ObjectFit}. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ARKUI_NumberValue objectFitValue[] = {.i32 = {static_cast<int>(ArkUI_ObjectFit.ARKUI_OBJECT_FIT_FILL)}};
-     * ARKUI_AttributeItem item = {.value = objectFitValue, .size = 1};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_OBJECT_FIT, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_OBJECT_FIT);
-     * auto objectFit = item->value[0].i32
+     * ArkUI_NumberValue objectFitValue[] = { { .i32 = static_cast<int32_t>(ARKUI_OBJECT_FIT_FILL) } };
+     * ArkUI_AttributeItem item = { .value = objectFitValue, .size = 1};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_OBJECT_FIT , &item);
+     * auto objectFitItem = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_OBJECT_FIT);
+     * auto objectFit = objectFitItem->value[0].i32;
      * @endcode
      */
     NODE_IMAGE_OBJECT_FIT,
     /**
-     * @brief Image interpolation effect attributes. The interfaces for setting, resetting, and obtaining attributes are supported.
+     * @brief Defines the interpolation effect of the image.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32 indicates the interpolation effect. The enumerated value is {@link ArkUI_ImageInterpolation}.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: interpolation effect of the image. The value is an enum of {@link ArkUI_ImageInterpolation}. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32 indicates the interpolation effect. The enumerated value is {@link ArkUI_ImageInterpolation}.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: interpolation effect of the image. The value is an enum of {@link ArkUI_ImageInterpolation}. \n
      *
      * @code {.c}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ARKUI_NumberValue interpolationValue[] = {.i32 = {
-     * static_cast<int>(ArkUI_ImageInterpolation.ARKUI_INTERPOLATION_LOW)}};
-     * ARKUI_AttributeItem item = {.value = interpolationValue, .size = 1};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_INTERPOLATION, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_INTERPOLATION);
-     * auto interpolation = item->value[0].i32
+     * ArkUI_NumberValue interpolationValue[] = { { .i32 = ARKUI_IMAGE_INTERPOLATION_LOW } };
+     * ArkUI_AttributeItem item = { .value = interpolationValue, .size = 1};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_INTERPOLATION , &item);
+     * auto interpolationItem = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_INTERPOLATION);
+     * auto interpolation = interpolationItem->value[0].i32;
      * @endcode
      */
     NODE_IMAGE_INTERPOLATION,
     /**
-     * @brief Image repetition style attribute, which supports attribute setting, attribute reset, and attribute obtaining interfaces.
+     * @brief Defines how the image is repeated.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32 indicates the image repetition style. The enumerated value is {@link ArkUI_ImageRepeat}.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: how the image is repeated. The value is an enum of {@link ArkUI_ImageRepeat}. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32 indicates the image repetition style. The enumerated value is {@link ArkUI_ImageRepeat}.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: how the image is repeated. The value is an enum of {@link ArkUI_ImageRepeat}. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ARKUI_NumberValue repeatValue[] = {.i32 = {static_cast<int>(ArkUI_ImageRepeat.ARKUI_IMAGE_REPEAT_X)}};
-     * ARKUI_AttributeItem item = {.value = repeatValue, .size = 1};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_OBJECT_REPEAT, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_OBJECT_REPEAT);
-     * auto repeat = item->value[0].i32
+     * ArkUI_NumberValue repeatValue[] = { { .i32 = static_cast<int32_t>(ARKUI_IMAGE_REPEAT_X) } };
+     * ArkUI_AttributeItem item = { .value = repeatValue, .size = 1};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_OBJECT_REPEAT , &item);
+     * auto objectRepeatItem = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_OBJECT_REPEAT);
+     * auto repeat = objectRepeatItem->value[0].i32;
      * @endcode
      */
     NODE_IMAGE_OBJECT_REPEAT,
     /**
-     * @brief Image filter effect attribute. The interface for setting, resetting, and obtaining attributes is supported.
+     * @brief Defines the color filter of the image.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32 ~ .value[19].i32 represents the filter matrix array\n
-     * .size indicates the size of the filter array 5*4 \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32 to .value[19].i32: filter matrix array. \n
+     * .size: 5 x 4 filter array size. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32 ~ .value[19].i32 represents the filter matrix array\n
-     * .size indicates the size of the filter array 5*4 \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32 to .value[19].i32: filter matrix array. \n
+     * .size: 5 x 4 filter array size. \n
      *
      * @code {.c}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ARKUI_NumberValue filterValue[] = {.i32 = {1}, .i32 = {0}, .i32 = {0}, .i32 = {0}, .i32 = {0}, .i32 = {0}, .i32
-     * = {1}, .i32 = {0}, .i32 = {0}, .i32 = {0}, .i32 = {0}, .i32 = {0}, .i32 = {1}, .i32 = {0}, .i32 = {0}, .i32 =
-     * {0}, .i32 = {0}, .i32 = {0}, .i32 = {1}, .i32 = {0}};
-     * ARKUI_AttributeItem item = {.value = filterValue, .size = sizeof(filterValue)/ sizeof(ARKUI_NumberValue)};
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_COLOR_FILTER, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_COLOR_FILTER);
-     * auto colorFilter = item->value
+     * ArkUI_NumberValue filterValue[] = { {.i32 = 1}, {.i32 = 0}, {.i32 = 0}, {.i32 = 0}, {.i32 = 0}, {.i32 = 0}, {.i32
+     * = 1}, {.i32 = 0}, {.i32 = 0}, {.i32 = 0}, {.i32 = 0}, {.i32 = 0}, {.i32 = 1}, {.i32 = 0}, {.i32 = 0}, {.i32 =
+     * 0}, {.i32 = 0}, {.i32 = 0}, {.i32 = 1}, {.i32 = 0} };
+     * ArkUI_AttributeItem item = { .value = filterValue, .size = sizeof(filterValue)/ sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_COLOR_FILTER , &item);
+     * auto colorFilterItem = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_COLOR_FILTER);
+     * auto colorFilter = colorFilterItem->value;
      * @endcode
      */
     NODE_IMAGE_COLOR_FILTER,
     /**
-     * @brief The automatic scaling attribute of the image source supports the interface for setting, resetting, and obtaining the attribute.
+     * @brief Defines the auto resize attribute, which can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32 Indicates whether a Boolean value is scaled.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32 : whether to resize the image source. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32 Indicates whether a Boolean value is scaled.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32 : whether to resize the image source. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ARKUI_NumberValue resizeValue[] = {.i32 = true};
-     * ARKUI_AttributeItem item = {.value = resizeValue, .size = 1}}
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_AUTO_RESIZE, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_AUTO_RESIZE);
-     * auto autoResize = item->value[0].i32
+     * ArkUI_NumberValue resizeValue[] = { {.i32 = true} };
+     * ArkUI_AttributeItem item = { .value = resizeValue, .size = 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_AUTO_RESIZE , &item);
+     * auto autoResizeItem = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_AUTO_RESIZE);
+     * auto autoResize = autoResizeItem->value[0].i32;
      * @endcode
      */
     NODE_IMAGE_AUTO_RESIZE,
     /**
-     * @brief Placeholder map address attribute, which supports the interface for setting, resetting, and obtaining attributes.
+     * @brief Defines the placeholder image source.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .string indicates the address of the image component bitholder.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: placeholder image source. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .string indicates the address of the image component bitholder.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: placeholder image source. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ARKUI_AttributeItem item = {.string = "/pages/loading.png"}
-     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_ALT, &item);
-     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_ALT);
-     * auto altStr = item->string
+     * ArkUI_AttributeItem item = { .string = "/pages/loading.png" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_IMAGE_ALT , &item);
+     * auto altStrItem = nativeNodeApi->getAttribute(nodeHandle, NODE_IMAGE_ALT);
+     * auto altStr = altStrItem->string;
      * @endcode
      */
     NODE_IMAGE_ALT,
-
     /**
-     * @brief Background color attribute of the enabled component. The attribute setting, resetting, and obtaining interfaces are supported.
+     * @brief Defines the color of the component when it is selected.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].u32: indicates the background color. The value is in the 0xargb format. For example, 0xFFFF0000 indicates red.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: background color, in 0xARGB format. For example, 0xFFFF0000 indicates red. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].u32: background color, in 0xargb format.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: background color, in 0xARGB format. \n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.u32=0xFFFF0000}};
-     * ArkUI_AttributeItem item = {value, 1};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_TOGGLE_SELECTED_COLOR, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_TOGGLE_SELECTED_COLOR);
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.u32=0xFFFF0000} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TOGGLE_SELECTED_COLOR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TOGGLE_SELECTED_COLOR);
      * auto nodeToggleSelectedColor = item->value[0].u32;
      * @endcode
      *
      */
     NODE_TOGGLE_SELECTED_COLOR = MAX_NODE_SCOPE_NUM * ARKUI_NODE_TOGGLE,
     /**
-     * @brief Color attribute of the round slider of the Switch type. The interface for setting, resetting, and obtaining attributes is supported.
+     * @brief Defines the color of the circular slider for the component of the switch type.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].u32: color value of the circular slider. The value is in the 0xargb format. For example, 0xFFFF0000 indicates red.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: color of the circular slider, in 0xARGB format. For example, 0xFFFF0000 indicates red. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].u32: color value of the circular slider, in 0xargb format.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: color of the circular slider, in 0xARGB format. \n
      *
      * @code {.cpp}
-     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.u32=0xFFFF0000}};
-     * ArkUI_AttributeItem item = {value, 1};
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.u32=0xFFFF0000} };
+     * ArkUI_AttributeItem item = { value, 1 };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_TOGGLE_SWITCH_POINT_COLOR, &item);
-     * auto item = nativeNodeApi=>getAttribute(nodeHandle, NODE_TOGGLE_SWITCH_POINT_COLOR);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TOGGLE_SWITCH_POINT_COLOR);
      * auto nodeSwitchPointColor = item->value[0].u32;
      * @endcode
      *
@@ -2121,204 +2753,2011 @@ typedef enum {
     NODE_TOGGLE_SWITCH_POINT_COLOR,
 
     /**
-     * @brief Alignment mode of a subcomponent in a container. Attributes can be set, reset, and obtained.
+     * @brief Defines the foreground color of the loading progress bar.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: alignment mode. The data type is {@link ArkUI_Alignment}. The default value is AKUI_ALIGNMENT_CENTER.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: foreground color, in 0xARGB format. For example, 0xFFFF0000 indicates red. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: Alignment mode, data type {@link ArkUI_Alignment}.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: foreground color, in 0xARGB format. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_ALIGNMENT_CENTER}};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_STACK_ALIGN_CONTENT, &item);
-     * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_STACK_ALIGN_CONTENT);
-     * auto nodeStackAlignContent = item->value[0].i32;
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .u32 = 0x99666666 } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_LOADING_PROGRESS_COLOR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_LOADING_PROGRESS_COLOR);
+     * auto nodeLoadingProgressColor = item->value[0].u32;
+     * @endcode
+     *
+     */
+    NODE_LOADING_PROGRESS_COLOR = MAX_NODE_SCOPE_NUM * ARKUI_NODE_LOADING_PROGRESS,
+    /**
+     * @brief Defines whether to show the loading animation for the <LoadingProgress> component.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to show the loading animation.
+     * The value <b>true</b> means to show the loading animation, and <b>false</b> means the opposite.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: The value <b>1</b> means to show the loading animation, and <b>0</b> means the opposite. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = true } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_LOADING_PROGRESS_ENABLE_LOADING, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_LOADING_PROGRESS_ENABLE_LOADING);
+     * auto nodeLoadingProgressEnableLoading = item->value[0].i32;
+     * @endcode
+     */
+    NODE_LOADING_PROGRESS_ENABLE_LOADING,
+
+    /**
+     * @brief Defines the default placeholder text of the single-line text box.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: default placeholder text. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: default placeholder text. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_AttributeItem item = { .string="input" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INPUT_PLACEHOLDER, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INPUT_PLACEHOLDER);
+     * auto nodeTextInputPlaceholder = item->string;
+     * @endcode
+     *
+     */
+    NODE_TEXT_INPUT_PLACEHOLDER = MAX_NODE_SCOPE_NUM * ARKUI_NODE_TEXT_INPUT,
+    /**
+     * @brief Defines the default text content of the single-line text box.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: default text content. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: default text content. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_AttributeItem item = { .string="input" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INPUT_TEXT, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INPUT_TEXT);
+     * auto nodeTextInputText = item->string;
+     * @endcode
+     *
+     */
+    NODE_TEXT_INPUT_TEXT,
+    /**
+     * @brief Defines the caret color attribute.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: caret color, in 0xARGB format. For example, 0xFFFF0000 indicates red.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: caret color, in 0xARGB format. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.u32=0xFFFF0000} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INPUT_CARET_COLOR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INPUT_CARET_COLOR);
+     * auto nodeTextInputCaretColor = item->value[0].u32;
+     * @endcode
+     *
+     */
+    NODE_TEXT_INPUT_CARET_COLOR,
+    /**
+     * @brief Defines the caret style attribute.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: caret width, in vp.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: caret width, in vp. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 100 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INPUT_CARET_STYLE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INPUT_CARET_STYLE);
+     * auto nodeTextInputCaretStyle = item->value[0].f32;
+     * @endcode
+     *
+     */
+    NODE_TEXT_INPUT_CARET_STYLE,
+    /**
+     * @brief Defines the underline attribute of the single-line text box.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to show an underline.
+     * The value <b>true</b> means to show an underline, and <b>false</b> means the opposite.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: The value <b>1</b> means to show an underline, and <b>0</b> means the opposite. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = true} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INPUT_SHOW_UNDERLINE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INPUT_SHOW_UNDERLINE);
+     * auto nodeTextInputUnderline = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_TEXT_INPUT_SHOW_UNDERLINE,
+    /**
+     * @brief Defines the maximum number of characters in the text input.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: maximum number of characters in the text input, without a unit. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: maximum number of characters in the text input. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = 50 } };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INPUT_MAX_LENGTH, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INPUT_MAX_LENGTH);
+     * auto nodeTextInputMaxlength = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_TEXT_INPUT_MAX_LENGTH,
+    /**
+     * @brief Defines the type of the Enter key.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: type of the Enter key{@link ArkUI_EnterKeyType}. The default value is <b>ARKUI_ENTER_KEY_TYPE_DONE</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: type of the Enter key{@link ArkUI_EnterKeyType}. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = ARKUI_ENTER_KEY_TYPE_DONE} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INPUT_ENTER_KEY_TYPE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INPUT_ENTER_KEY_TYPE);
+     * auto nodeTextInputMaxlength = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_TEXT_INPUT_ENTER_KEY_TYPE,
+    /**
+     * @brief Defines the placeholder text color.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: color value, in 0xARGB format. For example, 0xFFFF0000 indicates red. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: color value, in 0xARGB format. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.u32=0xFFFF0000} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INPUT_PLACEHOLDER_COLOR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INPUT_PLACEHOLDER_COLOR);
+     * auto nodeTextInputPlaceholderColor = item->value[0].u32;
+     * @endcode
+     *
+     */
+    NODE_TEXT_INPUT_PLACEHOLDER_COLOR,
+    /**
+     * @brief Defines the placeholder text font.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0]?.f32: font size, in fp. Optional. The default value is <b>16.0</b>.\n
+     * .value[1]?.i32: font style {@link ArkUI_FontStyle}. Optional.
+     * The default value is <b>ARKUI_FONT_STYLE_NORMAL</b>.\n
+     * .value[2]?.i32: font weight {@link ArkUI_FontWeight}. Optional.
+     * The default value is <b>ARKUI_FONT_WEIGHT_NORMAL</b>.\n
+     * ?.string: font family. Multiple font families are separated by commas (,).
+     * Example: "font weight; font family 1, font family 2". \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: font size, in fp.\n
+     * .value[1].i32: font style {@link ArkUI_FontStyle}.\n
+     * .value[2].i32: font weight {@link ArkUI_FontWeight}.\n
+     * .string: font family. Multiple font families are separated by commas (,). \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 16.0, {.i32=ARKUI_FONT_STYLE_NORMAL}, {.i32=ARKUI_FONT_WEIGHT_NORMAL} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue), "Arial" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INPUT_PLACEHOLDER_FONT, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INPUT_PLACEHOLDER_FONT);
+     * auto nodeTextInputPlaceholderFontSize = item->value[0].f32;
+     * auto nodeTextInputPlaceholderFontStyle = item->value[1].i32;
+     * auto nodeTextInputPlaceholderFontWeight = item->value[2].i32;
+     * auto nodeTextInputPlaceholderFontFamily = item->string;
+     * @endcode
+     *
+     */
+    NODE_TEXT_INPUT_PLACEHOLDER_FONT,
+    /**
+     * @brief Defines whether to enable the input method when the component obtains focus.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to enable the input method when the component obtains focus.
+     * The value <b>true</b> means to enable the input method, and <b>false</b> means the opposite.\n \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+      * .value[0].i32: The value <b>1</b> means to enable the input method when the component obtains focus,
+      * and <b>0</b> means the opposite. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = true} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INPUT_ENABLE_KEYBOARD_ON_FOCUS, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INPUT_ENABLE_KEYBOARD_ON_FOCUS);
+     * auto nodeTextInputFocusKeyboard = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_TEXT_INPUT_ENABLE_KEYBOARD_ON_FOCUS,
+    /**
+     * @brief Defines the text box type. This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: text box type {@link ArkUI_TextInputType}.
+     * The default value is <b>ARKUI_TEXTINPUT_TYPE_NORMAL</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: text box type {@link ArkUI_TextInputType}. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = ARKUI_TEXTINPUT_TYPE_NORMAL} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INPUT_TYPE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INPUT_TYPE);
+     * auto nodeTextInputType = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_TEXT_INPUT_TYPE,
+    /**
+     * @brief Defines the background color of the selected text.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: color value, in 0xARGB format. For example, 0xFFFF0000 indicates red. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: color value, in 0xARGB format. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.u32=0xFFFF0000} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INPUT_SELECTED_BACKGROUND_COLOR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INPUT_SELECTED_BACKGROUND_COLOR);
+     * auto nodeTextInputSelectedColor = item->value[0].u32;
+     * @endcode
+     *
+     */
+    NODE_TEXT_INPUT_SELECTED_BACKGROUND_COLOR,
+    /**
+     * @brief Defines whether to display the password icon at the end of the password text box.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to display the password icon at the end of the password text box.
+     * The value <b>true</b> means to display the password icon, and <b>false</b> means the opposite.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: The value <b>1</b> means to display the password icon at the end of the password text box,
+     * and <b>0</b> means the opposite. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = true} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INPUT_SHOW_PASSWORD_ICON, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INPUT_SHOW_PASSWORD_ICON);
+     * auto nodeTextInputPasswordIcon = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_TEXT_INPUT_SHOW_PASSWORD_ICON,
+    /**
+     * @brief Defines the editable state for the single-line text box.
+     * This attribute can be set as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute: \n
+     * .value[0].i32: whether to remain in the editable state. The value
+     * <b>true</b> means to remain in the editable state, and <b>false</b> means to exit the editable state. \n
+     * \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for obtaining the attribute:
+     * .value[0].i32: whether to remain in the editable state. The value <b>true</b> means to remain in the editable
+     * state, and <b>false</b> means to exit the editable state. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = false} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INPUT_EDITING, &item);
+     * @endcode
+     *
+     */
+    NODE_TEXT_INPUT_EDITING,
+    /**
+     * @brief Defines the style of the cancel button on the right of the single-line text box.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute: \n
+     * .value[0].i32: button style {@link ArkUI_CancelButtonStyle}.
+     * The default value is <b>ARKUI_CANCELBUTTON_STYLE_INPUT</b>.\n
+     * .value[1]?.f32: button icon size, in vp.\n
+     * .value[2]?.u32: button icon color, in 0xARGB format. For example, 0xFFFF0000 indicates red. \n
+     * ?.string: button icon image source. The value is the local address of the image, for example, /pages/icon.png. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: button style {@link ArkUI_CancelButtonStyle}.\n
+     * .value[1].f32: icon size, in vp.\n
+     * .value[2].u32: button icon color, in 0xARGB format.\n
+     * .string: button icon image source. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32=ARKUI_CANCELBUTTON_STYLE_INPUT}, 10.0, {.u32=0xFFFF0000} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue), "/pages/icon.png" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_INPUT_CANCEL_BUTTON, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_INPUT_CANCEL_BUTTON);
+     * auto nodeCancelButtonStyle = item->value[0].i32;
+     * auto nodeCancelButtonSize = item->value[1].f32;
+     * auto nodeCancelButtonColor = item->value[2].u32;
+     * auto nodeCancelButtonImage = item->string;
+     * @endcode
+     *
+     */
+    NODE_TEXT_INPUT_CANCEL_BUTTON,
+
+    /**
+     * @brief Defines the default placeholder text for the multi-line text box.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: default placeholder text. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: default placeholder text. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_AttributeItem item = { .string="input" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_AREA_PLACEHOLDER, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_AREA_PLACEHOLDER);
+     * auto nodeTextAreaPlaceholder = item->string;
+     * @endcode
+     *
+     */
+    NODE_TEXT_AREA_PLACEHOLDER = MAX_NODE_SCOPE_NUM * ARKUI_NODE_TEXT_AREA,
+    /**
+     * @brief Defines the default text content for the multi-line text box.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: default text content. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: default text content. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_AttributeItem item = { .string="input" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_AREA_TEXT, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_AREA_TEXT);
+     * auto nodeTextAreaText = item->string;
+     * @endcode
+     *
+     */
+    NODE_TEXT_AREA_TEXT,
+    /**
+     * @brief Defines the maximum number of characters in the text input.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: maximum number of characters in the text input. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: maximum number of characters in the text input. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = 50 } };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_AREA_MAX_LENGTH, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_AREA_MAX_LENGTH);
+     * auto nodeTextAreaMaxlength = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_TEXT_AREA_MAX_LENGTH,
+    /**
+     * @brief Defines the placeholder text color.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: color value, in 0xARGB format. For example, 0xFFFF0000 indicates red. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: color value, in 0xARGB format. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.u32=0xFFFF0000} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_AREA_PLACEHOLDER_COLOR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_AREA_PLACEHOLDER_COLOR);
+     * auto nodeTextAreaPlaceholderColor = item->value[0].u32;
+     * @endcode
+     *
+     */
+    NODE_TEXT_AREA_PLACEHOLDER_COLOR,
+    /**
+     * @brief Defines the placeholder text font.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0]?.f32: font size, in fp. Optional. The default value is <b>16.0</b>.\n
+     * .value[1]?.i32: font style {@link ArkUI_FontStyle}. Optional. The default value is <b>ARKUI_FONT_STYLE_NORMAL</b>.\n
+     * .value[2]?.i32: font weight {@link ArkUI_FontWeight}. Optional. The default value is <b>ARKUI_FONT_WEIGHT_NORMAL</b>.\n
+     * ?.string: font family. Multiple font families are separated by commas (,). For example, "font weight; font family 1, font family 2". \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: font size, in fp.\n
+     * .value[1].i32: font style {@link ArkUI_FontStyle}.\n
+     * .value[2].i32: font weight {@link ArkUI_FontWeight}.\n
+     * .string: font family. Multiple font families are separated by commas (,). \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 16.0, {.i32=ARKUI_FONT_STYLE_NORMAL}, {.i32=ARKUI_FONT_WEIGHT_NORMAL} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue), "Arial" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_AREA_PLACEHOLDER_FONT, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_AREA_PLACEHOLDER_FONT);
+     * auto nodeTextAreaPlaceholderFontSize = item->value[0].f32;
+     * auto nodeTextAreaPlaceholderFontStyle = item->value[1].i32;
+     * auto nodeTextAreaPlaceholderFontWeight = item->value[2].i32;
+     * auto nodeTextAreaPlaceholderFontFamily = item->string;
+     * @endcode
+     *
+     */
+    NODE_TEXT_AREA_PLACEHOLDER_FONT,
+    /**
+     * @brief Defines the caret color attribute.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: background color, in 0xARGB format. For example, 0xFFFF0000 indicates red. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: background color, in 0xARGB format. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.u32=0xFFFF0000} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_AREA_CARET_COLOR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_AREA_CARET_COLOR);
+     * auto nodeTextAreaCaretColor = item->value[0].u32;
+     * @endcode
+     *
+     */
+    NODE_TEXT_AREA_CARET_COLOR,
+    /**
+     * @brief Defines the editable state for the multi-line text box.
+     * This attribute can be set as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to remain in the editable state. The value <b>true</b> means to remain in the
+     * editable state, and <b>false</b> means to exit the editable state.\n \n
+     * \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for obtaining the attribute:
+     * .value[0].i32: whether to remain in the editable state. The value <b>true</b> means to remain in the editable
+     * state, and <b>false</b> means to exit the editable state.\n \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = false} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_AREA_EDITING, &item);
+     * @endcode
+     *
+     */
+    NODE_TEXT_AREA_EDITING,
+
+    /**
+     * @brief Defines the button text content. This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: default text content. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: default text content. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_AttributeItem item = { .string="click" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_BUTTON_LABEL, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_BUTTON_LABEL);
+     * auto nodeButtonLabelr = item->string;
+     * @endcode
+     *
+     */
+    NODE_BUTTON_LABEL = MAX_NODE_SCOPE_NUM * ARKUI_NODE_BUTTON,
+
+    /**
+     * @brief Defines the current value of the progress indicator.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: current value of the progress indicator. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: current value of the progress indicator. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 10 };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_PROGRESS_VALUE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_PROGRESS_VALUE);
+     * auto nodeProgressValue = item->value[0].f32;
+     * @endcode
+     *
+     */
+    NODE_PROGRESS_VALUE = MAX_NODE_SCOPE_NUM * ARKUI_NODE_PROGRESS,
+    /**
+     * @brief Defines the total value of the progress indicator.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: total value of the progress indicator. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: total value of the progress indicator. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 100 };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_PROGRESS_TOTAL, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_PROGRESS_TOTAL);
+     * auto nodeProgressTotal = item->value[0].f32;
+     * @endcode
+     *
+     */
+    NODE_PROGRESS_TOTAL,
+    /**
+     * @brief Defines the color for the progress value on the progress indicator.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: color value, in 0xARGB format. For example, 0xFFFF0000 indicates red. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: color value, in 0xARGB format. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.u32=0xFFFF0000} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_PROGRESS_COLOR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_PROGRESS_COLOR);
+     * auto nodeProgressColor = item->value[0].u32;
+     * @endcode
+     *
+     */
+    NODE_PROGRESS_COLOR,
+    /**
+     * @brief Defines the type of the progress indicator.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: type of the progress indicator {@link ArkUI_ProgressType}.
+     * The default value is <b>ARKUI_PROGRESS_LINEAR</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: type of the progress indicator {@link ArkUI_ProgressType}. \n
+     *
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32=ARKUI_PROGRESS_LINEAR} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_PROGRESS_TYPE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_PROGRESS_TYPE);
+     * auto nodeProgressType = item->value[0].i32;
+     * @endcode
+     */
+    NODE_PROGRESS_TYPE,
+
+    /**
+     * @brief Defines whether the check box is selected.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether the check box is selected.
+     * The value <b>1</b> means that the check box is selected, and <b>0</b> means the opposite. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: The value <b>1</b> means that the check box is selected, and <b>0</b> means the opposite. \n
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = 0 } };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_CHECKBOX_SELECT, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_CHECKBOX_SELECT);
+     * auto value = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_CHECKBOX_SELECT = MAX_NODE_SCOPE_NUM * ARKUI_NODE_CHECKBOX,
+
+    /**
+     * @brief Defines the color of the check box when it is selected.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: color of the check box when it is selected, in 0xARGB format, for example, <b>0xFF1122FF</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+      * .value[0].u32: color of the check box when it is selected, in 0xARGB format, for example, <b>0xFF1122FF</b>.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .u32 = 0xFF1122FF } };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_CHECKBOX_SELECT_COLOR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_CHECKBOX_SELECT_COLOR);
+     * auto value = item->value[0].u32;
+     * @endcode
+     *
+     */
+    NODE_CHECKBOX_SELECT_COLOR,
+
+    /**
+     * @brief Defines the border color of the check box when it is not selected.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: border color, in 0xARGB format, for example, <b>0xFF1122FF</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: border color, in 0xARGB format, for example, <b>0xFF1122FF</b>.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .u32 = 0xFF1122FF } };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_CHECKBOX_UNSELECT_COLOR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_CHECKBOX_UNSELECT_COLOR);
+     * auto value = item->value[0].u32;
+     * @endcode
+     *
+     */
+    NODE_CHECKBOX_UNSELECT_COLOR,
+
+    /**
+     * @brief Defines the internal icon style of the check box.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: border color, in 0xARGB format, for example, <b>0xFF1122FF</b>.\n
+     * .value[1]?.f32: size of the internal mark, in vp. Optional.\n
+     * .value[2]?.f32: stroke width of the internal mark, in vp. Optional. The default value is <b>2</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: border color, in 0xARGB format, for example, <b>0xFF1122FF</b>.\n
+     * .value[1].f32: size of the internal mark, in vp.\n
+     * .value[2].f32: stroke width of the internal mark, in vp. The default value is <b>2</b>. \n
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = 0xFF1122FF }, 20.0f, 2.0f };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_CHECKBOX_MARK, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_CHECKBOX_MARK);
+     * auto value = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_CHECKBOX_MARK,
+
+    /**
+     * @brief Defines the shape of the check box.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: component shape. The parameter type is {@link ArkUI_CheckboxShape}. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: component shape. The parameter type is {@link ArkUI_CheckboxShape}.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = ArkUI_CHECKBOX_SHAPE_CIRCLE } };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_CHECKBOX_SHAPE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_CHECKBOX_SHAPE);
+     * auto value = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_CHECKBOX_SHAPE,
+
+    /**
+     * @brief Defines the ID of the <b><XComponent></b> component.
+     * This attribute can be set and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: component ID. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: component ID. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_AttributeItem item = { .string = "test" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_XCOMPONENT_ID, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_XCOMPONENT_ID);
+     * auto nodeXcomponentId = item->string;
+     * @endcode
+     *
+     */
+    NODE_XCOMPONENT_ID = MAX_NODE_SCOPE_NUM * ARKUI_NODE_XCOMPONENT,
+    /**
+     * @brief Defines the type of the <b><XComponent></b> component.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: type {@link ArkUI_XComponentType}. The default value is <b>ARKUI_XCOMPONENT_TYPE_SURFACE</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: type {@link ArkUI_XComponentType}. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = ARKUI_XCOMPONENT_TYPE_SURFACE} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_XCOMPONENT_TYPE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_XCOMPONENT_TYPE);
+     * auto nodeXcomponentType = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_XCOMPONENT_TYPE,
+    /**
+     * @brief Defines the width and height of the <b><XComponent></b> component.
+     * This attribute can be set and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: width, in px. \n
+     * .value[1].u32: height, in px. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: width, in px. \n
+     * .value[1].u32: height, in px. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi - reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.u32=300}, {.u32=50} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_XCOMPONENT_SURFACE_SIZE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_XCOMPONENT_SURFACE_SIZE);
+     * auto nodeXcomponentSurfaceWidth = item->value[0].u32;
+     * auto nodeXcomponentSurfaceHeight = item->value[1].u32;
+     * @endcode
+     *
+     */
+    NODE_XCOMPONENT_SURFACE_SIZE,
+
+    /**
+     * @brief Defines whether to display the lunar calendar in the date picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to display the lunar calendar in the date picker. The default value is <b>false</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether to display the lunar calendar in the date picker.
+     *
+     * @code {.cpp}
+     * ArkUI_NumberValue value[] = { { .i32 = true } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_DATE_PICKER_LUNAR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_DATE_PICKER_LUNAR);
+     * auto nodeDatePickerLunar = item->value[0].i32;
+     * @endcode
+     */
+    NODE_DATE_PICKER_LUNAR = MAX_NODE_SCOPE_NUM * ARKUI_NODE_DATE_PICKER,
+    /**
+     * @brief Defines the start date of the date picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: date. The default value is <b>"1970-1-1"</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: date. \n
+     *
+     * @code {.cpp}
+     * ArkUI_AttributeItem item = { .string = "1970-1-1" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_DATE_PICKER_START, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_DATE_PICKER_START);
+     * auto nodeDatePickerStart = item->string;
+     * @endcode
+     */
+    NODE_DATE_PICKER_START,
+    /**
+     * @brief Defines the end date of the date picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: date. The default value is <b>"2100-12-31"</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: date. \n
+     *
+     * @code {.cpp}
+     * ArkUI_AttributeItem item = { .string = "2100-12-31" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_DATE_PICKER_END, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_DATE_PICKER_END);
+     * auto nodeDatePickerEnd = item->string;
+     * @endcode
+     */
+    NODE_DATE_PICKER_END,
+    /**
+     * @brief Defines the selected date of the date picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: date. The default value is <b>"2024-01-22"</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: date.
+     *
+     * @code {.cpp}
+     * ArkUI_AttributeItem item = { .string = "2024-01-22" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_DATE_PICKER_SELECTED, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_DATE_PICKER_SELECTED);
+     * auto nodeDatePickerSelected = item->string;
+     * @endcode
+     */
+    NODE_DATE_PICKER_SELECTED,
+    /**
+     * @brief Defines the font color, font size, and font weight for the top and bottom items in the date picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * @code {.cpp}
+     * ArkUI_AttributeItem item = { .string = "#ff182431;14;normal;Arial,HarmonyOS Sans;normal" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_DATE_PICKER_DISAPPEAR_TEXT_STYLE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_DATE_PICKER_DISAPPEAR_TEXT_STYLE);
+     * auto nodeDatePickerDisappearTextStyle = item->string;
+     * @endcode
+     */
+    NODE_DATE_PICKER_DISAPPEAR_TEXT_STYLE,
+    /**
+     * @brief Defines the font color, font size, and font weight of all items except the top, bottom, and selected
+     * items in the date picker. This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * @code {.cpp}
+     * ArkUI_AttributeItem item = { .string = "#ff182431;14;normal;Arial,HarmonyOS Sans;normal" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_DATE_PICKER_TEXT_STYLE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_DATE_PICKER_TEXT_STYLE);
+     * auto nodeDatePickerTextStyle = item->string;
+     * @endcode
+     */
+    NODE_DATE_PICKER_TEXT_STYLE,
+    /**
+     * @brief Defines the font color, font size, and font weight of the selected item in the date picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * @code {.cpp}
+     * ArkUI_AttributeItem item = { .string = "#ff182431;14;normal;Arial,HarmonyOS Sans;normal" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_DATE_PICKER_SELECTED_TEXT_STYLE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_DATE_PICKER_SELECTED_TEXT_STYLE);
+     * auto nodeDatePickerSelectedTextStyle = item->string;
+     * @endcode
+     */
+    NODE_DATE_PICKER_SELECTED_TEXT_STYLE,
+    /**
+     * @brief Defines the time of the selected item. in the timer picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: time. The default value is the current system time. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: time.
+     *
+     * @code {.cpp}
+     * ArkUI_AttributeItem item = { .string = "17-11" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TIME_PICKER_SELECTED, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TIME_PICKER_SELECTED);
+     * auto nodeTimePickerSelected = item->string;
+     * @endcode
+     */
+
+    NODE_TIME_PICKER_SELECTED = MAX_NODE_SCOPE_NUM * ARKUI_NODE_TIME_PICKER,
+    /**
+     * @brief Defines whether the display time is in 24-hour format.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether the display time is in 24-hour format. The default value is <b>false</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether the display time is in 24-hour format.
+     *
+     * @code {.cpp}
+     * ArkUI_NumberValue value[] = { { .i32 = true } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TIME_PICKER_USE_MILITARY_TIME, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TIME_PICKER_USE_MILITARY_TIME);
+     * auto nodeTimePickerUseMilitaryTime = item->value[0].i32;
+     * @endcode
+     */
+    NODE_TIME_PICKER_USE_MILITARY_TIME,
+    /**
+     * @brief Defines the font color, font size, and font weight for the top and bottom items in the time picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * @code {.cpp}
+     * ArkUI_AttributeItem item = { .string = "#ff182431;14;normal;Arial,HarmonyOS Sans;normal" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_DATE_PICKER_DISAPPEAR_TEXT_STYLE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_DATE_PICKER_DISAPPEAR_TEXT_STYLE);
+     * auto nodeDatePickerDisappearTextStyle = item->string;
+     * @endcode
+     */
+    NODE_TIME_PICKER_DISAPPEAR_TEXT_STYLE,
+    /**
+     * @brief Defines the font color, font size, and font weight of all items except the top, bottom, and selected items
+     * in the time picker. This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * @code {.cpp}
+     * ArkUI_AttributeItem item = { .string = "#ff182431;14;normal;Arial,HarmonyOS Sans;normal" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TIME_PICKER_TEXT_STYLE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TIME_PICKER_TEXT_STYLE);
+     * auto nodeTimePickerTextStyle = item->string;
+     * @endcode
+     */
+    NODE_TIME_PICKER_TEXT_STYLE,
+    /**
+     * @brief Defines the font color, font size, and font weight of the selected item in the time picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * @code {.c}
+     * ArkUI_AttributeItem item = { .string = "#ff182431;14;normal;Arial,HarmonyOS Sans;normal" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TIME_PICKER_SELECTED_TEXT_STYLE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TIME_PICKER_SELECTED_TEXT_STYLE);
+     * auto nodeDatePickerSelectedTextStyle = item->string;
+     * @endcode
+     */
+    NODE_TIME_PICKER_SELECTED_TEXT_STYLE,
+
+    /**
+     * @brief Defines the data selection range of the text picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: type of the text picker {@link ArkUI_TextPickerRangeType}.
+     * The default value is <b>ARKUI_TEXTPICKER_RANGETYPE_SINGLE</b>.\n
+     * ?.string: string input, whose format varies by picker type.\n
+     * 1: single-column picker. The input format is a group of strings separated by semicolons (;).\n
+     * 2: multi-column picker. Multiple pairs of plain text strings are supported. The pairs are separated by
+     * semicolons (;), and strings within each pair are separated by commas (,).\n
+     * ?.object: Object input, whose format varies by picker type.\n
+     * 1: single-column picker with image support. The input structure is {@link ARKUI_TextPickerRangeContent}.\n
+     * 2: multi-column interconnected picker. The input structure is {@link ARKUI_TextPickerCascadeRangeContent}.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: type of the text picker {@link ArkUI_TextPickerRangeType}.\n
+     * ?.string: string output, whose format varies by picker type.\n
+     * 1: single-column picker. The output format is a group of strings separated by semicolons (;).\n
+     * 2: multi-column picker. Multiple pairs of plain text strings are supported. The pairs are separated by
+     * semicolons (;), and strings within each pair are separated by commas (,).\n
+     * ?.string: Object output, whose format varies by picker type.\n
+     * 1: single-column picker with image support. The output structure is {@link ARKUI_TextPickerRangeContent}.\n
+     * 2: multi-column interconnected picker. The output structure is {@link ARKUI_TextPickerCascadeRangeContent}.\n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32=ARKUI_TEXTPICKER_RANGETYPE_MULTI} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue), "1,2,3;A,B,C" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_PICKER_OPTION_RANGE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_PICKER_OPTION_RANGE);
+     * auto nodeTextPickerRangeType = item->value[0].i32;
+     * auto nodeTextPickerMultiRange = item->string;
+     * @endcode
+     *
+     */
+    NODE_TEXT_PICKER_OPTION_RANGE = MAX_NODE_SCOPE_NUM * ARKUI_NODE_TEXT_PICKER,
+    /**
+     * @brief Defines the index of the default selected item in the data selection range of the text picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: index. If there are multiple index values, add them one by one. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: index. If there are multiple index values, add them one by one.\n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.u32 = 1}, {.u32 = 2} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_PICKER_OPTION_SELECTED, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_PICKER_OPTION_SELECTED);
+     * auto nodeTextPickerSelected = item->value[0].u32;
+     * @endcode
+     *
+     */
+    NODE_TEXT_PICKER_OPTION_SELECTED,
+    /**
+     * @brief Defines the value of the default selected item in the text picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: value of the selected item. If there are multiple values, add them one by one and
+     * separate them with semicolons (;). \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: value of the selected item. If there are multiple values, add them one by one and
+     * separate them with semicolons (;).\n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_AttributeItem item = { .string = "A;B" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_PICKER_OPTION_VALUE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_PICKER_OPTION_VALUE);
+     * auto nodeTextPickerValue = item->string;
+     * @endcode
+     *
+     */
+    NODE_TEXT_PICKER_OPTION_VALUE,
+    /**
+     * @brief Defines the font color, font size, and font weight for the top and bottom items in the text picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * @code {.c}
+     * ArkUI_AttributeItem item = { .string = "#ff182431;14;normal;Arial,HarmonyOS Sans;normal" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_PICKER_DISAPPEAR_TEXT_STYLE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_PICKER_DISAPPEAR_TEXT_STYLE);
+     * auto nodeDatePickerDisappearTextStyle = item->string;
+     * @endcode
+     */
+    NODE_TEXT_PICKER_DISAPPEAR_TEXT_STYLE,
+    /**
+     * @brief Defines the font color, font size, and font weight for all items except the top, bottom, and selected
+     * items in the text picker. This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * @code {.c}
+     * ArkUI_AttributeItem item = { .string = "#ff182431;14;normal;Arial,HarmonyOS Sans;normal" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_PICKER_TEXT_STYLE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_PICKER_TEXT_STYLE);
+     * auto nodeDatePickerTextStyle = item->string;
+     * @endcode
+     */
+    NODE_TEXT_PICKER_TEXT_STYLE,
+    /**
+     * @brief Defines the font color, font size, and font weight for the selected item in the text picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: array of five parameters of the string type, separated by semicolons (;).\n
+     * Parameter 1: font color, in #ARGB format.\n
+     * Parameter 2: font size, in fp. The value is a number.\n
+     * Parameter 3: font weight. Available options are ("bold", "normal", "bolder", "lighter", "medium", "regular").\n.
+     * Parameter 4: fonts, separated by commas (,).\n
+     * Parameter 5: font style. Available options are ("normal", "italic").\n
+     * Example: "#ff182431;14;normal;Arial,HarmonyOS Sans;normal". \n
+     * @code {.c}
+     * ArkUI_AttributeItem item = { .string = "#ff182431;14;normal;Arial,HarmonyOS Sans;normal" };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_PICKER_SELECTED_TEXT_STYLE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_PICKER_SELECTED_TEXT_STYLE);
+     * auto nodeTextPickerSelectedTextStyle = item->string;
+     * @endcode
+     */
+    NODE_TEXT_PICKER_SELECTED_TEXT_STYLE,
+    /**
+     * @brief Defines the index of the default selected item in the data selection range of the text picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0...].i32: index of the default item in the data selection range.
+     *
+     * @code {.c}
+     * ArkUI_NumberValue value[] = { { .i32 = 0 }, { .i32 = 1 } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_PICKER_SELECTED_INDEX, &item);
+     * @endcode
+     */
+    NODE_TEXT_PICKER_SELECTED_INDEX,
+    /**
+     * @brief Defines whether to support scroll looping for the text picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to support scroll looping. The value <b>true</b> means to support scroll looping, and
+     * <b>false</b> means the opposite.\n \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * value[0].i32: The value <b>1</b> means to support scroll looping, and <b>0</b> means the opposite. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32=true} };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_PICKER_CAN_LOOP, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_PICKER_CAN_LOOP);
+     * auto nodePickerCanLoop = item->value[0].i32;
+     * @endcode
+     */
+    NODE_TEXT_PICKER_CAN_LOOP,
+    /**
+     * @brief Defines the height of each item in the picker. This attribute can be set, reset, and obtained as required
+     * through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: item height, in vp. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * value[0].f32: item height, in vp. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 100 };
+     * ArkUI_AttributeItem item = { value, 1 };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_TEXT_PICKER_DEFAULT_PICKER_ITEM_HEIGHT, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_TEXT_PICKER_DEFAULT_PICKER_ITEM_HEIGHT);
+     * auto nodePickerItemHeight = item->value[0].f32;
+     * @endcode
+     */
+    NODE_TEXT_PICKER_DEFAULT_PICKER_ITEM_HEIGHT,
+    /**
+     * @brief Defines the style of the background in the selected state of the calendar picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: style of the background in the selected state of the calendar picker.
+     * The value range is [0, +∞). If the value is <b>0</b>, the background is a rectangle with square corners.
+     If the value is in the 0–16 range, the background is a rectangle with rounded corners. If the value is equal to
+     * or greater than 16, the background is a circle. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: style of the background in the selected state of the calendar picker. The value range is [0, +∞).
+     * If the value is <b>0</b>, the background is a rectangle with square corners.
+     If the value is in the 0–16 range, the background is a rectangle with rounded corners. If the value is equal to or
+     * greater than 16, the background is a circle. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NumberValue value[] = { 16.0f };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_CALENDAR_PICKER_HINT_RADIUS, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_CALENDAR_PICKER_HINT_RADIUS);
+     * auto borderRadius = item->value[0].f32;
+     * @endcode
+     */
+    NODE_CALENDAR_PICKER_HINT_RADIUS = MAX_NODE_SCOPE_NUM * ARKUI_NODE_CALENDAR_PICKER,
+    /**
+     * @brief Defines the date of the selected item in the calendar picker.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: selected year. \n
+     * .value[1].u32: selected month. \n
+     * .value[2].u32: selected day. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: selected year. \n
+     * .value[1].u32: selected month. \n
+     * .value[2].u32: selected day. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NumberValue value[] = { { .u32 = 2028 }, { .u32 = 1 }, { .u32 = 1 } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_CALENDAR_PICKER_SELECTED_DATE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_CALENDAR_PICKER_SELECTED_DATE);
+     * auto selectYear = item->value[0].u32;
+     * @endcode
+     */
+    NODE_CALENDAR_PICKER_SELECTED_DATE,
+    /**
+     * @brief Defines how the calendar picker is aligned with the entry component.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: alignment mode. The parameter type is {@link ArkUI_CalendarAlignment}. \n
+     * .value[1]?.f32: offset of the picker relative to the entry component along the x-axis after alignment based on
+     * the specified alignment mode. \n
+     * .value[2]?.f32: offset of the picker relative to the entry component along the y-axis after alignment based on
+     * the specified alignment mode. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: alignment mode. The parameter type is {@link ArkUI_CalendarAlignment}. \n
+     * .value[1].f32: offset of the picker relative to the entry component along the x-axis after alignment based on
+     * the specified alignment mode. \n
+     * .value[2].f32: offset of the picker relative to the entry component along the y-axis after alignment based on
+     * the specified alignment mode. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NumberValue value[] = { { .i32 = static_cast<int32_t>(ARKUI_CALENDAR_ALIGNMENT_END) }, 10.0f, 0.0f };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_CALENDAR_PICKER_EDGE_ALIGNMENT, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_CALENDAR_PICKER_EDGE_ALIGNMENT);
+     * auto alignType = item->value[0].i32;
+     * @endcode
+     */
+    NODE_CALENDAR_PICKER_EDGE_ALIGNMENT,
+    /**
+     * @brief Defines the font color, font size, and font weight in the entry area of the calendar picker.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0]?.u32: font color of the entry area. \n
+     * .value[1]?.f32: font size of the entry area, in fp. \n
+     * .value[2]?.i32: font weight of the entry area. The parameter type is {@link ArkUI_FontWeight}. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: font color of the entry area. \n
+     * .value[1].f32: font size of the entry area, in fp. \n
+     * .value[2].i32: font weight of the entry area. The parameter type is {@link ArkUI_FontWeight}. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NumberValue value[] = { { .u32 = 0xff00ffff }, 16.0f, { .i32 =
+     * static_cast<int32_t>(ARKUI_FONT_WEIGHT_NORMAL)} };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_CALENDAR_PICKER_TEXT_STYLE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_CALENDAR_PICKER_TEXT_STYLE);
+     * auto textColor = item->value[0].u32;
+     * @endcode
+     */
+    NODE_CALENDAR_PICKER_TEXT_STYLE,
+    /**
+     * @brief Defines the color of the slider. This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: color of the slider, in 0xARGB format, for example, <b>0xFF1122FF</b>.
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: color of the slider, in 0xARGB format, for example, <b>0xFF1122FF</b>.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .u32 = 0xFF1122FF } };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SLIDER_BLOCK_COLOR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SLIDER_BLOCK_COLOR);
+     * auto value = item->value[0].u32;
+     * @endcode
+     *
+     */
+    NODE_SLIDER_BLOCK_COLOR = MAX_NODE_SCOPE_NUM * ARKUI_NODE_SLIDER,
+
+    /**
+     * @brief Defines the background color of the slider. This attribute can be set, reset, and obtained as required
+     * through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: background color, in 0xARGB format, for example, <b>0xFF1122FF</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: background color, in 0xARGB format, for example, <b>0xFF1122FF</b>.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .u32 = 0xFF1122FF } };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SLIDER_TRACK_COLOR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SLIDER_TRACK_COLOR);
+     * auto value = item->value[0].u32;
+     * @endcode
+     *
+     */
+    NODE_SLIDER_TRACK_COLOR,
+
+    /**
+     * @brief Defines the color of the selected part of the slider track. This attribute can be set, reset, and obtained
+     * as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: color of the selected part of the slider track, in 0xARGB format, for example, <b>0xFF1122FF</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: color of the selected part of the slider track, in 0xARGB format, for example, <b>0xFF1122FF</b>.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .u32 = 0xFF1122FF } };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SLIDER_SELECTED_COLOR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SLIDER_SELECTED_COLOR);
+     * auto value = item->value[0].u32;
+     * @endcode
+     *
+     */
+    NODE_SLIDER_SELECTED_COLOR,
+
+    /**
+     * @brief Sets whether to display the stepping value. This attribute can be set, reset, and obtained as required
+     * through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to display the stepping value. The value <b>1</b> means to display the stepping value,
+     * and <b>0</b> (default value) means the opposite. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether to display the stepping value. The value <b>1</b> means to display the stepping value,
+     * and <b>0</b> (default value) means the opposite. \n
+     *
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = 1 } };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SLIDER_SHOW_STEPS, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SLIDER_SHOW_STEPS);
+     * auto value = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_SLIDER_SHOW_STEPS,
+
+    /**
+     * @brief Defines the slider shape, which can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: shape. The parameter type is {@link ArkUI_SliderBlockStyle}. \n
+     * .string?: depending on the shape. Optional. \n
+     * ARKUI_SLIDER_BLOCK_STYLE_IMAGE: image resource of the slider. Example: /pages/common/icon.png. \n
+     * ARKUI_SLIDER_BLOCK_STYLE_SHAPE: custom shape of the slider. \n
+     * There are five types:\n
+     * 1. Rectangle:\n
+     * .value[1].i32: type of shape. The parameter type is {@link ArkUI_ShapeType}.
+     * The value is <b>ARKUI_SHAPE_TYPE_RECT</b> for the rectangle shape.\n
+     * .value[2].f32: width of the rectangle.\n
+     * .value[3].f32: height of the rectangle.\n
+     * .value[4].f32: width of the rounded corner of the rectangle.\n
+     * .value[5].f32: height of the rounded corner of the rectangle.\n
+     * 2. Circle:\n
+     * .value[1].i32: type of shape. The parameter type is {@link ArkUI_ShapeType}.
+     * The value is <b>ARKUI_SHAPE_TYPE_CIRCLE</b> for the circle shape.\n
+     * .value[2].f32: width of the circle.\n
+     * .value[3].f32: height of the circle.\n
+     * 3.Ellipse:\n
+     * .value[1].i32: type of shape. The parameter type is {@link ArkUI_ShapeType}.
+     * The value is <b>ARKUI_SHAPE_TYPE_ELLIPSE</b> for the ellipse shape.\n
+     * .value[2].f32: width of the ellipse.\n
+     * .value[3].f32: height of the ellipse;\n
+     * 4. Path:\n
+     * .value[1].i32: type of shape. The parameter type is {@link ArkUI_ShapeType}.
+     * The value is <b>ARKUI_SHAPE_TYPE_PATH</b> for the path shape.\n
+     * .value[2].f32: width of the path.\n
+     * .value[3].f32: height of the path.\n
+     * .string: command for drawing the path.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: shape. The parameter type is {@link ArkUI_SliderBlockStyle}. \n
+     * .string?: depending on the shape. Optional. \n
+     * ARKUI_SLIDER_BLOCK_STYLE_IMAGE: image resource of the slider. Example: /pages/common/icon.png. \n
+     * ARKUI_SLIDER_BLOCK_STYLE_SHAPE: custom shape of the slider. \n
+      * There are five types:\n
+     * 1. Rectangle:\n
+     * .value[1].i32: type of shape. The parameter type is {@link ArkUI_ShapeType}.
+     * The value is <b>ARKUI_SHAPE_TYPE_RECT</b> for the rectangle shape.\n
+     * .value[2].f32: width of the rectangle.\n
+     * .value[3].f32: height of the rectangle.\n
+     * .value[4].f32: width of the rounded corner of the rectangle.\n
+     * .value[5].f32: height of the rounded corner of the rectangle.\n
+     * 2. Circle:\n
+     * .value[1].i32: type of shape. The parameter type is {@link ArkUI_ShapeType}.
+     * The value is <b>ARKUI_SHAPE_TYPE_CIRCLE</b> for the circle shape.\n
+     * .value[2].f32: width of the circle.\n
+     * .value[3].f32: height of the circle.\n
+     * 3.Ellipse:\n
+     * .value[1].i32: type of shape. The parameter type is {@link ArkUI_ShapeType}.
+     * The value is <b>ARKUI_SHAPE_TYPE_ELLIPSE</b> for the ellipse shape.\n
+     * .value[2].f32: width of the ellipse.\n
+     * .value[3].f32: height of the ellipse;\n
+     * 4. Path:\n
+     * .value[1].i32: type of shape. The parameter type is {@link ArkUI_ShapeType}.
+     * The value is <b>ARKUI_SHAPE_TYPE_PATH</b> for the path shape.\n
+     * .value[2].f32: width of the path.\n
+     * .value[3].f32: height of the path.\n
+     * .string: command for drawing the path.\n
+     *  
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_SLIDER_BLOCK_STYLE_DEFAULT}};
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SLIDER_BLOCK_STYLE, &item);
+     *
+     * ArkUI_NumberValue value[] = { {.i32 = ARKUI_SLIDER_BLOCK_STYLE_SHAPE},
+     * {.i32 = ARKUI_CLIP_TYPE_RECT}, 100, 100, 15, 15 };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SLIDER_BLOCK_STYLE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SLIDER_BLOCK_STYLE);
+     * auto value = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_SLIDER_BLOCK_STYLE,
+
+    /**
+     * @brief Defines the current value of the slider. This attribute can be set, reset, and obtained as required
+     * through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: current value. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: current value.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 0 };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SLIDER_VALUE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SLIDER_VALUE);
+     * auto value = item->value[0].f32;
+     * @endcode
+     *
+     */
+    NODE_SLIDER_VALUE,
+
+    /**
+     * @brief Defines the minimum value of the slider. This attribute can be set, reset, and obtained as required
+     * through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: minimum value. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: minimum value.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 0 };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SLIDER_MIN_VALUE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SLIDER_MIN_VALUE);
+     * auto value = item->value[0].f32;
+     * @endcode
+     *
+     */
+    NODE_SLIDER_MIN_VALUE,
+
+    /**
+     * @brief Defines the maximum value of the slider. This attribute can be set, reset, and obtained as required
+     * through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: maximum value. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: maximum value.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 100 };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SLIDER_MAX_VALUE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SLIDER_MAX_VALUE);
+     * auto value = item->value[0].f32;
+     * @endcode
+     *
+     */
+    NODE_SLIDER_MAX_VALUE,
+
+    /**
+     * @brief Defines the step of the slider. This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: step. The value range is [0.01, 100]. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: step. The value range is [0.01, 100].
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { 100 };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SLIDER_STEP, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SLIDER_STEP);
+     * auto value = item->value[0].f32;
+     * @endcode
+     *
+     */
+    NODE_SLIDER_STEP,
+
+    /**
+     * @brief Defines whether the slider moves horizontally or vertically. This attribute can be set, reset, and
+     * obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether the slider moves horizontally or vertically.
+     * The parameter type is {@link ArkUI_SliderDirection}. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether the slider moves horizontally or vertically.
+     * The parameter type is {@link ArkUI_SliderDirection}.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_SLIDER_DIRECTION_VERTICAL } };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SLIDER_DIRECTION, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SLIDER_DIRECTION);
+     * auto value = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_SLIDER_DIRECTION,
+
+    /**
+     * @brief Defines whether the slider values are reversed. This attribute can be set, reset, and obtained as required
+     * through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether the slider values are reversed. The value <b>1</b> means that the slider values are
+     * reversed, and <b>0</b> means the opposite. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether the slider values are reversed. The value <b>1</b> means that the slider values are
+     * reversed, and <b>0</b> means the opposite.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = 0} };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SLIDER_REVERSE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SLIDER_REVERSE);
+     * auto value = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_SLIDER_REVERSE,
+
+    /**
+     * @brief Defines the style of the slider thumb and track. This attribute can be set, reset, and obtained
+     * as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: style of the slider thumb and track. The parameter type is {@link ArkUI_SliderStyle}. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: style of the slider thumb and track. The parameter type is {@link ArkUI_SliderStyle}.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_SLIDER_STYLE_OUT_SET } };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SLIDER_STYLE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SLIDER_STYLE);
+     * auto value = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_SLIDER_STYLE,
+
+    /**
+     * @brief Defines the alignment mode of the child components in the container. This attribute can be set, reset,
+     * and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: alignment mode. The data type is {@link ArkUI_Alignment}.
+     * The default value is <b>ARKUI_ALIGNMENT_CENTER</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: alignment mode. The data type is {@link ArkUI_Alignment}. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_ALIGNMENT_CENTER } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_STACK_ALIGN_CONTENT, &item);
+     * auto alignContentItem = nativeNodeApi->getAttribute(nodeHandle, NODE_STACK_ALIGN_CONTENT);
+     * auto alignContent = alignContentItem->value[0].i32;
      * @endcode
      */
     NODE_STACK_ALIGN_CONTENT = MAX_NODE_SCOPE_NUM * ARKUI_NODE_STACK,
+
     /**
-     * @brief Status of the scroll bar of a scrolling component. Attributes can be set, reset, and obtained.
+     * @brief Defines the scrollbar status. This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: scroll bar status, data type {@link
-     * ArkUI_ScrollBarDisplayMode}, default ARKUI_SCROLL_BAR_DISPLAY_MODE_AUTO.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: scrollbar status. The parameter type is {@link ArkUI_ScrollBarDisplayMode}. The default value is
+     * <b>ARKUI_SCROLL_BAR_DISPLAY_MODE_AUTO</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: scroll bar status, data type {@link ArkUI_ScrollBarDisplayMode}.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: scrollbar status. The parameter type is {@link ArkUI_ScrollBarDisplayMode}. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_SCROLL_BAR_DISPLAY_MODE_AUTO}};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_SCROLL_BAR_DISPLAY_MODE, &item);
-     * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_SCROLL_BAR_DISPLAY_MODE);
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_SCROLL_BAR_DISPLAY_MODE_AUTO } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SCROLL_BAR_DISPLAY_MODE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SCROLL_BAR_DISPLAY_MODE);
      * auto nodeScrollBarDisplayMode = item->value[0].i32;
      * @endcode
      *
      */
     NODE_SCROLL_BAR_DISPLAY_MODE = MAX_NODE_SCOPE_NUM * ARKUI_NODE_SCROLL,
     /**
-     * @brief Width of the scroll bar of a scrolling component. Attributes can be set, reset, and obtained.
+     * @brief Defines the width of the scrollbar. This attribute can be set, reset, and obtained as required
+     * through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: scroll bar width, in vp. The default value is 4. \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: width of the scrollbar, in vp. The default value is <b>4</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: scroll bar width, in vp.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: width of the scrollbar, in vp. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {20};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_SCROLL_BAR_WIDTH, &item);
-     * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_SCROLL_BAR_WIDTH);
+     * ArkUI_NumberValue value[] = { 20 };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SCROLL_BAR_WIDTH, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SCROLL_BAR_WIDTH);
      * auto nodeScrollBarWidth = item->value[0].f32;
      * @endcode
      *
      */
     NODE_SCROLL_BAR_WIDTH,
     /**
-     * @brief Scroll bar color of a scrolling component. Attribute setting, attribute reset, and attribute obtaining are supported.
+     * @brief Defines the color of the scrollbar. This attribute can be set, reset, and obtained as required
+     * through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .data[0].u32: scroll bar color, 0xargb type.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .data[0].u32: color of the scrollbar, in 0xARGB format. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .data[0].u32: scroll bar color, 0xargb type.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .data[0].u32: color of the scrollbar, in 0xARGB format. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {{.u32 = 0xFFFFFFFF}};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_SCROLL_BAR_COLOR, &item);
-     * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_SCROLL_BAR_COLOR);
+     * ArkUI_NumberValue value[] = { { .u32 = 0xFFFFFFFF } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SCROLL_BAR_COLOR, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SCROLL_BAR_COLOR);
      * auto nodeScrollBarColor = item->value[0].u32;
      * @endcode
      *
      */
     NODE_SCROLL_BAR_COLOR,
     /**
-     * @brief Scrolling direction of the Scroll component. Attributes can be set, reset, and obtained.
+     * @brief Defines the scroll direction. This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: scrolling direction, data type {@link ArkUI_Axis}, default value AKUI_AXIS_VERSICAL.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: scroll direction. The parameter type is {@link ArkUI_ScrollDirection}.
+     * The default value is <b>ARKUI_SCROLL_DIRECTION_VERTICAL</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: scrolling direction, data type {@link ArkUI_Axis}.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: scroll direction. The parameter type is {@link ArkUI_ScrollDirection}. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_AXIS_VERTICAL}};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_SCROLL_SCROLL_DIRECTION, &item);
-     * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_SCROLL_SCROLL_DIRECTION);
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_SCROLL_DIRECTION_VERTICAL } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SCROLL_SCROLL_DIRECTION, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SCROLL_SCROLL_DIRECTION);
      * auto nodeScrollBarDirection = item->value[0].i32;
      * @endcode
      *
      */
     NODE_SCROLL_SCROLL_DIRECTION,
     /**
-     * @brief Edge sliding effect of a scrolling component. Attributes can be set, reset, and obtained.
+     * @brief Defines the effect used at the edges of the component when the boundary of the scrollable content is
+     * reached. This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: edge sliding effect. Parameter type: {@link ArkUI_EdgeEffect}. Default value: ARKUI_EDGE_EFFECT_NONE.\n
-     * .value[1]?.i32: Specifies whether to enable the sliding effect when the size of the component content is smaller than that of the component itself. The value can be 1, and the value can be 0. The default value is 1.
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: effect used at the edges of the component when the boundary of the scrollable content is reached.
+     * The parameter type is {@link ArkUI_EdgeEffect}. The default value is <b>ARKUI_EDGE_EFFECT_NONE</b>.\n
+     * .value[1]?.i32: whether to enable the scroll effect when the component content size is smaller than the
+     * component itself. Optional. The value <b>1</b> means to enable the scroll effect, and <b>0</b> means the
+     * opposite. The default value is <b>1</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: edge sliding effect. Parameter type: {@link ArkUI_EdgeEffect}.\n
-     * .value[1]?.i32: Specifies whether to enable the sliding effect when the widget content size is smaller than the widget itself. The options are as follows: 1 If yes, 0 If no.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: effect used at the edges of the component when the boundary of the scrollable content is reached.
+     * The parameter type is {@link ArkUI_EdgeEffect}.\n
+     * .value[1].i32: whether to enable the scroll effect when the component content size is smaller than the component
+     * itself. The value <b>1</b> means to enable the scroll effect, and <b>0</b> means the opposite. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_EDGE_EFFECT_NONE}, {.i32 = 1}};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_SCROLL_EDGE_EFFECT, &item);
-     * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_SCROLL_EDGE_EFFECT);
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_EDGE_EFFECT_NONE }, { .i32 = 1 } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SCROLL_EDGE_EFFECT, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SCROLL_EDGE_EFFECT);
      * auto nodeScrollEdgeEffect = item->value[0].i32;
      * @endcode
      *
      */
     NODE_SCROLL_EDGE_EFFECT,
     /**
-     * @brief Indicates whether the scrolling component supports the scrolling gesture. If this parameter is set to false, the scrolling function cannot be performed by finger or mouse, but the scrolling interface of the controller is not affected.
+     * @brief Defines whether to support scroll gestures. When this attribute is set to <b>false</b>, scrolling by
+     * finger or mouse is not supported, but the scroll controller API is not affected.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: whether to support scrolling gestures. The default value is true.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to support scroll gestures. The default value is <b>true</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: whether to support scrolling gestures.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether to support scroll gestures. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {{.i32 = true}};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_SCROLL_ENABLE_SCROLL_INTERACTION, &item);
-     * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_SCROLL_ENABLE_SCROLL_INTERACTION);
+     * ArkUI_NumberValue value[] = { { .i32 = true } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SCROLL_ENABLE_SCROLL_INTERACTION, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SCROLL_ENABLE_SCROLL_INTERACTION);
      * auto nodeScrollEnableScroll = item->value[0].i32;
      * @endcode
      *
      */
     NODE_SCROLL_ENABLE_SCROLL_INTERACTION,
     /**
-     * @brief Rolling friction coefficient of rolling components, which takes effect when the rolling area is manually moved. It only affects the inertial rolling process and indirectly affects the chain effect during inertial rolling.
+     * @brief Defines the friction coefficient. It applies only to gestures in the scrolling area, and it affects only
+     * indirectly the scroll chaining during the inertial scrolling process.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: friction coefficient. The default value is 0.6 for non-wearable devices and 0.9 for wearable devices.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: friction coefficient. The default value is <b>0.6</b> for non-wearable devices and <b>0.9</b>
+     * for wearable devices. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
      * .value[0].f32: friction coefficient.
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {0.6};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_SCROLL_FRICTION, &item);
-     * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_SCROLL_FRICTION);
+     * ArkUI_NumberValue value[] = { 0.6 };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SCROLL_FRICTION, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SCROLL_FRICTION);
      * auto nodeScrollFriction = item->value[0].f32;
      * @endcode
      *
      */
     NODE_SCROLL_FRICTION,
     /**
-     * @brief Limit scrolling mode of the scrolling component, which supports attribute setting, attribute reset, and attribute obtaining.
+     * @brief Defines the scroll snapping mode. This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: mode for the Scroll component to limit the scrolling. The data type is {@link ArkUI_ScrollSnapAlign}. The default value is ARKUI_SCROLL_SNAP_ALIGN_NONE. \n
-     * .value[1].i32: In the limit scroll mode of the Scroll component, if this property is set to false, the Scroll component slides freely between the start point and the first limit point. The default value is true. This parameter is valid only when there are multiple limit points.\n
-     * .value[2].i32: In the limit scroll mode of the Scroll component, if this property is set to false, the Scroll component slides freely between the last limit point and the end. The default value is true. This parameter is valid only when there are multiple limit points.\n
-     * .value[3...].f32: limit point of the Scroll component during scrolling. The limit point is the offset by which the Scroll component can slide and dock. You can have one or more.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: alignment mode for the scroll snap position. The parameter type is {@link ArkUI_ScrollSnapAlign}.
+     * The default value is <b>ARKUI_SCROLL_SNAP_ALIGN_NONE</b>.\n
+     * .value[1].i32: whether to enable the snap to start feature. When scroll snapping is defined for the
+     * <b><Scroll></b> component, setting this attribute to <b>false</b> enables the component to scroll between the
+     * start edge and the first snap point. The default value is <b>true</b>. It is valid only when there are multiple
+     * snap points.\n
+     * .value[2].i32: Whether to enable the snap to end feature. When scroll snapping is defined for the
+     * <b><Scroll></b> component, setting this attribute to <b>false</b> enables the component to scroll between the
+     * end edge and the last snap point. The default value is <b>true</b>. It is valid only when there are multiple
+     * snap points.\n
+     * .value[3...].f32: snap points for the <b><Scroll></b> component. Each snap point defines the offset from an
+     * edge to which the <b><Scroll></b> component can scroll.  \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: mode for the Scroll component to limit the scrolling. The data type is {@link ArkUI_ScrollSnapAlign}. \n
-     * .value[1].i32: In the limit scroll mode of the Scroll component, if this property is set to false, the Scroll component slides freely between the start and the first limit point.\n
-     * .value[2].i32: In the limit scroll mode of the Scroll component, if this property is set to false, the scroll can slide freely between the last limit point and the end.\n
-     * .value[3...].f32: limit point of the Scroll component during scrolling. The limit point is the offset of the Scroll component that can slide and dock.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: alignment mode for the scroll snap position. The parameter type is {@link ArkUI_ScrollSnapAlign}.\n
+     * .value[1].i32: whether to enable the snap to start feature. When scroll snapping is defined for the
+     * <b><Scroll></b> component, setting this attribute to <b>false</b> enables the component to scroll between the
+     * start edge and the first snap point.\n
+     * .value[2].i32: Whether to enable the snap to end feature. When scroll snapping is defined for the
+     * <b><Scroll></b> component, setting this attribute to <b>false</b> enables the component to scroll between the
+     * end edge and the last snap point.\n
+     * .value[3...].f32: snap points for the <b><Scroll></b> component. Each snap point defines the offset from an edge
+     * to which the <b><Scroll></b> component can scroll. \n
      *
      * @code {.cpp}
      * ArkUI_NumberValue value[] = {
-     * {.i32=ARKUI_SCROLL_SNAP_ALIGN_NONE}, {.i32=true}, {.i32=true},
-     * {.f32=0}, {.f32=500}, {.f32=1000}, {.f32=1500}
-     *};
-    * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-    * basicNodeApi->setAttribute(nodeHandle, NODE_SCROLL_SNAP, &item);
-    * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_SCROLL_SNAP);
-    * auto nodeScrollSnap = item->value[0].i32;
-    * @endcode
-    *
-    */
+     *     { .i32=ARKUI_SCROLL_SNAP_ALIGN_NONE }, { .i32=true }, { .i32=true },
+     *     { .f32=0 }, { .f32=500 }, { .f32=1000 }, { .f32=1500 }
+     * };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SCROLL_SNAP, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SCROLL_SNAP);
+     * auto nodeScrollSnap = item->value[0].i32;
+     * @endcode
+     *
+     */
     NODE_SCROLL_SNAP,
 
     /**
-     * @brief Nested scrolling option of the scrolling component, which supports attribute setting, attribute reset, and attribute obtaining.
+     * @brief Defines the nested scrolling options. This attribute can be set, reset, and obtained as required
+     * through APIs.
      *
-     * Parameter format of the attribute setting method {@link ArkUI_AttributeItem}:\n
-     * .value[0]?.i32: nested scrolling when the scrollable component scrolls to the end, parameter type {@link ArkUI_ScrollNestedMode}.\n
-     * .value[1]?.i32: nested scrolling when the scrollable component scrolls to the start end. The parameter type is {@link ArkUI_ScrollNestedMode}.
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: nested scrolling option when the component scrolls forward.
+     * The parameter type is {@link ArkUI_ScrollNestedMode}. \n
+     * .value[1].i32: nested scrolling option when the component scrolls backward.
+     * The parameter type is {@link ArkUI_ScrollNestedMode}. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0]?.i32: nested scrolling when the scrollable component scrolls to the end, parameter type {@link ArkUI_ScrollNestedMode}.\n
-     * .value[1]?.i32: nested scrolling when a scrollable component scrolls to the start end. The parameter type is {@link ArkUI_ScrollNestedMode}.
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: nested scrolling option when the component scrolls forward.
+     * The parameter type is {@link ArkUI_ScrollNestedMode}. \n
+     * .value[1].i32: nested scrolling option when the component scrolls backward.
+     * The parameter type is {@link ArkUI_ScrollNestedMode}.
      *
      * @code {.c}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_SCROLL_NESTED_MODE_SELF_ONLY},
-     * {.i32 = ARKUI_SCROLL_NESTED_OPTIONS_SELF_ONLY}};
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_SCROLL_NESTED_MODE_SELF_ONLY },
+     * { .i32 = ARKUI_SCROLL_NESTED_MODE_SELF_ONLY } };
      * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SCROLL_NESTED_SCROLL, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SCROLL_NESTED_SCROLL);
@@ -2329,24 +4768,26 @@ typedef enum {
      */
     NODE_SCROLL_NESTED_SCROLL,
     /**
-     * @brief Scroll to the specified position. The attribute setting, reset, and obtaining are supported.
+     * @brief Defines the specified position to scroll to. This attribute can be set, reset, and obtained as required
+     * through APIs.
      *
-     * Parameter format of the attribute setting method {@link ArkUI_AttributeItem}:\n
-     * .value[0].f32: horizontal sliding offset, in vp.\n
-     * .value[1].f32: vertical sliding offset, in vp.\n
-     * .value[2]?.i32: indicates whether to enable the default spring effect. The default value is 0.
-     * .value[3]?.i32: scrolling duration, in milliseconds.\n
-     * .value[4]?.i32: optional, scrolling curve, parameter type {@link ArkUI_AnimationCurve}. The default value is RKUI_CURVE_EASE.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: horizontal scrolling offset, in vp. \n
+     * .value[1].f32: vertical scrolling offset, in vp. \n
+     * .value[2]?.i32: scrolling duration, in milliseconds. Optional. \n
+     * .value[3]?.i32: scrolling curve. Optional. The parameter type is {@link ArkUI_AnimationCurve}.
+     * The default value is <b>ARKUI_CURVE_EASE</b>. \n
+     * .value[4]?.i32: whether to enable the default spring animation. Optional. The default value <b>0</b> means not
+     * to enable the default spring animation. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: horizontal sliding offset, in vp.\n
-     * .value[1].f32: vertical sliding offset, in vp.\n
-     *
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: horizontal scrolling offset, in vp. \n
+     * .value[1].f32: vertical scrolling offset, in vp. \n
+     * 
      * @code {.c}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {10, 100, {.i32 = 1000}, {.i32 = ARKUI_CURVE_EASE},
-     * {.i32 = 1}};
+     * ArkUI_NumberValue value[] = { 10, 100, { .i32 = 1000 }, { .i32 = ARKUI_CURVE_EASE }, { .i32 = 1 } };
      * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SCROLL_OFFSET, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SCROLL_OFFSET);
@@ -2358,18 +4799,19 @@ typedef enum {
     NODE_SCROLL_OFFSET,
 
     /**
-     * @brief Scroll Scroll to the container edge, which supports attribute setting, resetting, and obtaining.
+     * @brief Defines the edge position to scroll to. This attribute can be set and obtained as required through APIs.
      *
-     * Parameter format of the attribute setting method {@link ArkUI_AttributeItem}:\n
-     * .value[0].i32: container edge. The parameter type is {@link ArkUI_ScrollEdge}.
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: edge position to scroll to. The parameter type is {@link ArkUI_ScrollEdge}. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: container edge. The parameter type is {@link ArkUI_ScrollEdge}.
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether the container at the edge position. The value <b>-1</b> means that the container is not
+     * at the edge position. If the container is at the edge position, the parameter type is {@link ArkUI_ScrollEdge}.
      *
      * @code {.c}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_SCROLL_EDGE_TOP}};
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_SCROLL_EDGE_TOP } };
      * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SCROLL_EDGE, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SCROLL_EDGE);
@@ -2380,21 +4822,23 @@ typedef enum {
     NODE_SCROLL_EDGE,
 
     /**
-     * @brief Indicates whether to support sliding page turning, attribute setting, attribute reset, and attribute obtaining.
+     * @brief Defines whether to enable the swipe-to-turn-pages feature. This attribute can be set, reset, and obtained
+     * as required through APIs.
      *
-     * If both the enablePaging and limit scrollSnap parameters are set, scrollSnap takes effect first, and enablePaging does not take effect.\n
-     *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: indicates whether to support page turning by page. The default value is false.\n
+     * If both <b>enablePaging</b> and <b>scrollSnap</b> are set, <b>scrollSnap</b> takes effect, but
+     * <b>enablePaging</b> does not. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: indicates whether to support page turning.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to enable the swipe-to-turn-pages feature. The default value is <b>false</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether to enable the swipe-to-turn-pages feature. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {{.i32 = true}};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_SCROLL_ENABLE_PAGING, &item);
-     * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_SCROLL_ENABLE_PAGING);
+     * ArkUI_NumberValue value[] = { { .i32 = true } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SCROLL_ENABLE_PAGING, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SCROLL_ENABLE_PAGING);
      * auto nodeScrollEnablePaging = item->value[0].i32;
      * @endcode
      *
@@ -2402,59 +4846,65 @@ typedef enum {
     NODE_SCROLL_ENABLE_PAGING,
 
     /**
-     * @brief List direction, which supports attribute setting, attribute reset, and attribute obtaining.
+     * @brief Defines the direction in which the list items are arranged. This attribute can be set, reset, and
+     * obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: Indicates the arrangement direction of the List component. The data type is {@link ArkUI_Axis}. The default value is AKUI_AXIS_VERSTIC.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: direction in which the list items are arranged. The parameter type is {@link ArkUI_Axis}.
+     * The default value is <b>ARKUI_AXIS_VERTICAL</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: arrangement direction of the List component, data type {@link ArkUI_Axis}.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: direction in which the list items are arranged. The parameter type is {@link ArkUI_Axis}. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_AXIS_VERTICAL}};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_LIST_DIRECTION, &item);
-     * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_LIST_DIRECTION);
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_AXIS_VERTICAL } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_LIST_DIRECTION, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_LIST_DIRECTION);
      * auto nodeListDirection = item->value[0].i32;
      * @endcode
      *
      */
     NODE_LIST_DIRECTION = MAX_NODE_SCOPE_NUM * ARKUI_NODE_LIST,
     /**
-     * @brief Set whether the header and footer in ListItemGroup need to be installed on the top or bottom.
+     * @brief Defines whether to pin the header to the top or the footer to the bottom in the <b><ListItemGroup></b>
+     * component. This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: used together with the ListItemGroup component to set whether the header and footer in the ListItemGroup need to be installed on the top or bottom. Data type {@link ArkUI_StickyStyle}. Default value
-     * AKUI_STICKY_ ??_:00-20:00_NONE.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to pin the header to the top or the footer to the bottom in the <b><ListItemGroup></b>
+     * component. It is used together with the <b><ListItemGroup></b> component. The parameter type is
+     * {@link ArkUI_StickyStyle}. The default value is <b>ARKUI_STICKY_STYLE_NONE</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: used together with the ListItemGroup component to set whether the header and footer in the ListItemGroup need to be installed on the top or bottom. Data type {@link ArkUI_StickyStyle}.
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether to pin the header to the top or the footer to the bottom in the <b><ListItemGroup></b>
+     * component. It is used together with the <b><ListItemGroup></b> component. The parameter type is
+     * {@link ArkUI_StickyStyle}.
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_STICKY_STYLE_NONE}};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_LIST_STICKY, &item);
-     * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_LIST_STICKY);
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_STICKY_STYLE_NONE } };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_LIST_STICKY, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_LIST_STICKY);
      * auto nodeListSticky = item->value[0].i32;
      * @endcode
      *
      */
     NODE_LIST_STICKY,
-
     /**
-     * @brief List item spacing, which supports attribute setting, attribute reset, and attribute obtaining.
+     * @brief Defines the spacing between list items. This attribute can be set, reset, and obtained as required
+     * through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: interval in the direction of the main axis of the subassembly. Default value: 0.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: spacing between list items along the main axis. The default value is <b>0</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: Interval in the direction of the main axis of the subassembly.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: spacing between list items along the main axis. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {10};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_LIST_SPACE, &item);
-     * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_LIST_SPACE);
+     * ArkUI_NumberValue value[] = { 10 };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_LIST_SPACE, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_LIST_SPACE);
      * auto nodeListSpace = item->value[0].f32;
      * @endcode
      *
@@ -2462,17 +4912,20 @@ typedef enum {
     NODE_LIST_SPACE,
 
     /**
-     * @brief Whether to enable the loop function of the swiper. The interface supports the attribute setting, attribute reset, and attribute obtaining.
+     * @brief Defines whether to enable loop playback for the swiper. This attribute can be set, reset, and obtained
+     * as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: specifies whether to enable the loop. The value 0 indicates no loop, and the value 1 indicates loop. The default value is 1. \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to enable loop playback. The value <b>1</b> means to enable loop playback, and <b>0</b>
+     * means the opposite. The default value is <b>1/b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: specifies whether to enable the loop. The value 0 indicates no loop, and the value 1 indicates loop. The default value is 1. \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether to enable loop playback. The value <b>1</b> means to enable loop playback, and <b>0</b>
+     * means the opposite. The default value is <b>1</b>. \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {{.i32 = 0}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { {.i32 = 0} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SWIPER_LOOP, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SWIPER_LOOP);
      * auto nodeSwiperLoop = item->value[0].i32;
@@ -2481,40 +4934,46 @@ typedef enum {
      */
     NODE_SWIPER_LOOP = MAX_NODE_SCOPE_NUM * ARKUI_NODE_SWIPER,
     /**
-     * @brief Indicates whether to automatically play the subcomponent of the swiper. The interface supports attribute setting, attribute resetting, and attribute obtaining.
+     * @brief Defines whether to enable automatic playback for child component switching in the swiper.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: controls whether to play the subcomponent automatically. The value 0 indicates not to play the subcomponent automatically, and the value 1 indicates to play the subcomponent automatically. The default value is 0. \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to enable automatic playback for child component switching. The value <b>1</b>
+     * means to enable automatic playback, and <b>0</b> means the opposite. The default value is <b>0</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: controls whether to play the subcomponent automatically. The value 0 indicates not to play the subcomponent automatically, and the value 1 indicates to play the subcomponent automatically. The default value is 0. \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether to enable automatic playback for child component switching. The value <b>1</b> means
+     * to enable automatic playback, and <b>0</b> means the opposite. The default value is <b>0</b>. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = 1}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { {.i32 = 1} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SWIPER_AUTO_PLAY, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SWIPER_AUTO_PLAY);
-     * auto nodeSwiperLoop = item->value[0].i32;
+     * auto nodeSwiperAutoPlay = item->value[0].i32;
      * @endcode
      *
      */
     NODE_SWIPER_AUTO_PLAY,
     /**
-     * @brief Whether to display the navigation point indicator on the swiper. The interface for setting, resetting, and obtaining attributes is supported.
+     * @brief Defines whether to enable the navigation point indicator for the swiper. This attribute can be set,
+     * reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: Indicates whether to display the navigation point indicator. The value 0 indicates that the navigation point indicator is not displayed, and the value 1 indicates that the navigation point indicator is displayed. The default value is 1. \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to enable the navigation point indicator. The value <b>1</b> means to enable the
+     * navigation point indicator, and <b>0</b> means the opposite. The default value is <b>1</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: Indicates whether to display the navigation point indicator. The value 0 indicates that the navigation point indicator is not displayed, and the value 1 indicates that the navigation point indicator is displayed. The default value is 1. \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether to enable the navigation point indicator. The value <b>1</b> means to enable the
+     * navigation point indicator, and <b>0</b> means the opposite. The default value is <b>1</b>. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = 0}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { {.i32 = 0} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SWIPER_SHOW_INDICATOR, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SWIPER_SHOW_INDICATOR);
      * auto nodeSwiperShowIndicator = item->value[0].i32;
@@ -2523,19 +4982,20 @@ typedef enum {
      */
     NODE_SWIPER_SHOW_INDICATOR,
     /**
-     * @brief Set the interval for automatically playing the Swiper. The interface supports attribute setting, attribute reset, and attribute obtaining.
+     * @brief Defines the interval for automatic playback. This attribute can be set, reset, and obtained as required
+     * through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: Interval for playing autoplay, in milliseconds.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: interval for automatic playback, in milliseconds. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: Interval for playing autoplay, in milliseconds.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: interval for automatic playback, in milliseconds. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {3000};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { 3000 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SWIPER_INTERVAL, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SWIPER_INTERVAL);
      * auto nodeSwiperInterval = item->value[0].f32;
@@ -2544,19 +5004,22 @@ typedef enum {
      */
     NODE_SWIPER_INTERVAL,
     /**
-     * @brief This interface is used to set whether the Swiper is swiped vertically. The interface supports attribute setting, attribute reset, and attribute obtaining.
+     * @brief Defines whether vertical swiping is used for the swiper. This attribute can be set, reset, and obtained
+     * as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: indicates whether the vertical sliding mode is used. The value 0 indicates horizontal sliding and the value 1 indicates vertical sliding. The default value is 0. \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether vertical swiping is used. The value <b>1</b> means that vertical swiping is used, and
+     * <b>0</b> means the opposite. The default value is <b>0</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: indicates whether the vertical sliding mode is used. The value 0 indicates horizontal sliding and the value 1 indicates vertical sliding. The default value is 0. \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether vertical swiping is used. The value <b>1</b> means that vertical swiping is used, and
+     * <b>0</b> means the opposite. The default value is <b>0</b>. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = 1}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { {.i32 = 1} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SWIPER_VERTICAL, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SWIPER_VERTICAL);
      * auto nodeSwiperVertical = item->value[0].i32;
@@ -2566,85 +5029,93 @@ typedef enum {
     NODE_SWIPER_VERTICAL,
 
     /**
-     * @brief Set the duration for switching the animation of the Swiper subcomponent. The interface supports attribute setting, attribute resetting, and attribute obtaining.
+     * @brief Defines the duration of the animation for switching child components. This attribute can be set, reset,
+     * and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: animation duration for switching subcomponents, in milliseconds. The default value is 400.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: duration of the animation for switching child components, in milliseconds. The default value is
+     * <b>400</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: animation duration for switching subcomponents, in milliseconds. The default value is 400.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: duration of the animation for switching child components, in milliseconds. The default value is
+     * <b>400</b>. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {1000};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { 10000 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SWIPER_DURATION, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SWIPER_DURATION);
-     * auto nodeSwiperVertical = item->value[0].f32;
+     * auto nodeSwiperDuration = item->value[0].f32;
      * @endcode
      *
      */
     NODE_SWIPER_DURATION,
 
     /**
-     * @brief Sets the Swiper animation curve. The APIs for setting, resetting, and obtaining attributes are supported.
+     * @brief Defines the animation curve for the swiper. This attribute can be set, reset, and obtained as required
+     * through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: Sets the animation curve parameters. The parameter type is {@link ArkUI_AnimationCurve}. The default value is ARKUI_CURVE_LINEAR.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: animation curve. The parameter type is {@link ArkUI_AnimationCurve}.
+     * The default value is <b>ARKUI_CURVE_LINEAR</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: Sets the animation curve parameters. The parameter type is {@link ArkUI_AnimationCurve}. The default value is ARKUI_CURVE_LINEAR.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: animation curve. The parameter type is {@link ArkUI_AnimationCurve}.
+     * The default value is <b>ARKUI_CURVE_LINEAR</b>. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_CURVE_SHARP}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { {.i32 = ARKUI_CURVE_SHARP} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SWIPER_CURVE, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SWIPER_CURVE);
-     * auto nodeSwiperVertical = item->value[0].i32;
+     * auto nodeSwiperCurve = item->value[0].i32;
      * @endcode
      *
      */
     NODE_SWIPER_CURVE,
 
     /**
-     * @brief Sets the gap between the Swiper subcomponents. The interface for setting, resetting, and obtaining attributes is supported.
+     * @brief Defines the spacing between child components in the swiper.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].f32: Value of the gap between subcomponents.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: spacing between child components. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].f32: Value of the gap between subcomponents.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: spacing between child components. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {10};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { 10 };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SWIPER_ITEM_SPACE, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SWIPER_ITEM_SPACE);
-     * auto nodeSwiperVertical = item->value[0].f32;
+     * auto nodeSwiperItemSpace = item->value[0].f32;
      * @endcode
      *
      */
     NODE_SWIPER_ITEM_SPACE,
 
     /**
-     * @brief Set the index value of the subcomponents displayed in the container of the swiper. The interface for setting, resetting, and obtaining attributes is supported.
+     * @brief Defines the index of the child component currently displayed in the swiper.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: Index value of the subcomponent.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: index value of the child component. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: Index value of the subcomponent.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: index value of the child component. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{i32 = 3}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { {i32 = 3} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SWIPER_INDEX, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SWIPER_ITEM_SPACE);
      * auto nodeSwiperIndex = item->value[0].i32;
@@ -2654,19 +5125,20 @@ typedef enum {
     NODE_SWIPER_INDEX,
 
     /**
-     * @brief Set the number of elements to be displayed on a page of the swiper. The interface supports attribute setting, attribute resetting, and attribute obtaining.
+     * @brief Defines the number of elements to display per page.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: Index value of the subcomponent.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: index value of the child component. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: Index value of the subcomponent.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: index value of the child component. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{i32 = 3}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { {i32 = 3} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SWIPER_DISPLAY_COUNT, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SWIPER_ITEM_SPACE);
      * auto nodeSwiperDisplayCount = item->value[0].i32;
@@ -2676,111 +5148,285 @@ typedef enum {
     NODE_SWIPER_DISPLAY_COUNT,
 
     /**
-     * @brief Disables the sliding switchover function of the swiper. The interface for setting, resetting, and obtaining attributes is supported.
+     * @brief Defines whether to disable the swipe feature.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: indicates whether to disable the sliding switch function of the component. The value 0 indicates that the sliding switch function is disabled, and the value 1 indicates that the sliding switch function is disabled. The default value is 0. \n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to disable the swipe feature. The value <b>1</b> means to disable
+     * the swipe feature, and <b>0</b> means the opposite. The default value is <b>0</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: indicates whether to disable the sliding switch function of the component. The value 0 indicates that the sliding switch function is disabled, and the value 1 indicates that the sliding switch function is disabled. The default value is 0. \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether to disable the swipe feature. The value <b>1</b> means to disable the swipe
+     * feature, and <b>0</b> means the opposite. The default value is <b>0</b>. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = 1}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_SWIPER_DISABLE_SWIPE, &item);
+     * ArkUI_NumberValue value[] = { {.i32 = 1} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_SWIPER_DISABLE_SWIPE, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SWIPER_DISABLE_SWIPE);
-     * auto nodeSwiperDisplayCount = item->value[0].i32;
+     * auto nodeSwiperDisableSwipe = item->value[0].i32;
      * @endcode
      *
      */
     NODE_SWIPER_DISABLE_SWIPE,
 
     /**
-     * @brief This interface is used to set whether the Swiper displays the navigation point arrow. Attribute setting, attribute reset, and attribute obtaining interfaces are supported.
+     * @brief Defines whether to show the arrow when the mouse pointer hovers over the navigation point indicator.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].i32: indicates whether to display the navigation point arrow. Parameter type: {@link ArkUI_SwiperDisplayArrow}, \n
-     * The default is ARKUI_SWIPER_ARROW_FALSE.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: whether to show the arrow when the mouse pointer hovers over the navigation point indicator.
+     * The parameter type is {@link ArkUI_SwiperArrow}.\n
+     * The default value is <b>ARKUI_SWIPER_ARROW_HIDE</b>. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].i32: indicates whether to display the navigation point arrow. Parameter type: {@link ArkUI_SwiperDisplayArrow}, \n
-     * The default is ARKUI_SWIPER_ARROW_FALSE.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: whether to show the arrow when the mouse pointer hovers over the navigation point indicator.
+     * The parameter type is {@link ArkUI_SwiperArrow}.\n
+     * The default value is <b>ARKUI_SWIPER_ARROW_HIDE</b>. \n
      *
      * @code {.cpp}
      * ArkUI_NativeNodeAPI_1* nativeNodeApi =
      * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
-     * ArkUI_NumberValue value[] = {{.i32 = ARKUI_SWIPER_ARROW_SHOW_ON_HOVER}};
-     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * ArkUI_NumberValue value[] = { {.i32 = ARKUI_SWIPER_ARROW_SHOW_ON_HOVER} };
+     * ArkUI_AttributeItem item = { value, sizeof(value)/sizeof(ArkUI_NumberValue) };
      * nativeNodeApi->setAttribute(nodeHandle, NODE_SWIPER_SHOW_DISPLAY_ARROW, &item);
      * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_SWIPER_SHOW_DISPLAY_ARROW);
-     * auto nodeSwiperDisplayCount = item->value[0].i32;
+     * auto nodeSwiperShowDisplayArrow = item->value[0].i32;
      * @endcode
      *
      */
     NODE_SWIPER_SHOW_DISPLAY_ARROW,
 
     /**
-     * @brief ListItemGroup header component.
+     * @brief Defines the header of the list item group.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .object: Use the {@link ArkUI_NodeHandle} object as the ListItemGroup header component.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .object: {@link ArkUI_NodeHandle} object to be used as the header of the list item group. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .object: Use the {@link ArkUI_NodeHandle} object as the ListItemGroup header component.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .object: {@link ArkUI_NodeHandle} object to be used as the header of the list item group. \n
      *
      * @code {.cpp}
      * auto header = nodeAPI->createNode(ARKUI_NODE_TEXT);
-     * ARKUI_AttributeItem item = {.object = header};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_LIST_ITEM_GROUP_SET_HEADER, &item);
-     * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_LIST_ITEM_GROUP_SET_HEADER);
+     * ArkUI_AttributeItem item = { .object = header };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_LIST_ITEM_GROUP_SET_HEADER, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_LIST_ITEM_GROUP_SET_HEADER);
      * auto nodeListItemGroupSetHeader = item->object;
      * @endcode
      */
     NODE_LIST_ITEM_GROUP_SET_HEADER = MAX_NODE_SCOPE_NUM * ARKUI_NODE_LIST_ITEM_GROUP,
     /**
-     * @brief ListItemGroup tail component.
+     * @brief Defines the footer of the list item group. This attribute can be set, reset, and obtained as
+     * required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .object: Use the {@link ArkUI_NodeHandle} object as the ListItemGroup tail component.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .object: {@link ArkUI_NodeHandle} object to be used as the footer of the list item group. \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .object: Use the {@link ArkUI_NodeHandle} object as the ListItemGroup tail component.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .object: {@link ArkUI_NodeHandle} object to be used as the footer of the list item group. \n
      *
      * @code {.cpp}
      * auto footer = nodeAPI->createNode(ARKUI_NODE_TEXT);
-     * ARKUI_AttributeItem item = {.object = footer};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_LIST_ITEM_GROUP_SET_FOOTER, &item);
-     * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_LIST_ITEM_GROUP_SET_FOOTER);
+     * ArkUI_AttributeItem item = { .object = footer };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_LIST_ITEM_GROUP_SET_FOOTER, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_LIST_ITEM_GROUP_SET_FOOTER);
      * auto nodeListItemGroupSetFooter = item->value[0].object;
      * @endcode
      */
     NODE_LIST_ITEM_GROUP_SET_FOOTER,
     /**
-     * @brief ListItemGroup separator style. By default, there is no separator. Attributes can be set, reset, and obtained.
+     * @brief Defines the style of the divider for the list items. This attribute can be set, reset, and obtained
+     * as required through APIs.
      *
-     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
-     * .value[0].u32: color, 0xargb type; \n
-     * .value[1].f32: width of the split line, in vp.\n
-     * .value[2].f32: distance between the split line and the start end of the side of the list, in vp.\n
-     * .value[3].f32: distance between the split line and the end of the list, in vp.\n
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: color of the divider, in 0xARGB format.\n
+     * .value[1].f32: stroke width of the divider, in vp.\n
+     * .value[2].f32: distance between the divider and the start of the list, in vp.\n
+     * .value[3].f32: distance between the divider and the end of the list, in vp.\n \n
      * \n
-     * Return value {@link ArkUI_AttributeItem} format of the attribute obtaining method:\n
-     * .value[0].u32: color, 0xargb type; \n
-     * .value[1].f32: width of the split line, in vp.\n
-     * .value[2].f32: distance between the split line and the start end of the side of the list, in vp.\n
-     * .value[3].f32: distance between the split line and the end of the list, in vp.\n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: color of the divider, in 0xARGB format.\n
+     * .value[1].f32: stroke width of the divider, in vp.\n
+     * .value[2].f32: distance between the divider and the start of the list, in vp.\n
+     * .value[3].f32: distance between the divider and the end of the list, in vp.\n \n
      *
      * @code {.cpp}
-     * ArkUI_NumberValue value[] = {{.u32 = 0xFFFFFFFF}, 1, 0, 0};
-     * ARKUI_AttributeItem item = {value, sizeof(value) / sizeof(ArkUI_NumberValue)};
-     * basicNodeApi->setAttribute(nodeHandle, NODE_XCOMPONENT_SURFACE_SIZE, &item);
-     * auto item = basicNodeApi=>getAttribute(nodeHandle, NODE_XCOMPONENT_SURFACE_SIZE);
-     * auto nodeXcomponentSurfaceSize = item->value[0].i32;
+     * ArkUI_NumberValue value[] = { { .u32 = 0xFFFFFFFF }, 1, 0, 0 };
+     * ArkUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_LIST_ITEM_GROUP_SET_DIVIDER, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_LIST_ITEM_GROUP_SET_DIVIDER);
+     * auto nodeListItemDividerColor = item->value[0].u32;
      * @endcode
      */
     NODE_LIST_ITEM_GROUP_SET_DIVIDER,
+
+    /**
+     * @brief Defines the horizontal alignment mode of child components in the column.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: horizontal alignment mode of child components.
+     * The parameter type is {@link ArkUI_HorizontalAlignment}.\n
+     * Default value: <b>ARKUI_HORIZONTAL_ALIGNMENT_CENTER</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: horizontal alignment mode of child components.
+     * The parameter type is {@link ArkUI_HorizontalAlignment}. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_HORIZONTAL_ALIGNMENT_START } };
+     * ARKUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_COLUMN_ALIGN_ITEMS, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_COLUMN_ALIGN_ITEMS);
+     * auto nodeColumnAlignItems = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_COLUMN_ALIGN_ITEMS = MAX_NODE_SCOPE_NUM * ARKUI_NODE_COLUMN,
+    /**
+     * @brief Defines the vertical alignment mode of child components in the column.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: vertical alignment mode of child components. The parameter type is {@link ArkUI_FlexAlignment}.\n
+     * Default value: <b>ARKUI_FLEX_ALIGNMENT_START</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: vertical alignment mode of child components. The parameter type is {@link ArkUI_FlexAlignment}. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_FLEX_ALIGNMENT_END } };
+     * ARKUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_COLUMN_JUSTIFY_CONTENT, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_COLUMN_JUSTIFY_CONTENT);
+     * auto nodeColumnJustifyContent = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_COLUMN_JUSTIFY_CONTENT,
+
+    /**
+     * @brief Defines the vertical alignment mode of child components in the row.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: vertical alignment mode of child components.
+     * The parameter type is {@link ArkUI_VerticalAlignment}.\n
+     * Default value: <b>ARKUI_VERTICAL_ALIGNMENT_CENTER</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: vertical alignment mode of child components.
+     * The parameter type is {@link ArkUI_VerticalAlignment}. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_VERTICAL_ALIGNMENT_TOP } };
+     * ARKUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_ROW_ALIGN_ITEMS, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_ROW_ALIGN_ITEMS);
+     * auto nodeRowAlignItems = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_ROW_ALIGN_ITEMS = MAX_NODE_SCOPE_NUM * ARKUI_NODE_ROW,
+    /**
+     * @brief Defines the horizontal alignment mode of child components in the row.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: horizontal alignment mode of child components.
+     * The parameter type is {@link ArkUI_FlexAlignment}.\n
+     * Default value: <b>ARKUI_FLEX_ALIGNMENT_START</b>. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: horizontal alignment mode of child components.
+     * The parameter type is {@link ArkUI_FlexAlignment}. \n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = ARKUI_FLEX_ALIGNMENT_END } };
+     * ARKUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_ROW_JUSTIFY_CONTENT, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_ROW_JUSTIFY_CONTENT);
+     * auto nodeRowAlignItems = item->value[0].i32;
+     * @endcode
+     *
+     */
+    NODE_ROW_JUSTIFY_CONTENT,
+
+    /**
+     * @brief Defines the flex attribute. This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0]?.i32: direction in which flex items are arranged. The parameter type is {@link ArkUI_FlexDirection}.
+     * The default value is <b>ARKUI_FLEX_DIRECTION_ROW</b>.\n
+     * .value[1]?.i32: how the flex items are wrapped. The parameter type is {@link ArkUI_FlexWrap}.
+     * The default value is <b>ARKUI_FLEX_WRAP_NO_WRAP</b>.\n
+     * .value[2]?.i32: alignment mode along the main axis. The parameter type is {@link ArkUI_FlexAlignment}.
+     * The default value is <b>ARKUI_FLEX_ALIGNMENT_START</b>.\n
+     * .value[3]?.i32: alignment mode along the cross axis. The parameter type is {@link ArkUI_ItemAlignment}.
+     * The default value is <b>ARKUI_ITEM_ALIGNMENT_START</b>.\n
+     * .value[4]?.i32: alignment mode along the cross axis for multi-line content. The parameter type is
+     * {@link ArkUI_FlexAlignment}. The default value is <b>ARKUI_FLEX_ALIGNMENT_START</b>.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: direction in which flex items are arranged.\n
+     * .value[1].i32: how the flex items are wrapped.\n
+     * .value[2].i32: alignment mode along the main axis.\n
+     * .value[3].i32: alignment mode along the cross axis.\n
+     * .value[4].i32: alignment mode along the cross axis for multi-line content.\n
+     *
+     * @code {.cpp}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { {.i32 = ARKUI_FLEX_DIRECTION_COLUMN}, {.i32 = ARKUI_FLEX_WRAP_WRAP},
+     * {.i32 = ARKUI_FLEX_ALIGNMENT_SPACE_BETWEEN}, {.i32 = ARKUI_ITEM_ALIGNMENT_CENTER},
+     * {.i32 = ARKUI_FLEX_ALIGNMENT_END}};
+     * ARKUI_AttributeItem item = { value, sizeof(value) / sizeof(ArkUI_NumberValue) };
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_FLEX_OPTION, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_FLEX_OPTION);
+     * auto nodeFlexDirection = item->value[0].i32;
+     * auto nodeFlexWrap = item->value[1].i32;
+     * auto nodeFlexJustifyContent = item->value[2].i32;
+     * auto nodeFlexAlignItems = item->value[3].i32;
+     * auto nodeFlexAlignContent = item->value[4].i32;
+     *
+     * @endcode
+     *
+     */
+    NODE_FLEX_OPTION = MAX_NODE_SCOPE_NUM * ARKUI_NODE_FLEX,
+
+    /**
+     * @brief Sets whether the component is being refreshed.
+     * This attribute can be set and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: The parameter type is 1 or 0.
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: The parameter type is 1 or 0.
+     * 
+     * @code {.c}
+     * ArkUI_NativeNodeAPI_1* nativeNodeApi =
+     * reinterpret_cast<ArkUI_NativeNodeAPI_1*>(OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1));
+     * ArkUI_NumberValue value[] = { { .i32 = 0 } };
+     * ArkUI_AttributeItem item = {value, sizeof(value)/sizeof(ArkUI_NumberValue)};
+     * nativeNodeApi->setAttribute(nodeHandle, NODE_REFRESH_REFRESHING, &item);
+     * auto item = nativeNodeApi->getAttribute(nodeHandle, NODE_REFRESH_REFRESHING);
+     * auto value = item->data[0].i32;
+     * @endcode
+     *
+     */
+    NODE_REFRESH_REFRESHING = MAX_NODE_SCOPE_NUM * ARKUI_NODE_REFRESH,
 } ArkUI_NodeAttributeType;
 
 #define MAX_COMPONENT_EVENT_ARG_NUM 12
@@ -2790,194 +5436,386 @@ typedef enum {
  * @since 12
  */
 typedef struct {
-    /** Data array object.*/
+    /** Data array object. */
     ArkUI_NumberValue data[MAX_COMPONENT_EVENT_ARG_NUM];
 } ArkUI_NodeComponentEvent;
 
 /**
- * @brief Defines the type of the character string parameter used by the component callback event.
+ * @brief Defines the string type parameter used by the component callback event.
  *
  * @since 12
  */
 typedef struct {
-    /** String data.*/
-const char* pStr;
+    /** String. */
+    const char* pStr;
 } ArkUI_StringAsyncEvent;
 
 /**
- * @brief Provides the definitions of the event types supported by the NativeNode component.
+ * @brief Enumerates the event types supported by the NativeNode component.
  *
  * @since 12
  */
 typedef enum {
     /**
-     * @brief Gesture event type.
+     * @brief Defines the gesture event type.
      *
-     * When an event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is {@link ArkUI_TouchEvent}.
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is {@link ArkUI_TouchEvent}.
      */
     NODE_TOUCH_EVENT = 0,
 
     /**
-     * @brief Mounting event.
+     * @brief Defines the mount event.
      *
-     * Condition for triggering this event: This callback is triggered when a component is mounted to the display.\n
-     * The union type in the {@link ArkUI_NodeEvent} object is {@link ArkUI_NodeComponentEvent} when the event callback occurs.\n
+     * This event is triggered when the component is mounted and displayed. \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
      * {@link ArkUI_NodeComponentEvent} does not contain parameters.
      */
     NODE_EVENT_ON_APPEAR,
 
     /**
-     * @brief Component area change event
+     * @brief Defines the area change event.
      *
-     * Condition for triggering this event: This callback is triggered when the component area changes.\n
-     * The union type in the {@link ArkUI_NodeEvent} object is {@link ArkUI_NodeComponentEvent} when the event callback occurs.\n
-     * <b>::ArkUI_NodeComponentEvent</b> contains 12 parameters.\n
-     * <b>ArkUI_NodeComponent.data[0].f32</b> indicates the width of the target element in the old area. The type is number, in vp.\n
-     * <b>ArkUI_NodeComponent.data[1].f32</b> indicates the height of the target element in the old area. The type is number and the unit is vp.\n
-     * <b>ArkUI_NodeComponent.data[2].f32</b> indicates the x-axis coordinate of the position of the upper left corner of the target element in the old area relative to the upper left corner of the parent element. The type is number, in vp.\n
-     * <b>ArkUI_NodeComponent.data[3].f32</b> indicates the y-axis coordinate of the position of the upper left corner of the target element in the old area relative to the upper left corner of the parent element. The type is number, in vp.\n
-     * <b>ArkUI_NodeComponent.data[4].f32</b> indicates the x-axis coordinate of the position of the upper left corner of the target element in the old area relative to the upper left corner of the page. The type is number, in vp.\n
-     * <b>ArkUI_NodeComponent.data[5].f32</b> indicates the y-axis coordinate of the position of the upper left corner of the target element in the old area relative to the upper left corner of the page. The type is number, in vp.\n
-     * <b>ArkUI_NodeComponent.data[6].f32</b> indicates the width of the target element in the new area. The type is number and the unit is vp.\n
-     * <b>ArkUI_NodeComponent.data[7].f32</b> indicates the height of the target element in the new area. The type is number and the unit is vp.\n
-     * <b>ArkUI_NodeComponent.data[8].f32</b> indicates the x-axis coordinate of the position of the upper left corner of the new Area target element relative to the upper left corner of the parent element. The type is number, in vp.\n
-     * <b>ArkUI_NodeComponent.data[9].f32</b> indicates the Y-axis coordinate of the position of the upper left corner of the target element in the new Area relative to the upper left corner of the parent element. The type is number, in vp.\n
-     * <b>ArkUI_NodeComponent.data[10].f32</b> indicates the x-axis coordinate of the position of the target element in the upper left corner of the new Area target element relative to the upper left corner of the page. The type is number, in vp.\n
-     * <b>ArkUI_NodeComponent.data[11].f32</b> indicates the y-axis coordinate of the position of the target element in the upper left corner of the new Area target element relative to the upper left corner of the page. The type is number, in vp.\n
+     * This event is triggered when the component's size, position, or any other attribute that may
+     * affect its display area changes. \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     *  {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} contains 12 parameters:\n
+     * <b>ArkUI_NodeComponentEvent.data[0].f32</b>: original width of the target element, in vp.
+     * The value type is number. \n
+     * <b>ArkUI_NodeComponentEvent.data[1].f32</b>: original height of the target element, in vp.
+     * The value type is number. \n
+     * <b>ArkUI_NodeComponentEvent.data[2].f32</b>: original X coordinate of the target element's upper left corner
+     * relative to the parent element's, in vp. The value type is number. \n
+     * <b>ArkUI_NodeComponentEvent.data[3].f32</b>: original Y coordinate of the target element's upper left corner
+     * relative to the parent element's, in vp. The value type is number. \n
+     * <b>ArkUI_NodeComponentEvent.data[4].f32</b>: original X coordinate of the target element's upper left corner
+     * relative to the page's, in vp. The value type is number. \n
+     * <b>ArkUI_NodeComponentEvent.data[5].f32</b>: original Y coordinate of the target element's upper left corner
+     * relative to the page's, in vp. The value type is number. \n
+     * <b>ArkUI_NodeComponentEvent.data[6].f32</b>: new width of the target element, in vp. The value is a number. \n
+     * <b>ArkUI_NodeComponentEvent.data[7].f32</b>: new height of the target element, in vp. The value is a number. \n
+     * <b>ArkUI_NodeComponentEvent.data[8].f32</b>: new X coordinate of the target element's upper left corner relative
+     * to the parent element's, in vp. The value type is number. \n
+     * <b>ArkUI_NodeComponentEvent.data[9].f32</b>: new Y coordinate of the target element's upper left corner relative
+     * to the parent element's, in vp. The value type is number. \n
+     * <b>ArkUI_NodeComponentEvent.data[10].f32</b>: new X coordinate of the target element's upper left corner relative
+     * to the page's, in vp. The value type is number. \n
+     * <b>ArkUI_NodeComponentEvent.data[11].f32</b>: new Y coordinate of the target element's upper left corner relative
+     * to the page's, in vp. The value type is number. \n
      */
     NODE_EVENT_ON_AREA_CHANGE,
     /**
-     * @brief Focus event.
+     * @brief Defines the focus event.
      *
-     * Condition for triggering this event: This callback is triggered when the component is in focus.\n
-     * When the event callback occurred, the union type in the {@link ArkUI_NodeEvent} object of the event parameter was {@link ArkUI_NodeComponentEvent}.\n
+     * This event is triggered when the component obtains the focus. \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
      * {@link ArkUI_NodeComponentEvent} does not contain parameters.
      */
     NODE_ON_FOCUS,
     /**
-     * @brief Focus event.
+     * @brief Defines the blur event.
      *
-     * Condition for triggering this event: This callback is triggered when the component is in focus.\n
-     * When the event callback occurred, the union type in the {@link ArkUI_NodeEvent} object of the event parameter was {@link ArkUI_NodeComponentEvent}.\n
+     * This event is triggered when the component loses the focus. \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
      * {@link ArkUI_NodeComponentEvent} does not contain parameters.
      */
     NODE_ON_BLUR,
     /**
-     * @brief Click event type.
+     * @brief Defines the click event.
      *
-     * When an event callback occurs, the union type in the {@link ArkUI_NodeEvent} object of the event parameter {@link ArkUI_TouchEvent} is {@link ArkUI_TouchEvent}, which contains the touch point information in the hand-lifting phase.
+     * This event is triggered when the component is clicked. \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} contains 12 parameters:\n
+     * <b>ArkUI_NodeComponentEvent.data[0].f32</b>: X coordinate of the click relative to the upper left corner of the
+     * clicked component's original area, in vp. \n
+     * <b>ArkUI_NodeComponentEvent.data[1].f32</b>: Y coordinate of the click relative to the upper left corner of the
+     * clicked component's original area, in vp. \n
+     * <b>ArkUI_NodeComponentEvent.data[2].f32</b>: event timestamp. It is the interval between the time when the event
+     * is triggered and the time when the system starts, in microseconds. \n
+     * <b>ArkUI_NodeComponentEvent.data[3].i32</b>: event input device. The value <b>1</b> indicates the mouse,
+     * <b>2</b> indicates the touchscreen, and <b>4</b> indicates the key. \n
+     * <b>ArkUI_NodeComponentEvent.data[4].f32</b>: X coordinate of the click relative to the upper left corner of the
+     * application window, in vp. \n
+     * <b>ArkUI_NodeComponentEvent.data[5].f32</b>: Y coordinate of the click relative to the upper left corner of the
+     * application window, in vp. \n
+     * <b>ArkUI_NodeComponentEvent.data[6].f32</b>: X coordinate of the click relative to the upper left corner of the
+     * application screen, in vp. \n
+     * <b>ArkUI_NodeComponentEvent.data[7].f32</b>: Y coordinate of the click relative to the upper left corner of the
+     * application screen, in vp. \n
      */
     NODE_ON_CLICK,
-
     /**
-     * @brief Image loading success event.
+     * @brief Defines the image loading success event.
      *
-     * This event is triggered when the image data is successfully loaded and decoded.\n
-     * The union type in the {@link ArkUI_NodeEvent} object is {@link ArkUI_NodeComponentEvent} when the event callback occurred.\n
-     * <b>::ArkUI_NodeComponentEvent</b> contains nine parameters:\n
-     * <b>ArkUI_NodeComponent.data[0].i32</b> indicates the loading status. The value 0 indicates that the data is loaded successfully, and the value 1 indicates that the decoding succeeds.\n
-     * <b>ArkUI_NodeComponent.data[1].f32</b> indicates the width of the image, in px.\n
-     * <b>ArkUI_NodeComponent.data[2].f32</b> indicates the image height, in px.\n
-     * <b>ArkUI_NodeComponent.data[3].f32</b> indicates the width of the current component, in px.\n
-     * <b>ArkUI_NodeComponent.data[4].f32</b> indicates the height of the current component, in px.\n
-     * <b>ArkUI_NodeComponent.data[5].f32</b>Position of the image drawing area relative to the X axis of the component, in px.\n
-     * <b>ArkUI_NodeComponent.data[6].f32</b>Position of the drawing area relative to the Y axis of the component, in px.\n
-     * <b>ArkUI_NodeComponent.data[7].f32</b> Width of the drawing area, in px.\n
-     * <b>ArkUI_NodeComponent.data[8].f32</b>: image drawing area height, in px.\n
+     * This event is triggered when an image is successfully loaded or decoded. \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} contains nine parameters:\n
+     * <b>ArkUI_NodeComponentEvent.data[0].i32</b>: loading status. The value <b>0</b> indicates that the image is
+     * loaded successfully, and the value <b>1</b> indicates that the image is decoded successfully. \n
+     * <b>ArkUI_NodeComponentEvent.data[1].f32</b>: width of the image, in px. \n
+     * <b>ArkUI_NodeComponentEvent.data[2].f32</b>: height of the image, in px. \n
+     * <b>ArkUI_NodeComponentEvent.data[3].f32</b>: width of the component, in px. \n
+     * <b>ArkUI_NodeComponentEvent.data[4].f32</b>: height of the component, in px. \n
+     * <b>ArkUI_NodeComponentEvent.data[5].f32</b>: offset of the rendered content relative to the component on the
+     * x-axis, in px. \n
+     * <b>ArkUI_NodeComponentEvent.data[6].f32</b>: offset of the rendered content relative to the component on the
+     * y-axis, in px. \n
+     * <b>ArkUI_NodeComponentEvent.data[7].f32</b>: actual rendered width of the image, in px. \n
+     * <b>ArkUI_NodeComponentEvent.data[8].f32</b>: actual rendered height of the image, in px. \n
      */
     NODE_IMAGE_ON_COMPLETE = MAX_NODE_SCOPE_NUM * ARKUI_NODE_IMAGE,
     /**
-     * @brief Image loading failure event.
+     * @brief Defines the image loading failure event.
      *
-     * Condition for triggering this event: This callback is triggered when the image loading is abnormal.\n
-     * The union type in the {@link ArkUI_NodeEvent} object is {@link ArkUI_NodeComponentEvent} when the event callback occurs.\n
-     * <b>::ArkUI_NodeComponentEvent</b> contains 1 parameter:\n
-     * <b>ArkUI_NodeComponent.data[0].i32</b>Error code information:\n
-     * 401: The image path parameter is abnormal. The image data cannot be obtained.\n
-     * 103101: Picture format not supported.\n
+     * This event is triggered when an error occurs during image loading. \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} contains one parameter:\n
+     * <b>ArkUI_NodeComponentEvent.data[0].i32</b>error code:\n
+     * 401: The image could not be obtained because the image path is invalid. \n
+     * 103101: The image format is not supported. \n
      */
     NODE_IMAGE_ON_ERROR,
-
     /**
-     * @brief Image loading failure event.
+     * @brief Defines the SVG animation playback completion event.
      *
-     * This event is triggered when the SVG picture animation that drives the effect ends.\n
-     * The union type in the {@link ArkUI_NodeEvent} object is {@link ArkUI_NodeComponentEvent} when the event callback occurs.\n
-     * <b>::ArkUI_NodeComponentEvent</b> does not contain parameters.
-     *
+     * This event is triggered when the animation playback in the loaded SVG image is complete. \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} does not contain parameters.
      */
     NODE_IMAGE_ON_SVG_PLAY_FINISH,
-
     /**
-     * @brief This event is triggered when the switch status changes.
+     * @brief Defines the event triggered when the toggle status changes.
      *
-     * This event is triggered when the switch status changes.\n
-     * The union type in the {@link ArkUI_NodeEvent} object is {@link ArkUI_NodeComponentEvent} when the event callback occurs.\n
-     * <b>::ArkUI_NodeComponentEvent</b> contains one parameter:\n
-     * <b>ArkUI_NodeComponent.data[0].i32</b>: status of the current switch. The value 1 indicates that the switch is enabled, and the value 0 indicates that the switch is disabled.
+      \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} contains one parameter: \n
+     * <b>ArkUI_NodeComponentEvent.data[0].i32</b>: toggle status. <b>1</b>: on; <b>0</b>: off.
      *
      */
     NODE_TOGGLE_ON_CHANGE = MAX_NODE_SCOPE_NUM * ARKUI_NODE_TOGGLE,
     /**
-     * @brief Defines the scrolling event enumeration values of the AKUI_NODE_SCROLL scrolling component.
+     * @brief Defines the event triggered when the text input content changes.
      *
-     * Trigger conditions for this event:\n
-     * 1. When the scrolling component triggers scrolling, other input settings for triggering scrolling, such as keyboard and mouse operations, are supported.\n
-     * 2. Invoke the scrolling controller API.\n
-     * 3. Out-of-bounds rebound.\n
-     * When the event callback occurred, the union type in the {@link ArkUI_NodeEvent} object of the event parameter was {@link ArkUI_NodeComponentEvent}.\n
-     * <b>::ArkUI_NodeComponentEvent</b> contains 2 parameters.\n
-     * <b>ArkUI_NodeComponent.data[0].f32</b> indicates the X-axis increment from the last event trigger.\n
-     * <b>ArkUI_NodeComponent.data[1].f32</b> indicates the Y-axis increment from the last event trigger.\n
+      \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_StringAsyncEvent}. \n
+     * {@link ArkUI_StringAsyncEvent} contains one parameter:\n
+     * <b>ArkUI_StringAsyncEvent.pStr</b>: text input.
+     *
+     */
+    NODE_TEXT_INPUT_ON_CHANGE = MAX_NODE_SCOPE_NUM * ARKUI_NODE_TEXT_INPUT,
+    /**
+     * @brief Defines the event triggered when the Enter key of the text input method is pressed.
+     *
+      \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} contains one parameter:\n
+     * <b>ArkUI_NodeComponentEvent.data[0].i32</b>: Enter key type of the input method.
+     *
+     */
+    NODE_TEXT_INPUT_ON_SUBMIT,
+    /**
+     * @brief Defines the event triggered when the cut button on the pasteboard, which displays when the text box
+     * is long pressed, is clicked.
+     *
+      \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_StringAsyncEvent}. \n
+     * {@link ArkUI_StringAsyncEvent} contains one parameter:\n
+     * <b>ArkUI_StringAsyncEvent.pStr</b>: text that is cut.
+     *
+     */
+    NODE_TEXT_INPUT_ON_CUT,
+    /**
+     * @brief Defines the event triggered when the paste button on the pasteboard, which displays when the text box
+     * is long pressed, is clicked.
+     *
+      \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_StringAsyncEvent}. \n
+     * {@link ArkUI_StringAsyncEvent} contains one parameter:\n
+     * <b>ArkUI_StringAsyncEvent.pStr</b>: text that is pasted
+     *
+     */
+    NODE_TEXT_INPUT_ON_PASTE,
+    /**
+     * @brief Defines the event triggered when the input in the text box changes.
+     *
+      \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_StringAsyncEvent}. \n
+     * {@link ArkUI_StringAsyncEvent} contains one parameter:\n
+     * <b>ArkUI_StringAsyncEvent.pStr</b>: text entered.
+     *
+     */
+    NODE_TEXT_AREA_ON_CHANGE = MAX_NODE_SCOPE_NUM * ARKUI_NODE_TEXT_AREA,
+
+    /**
+     * @brief Defines the event triggered when the selected status of the <b>ARKUI_NODE_CHECKBOX</b> component changes.
+     *
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * <b>ArkUI_NodeComponentEvent.data[0].i32</b><b>1</b>: selected; <b>0</b>: not selected.\n
+     */
+    NODE_CHECKBOX_EVENT_ON_CHANGE = MAX_NODE_SCOPE_NUM * ARKUI_NODE_CHECKBOX,
+
+    /**
+     * @brief Defines the event triggered when a date is selected in the <b>ARKUI_NODE_DATE_PICKER</b> component.
+     *
+      \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} contains three parameters:\n
+     * <b>ArkUI_NodeComponentEvent.data[0].i32</b>: year of the selected date. \n
+     * <b>ArkUI_NodeComponentEvent.data[1].i32</b>: month of the selected date. Value range: [0-11]. \n
+     * <b>ArkUI_NodeComponentEvent.data[2].i32</b>: day of the selected date. \n
+     */
+    NODE_DATE_PICKER_EVENT_ON_DATE_CHANGE = MAX_NODE_SCOPE_NUM * ARKUI_NODE_DATE_PICKER,
+
+    /**
+     * @brief Defines the event triggered when a time is selected in the <b>ARKUI_NODE_TIME_PICKER</b> component.
+     *
+      \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} contains two parameters:\n
+     * <b>ArkUI_NodeComponentEvent.data[0].i32</b>: hour of the selected time. Value range: [0-23]. \n
+     * <b>ArkUI_NodeComponentEvent.data[1].i32</b>: minute of the selected time. Value range: [0-59]. \n
+     */
+    NODE_TIME_PICKER_EVENT_ON_CHANGE = MAX_NODE_SCOPE_NUM * ARKUI_NODE_TIME_PICKER,
+
+    /**
+     * @brief Defines the event triggered when an item is selected in the <b>ARKUI_NODE_TEXT_PICKER</b> component.
+     *
+      \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}.\n
+     * {@link ArkUI_NodeComponentEvent} contains one parameter:\n
+     * <b>ArkUI_NodeComponentEvent.data[0...11].i32</b>: value of the selected item. \n
+     */
+    NODE_TEXT_PICKER_EVENT_ON_CHANGE = MAX_NODE_SCOPE_NUM * ARKUI_NODE_TEXT_PICKER,
+
+    /**
+     * @brief Defines the event triggered when a date is selected in the <b>NODE_CALENDAR_PICKER</b>.
+     *
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * <b>ArkUI_NodeComponent.data[0].u32</b>: year of the selected date. \n
+     * <b>ArkUI_NodeComponent.data[1].u32</b>: month of the selected date. \n
+     * <b>ArkUI_NodeComponent.data[2].u32</b>: day of the selected date. \n
+     */
+    NODE_CALENDAR_PICKER_EVENT_ON_CHANGE = MAX_NODE_SCOPE_NUM * ARKUI_NODE_CALENDAR_PICKER,
+
+    /**
+     * @brief Defines the event triggered when the <b>ARKUI_NODE_SLIDER</b> component is dragged or clicked.
+     *
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} contains two parameters:\n
+     * <b>ArkUI_NodeComponentEvent.data[0].f32</b>: current slider value. \n
+     * <b>ArkUI_NodeComponentEvent.data[1].i32</b>: state triggered by the event.\n
+     */
+    NODE_SLIDER_EVENT_ON_CHANGE = MAX_NODE_SCOPE_NUM * ARKUI_NODE_SLIDER,
+
+    /**
+     * @brief Defines the event triggered when the <b>ARKUI_NODE_SCROLL</b> component scrolls.
+     *
+     * Notes for triggering the event:\n
+     * 1. This event is triggered when scrolling is started by the <b>ARKUI_NODE_SCROLL</b> component or other input
+     * settings, such as keyboard and mouse operations. \n
+     * 2. Scrolling can be initiated by calling the controller API. \n
+     * 3. The out-of-bounds bounce effect is supported. \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} contains two parameters:\n
+     * <b>ArkUI_NodeComponentEvent.data[0].f32</b>: horizontal scrolling offset. \n
+     * <b>ArkUI_NodeComponentEvent.data[1].f32</b>: vertical scrolling offset. \n
      */
     NODE_SCROLL_EVENT_ON_SCROLL = MAX_NODE_SCOPE_NUM * ARKUI_NODE_SCROLL,
     /**
-     * @brief Defines the enumerated value of the scroll frame start event of the RKUI_NODE_SC ROLL scrolling component.
+     * @brief Defines the event triggered when each frame scrolling starts in the <b>ARKUI_NODE_SCROLL</b> component.
      *
-     * Trigger conditions for this event:\n
-     * 1. The scrolling component triggers scrolling, including other input settings that trigger scrolling, such as keyboard and mouse operations.\n
-     * 2. Not triggered when the controller interface is invoked.\n
-     * 3. Out-of-bounds rebound is not triggered.\n
-     * The union type in the {@link ArkUI_NodeEvent} object was {@link ArkUI_NodeComponentEvent} when the event callback occurred.\n
-     * <b>::ArkUI_NodeComponentEvent</b> contains 2 parameters.\n
-     * <b>ArkUI_NodeComponent.data[0].f32</b> indicates the amount of scrolling that will occur.\n
-     * <b>ArkUI_NodeComponent.data[1].i32</b> indicates the current scrolling status.\n
-     * <b>::ArkUI_NodeComponentEvent</b> contains one return value.\n
-     * <b>ArkUI_NodeComponent.data[0].f32</b>In the event processing function, the actual scrolling amount can be calculated based on the application scenario and stored in data[0].f32. Scrolling is performed based on the actual scrolling amount of the returned value.\n
+     * Notes for triggering the event:\n
+     * 1. This event is triggered when scrolling is started by the <b>ARKUI_NODE_SCROLL</b> component or other input
+     * settings, such as keyboard and mouse operations. \n
+     * 2. This event is not triggered when the controller API is called. \n
+     * 3. This event does not support the out-of-bounds bounce effect. \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} contains two parameters:\n
+     * <b>ArkUI_NodeComponentEvent.data[0].f32</b>: amount to scroll by. \n
+     * <b>ArkUI_NodeComponentEvent.data[1].i32</b>: current scrolling state. \n
+     * <b>::ArkUI_NodeComponentEvent</b> contains one return value:\n
+     * <b>ArkUI_NodeComponentEvent.data[0].f32</b>: The event handler can work out the amount by which the component
+     * needs to scroll based on the real-world situation and return the result in this parameter. \n
      */
     NODE_SCROLL_EVENT_ON_SCROLL_FRAME_BEGIN,
     /**
-     * @brief Defines the enumerated values of the scrolling start event of the AKUI_NODE_SCROLL component.
+     * @brief Defines the event triggered when scrolling starts in the <b>ARKUI_NODE_SCROLL</b> component.
      *
-     * Trigger conditions for this event:\n
-     * 1. Triggered when the scrolling component starts to scroll. Other input settings for triggering scrolling, such as keyboard and mouse operations, are supported.\n
-     * 2. Start after calling the scrolling controller API, with transition effect.\n
-     * The union type in the {@link ArkUI_NodeEvent} object is {@link ArkUI_NodeComponentEvent} when the event callback occurred.\n
-     * <b>::ArkUI_NodeComponentEvent</b> contains no parameters.\n
+     * Notes for triggering the event:\n
+     * 1. This event is triggered when scrolling is started, with support for other input settings, such as keyboard
+     * and mouse operations. \n
+     * 2. This event is triggered when the controller API is called, accompanied by a transition animation. \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} does not contain parameters. \n
      */
     NODE_SCROLL_EVENT_ON_SCROLL_START,
     /**
-     * @brief Defines the enumerated values of the scrolling stop event of the AKUI_NODE_SC ROLL component.
+     * @brief Defines the event triggered when scrolling of the <b>ARKUI_NODE_SCROLL</b> component stops.
      *
-     * Trigger conditions for this event:\n
-     * 1. The scrolling component stops after triggering scrolling. Other input settings for triggering scrolling, such as keyboard and mouse operations, are supported.\n
-     * 2. After the API of the scrolling controller is invoked, stop with the transition effect.\n
-     * The union type in the {@link ArkUI_NodeEvent} object is {@link ArkUI_NodeComponentEvent} when the event callback occurs.\n
-     * <b>::ArkUI_NodeComponentEvent</b> contains no parameters.\n
+     * Notes for triggering the event:\n
+     * 1. This event is triggered when scrolling is stopped by the <b>ARKUI_NODE_SCROLL</b> component or other input
+     * settings, such as keyboard and mouse operations. \n
+     * 2. This event is triggered when the controller API is called, accompanied by a transition animation. \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} does not contain parameters. \n
      */
     NODE_SCROLL_EVENT_ON_SCROLL_STOP,
     /**
-     * @brief Defines the enumerated values of the scrolling edge event of the ARKUI_NODE_SCROLL component.
+     * @brief Defines the event triggered when scrolling of the <b>ARKUI_NODE_SCROLL</b> component reaches
+     * one of the edges.
      *
-     * Trigger conditions for this event:\n
-     * 1. The scrolling component is triggered when the scrolling component scrolls to the edge. Other input settings for triggering scrolling, such as keyboard and mouse operations, are supported.\n
-     * 2. Invoke the scrolling controller API.\n
-     * 3. Out-of-bounds rebound.\n
-     * When the event callback occurred, the union type in the {@link ArkUI_NodeEvent} object of the event parameter was {@link ArkUI_NodeComponentEvent}.\n
-     * <b>::ArkUI_NodeComponentEvent</b> contains 1 parameter.\n
-     * <b>ArkUI_NodeComponent.data[0].i32</b> indicates the upper, lower, left, and right edges that are touched.\n
+     * Notes for triggering the event:\n
+     * 1. This event is triggered when scrolling reaches the edge after being started by the <b>ARKUI_NODE_SCROLL</b>
+     * component or other input settings, such as keyboard and mouse operations. \n
+     * 2. Scrolling can be initiated by calling the controller API. \n
+     * 3. The out-of-bounds bounce effect is supported. \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} contains one parameter. \n
+     * <b>ArkUI_NodeComponentEvent.data[0].i32</b>: edge (top, bottom, left, or right) that the scrolling reaches. \n
      */
     NODE_SCROLL_EVENT_ON_SCROLL_EDGE,
+
+    /**
+     * @brief Defines the event triggered when the refresh state of the <b>ARKUI_NODE_REFRESH</b> object changes.
+     *
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} contains one parameter:\n
+     * <b>ArkUI_NodeComponentEvent.data[0].i32</b>: refresh state. \n
+     */
+    NODE_REFRESH_STATE_CHANGE = MAX_NODE_SCOPE_NUM * ARKUI_NODE_REFRESH,
+    /**
+     * @brief Defines the event triggered when the <b>ARKUI_NODE_REFRESH</b> object enters the refresh state.
+     *
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} does not contain parameters:\n
+     */
+    NODE_REFRESH_ON_REFRESH,
 } ArkUI_NodeEventType;
 
 /**
@@ -2987,205 +5825,214 @@ typedef enum {
  */
 typedef struct {
     /**
-     * @brief Event type.
+     * @brief Enumerates the event types.
      *
      * @see ArkUI_NodeEventType
      */
     int32_t kind;
 
     /**
-     * @brief Event ID.
+     * @brief Defines the custom ID of the event.
      *
-     * The event ID is transferred as a parameter when the {@link registerNodeEvent} function is invoked and can be applied to the same event entry function {@link
-     * registerNodeEventReceiver} dispatching logic.
+     * The event ID is passed as a parameter in {@link registerNodeEvent} and can be applied to the dispatch logic
+     * of the same event entry function {@link registerNodeEventReceiver}.
      */
     int32_t eventId;
-    /** Component object that triggers the component.*/
+
+    /** Component object that triggers the event. */
     ArkUI_NodeHandle node;
     union {
-        /** Callback parameter of the touch event type.*/
+        /** Callback parameter of the touch event type. */
         ArkUI_NodeTouchEvent touchEvent;
-        /** The common component event uses the callback parameter of the numeric type.*/
+        /** The universal component event uses callback parameters of the number type. */
         ArkUI_NodeComponentEvent componentEvent;
-        /** The common component event uses the callback parameter of the string type.*/
+        /** The universal component event uses callback parameters of the string type. */
         ArkUI_StringAsyncEvent stringEvent;
     };
 } ArkUI_NodeEvent;
 
 /**
- * @brief The custom component invokes <b>::markDirty</b>, which is the type of the passable hide ID.
+ * @brief Defines the dirty area flag passed in the <b>::markDirty</b> API.
  *
  * @since 12
  */
 typedef enum {
     /**
-     * @brief Resize.
+     * @brief Remeasure.
      *
-     * When the flag type is triggered, re-layout is also triggered by default.
+     * When this type of flag is specified, re-layout is triggered by default.
      */
     NODE_NEED_MEASURE = 1,
 
-    /** Relay the position.*/
+    /** Re-layout. */
     NODE_NEED_LAYOUT,
-    /** Repaint.*/
+    /** Re-rendering. */
     NODE_NEED_RENDER,
 } ArkUI_NodeDirtyFlag;
 
 /**
- * @brief ArkUI node-type API set on the Native side.
+ * @brief Declares a collection of native node APIs provided by ArkUI.
  *
  * @version 1
  * @since 12
  */
 typedef struct {
-    /** Structure version.*/
+    /** Struct version. */
     int32_t version;
 
     /**
-     * @brief Generate the corresponding component based on {@link ArkUI_NodeType} and return the component object pointer.
+     * @brief Creates a component based on {@link ArkUI_NodeType} and returns the pointer to the created component.
      *
-     * @param type Create a UI component node of a specified type.
-     * @return Return the pointer to the created component operation. If the creation fails, NULL is returned.
+     * @param type Indicates the type of component to create.
+     * @return Returns the pointer to the created component. If the component fails to be created, NULL is returned.
      */
     ArkUI_NodeHandle (*createNode)(ArkUI_NodeType type);
 
     /**
-     * @brief Destroys the component object pointed to by the component pointer.
+     * @brief Destroys the component to which the specified pointer points.
      *
-     * @param node Component pointer object.
+     * @param node Indicates the pointer.
      */
     void (*disposeNode)(ArkUI_NodeHandle node);
 
     /**
-     * @brief Mount the component to a parent node.
+     * @brief Adds a component to a parent node.
      *
-     * @param parent Pointer to the parent node.
-     * @param child Pointer to the child node.
-     * @return 0: success
-     *         401 - Function parameter exception.
+     * @param parent Indicates the pointer to the parent node.
+     * @param child Indicates the pointer to the child node.
+     * @return Returns 0 if success.
+     * Returns 401 if a parameter exception occurs.
      */
     int32_t (*addChild)(ArkUI_NodeHandle parent, ArkUI_NodeHandle child);
 
     /**
-     * @brief Remove the component from the parent node.
+     * @brief Removes a component from its parent node.
      *
-     * @param parent Pointer to the parent node.
-     * @param child Pointer to the child node.
-     * @return 0: success
-     *         401 - Function parameter exception.
+     * @param parent Indicates the pointer to the parent node.
+     * @param child Indicates the pointer to the child node.
+     * @return Returns 0 if success.
+     * Returns 401 if a parameter exception occurs.
      */
     int32_t (*removeChild)(ArkUI_NodeHandle parent, ArkUI_NodeHandle child);
 
     /**
-     * @brief Mount the component to a parent node after the <b>sibling</b> node.
+     * @brief Inserts a component to a parent node after the specified <b>sibling</b> node.
      *
-     * @param parent Pointer to the parent node.
-     * @param child Pointer to the child node.
-     * @param sibling Pointer to the previous sibling node. If the value is empty, the insertion position is at the beginning.
-     * @return 0: success
-     *         401 - Function parameter exception.
+     * @param parent Indicates the pointer to the parent node.
+     * @param child Indicates the pointer to the child node.
+     * @param sibling Indicates the pointer to the sibling node after which the target node is to be inserted.
+     * If the value is null, the node is inserted at the start of the parent node.
+     * @return Returns 0 if success.
+     * Returns 401 if a parameter exception occurs.
      */
     int32_t (*insertChildAfter)(ArkUI_NodeHandle parent, ArkUI_NodeHandle child, ArkUI_NodeHandle sibling);
 
     /**
-     * @brief Mount the component to a parent node. The mounting position is before the <b>sibling</b> node.
+     * @brief Inserts a component to a parent node before the specified <b>sibling</b> node.
      *
-     * @param parent Pointer to the parent node.
-     * @param child Pointer to the child node.
-     * @param sibling Pointer to the next sibling node. If the value is empty, the insertion position is at the end.
-     * @return 0: success
-     *         401 - Function parameter exception.
+     * @param parent Indicates the pointer to the parent node.
+     * @param child Indicates the pointer to the child node.
+     * @param sibling Indicates the pointer to the sibling node before which the target node is to be inserted.
+     * If the value is null, the node is inserted at the end of the parent node.
+     * @return Returns 0 if success.
+     * Returns 401 if a parameter exception occurs.
      */
     int32_t (*insertChildBefore)(ArkUI_NodeHandle parent, ArkUI_NodeHandle child, ArkUI_NodeHandle sibling);
 
     /**
-     * @brief Mount the component to a parent node. The mounting position is specified by <b>position</b>.
+     * @brief Inserts a component to the specified position in a parent node.
      *
-     * @param parent Pointer to the parent node.
-     * @param child Pointer to the child node.
-     * @param postion Insertion Position. If the insertion position is a negative number or does not exist, the insertion position is at the end by default.
-     * @return 0: success
-     *         401 - Function parameter exception.
+     * @param parent Indicates the pointer to the parent node.
+     * @param child Indicates the pointer to the child node.
+     * @param position Indicates the position to which the target child node is to be inserted. If the value is a
+     * negative number or invalid, the node is inserted at the end of the parent node.
+     * @return Returns 0 if success.
+     * Returns 401 if a parameter exception occurs.
      */
     int32_t (*insertChildAt)(ArkUI_NodeHandle parent, ArkUI_NodeHandle child, int32_t position);
 
     /**
-     * @brief Attribute setting function.
+     * @brief Sets the attribute of a node.
      *
-     * @param node Node object for which attributes need to be set.
-     * @param attribute Type of the attribute to be set.
-     * @param item Attribute value to be set.
-     * @return 0: success.
-     *         401 - Function parameter exception.
-     *         106102 - The attribute type is not supported by the current component.
+     * @param node Indicates the node whose attribute needs to be set.
+     * @param attribute Indicates the type of attribute to set.
+     * @param value Indicates the attribute value.
+     * @return Returns 0 if success.
+     * Returns 401 if a parameter exception occurs.
+     * Returns 106102 if the dynamic implementation library of the native API was not found.
      */
     int32_t (*setAttribute)(ArkUI_NodeHandle node, ArkUI_NodeAttributeType attribute, const ArkUI_AttributeItem* item);
 
     /**
-     * @brief Attribute obtaining function.
+     * @brief Obtains an attribute.
      *
-     * The pointer returned by this API is the buffer pointer in the ArkUI framework. Developers do not need to call delete to release memory. However, the pointer must be used before the function is called next time. Otherwise, the pointer may be overwritten by other values.
+     * The pointer returned by this API is an internal buffer pointer of the ArkUI framework. As such, you do not need
+     * to call <b>delete</b> to release the memory. However, the pointer must be used before this API is called next
+     * time. Otherwise, the pointer may be overwritten by other values.
      *
-     * @param node Node object whose attributes need to be obtained.
-     * @param attribute Type of the attribute to be obtained.
-     * @return Attribute value of the current attribute type. If the operation fails, a null pointer is returned.
+     * @param node Indicates the node whose attribute needs to be obtained.
+     * @param attribute Indicates the type of attribute to obtain.
+     * @return Returns the attribute value. If the operation fails, a null pointer is returned.
      */
     const ArkUI_AttributeItem* (*getAttribute)(ArkUI_NodeHandle node, ArkUI_NodeAttributeType attribute);
 
     /**
-     * @brief Reset attribute function.
+     * @brief Resets an attribute.
      *
-     * @param node Node object whose attributes need to be reset.
-     * @param attribute Type of the attribute to be reset.
-     * @return 0: success.
-     *         401 - Function parameter exception.
-     *         106102 - The attribute type is not supported by the current component.
+     * @param node Indicates the node whose attribute needs to be reset.
+     * @param attribute Indicates the type of attribute to reset.
+     * @return Returns 0 if success.
+     * Returns 401 if a parameter exception occurs.
+     * Returns 106102 if the dynamic implementation library of the native API was not found.
      */
     int32_t (*resetAttribute)(ArkUI_NodeHandle node, ArkUI_NodeAttributeType attribute);
 
     /**
-     * @brief Register the node event function.
+     * @brief Registers an event for the specified node.
      *
-     * @param node Node object to register the event.
-     * @param eventType Event type to be registered.
-     * @param eventId User-defined event ID, which is carried in the callback parameter <@link ArkUI_NodeEvent> when an event is triggered.
-     * @return 0: success.
-     *         401 - Function parameter exception.
-     *         106102 - This event type is not supported by the current component.
+     * @param node Indicates the target node.
+     * @param eventType Indicates the type of event to register.
+     * @param eventId Indicates the custom event ID, which is passed in the callback of {@link ArkUI_NodeEvent}
+     * when the event is triggered.
+     * @return Returns 0 if success.
+     * Returns 401 if a parameter exception occurs.
+     * Returns 106102 if the dynamic implementation library of the native API was not found.
      */
     int32_t (*registerNodeEvent)(ArkUI_NodeHandle node, ArkUI_NodeEventType eventType, int32_t eventId);
 
     /**
-     * @brief Event function for deregistering a node.
+     * @brief Unregisters an event for the specified node.
      *
-     * @param node Node object whose event needs to be deregistered.
-     * @param eventType Event type to be deregistered.
+     * @param node Indicates the target node.
+     * @param eventType Indicates the type of event to unregister.
      */
     void (*unregisterNodeEvent)(ArkUI_NodeHandle node, ArkUI_NodeEventType eventType);
 
     /**
-     * @brief Register the unified entry function for event callback.
+     * @brief Registers an event receiver.
      *
-     * The ArkUI framework collects component events generated during the process and invokes the registered eventReceiver function to call back the eventReceiver function to developers.\n
-     * If the function is called repeatedly, the previously registered function will be overwritten.
+     * The ArkUI framework collects component events generated during the process and calls back the events through the
+     * registered event receiver. \n
+     * A new call to this API will overwrite the previously registered event receiver.
      *
-     * @param eventReceiver Unified callback entry function.
+     * @param eventReceiver Indicates the event receiver to register.
      */
     void (*registerNodeEventReceiver)(void (*eventReceiver)(ArkUI_NodeEvent* event));
 
     /**
-     * @brief Unregister event callback unified entry function.
+     * @brief Unregisters the event receiver.
      *
      */
     void (*unregisterNodeEventReceiver)();
 
     /**
-     * @brief Forcibly mark the current node that needs to be recalculated, laid out, or drawn.
+     * @brief Forcibly marks the current node that needs to be measured, laid out, or rendered again.
      *
-     * In the system attribute setting update scenario, the ArkUI framework automatically marks the hidden area and performs calculation, layout, or drawing again. Developers do not need to invoke this function.
+     * Regarding updates to system attributes, the ArkUI framework automatically marks the dirty area and performs
+     * measuring, layout, or rendering again. In this case, you do not need to call this API.
      *
-     * @param nodeThe node object that needs to be marked in the hidden area.
-     * @param dirtyFlag Tibetan area type.
+     * @param node Indicates the node for which you want to mark as dirty area.
+     * @param dirtyFlag Indicates type of dirty area.
      */
     void (*markDirty)(ArkUI_NodeHandle node, ArkUI_NodeDirtyFlag dirtyFlag);
 } ArkUI_NativeNodeAPI_1;
