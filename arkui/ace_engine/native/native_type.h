@@ -257,24 +257,6 @@ typedef enum {
 } ArkUI_XComponentType;
 
 /**
- * @brief Enumerates the styles of the progress indicator.
- *
- * @since 12
- */
-typedef enum {
-    /** Linear style. */
-    ARKUI_PROGRESS_LINEAR = 0,
-    /** Indeterminate ring style. */
-    ARKUI_PROGRESS_RING,
-    /** Eclipse style. */
-    ARKUI_PROGRESS_ECLIPSE,
-    /** Determinate ring style. */
-    ARKUI_PROGRESS_SCALERING,
-    /** Capsule style. */
-    ARKUI_PROGRESS_CAPSULE,
-}ArkUI_ProgressType;
-
-/**
  * @brief Enumerates the text decoration styles.
  *
  * @since 12
@@ -342,10 +324,6 @@ typedef enum {
     ARKUI_TEXTPICKER_RANGETYPE_SINGLE = 0,
     /** Multi-column text picker. */
     ARKUI_TEXTPICKER_RANGETYPE_MULTI,
-    /** Single-column text picker with image resources. */
-    ARKUI_TEXTPICKER_RANGETYPE_RANGE_C0NTENT,
-    /** Interconnected multi-column text picker. */
-    ARKUI_TEXTPICKER_RANGETYPE_CASCADE_RANGE_CONTENT,
 } ArkUI_TextPickerRangeType;
 
 /**
@@ -572,14 +550,14 @@ typedef enum {
  */
 typedef enum {
     /** The value can be changed to yes or no based on the component. */
-    ARKUI_ACCESSIBILITY_LEVEL_AUTO = 0,
+    ARKUI_ACCESSIBILITY_STATUS_AUTO = 0,
     /** The component can be identified by the accessibility service. */
-    ARKUI_ACCESSIBILITY_LEVEL_YES,
+    ARKUI_ACCESSIBILITY_STATUS_ENABLED,
     /** The component cannot be identified by the accessibility service. */
-    ARKUI_ACCESSIBILITY_LEVEL_NO,
+    ARKUI_ACCESSIBILITY_STATUS_DISABLED,
     /** The component and all its child components cannot be identified by the accessibility service. */
-    ARKUI_ACCESSIBILITY_LEVEL_NO_HIDE_DESCENDANTS,
-} ArkUI_AccessibilityLevel;
+    ARKUI_ACCESSIBILITY_STATUS_DISABLED_FOR_DESCENDANTS,
+} ArkUI_AccessibilityStatus;
 
 /**
  * @brief Defines whether copy and paste is allowed for text content.
@@ -1114,40 +1092,6 @@ typedef enum {
 } ArkUI_CalendarAlignment;
 
 /**
- * @brief Enumerates the mask types.
- *
- * @since 12
- */
-typedef enum {
-    /** Rectangle. */
-    ARKUI_MASK_TYPE_RECT = 0,
-    /** Circle. */
-    ARKUI_MASK_TYPE_CIRCLE,
-    /** Ellipse. */
-    ARKUI_MASK_TYPE_ELLIPSE,
-    /** Path. */
-    ARKUI_MASK_TYPE_PATH,
-    /** Progress indicator. */
-    ARKUI_MASK_TYPE_PROGRESS,
-} ArkUI_MaskType;
-
-/**
- * @brief Enumerates the clipping region types.
- *
- * @since 12
- */
-typedef enum {
-    /** Rectangle. */
-    ARKUI_CLIP_TYPE_RECT = 0,
-    /** Circle. */
-    ARKUI_CLIP_TYPE_CIRCLE,
-    /** Ellipse. */
-    ARKUI_CLIP_TYPE_ELLIPSE,
-    /** Path. */
-    ARKUI_CLIP_TYPE_PATH,
-} ArkUI_ClipType;
-
-/**
  * @brief Defines the gradient color stop structure.
  *
  * @since 12
@@ -1162,46 +1106,31 @@ typedef struct {
 } ArkUI_ColorStop;
 
 /**
- * @brief Enumerates the custom shapes.
- *
- * @since 12
- */
-typedef enum {
-    /** Rectangle. */
-    ARKUI_SHAPE_TYPE_RECT = 0,
-    /** Circle. */
-    ARKUI_SHAPE_TYPE_CIRCLE,
-    /** Ellipse. */
-    ARKUI_SHAPE_TYPE_ELLIPSE,
-    /** Path. */
-    ARKUI_SHAPE_TYPE_PATH,
-} ArkUI_ShapeType;
-
-/**
  * @brief Enumerates the gradient directions.
  *
  * @since 12
  */
 typedef enum {
     /** From right to left. */
-    ARKUI_LINEAR_GRIDIENT_DIRECTION_LEFT = 0,
+    ARKUI_LINEAR_GRADIENT_DIRECTION_LEFT = 0,
     /** From bottom to top. */
-    ARKUI_LINEAR_GRIDIENT_DIRECTION_TOP,
+    ARKUI_LINEAR_GRADIENT_DIRECTION_TOP,
     /** From left to right. */
-    ARKUI_LINEAR_GRIDIENT_DIRECTION_RIGHT,
+    ARKUI_LINEAR_GRADIENT_DIRECTION_RIGHT,
     /** From top to bottom. */
-    ARKUI_LINEAR_GRIDIENT_DIRECTION_BOTTOM,
+    ARKUI_LINEAR_GRADIENT_DIRECTION_BOTTOM,
     /** From lower right to upper left. */
-    ARKUI_LINEAR_GRIDIENT_DIRECTION_LEFT_TOP,
+    ARKUI_LINEAR_GRADIENT_DIRECTION_LEFT_TOP,
     /** From upper right to lower left. */
-    ARKUI_LINEAR_GRIDIENT_DIRECTION_LEFT_BOTTOM,
+    ARKUI_LINEAR_GRADIENT_DIRECTION_LEFT_BOTTOM,
     /** From lower left to upper right. */
-    ARKUI_LINEAR_GRIDIENT_DIRECTION_RIGHT_TOP,
+    ARKUI_LINEAR_GRADIENT_DIRECTION_RIGHT_TOP,
     /** From upper left to lower right. */
-    ARKUI_LINEAR_GRIDIENT_DIRECTION_RIGHT_BOTTOM,
+    ARKUI_LINEAR_GRADIENT_DIRECTION_RIGHT_BOTTOM,
     /** No gradient. */
-    ARKUI_LINEAR_GRIDIENT_DIRECTION_NONE,
-} ArkUI_LinearGridientDirection;
+    ARKUI_LINEAR_GRADIENT_DIRECTION_NONE,
+} ArkUI_LinearGradientDirection;
+
 #ifdef __cplusplus
 };
 #endif
