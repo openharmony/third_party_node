@@ -1442,11 +1442,12 @@ void OH_Drawing_SetTypographyTextStyle(OH_Drawing_TypographyStyle*, OH_Drawing_T
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_Typography Indicates the pointer to a typography object {@link OH_Drawing_Typography}.
  * @param OH_Drawing_TextStyle Indicates the pointer to a text style object {@link OH_Drawing_TextStyle}.
- * @return Returns the text FontMetrics.
+ * @param OH_Drawing_Font_Metrics Indicates the pointer to a font metrics object {@link OH_Drawing_Font_Metrics}.
+ * @return Whether the font metrics was obtained.
  * @since 12
  * @version 1.0
  */
-OH_Drawing_Font_Metrics* OH_Drawing_TextStyleGetFontMetrics(OH_Drawing_Typography*, OH_Drawing_TextStyle*);
+bool OH_Drawing_TextStyleGetFontMetrics(OH_Drawing_Typography*, OH_Drawing_TextStyle*, OH_Drawing_Font_Metrics*);
 
 /**
  * @brief Gets the position of the specified line or the first text of the specified line.
