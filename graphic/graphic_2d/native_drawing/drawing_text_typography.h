@@ -1731,6 +1731,16 @@ void OH_Drawing_TypographySetIndents(OH_Drawing_Typography*, int, const float in
  */
 float OH_Drawing_TypographyGetIndentsWithIndex(OH_Drawing_Typography*, int);
 
+/**
+ * @brief Releases the memory occupied by vector with <b>OH_Drawing_TextShadow</b> objects.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param Indicates the pointer to the text shadow object {@link OH_Drawing_TextShadow}.
+ * @since 12
+ * @version 1.0
+ */
+void OH_Drawing_DestroyTextShadows(OH_Drawing_TextShadow*);
+
 #ifdef __cplusplus
 }
 #endif
