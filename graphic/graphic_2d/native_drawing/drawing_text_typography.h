@@ -300,7 +300,7 @@ typedef struct OH_Drawing_FontDescriptor {
      */
     char* path;
     /**
-     * @brief System font name defined by PostScript Page Description Language (PDL) rules
+     * @brief A name that uniquely identifies the font
      * @since_2013 12
      */
     char* postScriptName;
