@@ -149,38 +149,86 @@ void OH_Drawing_FontDestroy(OH_Drawing_Font*);
  * @since 12
  * @version 1.0
  */
-typedef struct {
-    /** Indicating which metrics are valid */
+typedef struct OH_Drawing_Font_Metrics {
+    /**
+     * @brief Indicating which metrics are valid
+     * @since_2013 12
+     */
     uint32_t flags;
-    /** storage for top in font metrics */
+    /**
+     * @brief storage for top in font metrics
+     * @since_2013 12
+     */
     float top;
-    /** storage for ascent in font metrics */
+    /**
+     * @brief storage for ascent in font metrics
+     * @since_2013 12
+     */
     float ascent;
-    /** storage for descent in font metrics */
+    /**
+     * @brief storage for descent in font metrics
+     * @since_2013 12
+     */
     float descent;
-    /** storage for bottom in font metrics */
+    /**
+     * @brief storage for bottom in font metrics
+     * @since_2013 12
+     */
     float bottom;
-    /** storage for leading in font metrics */
+    /**
+     * @brief storage for leading in font metrics
+     * @since_2013 12
+     */
     float leading;
-    /** Average character width, zero if unknown */
+    /**
+     * @brief Average character width, zero if unknown
+     * @since_2013 12
+     */
     float avgCharWidth;
-    /** Maximum character width, zero if unknown */
+    /**
+     * @brief Maximum character width, zero if unknown
+     * @since_2013 12
+     */
     float maxCharWidth;
-    /** Greatest extent to left of origin of any glyph bounding box, typically negative; deprecated with variable fonts */
+    /**
+     * @brief Greatest extent to left of origin of any glyph bounding box, typically negative; deprecated with variable fonts
+     * @since_2013 12
+     */
     float xMin;
-    /** Greatest extent to right of origin of any glyph bounding box, typically positive; deprecated with variable fonts */
+    /**
+     * @brief Greatest extent to right of origin of any glyph bounding box, typically positive; deprecated with variable fonts
+     * @since_2013 12
+     */
     float xMax;
-    /** Height of lower-case 'x', zero if unknown, typically negative */
+    /**
+     * @brief Height of lower-case letter, zero if unknown, typically negative
+     * @since_2013 12
+     */
     float xHeight;
-    /** Height of an upper-case letter, zero if unknown, typically negative */
+    /**
+     * @brief Height of an upper-case letter, zero if unknown, typically negative
+     * @since_2013 12
+     */
     float capHeight;
-    /** Underline thickness */
+    /**
+     * @brief Underline thickness
+     * @since_2013 12
+     */
     float underlineThickness;
-    /** Distance from baseline to top of stroke, typically positive */
+    /**
+     * @brief Distance from baseline to top of stroke, typically positive
+     * @since_2013 12
+     */
     float underlinePosition;
-    /** Strikeout thickness */
+    /**
+     * @brief Strikeout thickness
+     * @since_2013 12
+     */
     float strikeoutThickness;
-    /** Distance from baseline to bottom of stroke, typically negative */
+    /**
+     * @brief Distance from baseline to bottom of stroke, typically negative
+     * @since_2013 12
+     */
     float strikeoutPosition;
 } OH_Drawing_Font_Metrics;
 
