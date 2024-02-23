@@ -62,6 +62,7 @@ class DiffProcessorPermission:
             string = re.sub(re.compile(self.splitchar[char]['splitchar']), self.splitchar[char]['transferchar'], string)
         return string
 
+    @staticmethod
     def get_bool_in_list(self, number_list, bin_len):
         state_list = [bin(i) for i in number_list]
         state_list = [x[2:] for x in state_list]
@@ -79,6 +80,7 @@ class DiffProcessorPermission:
             state_value[state_index] = eval(modify_string)
         return state_value
 
+    @staticmethod
     def process_value(self, state_value):
         calculate = CalculateValue()
         for state in state_value:
@@ -99,10 +101,13 @@ class DiffProcessorPermission:
 
     def calculate_paradigm_up(self, old_str, new_str, falg_bool=True):
         char = ''
-        if falg_bool:
-            char = self.splitchar['LE']['splitchar']
-        else:
-            char = self.splitchar['RE']['splitchar']
+        try:
+            if falg_bool:
+                char = self.splitchar['LE']['splitchar']
+            else:
+                char = self.splitchar['RE']['splitchar']
+        except KeyError:
+            print('An error occurred. The specified key does not exist.')
         merge_str = f'({old_str}) {char} ({new_str})'
         return self.calculate_paradigm(merge_str)
 

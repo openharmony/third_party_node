@@ -16,6 +16,7 @@
 import filecmp
 import json
 import os
+import stat
 from collections import OrderedDict
 import openpyxl as op
 from coreImpl.parser.parser import parser_include_ast
@@ -55,9 +56,9 @@ def generate_excel(result_info_list):
     ws = wb['Sheet']
     ws.append(['api名称', '所在行', '所在列', '所在文件', '节点类型',
                '变更类型', '变更信息', '旧版节点内容', '新版节点内容', '兼容'])
-    for i in range(len(data)):
-        d = data[i][0], data[i][1], data[i][2], data[i][3], data[i][4],\
-            data[i][5], data[i][6], data[i][7], data[i][8], data[i][9]
+    for title in data:
+        d = title[0], title[1], title[2], title[3], title[4],\
+            title[5], title[6], title[7], title[8], title[9]
         ws.append(d)
     wb.save('diff.xlsx')
 
@@ -77,13 +78,14 @@ def result_to_json(result_info_list):
     result_json = []
     for diff_info in result_info_list:
         result_json.append(OutputJson(diff_info))
-    return json.dumps(result_json, default=lambda obj: obj.__dict__, indent=4)
+    return json.dumps(result_json, default=lambda obj: obj.__dict__, indent=4, ensure_ascii=False)
 
 
 def write_in_txt(check_result, output_path):
-    with open(output_path, 'w', encoding='utf-8') as fs:
-        fs.write(check_result)
-        fs.close()
+    modes = stat.S_IRWXO | stat.S_IRWXG | stat.S_IRWXU
+    fd = os.open(output_path, os.O_WRONLY | os.O_CREAT, mode=modes)
+    os.write(fd, check_result.encode())
+    os.close(fd)
 
 
 def do_diff(old_dir, new_dir):
