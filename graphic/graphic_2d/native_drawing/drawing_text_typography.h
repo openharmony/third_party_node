@@ -294,55 +294,25 @@ typedef enum {
  * @version 1.0
  */
 typedef struct OH_Drawing_FontDescriptor {
-    /**
-     * @brief The file path of System font
-     * @since_2013 12
-     */
+    /** The file path of System font */
     char* path;
-    /**
-     * @brief A name that uniquely identifies the font
-     * @since_2013 12
-     */
+    /** A name that uniquely identifies the font */
     char* postScriptName;
-    /**
-     * @brief The name of System font
-     * @since_2013 12
-     */
+    /** The name of System font */
     char* fullName;
-    /**
-     * @brief The family of System font
-     * @since_2013 12
-     */
+    /** The family of System font */
     char* fontFamily;
-    /**
-     * @brief The subfont family of the system font
-     * @since_2013 12
-     */
+    /** The subfont family of the system font */
     char* fontSubfamily;
-    /**
-     * @brief The weight of System font
-     * @since_2013 12
-     */
+    /** The weight of System font */
     int weight;
-    /**
-     * @brief The width of System font
-     * @since_2013 12
-     */
+    /** The width of System font */
     int width;
-    /**
-     * @brief Whether the system font is tilted
-     * @since_2013 12
-     */
+    /** Whether the system font is tilted */
     int italic;
-    /**
-     * @brief Whether the system font is compact
-     * @since_2013 12
-     */
+    /** Whether the system font is compact */
     bool monoSpace;
-    /**
-     * @brief whether symbolic fonts are supported
-     * @since_2013 12
-     */
+    /** whether symbolic fonts are supported */
     bool symbolic;
 } OH_Drawing_FontDescriptor;
 
@@ -353,62 +323,33 @@ typedef struct OH_Drawing_FontDescriptor {
  * @version 1.0
  */
 typedef struct OH_Drawing_LineMetrics {
-    /**
-     * @brief Text ascender height
-     * @since_2013 12
-     */
+    /** Text ascender height */
     double ascender;
-    /**
-     * @brief Tex descender height
-     * @since_2013 12
-     */
+    /** Tex descender height */
     double descender;
-    /**
-     * @brief The height of a capital letter
-     * @since_2013 12
-     */
+    /** The height of a capital letter */
     double capHeight;
-    /**
-     * @brief The height of a lowercase letter
-     * @since_2013 12
-     */
+    /** The height of a lowercase letter */
     double xHeight;
-    /**
-     * @brief Text width
-     * @since_2013 12
-     */
+    /** Text width */
     double width;
-    /**
-     * @brief Line height
-     * @since_2013 12
-     */
+    /** Line height */
     double height;
     /**
-     * @brief The distance from the left end of the text to the left end of the container,
-     * aligned to 0, is the width of the container minus the width of the line of text
-     * @since_2013 12
+     * The distance from the left end of the text to the left end of the container,
+     * aligned to 0, is the width of the container minus the width of the line of text 
      */
     double x;
     /**
-     * @brief The height from the top of the text to the top of the container, the first line is 0,
+     * The height from the top of the text to the top of the container, the first line is 0,
      * and the second line is the height of the first line
-     * @since_2013 12
      */
     double y;
-    /**
-     * @brief Start Index
-     * @since_2013 12
-     */
+    /** Start Index */
     size_t startIndex;
-    /**
-     * @brief End Index
-     * @since_2013 12
-     */
+    /** End Index */
     size_t endIndex;
-    /**
-     * @brief The metrics information of the first character
-     * @since_2013 12
-     */
+    /** The metrics information of the first character */
     OH_Drawing_Font_Metrics firstCharMetrics;
 } OH_Drawing_LineMetrics;
 
@@ -1506,7 +1447,7 @@ void OH_Drawing_SetTypographyTextFontFamily(OH_Drawing_TypographyStyle*, const c
  * @since 12
  * @version 1.0
  */
-void OH_Drawing_SetTypographyTextFontSize(OH_Drawing_TypographyStyle* style, double fontSize);
+void OH_Drawing_SetTypographyTextFontSize(OH_Drawing_TypographyStyle*, double);
 
 /**
  * @brief Sets the font height of text typography.
@@ -1517,7 +1458,7 @@ void OH_Drawing_SetTypographyTextFontSize(OH_Drawing_TypographyStyle* style, dou
  * @since 12
  * @version 1.0
  */
-void OH_Drawing_SetTypographyTextFontHeight(OH_Drawing_TypographyStyle*, double /* fontHeight */);
+void OH_Drawing_SetTypographyTextFontHeight(OH_Drawing_TypographyStyle*, double);
 
 /**
  * @brief Sets the half leading of text typography.
@@ -1596,7 +1537,7 @@ void OH_Drawing_SetTypographyTextLineStyleFontSize(OH_Drawing_TypographyStyle*, 
  * @since 12
  * @version 1.0
  */
-void OH_Drawing_SetTypographyTextLineStyleFontHeight(OH_Drawing_TypographyStyle*, double /* fontHeight */);
+void OH_Drawing_SetTypographyTextLineStyleFontHeight(OH_Drawing_TypographyStyle*, double);
 
 /**
  * @brief Sets the half leading of line style for text typography.
@@ -1642,7 +1583,7 @@ void OH_Drawing_SetTypographyTextLineStyleOnly(OH_Drawing_TypographyStyle*, bool
 OH_Drawing_TextShadow* OH_Drawing_CreateTextShadow(void);
 
 /**
- * @brief Releases the memory occupied by an <b>OH_Drawing_TextShadow</b> object.
+ * @brief Releases the memory occupied by the text shadow object {@link OH_Drawing_TextShadow}.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextShadow Indicates the pointer to the text shadow object {@link OH_Drawing_TextShadow}.
@@ -1702,7 +1643,7 @@ void OH_Drawing_TextStyleClearShadows(OH_Drawing_TextStyle*);
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextStyle Indicates the pointer to a text style object {@link OH_Drawing_TextStyle}.
  * @param int Indicates the index to set.
- * @return Returns the pointer to element with the index in vector of <b>OH_Drawing_TextShadow</b> objects.
+ * @return Returns the pointer to element with the index in vector of the text style object {@link OH_Drawing_TextStyle}.
  * @since 12
  * @version 1.0
  */
@@ -1732,7 +1673,7 @@ void OH_Drawing_TypographySetIndents(OH_Drawing_Typography*, int, const float in
 float OH_Drawing_TypographyGetIndentsWithIndex(OH_Drawing_Typography*, int);
 
 /**
- * @brief Releases the memory occupied by vector with <b>OH_Drawing_TextShadow</b> objects.
+ * @brief Releases the memory occupied by vector with the text shadow object {@link OH_Drawing_TextShadow}.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param Indicates the pointer to the text shadow object {@link OH_Drawing_TextShadow}.

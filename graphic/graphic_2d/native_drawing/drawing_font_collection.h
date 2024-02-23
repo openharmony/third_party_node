@@ -66,7 +66,7 @@ void OH_Drawing_DestroyFontCollection(OH_Drawing_FontCollection*);
  * @brief Disable the font collection fallback.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_FontCollection Indicates the pointer to an <b>OH_Drawing_FontCollection</b> object.
+ * @param OH_Drawing_FontCollection Indicates the pointer to a {@link OH_Drawing_FontCollection} object.
  * @since 12
  * @version 1.0
  */
@@ -76,7 +76,7 @@ void OH_Drawing_DisableFontCollectionFallback(OH_Drawing_FontCollection*);
  * @brief Disable the font collection systemfont.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_FontCollection Indicates the pointer to an <b>OH_Drawing_FontCollection</b> object.
+ * @param OH_Drawing_FontCollection Indicates the pointer to an {@link OH_Drawing_FontCollection} object.
  * @since 12
  * @version 1.0
  */
