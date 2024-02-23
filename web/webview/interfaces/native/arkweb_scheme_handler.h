@@ -219,16 +219,6 @@ typedef void (*ArkWeb_PostDataReadCallback)(const ArkWeb_PostDataStream* postDat
 typedef void (*ArkWeb_PostDataStreamInitCallback)(const ArkWeb_PostDataStream* postDataStream, ArkWeb_NetError result);
 
 /*
- * @brief The request header list.
- * @param requestHeaderList The created ArkWeb_RequestHeaderList.
- *
- * @syscap SystemCapability.Web.Webview.Core
- * @since 12
- */
-void OH_ArkWebRequestHeaderList_Create(const ArkWeb_ResourceRequest* resourceRequest,
-                                       ArkWeb_RequestHeaderList** requestHeaderList);
-
-/*
  * @brief Destroy the ArkWeb_RequestHeaderList.
  * @param requestHeaderList The ArkWeb_RequestHeaderList to be destroyed.
  *
@@ -387,9 +377,10 @@ int32_t OH_ArkWebPostDataStream_Init(ArkWeb_PostDataStream* postDataStream,
 void OH_ArkWebPostDataStream_Read(const ArkWeb_PostDataStream* postDataStream, uint8_t* buffer, int bufLen);
 
 /*
- * @brief Get the total size of the data stream. When data is chunked, always return zero.
+ * @brief Get the total size of the data stream.
+ *        When data is chunked or postDataStream is invalid, always return zero.
  * @param postDataStream The ArkWeb_PostDataStream.
- * @return The size of data stream. -1 if postDataStream is invalid.
+ * @return The size of data stream.
  *
  * @syscap SystemCapability.Web.Webview.Core
  * @since 12
@@ -399,7 +390,7 @@ uint64_t OH_ArkWebPostDataStream_GetSize(const ArkWeb_PostDataStream* postDataSt
 /*
  * @brief Get the current position of the data stream.
  * @param postDataStream The ArkWeb_PostDataStream.
- * @return The current position of data stream. -1 if postDataStream is invalid.
+ * @return The current position of data stream. 0 if postDataStream is invalid.
  *
  * @syscap SystemCapability.Web.Webview.Core
  * @since 12
