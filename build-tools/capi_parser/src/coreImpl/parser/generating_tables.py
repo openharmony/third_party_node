@@ -88,6 +88,7 @@ def get_parm(item, parm):
 def filter_func(item):
     del item["is_extern"]  # 剔除is_extern键值对，过滤后都是extern
     del item["comment"]
+    del item["syscap"]
     if "type_ref" in list(item.keys()):
         del item["type_ref"]
     if "children" in list(item.keys()):
@@ -117,7 +118,7 @@ def generate_excel(array, name, only_file1, only_file2):
         'location': '位置行',
         'return_type': '返回类型',
         'parm': '参数',
-        'location_path': '文件相对路径',
+        'location_path': '文件相对路径'
     }
 
     workbook = openpyxl.Workbook()

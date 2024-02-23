@@ -241,6 +241,17 @@ def node_extent(cursor, current_file):
     return extent
 
 
+def define_comment(cursor, current_file, data):
+    line = cursor.location.line
+    with open(current_file, mode='r', encoding='utf-8') as file:
+        file_content = file.readlines()[:line]
+        file_content = ''.join(file_content)
+        pattern = '{} {})'.format(RegularExpressions.DEFINE_COMMENT.value, cursor.spelling)
+        matches = re.search(pattern, file_content)
+        if matches:
+            data['comment'] = matches.group()
+
+
 def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解析数据的整理
     # 通用
     data = {
@@ -249,13 +260,10 @@ def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解
         "type": cursor.type.spelling,
         "gn_path": gn_path,
         "node_content": {},
-        "comment": ''
+        "comment": '',
+        "syscap": ''
     }
-    if cursor.raw_comment:  # 是否有注释信息，有就取，没有过
-        data["comment"] = cursor.raw_comment
-    else:
-        data["comment"] = 'none_comment'
-
+    get_comment(cursor, data)
     if key == 0:
         data["kind"] = CursorKind.TRANSLATION_UNIT.name
         if comment:
@@ -267,7 +275,9 @@ def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解
         content = node_extent(cursor, current_file)
         data["node_content"] = content
         data["kind"] = cursor.kind.name
-
+        if cursor.kind.name == CursorKind.MACRO_DEFINITION.name:
+            define_comment(cursor, current_file, data)
+    get_syscap_value(data)
     processing_special_node(cursor, data, key, gn_path)  # 节点处理
     children = list(cursor.get_children())  # 判断是否有子节点，有就追加children，没有根据情况来
     if len(children) > 0:
@@ -286,12 +296,27 @@ def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解
 
         for child in children:
             # 剔除多余宏定义和跳过UNEXPOSED_ATTR节点
-            if child.location.file is not None and child.kind != CursorKind.UNEXPOSED_ATTR \
-                    and child.location.file.name == current_file:
+            if (child.location.file is not None) and (not child.kind.is_attribute()) \
+                    and (child.location.file.name == current_file):
                 processing_ast_node(child, current_file, data, name, gn_path)
     else:
         processing_no_child(cursor, data)  # 处理没有子节点的节点
     return data
+
+
+def get_syscap_value(data: dict):
+    if 'none_comment' != data["comment"]:
+        pattern = r'@([Ss]yscap).*?(?=\n)'
+        matches = re.search(pattern, data['comment'])
+        if matches:
+            data["syscap"] = matches.group(0)
+
+
+def get_comment(cursor, data: dict):
+    if cursor.raw_comment:  # 是否有注释信息，有就取，没有过
+        data["comment"] = cursor.raw_comment
+    else:
+        data["comment"] = 'none_comment'
 
 
 def processing_ast_node(child, current_file, data, name, gn_path):
@@ -331,17 +356,21 @@ def get_start_comments(include_path):  # 获取每个头文件的最开始注释
 def open_file(include_path):
     with open(include_path, 'r', encoding='utf-8') as f:
         content = ''
-        loge = 0
+        mark = 0
+        if 'ffrt' in include_path:
+            end_line_mark = r'#ifndef'
+        else:
+            end_line_mark = r'#endif'
         for line in f:
-            if line.startswith('#ifdef __cplusplus'):
-                loge = 1
+            if line.startswith(end_line_mark):
+                mark = 1
                 break
             else:
                 inside_ifdef = True
 
             if inside_ifdef:
                 content += line
-        if loge == 0:
+        if mark == 0:
             content = ''
         f.close()
         return content
@@ -386,5 +415,4 @@ def get_include_file(include_file_path, link_path, gn_path=None):  # 库路径�
     # 头文件链接路径
     link_include_path = link_path  # 可以通过列表传入
     data = api_entrance(libclang_path, file_path, gn_path, link_include_path)  # 调用接口
-
     return data

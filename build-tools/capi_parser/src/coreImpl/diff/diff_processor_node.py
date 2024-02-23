@@ -26,6 +26,8 @@ current_file = os.path.dirname(__file__)
 
 def wrap_diff_info(old_info, new_info, diff_info: DiffInfo):
     if old_info is not None:
+        if 'temporary_name' in old_info['name']:
+            old_info['name'] = ''
         diff_info.set_api_name(old_info['name'])
         diff_info.set_api_type(old_info['kind'])
         diff_info.set_api_line(old_info['location']['location_line'])
@@ -34,6 +36,8 @@ def wrap_diff_info(old_info, new_info, diff_info: DiffInfo):
         if 'content' in old_info['node_content']:
             diff_info.set_old_api_full_text(old_info['node_content']['content'])
     if new_info is not None:
+        if 'temporary_name' in new_info['name']:
+            new_info['name'] = ''
         diff_info.set_api_name(new_info['name'])
         diff_info.set_api_type(new_info['kind'])
         diff_info.set_api_line(new_info['location']['location_line'])
@@ -47,9 +51,12 @@ def wrap_diff_info(old_info, new_info, diff_info: DiffInfo):
 
 def parse_file_result(result):
     result_map = {}
+    key = 1
     for member in result:
         if member["name"] == '':
-            continue
+            name = 'temporary_name'
+            member["name"] = '{}{}'.format(name, key)
+            key += 1
         result_map.setdefault(f'{member["name"]}-{member["kind"]}', member)
     return result_map
 
@@ -192,10 +199,12 @@ def process_struct_member_scene(old_member, new_member, diff_struct_list):
         special_data = process_enum(old_member, new_member)
     diff_struct_list.extend(special_data)
 
-    if old_member['type'] != new_member['type']:
-        diff_info = wrap_diff_info(old_member, new_member,
-                                   DiffInfo(DiffType.STRUCT_MEMBER_TYPE_CHANGE))
-        diff_struct_list.append(diff_info)
+    if (not(old_member['location']['location_path'] in old_member['type'])) and \
+            (not(new_member['location']['location_path'] in new_member['type'])):
+        if old_member['type'] != new_member['type']:
+            diff_info = wrap_diff_info(old_member, new_member,
+                                       DiffInfo(DiffType.STRUCT_MEMBER_TYPE_CHANGE))
+            diff_struct_list.append(diff_info)
 
     if old_member['name'] != new_member['name']:
         diff_info = wrap_diff_info(old_member, new_member,
@@ -257,10 +266,12 @@ def process_union_member_scene(old_member, new_member, diff_union_list):
         special_data = process_enum(old_member, new_member)
     diff_union_list.extend(special_data)
 
-    if old_member['type'] != new_member['type']:
-        diff_info = wrap_diff_info(old_member, new_member,
-                                   DiffInfo(DiffType.UNION_MEMBER_TYPE_CHANGE))
-        diff_union_list.append(diff_info)
+    if (not(old_member['location']['location_path'] in old_member['type'])) and \
+            (not(new_member['location']['location_path'] in new_member['type'])):
+        if old_member['type'] != new_member['type']:
+            diff_info = wrap_diff_info(old_member, new_member,
+                                       DiffInfo(DiffType.UNION_MEMBER_TYPE_CHANGE))
+            diff_union_list.append(diff_info)
 
     if old_member['name'] != new_member['name']:
         diff_info = wrap_diff_info(old_member, new_member,
@@ -401,7 +412,7 @@ def process_typedef(old, new):
     diff_typedef_list = []
     process_typedef_name(old, new, diff_typedef_list)       # 处理命名
 
-    if 'children' in old and 'children' in old:             # 处理子节点
+    if 'children' in old and 'children' in new:             # 处理子节点
         process_typedef_child(old['children'], new['children'], diff_typedef_list)
 
     return diff_typedef_list
@@ -699,10 +710,10 @@ def process_doc_list(old_doc_list: list, new_doc_list: list, old_info, new_info)
     new_length = len(new_doc_list)
     index = 0
     while index < max(old_length, new_length):
-        if index > old_length:
+        if index >= old_length != new_length:
             diff_info_list.append(wrap_diff_info(old_info, new_info, DiffInfo(DiffType.ADD_DOC)))
             break
-        if index > new_length:
+        if index >= new_length != old_length:
             diff_info_list.append(wrap_diff_info(old_info, new_info, DiffInfo(DiffType.REDUCE_DOC)))
             break
         diff_info_list.extend(process_doc(old_doc_list[index], new_doc_list[index], old_info, new_info))

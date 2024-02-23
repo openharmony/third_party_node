@@ -39,3 +39,4 @@ class RegularExpressions(enum.Enum):
     SOURCES = r'sources\s*=\s*\[[^\]]*\]'
     DEST_DIR = r'dest_dir\s*=\s*"([^"]*)"'
     INCLUDE_H = r'"([^"]+h)"'
+    DEFINE_COMMENT = r'/\*[^/]*\*/\s*(?=#define'
