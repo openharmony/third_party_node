@@ -144,11 +144,11 @@ void OH_Drawing_FontSetFakeBoldText(OH_Drawing_Font*, bool isFakeBoldText);
 void OH_Drawing_FontDestroy(OH_Drawing_Font*);
 
 /**
-* @brief Defines a run, supplies storage for the metrics of an SkFont.
-*
-* @since 12
-* @version 1.0
-*/
+ * @brief Defines a run, supplies storage for the metrics of an SkFont.
+ *
+ * @since 12
+ * @version 1.0
+ */
 typedef struct OH_Drawing_Font_Metrics {
     /** Indicating which metrics are valid */
     uint32_t flags;
