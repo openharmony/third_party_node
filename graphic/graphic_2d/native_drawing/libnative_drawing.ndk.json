@@ -202,6 +202,42 @@
     { "name": "OH_Drawing_ImageGetHeight" },
     {
         "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetShadowWithIndex"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyGetIndentsWithIndex"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleClearShadows"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleAddShadow"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetShadowCount"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetShadows"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_DestroyTextShadow"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_CreateTextShadow"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographySetIndents"
+    },
+    {
+        "first_introduced": "12",
         "name": "OH_Drawing_ImageGetImageInfo"
     },
     { "name": "OH_Drawing_SamplingOptionsCreate" },
@@ -337,5 +373,190 @@
     {
         "first_introduced": "12",
         "name": "OH_Drawing_TypographyGetLineTextRange"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_CreateFontDescriptor"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_DestroyFontDescriptor"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_CreateFontParser"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_DestroyFontParser"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontParserGetSystemFontList"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_DestroySystemFontList"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontParserGetFontByName"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyGetLineMetrics"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_LineMetricsGetSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_DestroyLineMetrics"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyGetLineMetricsAt"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyGetLineInfo"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextEllipsis"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextLocale"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextSplitRatio"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyGetTextStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyGetEffectiveAlignment"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyIsLineUnlimited"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyIsEllipsized"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetFontMetrics"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyGetMetrics"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTextStyleForegroundBrush"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetForegroundBrush"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTextStyleForegroundPen"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetForegroundPen"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTextStyleBackgroundBrush"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetBackgroundBrush"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTextStyleBackgroundPen"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetBackgroundPen"
+    },  
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_DisableFontCollectionFallback"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_DisableFontCollectionSystemFont"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextFontWeight"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextFontStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextFontSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextHalfLeading"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextUseLineStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextLineStyleFontWeight"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextLineStyleFontStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextLineStyleFontFamilies"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextLineStyleFontSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextLineStyleFontHeight"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextLineStyleHalfLeading"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextLineStyleSpacingScale"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyTextLineStyleOnly"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_DestroyTextShadows"
     }
+
 ]

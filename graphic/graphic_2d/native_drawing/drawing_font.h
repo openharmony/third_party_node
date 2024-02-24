@@ -149,7 +149,9 @@ void OH_Drawing_FontDestroy(OH_Drawing_Font*);
  * @since 12
  * @version 1.0
  */
-typedef struct {
+typedef struct OH_Drawing_Font_Metrics {
+    /** Indicating which metrics are valid */
+    uint32_t flags;
     /** storage for top in font metrics */
     float top;
     /** storage for ascent in font metrics */
@@ -160,6 +162,26 @@ typedef struct {
     float bottom;
     /** storage for leading in font metrics */
     float leading;
+    /**  Average character width, zero if unknown */
+    float avgCharWidth;
+    /** Maximum character width, zero if unknown */
+    float maxCharWidth;
+    /** Greatest extent to left of origin of any glyph bounding box, typically negative; deprecated with variable fonts */
+    float xMin;
+    /** Greatest extent to right of origin of any glyph bounding box, typically positive; deprecated with variable fonts */
+    float xMax;
+    /** Height of lower-case letter, zero if unknown, typically negative */
+    float xHeight;
+    /** Height of an upper-case letter, zero if unknown, typically negative */
+    float capHeight;
+    /** @brief Underline thickness */
+    float underlineThickness;
+    /** Distance from baseline to top of stroke, typically positive */
+    float underlinePosition;
+    /** Strikeout thickness */
+    float strikeoutThickness;
+    /** Distance from baseline to bottom of stroke, typically negative */
+    float strikeoutPosition;
 } OH_Drawing_Font_Metrics;
 
 /**
