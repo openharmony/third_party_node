@@ -204,35 +204,35 @@
         "first_introduced": "12",
         "name": "OH_Drawing_TextStyleGetShadowWithIndex"
     },
-	{
+    {
         "first_introduced": "12",
         "name": "OH_Drawing_TypographyGetIndentsWithIndex"
     },
-	{
+    {
         "first_introduced": "12",
         "name": "OH_Drawing_TextStyleClearShadows"
     },
-	{
+    {
         "first_introduced": "12",
         "name": "OH_Drawing_TextStyleAddShadow"
     },
-	{
+    {
         "first_introduced": "12",
         "name": "OH_Drawing_TextStyleGetShadowCount"
     },
-	{
+    {
         "first_introduced": "12",
         "name": "OH_Drawing_TextStyleGetShadows"
     },
-	{
+    {
         "first_introduced": "12",
         "name": "OH_Drawing_DestroyTextShadow"
     },
-	{
+    {
         "first_introduced": "12",
         "name": "OH_Drawing_CreateTextShadow"
     },
-	{
+    {
         "first_introduced": "12",
         "name": "OH_Drawing_TypographySetIndents"
     },
