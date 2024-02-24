@@ -497,6 +497,8 @@
         'src/jsvm_types.h',
         'src/js_native_api_v8.cc',
         'src/js_native_api_v8.h',
+        'src/js_native_api_v8_inspector.cc',
+        'src/js_native_api_v8_inspector.h',
         'src/js_native_api_v8_internals.h',
         'src/js_stream.cc',
         'src/json_utils.cc',
