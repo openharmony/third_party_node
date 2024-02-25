@@ -1517,7 +1517,7 @@ void OH_Drawing_SetTypographyTextLineStyleFontStyle(OH_Drawing_TypographyStyle*,
  * @since 12
  * @version 1.0
  */
-void OH_Drawing_SetTypographyTextLineStyleFontFamilies(OH_Drawing_TypographyStyle*, int, const char*);
+void OH_Drawing_SetTypographyTextLineStyleFontFamilies(OH_Drawing_TypographyStyle*, int, const char* fontFamilies[]);
 	
 /**
  * @brief Sets the font size of line style for text typography.
