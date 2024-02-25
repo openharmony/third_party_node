@@ -17,7 +17,8 @@
  * @addtogroup ArkUI_NativeModule
  * @{
  *
- * @brief Provide UI capabilities of the ArkUI on the Native side, such as creating and destroying UI components, operating tree nodes, setting attributes, and listening on events.
+ * @brief Provides UI capabilities of ArkUI on the native side, such as UI component creation and destruction,
+ * tree node operations, attribute setting, and event listening.
  *
  * @since 12
  */
@@ -25,7 +26,7 @@
 /**
  * @file native_interface.h
  *
- * @brief Provide the unified entry function of the NativeModule interface.
+ * @brief Provides a unified entry for the native module APIs.
  *
  * @library libace_ndk.z.so
  * @syscap SystemCapability.ArkUI.ArkUI.Full
@@ -42,35 +43,47 @@ extern "C" {
 #endif
 
 /**
- * @brief Define the native interface type of any version.
+ * @brief Defines the native API type of any version.
  *
  * @since 12
  */
 typedef struct {
-/**
- * @brief Define the version information about the Native interface set.
- *
- * Different from the NDK version, the version field of the NativeNode interface indicates the version information of the structure.
- */
-int32_t version;
+    /**
+     * @brief Defines the version information of the native API set.
+     *
+     * Unlike the NDK version, the version field of the NativeNode API indicates the version of its own structure.
+     */
+    int32_t version;
 } ArkUI_AnyNativeAPI;
 
 /**
- * @brief Define the native interface set type.
+ * @brief Defines the native API set type.
  *
  * @since 12
  */
 typedef enum {
-    /** Indicates the type of the interface related to the UI component. */
+    /** API type related to UI components. */
     ARKUI_NATIVE_NODE,
 } ArkUI_NativeAPIVariantKind;
 
 /**
- * @brief Obtain the Native interface set of a specified version.
+ * @brief Defines the version information supported by the ARKUI_NATIVE_NODE type.
  *
- * @param type indicates the class of the Native interface set provided by the ArkUI, for example, the UI component interface class ARKUI_NATIVE_NODE.
- * @param version Version of the native interface structure, which is obtained through the suffix defined by the structure, for example, ArkUI_NativeNodeAPI_1 of the UI component structure of version 1.
- * @return ArkUI_AnyNativeAPI* Return the abstract object of the Native interface that carries the version.
+ * @since 12 
+ */
+typedef enum {
+    /** The ARKUI_NATIVE_NODE type supports the structure {@link ArkUI_NativeNodeAPI_1} of version 1. */
+    ARKUI_NATIVE_NODE_VERSION_1,
+} ArkUI_NativeNodeAPIVersion;
+
+/**
+ * @brief Obtains the native API set of a specified version.
+ *
+ * @param type Indicates the type of the native API set provided by ArkUI, for example, ARKUI_NATIVE_NODE
+ * (API type related to UI components).
+ * @param version Indicates the version of the native API structure, which is obtained through the suffix defined in the
+ * structure. For example, for the ArkUI_NativeNodeAPI_1 structure, the version is 1.
+ * @return Returns the pointer to the native API abstract object that carries the version.
  * @code {.cpp}
  * #include<arkui/native_interface.h>
  * #include<arkui/native_node.h>
@@ -80,10 +93,34 @@ typedef enum {
  *     auto basicNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(anyNativeAPI);
  * }
  * @endcode
+ * @deprecated This API is deprecated since API version 12.
+ * You are advised to use {@link OH_ArkUI_QueryModuleInterface} instead.
+ * @since 12
+ */
+ArkUI_AnyNativeAPI* OH_ArkUI_GetNativeAPI(ArkUI_NativeAPIVariantKind type, int32_t version);
+
+/**
+ * @brief Obtains the native module API set of a specified version.
+ *
+ * @param type Indicates the type of the native API set provided by ArkUI, for example, ARKUI_NATIVE_NODE
+ * (API type related to UI components).
+ * @param version Indicates the version of the native API structure, which is obtained through the version enums
+ * supported by the structure. For example, the available version of ARKUI_NATIVE_NODE is
+ * {@link ARKUI_NATIVE_NODE_VERSION}.
+ * @return Returns the pointer to the native API abstract object that carries the version.
+ * @code {.cpp}
+ * #include<arkui/native_interface.h>
+ * #include<arkui/native_node.h>
+ *
+ * auto anyNativeAPI = OH_ArkUI_QueryModuleInterface(ARKUI_NATIVE_NODE, ARKUI_NATIVE_NODE_VERSION_1);
+ * if (anyNativeAPI->version == ARKUI_NATIVE_NODE_VERSION_1) {
+ *     auto nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(anyNativeAPI);
+ * }
+ * @endcode
  *
  * @since 12
-*/
-ArkUI_AnyNativeAPI* OH_ArkUI_GetNativeAPI(ArkUI_NativeAPIVariantKind type, int32_t version);
+ */
+ArkUI_AnyNativeAPI* OH_ArkUI_QueryModuleInterface(ArkUI_NativeAPIVariantKind type, int32_t version);
 
 #ifdef __cplusplus
 };

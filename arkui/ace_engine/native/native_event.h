@@ -17,7 +17,9 @@
  * @addtogroup ArkUI_NativeModule
  * @{
  *
- * @brief Provides the UI component capabilities of the ArkUI on the Native side, such as component creation and destruction, tree node operations, attribute setting, and event listening.
+ * @brief Provides UI capabilities of ArkUI on the native side, such as UI
+ * component creation and destruction, tree node operations, attribute setting,
+ * and event listening.
  *
  * @since 12
  */
@@ -25,7 +27,7 @@
 /**
  * @file native_event.h
  *
- * @brief Provides the event type definition set of the ArkUI on the Native side.
+ * @brief Provides the event type definitions of ArkUI on the native side.
  *
  * @library libace_ndk.z.so
  * @syscap SystemCapability.ArkUI.ArkUI.Full
@@ -43,77 +45,79 @@ extern "C" {
 #endif
 
 /**
- * @brief Tool type definition of the Touch event.
+ * @brief Enumerates the tool types of the touch event.
  *
  * @since 12
  */
 typedef enum {
-    /** The tool type is not supported. */
+    /** Unknown tool type. */
     NODE_TOOL_TYPE_UNKNOWN = -1,
 
-    /** Finger */
+    /** Finger. */
     NODE_TOOL_TYPE_FINGER = 0,
 
-    /** Pen */
+    /** Stylus. */
     NODE_TOOL_TYPE_STYLUS = 1,
 } ArkUI_NodeToolType;
 
 /**
- * @brief Source type definition of the Touch event.
+ * @brief Enumerates the source types of the touch event.
  *
  * @since 12
  */
 typedef enum {
-    /** Unsupported source type */
+    /** Unknown source type. */
     NODE_SOURCE_TYPE_UNKNOWN = -1,
-    /** Touch screen */
+    /** Touchscreen. */
     NODE_SOURCE_TYPE_TOUCH_SCREEN = 0,
-    /** Stylus */
+    /** Stylus. */
     NODE_SOURCE_TYPE_STYLUS = 1,
-    /** Touchpad */
+    /** Touchpad. */
     NODE_SOURCE_TYPE_TOUCHPAD = 2,
 } ArkUI_NodeSourceType;
 
 /**
- * @brief Defines the data structure of the touch point information of the Touch event.
+ * @brief Defines the data structure of the touch point information of the
+ * touch event.
  *
  * @since 12
  */
 typedef struct {
-    /** Touch event ID. */
+    /** ID of the touch event. */
     int32_t id;
 
-    /** Timestamp when a finger is pressed, in microseconds (us). */
+    /** Timestamp when a finger is pressed, in μs. */
     int64_t pressedTime;
 
-    /** X coordinate of the screen to which the touch position belongs. */
+    /** X coordinate of the touch point on the screen. */
     int32_t screenX;
 
-    /** Y coordinate of the screen to which the touch position belongs. */
+    /** Y coordinate of the touch point on the screen. */
     int32_t screenY;
 
-    /** X coordinate of the touch position in the window. */
+    /** X coordinate of the touch point in the window. */
     int32_t windowX;
 
-    /** Y coordinate of the touch position in the window. */
+    /** Y coordinate of the touch point in the window. */
     int32_t windowY;
 
-    /** X coordinate of the touch position in the current trigger event component. */
+    /** X coordinate of the touch point in the component that triggers the event. */
     int32_t nodeX;
 
-    /** Y coordinate of the touch position in the current trigger event component. */
+    /** Y coordinate of the touch point in the component that triggers the event. */
     int32_t nodeY;
 
-    /** Pressure value. The value range is [0.0, 1.0]. 0.0 indicates that the pressure is not supported. */
+    /** Pressure value. The value range is [0.0, 1.0]. The value 0.0 indicates
+        that the pressure is not supported. */
     double pressure;
 
-    /** Wideness of the touch area. */
+    /** Width of the touch area. */
     int32_t contactAreaWidth;
 
     /** Height of the touch area. */
     int32_t contactAreaHeight;
 
-    /** Angle relative to the YZ plane. The value range is [-90, 90], where a positive value indicates the right slant. */
+    /** Angle relative to the YZ plane. The value range is [-90, 90]. A positive value indicates a rightward tilt. */
     double tiltX;
 
     /** Angle relative to the XZ plane. The value range is [-90, 90]. A positive value indicates a downward tilt. */
@@ -125,16 +129,16 @@ typedef struct {
     /** Y coordinate of the center point of the tool area. */
     int32_t toolY;
 
-    /** Width of the contact area of the tool. */
+    /** Width of the tool area. */
     int32_t toolWidth;
 
-    /** Height of the contact area of the tool. */
+    /** Height of the tool area. */
     int32_t toolHeight;
 
-    /** Enter the X coordinate of the device. */
+    /** X coordinate of the input device. */
     int32_t rawX;
 
-    /** Input the Y coordinate of the device. */
+    /** Y coordinate of the input device. */
     int32_t rawY;
 
     /** Tool type. */
@@ -142,77 +146,82 @@ typedef struct {
 } ArkUI_NodeTouchPoint;
 
 /**
- * @brief Defines the enumerated value of the touch event type.
+ * @brief Enumerates touch event types.
  *
  * @since 12
  */
 typedef enum {
-    /**  Touch to cancel. */
+    /** Cancellation of touch. */
     NODE_ACTION_CANCEL = 0,
-    /** Touch and press. */
+    /** Pressing of a touch point. */
     NODE_ACTION_DOWN = 1,
-    /** Touch to move. */
+    /** Moving of a touch point. */
     NODE_ACTION_MOVE = 2,
-    /**  Touch to lift. */
+    /** Lifting of a touch point. */
     NODE_ACTION_UP = 3,
 } ArkUI_NodeTouchEventAction;
 
 /**
- * @brief Defines the structure type of historical point information.
+ * @brief Defines the data structure of the historical point information.
  *
  * @since 12
  */
 typedef struct {
-    /** Screen touch event type. */
+    /** Touch event type. */
     ArkUI_NodeTouchEventAction action;
-    /** Timestamp of historical touchscreen events, in microseconds (us). */
+    /** Timestamp of the historical touch event, in μs. */
     int64_t timeStamp;
-    /** Source type of historical touch events. */
+    /** Source type of the historical touch event. */
     ArkUI_NodeTouchPoint actionTouch;
-    /** Source type of historical touch events. */
+    /** Source type of the historical touch event. */
     ArkUI_NodeSourceType sourceType;
 } ArkUI_NodeHistoricalTouchPoint;
 
 /**
- * @brief Defines the structure type of the Touch event.
+ * @brief Defines the data structure of the touch event.
  *
  * @since 12
  */
 typedef struct {
-    /** Type of the touch event. */
+    /** Touch event type. */
     ArkUI_NodeTouchEventAction action;
 
-    /** Timestamp of the touch event, in microseconds (us). */
+    /** Timestamp of the touch event, in μs. */
     int64_t timeStamp;
 
-    /**  Information about the touch point of the current touch event. */
+    /** Touch point information of the touch event. */
     ArkUI_NodeTouchPoint actionTouch;
 
     /**
-     * @brief Return the information about all screen touch points when this event occurs.
-     * @param points Pointer object used to receive data.
-     * @return Number of screen contact points.
+     * @brief Returns information about all touch points when this event occurs.
+     * @param points Indicates the pointer to the object that receives data.
+     * @return Returns the number of elements in the touch point information array.
      * @note
-     * When this function is invoked, the framework creates a heap memory object of the touch point information array and returns a pointer. Developers need to manually release the memory by calling delete[] after using the function.
+     * When this function is called, ArkUI creates a heap memory object of the touch point information array and
+     * returns the pointer to the pointer. You need to call <b>delete[]</b> to manually free the memory when the
+     * object is not in use.
      */
     int32_t (*getTouches)(ArkUI_NodeTouchPoint** points);
 
     /**
-     * @brief Return the historical point information in the event. These are the motions that occur between this event and the previous event.
-     * @param historicalPoints Pointer object used to receive data.
-     * @return Number of historical points.
+     * @brief Returns the historical point information of this event, which covers actions that occur between
+     * this event and the previous event.
+     * @param historicalPoints Indicates the pointer to the object that receives data.
+     * @return Returns the number of elements in the historical touch point information array.
      * @note
-     * When this function is invoked, the framework creates a heap memory object of the historical point data array and returns a pointer. After the function is invoked, you need to manually release the memory by calling delete[].
+     * When this function is called, ArkUI creates a heap memory object of the historical touch point information array
+     * and returns the pointer to the pointer. You need to call <b>delete[]</b> to manually free the memory
+     * when the object is not in use.
      */
     int32_t (*getHistoricalPoints)(ArkUI_NodeHistoricalTouchPoint** historicalPoints);
 
-    /** Type of the triggering event source. */
+    /** Source type of the touch event. */
     ArkUI_NodeSourceType sourceType;
 
-    /** Prohibit further pop-up processing of the event to the parent node. */
+    /** Whether to prevent propagation of the event to the parent node. */
     bool stopPropagation;
 
-    /** Block the default event processing behavior of the current node and allow events to bubble up further. */
+    /** Whether to prevent the default event processing behavior of the current node and allow propagation of the event. */
     bool preventDefault;
 } ArkUI_NodeTouchEvent;
 
