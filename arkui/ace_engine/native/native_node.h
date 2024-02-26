@@ -496,7 +496,7 @@ typedef enum {
      * which supports five types of shapes:\n
      * 1. Rectangle:\n
      * .value[0].i32: type of shape. The parameter type is {@link ArkUI_ClipType}.
-     * The value is <b>ARKUI_CLIP_TYPE_RECT</b> for the rectangle shape.\n
+     * The value is <b>ARKUI_CLIP_TYPE_RECTANGLE</b> for the rectangle shape.\n
      * .value[1].f32: width of the rectangle.\n
      * .value[2].f32: height of rectangle.\n
      * .value[3].f32: width of the rounded corner of the rectangle.\n
@@ -520,7 +520,7 @@ typedef enum {
      * Format of the return value {@link ArkUI_AttributeItem}, which supports five types of shapes:\n
      * 1. Rectangle:\n
      * .value[0].i32: type of shape. The parameter type is {@link ArkUI_ClipType}.
-     * The value is <b>ARKUI_CLIP_TYPE_RECT</b> for the rectangle shape.\n
+     * The value is <b>ARKUI_CLIP_TYPE_RECTANGLE</b> for the rectangle shape.\n
      * .value[1].f32: width of the rectangle.\n
      * .value[2].f32: height of rectangle.\n
      * .value[3].f32: width of the rounded corner of the rectangle.\n
@@ -941,7 +941,7 @@ typedef enum {
      * .value[1].u32: stroke color, in 0xARGB format. \n
      * .value[2].f32: stroke width, in vp. \n
      * .value[3].i32: mask type. The parameter type is {@link ArkUI_MaskType}.
-     * The value is <b>ARKUI_MASK_TYPE_RECT</b> for the rectangle shape.\n
+     * The value is <b>ARKUI_MASK_TYPE_RECTANGLE</b> for the rectangle shape.\n
      * .value[4].f32: width of the rectangle.\n
      * .value[5].f32: height of the rectangle.\n
      * .value[6].f32: width of the rounded corner of the rectangle.\n
@@ -1306,16 +1306,16 @@ typedef enum {
     NODE_ACCESSIBILITY_TEXT,
 
     /**
-     * @brief Sets the accessibility level. This attribute can be set, reset, and obtained as required through APIs.
+     * @brief Sets the accessibility service model. This attribute can be set, reset, and obtained as required through APIs.
      *
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
-     * .value[0].i32: accessibility level. The parameter type is {@link ArkUI_AccessibilityLevel}.
+     * .value[0].i32: accessibility service model. The parameter type is {@link ArkUI_AccessibilityMode}.
      * \n
      * Format of the return value {@link ArkUI_AttributeItem}:\n
-     * .value[0].i32: accessibility level. The parameter type is {@link ArkUI_AccessibilityLevel}.
+     * .value[0].i32: accessibility service model. The parameter type is {@link ArkUI_AccessibilityMode}.
      *
      */
-    NODE_ACCESSIBILITY_STATUS,
+    NODE_ACCESSIBILITY_MODE,
 
     /**
      * @brief Sets the accessibility description.
@@ -2129,7 +2129,7 @@ typedef enum {
      *
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .value[0].i32: type of the progress indicator {@link ArkUI_ProgressType}.
-     * The default value is <b>ARKUI_PROGRESS_LINEAR</b>. \n
+     * The default value is <b>ARKUI_PROGRESS_TYPE_LINEAR</b>. \n
      * \n
      * Format of the return value {@link ArkUI_AttributeItem}:\n
      * .value[0].i32: type of the progress indicator {@link ArkUI_ProgressType}. \n
@@ -2756,7 +2756,7 @@ typedef enum {
      * There are five types:\n
      * 1. Rectangle:\n
      * .value[1].i32: type of shape. The parameter type is {@link ArkUI_ShapeType}.
-     * The value is <b>ARKUI_SHAPE_TYPE_RECT</b> for the rectangle shape.\n
+     * The value is <b>ARKUI_SHAPE_TYPE_RECTANGLE</b> for the rectangle shape.\n
      * .value[2].f32: width of the rectangle.\n
      * .value[3].f32: height of the rectangle.\n
      * .value[4].f32: width of the rounded corner of the rectangle.\n
@@ -2786,7 +2786,7 @@ typedef enum {
       * There are five types:\n
      * 1. Rectangle:\n
      * .value[1].i32: type of shape. The parameter type is {@link ArkUI_ShapeType}.
-     * The value is <b>ARKUI_SHAPE_TYPE_RECT</b> for the rectangle shape.\n
+     * The value is <b>ARKUI_SHAPE_TYPE_RECTANGLE</b> for the rectangle shape.\n
      * .value[2].f32: width of the rectangle.\n
      * .value[3].f32: height of the rectangle.\n
      * .value[4].f32: width of the rounded corner of the rectangle.\n
