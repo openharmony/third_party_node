@@ -155,6 +155,7 @@
   "SystemCapability.Security.DeviceSecurityLevel",
   "SystemCapability.Security.Huks.Core",
   "SystemCapability.Security.Huks.Extension",
+  "SystemCapability.Security.Asset",
   "SystemCapability.Security.AccessToken",
   "SystemCapability.Security.Cipher",
   "SystemCapability.Security.CertificateManager",
