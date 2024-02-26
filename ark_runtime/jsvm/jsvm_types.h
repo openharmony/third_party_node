@@ -170,7 +170,11 @@ typedef void(JSVM_CDECL* JSVM_Finalize)(JSVM_Env env,
                                         void* finalizeHint);
 
 /**
- * @brief Function pointer type for callback of ASCII output stream.
+ * @brief Function pointer type for callback of ASCII output stream. The first parameter data is the data pointer.
+ * And the second parameter size is the data size to output. A null data pointer indicates the end of the stream.
+ * The third parameter streamData is the pointer passed in together with the callback to the API functions that
+ * generate data to the output stream. The callback returns true to indicate the stream can continue to accept
+ * data. Otherwise, it will abort the stream. 
  *
  * @since 12
  */
