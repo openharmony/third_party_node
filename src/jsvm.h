@@ -2138,8 +2138,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_GetHeapStatistics(JSVM_VM vm,
  * @return Returns JSVM_OK if the API succeeded.
  * @since 12
  */
-JSVM_EXTERN JSVM_Status OH_JSVM_StartCPUProfiler(JSVM_VM vm,
-                                                 JSVM_CPUProfiler* result);
+JSVM_EXTERN JSVM_Status OH_JSVM_StartCpuProfiler(JSVM_VM vm,
+                                                 JSVM_CpuProfiler* result);
 
 /**
  * @brief This function stops the CPU profiler and output to the stream.
@@ -2151,8 +2151,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_StartCPUProfiler(JSVM_VM vm,
  * @return Returns JSVM_OK if the API succeeded.
  * @since 12
  */
-JSVM_EXTERN JSVM_Status OH_JSVM_StopCPUProfiler(JSVM_VM vm,
-                                                JSVM_CPUProfiler profiler,
+JSVM_EXTERN JSVM_Status OH_JSVM_StopCpuProfiler(JSVM_VM vm,
+                                                JSVM_CpuProfiler profiler,
                                                 JSVM_OutputStream stream,
                                                 void* streamData);
 
@@ -2207,3 +2207,4 @@ EXTERN_C_END
 
 /** @} */
 #endif /* ARK_RUNTIME_JSVM_JSVM_H */
+
