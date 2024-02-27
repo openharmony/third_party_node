@@ -5,6 +5,10 @@
     { "name": "OH_Drawing_BitmapCreateFromPixels" },
     { "name": "OH_Drawing_BitmapGetWidth" },
     { "name": "OH_Drawing_BitmapGetHeight" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_BitmapGetImageInfo"
+    },
     { "name": "OH_Drawing_BitmapGetPixels" },
     { "name": "OH_Drawing_BrushCreate" },
     { "name": "OH_Drawing_BrushDestroy" },
@@ -90,6 +94,10 @@
     { "name": "OH_Drawing_MatrixRotate" },
     { "name": "OH_Drawing_MatrixTranslate" },
     { "name": "OH_Drawing_MatrixScale" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_MatrixSetPolyToPoly"
+    },
     { "name": "OH_Drawing_MatrixInvert" },
     { "name": "OH_Drawing_MatrixIsEqual" },
     { "name": "OH_Drawing_MatrixIsIdentity" },
