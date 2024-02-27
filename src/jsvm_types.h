@@ -97,7 +97,7 @@ typedef struct JSVM_Env__* JSVM_Env;
  *
  * @since 12
  */
-typedef struct JSVM_CPUProfiler__* JSVM_CPUProfiler;
+typedef struct JSVM_CpuProfiler__* JSVM_CpuProfiler;
 
 /**
  * @brief To represent a JavaScript VM environment.
