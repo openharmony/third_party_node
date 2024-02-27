@@ -65,10 +65,6 @@
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkWebRequestHeaderList_Create"
-    },
-    {
-        "first_introduced": "12",
         "name": "OH_ArkWebRequestHeaderList_Destroy"
     },
     {
