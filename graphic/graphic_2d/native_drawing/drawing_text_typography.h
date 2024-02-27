@@ -1517,7 +1517,7 @@ void OH_Drawing_SetTypographyTextLineStyleFontStyle(OH_Drawing_TypographyStyle*,
  * @since 12
  * @version 1.0
  */
-void OH_Drawing_SetTypographyTextLineStyleFontFamilies(OH_Drawing_TypographyStyle*, int, const char*);
+void OH_Drawing_SetTypographyTextLineStyleFontFamilies(OH_Drawing_TypographyStyle*, int, const char* fontFamilies[]);
 	
 /**
  * @brief Sets the font size of line style for text typography.
@@ -1660,7 +1660,7 @@ OH_Drawing_TextShadow* OH_Drawing_TextStyleGetShadowWithIndex(OH_Drawing_TextSty
  * @since 12
  * @version 1.0
  */
-void OH_Drawing_TypographySetIndents(OH_Drawing_Typography*, int, const float);
+void OH_Drawing_TypographySetIndents(OH_Drawing_Typography*, int, const float indents[]);
 
 /**
  * @brief Gets element with index in vector of Indents.
