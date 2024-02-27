@@ -50,6 +50,10 @@ typedef enum FileManagement_ErrCode {
      */
     ERR_PERMISSION_ERROR = 201,
     /**
+     * invalid input parameter.
+     */
+    ERR_INVALID_PARAMETER = 401,
+    /**
      * device not supported.
      */
     ERR_DEVICE_NOT_SUPPORTED = 801,
@@ -64,7 +68,7 @@ typedef enum FileManagement_ErrCode {
     /**
      * out of memory.
      */
-    ERR_ENOMEM = 139000011,
+    ERR_ENOMEM = 13900011,
     /**
      * unknown error.
      */
