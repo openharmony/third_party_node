@@ -1270,18 +1270,18 @@ OH_JSVM_GetHeapStatistics(JSVM_VM vm, JSVM_HeapStatistics* result) {
 }
 
 JSVM_EXTERN JSVM_Status JSVM_CDECL
-OH_JSVM_StartCPUProfiler(JSVM_VM vm, JSVM_CPUProfiler* result) {
+OH_JSVM_StartCpuProfiler(JSVM_VM vm, JSVM_CpuProfiler* result) {
   auto isolate = reinterpret_cast<v8::Isolate*>(vm);
   auto profiler = v8::CpuProfiler::New(isolate);
   v8::HandleScope scope(isolate);
   v8::CpuProfilingOptions options;
   profiler->Start(v8::String::Empty(isolate), std::move(options));
-  *result = reinterpret_cast<JSVM_CPUProfiler>(profiler);
+  *result = reinterpret_cast<JSVM_CpuProfiler>(profiler);
   return JSVM_OK;
 }
 
 JSVM_EXTERN JSVM_Status JSVM_CDECL
-OH_JSVM_StopCPUProfiler(JSVM_VM vm, JSVM_CPUProfiler profiler,
+OH_JSVM_StopCpuProfiler(JSVM_VM vm, JSVM_CpuProfiler profiler,
                         JSVM_OutputStream stream, void* streamData) {
   auto isolate = reinterpret_cast<v8::Isolate*>(vm);
   auto v8profiler = reinterpret_cast<v8::CpuProfiler*>(profiler);
