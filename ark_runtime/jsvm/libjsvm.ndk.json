@@ -534,5 +534,37 @@
     {
         "first_introduced": "11",
         "name": "OH_JSVM_CreateSnapshot"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_JSVM_GetVM"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_JSVM_GetHeapStatistics"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_JSVM_StartCpuProfiler"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_JSVM_StopCpuProfiler"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_JSVM_TakeHeapSnapshot"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_JSVM_OpenInspector"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_JSVM_CloseInspector"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_JSVM_WaitForDebugger"
     }
 ]

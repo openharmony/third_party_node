@@ -93,6 +93,13 @@ typedef struct JSVM_Script__* JSVM_Script;
 typedef struct JSVM_Env__* JSVM_Env;
 
 /**
+ * @brief To represent a JavaScript profiler.
+ *
+ * @since 12
+ */
+typedef struct JSVM_CpuProfiler__* JSVM_CpuProfiler;
+
+/**
  * @brief To represent a JavaScript VM environment.
  *
  * @since 11
@@ -161,6 +168,19 @@ typedef JSVM_CallbackStruct* JSVM_Callback;
 typedef void(JSVM_CDECL* JSVM_Finalize)(JSVM_Env env,
                                         void* finalizeData,
                                         void* finalizeHint);
+
+/**
+ * @brief Function pointer type for callback of ASCII output stream. The first parameter data is the data pointer.
+ * And the second parameter size is the data size to output. A null data pointer indicates the end of the stream.
+ * The third parameter streamData is the pointer passed in together with the callback to the API functions that
+ * generate data to the output stream. The callback returns true to indicate the stream can continue to accept
+ * data. Otherwise, it will abort the stream. 
+ *
+ * @since 12
+ */
+typedef bool(JSVM_CDECL* JSVM_OutputStream)(const char* data,
+                                            int size,
+                                            void* streamData);
 
 /**
  * @brief JSVM_PropertyAttributes are flag used to control the behavior of properties set on a js object.
@@ -355,6 +375,40 @@ typedef enum {
     /** critical pressure. */
     JSVM_MEMORY_PRESSURE_LEVEL_CRITICAL,
 } JSVM_MemoryPressureLevel;
+
+/**
+ * @brief Heap statisics.
+ *
+ * @since 12
+ */
+typedef struct {
+    /** the size of the total heap. */
+    size_t totalHeapSize;
+    /** the executable size of the total heap. */
+    size_t totalHeapSizeExecutable;
+    /** the physical size of the total heap. */
+    size_t totalPhysicalSize;
+    /** the available size of the total heap. */
+    size_t totalAvailableSize;
+    /** used size of the heap. */
+    size_t usedHeapSize;
+    /** heap size limit. */
+    size_t heapSizeLimit;
+    /** memory requested by the heap. */
+    size_t mallocedMemory;
+    /** heap-requested external memory. */
+    size_t externalMemory;
+    /** peak memory requested by the heap. */
+    size_t peakMallocedMemory;
+    /** the number of native contexts. */
+    size_t numberOfNativeContexts;
+    /** the number of detached contexts. */
+    size_t numberOfDetachedContexts;
+    /** the size of the total global handles. */
+    size_t totalGlobalHandlesSize;
+    /** the size of the used global handles. */
+    size_t usedGlobalHandlesSize;
+} JSVM_HeapStatistics;
 
 /**
  * @brief Init the JavaScript VM with init option.
