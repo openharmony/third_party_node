@@ -17,6 +17,7 @@
 #ifndef __UCONFIG_H__
 #define __UCONFIG_H__
 
+// ohos icu ndk configs
 #define U_DISABLE_RENAMING 1
 #define U_HIDE_DRAFT_API 1
 #define U_HIDE_DEPRECATED_API 1
@@ -88,15 +89,6 @@
  */
 #ifndef UCLN_NO_AUTO_CLEANUP
 #define UCLN_NO_AUTO_CLEANUP 1
-#endif
-
-/**
- * \def U_DISABLE_RENAMING
- * Determines whether to disable renaming or not.
- * @internal
- */
-#ifndef U_DISABLE_RENAMING
-#define U_DISABLE_RENAMING 0
 #endif
 
 /**
