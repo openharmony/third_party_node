@@ -21,8 +21,7 @@ ohos_ndk_library("libohfileshare") {
   output_extension = "so"
   system_capability =
       "SystemCapability.FileManagement.AppFileService.FolderAuthorization"
-  system_capability_headers =
-      [ "$ndk_headers_out_dir/filemanagement/fileshare/oh_file_share.h" ]
+  system_capability_headers = [ "filemanagement/fileshare/oh_file_share.h" ]
 }
 
 ohos_ndk_headers("oh_file_share_header") {
