@@ -21,15 +21,9 @@ ohos_ndk_library("libicu_ndk") {
   output_extension = "so"
 }
 
-ohos_ndk_headers("icu_header") {
-  dest_dir = "$ndk_headers_out_dir"
-  sources = [ "ndk_headers/uconfig_local.h" ]
-}
-
 ohos_ndk_headers("icu_unicode_header") {
   dest_dir = "$ndk_headers_out_dir/unicode"
   sources = [
-    "ndk_headers/unicode/char16ptr.h",
     "ndk_headers/unicode/platform.h",
     "ndk_headers/unicode/ptypes.h",
     "ndk_headers/unicode/ucnv.h",
