@@ -36,13 +36,8 @@
 
 
 #include "unicode/umachine.h"
-#include "unicode/uversion.h"
 #include "unicode/uconfig.h"
 #include <float.h>
-
-#if !U_NO_DEFAULT_INCLUDE_UTF_HEADERS
-#   include "unicode/utf.h"
-#endif
 
 /*!
  * \file
