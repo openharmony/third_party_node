@@ -431,14 +431,6 @@ typedef enum UErrorCode {
     
     U_PLUGIN_CHANGED_LEVEL_WARNING = -120, /**< A plugin caused a level change. May not be an error, but later plugins may not load. */
 
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * One more than the highest normal UErrorCode warning value.
-     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
-     */
-    U_ERROR_WARNING_LIMIT,
-#endif  // U_HIDE_DEPRECATED_API
-
     U_ZERO_ERROR              =  0,     /**< No error, no warning. */
 
     U_ILLEGAL_ARGUMENT_ERROR  =  1,     /**< Start of codes indicating failure */
@@ -481,14 +473,6 @@ typedef enum UErrorCode {
      */
     U_INPUT_TOO_LONG_ERROR = 31,
 
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * One more than the highest standard error code.
-     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
-     */
-    U_STANDARD_ERROR_LIMIT = 32,
-#endif  // U_HIDE_DEPRECATED_API
-
     /*
      * Error codes in the range 0x10000 0x10100 are reserved for Transliterator.
      */
@@ -528,13 +512,6 @@ typedef enum UErrorCode {
     U_INTERNAL_TRANSLITERATOR_ERROR,  /**< Internal transliterator system error */
     U_INVALID_ID,                     /**< A "::id" rule specifies an unknown transliterator */
     U_INVALID_FUNCTION,               /**< A "&fn()" rule specifies an unknown transliterator */
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * One more than the highest normal Transliterator error code.
-     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
-     */
-    U_PARSE_ERROR_LIMIT,
-#endif  // U_HIDE_DEPRECATED_API
 
     /*
      * Error codes in the range 0x10100 0x10200 are reserved for the formatting API.
@@ -561,13 +538,6 @@ typedef enum UErrorCode {
     U_FORMAT_INEXACT_ERROR,           /**< Cannot format a number exactly and rounding mode is ROUND_UNNECESSARY @stable ICU 4.8 */
     U_NUMBER_ARG_OUTOFBOUNDS_ERROR,   /**< The argument to a NumberFormatter helper method was out of bounds; the bounds are usually 0 to 999. @stable ICU 61 */
     U_NUMBER_SKELETON_SYNTAX_ERROR,   /**< The number skeleton passed to C++ NumberFormatter or C UNumberFormatter was invalid or contained a syntax error. @stable ICU 62 */
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * One more than the highest normal formatting API error code.
-     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
-     */
-    U_FMT_PARSE_ERROR_LIMIT = 0x10114,
-#endif  // U_HIDE_DEPRECATED_API
 
     /*
      * Error codes in the range 0x10200 0x102ff are reserved for BreakIterator.
@@ -587,13 +557,6 @@ typedef enum UErrorCode {
     U_BRK_RULE_EMPTY_SET,                  /**< Rule contains an empty Unicode Set.               */
     U_BRK_UNRECOGNIZED_OPTION,             /**< !!option in RBBI rules not recognized.            */
     U_BRK_MALFORMED_RULE_TAG,              /**< The {nnn} tag on a rule is malformed              */
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * One more than the highest normal BreakIterator error code.
-     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
-     */
-    U_BRK_ERROR_LIMIT,
-#endif  // U_HIDE_DEPRECATED_API
 
     /*
      * Error codes in the range 0x10300-0x103ff are reserved for regular expression related errors.
@@ -613,9 +576,6 @@ typedef enum UErrorCode {
     U_REGEX_INVALID_FLAG,                 /**< Invalid value for match mode flags.                */
     U_REGEX_LOOK_BEHIND_LIMIT,            /**< Look-Behind pattern matches must have a bounded maximum length.    */
     U_REGEX_SET_CONTAINS_STRING,          /**< Regexps cannot have UnicodeSets containing strings.*/
-#ifndef U_HIDE_DEPRECATED_API
-    U_REGEX_OCTAL_TOO_BIG,                /**< Octal character constants must be <= 0377. @deprecated ICU 54. This error cannot occur. */
-#endif  /* U_HIDE_DEPRECATED_API */
     U_REGEX_MISSING_CLOSE_BRACKET=U_REGEX_SET_CONTAINS_STRING+2, /**< Missing closing bracket on a bracket expression. */
     U_REGEX_INVALID_RANGE,                /**< In a character range [x-y], x is greater than y.   */
     U_REGEX_STACK_OVERFLOW,               /**< Regular expression backtrack stack overflow.       */
@@ -623,13 +583,6 @@ typedef enum UErrorCode {
     U_REGEX_STOPPED_BY_CALLER,            /**< Matching operation aborted by user callback fn.    */
     U_REGEX_PATTERN_TOO_BIG,              /**< Pattern exceeds limits on size or complexity. @stable ICU 55 */
     U_REGEX_INVALID_CAPTURE_GROUP_NAME,   /**< Invalid capture group name. @stable ICU 55 */
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * One more than the highest normal regular expression error code.
-     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
-     */
-    U_REGEX_ERROR_LIMIT=U_REGEX_STOPPED_BY_CALLER+3,
-#endif  // U_HIDE_DEPRECATED_API
 
     /*
      * Error codes in the range 0x10400-0x104ff are reserved for IDNA related error codes.
@@ -644,13 +597,6 @@ typedef enum UErrorCode {
     U_IDNA_LABEL_TOO_LONG_ERROR,
     U_IDNA_ZERO_LENGTH_LABEL_ERROR,
     U_IDNA_DOMAIN_NAME_TOO_LONG_ERROR,
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * One more than the highest normal IDNA error code.
-     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
-     */
-    U_IDNA_ERROR_LIMIT,
-#endif  // U_HIDE_DEPRECATED_API
     /*
      * Aliases for StringPrep
      */
@@ -664,21 +610,7 @@ typedef enum UErrorCode {
     U_PLUGIN_ERROR_START=0x10500,         /**< Start of codes indicating plugin failures */
     U_PLUGIN_TOO_HIGH=0x10500,            /**< The plugin's level is too high to be loaded right now. */
     U_PLUGIN_DIDNT_SET_LEVEL,             /**< The plugin didn't call uplug_setPlugLevel in response to a QUERY */
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * One more than the highest normal plug-in error code.
-     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
-     */
-    U_PLUGIN_ERROR_LIMIT,
-#endif  // U_HIDE_DEPRECATED_API
 
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * One more than the highest normal error code.
-     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
-     */
-    U_ERROR_LIMIT=U_PLUGIN_ERROR_LIMIT
-#endif  // U_HIDE_DEPRECATED_API
 } UErrorCode;
 
 /* Use the following to determine if an UErrorCode represents */
