@@ -92,7 +92,10 @@ typedef enum {
   napi_date_expected,
   napi_arraybuffer_expected,
   napi_detachable_arraybuffer_expected,
-  napi_would_deadlock  // unused
+  napi_would_deadlock,  // unused
+  napi_create_ark_runtime_too_many_envs = 22,
+  napi_create_ark_runtime_only_one_env_per_thread = 23,
+  napi_destroy_ark_runtime_env_not_exist = 24
 } napi_status;
 // Note: when adding a new enum value to `napi_status`, please also update
 //   * `const int last_status` in the definition of `napi_get_last_error_info()'
