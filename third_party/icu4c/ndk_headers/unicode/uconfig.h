@@ -17,7 +17,7 @@
 #ifndef __UCONFIG_H__
 #define __UCONFIG_H__
 
-// ohos icu ndk configs
+// ohos icu configs
 #define U_DISABLE_RENAMING 1
 #define U_HIDE_DRAFT_API 1
 #define U_HIDE_DEPRECATED_API 1
