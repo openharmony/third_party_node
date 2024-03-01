@@ -512,18 +512,6 @@ ucnv_openPackage(const char *packageName, const char *converterName, UErrorCode 
  */
 U_CAPI UConverter* U_EXPORT2 ucnv_clone(const UConverter *cnv, UErrorCode *status);
 
-#ifndef U_HIDE_DEPRECATED_API
-
-/**
- * \def U_CNV_SAFECLONE_BUFFERSIZE
- * Definition of a buffer size that is designed to be large enough for
- * converters to be cloned with ucnv_safeClone().
- * @deprecated ICU 52. Do not rely on ucnv_safeClone() cloning into any provided buffer.
- */
-#define U_CNV_SAFECLONE_BUFFERSIZE  1024
-
-#endif /* U_HIDE_DEPRECATED_API */
-
 /**
  * Deletes the unicode converter and releases resources associated
  * with just this instance.
@@ -900,8 +888,151 @@ ucnv_getStarters(const UConverter* converter,
                  UBool starters[256],
                  UErrorCode* err);
 
+/**
+ * Gets the current callback function used by the converter when an illegal
+ *  or invalid codepage sequence is found.
+ * Context pointers are always owned by the caller.
+ *
+ * @param converter the unicode converter
+ * @param action fillin: returns the callback function pointer
+ * @param context fillin: returns the callback's private void* context
+ * @see ucnv_setToUCallBack
+ * @stable ICU 2.0
+ */
+U_CAPI void U_EXPORT2
+ucnv_getToUCallBack (const UConverter * converter,
+                     UConverterToUCallback *action,
+                     const void **context);
 
+/**
+ * Gets the current callback function used by the converter when illegal
+ * or invalid Unicode sequence is found.
+ * Context pointers are always owned by the caller.
+ *
+ * @param converter the unicode converter
+ * @param action fillin: returns the callback function pointer
+ * @param context fillin: returns the callback's private void* context
+ * @see ucnv_setFromUCallBack
+ * @stable ICU 2.0
+ */
+U_CAPI void U_EXPORT2
+ucnv_getFromUCallBack (const UConverter * converter,
+                       UConverterFromUCallback *action,
+                       const void **context);
 
+/**
+ * Changes the callback function used by the converter when
+ * an illegal or invalid sequence is found.
+ * Context pointers are always owned by the caller.
+ * Predefined actions and contexts can be found in the ucnv_err.h header.
+ *
+ * @param converter the unicode converter
+ * @param newAction the new callback function
+ * @param newContext the new toUnicode callback context pointer. This can be NULL.
+ * @param oldAction fillin: returns the old callback function pointer. This can be NULL.
+ * @param oldContext fillin: returns the old callback's private void* context. This can be NULL.
+ * @param err The error code status
+ * @see ucnv_getToUCallBack
+ * @stable ICU 2.0
+ */
+U_CAPI void U_EXPORT2
+ucnv_setToUCallBack (UConverter * converter,
+                     UConverterToUCallback newAction,
+                     const void* newContext,
+                     UConverterToUCallback *oldAction,
+                     const void** oldContext,
+                     UErrorCode * err);
+
+/**
+ * Changes the current callback function used by the converter when
+ * an illegal or invalid sequence is found.
+ * Context pointers are always owned by the caller.
+ * Predefined actions and contexts can be found in the ucnv_err.h header.
+ *
+ * @param converter the unicode converter
+ * @param newAction the new callback function
+ * @param newContext the new fromUnicode callback context pointer. This can be NULL.
+ * @param oldAction fillin: returns the old callback function pointer. This can be NULL.
+ * @param oldContext fillin: returns the old callback's private void* context. This can be NULL.
+ * @param err The error code status
+ * @see ucnv_getFromUCallBack
+ * @stable ICU 2.0
+ */
+U_CAPI void U_EXPORT2
+ucnv_setFromUCallBack (UConverter * converter,
+                       UConverterFromUCallback newAction,
+                       const void *newContext,
+                       UConverterFromUCallback *oldAction,
+                       const void **oldContext,
+                       UErrorCode * err);
+
+/**
+ * Converts an array of unicode characters to an array of codepage
+ * characters. This function is optimized for converting a continuous
+ * stream of data in buffer-sized chunks, where the entire source and
+ * target does not fit in available buffers.
+ *
+ * The source pointer is an in/out parameter. It starts out pointing where the
+ * conversion is to begin, and ends up pointing after the last UChar consumed.
+ *
+ * Target similarly starts out pointer at the first available byte in the output
+ * buffer, and ends up pointing after the last byte written to the output.
+ *
+ * The converter always attempts to consume the entire source buffer, unless
+ * (1.) the target buffer is full, or (2.) a failing error is returned from the
+ * current callback function.  When a successful error status has been
+ * returned, it means that all of the source buffer has been
+ *  consumed. At that point, the caller should reset the source and
+ *  sourceLimit pointers to point to the next chunk.
+ *
+ * At the end of the stream (flush==true), the input is completely consumed
+ * when *source==sourceLimit and no error code is set.
+ * The converter object is then automatically reset by this function.
+ * (This means that a converter need not be reset explicitly between data
+ * streams if it finishes the previous stream without errors.)
+ *
+ * This is a <I>stateful</I> conversion. Additionally, even when all source data has
+ * been consumed, some data may be in the converters' internal state.
+ * Call this function repeatedly, updating the target pointers with
+ * the next empty chunk of target in case of a
+ * <TT>U_BUFFER_OVERFLOW_ERROR</TT>, and updating the source  pointers
+ *  with the next chunk of source when a successful error status is
+ * returned, until there are no more chunks of source data.
+ * @param converter the Unicode converter
+ * @param target I/O parameter. Input : Points to the beginning of the buffer to copy
+ *  codepage characters to. Output : points to after the last codepage character copied
+ *  to <TT>target</TT>.
+ * @param targetLimit the pointer just after last of the <TT>target</TT> buffer
+ * @param source I/O parameter, pointer to pointer to the source Unicode character buffer.
+ * @param sourceLimit the pointer just after the last of the source buffer
+ * @param offsets if NULL is passed, nothing will happen to it, otherwise it needs to have the same number
+ * of allocated cells as <TT>target</TT>. Will fill in offsets from target to source pointer
+ * e.g: <TT>offsets[3]</TT> is equal to 6, it means that the <TT>target[3]</TT> was a result of transcoding <TT>source[6]</TT>
+ * For output data carried across calls, and other data without a specific source character
+ * (such as from escape sequences or callbacks)  -1 will be placed for offsets.
+ * @param flush set to <TT>true</TT> if the current source buffer is the last available
+ * chunk of the source, <TT>false</TT> otherwise. Note that if a failing status is returned,
+ * this function may have to be called multiple times with flush set to <TT>true</TT> until
+ * the source buffer is consumed.
+ * @param err the error status.  <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> will be set if the
+ * converter is <TT>NULL</TT>.
+ * <code>U_BUFFER_OVERFLOW_ERROR</code> will be set if the target is full and there is
+ * still data to be written to the target.
+ * @see ucnv_fromUChars
+ * @see ucnv_convert
+ * @see ucnv_getMinCharSize
+ * @see ucnv_setToUCallBack
+ * @stable ICU 2.0
+ */
+U_CAPI void U_EXPORT2
+ucnv_fromUnicode (UConverter * converter,
+                  char **target,
+                  const char *targetLimit,
+                  const UChar ** source,
+                  const UChar * sourceLimit,
+                  int32_t* offsets,
+                  UBool flush,
+                  UErrorCode * err);
 
 /**
  * Converts a buffer of codepage bytes into an array of unicode UChars
