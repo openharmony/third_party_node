@@ -21,8 +21,10 @@ ohos_ndk_library("libohweb") {
   system_capability = "SystemCapability.Web.Webview.Core"
   system_capability_headers = [
     "web/arkweb_error_code.h",
+    "web/arkweb_interface.h",
     "web/arkweb_net_error_list.h",
     "web/arkweb_scheme_handler.h",
+    "web/arkweb_type.h",
     "web/native_interface_arkweb.h",
   ]
   min_compact_version = "11"
@@ -32,8 +34,10 @@ ohos_ndk_headers("web_header") {
   dest_dir = "$ndk_headers_out_dir/web/"
   sources = [
     "arkweb_error_code.h",
+    "arkweb_interface.h",
     "arkweb_net_error_list.h",
     "arkweb_scheme_handler.h",
+    "arkweb_type.h",
     "native_interface_arkweb.h",
   ]
 }

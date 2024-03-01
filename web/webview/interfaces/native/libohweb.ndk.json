@@ -322,5 +322,9 @@
     {
         "first_introduced": "12",
         "name": "OH_ArkWeb_ReleaseByteArray"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkWeb_GetNativeAPI"
     }
 ]
