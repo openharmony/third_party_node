@@ -18,6 +18,7 @@ ohos_ndk_library("libicu_ndk") {
   ndk_description_file = "./libicu.ndk.json"
   min_compact_version = "12"
   output_name = "icu"
+  system_capability = "SystemCapability.Global.I18n"
   output_extension = "so"
 }
 
