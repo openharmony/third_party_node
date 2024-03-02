@@ -19,6 +19,16 @@ ohos_ndk_library("libicu_ndk") {
   min_compact_version = "12"
   output_name = "icu"
   system_capability = "SystemCapability.Global.I18n"
+  system_capability_headers = [
+    "icu4c/ndk_headers/unicode/platform.h",
+    "icu4c/ndk_headers/unicode/ptypes.h",
+    "icu4c/ndk_headers/unicode/ucnv.h",
+    "icu4c/ndk_headers/unicode/ucnv_err.h",
+    "icu4c/ndk_headers/unicode/uconfig.h",
+    "icu4c/ndk_headers/unicode/uenum.h",
+    "icu4c/ndk_headers/unicode/umachine.h",
+    "icu4c/ndk_headers/unicode/utypes.h",
+  ]
   output_extension = "so"
 }
 
