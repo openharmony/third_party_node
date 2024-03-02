@@ -486,7 +486,7 @@ int OH_HiAppEvent_SetTriggerCondition(HiAppEvent_Watcher* watcher, uint32_t row,
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @param watcher The pointer to the HiAppEvent_Watcher instance.
- * @param domain The name of the event domain to be monitored by the watcher..
+ * @param domain The name of the event domain to be monitored by the watcher.
  * @param eventTypes The types of the events to be monitored by the watcher.0x08 means BEHAVIOR,0x04 means
  * SECURITY, 0x02 means STATISTIC,0x01 means FAULT, 0xff and 0x00 means all.
  * @param names The names of the events to be monitored by the watcher.
