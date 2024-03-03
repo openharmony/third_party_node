@@ -1,0 +1,254 @@
+[
+    {
+        "first_introduced": "12",
+        "name":"ucnv_compareNames"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_open"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_openU"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_openCCSID"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_openPackage"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_clone"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_close"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getSubstChars"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_setSubstChars"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_setSubstString"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getInvalidChars"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getInvalidUChars"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_reset"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_resetToUnicode"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_resetFromUnicode"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getMaxCharSize"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getMinCharSize"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getDisplayName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getCCSID"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getPlatform"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getType"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getStarters"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getToUCallBack"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getFromUCallBack"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_setToUCallBack"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_setFromUCallBack"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_fromUnicode"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_toUnicode"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_fromUChars"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_toUChars"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getNextUChar"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_convertEx"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_convert"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_toAlgorithmic"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_fromAlgorithmic"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_flushCache"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_countAvailable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getAvailableName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_openAllNames"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_countAliases"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getAlias"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getAliases"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_openStandardNames"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_countStandards"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getStandard"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getStandardName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getCanonicalName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_getDefaultName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_setDefaultName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_fixFileSeparator"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_isAmbiguous"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_setFallback"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_usesFallback"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_detectUnicodeSignature"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_fromUCountPending"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_toUCountPending"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucnv_isFixedWidth"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uenum_close"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uenum_count"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uenum_unext"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uenum_next"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uenum_reset"
+    }
+]

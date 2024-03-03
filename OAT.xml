@@ -29,6 +29,7 @@
         </policylist>
         <filefilterlist>
             <filefilter name="defaultPolicyFilter" desc="compatibility,License Header Invalid">
+                <filteritem type="filepath" name="third_party/icu4c/.*" desc="License matcher rules, 三方软件不检查许可头"/>
                 <filteritem type="filepath" name="third_party/musl/.*" desc="License matcher rules, 三方软件不检查许可头"/>
                 <filteritem type="filepath" name="third_party/libuv/.*" desc="License matcher rules, 三方软件不检查许可头"/>
                 <filteritem type="filepath" name="third_party/zlib/.*" desc="License matcher rules, 三方软件不检查许可头"/>
@@ -40,6 +41,7 @@
                 <filteritem type="filepath" name="third_party/vulkan-headers/.*" desc="License matcher rules, 三方软件不检查许可头"/>
             </filefilter>
             <filefilter name="copyrightPolicyFilter" desc="Copyright Header Invalid">
+                <filteritem type="filepath" name="third_party/icu4c/.*" desc="Copyright matcher rules, 三方软件不检查版权"/>
                 <filteritem type="filepath" name="third_party/musl/.*" desc="Copyright matcher rules, 三方软件不检查版权"/>
                 <filteritem type="filepath" name="third_party/libuv/.*" desc="Copyright matcher rules, 三方软件不检查版权"/>
                 <filteritem type="filepath" name="third_party/zlib/.*" desc="Copyright matcher rules, 三方软件不检查版权"/>

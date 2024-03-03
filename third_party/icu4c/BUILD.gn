@@ -1,0 +1,47 @@
+# Copyright (c) 2024 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("//build/ohos/ndk/ndk.gni")
+
+ohos_ndk_library("libicu_ndk") {
+  ndk_description_file = "./libicu.ndk.json"
+  min_compact_version = "12"
+  output_name = "icu"
+  system_capability = "SystemCapability.Global.I18n"
+  system_capability_headers = [
+    "unicode/platform.h",
+    "unicode/ptypes.h",
+    "unicode/ucnv.h",
+    "unicode/ucnv_err.h",
+    "unicode/uconfig.h",
+    "unicode/uenum.h",
+    "unicode/umachine.h",
+    "unicode/utypes.h",
+  ]
+  output_extension = "so"
+}
+
+ohos_ndk_headers("icu_unicode_header") {
+  dest_dir = "$ndk_headers_out_dir/unicode"
+  sources = [
+    "ndk_headers/unicode/platform.h",
+    "ndk_headers/unicode/ptypes.h",
+    "ndk_headers/unicode/ucnv.h",
+    "ndk_headers/unicode/ucnv_err.h",
+    "ndk_headers/unicode/uconfig.h",
+    "ndk_headers/unicode/uenum.h",
+    "ndk_headers/unicode/umachine.h",
+    "ndk_headers/unicode/utypes.h",
+  ]
+}
