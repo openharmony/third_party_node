@@ -225,6 +225,33 @@ typedef struct {
     bool preventDefault;
 } ArkUI_NodeTouchEvent;
 
+/**
+ * @brief Enumerates the hit test modes.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** Both the node and its child node respond to the hit test of a touch event, but its sibling node is blocked from
+     *  the hit test.
+     */
+    HTM_DEFAULT = 0,
+
+    /** The node responds to the hit test of a touch event, but its child node and sibling node are blocked from the hit
+     *  test.
+     */
+    HTM_BLOCK,
+
+    /** Both the node and its child node respond to the hit test of a touch event, and its sibling node is also
+     *  considered during the hit test.
+     */
+    HTM_TRANSPARENT,
+
+    /** The node does not respond to the hit test of a touch event, but its child node and sibling node are considered
+     *  during the hit test.
+     */
+    HTM_NONE,
+} HitTestMode;
+
 #ifdef __cplusplus
 };
 #endif
