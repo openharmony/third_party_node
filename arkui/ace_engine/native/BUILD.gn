@@ -29,6 +29,7 @@ if (!is_arkui_x) {
       "native_event.h",
       "native_interface.h",
       "native_node.h",
+      "native_node_napi.h",
       "native_type.h",
       "ui_input_event.h",
     ]
