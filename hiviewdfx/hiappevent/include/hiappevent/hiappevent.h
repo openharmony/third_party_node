@@ -108,13 +108,14 @@ enum EventType {
 };
 
 /**
- * @brief Definition of HiAppEvent_AppEventInfo object.
+ * @brief The HiAppEvent_AppEventInfo structure is used to represent event information in an application, including
+ * the event's domain, name, type, and parameters.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @since 12
  * @version 1.0
  */
-struct HiAppEvent_AppEventInfo {
+typedef struct HiAppEvent_AppEventInfo {
     /* The domain of the event. */
     const char* domain;
     /* The name of the event. */
@@ -123,23 +124,25 @@ struct HiAppEvent_AppEventInfo {
     enum EventType type;
     /* The json string of the parameter. */
     const char* params;
-};
+} HiAppEvent_AppEventInfo;
 
 /**
- * @brief Defines the event group.
+ * @brief The HiAppEvent_AppEventGroup structure represents a group of events in an application. It contains the name
+ * of the event group, an array of HiAppEvent_AppEventInfo structures representing individual events grouped by the
+ * name, and the length of the event array.
  *
  * @syscap SystemCapability.HiviewDFX.HiAppEvent
  * @since 12
  * @version 1.0
  */
-struct HiAppEvent_AppEventGroup {
+typedef struct HiAppEvent_AppEventGroup {
     /* The name of the event. */
     const char* name;
     /* The event array which is group by the name. */
     const struct HiAppEvent_AppEventInfo* appEventInfos;
     /* The length of appEventInfos array. */
     uint32_t infoLen;
-};
+} HiAppEvent_AppEventGroup;
 
 /**
  * @brief Event param list node.
@@ -150,7 +153,8 @@ struct HiAppEvent_AppEventGroup {
 typedef struct ParamListNode* ParamList;
 
 /**
- * @brief HiAppEvent_Watcher node.
+ * @brief The HiAppEvent_Watcher structure is designed for event monitoring, allowing it to be invoked when the event
+ * occurs.
  *
  * @syscap SystemCapability.HiviewDFX.HiAppEvent
  * @since 12
@@ -159,7 +163,8 @@ typedef struct ParamListNode* ParamList;
 typedef struct HiAppEvent_Watcher HiAppEvent_Watcher;
 
 /**
- * @brief Called when watcher receive the event.
+ * @brief The OH_HiAppEvent_OnReceive function acts as the callback function for the HiAppEvent_Watcher. It is called
+ * when an event occurs.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @param domain The domain of the event.
@@ -467,7 +472,9 @@ HiAppEvent_Watcher* OH_HiAppEvent_CreateWatcher(const char* name);
 void OH_HiAppEvent_DestroyWatcher(HiAppEvent_Watcher* watcher);
 
 /**
- * @brief Set the TriggerCondition to trigger the onTrigger callback.
+ * @brief The interface to set trigger conditions for the watcher. Three trigger conditions can be set through this
+ * interface and any of the condition which is set over than 0 met, the onTrigger callback set through
+ * OH_HiAppEvent_SetWatcherOnTrigger will be invoked.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @param watcher The pointer to the HiAppEvent_Watcher instance.
@@ -482,7 +489,7 @@ void OH_HiAppEvent_DestroyWatcher(HiAppEvent_Watcher* watcher);
 int OH_HiAppEvent_SetTriggerCondition(HiAppEvent_Watcher* watcher, uint32_t row, uint32_t size, uint32_t timeOut);
 
 /**
- * @brief Set the AppEventFilter, which is used to filter events monitored by the watcher.
+ * @brief The interface to set the AppEventFilter which defines the kind of app events will be received by  the watcher.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @param watcher The pointer to the HiAppEvent_Watcher instance.
@@ -500,7 +507,9 @@ int OH_HiAppEvent_SetAppEventFilter(HiAppEvent_Watcher* watcher, const char* dom
     const char* const *names, int namesLen);
 
 /**
- * @brief Set the onTrigger callback.
+ * @brief The interface to set onTrigger callback for watcher. If the OnReceive callback is not be set, and has been set
+ * to nullptr, the app events received will be saved. When the new saved appEvents met conditions set by
+ * OH_HiAppEvent_SetTriggerCondition, The onTrigger callback will be invoked.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @param watcher The pointer to the HiAppEvent_Watcher instance.
@@ -513,7 +522,8 @@ int OH_HiAppEvent_SetAppEventFilter(HiAppEvent_Watcher* watcher, const char* dom
 int OH_HiAppEvent_SetWatcherOnTrigger(HiAppEvent_Watcher* watcher, OH_HiAppEvent_OnTrigger onTrigger);
 
 /**
- * @brief Set the OnReceive callback.
+ * @brief The interface to set onReceive callback for watcher. When the watcher received an app event, the onReceive
+ * call back set will be invoked.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @param watcher The pointer to the HiAppEvent_Watcher instance.
@@ -526,7 +536,7 @@ int OH_HiAppEvent_SetWatcherOnTrigger(HiAppEvent_Watcher* watcher, OH_HiAppEvent
 int OH_HiAppEvent_SetWatcherOnReceive(HiAppEvent_Watcher* watcher, OH_HiAppEvent_OnReceive onReceive);
 
 /**
- * @brief Set the AppEventFilter, which is used to filter events monitored by the watcher.
+ * @brief The interface to take saved events for the watcher.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @param watcher The pointer to the HiAppEvent_Watcher instance.
@@ -540,7 +550,7 @@ int OH_HiAppEvent_SetWatcherOnReceive(HiAppEvent_Watcher* watcher, OH_HiAppEvent
 int OH_HiAppEvent_TakeWatcherData(HiAppEvent_Watcher* watcher, uint32_t size, OH_HiAppEvent_OnTake onTake);
 
 /**
- * @brief Add watcher to receive the event.
+ * @brief The interface to add the watcher. The watcher start receiving app events after it was added.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @param watcher The pointer to the HiAppEvent_Watcher instance which receive the event.
@@ -552,7 +562,7 @@ int OH_HiAppEvent_TakeWatcherData(HiAppEvent_Watcher* watcher, uint32_t size, OH
 int OH_HiAppEvent_AddWatcher(HiAppEvent_Watcher* watcher);
 
 /**
- * @brief Remove watcher.
+ * @brief The interface to remove the watcher. The watcher stop receiving app events after it was removed.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @param watcher The pointer to the HiAppEvent_Watcher instance.
@@ -564,7 +574,7 @@ int OH_HiAppEvent_AddWatcher(HiAppEvent_Watcher* watcher);
 int OH_HiAppEvent_RemoveWatcher(HiAppEvent_Watcher* watcher);
 
 /**
- * @brief Clear all local logging data of the application.
+ * @brief Clear all local event data saved of the application.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @since 12
