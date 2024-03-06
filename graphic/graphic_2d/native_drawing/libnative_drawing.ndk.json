@@ -7,6 +7,14 @@
     { "name": "OH_Drawing_BitmapGetHeight" },
     {
         "first_introduced": "12",
+        "name": "OH_Drawing_BitmapGetColorFormat"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_BitmapGetAlphaFormat"
+    },
+    {
+        "first_introduced": "12",
         "name": "OH_Drawing_BitmapGetImageInfo"
     },
     { "name": "OH_Drawing_BitmapGetPixels" },
