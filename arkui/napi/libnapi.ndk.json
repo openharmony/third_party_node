@@ -154,5 +154,9 @@
     {
         "first_introduced": "11",
         "name": "napi_make_callback"
+    },
+    {
+        "first_introduced": "12",
+        "name": "napi_load_module_with_info"
     }
 ]

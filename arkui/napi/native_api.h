@@ -78,6 +78,21 @@ typedef napi_value (*napi_native_binding_attach_callback)(napi_env env, void* na
 NAPI_EXTERN napi_status napi_run_script_path(napi_env env, const char* path, napi_value* result);
 NAPI_EXTERN napi_status napi_queue_async_work_with_qos(napi_env env, napi_async_work work, napi_qos_t qos);
 NAPI_EXTERN napi_status napi_load_module(napi_env env, const char* path, napi_value* result);
+
+/**
+ * @brief The module is loaded through the NAPI. By default, the default object is exported from the module.
+ *
+ * @param env Current running virtual machine context.
+ * @param path Path name of the module to be loaded, like @ohos.hilog.
+ * @param module_info Path names of bundle and module, like com.example.application/entry.
+ * @param result Result of loading a module, which is an exported object of the module.
+ * @return Returns the function execution status.
+ * @since 12
+*/
+NAPI_EXTERN napi_status napi_load_module_with_info(napi_env env,
+                                                   const char* path,
+                                                   const char* module_info,
+                                                   napi_value* result);
 NAPI_EXTERN napi_status napi_get_instance_data(napi_env env, void** data);
 NAPI_EXTERN napi_status napi_set_instance_data(napi_env env,
                                                void* data,
