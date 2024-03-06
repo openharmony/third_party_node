@@ -507,9 +507,9 @@ int OH_HiAppEvent_SetAppEventFilter(HiAppEvent_Watcher* watcher, const char* dom
     const char* const *names, int namesLen);
 
 /**
- * @brief The interface to set onTrigger callback for watcher. If the OnReceive callback is not be set, and has been set
- * to nullptr, the app events received will be saved. When the new saved appEvents met conditions set by
- * OH_HiAppEvent_SetTriggerCondition, The onTrigger callback will be invoked.
+ * @brief The interface to set onTrigger callback for watcher. If the OnReceive callback is not be set or has been set
+ * to nullptr, the app events received by the watcher will be saved. When the new saved appEvents met the conditions set
+ * by OH_HiAppEvent_SetTriggerCondition, the onTrigger callback will be invoked.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @param watcher The pointer to the HiAppEvent_Watcher instance.
@@ -523,7 +523,7 @@ int OH_HiAppEvent_SetWatcherOnTrigger(HiAppEvent_Watcher* watcher, OH_HiAppEvent
 
 /**
  * @brief The interface to set onReceive callback for watcher. When the watcher received an app event, the onReceive
- * call back set will be invoked.
+ * callback set will be invoked.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @param watcher The pointer to the HiAppEvent_Watcher instance.
@@ -536,7 +536,7 @@ int OH_HiAppEvent_SetWatcherOnTrigger(HiAppEvent_Watcher* watcher, OH_HiAppEvent
 int OH_HiAppEvent_SetWatcherOnReceive(HiAppEvent_Watcher* watcher, OH_HiAppEvent_OnReceive onReceive);
 
 /**
- * @brief The interface to take saved events for the watcher.
+ * @brief The interface to take saved events data for the watcher.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @param watcher The pointer to the HiAppEvent_Watcher instance.
@@ -550,7 +550,7 @@ int OH_HiAppEvent_SetWatcherOnReceive(HiAppEvent_Watcher* watcher, OH_HiAppEvent
 int OH_HiAppEvent_TakeWatcherData(HiAppEvent_Watcher* watcher, uint32_t size, OH_HiAppEvent_OnTake onTake);
 
 /**
- * @brief The interface to add the watcher. The watcher start receiving app events after it was added.
+ * @brief The interface to add the watcher. The watcher will start receiving app events after it is added.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @param watcher The pointer to the HiAppEvent_Watcher instance which receive the event.
@@ -562,7 +562,7 @@ int OH_HiAppEvent_TakeWatcherData(HiAppEvent_Watcher* watcher, uint32_t size, OH
 int OH_HiAppEvent_AddWatcher(HiAppEvent_Watcher* watcher);
 
 /**
- * @brief The interface to remove the watcher. The watcher stop receiving app events after it was removed.
+ * @brief The interface to remove the watcher. The watcher will stop receiving app events after it is removed.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @param watcher The pointer to the HiAppEvent_Watcher instance.
@@ -574,7 +574,7 @@ int OH_HiAppEvent_AddWatcher(HiAppEvent_Watcher* watcher);
 int OH_HiAppEvent_RemoveWatcher(HiAppEvent_Watcher* watcher);
 
 /**
- * @brief Clear all local event data saved of the application.
+ * @brief Clear all local saved event data of the application.
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @since 12
