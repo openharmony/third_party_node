@@ -668,6 +668,17 @@ int32_t OH_NativeXComponent_RegisterUIInputEventCallback(
                      ArkUI_UIInputEvent_Type type),
     ArkUI_UIInputEvent_Type type);
 
+/**
+ * @brief Set whether the <b>OH_NativeXComponent</b> instance needs soft keyboard.
+ * @param component Indicates the pointer to this <b>OH_NativeXComponent</b> instance.
+ * @param needSoftKeyboard Indicates whether the <b>OH_NativeXComponent</b> instance needs soft keyboard or not.
+ *                           Default value is false.
+ * @return Returns the status code of the execution.
+ * @since 12
+ * @version 1.0
+ */
+int32_t OH_NativeXComponent_SetNeedSoftKeyboard(OH_NativeXComponent* component, bool needSoftKeyboard);
+
 #ifdef __cplusplus
 };
 #endif
