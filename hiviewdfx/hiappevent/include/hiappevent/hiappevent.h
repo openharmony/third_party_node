@@ -185,7 +185,7 @@ typedef void (*OH_HiAppEvent_OnReceive)(
  * @since 12
  * @version 1.0
  */
-typedef void (*OH_HiAppEvent_OnTrigger)(int32_t row, int32_t size);
+typedef void (*OH_HiAppEvent_OnTrigger)(int row, int size);
 
 /**
  * @brief Called when watcher take the events.
@@ -196,7 +196,7 @@ typedef void (*OH_HiAppEvent_OnTrigger)(int32_t row, int32_t size);
  * @since 12
  * @version 1.0
  */
-typedef void (*OH_HiAppEvent_OnTake)(const char* const *events, int32_t eventLen);
+typedef void (*OH_HiAppEvent_OnTake)(const char* const *events, uint32_t eventLen);
 
 /**
  * @brief Create a pointer to the ParamList.
@@ -486,7 +486,7 @@ void OH_HiAppEvent_DestroyWatcher(HiAppEvent_Watcher* watcher);
  * @since 12
  * @version 1.0
  */
-int OH_HiAppEvent_SetTriggerCondition(HiAppEvent_Watcher* watcher, uint32_t row, uint32_t size, uint32_t timeOut);
+int OH_HiAppEvent_SetTriggerCondition(HiAppEvent_Watcher* watcher, int row, int size, int timeOut);
 
 /**
  * @brief The interface to set the AppEventFilter which defines the kind of app events will be received by  the watcher.
@@ -540,14 +540,14 @@ int OH_HiAppEvent_SetWatcherOnReceive(HiAppEvent_Watcher* watcher, OH_HiAppEvent
  *
  * @SystemCapability.HiviewDFX.HiAppEvent
  * @param watcher The pointer to the HiAppEvent_Watcher instance.
- * @param size The the threshold size per read.
+ * @param eventNum The num of events to take.
  * @param onTake The callback of the watcher.
  * @return Returns {@code 0} if remove watcher is successful, and returns a
  * negative integer if remove fail.
  * @since 12
  * @version 1.0
  */
-int OH_HiAppEvent_TakeWatcherData(HiAppEvent_Watcher* watcher, uint32_t size, OH_HiAppEvent_OnTake onTake);
+int OH_HiAppEvent_TakeWatcherData(HiAppEvent_Watcher* watcher, uint32_t eventNum, OH_HiAppEvent_OnTake onTake);
 
 /**
  * @brief The interface to add the watcher. The watcher will start receiving app events after it is added.
