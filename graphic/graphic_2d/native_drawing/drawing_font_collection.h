@@ -82,6 +82,17 @@ void OH_Drawing_DisableFontCollectionFallback(OH_Drawing_FontCollection*);
  */
 void OH_Drawing_DisableFontCollectionSystemFont(OH_Drawing_FontCollection*);
 
+/**
+ * @brief Creates an <b>OH_Drawing_FontCollection</b> object with shared usage between
+ * <b>OH_Drawing_TypographyCreate</b>.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @return Returns the pointer to the <b>OH_Drawing_FontCollection</b> object created.
+ * @since 12
+ * @version 1.0
+ */
+OH_Drawing_FontCollection* OH_Drawing_CreateSharedFontCollection(void);
+
 #ifdef __cplusplus
 }
 #endif
