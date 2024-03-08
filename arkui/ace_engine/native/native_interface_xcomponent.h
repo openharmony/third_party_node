@@ -42,6 +42,7 @@
 #include <vector>
 #endif
 
+#include "arkui/native_event.h"
 #include "arkui/native_type.h"
 #include "arkui/ui_input_event.h"
 
@@ -678,6 +679,19 @@ int32_t OH_NativeXComponent_RegisterUIInputEventCallback(
  * @version 1.0
  */
 int32_t OH_NativeXComponent_SetNeedSoftKeyboard(OH_NativeXComponent* component, bool needSoftKeyboard);
+
+/**
+ * @brief Registers a custom event intercept callback for this <b>OH_NativeXComponent</b> and enables the callback
+ * during the hit test.
+ *
+ * @param component Indicates the pointer to the <b>OH_NativeXComponent</b> instance.
+ * @param callback Indicates the pointer to the custom event intercept callback.
+ * @return Returns 0 if success.
+ *         Returns 401 if a parameter exception occurs.
+ * @since 12
+ */
+int32_t OH_NativeXComponent_RegisterOnTouchInterceptCallback(
+    OH_NativeXComponent* component, HitTestMode (*callback)(OH_NativeXComponent* component, ArkUI_UIInputEvent* event));
 
 #ifdef __cplusplus
 };
