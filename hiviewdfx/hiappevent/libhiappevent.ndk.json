@@ -58,5 +58,35 @@
     },
     {
         "name": "OH_HiAppEvent_DestroyParamList"
+    },
+    {
+        "name": "OH_HiAppEvent_CreateWatcher"
+    },
+    {
+        "name": "OH_HiAppEvent_DestroyWatcher"
+    },
+    {
+        "name": "OH_HiAppEvent_SetTriggerCondition"
+    },
+    {
+        "name": "OH_HiAppEvent_SetAppEventFilter"
+    },
+    {
+        "name": "OH_HiAppEvent_SetWatcherOnTrigger"
+    },
+    {
+        "name": "OH_HiAppEvent_SetWatcherOnReceive"
+    },
+    {
+        "name": "OH_HiAppEvent_TakeWatcherData"
+    },
+    {
+        "name": "OH_HiAppEvent_AddWatcher"
+    },
+    {
+        "name": "OH_HiAppEvent_RemoveWatcher"
+    },
+    {
+        "name": "OH_HiAppEvent_ClearData"
     }
 ]
