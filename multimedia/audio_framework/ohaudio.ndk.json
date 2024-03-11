@@ -39,7 +39,7 @@
         "first_introduced": "10",
         "name": "OH_AudioStreamBuilder_SetRendererCallback"
     },
-    { 
+    {
         "first_introduced": "11",
         "name": "OH_AudioStreamBuilder_SetRendererOutputDeviceChangeCallback"
     },
@@ -194,5 +194,17 @@
     {
         "first_introduced": "11",
         "name": "OH_AudioRenderer_SetSpeed"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioRenderer_SetVolume"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioRenderer_SetVolumeWithRamp"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioRenderer_GetVolume"
     }
 ]
