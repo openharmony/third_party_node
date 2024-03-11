@@ -49,11 +49,11 @@ extern "C" {
  * @since 12
  */
 enum {
-    /** Cancel */
+    /** Default */
     KEY_DEFAULT = -1,
-    /** Cancellation of a key action */
-    KEY_PRESSED = 0,
     /** Pressing of a key */
+    KEY_PRESSED = 0,
+    /** Release of a key */
     KEY_NOT_PRESSED = 1,
 };
 
@@ -96,8 +96,7 @@ typedef enum {
 /**
  * @brief Queries the key status.
  *
- * @param keyStatus Key status.
- * @param len Number of keys to be queried.
+ * @param keyState Key state.
  * @return SUCCESS - Success.
  *         PARAMETER_ERROR - Parameter error.
  * @syscap SystemCapability.MultimodalInput.Input.Core
