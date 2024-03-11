@@ -188,6 +188,17 @@ OH_AudioStream_Result OH_AudioStreamBuilder_SetRendererCallback(OH_AudioStreamBu
 OH_AudioStream_Result OH_AudioStreamBuilder_SetRendererOutputDeviceChangeCallback(OH_AudioStreamBuilder* builder,
     OH_AudioRenderer_OutputDeviceChangeCallback callback, void* userData);
 
+/**
+ * @brief Set the privacy of audio render.
+ *
+ * @param builder Builder provided by OH_AudioStreamBuilder_Create()
+ * @param privacy Privacy type.
+ * @return {@link #AUDIOSTREAM_SUCCESS} or an undesired error.
+ * @since 12
+ */
+OH_AudioStream_Result OH_AudioStreamBuilder_SetRendererPrivacy(OH_AudioStreamBuilder* builder,
+    OH_AudioStream_PrivacyType privacy);
+
 /*
  * Set the callbacks for the capturer client
  *
