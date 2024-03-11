@@ -25,7 +25,20 @@
         },
         "build": {
             "sub_component": [],
-            "inner_kits": [],
+            "inner_kits": [
+                {
+                    "name": "//third_party/node:node_header_notice",
+                    "header": {
+                        "header_base": "//third_party/node/src",
+                        "header_files": [
+                            "js_native_api.h",
+                            "js_native_api_types.h",
+                            "node_api.h",
+                            "node_api_types.h"
+                        ]
+                    }
+                }
+            ],
             "test": []
         }
     }
