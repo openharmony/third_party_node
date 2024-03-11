@@ -415,6 +415,8 @@ typedef enum {
     /**
      * Playback capture source type.
      *
+     * @deprecated since 12
+     * @useinstead AVScreenCapture in MediaKit.
      * @since 10
      */
     AUDIOSTREAM_SOURCE_TYPE_PLAYBACK_CAPTURE = 2,
