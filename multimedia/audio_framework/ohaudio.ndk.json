@@ -206,5 +206,13 @@
     {
         "first_introduced": "12",
         "name": "OH_AudioRenderer_GetVolume"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioRenderer_SetMarkPosition"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioRenderer_CancelMark"
     }
 ]
