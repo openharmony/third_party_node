@@ -1379,6 +1379,9 @@ static const char* error_messages[] = {
     "Main thread would deadlock",
     "External buffers are not allowed",
     "Cannot run JavaScript",
+    "Created too many ark runtime environment, up to 16",
+    "Only one ark runtime environment can be created per thread",
+    "The ark runtime environment to be destroyed does not exist",
 };
 
 JSVM_Status JSVM_CDECL OH_JSVM_GetLastErrorInfo(
