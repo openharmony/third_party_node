@@ -104,23 +104,6 @@ typedef enum UBreakIteratorType {
   UBRK_LINE = 2,
   /** Sentence breaks @stable ICU 2.0 */
   UBRK_SENTENCE = 3,
-
-#ifndef U_HIDE_DEPRECATED_API
-  /**
-   * Title Case breaks
-   * The iterator created using this type locates title boundaries as described for
-   * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
-   * please use Word Boundary iterator.
-   *
-   * @deprecated ICU 2.8 Use the word break iterator for titlecasing for Unicode 4 and later.
-   */
-  UBRK_TITLE = 4,
-    /**
-     * One more than the highest normal UBreakIteratorType value.
-     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
-     */
-    UBRK_COUNT = 5
-#endif  // U_HIDE_DEPRECATED_API
 } UBreakIteratorType;
 
 /** Value indicating all text boundaries have been returned.
@@ -306,16 +289,6 @@ ubrk_openBinaryRules(const uint8_t *binaryRules, int32_t rulesLength,
 U_CAPI UBreakIterator * U_EXPORT2
 ubrk_clone(const UBreakIterator *bi,
            UErrorCode *status);
-
-#ifndef U_HIDE_DEPRECATED_API
-
-/**
-  * A recommended size (in bytes) for the memory buffer to be passed to ubrk_saveClone().
-  * @deprecated ICU 52. Do not rely on ubrk_safeClone() cloning into any provided buffer.
-  */
-#define U_BRK_SAFECLONE_BUFFERSIZE 1
-
-#endif /* U_HIDE_DEPRECATED_API */
 
 /**
 * Close a UBreakIterator.

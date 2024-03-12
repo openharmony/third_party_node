@@ -205,13 +205,6 @@ typedef enum USetSpanCondition {
      * @stable ICU 3.8
      */
     USET_SPAN_SIMPLE = 2,
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * One more than the last span condition.
-     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
-     */
-    USET_SPAN_CONDITION_COUNT
-#endif  // U_HIDE_DEPRECATED_API
 } USetSpanCondition;
 
 enum {
