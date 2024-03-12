@@ -23,4 +23,24 @@ typedef enum {
     napi_qos_user_initiated = 3,
 } napi_qos_t;
 
+/**
+ * @brief Indicates the running mode of the native event loop in an asynchronous native thread.
+ *
+ * @since 12
+ */
+typedef enum {
+    /**
+     * In this mode, the current asynchronous thread will be blocked and events of native event loop will
+     * be processed.
+     */
+    napi_event_mode_default = 0,
+
+    /**
+     * In this mode, the current asynchronous thread will not be blocked. If there are events in the event loop,
+     * only one event will be processed and then the event loop will stop. If there are no events in the loop,
+     * the event loop will stop immediately.
+     */
+    napi_event_mode_nowait = 1,
+} napi_event_mode;
+
 #endif /* FOUNDATION_ACE_NAPI_INTERFACES_KITS_NAPI_NATIVE_API_H */

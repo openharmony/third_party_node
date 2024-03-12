@@ -143,6 +143,29 @@ NAPI_EXTERN napi_status napi_create_ark_runtime(napi_env* env);
  */
 NAPI_EXTERN napi_status napi_destroy_ark_runtime(napi_env* env);
 
+/**
+ * @brief Run the event loop by the given env and running mode in current thread.
+ *
+ * Support to run the native event loop in an asynchronous native thread with the specified running mode.
+ *
+ * @param env Current running virtual machine context.
+ * @param mode Indicates the running mode of the native event loop.
+ * @return Return the function execution status.
+ * @since 12
+ */
+NAPI_EXTERN napi_status napi_run_event_loop(napi_env env, napi_event_mode mode);
+
+/**
+ * @brief Stop the event loop in current thread.
+ *
+ * Support to stop the running event loop in current native thread.
+ *
+ * @param env Current running virtual machine context.
+ * @return Return the function execution status.
+ * @since 12
+ */
+NAPI_EXTERN napi_status napi_stop_event_loop(napi_env env);
+
 #ifdef __cplusplus
 }
 #endif
