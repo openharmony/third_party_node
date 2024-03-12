@@ -127,6 +127,21 @@ NAPI_EXTERN napi_status napi_add_finalizer(napi_env env,
                                            napi_finalize finalize_cb,
                                            void* finalize_hint,
                                            napi_ref* result);
+/**
+ * @brief Create the ark runtime.
+ *
+ * @param env Indicates the ark runtime environment.
+ * @since 12
+ */
+NAPI_EXTERN napi_status napi_create_ark_runtime(napi_env* env);
+
+/**
+ * @brief Destroy the ark runtime.
+ *
+ * @param env Indicates the ark runtime environment.
+ * @since 12
+ */
+NAPI_EXTERN napi_status napi_destroy_ark_runtime(napi_env* env);
 
 #ifdef __cplusplus
 }
