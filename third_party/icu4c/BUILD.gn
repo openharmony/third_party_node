@@ -20,13 +20,31 @@ ohos_ndk_library("libicu_ndk") {
   output_name = "icu"
   system_capability = "SystemCapability.Global.I18n"
   system_capability_headers = [
+    "unicode/parseerr.h",
     "unicode/platform.h",
     "unicode/ptypes.h",
+    "unicode/stringoptions.h",
+    "unicode/ubidi.h",
+    "unicode/ubrk.h",
+    "unicode/ucal.h",
+    "unicode/uchar.h",
     "unicode/ucnv.h",
     "unicode/ucnv_err.h",
+    "unicode/ucol.h",
     "unicode/uconfig.h",
+    "unicode/udat.h",
+    "unicode/udisplaycontext.h",
     "unicode/uenum.h",
+    "unicode/ufieldpositer.h",
+    "unicode/uloc.h",
     "unicode/umachine.h",
+    "unicode/umisc.h",
+    "unicode/unorm2.h",
+    "unicode/unum.h",
+    "unicode/unumberformatter.h",
+    "unicode/uscript.h",
+    "unicode/uset.h",
+    "unicode/utrans.h",
     "unicode/utypes.h",
   ]
   output_extension = "so"
@@ -35,13 +53,31 @@ ohos_ndk_library("libicu_ndk") {
 ohos_ndk_headers("icu_unicode_header") {
   dest_dir = "$ndk_headers_out_dir/unicode"
   sources = [
+    "ndk_headers/unicode/parseerr.h",
     "ndk_headers/unicode/platform.h",
     "ndk_headers/unicode/ptypes.h",
+    "ndk_headers/unicode/stringoptions.h",
+    "ndk_headers/unicode/ubidi.h",
+    "ndk_headers/unicode/ubrk.h",
+    "ndk_headers/unicode/ucal.h",
+    "ndk_headers/unicode/uchar.h",
     "ndk_headers/unicode/ucnv.h",
     "ndk_headers/unicode/ucnv_err.h",
+    "ndk_headers/unicode/ucol.h",
     "ndk_headers/unicode/uconfig.h",
+    "ndk_headers/unicode/udat.h",
+    "ndk_headers/unicode/udisplaycontext.h",
     "ndk_headers/unicode/uenum.h",
+    "ndk_headers/unicode/ufieldpositer.h",
+    "ndk_headers/unicode/uloc.h",
     "ndk_headers/unicode/umachine.h",
+    "ndk_headers/unicode/umisc.h",
+    "ndk_headers/unicode/unorm2.h",
+    "ndk_headers/unicode/unum.h",
+    "ndk_headers/unicode/unumberformatter.h",
+    "ndk_headers/unicode/uscript.h",
+    "ndk_headers/unicode/uset.h",
+    "ndk_headers/unicode/utrans.h",
     "ndk_headers/unicode/utypes.h",
   ]
 }
