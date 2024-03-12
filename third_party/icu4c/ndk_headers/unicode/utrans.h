@@ -17,7 +17,6 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
-#include "unicode/urep.h"
 #include "unicode/parseerr.h"
 #include "unicode/uenum.h"
 #include "unicode/uset.h"
@@ -358,87 +357,6 @@ utrans_openIDs(UErrorCode *pErrorCode);
 /********************************************************************
  * Transliteration API
  ********************************************************************/
-
-/**
- * Transliterate a segment of a UReplaceable string.  The string is
- * passed in as a UReplaceable pointer rep and a UReplaceableCallbacks
- * function pointer struct repFunc.  Functions in the repFunc struct
- * will be called in order to modify the rep string.
- *
- * @param trans the transliterator
- * @param rep a pointer to the string.  This will be passed to the
- * repFunc functions.
- * @param repFunc a set of function pointers that will be used to
- * modify the string pointed to by rep.
- * @param start the beginning index, inclusive; <code>0 <= start <=
- * limit</code>.
- * @param limit pointer to the ending index, exclusive; <code>start <=
- * limit <= repFunc->length(rep)</code>.  Upon return, *limit will
- * contain the new limit index.  The text previously occupying
- * <code>[start, limit)</code> has been transliterated, possibly to a
- * string of a different length, at <code>[start,
- * </code><em>new-limit</em><code>)</code>, where <em>new-limit</em>
- * is the return value.
- * @param status a pointer to the UErrorCode
- * @stable ICU 2.0
- */
-U_CAPI void U_EXPORT2 
-utrans_trans(const UTransliterator* trans,
-             UReplaceable* rep,
-             const UReplaceableCallbacks* repFunc,
-             int32_t start,
-             int32_t* limit,
-             UErrorCode* status);
-
-/**
- * Transliterate the portion of the UReplaceable text buffer that can
- * be transliterated unambiguously.  This method is typically called
- * after new text has been inserted, e.g. as a result of a keyboard
- * event.  The transliterator will try to transliterate characters of
- * <code>rep</code> between <code>index.cursor</code> and
- * <code>index.limit</code>.  Characters before
- * <code>index.cursor</code> will not be changed.
- *
- * <p>Upon return, values in <code>index</code> will be updated.
- * <code>index.start</code> will be advanced to the first
- * character that future calls to this method will read.
- * <code>index.cursor</code> and <code>index.limit</code> will
- * be adjusted to delimit the range of text that future calls to
- * this method may change.
- *
- * <p>Typical usage of this method begins with an initial call
- * with <code>index.start</code> and <code>index.limit</code>
- * set to indicate the portion of <code>text</code> to be
- * transliterated, and <code>index.cursor == index.start</code>.
- * Thereafter, <code>index</code> can be used without
- * modification in future calls, provided that all changes to
- * <code>text</code> are made via this method.
- *
- * <p>This method assumes that future calls may be made that will
- * insert new text into the buffer.  As a result, it only performs
- * unambiguous transliterations.  After the last call to this method,
- * there may be untransliterated text that is waiting for more input
- * to resolve an ambiguity.  In order to perform these pending
- * transliterations, clients should call utrans_trans() with a start
- * of index.start and a limit of index.end after the last call to this
- * method has been made.
- *
- * @param trans the transliterator
- * @param rep a pointer to the string.  This will be passed to the
- * repFunc functions.
- * @param repFunc a set of function pointers that will be used to
- * modify the string pointed to by rep.
- * @param pos a struct containing the start and limit indices of the
- * text to be read and the text to be transliterated
- * @param status a pointer to the UErrorCode
- * @stable ICU 2.0
- */
-U_CAPI void U_EXPORT2 
-utrans_transIncremental(const UTransliterator* trans,
-                        UReplaceable* rep,
-                        const UReplaceableCallbacks* repFunc,
-                        UTransPosition* pos,
-                        UErrorCode* status);
 
 /**
  * Transliterate a segment of a UChar* string.  The string is passed
