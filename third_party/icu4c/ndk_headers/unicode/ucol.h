@@ -14,7 +14,6 @@
 
 #if !UCONFIG_NO_COLLATION
 
-#include "unicode/unorm.h"
 #include "unicode/parseerr.h"
 #include "unicode/uloc.h"
 #include "unicode/uset.h"
@@ -126,7 +125,7 @@ typedef enum {
       lower case sorts before upper case */
   UCOL_LOWER_FIRST = 24,
   /** upper case sorts before lower case */
-  UCOL_UPPER_FIRST = 25,
+  UCOL_UPPER_FIRST = 25
 } UColAttributeValue;
 
 /**
@@ -192,7 +191,7 @@ typedef enum {
     * This is equivalent to the rule value "digit".
     * @stable ICU 4.8
     */    
-    UCOL_REORDER_CODE_DIGIT         = 0x1004,
+    UCOL_REORDER_CODE_DIGIT         = 0x1004
 } UColReorderCode;
 
 /**
@@ -314,10 +313,7 @@ typedef enum {
       *
       * @stable ICU 2.8
       */
-     UCOL_NUMERIC_COLLATION = UCOL_STRENGTH + 2, 
-
-    /* Do not conditionalize the following with #ifndef U_HIDE_DEPRECATED_API,
-     * it is needed for layout of RuleBasedCollator object. */
+     UCOL_NUMERIC_COLLATION = UCOL_STRENGTH + 2
 } UColAttribute;
 
 /** Options for retrieving the rule string 
@@ -400,14 +396,6 @@ ucol_openRules( const UChar        *rules,
                 UCollationStrength strength,
                 UParseError        *parseError,
                 UErrorCode         *status);
-
-#ifndef U_HIDE_DEPRECATED_API
-
-#endif  /* U_HIDE_DEPRECATED_API */
-
-#ifndef U_HIDE_DEPRECATED_API
-
-#endif  /* U_HIDE_DEPRECATED_API */
 
 /**
  * Get a set containing the expansions defined by the collator. The set includes
@@ -563,23 +551,6 @@ ucol_equal(const UCollator *coll,
            const UChar     *source, int32_t sourceLength,
            const UChar     *target, int32_t targetLength);
 
-/**
- * Compare two UTF-8 encoded strings.
- * The strings will be compared using the options already specified.
- * @param coll The UCollator containing the comparison rules.
- * @param sIter The source string iterator.
- * @param tIter The target string iterator.
- * @return The result of comparing the strings; one of UCOL_EQUAL,
- * UCOL_GREATER, UCOL_LESS
- * @param status A pointer to a UErrorCode to receive any errors
- * @see ucol_strcoll
- * @stable ICU 2.6
- */
-U_CAPI UCollationResult U_EXPORT2 
-ucol_strcollIter(  const    UCollator    *coll,
-                  UCharIterator *sIter,
-                  UCharIterator *tIter,
-                  UErrorCode *status);
 
 /**
  * Get the collation strength used in a UCollator.
@@ -849,9 +820,6 @@ U_CAPI const UChar* U_EXPORT2
 ucol_getRules(    const    UCollator    *coll, 
         int32_t            *length);
 
-#ifndef U_HIDE_DEPRECATED_API
-
-#endif  /* U_HIDE_DEPRECATED_API */
 /**
  * Get a sort key for a string from a UCollator.
  * Sort keys may be compared using <TT>strcmp</TT>.
@@ -881,34 +849,6 @@ ucol_getSortKey(const    UCollator    *coll,
         uint8_t        *result,
         int32_t        resultLength);
 
-
-/** Gets the next count bytes of a sort key. Caller needs
- *  to preserve state array between calls and to provide
- *  the same type of UCharIterator set with the same string.
- *  The destination buffer provided must be big enough to store
- *  the number of requested bytes.
- *
- *  The generated sort key may or may not be compatible with
- *  sort keys generated using ucol_getSortKey().
- *  @param coll The UCollator containing the collation rules.
- *  @param iter UCharIterator containing the string we need 
- *              the sort key to be calculated for.
- *  @param state Opaque state of sortkey iteration.
- *  @param dest Buffer to hold the resulting sortkey part
- *  @param count number of sort key bytes required.
- *  @param status error code indicator.
- *  @return the actual number of bytes of a sortkey. It can be
- *          smaller than count if we have reached the end of 
- *          the sort key.
- *  @stable ICU 2.6
- */
-U_CAPI int32_t U_EXPORT2 
-ucol_nextSortKeyPart(const UCollator *coll,
-                     UCharIterator *iter,
-                     uint32_t state[2],
-                     uint8_t *dest, int32_t count,
-                     UErrorCode *status);
-
 /** enum that is taken by ucol_getBound API 
  * See below for explanation                
  * do not change the values assigned to the 
@@ -922,7 +862,7 @@ typedef enum {
   /** upper bound that will match strings of exact size */
   UCOL_BOUND_UPPER = 1,
   /** upper bound that will match all the strings that have the same initial substring as the given string */
-  UCOL_BOUND_UPPER_LONG = 2,
+  UCOL_BOUND_UPPER_LONG = 2
 } UColBoundMode;
 
 /**
@@ -971,26 +911,6 @@ ucol_getBound(const uint8_t       *source,
         int32_t             resultLength,
         UErrorCode          *status);
         
-/**
- * Gets the version information for a Collator. Version is currently
- * an opaque 32-bit number which depends, among other things, on major
- * versions of the collator tailoring and UCA.
- * @param coll The UCollator to query.
- * @param info the version # information, the result will be filled in
- * @stable ICU 2.0
- */
-U_CAPI void U_EXPORT2
-ucol_getVersion(const UCollator* coll, UVersionInfo info);
-
-/**
- * Gets the UCA version information for a Collator. Version is the
- * UCA version number (3.1.1, 4.0).
- * @param coll The UCollator to query.
- * @param info the version # information, the result will be filled in
- * @stable ICU 2.8
- */
-U_CAPI void U_EXPORT2
-ucol_getUCAVersion(const UCollator* coll, UVersionInfo info);
 
 /**
  * Merges two sort keys. The levels are merged with their corresponding counterparts
@@ -1101,10 +1021,6 @@ ucol_setMaxVariable(UCollator *coll, UColReorderCode group, UErrorCode *pErrorCo
 U_CAPI UColReorderCode U_EXPORT2
 ucol_getMaxVariable(const UCollator *coll);
 
-#ifndef U_HIDE_DEPRECATED_API
-
-#endif  /* U_HIDE_DEPRECATED_API */
-
 /** 
  * Gets the variable top value of a Collator. 
  * @param coll collator which variable top needs to be retrieved
@@ -1117,10 +1033,6 @@ ucol_getMaxVariable(const UCollator *coll);
  * @stable ICU 2.0
  */
 U_CAPI uint32_t U_EXPORT2 ucol_getVariableTop(const UCollator *coll, UErrorCode *status);
-
-#ifndef U_HIDE_DEPRECATED_API
-
-#endif  /* U_HIDE_DEPRECATED_API */
 
 /**
  * Thread safe cloning operation. The result is a clone of a given collator.
@@ -1152,10 +1064,6 @@ U_CAPI UCollator* U_EXPORT2 ucol_clone(const UCollator *coll, UErrorCode *status
 U_CAPI int32_t U_EXPORT2 
 ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen);
 
-#ifndef U_HIDE_DEPRECATED_API
-
-#endif  /* U_HIDE_DEPRECATED_API */
-
 /**
  * gets the locale name of the collator. If the collator
  * is instantiated from the rules, then this function returns
@@ -1185,10 +1093,6 @@ ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode 
  */
 U_CAPI USet * U_EXPORT2
 ucol_getTailoredSet(const UCollator *coll, UErrorCode *status);
-
-#ifndef U_HIDE_INTERNAL_API
-
-#endif  /* U_HIDE_INTERNAL_API */
 
 /** Creates a binary image of a collator. This binary image can be stored and 
  *  later used to instantiate a collator using ucol_openBinary.
