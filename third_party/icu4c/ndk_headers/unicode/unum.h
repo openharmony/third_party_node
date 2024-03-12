@@ -334,7 +334,7 @@ enum UCurrencySpacing {
     /** @stable ICU 4.8 */
     UNUM_CURRENCY_SURROUNDING_MATCH,
     /** @stable ICU 4.8 */
-    UNUM_CURRENCY_INSERT,
+    UNUM_CURRENCY_INSERT
 };
 typedef enum UCurrencySpacing UCurrencySpacing; /**< @stable ICU 4.8 */
 
@@ -370,12 +370,7 @@ typedef enum UNumberFormatFields {
     /** @stable ICU 64 */
     UNUM_MEASURE_UNIT_FIELD,
     /** @stable ICU 64 */
-    UNUM_COMPACT_FIELD,
-    UNUM_FIELD_COUNT = UNUM_COMPACT_FIELD + 2
-#else  // U_HIDE_DRAFT_API (for UNUM_APPROXIMATELY_SIGN_FIELD)
-    UNUM_FIELD_COUNT = UNUM_COMPACT_FIELD + 1
-#endif  // U_HIDE_DRAFT_API (for UNUM_APPROXIMATELY_SIGN_FIELD)
-#endif  /* U_HIDE_DEPRECATED_API */
+    UNUM_COMPACT_FIELD
 } UNumberFormatFields;
 
 
@@ -1063,10 +1058,6 @@ typedef enum UNumberFormatAttribute {
 
 } UNumberFormatAttribute;
 
-#ifndef U_HIDE_DRAFT_API
-
-#endif // U_HIDE_DRAFT_API
-
 /**
 * Get a numeric attribute associated with a UNumberFormat.
 * An example of a numeric attribute is the number of integer digits a formatter will produce.
@@ -1345,14 +1336,7 @@ typedef enum UNumberFormatSymbol {
   /** Multiplication sign
    * @stable ICU 54
    */
-  UNUM_EXPONENT_MULTIPLICATION_SYMBOL = 27,
-
-#ifndef U_HIDE_INTERNAL_API
-  /** Approximately sign.
-   * @internal
-   */
-  UNUM_APPROXIMATELY_SIGN_SYMBOL = 28,
-#endif
+  UNUM_EXPONENT_MULTIPLICATION_SYMBOL = 27
 } UNumberFormatSymbol;
 
 /**
