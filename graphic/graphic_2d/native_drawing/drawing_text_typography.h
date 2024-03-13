@@ -1728,7 +1728,7 @@ void OH_Drawing_TextStyleSetBackgroundRect(OH_Drawing_TextStyle*, OH_Drawing_Rec
 void OH_Drawing_TypographyHandlerAddSymbol(OH_Drawing_TypographyCreate*, uint32_t);
 
 /**
- * @brief Sets Feature in FontFeatures.
+ * @brief Sets features in fontfeatures of textstyle.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
@@ -1763,7 +1763,7 @@ int OH_Drawing_TextStyleGetFeature(OH_Drawing_TextStyle*, const char*);
 char* OH_Drawing_TextStyleGetFeatures(OH_Drawing_TextStyle*);
 
 /**
- * @brief Gets size of FontFeatures map.
+ * @brief Gets size of fontfeatures map.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
@@ -1774,7 +1774,7 @@ char* OH_Drawing_TextStyleGetFeatures(OH_Drawing_TextStyle*);
 int OH_Drawing_TextStyleGetFeaturesSize(OH_Drawing_TextStyle*);
 
 /**
- * @brief Clear elements in FontFeatures map.
+ * @brief Clear elements in fontfeatures map.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
@@ -1784,7 +1784,7 @@ int OH_Drawing_TextStyleGetFeaturesSize(OH_Drawing_TextStyle*);
 void OH_Drawing_TextStyleClearFeatures(OH_Drawing_TextStyle*);
 
 /**
- * @brief Sets the baseline shift.
+ * @brief Sets the base line shift.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
@@ -1795,7 +1795,7 @@ void OH_Drawing_TextStyleClearFeatures(OH_Drawing_TextStyle*);
 void OH_Drawing_TextStyleSetBaseLineShift(OH_Drawing_TextStyle*, double);
 
 /**
- * @brief Gets the baseline shift.
+ * @brief Gets the base line shift.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
