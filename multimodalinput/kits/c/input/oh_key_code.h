@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef NATIVE_KEY_CODE_H
-#define NATIVE_KEY_CODE_H
+#ifndef OH_KEY_CODE_H
+#define OH_KEY_CODE_H
 
 /**
  * @addtogroup input
@@ -26,12 +26,12 @@
  */
 
 /**
- * @file native_key_code.h
+ * @file oh_key_code.h
  *
  * @brief Defines the key event structure and related enumeration values.
  *
  * @syscap SystemCapability.MultimodalInput.Input.Core
- * @library libnative_input.so
+ * @library libohinput.so
  * @since 12
  */
 
@@ -85,9 +85,9 @@ typedef enum {
     KEYCODE_8 = 2008,
     /** Key 9 */
     KEYCODE_9 = 2009,
-    /** Key * */ 
+    /** Key * */
     KEYCODE_STAR = 2010,
-    /** Key # */ 
+    /** Key # */
     KEYCODE_POUND = 2011,
      /** Up key on D-pad */
     KEYCODE_DPAD_UP = 2012,
@@ -151,53 +151,53 @@ typedef enum {
     KEYCODE_Y = 2041,
     /** Key Z */
     KEYCODE_Z = 2042,
-    /** Key , */ 
+    /** Key , */
     KEYCODE_COMMA = 2043,
-    /** Key . */ 
+    /** Key . */
     KEYCODE_PERIOD = 2044,
-    /** Left Alt key */ 
+    /** Left Alt key */
     KEYCODE_ALT_LEFT = 2045,
-    /** Right Alt key */ 
+    /** Right Alt key */
     KEYCODE_ALT_RIGHT = 2046,
-    /** Left Shift key */ 
+    /** Left Shift key */
     KEYCODE_SHIFT_LEFT = 2047,
-    /** Right Shift key */ 
+    /** Right Shift key */
     KEYCODE_SHIFT_RIGHT = 2048,
-    /** Tab key */ 
+    /** Tab key */
     KEYCODE_TAB = 2049,
-    /** Space key */ 
+    /** Space key */
     KEYCODE_SPACE = 2050,
-    /** Symbol key */ 
+    /** Symbol key */
     KEYCODE_SYM = 2051,
-    /** Explorer key, used to start the explorer application */ 
+    /** Explorer key, used to start the explorer application */
     KEYCODE_EXPLORER = 2052,
-    /** Email key, used to start the email application */ 
+    /** Email key, used to start the email application */
     KEYCODE_ENVELOPE = 2053,
-    /** Enter key */ 
+    /** Enter key */
     KEYCODE_ENTER = 2054,
-    /** Backspace key */ 
+    /** Backspace key */
     KEYCODE_DEL = 2055,
-    /** Key * */ 
+    /** Key * */
     KEYCODE_GRAVE = 2056,
-    /** Key - */ 
+    /** Key - */
     KEYCODE_MINUS = 2057,
-    /** Key = */ 
+    /** Key = */
     KEYCODE_EQUALS = 2058,
-    /** Key [ */ 
+    /** Key [ */
     KEYCODE_LEFT_BRACKET = 2059,
-    /** Key ] */ 
+    /** Key ] */
     KEYCODE_RIGHT_BRACKET = 2060,
-    /** Key \ */ 
+    /** Key \ */
     KEYCODE_BACKSLASH = 2061,
-    /** Key ; */ 
+    /** Key ; */
     KEYCODE_SEMICOLON = 2062,
-    /** Key ' */ 
+    /** Key ' */
     KEYCODE_APOSTROPHE = 2063,
-    /** Key / */ 
+    /** Key / */
     KEYCODE_SLASH = 2064,
-    /** Key @ */ 
+    /** Key @ */
     KEYCODE_AT = 2065,
-    /** Key + */ 
+    /** Key + */
     KEYCODE_PLUS = 2066,
     /** Menu key */
     KEYCODE_MENU = 2067,
@@ -318,4 +318,4 @@ typedef enum {
 #endif
 /** @} */
 
-#endif /* NATIVE_KEY_CODE_H */
+#endif /* OH_KEY_CODE_H */

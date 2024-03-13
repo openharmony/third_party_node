@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef NATIVE_INPUT_MANAGER_H
-#define NATIVE_INPUT_MANAGER_H
+#ifndef OH_INPUT_MANAGER_H
+#define OH_INPUT_MANAGER_H
 
 /**
  * @addtogroup input
@@ -26,18 +26,18 @@
  */
 
 /**
- * @file native_input_manager.h
+ * @file oh_input_manager.h
  *
  * @brief Provides capabilities such as event injection and key status query.
  *
  * @syscap SystemCapability.MultimodalInput.Input.Core
- * @library libnative_input.so
+ * @library liboh_input.so
  * @since 12
  */
 
 #include <stdint.h>
 
-#include "native_key_code.h"
+#include "oh_key_code.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -179,4 +179,4 @@ int32_t OH_Input_GetKeySwitch(struct Input_KeyState* keyState);
 #endif
 /** @} */
 
-#endif /* NATIVE_INPUT_MANAGER_H */
+#endif /* OH_INPUT_MANAGER_H */
