@@ -108,7 +108,7 @@ struct Input_KeyState* OH_Input_CreateKeyState();
 /**
  * @brief Destroys a key status enumeration object.
  * 
- * @param keyState keyState Key status enumeration object.
+ * @param keyState Key status enumeration object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -117,7 +117,7 @@ void OH_Input_DestroyKeyState(struct Input_KeyState* keyState);
 /**
  * @brief Sets the key value of a key status enumeration object.
  * 
- * @param keyState keyState Key status enumeration object.
+ * @param keyState Key status enumeration object.
  * @param keyCode Key value of the key status enumeration object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
