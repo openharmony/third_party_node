@@ -24,7 +24,7 @@ ohos_ndk_headers("ohinput_header") {
 }
 
 ohos_ndk_library("libohinput_ndk") {
-  output_name = "ohinput"
+  output_name = "native_input"
   output_extension = "so"
   ndk_description_file = "./ohinput.ndk.json"
   system_capability = "SystemCapability.MultimodalInput.Input.Core"
