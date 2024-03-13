@@ -15,7 +15,7 @@ import("//build/ohos.gni")
 import("//build/ohos/ndk/ndk.gni")
 import("//foundation/multimodalinput/input/multimodalinput_mini.gni")
 
-ohos_ndk_headers("ohinput_header") {
+ohos_ndk_headers("native_input_header") {
   dest_dir = "$ndk_headers_out_dir/multimodalinput"
   sources = [
     "./input/native_input_manager.h",
@@ -23,10 +23,10 @@ ohos_ndk_headers("ohinput_header") {
   ]
 }
 
-ohos_ndk_library("libohinput_ndk") {
+ohos_ndk_library("libnative_input_ndk") {
   output_name = "native_input"
   output_extension = "so"
-  ndk_description_file = "./ohinput.ndk.json"
+  ndk_description_file = "./libnative_input.ndk.json"
   system_capability = "SystemCapability.MultimodalInput.Input.Core"
   system_capability_headers = [
     "multimodalinput/native_input_manager.h",
