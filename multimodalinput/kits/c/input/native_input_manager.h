@@ -78,9 +78,9 @@ typedef enum {
     /** Permission verification failed */
     INPUT_PERMISSION_DENIED = 201,
     /** Non-system application */
-    INPUT_NOT_SYSTEM_APPLICATION= 202,
+    INPUT_NOT_SYSTEM_APPLICATION = 202,
     /** Parameter check failed */
-    INPUT_PARAMETER_ERROR= 401
+    INPUT_PARAMETER_ERROR = 401
 } Input_Result;
 
 /**
@@ -178,4 +178,4 @@ int32_t OH_Input_GetKeySwitch(struct Input_KeyState* keyState);
 #endif
 /** @} */
 
-#endif // NATIVE_INPUT_MANAGER_H
+#endif /* NATIVE_INPUT_MANAGER_H */

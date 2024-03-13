@@ -318,4 +318,4 @@ typedef enum {
 #endif
 /** @} */
 
-#endif // NATIVE_KEY_CODE_H
+#endif /* NATIVE_KEY_CODE_H */
