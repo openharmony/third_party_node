@@ -154,5 +154,13 @@
     {
         "first_introduced": "11",
         "name": "napi_make_callback"
+    },
+    {
+        "first_introduced": "12",
+        "name": "napi_create_ark_runtime"
+    },
+    {
+        "first_introduced": "12",
+        "name": "napi_destroy_ark_runtime"
     }
 ]
