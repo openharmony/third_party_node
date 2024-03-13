@@ -17,7 +17,7 @@
 #define NATIVE_INPUT_MANAGER_H
 
 /**
- * @addtogroup OHInput
+ * @addtogroup input
  * @{
  *
  * @brief Provides the C interface in the multi-modal input domain.
@@ -25,14 +25,13 @@
  * @since 12
  */
 
-
 /**
  * @file native_input_manager.h
  *
  * @brief Provides capabilities such as event injection and key status query.
  *
  * @syscap SystemCapability.MultimodalInput.Input.Core
- * @library libohinput.so
+ * @library libnative_input.so
  * @since 12
  */
 
@@ -48,25 +47,17 @@ extern "C" {
  *
  * @since 12
  */
-enum {
+enum Input_KeyStateAction {
     /** Default */
     KEY_DEFAULT = -1,
     /** Pressing of a key */
-    KEY_PRESSED = 0,
+    KEY_RELEASED = 0,
     /** Release of a key */
-    KEY_NOT_PRESSED = 1,
-};
-
-/**
- * @brief 按键开关状态，包括使能和去使能，比如caplock键切换大小写。
- *
- * @since 12
- */
-enum {
-    /** 按键开关使能 */
-    KEY_SWITCH_ENABLE = 0,
-    /** 按键开关去使能 */
-    KEY_SWITCH_DISABLE = 1,
+    KEY_PRESSED = 1,
+    /** Key switch enabled */
+    KEY_SWITCH_ON = 2,
+    /** Key switch disabled */
+    KEY_SWITCH_OFF = 3
 };
 
 /**
@@ -83,31 +74,30 @@ struct Input_KeyState;
  */
 typedef enum {
     /** Success */
-    SUCCESS = 0,
+    INPUT_SUCCESS = 0,
     /** Permission verification failed */
-    PERMISSION_REFUSED = 201,
+    INPUT_PERMISSION_DENIED = 201,
     /** Non-system application */
-    NOT_SYSTEM_APPLICATION= 202,
+    INPUT_NOT_SYSTEM_APPLICATION= 202,
     /** Parameter check failed */
-    PARAMETER_ERROR = 401,
-
-} Input_ErrorCode;
+    INPUT_PARAMETER_ERROR= 401
+} Input_Result;
 
 /**
- * @brief Queries the key status.
+ * @brief Queries the key state.
  *
  * @param keyState Key state.
- * @return SUCCESS - Success.
- *         PARAMETER_ERROR - Parameter error.
+ * @return Returns {@link Input_Result} INPUT_SUCCESS - if the operation is successful.
+ * returns {@link Input_Result} INPUT_PARAMETER_ERROR - if bad parameter.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-Input_ErrorCode OH_Input_GetKeyState(struct Input_KeyState* keyState);
+Input_Result OH_Input_GetKeyState(struct Input_KeyState* keyState);
 
 /**
- * @brief 创建按键状态枚举对象.
+ * @brief Creates a key status enumeration object.
  *
- * @return Returns an {@link Input_KeyState} pointer object if the operation is successful
+ * @return Returns an {@link Input_KeyState} pointer object if the operation is successful.
  * returns a null pointer otherwise.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
@@ -115,62 +105,69 @@ Input_ErrorCode OH_Input_GetKeyState(struct Input_KeyState* keyState);
 struct Input_KeyState* OH_Input_CreateKeyState();
 
 /**
- * @brief 销毁按键状态枚举对象。
- * @param keyState 按键状态枚举对象.
+ * @brief Destroys a key status enumeration object.
+ * 
+ * @param keyState keyState Key status enumeration object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_DestroyKeyState(struct Input_KeyState* keyState);
 
 /**
- * @brief 设置按键状态对象的键值。
- * @param keyState 按键状态枚举对象.
- * @param keyCode 按键键值
+ * @brief Sets the key value of a key status enumeration object.
+ * 
+ * @param keyState keyState Key status enumeration object.
+ * @param keyCode Key value of the key status enumeration object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetKeyCode(struct Input_KeyState* keyState, int32_t keyCode);
 
 /**
- * @brief 获取按键状态对象的键值。
- * @param keyState 按键状态枚举对象.
- * @return 返回按键状态对象的键值。
+ * @brief Obtains the key value of a key status enumeration object.
+ * 
+ * @param keyState Key status enumeration object.
+ * @return Key value of the key status enumeration object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 int32_t OH_Input_GetKeyCode(struct Input_KeyState* keyState);
 
 /**
- * @brief 设置按键状态对象的按键是否按下。
- * @param keyState 按键状态枚举对象.
- * @param keyAction 按键是否按下
+ * @brief Sets whether the key specific to a key status enumeration object is pressed.
+ * 
+ * @param keyState Key status enumeration object.
+ * @param keyAction Whether the key is pressed.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetKeyPressed(struct Input_KeyState* keyState, int32_t keyAction);
 
 /**
- * @brief 获取按键状态对象的按键是否按下。
- * @param keyState 按键状态枚举对象.
- * @return 返回按键状态对象的按键按下状态。
+ * @brief Checks whether the key specific to a key status enumeration object is pressed.
+ * 
+ * @param keyState Key status enumeration object.
+ * @return Key pressing status of the key status enumeration object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 int32_t OH_Input_GetKeyPressed(struct Input_KeyState* keyState);
 
 /**
- * @brief 设置按键状态对象的按键开关。
- * @param keyState 按键状态枚举对象.
- * @param keySwitch 按键开关
+ * @brief Sets the key switch of the key status enumeration object.
+ * 
+ * @param keyState Key status enumeration object.
+ * @param keySwitch Key switch of the key status enumeration object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetKeySwitch(struct Input_KeyState* keyState, int32_t keySwitch);
 
 /**
- * @brief 获取按键状态对象的按键开关。
- * @param keyState 按键状态枚举对象.
- * @return 返回按键状态对象的按键开关。
+ * @brief Obtains the key switch of the key status enumeration object.
+ * 
+ * @param keyState Key status enumeration object.
+ * @return Key switch of the key status enumeration object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -179,4 +176,6 @@ int32_t OH_Input_GetKeySwitch(struct Input_KeyState* keyState);
 #ifdef __cplusplus
 }
 #endif
+/** @} */
+
 #endif // NATIVE_INPUT_MANAGER_H

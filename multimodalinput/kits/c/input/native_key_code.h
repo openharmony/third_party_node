@@ -31,11 +31,9 @@
  * @brief Defines the key event structure and related enumeration values.
  *
  * @syscap SystemCapability.MultimodalInput.Input.Core
- * @library libohinput.so
+ * @library libnative_input.so
  * @since 12
  */
-
-#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,6 +45,8 @@ extern "C" {
  * @since 12
  */
 typedef enum {
+    /** Unknown key */
+    KEYCODE_UNKNOWN = -1,
     /** Function (Fn) key */
     KEYCODE_FN = 0,
     /** Volume Up key */
@@ -316,5 +316,6 @@ typedef enum {
 #ifdef __cplusplus
 }
 #endif
+/** @} */
 
 #endif // NATIVE_KEY_CODE_H
