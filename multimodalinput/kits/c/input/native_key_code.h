@@ -17,7 +17,7 @@
 #define NATIVE_KEY_CODE_H
 
 /**
- * @addtogroup OHInput
+ * @addtogroup input
  * @{
  *
  * @brief Provides the C interface in the multi-modal input domain.
