@@ -22,3 +22,13 @@ ohos_ndk_headers("node_header") {
     "//third_party/node/src/node_api_types.h",
   ]
 }
+ohos_static_library("node_header_notice") {
+  sources = [
+    "//third_party/node/src/js_native_api.h",
+    "//third_party/node/src/js_native_api_types.h",
+    "//third_party/node/src/node_api.h",
+    "//third_party/node/src/node_api_types.h",
+  ]
+  part_name = "node"
+  subsystem_name = "thirdparty"
+}
