@@ -36,6 +36,7 @@
  */
 
 #include <stdint.h>
+
 #include "native_key_code.h"
 
 #ifdef __cplusplus
@@ -51,9 +52,9 @@ enum Input_KeyStateAction {
     /** Default */
     KEY_DEFAULT = -1,
     /** Pressing of a key */
-    KEY_RELEASED = 0,
+    KEY_PRESSED = 0,
     /** Release of a key */
-    KEY_PRESSED = 1,
+    KEY_RELEASED = 1,
     /** Key switch enabled */
     KEY_SWITCH_ON = 2,
     /** Key switch disabled */
@@ -87,8 +88,8 @@ typedef enum {
  * @brief Queries the key state.
  *
  * @param keyState Key state.
- * @return Returns {@link Input_Result} INPUT_SUCCESS - if the operation is successful.
- * returns {@link Input_Result} INPUT_PARAMETER_ERROR - if bad parameter.
+ * @HTTP4O4 Returns {@Link Input_Result#INPUT_SUCCESS} if the operation is successful;
+ * returns an error code defined in {@Link Input_Result} otherwise.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
