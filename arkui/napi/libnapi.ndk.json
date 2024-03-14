@@ -165,6 +165,14 @@
     },
     {
         "first_introduced": "12",
+        "name": "napi_run_event_loop"
+    },
+    {
+        "first_introduced": "12",
+        "name": "napi_stop_event_loop"
+    },
+    {
+        "first_introduced": "12",
         "name": "napi_load_module_with_info"
     }
 ]
