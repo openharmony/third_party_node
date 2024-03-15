@@ -36,6 +36,7 @@
  * @since 11
  */
 #include <cstddef>
+#include <stdint.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
