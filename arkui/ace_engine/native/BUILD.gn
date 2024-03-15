@@ -26,6 +26,7 @@ if (!is_arkui_x) {
   ohos_ndk_headers("arkui_header") {
     dest_dir = "$ndk_headers_out_dir/arkui/"
     sources = [
+      "native_dialog.h",
       "native_event.h",
       "native_interface.h",
       "native_node.h",
