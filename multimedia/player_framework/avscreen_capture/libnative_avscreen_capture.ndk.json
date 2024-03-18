@@ -19,6 +19,5 @@
     { "name": "OH_AVScreenCapture_SetErrorCallback" },
     { "name": "OH_AVScreenCapture_CreateContentFilter" },
     { "name": "OH_AVScreenCapture_ReleaseContentFilter" },
-    { "name": "OH_AVScreenCapture_ContentFilter_AddAudioContent" },
-    { "name": "OH_AVScreenCapture_ExcludeContent" }
+    { "name": "OH_AVScreenCapture_ContentFilter_AddAudioContent" }
 ]
