@@ -42,7 +42,7 @@ struct OH_AVScreenCapture *OH_AVScreenCapture_Create(void);
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param config Information describing the audio and video config
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
+ * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
  * @since 10
  * @version 1.0
@@ -54,7 +54,7 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_Init(struct OH_AVScreenCapture *c
  * @brief Start the av screen capture
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
+ * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
  * @since 10
  * @version 1.0
@@ -78,7 +78,7 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_StartScreenCaptureWithSurface(str
  * @brief Stop the av screen capture
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
+ * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
  * @since 10
  * @version 1.0
@@ -89,7 +89,7 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_StopScreenCapture(struct OH_AVScr
  * @brief Start av screen record use to start save screen record file.
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
+ * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
  * @since 10
  * @version 1.0
@@ -100,7 +100,7 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_StartScreenRecording(struct OH_AV
  * @brief Start av screen record use to stop save screen record file.
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
+ * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
  * @since 10
  * @version 1.0
@@ -113,12 +113,12 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_StopScreenRecording(struct OH_AVS
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param audiobuffer Information describing the audio buffer of the capture
  * @param type Information describing the audio source type
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
+ * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
- * @deprecated since 12
- * @useinstead {@link OH_AVScreenCapture_OnBufferAvailable}
  * @since 10
  * @version 1.0
+ * @deprecated since 12
+ * @useinstead {@link OH_AVScreenCapture_OnBufferAvailable}
  */
 OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_AcquireAudioBuffer(struct OH_AVScreenCapture *capture,
     OH_AudioBuffer **audiobuffer, OH_AudioCaptureSourceType type);
@@ -131,10 +131,10 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_AcquireAudioBuffer(struct OH_AVSc
  * @param timestamp Information about the video buffer
  * @param region Information about the video buffer
  * @return Returns a pointer to an OH_NativeBuffer instance
- * @deprecated since 12
- * @useinstead {@link OH_AVScreenCapture_OnBufferAvailable}
  * @since 10
  * @version 1.0
+ * @deprecated since 12
+ * @useinstead {@link OH_AVScreenCapture_OnBufferAvailable}
  */
 OH_NativeBuffer* OH_AVScreenCapture_AcquireVideoBuffer(struct OH_AVScreenCapture *capture,
     int32_t *fence, int64_t *timestamp, struct OH_Rect *region);
@@ -144,12 +144,12 @@ OH_NativeBuffer* OH_AVScreenCapture_AcquireVideoBuffer(struct OH_AVScreenCapture
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param type Information describing the audio source type
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
+ * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
- * @deprecated since 12
- * @useinstead {@link OH_AVScreenCapture_OnBufferAvailable}
  * @since 10
  * @version 1.0
+ * @deprecated since 12
+ * @useinstead {@link OH_AVScreenCapture_OnBufferAvailable}
  */
 OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_ReleaseAudioBuffer(struct OH_AVScreenCapture *capture,
     OH_AudioCaptureSourceType type);
@@ -158,12 +158,12 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_ReleaseAudioBuffer(struct OH_AVSc
  * @brief Release the video buffer for the av screen capture
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
+ * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
- * @deprecated since 12
- * @useinstead {@link OH_AVScreenCapture_OnBufferAvailable}
  * @since 10
  * @version 1.0
+ * @deprecated since 12
+ * @useinstead {@link OH_AVScreenCapture_OnBufferAvailable}
  */
 OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_ReleaseVideoBuffer(struct OH_AVScreenCapture *capture);
 
@@ -173,12 +173,12 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_ReleaseVideoBuffer(struct OH_AVSc
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param callback A collection of all callback functions, see {@link OH_AVScreenCaptureCallback}
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
+ * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
- * @deprecated since 12
- * @useinstead {@link OH_AVScreenCapture_SetErrorCallback} {@link OH_AVScreenCapture_SetDataCallback}
  * @since 10
  * @version 1.0
+ * @deprecated since 12
+ * @useinstead {@link OH_AVScreenCapture_SetErrorCallback} {@link OH_AVScreenCapture_SetDataCallback}
  */
 OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_SetCallback(struct OH_AVScreenCapture *capture,
     struct OH_AVScreenCaptureCallback callback);
@@ -187,7 +187,7 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_SetCallback(struct OH_AVScreenCap
  * @brief Release the av screen capture
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
+ * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
  * @since 10
  * @version 1.0
@@ -199,7 +199,7 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_Release(struct OH_AVScreenCapture
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param isMicrophone The switch of the microphone
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
+ * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
  * @since 10
  * @version 1.0
@@ -277,7 +277,7 @@ struct OH_AVScreenCapture_ContentFilter *OH_AVScreenCapture_CreateContentFilter(
  * @brief Release the screen capture content filter
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param filter Pointer to an OH_AVScreenCapture_ContentFilter instance
- * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
+ * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
  * @since 12
  * @version 1.0
@@ -289,7 +289,7 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_ReleaseContentFilter(struct OH_AV
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param filter Pointer to an OH_AVScreenCapture_ContentFilter instance
  * @param content content to be added
- * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
+ * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
  * @since 12
  * @version 1.0
@@ -302,7 +302,7 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_ContentFilter_AddAudioContent(
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param filter Pointer to an OH_AVScreenCapture_ContentFilter instance
- * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
+ * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
  * @since 12
  * @version 1.0
