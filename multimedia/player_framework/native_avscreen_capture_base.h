@@ -315,8 +315,6 @@ typedef struct OH_AVScreenCaptureConfig {
  *
  * @since 10
  * @version 1.0
- * @deprecated since 12
- * @useinstead {@link OH_AVScreenCapture_OnError}
  */
 typedef void (*OH_AVScreenCaptureOnError)(OH_AVScreenCapture *capture, int32_t errorCode);
 
@@ -330,8 +328,6 @@ typedef void (*OH_AVScreenCaptureOnError)(OH_AVScreenCapture *capture, int32_t e
  *
  * @since 10
  * @version 1.0
- * @deprecated since 12
- * @useinstead {@link OH_AVScreenCapture_OnBufferAvailable}
  */
 typedef void (*OH_AVScreenCaptureOnAudioBufferAvailable)(OH_AVScreenCapture *capture, bool isReady,
     OH_AudioCaptureSourceType type);
@@ -345,8 +341,6 @@ typedef void (*OH_AVScreenCaptureOnAudioBufferAvailable)(OH_AVScreenCapture *cap
  *
  * @since 10
  * @version 1.0
- * @deprecated since 12
- * @useinstead {@link OH_AVScreenCapture_OnBufferAvailable}
  */
 typedef void (*OH_AVScreenCaptureOnVideoBufferAvailable)(OH_AVScreenCapture *capture, bool isReady);
 
@@ -361,8 +355,6 @@ typedef void (*OH_AVScreenCaptureOnVideoBufferAvailable)(OH_AVScreenCapture *cap
  *
  * @since 10
  * @version 1.0
- * @deprecated since 12
- * @useinstead {@link OH_AVScreenCapture_OnError} {@link OH_AVScreenCapture_OnBufferAvailable}
  */
 typedef struct OH_AVScreenCaptureCallback {
     OH_AVScreenCaptureOnError onError;

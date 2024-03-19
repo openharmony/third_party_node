@@ -105,8 +105,6 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_StopScreenRecording(struct OH_AVS
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
  * @since 10
  * @version 1.0
- * @deprecated since 12
- * @useinstead {@link OH_AVScreenCapture_OnBufferAvailable}
  */
 OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_AcquireAudioBuffer(struct OH_AVScreenCapture *capture,
     OH_AudioBuffer **audiobuffer, OH_AudioCaptureSourceType type);
@@ -121,8 +119,6 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_AcquireAudioBuffer(struct OH_AVSc
  * @return Returns a pointer to an OH_NativeBuffer instance
  * @since 10
  * @version 1.0
- * @deprecated since 12
- * @useinstead {@link OH_AVScreenCapture_OnBufferAvailable}
  */
 OH_NativeBuffer* OH_AVScreenCapture_AcquireVideoBuffer(struct OH_AVScreenCapture *capture,
     int32_t *fence, int64_t *timestamp, struct OH_Rect *region);
@@ -136,8 +132,6 @@ OH_NativeBuffer* OH_AVScreenCapture_AcquireVideoBuffer(struct OH_AVScreenCapture
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
  * @since 10
  * @version 1.0
- * @deprecated since 12
- * @useinstead {@link OH_AVScreenCapture_OnBufferAvailable}
  */
 OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_ReleaseAudioBuffer(struct OH_AVScreenCapture *capture,
     OH_AudioCaptureSourceType type);
@@ -150,8 +144,6 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_ReleaseAudioBuffer(struct OH_AVSc
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
  * @since 10
  * @version 1.0
- * @deprecated since 12
- * @useinstead {@link OH_AVScreenCapture_OnBufferAvailable}
  */
 OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_ReleaseVideoBuffer(struct OH_AVScreenCapture *capture);
 
@@ -165,8 +157,6 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_ReleaseVideoBuffer(struct OH_AVSc
  * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
  * @since 10
  * @version 1.0
- * @deprecated since 12
- * @useinstead {@link OH_AVScreenCapture_SetErrorCallback} {@link OH_AVScreenCapture_SetDataCallback}
  */
 OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_SetCallback(struct OH_AVScreenCapture *capture,
     struct OH_AVScreenCaptureCallback callback);
