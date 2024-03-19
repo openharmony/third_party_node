@@ -422,7 +422,7 @@ typedef enum OH_AVScreenCaptureStateCode {
     /* ScreenCapture stopped by user */
     OH_SCREEN_CAPTURE_STATE_STOPPED_BY_USER = 2,
     /* ScreenCapture interrupted by other screen capture */
-    OH_SCREEN_CAPTURE_STATE_INTERRUPTTED_BY_OTHER = 3,
+    OH_SCREEN_CAPTURE_STATE_INTERRUPTED_BY_OTHER = 3,
     /* ScreenCapture stopped by SIM call */
     OH_SCREEN_CAPTURE_STATE_STOPPED_BY_CALL = 4,
     /* Microphone is temporarily unavailable */
