@@ -354,6 +354,19 @@ typedef struct OH_Drawing_LineMetrics {
 } OH_Drawing_LineMetrics;
 
 /**
+ * @brief Defines the fontfeature.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct {
+    /** key of fontfeature */
+    char* fontFeatureKey;
+    /** value of fontfeature */
+    int fontFeatureValue;
+} OH_Drawing_FontFeature;
+
+/**
  * @brief Creates an <b>OH_Drawing_TypographyStyle</b> object.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
@@ -1697,7 +1710,7 @@ void OH_Drawing_DestroyTextShadows(OH_Drawing_TextShadow*);
 void OH_Drawing_TextStyleSetBackgroundRect(OH_Drawing_TextStyle*, const OH_Drawing_RectStyle_Info*, int styleId);
 
 /**
- * @brief Set symbols in creating typography.
+ * @brief Add symbols in creating typography.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TypographyCreate Indicates the pointer to an <b>OH_Drawing_TypographyCreate</b> object.
@@ -1708,7 +1721,7 @@ void OH_Drawing_TextStyleSetBackgroundRect(OH_Drawing_TextStyle*, const OH_Drawi
 void OH_Drawing_TypographyHandlerAddSymbol(OH_Drawing_TypographyCreate*, uint32_t symbol);
 
 /**
- * @brief Set features of font features.
+ * @brief Add font feature.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
@@ -1720,37 +1733,26 @@ void OH_Drawing_TypographyHandlerAddSymbol(OH_Drawing_TypographyCreate*, uint32_
 void OH_Drawing_TextStyleAddFontFeature(OH_Drawing_TextStyle*, const char* tag, int value);
 
 /**
- * @brief Get value with key of font features.
+ * @brief Get all font features.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
- * @param tag Indicates the pointer to the key of fontfeature in map.
- * @return Returns the value of the key in map.
+ * @return OH_Drawing_FontFeature Indicates the pointer to an array of structures of OH_Drawing_FontFeature.
  * @since 12
  * @version 1.0
  */
-int OH_Drawing_TextStyleGetFontFeature(OH_Drawing_TextStyle*, const char* tag);
+OH_Drawing_FontFeature* OH_Drawing_TextStyleGetFontFeatures(OH_Drawing_TextStyle*);
 
 /**
- * @brief Get all elements of font features.
+ * @brief Release the memory occupied by array of structures of font features.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
- * @return char Indicates the pointer to the string in Json of all elements in fontfeatures map.
+ * @param OH_Drawing_FontFeature Indicates the pointer to an array of structures of OH_Drawing_FontFeature.
+ * @param fontFeatureSize Indicates the size of array of structures of OH_Drawing_FontFeature.
  * @since 12
  * @version 1.0
  */
-char* OH_Drawing_TextStyleGetFontFeatures(OH_Drawing_TextStyle*);
-
-/**
- * @brief Releases the memory occupied by string of font features.
- *
- * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
- * @since 12
- * @version 1.0
- */
-void OH_Drawing_DestroyFontFeature(char* fontFeatureStr);
+void OH_Drawing_TextStyleDestroyFontFeatures(OH_Drawing_FontFeature*, size_t fontFeatureSize);
 
 /**
  * @brief Get size of font features.
@@ -1761,10 +1763,10 @@ void OH_Drawing_DestroyFontFeature(char* fontFeatureStr);
  * @since 12
  * @version 1.0
  */
-int OH_Drawing_TextStyleGetFontFeatureSize(OH_Drawing_TextStyle*);
+size_t OH_Drawing_TextStyleGetFontFeatureSize(OH_Drawing_TextStyle*);
 
 /**
- * @brief Clear elements of font features.
+ * @brief Clear font features.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_TextStyle Indicates the pointer to an <b>OH_Drawing_TextStyle</b> object.
