@@ -416,7 +416,7 @@ typedef enum {
      * Playback capture source type.
      *
      * @deprecated since 12
-     * @useinstead AVScreenCapture in MediaKit.
+     * @useinstead OH_AVScreenCapture in native interface.
      * @since 10
      */
     AUDIOSTREAM_SOURCE_TYPE_PLAYBACK_CAPTURE = 2,
@@ -654,10 +654,14 @@ typedef int32_t (*OH_AudioRenderer_WriteDataWithMetadataCallback)(OH_AudioRender
  * @since 12
  */
 typedef enum {
-    /* Privacy type that stream can be captured by third party applications. */
-    PRIVACY_TYPE_PUBLIC = 0,
-    /* Privacy type that stream can not be captured. */
-    PRIVACY_TYPE_PRIVATE = 1,
+    /** Privacy type that stream can be captured by third party applications.
+     * @since 12
+     */
+    AUDIO_STREAM_PRIVACY_TYPE_PUBLIC = 0,
+    /** Privacy type that stream can not be captured.
+     * @since 12
+     */
+    AUDIO_STREAM_PRIVACY_TYPE_PRIVATE = 1,
 } OH_AudioStream_PrivacyType;
 #ifdef __cplusplus
 }
