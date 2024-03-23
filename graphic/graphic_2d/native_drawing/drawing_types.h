@@ -110,6 +110,14 @@ typedef struct OH_Drawing_Point OH_Drawing_Point;
 typedef struct OH_Drawing_ColorSpace OH_Drawing_ColorSpace;
 
 /**
+ * @brief Defines a pixelmap, which is used to wrap real pixelmap supported by image framework.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct OH_Drawing_PixelMap OH_Drawing_PixelMap;
+
+/**
  * @brief Defines a point of 2d.
  *
  * @since 12

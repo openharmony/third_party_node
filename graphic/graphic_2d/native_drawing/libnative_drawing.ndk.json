@@ -60,6 +60,10 @@
     { "name": "OH_Drawing_CanvasDrawLine" },
     { "name": "OH_Drawing_CanvasDrawOval" },
     { "name": "OH_Drawing_CanvasDrawPath" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_CanvasDrawPixelMapRect"
+    },
     { 
         "first_introduced": "12",
         "name": "OH_Drawing_CanvasDrawPoints" 
@@ -415,6 +419,10 @@
     { "name": "OH_Drawing_TypographyGetMaxIntrinsicWidth" },
     { "name": "OH_Drawing_TypographyGetAlphabeticBaseline" },
     { "name": "OH_Drawing_TypographyGetIdeographicBaseline" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_PixelMapGetFromNativePixelMap"
+    },
     { "name": "OH_Drawing_ImageCreate" },
     { "name": "OH_Drawing_ImageDestroy" },
     { "name": "OH_Drawing_ImageBuildFromBitmap" },
