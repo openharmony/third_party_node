@@ -57,6 +57,20 @@ struct ArkUI_Node;
 struct ArkUI_NativeDialog;
 
 /**
+  * @brief constrains the size and limits the size range during component layout.
+  *
+  * @since 12
+  */
+struct ArkUI_LayoutConstraint;
+
+/**
+  * @brief defines the component drawing context type structure.
+  *
+  * @since 12
+  */
+struct ArkUI_DrawContext;
+
+/**
  * @brief Defines the pointer to the ArkUI native component object.
  *
  * @since 12
@@ -1231,6 +1245,8 @@ typedef enum {
     ARKUI_LINEAR_GRADIENT_DIRECTION_RIGHT_BOTTOM,
     /** No gradient. */
     ARKUI_LINEAR_GRADIENT_DIRECTION_NONE,
+    /** Customize the gradient direction. */
+    ARKUI_LINEAR_GRADIENT_DIRECTION_CUSTOM,
 } ArkUI_LinearGradientDirection;
 
 /**
@@ -1308,6 +1324,181 @@ typedef struct {
     /** Height of the mask area. */
     float height;
 } ArkUI_Rect;
+
+/**
+ * @brief Dimension type, used to describe the width and height of the component.
+ *
+ * @since 12。
+ */
+typedef struct {
+    /** Width, unit is px. */
+    int32_t width;
+    /** Height, unit is px. */
+    int32_t height;
+} ArkUI_IntSize;
+
+/**
+  * @brief location, used to describe the location of the component.
+  *
+  * @since 12.
+  */
+typedef struct {
+     /** Horizontal abscissa, unit is px. */
+     int32_t x;
+     /** Vertical ordinate, unit is px. */
+     int32_t y;
+} ArkUI_IntOffset;
+
+/**
+* @brief Create constrained dimensions.
+*
+* @since 12
+*/
+ArkUI_LayoutConstraint* OH_ArkUI_LayoutConstraint_Create();
+
+/**
+* @brief Constraint size deep copy.
+*
+* @param Constraint constraint size.
+* @return new constraint size pointer.
+* @since 12
+*/
+ArkUI_LayoutConstraint* OH_ArkUI_LayoutConstraint_Copy(const ArkUI_LayoutConstraint* Constraint);
+
+/**
+* @brief Destroy the constraint size pointer.
+*
+* @param Constraint constraint size.
+* @since 12
+*/
+void* OH_ArkUI_LayoutConstraint_Dispose(ArkUI_LayoutConstraint* Constraint);
+
+/**
+* @brief Get the maximum width through constraint size, in px.
+*
+* @param Constraint constraint size.
+* @return maximum width.
+* @since 12
+*/
+int32_t OH_ArkUI_LayoutConstraint_GetMaxWidth(const ArkUI_LayoutConstraint* Constraint);
+
+/**
+* @brief Get the minimum width through constraint size, in px.
+*
+* @param Constraint constraint size.
+* @return minimum width.
+* @since 12
+*/
+int32_t OH_ArkUI_LayoutConstraint_GetMinWidth(const ArkUI_LayoutConstraint* Constraint);
+
+/**
+* @brief Get the maximum height through constraint size, in px.
+*
+* @param Constraint constraint size.
+* @return maximum width.
+* @since 12
+*/
+int32_t OH_ArkUI_LayoutConstraint_GetMaxHeight(const ArkUI_LayoutConstraint* Constraint);
+
+/**
+* @brief Get the minimum height through constraint size, in px.
+*
+* @param Constraint constraint size.
+* @return maximum width.
+* @since 12
+*/
+int32_t OH_ArkUI_LayoutConstraint_GetMinHeight(const ArkUI_LayoutConstraint* Constraint);
+
+/**
+* @brief Get the width percentage base through the constraint size, in px.
+*
+* @param Constraint constraint size.
+* @return Width percentage base.
+* @since 12
+*/
+int32_t OH_ArkUI_LayoutConstraint_GetPercentReferenceWidth(const ArkUI_LayoutConstraint* Constraint);
+
+/**
+* @brief Get the height percentage base through the constraint size, in px.
+*
+* @param Constraint constraint size.
+* @return height percentage base.
+* @since 12
+*/
+int32_t OH_ArkUI_LayoutConstraint_GetPercentReferenceHeight(const ArkUI_LayoutConstraint* Constraint);
+
+/**
+* @brief Set the maximum width.
+*
+* @param Constraint constraint size.
+* @param value Maximum width, unit is px.
+* @since 12
+*/
+void OH_ArkUI_LayoutConstraint_SetMaxWidth(ArkUI_LayoutConstraint* Constraint, int32_t value);
+
+/**
+* @brief Set the minimum width.
+*
+* @param Constraint constraint size.
+* @param value Minimum width, unit is px.
+* @since 12
+*/
+void OH_ArkUI_LayoutConstraint_SetMinWidth(ArkUI_LayoutConstraint* Constraint, int32_t value);
+
+/**
+* @brief Set the maximum height.
+*
+* @param Constraint constraint size.
+* @param value Maximum height, unit is px.
+* @since 12
+*/
+void OH_ArkUI_LayoutConstraint_SetMaxHeight(ArkUI_LayoutConstraint* Constraint, int32_t value);
+
+/**
+* @brief Set the minimum height.
+*
+* @param Constraint constraint size.
+* @param value Minimum height, unit is px.
+* @since 12
+*/
+void OH_ArkUI_LayoutConstraint_SetMinHeight(ArkUI_LayoutConstraint* Constraint, int32_t value);
+
+/**
+* @brief Set the width percentage base.
+*
+* @param Constraint constraint size.
+* @param value Width percentage base, unit is px.
+* @since 12
+*/
+void OH_ArkUI_LayoutConstraint_SetPercentReferenceWidth(ArkUI_LayoutConstraint* Constraint, int32_t value);
+
+/**
+* @brief Set height percentage base.
+*
+* @param Constraint constraint size.
+* @param value Height percentage reference, unit is px.
+* @since 12
+*/
+void OH_ArkUI_LayoutConstraint_SetPercentReferenceHeight(ArkUI_LayoutConstraint* Constraint, int32_t value);
+
+/**
+* @brief Gets the drawing canvas pointer, which can be converted to the 
+* OH_Drawing_Canvas pointer of the graphics library for drawing.
+*
+* @param context drawing context.
+* @return Canvas pointer used for drawing.
+* @since 12
+*/
+void* OH_ArkUI_DrawContext_GetCanvas(ArkUI_DrawContext* context);
+
+/**
+* @brief Get the size of the drawable area.
+*
+* @param context drawing context.
+* @return drawable area size.
+* @since 12
+*/
+ArkUI_IntSize OH_ArkUI_DrawContext_GetSize(ArkUI_DrawContext* context);
 
 #ifdef __cplusplus
 };
