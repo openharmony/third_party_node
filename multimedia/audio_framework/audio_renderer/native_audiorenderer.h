@@ -250,6 +250,37 @@ OH_AudioStream_Result OH_AudioRenderer_GetSpeed(OH_AudioRenderer* renderer, floa
 */
 OH_AudioStream_Result OH_AudioRenderer_SetSpeed(OH_AudioRenderer* renderer, float speed);
 
+/**
+ * Set volume of current renderer.
+ *
+ * @param renderer Reference created by OH_AudioStreamBuilder_GenerateRenderer()
+ * @param volume Volume to set which changes from 0.0 to 1.0.
+ * @return {@link #AUDIOSTREAM_SUCCESS} or an undesired error.
+ * @since 12
+ */
+OH_AudioStream_Result OH_AudioRenderer_SetVolume(OH_AudioRenderer* renderer, float volume);
+
+/**
+ * Changes the volume with ramp for a duration.
+ *
+ * @param renderer Reference created by OH_AudioStreamBuilder_GenerateRenderer()
+ * @param volume Volume to set which changes from 0.0 to 1.0.
+ * @param durationMs Duration for volume ramp, in millisecond.
+ * @return {@link #AUDIOSTREAM_SUCCESS} or an undesired error.
+ * @since 12
+ */
+OH_AudioStream_Result OH_AudioRenderer_SetVolumeWithRamp(OH_AudioRenderer* renderer, float volume, int32_t durationMs);
+
+/**
+ * Get Volume of current renderer.
+ *
+ * @param renderer Reference created by OH_AudioStreamBuilder_GenerateRenderer()
+ * @param volume Pointer to a variable to receive the volume.
+ * @return {@link #AUDIOSTREAM_SUCCESS} or an undesired error.
+ * @since 12
+ */
+OH_AudioStream_Result OH_AudioRenderer_GetVolume(OH_AudioRenderer* renderer, float* volume);
+
 #ifdef __cplusplus
 }
 #endif
