@@ -103,12 +103,14 @@ typedef enum AVPlaybackSpeed {
     /* Video playback at 2.0x normal speed */
     AV_SPEED_FORWARD_2_00_X,
     /**
-     * Video playback at 0.5x normal speed
+     * @brief Video playback at 0.5x normal speed
+     * @syscap SystemCapability.Multimedia.Media.AVPlayer
      * @since 12
     */
     AV_SPEED_FORWARD_0_50_X,
     /**
-     * Video playback at 1.5x normal speed
+     * @brief Video playback at 1.5x normal speed
+     * @syscap SystemCapability.Multimedia.Media.AVPlayer
      * @since 12
     */
     AV_SPEED_FORWARD_1_50_X,
