@@ -361,9 +361,9 @@ typedef struct OH_Drawing_LineMetrics {
  */
 typedef struct {
     /** key of fontfeature */
-    char* fontFeatureKey;
+    char* tag;
     /** value of fontfeature */
-    int fontFeatureValue;
+    int value;
 } OH_Drawing_FontFeature;
 
 /**
