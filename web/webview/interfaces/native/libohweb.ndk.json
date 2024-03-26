@@ -61,7 +61,7 @@
     },
     {
         "first_introduced": "12",
-        "name": "ArkWeb_PostDataStream"
+        "name": "ArkWeb_HttpBodyStream"
     },
     {
         "first_introduced": "12",
@@ -105,59 +105,59 @@
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkWebResourceRequest_GetPostData"
+        "name": "OH_ArkWebResourceRequest_GetHttpBodyStream"
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkWebResourceRequest_DestroyPostData"
+        "name": "OH_ArkWebResourceRequest_DestroyHttpBodyStream"
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkWebPostDataStream_SetReadCallback"
+        "name": "OH_ArkWebHttpBodyStream_SetReadCallback"
     },
     {
         "first_introduced": "12",
-        "name": "ArkWeb_PostDataStreamInitCallback"
+        "name": "ArkWeb_HttpBodyStreamInitCallback"
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkWebPostDataStream_SetUserData"
+        "name": "OH_ArkWebHttpBodyStream_SetUserData"
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkWebPostDataStream_GetUserData"
+        "name": "OH_ArkWebHttpBodyStream_GetUserData"
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkWebPostDataStream_Init"
+        "name": "OH_ArkWebHttpBodyStream_Init"
     },
     {
         "first_introduced": "12",
-        "name": "ArkWeb_PostDataReadCallback"
+        "name": "ArkWeb_HttpBodyStreamReadCallback"
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkWebPostDataStream_Read"
+        "name": "OH_ArkWebHttpBodyStream_Read"
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkWebPostDataStream_GetSize"
+        "name": "OH_ArkWebHttpBodyStream_GetSize"
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkWebPostDataStream_GetPosition"
+        "name": "OH_ArkWebHttpBodyStream_GetPosition"
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkWebPostDataStream_IsChunked"
+        "name": "OH_ArkWebHttpBodyStream_IsChunked"
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkWebPostDataStream_IsEof"
+        "name": "OH_ArkWebHttpBodyStream_IsEof"
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkWebPostDataStream_IsInMemory"
+        "name": "OH_ArkWebHttpBodyStream_IsInMemory"
     },
     {
         "first_introduced": "12",

@@ -57,32 +57,37 @@ typedef struct {
 } ArkUI_AnyNativeAPI;
 
 /**
- * @brief Defines the native API set type.
+ * @brief Defines the native API types.
  *
  * @since 12
  */
 typedef enum {
-    /** API type related to UI components. */
+    /** API related to UI components. */
     ARKUI_NATIVE_NODE,
+    /** API related to dialog boxes. */
+    ARKUI_NATIVE_DIALOG,
+    /** API related to gestures. */
+    ARKUI_NATIVE_GESTURE,
 } ArkUI_NativeAPIVariantKind;
 
 /**
  * @brief Defines the version information supported by the ARKUI_NATIVE_NODE type.
  *
- * @since 12 
+ * @since 12
  */
 typedef enum {
     /** The ARKUI_NATIVE_NODE type supports the structure {@link ArkUI_NativeNodeAPI_1} of version 1. */
-    ARKUI_NATIVE_NODE_VERSION_1,
+    ARKUI_NATIVE_NODE_VERSION_1 = 1,
 } ArkUI_NativeNodeAPIVersion;
 
 /**
  * @brief Obtains the native API set of a specified version.
  *
- * @param type Indicates the type of the native API set provided by ArkUI, for example, ARKUI_NATIVE_NODE
- * (API type related to UI components).
- * @param version Indicates the version of the native API structure, which is obtained through the suffix defined in the
- * structure. For example, for the ArkUI_NativeNodeAPI_1 structure, the version is 1.
+ * @param type Indicates the type of the native API set provided by ArkUI, for example,
+ *        <b>ARKUI_NATIVE_NODE</b> and <b>ARKUI_NATIVE_GESTURE</b>.
+ * @param version Indicates the version of the native API structure, which is obtained through the suffix
+ *        defined in the structure. For the <b>ARKUI_NATIVE_NODE</b> structure, the version is 1,
+ *        For the <b>ARKUI_NATIVE_GESTURE</b> structure, the version is 1
  * @return Returns the pointer to the native API abstract object that carries the version.
  * @code {.cpp}
  * #include<arkui/native_interface.h>
@@ -91,6 +96,10 @@ typedef enum {
  * auto anyNativeAPI = OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_NODE, 1);
  * if (anyNativeAPI->version == 1) {
  *     auto basicNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(anyNativeAPI);
+ * }
+ * auto anyGestureAPI = OH_ArkUI_GetNativeAPI(ARKUI_NATIVE_GESTURE, 1);
+ * if (anyNativeAPI->version == 1) {
+ *     auto basicGestureApi = reinterpret_cast<ArkUI_NativeGestureAPI_1*>(anyGestureAPI);
  * }
  * @endcode
  * @deprecated This API is deprecated since API version 12.
@@ -102,19 +111,23 @@ ArkUI_AnyNativeAPI* OH_ArkUI_GetNativeAPI(ArkUI_NativeAPIVariantKind type, int32
 /**
  * @brief Obtains the native module API set of a specified version.
  *
- * @param type Indicates the type of the native API set provided by ArkUI, for example, ARKUI_NATIVE_NODE
- * (API type related to UI components).
- * @param version Indicates the version of the native API structure, which is obtained through the version enums
- * supported by the structure. For example, the available version of ARKUI_NATIVE_NODE is
- * {@link ARKUI_NATIVE_NODE_VERSION}.
+ * @param type Indicates the type of the native API set provided by ArkUI, for example, <b>ARKUI_NATIVE_NODE</b> and
+ *        <b>ARKUI_NATIVE_GESTURE</b>.
+ * @param version Indicates the version of the native API structure, which is obtained through the version enum
+ *        supported by the structure, for example, For the <b>ARKUI_NATIVE_NODE</b> structure, the version is 1,
+ *        For the <b>ARKUI_NATIVE_GESTURE</b> structure, the version is 1
  * @return Returns the pointer to the native API abstract object that carries the version.
  * @code {.cpp}
  * #include<arkui/native_interface.h>
  * #include<arkui/native_node.h>
  *
- * auto anyNativeAPI = OH_ArkUI_QueryModuleInterface(ARKUI_NATIVE_NODE, ARKUI_NATIVE_NODE_VERSION_1);
- * if (anyNativeAPI->version == ARKUI_NATIVE_NODE_VERSION_1) {
+ * auto anyNativeAPI = OH_ArkUI_QueryModuleInterface(ARKUI_NATIVE_NODE, 1);
+ * if (anyNativeAPI->version == 1) {
  *     auto nativeNodeApi = reinterpret_cast<ArkUI_NativeNodeAPI_1*>(anyNativeAPI);
+ * }
+ * auto anyGestureAPI = OH_ArkUI_QueryModuleInterface(ARKUI_NATIVE_GESTURE, 1);
+ * if (anyNativeAPI->version == 1) {
+ *     auto basicGestureApi = reinterpret_cast<ArkUI_NativeGestureAPI_1*>(anyGestureAPI);
  * }
  * @endcode
  *

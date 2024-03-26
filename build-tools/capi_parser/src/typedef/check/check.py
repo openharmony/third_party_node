@@ -137,6 +137,7 @@ reuse in Doc which has addtogroup tag.'
 be reused please delete the extra tags.'
     ERROR_FILE_HAS_ONE_LOSE_OTHER = 'the file has the $$, but do not has the $$.'
     ERROR_FILE_LOSE_ONE = 'the file missing $$'
+    ERROR_LOST_LABEL = 'JSDoc tag validity verification failed. Please confirm if the [$$] tag is missing'
     FUNCTION_DECL = 'This name [$$] should use the big hump naming style or beginning with OH/OS,and \
         using "_" segmentation.'
     STRUCT_DECL = 'This name [$$] should use the big hump naming style.'
@@ -205,6 +206,7 @@ class ApiResultInfo:
     error_info = ''
     level: ErrorLevel = -1
     api_name = ''
+    api_since = ''
     api_full_text = ''
     file_name = ''
     location = ''
@@ -268,6 +270,12 @@ class ApiResultInfo:
 
     def set_api_name(self, api_name_param):
         self.api_name = api_name_param
+
+    def get_api_since(self):
+        return self.api_since
+
+    def set_api_since(self, api_since):
+        self.api_since = api_since
 
     def get_api_full_text(self):
         return self.api_full_text

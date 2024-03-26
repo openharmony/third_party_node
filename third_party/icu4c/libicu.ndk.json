@@ -1,6 +1,666 @@
 [
     {
         "first_introduced": "12",
+        "name":"ubidi_open"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_openSized"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_close"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_setInverse"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_isInverse"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_orderParagraphsLTR"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_isOrderParagraphsLTR"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_setReorderingMode"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getReorderingMode"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_setReorderingOptions"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getReorderingOptions"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_setContext"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_setPara"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_setLine"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getDirection"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getBaseDirection"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getText"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getLength"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getParaLevel"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_countParagraphs"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getParagraph"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getParagraphByIndex"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getLevelAt"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getLevels"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getLogicalRun"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_countRuns"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getVisualRun"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getVisualIndex"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getLogicalIndex"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getLogicalMap"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getVisualMap"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_reorderLogical"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_reorderVisual"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_invertMap"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getProcessedLength"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getResultLength"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getCustomizedClass"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_setClassCallback"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_getClassCallback"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_writeReordered"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubidi_writeReverse"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_open"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_openRules"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_openBinaryRules"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_clone"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_close"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_setText"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_current"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_next"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_previous"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_first"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_last"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_preceding"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_following"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_getAvailable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_countAvailable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_isBoundary"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_getRuleStatus"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_getRuleStatusVec"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_getLocaleByType"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ubrk_getBinaryRules"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_openTimeZoneIDEnumeration"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_openTimeZones"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_openCountryTimeZones"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getDefaultTimeZone"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_setDefaultTimeZone"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getHostTimeZone"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getDSTSavings"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getNow"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_open"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_close"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_clone"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_setTimeZone"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getTimeZoneID"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getTimeZoneDisplayName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_inDaylightTime"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_setGregorianChange"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getGregorianChange"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getAttribute"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_setAttribute"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getAvailable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_countAvailable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getMillis"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_setMillis"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_setDate"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_setDateTime"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_equivalentTo"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_add"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_roll"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_get"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_set"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_isSet"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_clearField"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_clear"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getLimit"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getLocaleByType"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getTZDataVersion"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getCanonicalTimeZoneID"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getType"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getKeywordValuesForLocale"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getDayOfWeekType"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getWeekendTransition"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_isWeekend"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getFieldDifference"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getTimeZoneTransitionDate"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getWindowsTimeZoneID"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getTimeZoneIDForWindowsID"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucal_getTimeZoneOffsetFromLocal"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_hasBinaryProperty"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_stringHasBinaryProperty"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_getBinaryPropertySet"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isUAlphabetic"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isULowercase"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isUUppercase"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isUWhiteSpace"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_getIntPropertyValue"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_getIntPropertyMinValue"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_getIntPropertyMaxValue"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_getNumericValue"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_islower"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isupper"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_istitle"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isdigit"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isalpha"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isalnum"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isxdigit"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_ispunct"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isgraph"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isblank"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isdefined"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isspace"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isJavaSpaceChar"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isWhitespace"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_iscntrl"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isISOControl"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isprint"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isbase"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_charDirection"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isMirrored"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_charMirror"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_getBidiPairedBracket"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_charType"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_enumCharTypes"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_getCombiningClass"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_charDigitValue"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ublock_getCode"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_charName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_charFromName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_enumCharNames"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_getPropertyName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_getPropertyEnum"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_getPropertyValueName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_getPropertyValueEnum"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isIDStart"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isIDPart"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isIDIgnorable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isJavaIDStart"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_isJavaIDPart"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_tolower"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_toupper"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_totitle"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_foldCase"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_digit"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_forDigit"
+    },
+    {
+        "first_introduced": "12",
+        "name":"u_getFC_NFKC_Closure"
+    },
+    {
+        "first_introduced": "12",
         "name":"ucnv_compareNames"
     },
     {
@@ -233,6 +893,290 @@
     },
     {
         "first_introduced": "12",
+        "name":"UCNV_TO_U_CALLBACK_ESCAPE "
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_open"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_openRules"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getContractionsAndExpansions"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_close"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_strcoll"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_strcollUTF8"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_greater"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_greaterOrEqual"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_equal"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getStrength"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_setStrength"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getReorderCodes"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_setReorderCodes"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getEquivalentReorderCodes"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getDisplayName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getAvailable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_countAvailable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_openAvailableLocales"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getKeywords"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getKeywordValues"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getKeywordValuesForLocale"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getFunctionalEquivalent"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getRules"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getSortKey"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getBound"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_mergeSortkeys"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_setAttribute"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getAttribute"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_setMaxVariable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getMaxVariable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getVariableTop"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_clone"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getRulesEx"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getLocaleByType"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_getTailoredSet"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_cloneBinary"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ucol_openBinary"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_toCalendarDateField"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_open"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_close"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_getBooleanAttribute"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_setBooleanAttribute"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_clone"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_format"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_formatCalendar"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_formatForFields"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_formatCalendarForFields"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_parse"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_parseCalendar"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_isLenient"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_setLenient"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_getCalendar"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_setCalendar"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_getNumberFormat"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_getNumberFormatForField"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_adoptNumberFormatForFields"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_setNumberFormat"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_adoptNumberFormat"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_getAvailable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_countAvailable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_get2DigitYearStart"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_set2DigitYearStart"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_toPattern"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_applyPattern"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_getSymbols"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_countSymbols"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_setSymbols"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_getLocaleByType"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_setContext"
+    },
+    {
+        "first_introduced": "12",
+        "name":"udat_getContext"
+    },
+    {
+        "first_introduced": "12",
         "name":"uenum_close"
     },
     {
@@ -250,5 +1194,585 @@
     {
         "first_introduced": "12",
         "name":"uenum_reset"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ufieldpositer_open"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ufieldpositer_close"
+    },
+    {
+        "first_introduced": "12",
+        "name":"ufieldpositer_next"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getDefault"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_setDefault"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getLanguage"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getScript"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getCountry"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getVariant"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_canonicalize"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getISO3Language"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getISO3Country"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getLCID"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getDisplayLanguage"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getDisplayScript"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getDisplayCountry"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getDisplayVariant"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getDisplayKeyword"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getDisplayKeywordValue"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getDisplayName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getAvailable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_countAvailable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_openAvailableByType"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getISOLanguages"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getISOCountries"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getParent"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getBaseName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_openKeywords"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getKeywordValue"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_setKeywordValue"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_isRightToLeft"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getCharacterOrientation"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getLineOrientation"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_acceptLanguageFromHTTP"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_acceptLanguage"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_getLocaleForLCID"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_addLikelySubtags"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_minimizeSubtags"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_forLanguageTag"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_toLanguageTag"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_toUnicodeLocaleKey"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_toUnicodeLocaleType"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_toLegacyKey"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uloc_toLegacyType"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_getNFCInstance"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_getNFDInstance"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_getNFKCInstance"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_getNFKDInstance"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_getNFKCCasefoldInstance"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_getInstance"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_openFiltered"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_close"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_normalize"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_normalizeSecondAndAppend"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_append"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_getDecomposition"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_getRawDecomposition"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_composePair"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_getCombiningClass"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_isNormalized"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_quickCheck"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_spanQuickCheckYes"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_hasBoundaryBefore"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_hasBoundaryAfter"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm2_isInert"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unorm_compare"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_open"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_close"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_clone"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_format"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_formatInt64"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_formatDouble"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_formatDoubleForFields"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_formatDecimal"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_formatDoubleCurrency"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_parse"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_parseInt64"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_parseDouble"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_parseDecimal"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_parseDoubleCurrency"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_applyPattern"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_getAvailable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_countAvailable"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_getAttribute"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_setAttribute"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_getDoubleAttribute"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_setDoubleAttribute"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_getTextAttribute"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_setTextAttribute"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_toPattern"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_getSymbol"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_setSymbol"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_getLocaleByType"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_setContext"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unum_getContext"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unumf_openForSkeletonAndLocale"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unumf_openForSkeletonAndLocaleWithError"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unumf_formatInt"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unumf_formatDouble"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unumf_formatDecimal"
+    },
+    {
+        "first_introduced": "12",
+        "name":"unumf_close"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uscript_getCode"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uscript_getName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uscript_getShortName"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uscript_getScript"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uscript_hasScript"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uscript_getScriptExtensions"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uscript_getSampleString"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uscript_getUsage"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uscript_isRightToLeft"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uscript_breaksBetweenLetters"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uscript_isCased"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_open"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_openPattern"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_openPatternOptions"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_close"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_toPattern"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_add"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_addString"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_remove"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_removeString"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_complement"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_clear"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_isEmpty"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_contains"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_containsString"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_size"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_getRangeCount"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_getItemCount"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uset_getItem"
+    },
+    {
+        "first_introduced": "12",
+        "name":"utrans_openU"
+    },
+    {
+        "first_introduced": "12",
+        "name":"utrans_openInverse"
+    },
+    {
+        "first_introduced": "12",
+        "name":"utrans_clone"
+    },
+    {
+        "first_introduced": "12",
+        "name":"utrans_close"
+    },
+    {
+        "first_introduced": "12",
+        "name":"utrans_getUnicodeID"
+    },
+    {
+        "first_introduced": "12",
+        "name":"utrans_register"
+    },
+    {
+        "first_introduced": "12",
+        "name":"utrans_unregisterID"
+    },
+    {
+        "first_introduced": "12",
+        "name":"utrans_setFilter"
+    },
+    {
+        "first_introduced": "12",
+        "name":"utrans_countAvailableIDs"
+    },
+    {
+        "first_introduced": "12",
+        "name":"utrans_openIDs"
+    },
+    {
+        "first_introduced": "12",
+        "name":"utrans_transIncremental"
+    },
+    {
+        "first_introduced": "12",
+        "name":"utrans_transUChars"
+    },
+    {
+        "first_introduced": "12",
+        "name":"utrans_toRules"
+    },
+    {
+        "first_introduced": "12",
+        "name":"utrans_getSourceSet"
     }
 ]

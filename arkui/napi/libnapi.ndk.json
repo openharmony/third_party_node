@@ -157,10 +157,30 @@
     },
     {
         "first_introduced": "12",
+        "name": "napi_define_sendable_class"
+    },
+    {
+        "first_introduced": "12",
+        "name": "napi_is_sendable"
+    },
+    {
+        "first_introduced": "12",
         "name": "napi_create_ark_runtime"
     },
     {
         "first_introduced": "12",
         "name": "napi_destroy_ark_runtime"
+    },
+    {
+        "first_introduced": "12",
+        "name": "napi_run_event_loop"
+    },
+    {
+        "first_introduced": "12",
+        "name": "napi_stop_event_loop"
+    },
+    {
+        "first_introduced": "12",
+        "name": "napi_load_module_with_info"
     }
 ]

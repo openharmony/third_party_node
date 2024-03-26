@@ -78,6 +78,21 @@ typedef napi_value (*napi_native_binding_attach_callback)(napi_env env, void* na
 NAPI_EXTERN napi_status napi_run_script_path(napi_env env, const char* path, napi_value* result);
 NAPI_EXTERN napi_status napi_queue_async_work_with_qos(napi_env env, napi_async_work work, napi_qos_t qos);
 NAPI_EXTERN napi_status napi_load_module(napi_env env, const char* path, napi_value* result);
+
+/**
+ * @brief The module is loaded through the NAPI. By default, the default object is exported from the module.
+ *
+ * @param env Current running virtual machine context.
+ * @param path Path name of the module to be loaded, like @ohos.hilog.
+ * @param module_info Path names of bundle and module, like com.example.application/entry.
+ * @param result Result of loading a module, which is an exported object of the module.
+ * @return Returns the function execution status.
+ * @since 12
+*/
+NAPI_EXTERN napi_status napi_load_module_with_info(napi_env env,
+                                                   const char* path,
+                                                   const char* module_info,
+                                                   napi_value* result);
 NAPI_EXTERN napi_status napi_get_instance_data(napi_env env, void** data);
 NAPI_EXTERN napi_status napi_set_instance_data(napi_env env,
                                                void* data,
@@ -142,6 +157,66 @@ NAPI_EXTERN napi_status napi_create_ark_runtime(napi_env* env);
  * @since 12
  */
 NAPI_EXTERN napi_status napi_destroy_ark_runtime(napi_env* env);
+
+/*
+ * @brief Defines a sendable class.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param utf8name: Name of the ArkTS constructor function.
+ * @param length: The length of the utf8name in bytes, or NAPI_AUTO_LENGTH if it is null-terminated.
+ * @param constructor: Callback function that handles constructing instances of the class.
+ * @param data: Optional data to be passed to the constructor callback as the data property of the callback info.
+ * @param property_count: Number of items in the properties array argument.
+ * @param properties: Array of property descriptors describing static and instance data properties, accessors, and
+ * methods on the class. See napi_property_descriptor.
+ * @param parent: A napi_value representing the Superclass.
+ * @param result: A napi_value representing the constructor function for the class.
+ * @return Return the function execution status.
+ * @since 12
+ */
+NAPI_EXTERN napi_status napi_define_sendable_class(napi_env env,
+                                                   const char* utf8name,
+                                                   size_t length,
+                                                   napi_callback constructor,
+                                                   void* data,
+                                                   size_t property_count,
+                                                   const napi_property_descriptor* properties,
+                                                   napi_value parent,
+                                                   napi_value* result);
+
+/**
+ * @brief Queries a napi_value to check if it is sendable.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param value The napi_value to be checked.
+ * @param result Boolean value that is set to true if napi_value is sendable, false otherwise.
+ * @return Return the function execution status.
+ * @since 12
+ */
+NAPI_EXTERN napi_status napi_is_sendable(napi_env env, napi_value value, bool* result);
+
+/**
+ * @brief Run the event loop by the given env and running mode in current thread.
+ *
+ * Support to run the native event loop in an asynchronous native thread with the specified running mode.
+ *
+ * @param env Current running virtual machine context.
+ * @param mode Indicates the running mode of the native event loop.
+ * @return Return the function execution status.
+ * @since 12
+ */
+NAPI_EXTERN napi_status napi_run_event_loop(napi_env env, napi_event_mode mode);
+
+/**
+ * @brief Stop the event loop in current thread.
+ *
+ * Support to stop the running event loop in current native thread.
+ *
+ * @param env Current running virtual machine context.
+ * @return Return the function execution status.
+ * @since 12
+ */
+NAPI_EXTERN napi_status napi_stop_event_loop(napi_env env);
 
 #ifdef __cplusplus
 }

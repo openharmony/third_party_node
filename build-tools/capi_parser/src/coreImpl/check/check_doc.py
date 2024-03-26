@@ -37,6 +37,7 @@ def create_api_result_info_by_doc(error_type: ErrorType, error: ErrorMessage, pa
     for param in params:
         error_info = error_info.replace('$$', str(param), 1)
     api_result_info = ApiResultInfo(error_type.value, error_info, api_info['name'])
+    api_result_info.set_api_since(api_info['since'])
     api_result_info.set_type(LogType.LOG_JSDOC.value)
     api_result_info.set_level(ErrorLevel.LOW.value)
     if 'location' in api_info.keys():
@@ -331,6 +332,35 @@ def process_each_comment(comment_object, file_doc_info: FileDocInfo, api_info) -
     return api_result_info_list
 
 
+def process_tag_missing(comment_object, file_doc_info: FileDocInfo, api_info):
+    print(api_info['kind'])
+    api_result_info_list = []
+    if api_info['kind'] not in process_tag_missing_function.keys():
+        return []
+    has_since_tag = False
+    tags = comment_object['tags']
+    for item in tags:
+        if item['tag'] == 'since':
+            has_since_tag = True
+    if not has_since_tag:
+        api_result_info = create_api_result_info_by_doc(
+            ErrorType.WRONG_SCENE, ErrorMessage.ERROR_LOST_LABEL, ['since'], api_info)
+        api_result_info_list.append(api_result_info)
+    return api_result_info_list
+
+
+process_tag_missing_function = {
+    CursorKind.FUNCTION_DECL.name: [],
+    CursorKind.UNION_DECL.name: [],
+    CursorKind.STRUCT_DECL.name: [],
+    CursorKind.ENUM_DECL.name: [],
+    CursorKind.TYPEDEF_DECL.name: [],
+    CursorKind.FUNCTION_DECL.name: [],
+    CursorKind.VAR_DECL.name: [],
+    CursorKind.MACRO_DEFINITION.name: [],
+}
+
+
 def process_comment(comment: str, file_doc_info: FileDocInfo, api_info) -> list:
     '''
     处理comment数据，通过node调用comment-parser解析doc注释
@@ -341,8 +371,10 @@ def process_comment(comment: str, file_doc_info: FileDocInfo, api_info) -> list:
     result = subprocess.check_output(
         ['node', os.path.abspath(os.path.join(current_file, "comment_parser.js")), comment])   # 解析comment
     result_json = json.loads(result.decode('utf-8'))
-    for item in result_json:
+    for index, item in enumerate(result_json):
         api_result_info_list.extend(process_each_comment(item, file_doc_info, api_info))
+        if index == len(result_json) - 1:
+            api_result_info_list.extend(process_tag_missing(item, file_doc_info, api_info))
         file_doc_info.is_in_group_tag = False      # 初始化group标签判断
         file_doc_info.is_in_file_tag = False       # 初始化file标签判断
     return api_result_info_list
