@@ -15,7 +15,7 @@
         "first_introduced": "12",
         "name": "OH_Input_SetKeyCode"
     },
-    { 
+    {
         "first_introduced": "12",
         "name": "OH_Input_GetKeyCode"
     },
@@ -34,5 +34,149 @@
     {
         "first_introduced": "12",
         "name": "OH_Input_GetKeySwitch"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_InjectKeyEvent"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_CreateKeyEvent"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_DestroyKeyEvent"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_SetKeyEventIsPressed"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_GetKeyEventIsPressed"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_SetKeyEventKeyCode"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_GetKeyEventKeyCode"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_InjectMouseEvent"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_CreateMouseEvent"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_DestroyMouseEvent"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_SetMouseEventAction"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_GetMouseEventAction"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_SetMouseEventScreenX"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_GetMouseEventScreenX"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_SetMouseEventScreenY"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_GetMouseEventScreenY"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_SetMouseEventButton"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_GetMouseEventButton"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_InjectTouchEvent"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_CreateTouchEvent"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_DestroyTouchEvent"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_SetTouchEventAction"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_GetTouchEventAction"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_SetTouchEventID"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_GetTouchEventID"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_SetTouchEventScreenX"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_GetTouchEventScreenX"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_SetTouchEventScreenY"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_GetTouchEventScreenY"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_SetTouchEventPressure"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_GetTouchEventPressure"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_SetMouseEventAxisType"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_GetMouseEventAxisType"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_SetMouseEventAxisValue"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_GetMouseEventAxisValue"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Input_CancelInjection"
     }
 ]
