@@ -1816,26 +1816,6 @@ void OH_Drawing_TextStyleSetBaseLineShift(OH_Drawing_TextStyle*, double lineShif
 double OH_Drawing_TextStyleGetBaseLineShift(OH_Drawing_TextStyle*);
 
 /**
- * @brief Set mode of applying the leading over and under text.
- *
- * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_TypographyStyle Indicates the pointer to an <b>OH_Drawing_TypographyStyle</b> object.
- * @param heightMode Indicates the mode to set.
- * @since 12
- * @version 1.0
- */
-void OH_Drawing_TypographyTextSetHeightBehavior(OH_Drawing_TypographyStyle*, OH_Drawing_TextHeightBehavior heightMode);
-
-/**
- * @brief Get mode of applying the leading over and under text.
- *
- * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_TypographyStyle Indicates the pointer to an <b>OH_Drawing_TypographyStyle</b> object.
- * @return Returns the mode.
- * @since 12
- * @version 1.0
- */
-OH_Drawing_TextHeightBehavior OH_Drawing_TypographyTextGetHeightBehavior(OH_Drawing_TypographyStyle*);
  * @brief Gets the text color.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
