@@ -1802,7 +1802,7 @@ void OH_Drawing_TextStyleClearFontFeature(OH_Drawing_TextStyle*);
  * @since 12
  * @version 1.0
  */
-void OH_Drawing_TextStyleSetBaseLineShift(OH_Drawing_TextStyle*, double lineShift);
+void OH_Drawing_TextStyleSetBaselineShift(OH_Drawing_TextStyle*, double lineShift);
 
 /**
  * @brief Get baseline shift of text.
@@ -1813,7 +1813,7 @@ void OH_Drawing_TextStyleSetBaseLineShift(OH_Drawing_TextStyle*, double lineShif
  * @since 12
  * @version 1.0
  */
-double OH_Drawing_TextStyleGetBaseLineShift(OH_Drawing_TextStyle*);
+double OH_Drawing_TextStyleGetBaselineShift(OH_Drawing_TextStyle*);
 
 /**
  * @brief Gets the text color.
