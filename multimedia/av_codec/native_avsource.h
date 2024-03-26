@@ -28,9 +28,9 @@ extern "C" {
 typedef struct OH_AVSource OH_AVSource;
 
 /**
- * @brief Creates an OH_AVSource instance that models the media with data source.
+ * @brief Creates an OH_AVSource instance that models the media with dataSource.
  * @syscap SystemCapability.Multimedia.Media.Spliter
- * @param dataSource User customized media resource.
+ * @param dataSource An Struct for a remote media resource.
  * @return Returns a pointer to an OH_AVSource instance
  * @since 12
 */
