@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include "native_avscreen_capture_errors.h"
 #include "native_avscreen_capture_base.h"
-#include "external_window.h"
+#include "native_window/external_window.h"
 
 #ifdef __cplusplus
 extern "C" {
