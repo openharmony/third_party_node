@@ -809,5 +809,57 @@
     {
         "first_introduced": "12",
         "name": "OH_Drawing_CreateSharedFontCollection"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetColor"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetDecorationStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetFontWeight"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetFontStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetBaseline"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetFontFamilies"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleDestroyFontFamilies"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetFontSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetLetterSpacing"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetWordSpacing"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetFontHeight"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetHalfLeading"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetLocale"
     }
 ]
