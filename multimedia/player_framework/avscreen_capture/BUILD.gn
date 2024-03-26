@@ -18,9 +18,9 @@ import("//foundation/multimedia/player_framework/config.gni")
 ohos_ndk_headers("native_avscreen_capture_header") {
   dest_dir = "$ndk_headers_out_dir/multimedia/player_framework"
   sources = [
-    "$MEDIA_PLAYER_ROOT_DIR/interfaces/kits/c/native_avscreen_capture.h",
-    "$MEDIA_PLAYER_ROOT_DIR/interfaces/kits/c/native_avscreen_capture_base.h",
-    "$MEDIA_PLAYER_ROOT_DIR/interfaces/kits/c/native_avscreen_capture_errors.h",
+    "../native_avscreen_capture.h",
+    "../native_avscreen_capture_base.h",
+    "../native_avscreen_capture_errors.h",
   ]
 }
 
