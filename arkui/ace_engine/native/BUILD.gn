@@ -28,6 +28,7 @@ if (!is_arkui_x) {
     sources = [
       "native_dialog.h",
       "native_event.h",
+      "native_gesture.h",
       "native_interface.h",
       "native_node.h",
       "native_node_napi.h",
