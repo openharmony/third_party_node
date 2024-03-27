@@ -277,7 +277,7 @@ int32_t OH_Input_GetKeySwitch(struct Input_KeyState* keyState);
 int32_t OH_Input_InjectKeyEvent(struct Input_KeyEvent* keyEvent);
 
 /**
- * @brief 创建按键事件对象
+ * @brief Creates a key event object.
  *
  * @return Returns an {@link Input_KeyEvent} pointer object if the operation is successful.
  * returns a null pointer otherwise.
@@ -287,49 +287,49 @@ int32_t OH_Input_InjectKeyEvent(struct Input_KeyEvent* keyEvent);
 struct Input_KeyEvent* OH_Input_CreateKeyEvent();
 
 /**
- * @brief 销毁按键事件对象
+ * @brief Destroys a key event object.
  *
- * @param keyEvent 按键事件对象
+ * @param keyEvent event Key event object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_DestroyKeyEvent(struct Input_KeyEvent** keyEvent);
 
 /**
- * @brief 设置按键事件的是否按下
+ * @brief Sets whether a key is pressed.
  *
- * @param keyEvent 按键事件对象
- * @param isPressed 按键是否按下
+ * @param keyEvent event Key event object.
+ * @param isPressed isPressed Whether the key is pressed.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetKeyEventIsPressed(struct Input_KeyEvent* keyEvent, bool isPressed);
 
 /**
- * @brief 获取按键事件的是否按下
+ * @brief Checks whether a key is pressed.
  *
- * @param keyEvent 按键事件对象
- * @return 按键是否按下
+ * @param keyEvent event Key event object.
+ * @return Whether the key is pressed.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 bool OH_Input_GetKeyEventIsPressed(struct Input_KeyEvent* keyEvent);
 
 /**
- * @brief 设置按键事件的键值
+ * @brief Sets the key value for a key event.
  *
- * @param keyEvent 按键事件对象
- * @param keyCode 按键的键值
+ * @param keyEvent event Key event object.
+ * @param keyCode keyCode Key code.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetKeyEventKeyCode(struct Input_KeyEvent* keyEvent, int32_t keyCode);
 
 /**
- * @brief 获取按键事件的键值
+ * @brief Obtains the key value of a key event.
  *
- * @param keyEvent 按键事件对象
- * @return 按键的键值
+ * @param keyEvent event Key event object.
+ * @return Key code.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -349,7 +349,7 @@ int32_t OH_Input_GetKeyEventKeyCode(struct Input_KeyEvent* keyEvent);
 int32_t OH_Input_InjectMouseEvent(struct Input_MouseEvent* mouseEvent);
 
 /**
- * @brief 创建鼠标事件对象
+ * @brief Creates a mouse event object.
  *
  * @return Returns an {@link Input_MouseEvent} pointer object if the operation is successful.
  * returns a null pointer otherwise.
@@ -359,129 +359,129 @@ int32_t OH_Input_InjectMouseEvent(struct Input_MouseEvent* mouseEvent);
 struct Input_MouseEvent* OH_Input_CreateMouseEvent();
 
 /**
- * @brief 销毁鼠标事件对象
+ * @brief Destroys a mouse event object.
  *
- * @param mouseEvent 鼠标事件对象
+ * @param mouseEvent Mouse event object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_DestroyMouseEvent(struct Input_MouseEvent** mouseEvent);
 
 /**
- * @brief 设置鼠标事件的动作
+ * @brief Sets the action for a mouse event.
  *
- * @param mouseEvent 鼠标事件对象
- * @param action 鼠标的动作
+ * @param mouseEvent Mouse event object.
+ * @param action Mouse action.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetMouseEventAction(struct Input_MouseEvent* mouseEvent, int32_t action);
 
 /**
- * @brief 获取鼠标事件的动作
+ * @brief Obtains the action of a mouse event.
  *
- * @param mouseEvent 鼠标事件对象
- * @return 鼠标的动作
+ * @param mouseEvent Mouse event object.
+ * @return Mouse action.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 int32_t OH_Input_GetMouseEventAction(struct Input_MouseEvent* mouseEvent);
 
 /**
- * @brief 设置鼠标事件的屏幕横坐标
+ * @brief Sets the X coordinate for a mouse event.
  *
- * @param mouseEvent 鼠标事件对象
- * @param screenX 屏幕横坐标
+ * @param mouseEvent Mouse event object.
+ * @param screenX  X coordinate on the screen.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetMouseEventScreenX(struct Input_MouseEvent* mouseEvent, int32_t screenX);
 
 /**
- * @brief 获取鼠标事件的屏幕横坐标
+ * @brief Obtains the X coordinate of a mouse event.
  *
- * @param mouseEvent 鼠标事件对象
- * @return 屏幕横坐标
+ * @param mouseEvent Mouse event object.
+ * @return X coordinate on the screen.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 int32_t OH_Input_GetMouseEventScreenX(struct Input_MouseEvent* mouseEvent);
 
 /**
- * @brief 设置鼠标事件的屏幕纵坐标
+ * @brief Sets the Y coordinate for a mouse event.
  *
- * @param mouseEvent 鼠标事件对象
- * @param screenY 屏幕纵坐标
+ * @param mouseEvent Mouse event object.
+ * @param screenY Y coordinate on the screen.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetMouseEventScreenY(struct Input_MouseEvent* mouseEvent, int32_t screenY);
 
 /**
- * @brief 获取鼠标事件的屏幕纵坐标
+ * @brief Obtains the Y coordinate of a mouse event.
  *
- * @param mouseEvent 鼠标事件对象
- * @return 屏幕纵坐标
+ * @param mouseEvent Mouse event object.
+ * @return Y coordinate on the screen.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 int32_t OH_Input_GetMouseEventScreenY(struct Input_MouseEvent* mouseEvent);
 
 /**
- * @brief 设置鼠标事件的按键
+ * @brief Sets the button for a mouse event.
  *
- * @param mouseEvent 鼠标事件对象
- * @param button 按键
+ * @param mouseEvent Mouse event object.
+ * @param button Mouse button.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetMouseEventButton(struct Input_MouseEvent* mouseEvent, int32_t button);
 
 /**
- * @brief 获取鼠标事件的屏幕按键
+ * @brief Obtains the button of a mouse event.
  *
- * @param mouseEvent 鼠标事件对象
- * @return 按键
+ * @param mouseEvent Mouse event object.
+ * @return Mouse button.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 int32_t OH_Input_GetMouseEventButton(struct Input_MouseEvent* mouseEvent);
 
 /**
- * @brief 设置鼠标轴事件的类型
+ * @brief Sets the axis type for mouse event.
  *
- * @param mouseEvent 鼠标事件对象
- * @param axisType 轴类型，比如垂直轴、水平轴。
+ * @param mouseEvent Mouse event object.
+ * @param axisType Axis type, for example, X axis or Y axis.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetMouseEventAxisType(struct Input_MouseEvent* mouseEvent, int32_t axisType);
 
 /**
- * @brief 获取鼠标轴事件的类型
+ * @brief Obtains the axis type of a mouse event.
  *
- * @param mouseEvent 鼠标事件对象
- * @return 轴类型
+ * @param mouseEvent Mouse event object.
+ * @return Axis type.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 int32_t OH_Input_GetMouseEventAxisType(struct Input_MouseEvent* mouseEvent);
 
 /**
- * @brief 设置鼠标轴事件的值
+ * @brief Sets the axis value for a mouse axis event.
  *
- * @param mouseEvent 鼠标事件对象
- * @param axisType 轴事件的值，正数向前滚动，负数向后滚动。
+ * @param mouseEvent Mouse event object.
+ * @param axisType Axis value. A positive value means scrolling forward, and a negative number means scrolling backward.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetMouseEventAxisValue(struct Input_MouseEvent* mouseEvent, float axisValue);
 
 /**
- * @brief 获取鼠标轴事件的值
+ * @brief Obtains the axis value of a mouse event.
  *
- * @param mouseEvent 鼠标事件对象
- * @return 轴事件的值
+ * @param mouseEvent Mouse event object.
+ * @return Axis value.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -501,7 +501,7 @@ float OH_Input_GetMouseEventAxisValue(struct Input_MouseEvent* mouseEvent);
 int32_t OH_Input_InjectTouchEvent(struct Input_TouchEvent* touchEvent);
 
 /**
- * @brief 创建触屏事件对象
+ * @brief Creates a touch event object.
  *
  * @return Returns an {@link Input_TouchEvent} pointer object if the operation is successful.
  * returns a null pointer otherwise.
@@ -511,116 +511,116 @@ int32_t OH_Input_InjectTouchEvent(struct Input_TouchEvent* touchEvent);
 struct Input_TouchEvent* OH_Input_CreateTouchEvent();
 
 /**
- * @brief 销毁触屏事件对象
+ * @brief Destroys a touch event object.
  *
- * @param touchEvent 触屏事件对象
+ * @param touchEvent Touch event object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_DestroyTouchEvent(struct Input_TouchEvent** touchEvent);
 
 /**
- * @brief 设置触屏事件的动作
+ * @brief Sets the action for a touch event.
  *
- * @param touchEvent 触屏事件对象
- * @param action 触屏的动作
+ * @param touchEvent Touch event object.
+ * @param action Touch action.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetTouchEventAction(struct Input_TouchEvent* touchEvent, int32_t action);
 
 /**
- * @brief 获取触屏事件的动作
+ * @brief Obtains the action of a touch event.
  *
- * @param touchEvent 触屏事件对象
- * @return 触屏的动作
+ * @param touchEvent Touch event object.
+ * @return Touch action.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 int32_t OH_Input_GetTouchEventAction(struct Input_TouchEvent* touchEvent);
 
 /**
- * @brief 设置触屏事件的手指ID
+ * @brief Sets the finger ID for the touch event.
  *
- * @param touchEvent 触屏事件对象
- * @param id 触屏的手指ID
+ * @param touchEvent Touch event object.
+ * @param id Finger ID.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetTouchEventId(struct Input_TouchEvent* touchEvent, int32_t id);
 
 /**
- * @brief 获取触屏事件的手指ID
+ * @brief Obtains the finger ID of a touch event.
  *
- * @param touchEvent 触屏事件对象
- * @return 触屏的手指ID
+ * @param touchEvent Touch event object.
+ * @return Finger ID.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 int32_t OH_Input_GetTouchEventId(struct Input_TouchEvent* touchEvent);
 
 /**
- * @brief 设置触屏事件的屏幕横坐标
+ * @brief Sets the X coordinate for a touch event.
  *
- * @param touchEvent 触屏事件对象
- * @param screenX 触屏的屏幕横坐标
+ * @param touchEvent Touch event object.
+ * @param screenX X coordinate.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetTouchEventScreenX(struct Input_TouchEvent* touchEvent, int32_t screenX);
 
 /**
- * @brief 获取触屏事件的屏幕横坐标
+ * @brief Obtains the X coordinate of a touch event.
  *
- * @param touchEvent 触屏事件对象
- * @return 触屏的屏幕横坐标
+ * @param touchEvent Touch event object.
+ * @return X coordinate.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 int32_t OH_Input_GetTouchEventScreenX(struct Input_TouchEvent* touchEvent);
 
 /**
- * @brief 设置触屏事件的屏幕纵坐标
+ * @brief Sets the Y coordinate for a touch event.
  *
- * @param touchEvent 触屏事件对象
- * @param screenY 触屏的屏幕纵坐标
+ * @param touchEvent Touch event object.
+ * @param screenY Y coordinate.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetTouchEventScreenY(struct Input_TouchEvent* touchEvent, int32_t screenY);
 
 /**
- * @brief 获取触屏事件的屏幕纵坐标
+ * @brief Obtains the Y coordinate of a touch event.
  *
- * @param touchEvent 触屏事件对象
- * @return 触屏的屏幕纵坐标
+ * @param touchEvent Touch event object.
+ * @return Y coordinate.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 int32_t OH_Input_GetTouchEventScreenY(struct Input_TouchEvent* touchEvent);
 
 /**
- * @brief 设置触屏事件的手指压力
+ * @brief Sets the finger pressure for a touch event.
  *
- * @param touchEvent 触屏事件对象
- * @param pressure 触屏的手指压力
+ * @param touchEvent Touch event object.
+ * @param pressure Finger pressure.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetTouchEventPressure(struct Input_TouchEvent* touchEvent, double pressure);
 
 /**
- * @brief 获取触屏事件的手指压力
+ * @brief Obtains the finger pressure of a touch event.
  *
- * @param touchEvent 触屏事件对象
- * @return 触屏的手指压力
+ * @param touchEvent Touch event object.
+ * @return Finger pressure.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 double OH_Input_GetTouchEventPressure(struct Input_TouchEvent* touchEvent);
 
 /**
- * @brief 取消注入
+ * @brief Cancels event injection.
  *
  * @HTTP4O4 Returns {@Link Input_Result#INPUT_SUCCESS} if the operation is successful;
  * returns an error code defined in {@Link Input_Result} otherwise.
@@ -628,15 +628,6 @@ double OH_Input_GetTouchEventPressure(struct Input_TouchEvent* touchEvent);
  * @since 12
  */
 Input_Result OH_Input_CancelInjection();
-
-/**
- * @brief 授权权限，只有授权hap可以调用
- *
- * @param isAuthorize 是否同意授权
- * @syscap SystemCapability.MultimodalInput.Input.Core
- * @since 12
- */
-void OH_Input_Authorize(bool isAuthorize);
 
 #ifdef __cplusplus
 }
