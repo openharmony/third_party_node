@@ -721,7 +721,7 @@
     {
         "first_introduced": "12",
         "name": "OH_Drawing_TextStyleGetBackgroundPen"
-    },  
+    },
     {
         "first_introduced": "12",
         "name": "OH_Drawing_DisableFontCollectionFallback"
@@ -805,6 +805,42 @@
     {
         "first_introduced": "12",
         "name": "OH_Drawing_SetTypographyTextFontHeight"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleSetBackgroundRect"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyHandlerAddSymbol"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleAddFontFeature"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetFontFeatures"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleDestroyFontFeatures"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetFontFeatureSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleClearFontFeature"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetBaselineShift"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleSetBaselineShift"
     },
     {
         "first_introduced": "12",
