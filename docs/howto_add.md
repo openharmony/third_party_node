@@ -71,7 +71,7 @@ ohos_ndk_library("libsensor_ndk") {
     ]
 }
 ```
- **min_compact_version** : 相当于Android的API level，当前library从哪个版本开始支持？如果没有设置，默认设置为从当前版本开始支持。
+ **min_compact_version** : API level，当前library从哪个版本开始支持？如果没有设置，默认设置为从当前版本开始支持。
 
 为什么需要变量min_compact_version？
 一般地，操作系统的后期版本会提供比前期版本更多的库，比如某个提供23个NDK库，但是前一个版本仅提供13个NDK库。所以需要提供一个变量来告知编译系统当前库是从哪个版本开始支持的。
