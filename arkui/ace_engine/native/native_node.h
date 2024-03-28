@@ -109,6 +109,8 @@ typedef enum {
     ARKUI_NODE_REFRESH,
     /** Waterfall container. */
     ARKUI_NODE_WATER_FLOW,
+    /** Waterfall item container. */
+    ARKUI_NODE_FLOW_ITEM,
 } ArkUI_NodeType;
 
 /**
@@ -3644,6 +3646,83 @@ typedef enum {
      *
      */
     NODE_WATER_FLOW_LAYOUT_DIRECTION = MAX_NODE_SCOPE_NUM * ARKUI_NODE_WATER_FLOW,
+    /**
+     * @brief Sets the number of columns in the layout. If this parameter is not set, one column is used by default.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     * For example, <b>'1fr 1fr 2fr'</b> indicates three columns, with the first column taking up 1/4 of the parent
+     * component's full width, the second column 1/4, and the third column 2/4.
+     * You can use <b>columnsTemplate('repeat(auto-fill,track-size)')</b> to automatically calculate the number of
+     * columns based on the specified column width <b>track-size</b>.
+     * <b>repeat</b> and <b>auto-fill</b> are keywords. The units for <b>track-size</b> can be px, vp (default), %, or
+     * a valid number.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: number of columns in the layout.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: number of columns in the layout.\n
+     *
+     */
+    NODE_WATER_FLOW_COLUMN_TEMPLATE,
+
+    /**
+     * @brief Sets the number of rows in the layout. If this parameter is not set, one row is used by default.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     * For example, <b>'1fr 1fr 2fr'</b> indicates three rows,
+     * with the first row taking up 1/4 of the parent component's
+     * full height, the second row 1/4, and the third row 2/4.
+     * You can use <b>rowsTemplate('repeat(auto-fill,track-size)')</b> to automatically calculate the number of rows
+     * based on the specified row height <b>track-size</b>.
+     * <b>repeat</b> and <b>auto-fill</b> are keywords. The units for <b>track-size</b> can be px, vp (default), %,
+     * or a valid number.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .string: number of rows in the layout. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: number of rows in the layout. \n
+     *
+     */
+    NODE_WATER_FLOW_ROW_TEMPLATE,
+
+    /**
+     * @brief Sets the gap between columns.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: gap between columns, in vp.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: gap between columns, in vp.\n
+     *
+     */
+    NODE_WATER_FLOW_COLUMN_GAP,
+
+    /**
+     * @brief Sets the gap between rows.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: gap between lines, in vp.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: gap between lines, in vp.\n
+     *
+     */
+    NODE_WATER_FLOW_ROW_GAP,
+
+    /**
+     * @brief Defines the water flow section configuration.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .object: {@ArkUI_WaterFlowSectionOption} object.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .object: {@ArkUI_WaterFlowSectionOption} object.\n
+     *
+     */
+    NODE_WATER_FLOW_SECTION_OPTION,
 } ArkUI_NodeAttributeType;
 
 #define MAX_COMPONENT_EVENT_ARG_NUM 12
@@ -4130,6 +4209,23 @@ typedef enum {
      * {@link ArkUI_NodeComponentEvent} does not contain parameters:\n
      */
     NODE_REFRESH_ON_REFRESH,
+
+    /**
+     * @brief Defines the event triggered when the <b>ARKUI_NODE_SCROLL</b> component is about to scroll.
+     *
+     * Notes for triggering the event:\n
+     * 1. This event is triggered when scrolling by the <b>ARKUI_NODE_SCROLL</b> component or other input settings,
+     * such as keyboard and mouse operations, is about to start. \n
+     * 2. Scrolling can be initiated by calling the controller API. \n
+     * 3. The out-of-bounds bounce effect is supported. \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} contains two parameters: \n
+     * <b>ArkUI_NodeComponentEvent.data[0].f32</b>: scroll offset of each frame. The offset is positive when the
+     * component is scrolled up and negative when the component is scrolled down. \n
+     * <b>ArkUI_NodeComponentEvent.data[1].f32</b>: current scroll state. \n
+     */
+    NODE_ON_WILL_SCROLL = MAX_NODE_SCOPE_NUM * ARKUI_NODE_WATER_FLOW,
 } ArkUI_NodeEventType;
 
 /**
@@ -4252,6 +4348,8 @@ typedef struct {
      * @param child Indicates the pointer to the child node.
      * @return Returns 0 if success.
      * Returns 401 if a parameter exception occurs.
+     * Returns 106103 if the following operations are not allowed on BuilderNode generated nodes: setting or resetting
+     * attributes, setting events, or adding or editing subnodes.
      */
     int32_t (*addChild)(ArkUI_NodeHandle parent, ArkUI_NodeHandle child);
 
@@ -4264,6 +4362,8 @@ typedef struct {
      * @param child Indicates the pointer to the child node.
      * @return Returns 0 if success.
      * Returns 401 if a parameter exception occurs.
+     * Returns 106103 if the following operations are not allowed on BuilderNode generated nodes: setting or resetting
+     * attributes, setting events, or adding or editing subnodes.
      */
     int32_t (*removeChild)(ArkUI_NodeHandle parent, ArkUI_NodeHandle child);
 
@@ -4278,6 +4378,8 @@ typedef struct {
      * If the value is null, the node is inserted at the start of the parent node.
      * @return Returns 0 if success.
      * Returns 401 if a parameter exception occurs.
+     * Returns 106103 if the following operations are not allowed on BuilderNode generated nodes: setting or resetting
+     * attributes, setting events, or adding or editing subnodes.
      */
     int32_t (*insertChildAfter)(ArkUI_NodeHandle parent, ArkUI_NodeHandle child, ArkUI_NodeHandle sibling);
 
@@ -4292,6 +4394,8 @@ typedef struct {
      * If the value is null, the node is inserted at the end of the parent node.
      * @return Returns 0 if success.
      * Returns 401 if a parameter exception occurs.
+     * Returns 106103 if the following operations are not allowed on BuilderNode generated nodes: setting or resetting
+     * attributes, setting events, or adding or editing subnodes.
      */
     int32_t (*insertChildBefore)(ArkUI_NodeHandle parent, ArkUI_NodeHandle child, ArkUI_NodeHandle sibling);
 
@@ -4306,6 +4410,8 @@ typedef struct {
      * negative number or invalid, the node is inserted at the end of the parent node.
      * @return Returns 0 if success.
      * Returns 401 if a parameter exception occurs.
+     * Returns 106103 if the following operations are not allowed on BuilderNode generated nodes: setting or resetting
+     * attributes, setting events, or adding or editing subnodes.
      */
     int32_t (*insertChildAt)(ArkUI_NodeHandle parent, ArkUI_NodeHandle child, int32_t position);
 
@@ -4320,6 +4426,8 @@ typedef struct {
      * @return Returns 0 if success.
      * Returns 401 if a parameter exception occurs.
      * Returns 106102 if the dynamic implementation library of the native API was not found.
+     * Returns 106103 if the following operations are not allowed on BuilderNode generated nodes: setting or resetting
+     * attributes, setting events, or adding or editing subnodes.
      */
     int32_t (*setAttribute)(ArkUI_NodeHandle node, ArkUI_NodeAttributeType attribute, const ArkUI_AttributeItem* item);
 
@@ -4347,6 +4455,8 @@ typedef struct {
      * @return Returns 0 if success.
      * Returns 401 if a parameter exception occurs.
      * Returns 106102 if the dynamic implementation library of the native API was not found.
+     * Returns 106103 if the following operations are not allowed on BuilderNode generated nodes: setting or resetting
+     * attributes, setting events, or adding or editing subnodes.
      */
     int32_t (*resetAttribute)(ArkUI_NodeHandle node, ArkUI_NodeAttributeType attribute);
 
@@ -4362,6 +4472,8 @@ typedef struct {
      * @return Returns 0 if success.
      * Returns 401 if a parameter exception occurs.
      * Returns 106102 if the dynamic implementation library of the native API was not found.
+     * Returns 106103 if the following operations are not allowed on BuilderNode generated nodes: setting or resetting
+     * attributes, setting events, or adding or editing subnodes.
      */
     int32_t (*registerNodeEvent)(ArkUI_NodeHandle node, ArkUI_NodeEventType eventType, int32_t eventId);
 

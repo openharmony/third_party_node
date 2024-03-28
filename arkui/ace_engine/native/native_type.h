@@ -85,6 +85,13 @@ typedef struct ArkUI_Node* ArkUI_NodeHandle;
 typedef struct ArkUI_NativeDialog* ArkUI_NativeDialogHandle;
 
 /**
+ * @brief Defines the water flow section configuration.
+ *
+ * @since 12
+ */
+typedef struct ArkUI_WaterFlowSectionOption ArkUI_WaterFlowSectionOption;
+
+/**
  * @brief Provides the number types of ArkUI in the native code.
  *
  * @since 12
@@ -1310,6 +1317,19 @@ typedef enum {
 } ArkUI_TransitionEdge;
 
 /**
+ * @brief Defines how the specified blend mode is applied.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** The content of the view is blended in sequence on the target image. */
+    BLEND_APPLY_TYPE_FAST = 0,
+    /** The content of the component and its child components are drawn on the offscreen canvas, and then blended with
+    /*  the existing content on the canvas. */
+    BLEND_APPLY_TYPE_OFFSCREEN,
+} ArkUI_BlendApplyType;
+
+/**
  * @brief Defines a mask area.
  *
  * @since 12
@@ -1500,6 +1520,79 @@ void* OH_ArkUI_DrawContext_GetCanvas(ArkUI_DrawContext* context);
 */
 ArkUI_IntSize OH_ArkUI_DrawContext_GetSize(ArkUI_DrawContext* context);
 
+/**
+* @brief Creates water flow section configuration.
+*
+* @return Indicates the pointer to a water flow section configuration.
+* @since 12
+*/
+ArkUI_WaterFlowSectionOption* OH_ArkUI_WaterFlowSectionOption_Create();
+
+/**
+* @brief Destroys the pointer to a water flow section configuration.
+*
+* @param option Indicates the pointer to a water flow section configuration.
+* @since 12
+*/
+void OH_ArkUI_WaterFlowSectionOption_Dispose(ArkUI_WaterFlowSectionOption* option);
+
+/**
+* @brief Sets the number of items in a water flow section.
+*
+* @param option Indicates the pointer to a water flow section configuration.
+* @param index Indicates the index of the target water flow section.
+* @param itemCount Indicates the number of items to set.
+* @since 12
+*/
+void OH_ArkUI_WaterFlowSectionOption_SetItemCount(ArkUI_WaterFlowSectionOption* option,
+    int32_t index, int32_t itemCount);
+
+/**
+* @brief Sets the number of columns (in a vertical layout) or rows (in a horizontal layout) of a water flow.
+*
+* @param option Indicates the pointer to a water flow section configuration.
+* @param index Indicates the index of the target water flow section.
+* @param crossCount Indicates the number of columns or rows, depending on the layout direction.
+* @since 12
+*/
+void OH_ArkUI_WaterFlowSectionOption_SetCrossCount(ArkUI_WaterFlowSectionOption* option,
+    int32_t index, int32_t crossCount);
+
+/**
+* @brief Sets the gap between columns in the specified water flow section.
+*
+* @param option Indicates the pointer to a water flow section configuration.
+* @param index Indicates the index of the target water flow section.
+* @param columnGap Indicates the gap between columns to set.
+* @since 12
+*/
+void OH_ArkUI_WaterFlowSectionOption_SetColumnGap(ArkUI_WaterFlowSectionOption* option,
+    int32_t index, float columnGap);
+
+/**
+* @brief Sets the gap between rows in the specified water flow section.
+*
+* @param option Indicates the pointer to a water flow section configuration.
+* @param index Indicates the index of the target water flow section.
+* @param rowGap Indicates the gap between rows to set.
+* @since 12
+*/
+void OH_ArkUI_WaterFlowSectionOption_SetRowGap(ArkUI_WaterFlowSectionOption* option,
+    int32_t index, float rowGap);
+
+/**
+* @brief Sets the margins for the specified water flow section.
+*
+* @param option Indicates the pointer to a water flow section configuration.
+* @param index Indicates the index of the target water flow section.
+* @param marginTop Indicates the top margin of the water flow section.
+* @param marginRight Indicates the right margin of the water flow section.
+* @param marginBottom Indicates the bottom margin of the water flow section.
+* @param marginLeft Indicates the left margin of the water flow section.
+* @since 12
+*/
+void OH_ArkUI_WaterFlowSectionOption_SetMargin(ArkUI_WaterFlowSectionOption* option, int32_t index,
+    float marginTop, float marginRight, float marginBottom, float marginLeft);
 #ifdef __cplusplus
 };
 #endif
