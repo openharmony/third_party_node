@@ -210,7 +210,7 @@ struct Input_KeyState* OH_Input_CreateKeyState();
 
 /**
  * @brief Destroys a key status enumeration object.
- *
+ * 
  * @param keyState Key status enumeration object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
@@ -219,7 +219,7 @@ void OH_Input_DestroyKeyState(struct Input_KeyState** keyState);
 
 /**
  * @brief Sets the key value of a key status enumeration object.
- *
+ * 
  * @param keyState Key status enumeration object.
  * @param keyCode Key value of the key status enumeration object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
@@ -229,7 +229,7 @@ void OH_Input_SetKeyCode(struct Input_KeyState* keyState, int32_t keyCode);
 
 /**
  * @brief Obtains the key value of a key status enumeration object.
- *
+ * 
  * @param keyState Key status enumeration object.
  * @return Key value of the key status enumeration object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
@@ -239,7 +239,7 @@ int32_t OH_Input_GetKeyCode(const struct Input_KeyState* keyState);
 
 /**
  * @brief Sets whether the key specific to a key status enumeration object is pressed.
- *
+ * 
  * @param keyState Key status enumeration object.
  * @param keyAction Whether the key is pressed.
  * @syscap SystemCapability.MultimodalInput.Input.Core
@@ -249,7 +249,7 @@ void OH_Input_SetKeyPressed(struct Input_KeyState* keyState, int32_t keyAction);
 
 /**
  * @brief Checks whether the key specific to a key status enumeration object is pressed.
- *
+ * 
  * @param keyState Key status enumeration object.
  * @return Key pressing status of the key status enumeration object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
@@ -259,7 +259,7 @@ int32_t OH_Input_GetKeyPressed(const struct Input_KeyState* keyState);
 
 /**
  * @brief Sets the key switch of the key status enumeration object.
- *
+ * 
  * @param keyState Key status enumeration object.
  * @param keySwitch Key switch of the key status enumeration object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
@@ -269,7 +269,7 @@ void OH_Input_SetKeySwitch(struct Input_KeyState* keyState, int32_t keySwitch);
 
 /**
  * @brief Obtains the key switch of the key status enumeration object.
- *
+ * 
  * @param keyState Key status enumeration object.
  * @return Key switch of the key status enumeration object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
