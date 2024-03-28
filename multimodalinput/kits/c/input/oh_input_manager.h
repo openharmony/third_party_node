@@ -62,6 +62,20 @@ enum Input_KeyStateAction {
 };
 
 /**
+ * @brief 按键事件类型
+ *
+ * @since 12
+ */
+typedef enum {
+    /** 按键取消 */
+    KEY_ACTION_CANCEL = 0,
+    /** 按键按下 */
+    KEY_ACTION_DOWN = 1,
+    /** 按键抬起 */
+    KEY_ACTION_UP = 2,
+} Input_KeyEventAction;
+
+/**
  * @brief Enumerated values of mouse event action.
  *
  * @since 12
@@ -274,7 +288,7 @@ int32_t OH_Input_GetKeySwitch(struct Input_KeyState* keyState);
  * @syscap SystemCapability.MultimodalInput.Input.InputSimulator
  * @since 12
  */
-int32_t OH_Input_InjectKeyEvent(struct Input_KeyEvent* keyEvent);
+int32_t OH_Input_InjectKeyEvent(const struct Input_KeyEvent* keyEvent);
 
 /**
  * @brief Creates a key event object.
@@ -296,24 +310,24 @@ struct Input_KeyEvent* OH_Input_CreateKeyEvent();
 void OH_Input_DestroyKeyEvent(struct Input_KeyEvent** keyEvent);
 
 /**
- * @brief Sets whether a key is pressed.
+ * @brief 设置按键事件类型
  *
  * @param keyEvent event Key event object.
- * @param isPressed isPressed Whether the key is pressed.
+ * @param action 按键事件类型.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-void OH_Input_SetKeyEventIsPressed(struct Input_KeyEvent* keyEvent, bool isPressed);
+void OH_Input_SetKeyEventAction(struct Input_KeyEvent* keyEvent, int32_t action);
 
 /**
- * @brief Checks whether a key is pressed.
+ * @brief 获取按键事件类型
  *
  * @param keyEvent event Key event object.
- * @return Whether the key is pressed.
+ * @return 按键事件类型
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-bool OH_Input_GetKeyEventIsPressed(struct Input_KeyEvent* keyEvent);
+int32_t OH_Input_GetKeyEventAction(const struct Input_KeyEvent* keyEvent);
 
 /**
  * @brief Sets the key value for a key event.
@@ -333,7 +347,7 @@ void OH_Input_SetKeyEventKeyCode(struct Input_KeyEvent* keyEvent, int32_t keyCod
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-int32_t OH_Input_GetKeyEventKeyCode(struct Input_KeyEvent* keyEvent);
+int32_t OH_Input_GetKeyEventKeyCode(const struct Input_KeyEvent* keyEvent);
 
 /**
  * @brief Inject mouse event.
@@ -346,7 +360,7 @@ int32_t OH_Input_GetKeyEventKeyCode(struct Input_KeyEvent* keyEvent);
  * @syscap SystemCapability.MultimodalInput.Input.InputSimulator
  * @since 12
  */
-int32_t OH_Input_InjectMouseEvent(struct Input_MouseEvent* mouseEvent);
+int32_t OH_Input_InjectMouseEvent(const struct Input_MouseEvent* mouseEvent);
 
 /**
  * @brief Creates a mouse event object.
@@ -385,7 +399,7 @@ void OH_Input_SetMouseEventAction(struct Input_MouseEvent* mouseEvent, int32_t a
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-int32_t OH_Input_GetMouseEventAction(struct Input_MouseEvent* mouseEvent);
+int32_t OH_Input_GetMouseEventAction(const struct Input_MouseEvent* mouseEvent);
 
 /**
  * @brief Sets the X coordinate for a mouse event.
@@ -405,7 +419,7 @@ void OH_Input_SetMouseEventScreenX(struct Input_MouseEvent* mouseEvent, int32_t 
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-int32_t OH_Input_GetMouseEventScreenX(struct Input_MouseEvent* mouseEvent);
+int32_t OH_Input_GetMouseEventScreenX(const struct Input_MouseEvent* mouseEvent);
 
 /**
  * @brief Sets the Y coordinate for a mouse event.
@@ -425,7 +439,7 @@ void OH_Input_SetMouseEventScreenY(struct Input_MouseEvent* mouseEvent, int32_t 
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-int32_t OH_Input_GetMouseEventScreenY(struct Input_MouseEvent* mouseEvent);
+int32_t OH_Input_GetMouseEventScreenY(const struct Input_MouseEvent* mouseEvent);
 
 /**
  * @brief Sets the button for a mouse event.
@@ -445,7 +459,7 @@ void OH_Input_SetMouseEventButton(struct Input_MouseEvent* mouseEvent, int32_t b
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-int32_t OH_Input_GetMouseEventButton(struct Input_MouseEvent* mouseEvent);
+int32_t OH_Input_GetMouseEventButton(const struct Input_MouseEvent* mouseEvent);
 
 /**
  * @brief Sets the axis type for mouse event.
@@ -465,7 +479,7 @@ void OH_Input_SetMouseEventAxisType(struct Input_MouseEvent* mouseEvent, int32_t
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-int32_t OH_Input_GetMouseEventAxisType(struct Input_MouseEvent* mouseEvent);
+int32_t OH_Input_GetMouseEventAxisType(const struct Input_MouseEvent* mouseEvent);
 
 /**
  * @brief Sets the axis value for a mouse axis event.
@@ -485,7 +499,7 @@ void OH_Input_SetMouseEventAxisValue(struct Input_MouseEvent* mouseEvent, float 
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-float OH_Input_GetMouseEventAxisValue(struct Input_MouseEvent* mouseEvent);
+float OH_Input_GetMouseEventAxisValue(const struct Input_MouseEvent* mouseEvent);
 
 /**
  * @brief Inject touch event.
@@ -498,7 +512,7 @@ float OH_Input_GetMouseEventAxisValue(struct Input_MouseEvent* mouseEvent);
  * @syscap SystemCapability.MultimodalInput.Input.InputSimulator
  * @since 12
  */
-int32_t OH_Input_InjectTouchEvent(struct Input_TouchEvent* touchEvent);
+int32_t OH_Input_InjectTouchEvent(const struct Input_TouchEvent* touchEvent);
 
 /**
  * @brief Creates a touch event object.
@@ -537,7 +551,7 @@ void OH_Input_SetTouchEventAction(struct Input_TouchEvent* touchEvent, int32_t a
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-int32_t OH_Input_GetTouchEventAction(struct Input_TouchEvent* touchEvent);
+int32_t OH_Input_GetTouchEventAction(const struct Input_TouchEvent* touchEvent);
 
 /**
  * @brief Sets the finger ID for the touch event.
@@ -547,7 +561,7 @@ int32_t OH_Input_GetTouchEventAction(struct Input_TouchEvent* touchEvent);
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-void OH_Input_SetTouchEventId(struct Input_TouchEvent* touchEvent, int32_t id);
+void OH_Input_SetTouchEventFingerId(struct Input_TouchEvent* touchEvent, int32_t id);
 
 /**
  * @brief Obtains the finger ID of a touch event.
@@ -557,7 +571,7 @@ void OH_Input_SetTouchEventId(struct Input_TouchEvent* touchEvent, int32_t id);
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-int32_t OH_Input_GetTouchEventId(struct Input_TouchEvent* touchEvent);
+int32_t OH_Input_GetTouchEventFingerId(const struct Input_TouchEvent* touchEvent);
 
 /**
  * @brief Sets the X coordinate for a touch event.
@@ -567,7 +581,7 @@ int32_t OH_Input_GetTouchEventId(struct Input_TouchEvent* touchEvent);
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-void OH_Input_SetTouchEventScreenX(struct Input_TouchEvent* touchEvent, int32_t screenX);
+void OH_Input_SetTouchEventDisplayX(struct Input_TouchEvent* touchEvent, int32_t screenX);
 
 /**
  * @brief Obtains the X coordinate of a touch event.
@@ -577,7 +591,7 @@ void OH_Input_SetTouchEventScreenX(struct Input_TouchEvent* touchEvent, int32_t 
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-int32_t OH_Input_GetTouchEventScreenX(struct Input_TouchEvent* touchEvent);
+int32_t OH_Input_GetTouchEventDisplayX(const struct Input_TouchEvent* touchEvent);
 
 /**
  * @brief Sets the Y coordinate for a touch event.
@@ -587,7 +601,7 @@ int32_t OH_Input_GetTouchEventScreenX(struct Input_TouchEvent* touchEvent);
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-void OH_Input_SetTouchEventScreenY(struct Input_TouchEvent* touchEvent, int32_t screenY);
+void OH_Input_SetTouchEventDisplayY(struct Input_TouchEvent* touchEvent, int32_t screenY);
 
 /**
  * @brief Obtains the Y coordinate of a touch event.
@@ -597,7 +611,7 @@ void OH_Input_SetTouchEventScreenY(struct Input_TouchEvent* touchEvent, int32_t 
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-int32_t OH_Input_GetTouchEventScreenY(struct Input_TouchEvent* touchEvent);
+int32_t OH_Input_GetTouchEventDisplayY(const struct Input_TouchEvent* touchEvent);
 
 /**
  * @brief Sets the finger pressure for a touch event.
@@ -617,17 +631,17 @@ void OH_Input_SetTouchEventPressure(struct Input_TouchEvent* touchEvent, double 
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-double OH_Input_GetTouchEventPressure(struct Input_TouchEvent* touchEvent);
+double OH_Input_GetTouchEventPressure(const struct Input_TouchEvent* touchEvent);
 
 /**
- * @brief Cancels event injection.
+ * @brief 停止注入，取消授权
  *
  * @HTTP4O4 Returns {@Link Input_Result#INPUT_SUCCESS} if the operation is successful;
  * returns an error code defined in {@Link Input_Result} otherwise.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-Input_Result OH_Input_CancelInjection();
+void OH_Input_StopInjection();
 
 #ifdef __cplusplus
 }

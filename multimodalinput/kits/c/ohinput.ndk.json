@@ -49,11 +49,11 @@
     },
     {
         "first_introduced": "12",
-        "name": "OH_Input_SetKeyEventIsPressed"
+        "name": "OH_Input_SetKeyEventAction"
     },
     {
         "first_introduced": "12",
-        "name": "OH_Input_GetKeyEventIsPressed"
+        "name": "OH_Input_GetKeyEventAction"
     },
     {
         "first_introduced": "12",
@@ -177,6 +177,6 @@
     },
     {
         "first_introduced": "12",
-        "name": "OH_Input_CancelInjection"
+        "name": "OH_Input_StopInjection"
     }
 ]
