@@ -62,16 +62,16 @@ enum Input_KeyStateAction {
 };
 
 /**
- * @brief 按键事件类型
+ * @brief Enumerates key event types.
  *
  * @since 12
  */
 typedef enum {
-    /** 按键取消 */
+    /** Cancellation of a key action. */
     KEY_ACTION_CANCEL = 0,
-    /** 按键按下 */
+    /** Pressing of a key. */
     KEY_ACTION_DOWN = 1,
-    /** 按键抬起 */
+    /** Release of a key. */
     KEY_ACTION_UP = 2,
 } Input_KeyEventAction;
 
@@ -310,20 +310,20 @@ struct Input_KeyEvent* OH_Input_CreateKeyEvent();
 void OH_Input_DestroyKeyEvent(struct Input_KeyEvent** keyEvent);
 
 /**
- * @brief 设置按键事件类型
+ * @brief Sets the key event type.
  *
  * @param keyEvent event Key event object.
- * @param action 按键事件类型.
+ * @param action Key event type.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetKeyEventAction(struct Input_KeyEvent* keyEvent, int32_t action);
 
 /**
- * @brief 获取按键事件类型
+ * @brief Obtains the key event type.
  *
  * @param keyEvent event Key event object.
- * @return 按键事件类型
+ * @return Key event type.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -634,10 +634,8 @@ void OH_Input_SetTouchEventPressure(struct Input_TouchEvent* touchEvent, double 
 double OH_Input_GetTouchEventPressure(const struct Input_TouchEvent* touchEvent);
 
 /**
- * @brief 停止注入，取消授权
+ * @brief Stops event injection and revokes authorization.
  *
- * @HTTP4O4 Returns {@Link Input_Result#INPUT_SUCCESS} if the operation is successful;
- * returns an error code defined in {@Link Input_Result} otherwise.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
