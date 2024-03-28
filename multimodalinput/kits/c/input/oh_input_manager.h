@@ -634,12 +634,12 @@ void OH_Input_SetTouchEventPressure(struct Input_TouchEvent* touchEvent, double 
 double OH_Input_GetTouchEventPressure(const struct Input_TouchEvent* touchEvent);
 
 /**
- * @brief Stops event injection and revokes authorization.
+ * @brief Cancels event injection and revokes authorization.
  *
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-void OH_Input_StopInjection();
+void OH_Input_CancelInjection();
 
 #ifdef __cplusplus
 }
