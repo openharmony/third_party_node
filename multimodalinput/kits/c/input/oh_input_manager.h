@@ -305,7 +305,7 @@ struct Input_KeyEvent* OH_Input_CreateKeyEvent();
 /**
  * @brief Destroys a key event object.
  *
- * @param keyEvent event Key event object.
+ * @param keyEvent Key event object.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -314,7 +314,7 @@ void OH_Input_DestroyKeyEvent(struct Input_KeyEvent** keyEvent);
 /**
  * @brief Sets the key event type.
  *
- * @param keyEvent event Key event object.
+ * @param keyEvent Key event object.
  * @param action Key event type.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
@@ -324,7 +324,7 @@ void OH_Input_SetKeyEventAction(struct Input_KeyEvent* keyEvent, int32_t action)
 /**
  * @brief Obtains the key event type.
  *
- * @param keyEvent event Key event object.
+ * @param keyEvent Key event object.
  * @return Key event type.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
@@ -334,7 +334,7 @@ int32_t OH_Input_GetKeyEventAction(const struct Input_KeyEvent* keyEvent);
 /**
  * @brief Sets the key value for a key event.
  *
- * @param keyEvent event Key event object.
+ * @param keyEvent evt Key event object.
  * @param keyCode keyCode Key code.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
@@ -344,7 +344,7 @@ void OH_Input_SetKeyEventKeyCode(struct Input_KeyEvent* keyEvent, int32_t keyCod
 /**
  * @brief Obtains the key value of a key event.
  *
- * @param keyEvent event Key event object.
+ * @param keyEvent Key event object.
  * @return Key code.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
@@ -352,20 +352,20 @@ void OH_Input_SetKeyEventKeyCode(struct Input_KeyEvent* keyEvent, int32_t keyCod
 int32_t OH_Input_GetKeyEventKeyCode(const struct Input_KeyEvent* keyEvent);
 
 /**
- * @brief 设置按键事件发生时间。
+ * @brief Sets the time when a key event occurs.
  *
- * @param keyEvent event Key event object.
- * @param actionTime 时间戳.
+ * @param keyEvent Key event object.
+ * @param actionTime Time when the key event occurs.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetKeyEventActionTime(struct Input_KeyEvent* keyEvent, int64_t actionTime);
 
 /**
- * @brief 查询按键事件发生时间。
+ * @brief Obtains the time when a key event occurs.
  *
- * @param keyEvent event Key event object.
- * @return 按键事件发生时间
+ * @param keyEvent Key event object.
+ * @return Returns the time when the key event occurs.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -524,20 +524,20 @@ void OH_Input_SetMouseEventAxisValue(struct Input_MouseEvent* mouseEvent, float 
 float OH_Input_GetMouseEventAxisValue(const struct Input_MouseEvent* mouseEvent);
 
 /**
- * @brief 设置鼠标事件发生时间。
+ * @brief Sets the time when a mouse event occurs.
  *
- * @param keyEvent event Key event object.
- * @param actionTime 时间戳.
+ * @param mouseEvent Mouse event object.
+ * @param actionTime Time when the mouse event occurs.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetMouseEventActionTime(struct Input_MouseEvent* mouseEvent, int64_t actionTime);
 
 /**
- * @brief 查询鼠标事件发生时间。
+ * @brief Obtains the time when a mouse event occurs.
  *
- * @param keyEvent event Key event object.
- * @return 鼠标事件发生时间
+ * @param keyEvent Mouse event object.
+ * @return Returns the time when the mouse event occurs.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -656,20 +656,20 @@ void OH_Input_SetTouchEventDisplayY(struct Input_TouchEvent* touchEvent, int32_t
 int32_t OH_Input_GetTouchEventDisplayY(const struct Input_TouchEvent* touchEvent);
 
 /**
- * @brief 设置触屏事件发生时间。
+ * @brief Sets the time when a touch event occurs.
  *
- * @param keyEvent event Key event object.
- * @param actionTime 时间戳.
+ * @param keyEvent Touch event object.
+ * @param actionTime Time when the touch event occurs.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 void OH_Input_SetTouchEventActionTime(struct Input_TouchEvent* touchEvent, int64_t actionTime);
 
 /**
- * @brief 查询触屏事件发生时间。
+ * @brief Obtains the time when a touch event occurs.
  *
- * @param keyEvent event Key event object.
- * @return 触屏事件发生时间
+ * @param keyEvent touch event object.
+ * @return Returns the time when the touch event occurs.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
