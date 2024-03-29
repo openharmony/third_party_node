@@ -1,5 +1,9 @@
 [
     {
+        "first_introduced": "12",
+        "name": "OH_AVSource_CreateWithDataSource"
+    },
+    {
         "first_introduced": "10",
         "name": "OH_AVSource_CreateWithURI"
     },
