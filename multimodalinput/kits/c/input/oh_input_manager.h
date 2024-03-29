@@ -531,7 +531,7 @@ float OH_Input_GetMouseEventAxisValue(const struct Input_MouseEvent* mouseEvent)
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-void OH_Input_SetMouseEventActionTime(struct Input_KeyEvent* keyEvent, int64_t actionTime);
+void OH_Input_SetMouseEventActionTime(struct Input_MouseEvent* mouseEvent, int64_t actionTime);
 
 /**
  * @brief 查询鼠标事件发生时间。
@@ -541,7 +541,7 @@ void OH_Input_SetMouseEventActionTime(struct Input_KeyEvent* keyEvent, int64_t a
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-int64_t OH_Input_GetMouseEventActionTime(const struct Input_KeyEvent* keyEvent);
+int64_t OH_Input_GetMouseEventActionTime(const struct Input_MouseEvent* mouseEvent);
 
 /**
  * @brief Inject touch event.
@@ -663,7 +663,7 @@ int32_t OH_Input_GetTouchEventDisplayY(const struct Input_TouchEvent* touchEvent
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-void OH_Input_SetTouchEventActionTime(struct Input_KeyEvent* keyEvent, int64_t actionTime);
+void OH_Input_SetTouchEventActionTime(struct Input_TouchEvent* touchEvent, int64_t actionTime);
 
 /**
  * @brief 查询触屏事件发生时间。
@@ -673,7 +673,7 @@ void OH_Input_SetTouchEventActionTime(struct Input_KeyEvent* keyEvent, int64_t a
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-int64_t OH_Input_GetTouchEventActionTime(const struct Input_KeyEvent* keyEvent);
+int64_t OH_Input_GetTouchEventActionTime(const struct Input_TouchEvent* touchEvent);
 
 /**
  * @brief Cancels event injection and revokes authorization.
