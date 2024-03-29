@@ -115,6 +115,8 @@ enum InputEvent_MouseAxis {
  * @since 12
  */
 typedef enum {
+    /** Invalid button */
+    MOUSE_BUTTON_NONE = -1,
     /** Left button on the mouse. */
     MOUSE_BUTTON_LEFT = 0,
     /** Middle button on the mouse. */
