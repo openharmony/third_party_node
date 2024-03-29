@@ -350,6 +350,26 @@ void OH_Input_SetKeyEventKeyCode(struct Input_KeyEvent* keyEvent, int32_t keyCod
 int32_t OH_Input_GetKeyEventKeyCode(const struct Input_KeyEvent* keyEvent);
 
 /**
+ * @brief 设置按键事件发生时间。
+ *
+ * @param keyEvent event Key event object.
+ * @param actionTime 时间戳.
+ * @syscap SystemCapability.MultimodalInput.Input.Core
+ * @since 12
+ */
+void OH_Input_SetKeyEventActionTime(struct Input_KeyEvent* keyEvent, int64_t actionTime);
+
+/**
+ * @brief 查询按键事件发生时间。
+ *
+ * @param keyEvent event Key event object.
+ * @return 按键事件发生时间
+ * @syscap SystemCapability.MultimodalInput.Input.Core
+ * @since 12
+ */
+int64_t OH_Input_GetKeyEventActionTime(const struct Input_KeyEvent* keyEvent);
+
+/**
  * @brief Inject mouse event.
  *
  * @param mouseEvent - the mouse event to be injected.
@@ -502,6 +522,26 @@ void OH_Input_SetMouseEventAxisValue(struct Input_MouseEvent* mouseEvent, float 
 float OH_Input_GetMouseEventAxisValue(const struct Input_MouseEvent* mouseEvent);
 
 /**
+ * @brief 设置鼠标事件发生时间。
+ *
+ * @param keyEvent event Key event object.
+ * @param actionTime 时间戳.
+ * @syscap SystemCapability.MultimodalInput.Input.Core
+ * @since 12
+ */
+void OH_Input_SetMouseEventActionTime(struct Input_KeyEvent* keyEvent, int64_t actionTime);
+
+/**
+ * @brief 查询鼠标事件发生时间。
+ *
+ * @param keyEvent event Key event object.
+ * @return 鼠标事件发生时间
+ * @syscap SystemCapability.MultimodalInput.Input.Core
+ * @since 12
+ */
+int64_t OH_Input_GetMouseEventActionTime(const struct Input_KeyEvent* keyEvent);
+
+/**
  * @brief Inject touch event.
  *
  * @param touchEvent - the touch event to be injected.
@@ -612,6 +652,26 @@ void OH_Input_SetTouchEventDisplayY(struct Input_TouchEvent* touchEvent, int32_t
  * @since 12
  */
 int32_t OH_Input_GetTouchEventDisplayY(const struct Input_TouchEvent* touchEvent);
+
+/**
+ * @brief 设置触屏事件发生时间。
+ *
+ * @param keyEvent event Key event object.
+ * @param actionTime 时间戳.
+ * @syscap SystemCapability.MultimodalInput.Input.Core
+ * @since 12
+ */
+void OH_Input_SetTouchEventActionTime(struct Input_KeyEvent* keyEvent, int64_t actionTime);
+
+/**
+ * @brief 查询触屏事件发生时间。
+ *
+ * @param keyEvent event Key event object.
+ * @return 触屏事件发生时间
+ * @syscap SystemCapability.MultimodalInput.Input.Core
+ * @since 12
+ */
+int64_t OH_Input_GetTouchEventActionTime(const struct Input_KeyEvent* keyEvent);
 
 /**
  * @brief Cancels event injection and revokes authorization.
