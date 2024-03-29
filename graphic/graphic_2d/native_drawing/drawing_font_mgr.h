@@ -33,6 +33,7 @@
  *
  * @brief Declares functions related to the <b>fontmgr</b> object in the drawing module.
  *
+ * @library libnative_drawing_ndk.z.so
  * @since 12
  * @version 1.0
  */
