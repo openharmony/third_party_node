@@ -18,7 +18,7 @@
         "name": "OH_Drawing_BitmapGetImageInfo"
     },
     { "name": "OH_Drawing_BitmapGetPixels" },
-    { 
+    {
         "first_introduced": "12",
         "name": "OH_Drawing_BitmapReadPixels"
     },
@@ -64,24 +64,24 @@
         "first_introduced": "12",
         "name": "OH_Drawing_CanvasDrawPixelMapRect"
     },
-    { 
+    {
         "first_introduced": "12",
-        "name": "OH_Drawing_CanvasDrawPoints" 
+        "name": "OH_Drawing_CanvasDrawPoints"
     },
     { "name": "OH_Drawing_CanvasDrawRect" },
     { "name": "OH_Drawing_CanvasDrawRoundRect" },
     { "name": "OH_Drawing_CanvasDrawTextBlob" },
-    {   
+    {
         "first_introduced": "12",
         "name": "OH_Drawing_CanvasDrawRegion"
     },
-    {   
+    {
         "first_introduced": "12",
         "name": "OH_Drawing_CanvasDrawBackground"
     },
-    { 
+    {
         "first_introduced": "12",
-        "name": "OH_Drawing_CanvasDrawVertices" 
+        "name": "OH_Drawing_CanvasDrawVertices"
     },
     { "name": "OH_Drawing_CanvasDrawImageRect" },
     {
@@ -786,15 +786,15 @@
         "first_introduced": "12",
         "name": "OH_Drawing_DestroyTextShadows"
     },
-    {   
+    {
         "first_introduced": "12",
         "name": "OH_Drawing_RegionCreate"
     },
-    {   
+    {
         "first_introduced": "12",
         "name": "OH_Drawing_RegionDestroy"
     },
-    {   
+    {
         "first_introduced": "12",
         "name": "OH_Drawing_RegionSetRect"
     },
@@ -897,5 +897,241 @@
     {
         "first_introduced": "12",
         "name": "OH_Drawing_TextStyleGetLocale"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontMgrCreate"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontMgrDestroy"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontMgrGetFamilyCount"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontMgrGetFamilyName"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontMgrDestroyFamilyName"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontMgrCreateFontStyleSet"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontMgrDestroyFontStyleSet"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontMgrMatchFamily"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontMgrMatchFamilyStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontMgrMatchFamilyStyleCharacter"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTextStyleFontStyleStruct"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleGetFontStyleStruct"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyStyleFontStyleStruct"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyStyleGetFontStyleStruct"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleIsEqual"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleIsEqualByFont"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleIsAttributeMatched"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleSetPlaceholder"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextStyleIsPlaceholder"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyStyleGetEffectiveAlignment"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyStyleIsHintEnabled"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontStyleSetCreateTypeface"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontStyleSetGetStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontStyleSetFreeStyleName"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontStyleSetMatchStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontStyleSetCount"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyTextSetHeightBehavior"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyTextGetHeightBehavior"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_GetSystemFontConfigInfo"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_DestroySystemFontConfigInfo"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_SetTypographyStyleTextStrutStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyStyleDestroyStrutStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyStyleGetStrutStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyStyleStrutStyleEquals"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyStyleSetHintsEnabled"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyGetLineFontMetrics"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyDestroyLineFontMetrics"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyMarkDirty"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyGetUnresolvedGlyphsCount"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyUpdateFontSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_RegisterThemeFontBuffer"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_RegisterThemeFont"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TypographyTextGetLineStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyTextlineStyleGetFontStyle"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyTextlineStyleGetFontWeight"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyTextlineStyleGetFontFamilies"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyTextlineStyleDestroyFontFamilies"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyTextlineStyleGetFontSize"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyTextlineStyleGetHeightOnly"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyTextlineStyleGetHeightScale"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyTextlineStyleGetHalfLeading"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyTextlineStyleGetSpacingScale"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyTextlineGetStyleOnly"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyGetTextAlign"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyGetTextDirection"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyGetTextMaxLines"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyGetTextEllipsis"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyDestroyEllipsis"
+    },
+    {
+        "first_introduced": "12",
+        "name":"OH_Drawing_TypographyStyleEquals"
     }
 ]
