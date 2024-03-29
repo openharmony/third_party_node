@@ -196,7 +196,7 @@ typedef enum {
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-Input_Result OH_Input_GetKeyState(const struct Input_KeyState* keyState);
+Input_Result OH_Input_GetKeyState(struct Input_KeyState* keyState);
 
 /**
  * @brief Creates a key status enumeration object.
@@ -285,7 +285,7 @@ int32_t OH_Input_GetKeySwitch(const struct Input_KeyState* keyState);
  *         201 - Missing permissions.
  *         401 - Parameter error.
  * @permission systemapi hide for inner use
- * @syscap SystemCapability.MultimodalInput.Input.InputSimulator
+ * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 int32_t OH_Input_InjectKeyEvent(const struct Input_KeyEvent* keyEvent);
@@ -357,7 +357,7 @@ int32_t OH_Input_GetKeyEventKeyCode(const struct Input_KeyEvent* keyEvent);
  *         201 - Missing permissions.
  *         401 - Parameter error.
  * @permission systemapi hide for inner use
- * @syscap SystemCapability.MultimodalInput.Input.InputSimulator
+ * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 int32_t OH_Input_InjectMouseEvent(const struct Input_MouseEvent* mouseEvent);
@@ -509,7 +509,7 @@ float OH_Input_GetMouseEventAxisValue(const struct Input_MouseEvent* mouseEvent)
  *         201 - Missing permissions.
  *         401 - Parameter error.
  * @permission systemapi hide for inner use
- * @syscap SystemCapability.MultimodalInput.Input.InputSimulator
+ * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
 int32_t OH_Input_InjectTouchEvent(const struct Input_TouchEvent* touchEvent);
@@ -612,26 +612,6 @@ void OH_Input_SetTouchEventDisplayY(struct Input_TouchEvent* touchEvent, int32_t
  * @since 12
  */
 int32_t OH_Input_GetTouchEventDisplayY(const struct Input_TouchEvent* touchEvent);
-
-/**
- * @brief Sets the finger pressure for a touch event.
- *
- * @param touchEvent Touch event object.
- * @param pressure Finger pressure.
- * @syscap SystemCapability.MultimodalInput.Input.Core
- * @since 12
- */
-void OH_Input_SetTouchEventPressure(struct Input_TouchEvent* touchEvent, double pressure);
-
-/**
- * @brief Obtains the finger pressure of a touch event.
- *
- * @param touchEvent Touch event object.
- * @return Finger pressure.
- * @syscap SystemCapability.MultimodalInput.Input.Core
- * @since 12
- */
-double OH_Input_GetTouchEventPressure(const struct Input_TouchEvent* touchEvent);
 
 /**
  * @brief Cancels event injection and revokes authorization.
