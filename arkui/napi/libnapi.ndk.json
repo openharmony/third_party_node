@@ -182,5 +182,17 @@
     {
         "first_introduced": "12",
         "name": "napi_load_module_with_info"
+    },
+    {
+        "first_introduced": "12",
+        "name": "napi_serialize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "napi_deserialize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "napi_delete_serialization_data"
     }
 ]
