@@ -427,41 +427,41 @@ int32_t OH_Input_GetMouseEventAction(const struct Input_MouseEvent* mouseEvent);
  * @brief Sets the X coordinate for a mouse event.
  *
  * @param mouseEvent Mouse event object.
- * @param screenX  X coordinate on the screen.
+ * @param displayX  X coordinate on the display.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-void OH_Input_SetMouseEventScreenX(struct Input_MouseEvent* mouseEvent, int32_t screenX);
+void OH_Input_SetMouseEventDisplayX(struct Input_MouseEvent* mouseEvent, int32_t displayX);
 
 /**
  * @brief Obtains the X coordinate of a mouse event.
  *
  * @param mouseEvent Mouse event object.
- * @return X coordinate on the screen.
+ * @return X coordinate on the display.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-int32_t OH_Input_GetMouseEventScreenX(const struct Input_MouseEvent* mouseEvent);
+int32_t OH_Input_GetMouseEventDisplayX(const struct Input_MouseEvent* mouseEvent);
 
 /**
  * @brief Sets the Y coordinate for a mouse event.
  *
  * @param mouseEvent Mouse event object.
- * @param screenY Y coordinate on the screen.
+ * @param displayY Y coordinate on the display.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-void OH_Input_SetMouseEventScreenY(struct Input_MouseEvent* mouseEvent, int32_t screenY);
+void OH_Input_SetMouseEventDisplayY(struct Input_MouseEvent* mouseEvent, int32_t displayY);
 
 /**
  * @brief Obtains the Y coordinate of a mouse event.
  *
  * @param mouseEvent Mouse event object.
- * @return Y coordinate on the screen.
+ * @return Y coordinate on the display.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-int32_t OH_Input_GetMouseEventScreenY(const struct Input_MouseEvent* mouseEvent);
+int32_t OH_Input_GetMouseEventDisplayY(const struct Input_MouseEvent* mouseEvent);
 
 /**
  * @brief Sets the button for a mouse event.
@@ -619,11 +619,11 @@ int32_t OH_Input_GetTouchEventFingerId(const struct Input_TouchEvent* touchEvent
  * @brief Sets the X coordinate for a touch event.
  *
  * @param touchEvent Touch event object.
- * @param screenX X coordinate.
+ * @param displayX X coordinate.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-void OH_Input_SetTouchEventDisplayX(struct Input_TouchEvent* touchEvent, int32_t screenX);
+void OH_Input_SetTouchEventDisplayX(struct Input_TouchEvent* touchEvent, int32_t displayX);
 
 /**
  * @brief Obtains the X coordinate of a touch event.
@@ -639,11 +639,11 @@ int32_t OH_Input_GetTouchEventDisplayX(const struct Input_TouchEvent* touchEvent
  * @brief Sets the Y coordinate for a touch event.
  *
  * @param touchEvent Touch event object.
- * @param screenY Y coordinate.
+ * @param displayY Y coordinate.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
-void OH_Input_SetTouchEventDisplayY(struct Input_TouchEvent* touchEvent, int32_t screenY);
+void OH_Input_SetTouchEventDisplayY(struct Input_TouchEvent* touchEvent, int32_t displayY);
 
 /**
  * @brief Obtains the Y coordinate of a touch event.
