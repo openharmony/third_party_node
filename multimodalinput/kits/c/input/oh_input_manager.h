@@ -286,7 +286,6 @@ int32_t OH_Input_GetKeySwitch(const struct Input_KeyState* keyState);
  * @return 0 - Success.
  *         201 - Missing permissions.
  *         401 - Parameter error.
- * @permission systemapi hide for inner use
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -378,7 +377,6 @@ int64_t OH_Input_GetKeyEventActionTime(const struct Input_KeyEvent* keyEvent);
  * @return 0 - Success.
  *         201 - Missing permissions.
  *         401 - Parameter error.
- * @permission systemapi hide for inner use
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -550,7 +548,6 @@ int64_t OH_Input_GetMouseEventActionTime(const struct Input_MouseEvent* mouseEve
  * @return 0 - Success.
  *         201 - Missing permissions.
  *         401 - Parameter error.
- * @permission systemapi hide for inner use
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
