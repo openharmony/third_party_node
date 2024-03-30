@@ -82,5 +82,13 @@
     {
         "first_introduced": "11",
         "name": "OH_VideoEncoder_FreeOutputBuffer"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoEncoder_RegisterParameterCallback"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoEncoder_PushInputParameter"
     }
 ]
