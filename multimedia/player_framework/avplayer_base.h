@@ -83,6 +83,12 @@ typedef enum AVPlayerSeekMode {
     AV_SEEK_NEXT_SYNC = 0,
     /* sync to keyframes before the time point. */
     AV_SEEK_PREVIOUS_SYNC,
+    /**
+     * @brief Sync to frames closest to the time point.
+     * @syscap SystemCapability.Multimedia.Media.AVPlayer
+     * @since 12
+     */
+    AV_SEEK_CLOSEST = 2,
 } AVPlayerSeekMode;
 
 /**
@@ -102,6 +108,18 @@ typedef enum AVPlaybackSpeed {
     AV_SPEED_FORWARD_1_75_X,
     /* Video playback at 2.0x normal speed */
     AV_SPEED_FORWARD_2_00_X,
+    /**
+     * @brief Video playback at 0.5x normal speed.
+     * @syscap SystemCapability.Multimedia.Media.AVPlayer
+     * @since 12
+    */
+    AV_SPEED_FORWARD_0_50_X,
+    /**
+     * @brief Video playback at 1.5x normal speed.
+     * @syscap SystemCapability.Multimedia.Media.AVPlayer
+     * @since 12
+    */
+    AV_SPEED_FORWARD_1_50_X,
 } AVPlaybackSpeed;
 
 /**
