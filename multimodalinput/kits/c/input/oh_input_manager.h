@@ -333,7 +333,7 @@ int32_t OH_Input_GetKeyEventAction(const struct Input_KeyEvent* keyEvent);
 /**
  * @brief Sets the key value for a key event.
  *
- * @param keyEvent evt Key event object.
+ * @param keyEvent Key event object.
  * @param keyCode keyCode Key code.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
