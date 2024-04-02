@@ -2203,6 +2203,38 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CloseInspector(JSVM_Env env);
 JSVM_EXTERN JSVM_Status OH_JSVM_WaitForDebugger(JSVM_Env env,
                                                 bool breakNextLine);
 
+/**
+ * @brief When packaging C++classes, the C++constructor callback passed through the constructor
+ * triggers the corresponding callback function when getter, setter, call, and other
+ * behaviors occur on the instance object, handles the user's custom behavior, and then wraps
+ * the new C++instance in a JavaScript object and returns the wrapper object.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param utf8name: Name of the JavaScript constructor function. For clarity, it is
+ * recommended to use the C++ class name when wrapping a C++ class.
+ * @param length: The length of the utf8name in bytes, or JSVM_AUTO_LENGTH if it
+ * is null-terminated.
+ * @param constructor: Struct include callback function that handles constructing instances of the class.
+ * When wrapping a C++ class, this method must be a static member with the JSVM_Callback.callback
+ * signature. A C++ class constructor cannot be used. 
+ * Include Optional data to be passed to the constructor callback as the data
+ * property of the callback info. JSVM_Callback provides more details.
+ * @param propertyCount: Number of items in the properties array argument.
+ * @param properties: Array of property descriptors describing static and instance data
+ * properties, accessors, and methods on the class See JSVM_PropertyDescriptor.
+ * @param propertyHandlerCfg: The instance object triggers the corresponding callback function.
+ * @param result: A JSVM_Value representing the constructor function for the class.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_DefineClassWithPropertyHandler(JSVM_Env env,
+                                                               const char* utf8name,
+                                                               size_t length,
+                                                               JSVM_Callback constructor,
+                                                               size_t propertyCount,
+                                                               const JSVM_PropertyDescriptor* properties,
+                                                               JSVM_PropertyHandlerCfg propertyHandlerCfg,
+                                                               JSVM_Value* result);
 EXTERN_C_END
 
 /** @} */

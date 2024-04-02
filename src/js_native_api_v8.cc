@@ -504,6 +504,11 @@ class CallbackBundle {
                                          JSVM_Callback cb) {
     return v8::External::New(env->isolate, cb);
   }
+
+  static inline v8::Local<v8::Value> New(JSVM_Env env,
+                                         JSVM_PropertyHandlerCfg cb) {
+    return v8::External::New(env->isolate, cb);
+  }
 };
 
 // Base class extended by classes that wrap V8 function and property callback
@@ -513,8 +518,8 @@ class CallbackWrapper {
   inline CallbackWrapper(JSVM_Value thisArg, size_t args_length, void* data)
       : _this(thisArg), _args_length(args_length), _data(data) {}
 
-  virtual JSVM_Value GetNewTarget() = 0;
-  virtual void Args(JSVM_Value* buffer, size_t bufferlength) = 0;
+  virtual JSVM_Value GetNewTarget() {};
+  virtual void Args(JSVM_Value* buffer, size_t bufferlength) {};
   virtual void SetReturnValue(JSVM_Value value) = 0;
 
   JSVM_Value This() { return _this; }
@@ -638,6 +643,304 @@ class FunctionCallbackWrapper : public CallbackWrapperBase {
     v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
     _cbinfo.GetReturnValue().Set(val);
   }
+};
+
+template <typename T>
+class PropertyCallbackWrapperBase : public CallbackWrapper {
+ public:
+  inline PropertyCallbackWrapperBase(uint32_t index, v8::Local<v8::Name> property, v8::Local<v8::Value> value,
+    const v8::PropertyCallbackInfo<T>& cbinfo, const size_t args_length)
+      : CallbackWrapper(
+            JsValueFromV8LocalValue(cbinfo.This()), args_length, nullptr),
+        _cbinfo(cbinfo), _property(property), _value(value), _index(index) {
+    _cb = (JSVM_PropertyHandlerCfg)_cbinfo.Data().template As<v8::External>()->Value();
+  }
+
+ protected:
+  inline void NameSetterInvokeCallback() {
+    auto context = _cbinfo.GetIsolate()->GetCurrentContext();
+    auto env = v8impl::GetContextEnv(context);
+    auto setterCb = _cb->genericNamedPropertySetterCallback;
+
+    bool exceptionOccurred = false;
+    JSVM_Value result = nullptr;
+    JSVM_Value name = JsValueFromV8LocalValue(_property);
+    JSVM_Value value = JsValueFromV8LocalValue(_value);
+    JSVM_Value thisArg = this->This();
+    env->CallIntoModule([&](JSVM_Env env) {
+                          if (setterCb) {
+                            result = setterCb(env, name, value, thisArg);
+                          }
+                        },
+                        [&](JSVM_Env env, v8::Local<v8::Value> value) {
+                          exceptionOccurred = true;
+                          if (env->terminatedOrTerminating()) {
+                            return;
+                          }
+                          env->isolate->ThrowException(value);
+                        });
+    if (!exceptionOccurred && (result != nullptr)) {
+      this->SetReturnValue(result);
+    }
+  }
+
+  inline void NameGetterInvokeCallback() {
+    auto context = _cbinfo.GetIsolate()->GetCurrentContext();
+    auto env = v8impl::GetContextEnv(context);
+    auto getterCb = _cb->genericNamedPropertyGetterCallback;
+
+    bool exceptionOccurred = false;
+    JSVM_Value result = nullptr;
+    JSVM_Value name = JsValueFromV8LocalValue(_property);
+    JSVM_Value thisArg = this->This();
+    env->CallIntoModule([&](JSVM_Env env) {
+                          if (getterCb) {
+                            result = getterCb(env, name, thisArg);
+                          }
+                        },
+                        [&](JSVM_Env env, v8::Local<v8::Value> value) {
+                          exceptionOccurred = true;
+                          if (env->terminatedOrTerminating()) {
+                            return;
+                          }
+                          env->isolate->ThrowException(value);
+                        });
+    if (!exceptionOccurred && (result != nullptr)) {
+      this->SetReturnValue(result);
+    }
+  }
+
+  inline void NameDeleterInvokeCallback() {
+    auto context = _cbinfo.GetIsolate()->GetCurrentContext();
+    auto env = v8impl::GetContextEnv(context);
+    auto deleterCb = _cb->genericNamedPropertyDeleterCallback;
+
+    bool exceptionOccurred = false;
+    JSVM_Value result = nullptr;
+    JSVM_Value name = JsValueFromV8LocalValue(_property);
+    JSVM_Value thisArg = this->This();
+    env->CallIntoModule([&](JSVM_Env env) {
+                          if (deleterCb) {
+                            result = deleterCb(env, name, thisArg);
+                          }
+                        },
+                        [&](JSVM_Env env, v8::Local<v8::Value> value) {
+                          exceptionOccurred = true;
+                          if (env->terminatedOrTerminating()) {
+                            return;
+                          }
+                          env->isolate->ThrowException(value);
+                        });
+    if (!exceptionOccurred && (result != nullptr)) {
+      if (v8impl::V8LocalValueFromJsValue(result)->IsBoolean()) {
+        this->SetReturnValue(result);
+      }
+    }
+  }
+
+  inline void NameEnumeratorInvokeCallback() {
+    auto context = _cbinfo.GetIsolate()->GetCurrentContext();
+    auto env = v8impl::GetContextEnv(context);
+    auto enumeratorCb = _cb->genericNamedPropertyEnumeratorCallback;
+
+    bool exceptionOccurred = false;
+    JSVM_Value result = nullptr;
+    JSVM_Value thisArg = this->This();
+    env->CallIntoModule([&](JSVM_Env env) {
+                          if (enumeratorCb) {
+                            result = enumeratorCb(env, thisArg);
+                          }
+                        },
+                        [&](JSVM_Env env, v8::Local<v8::Value> value) {
+                          exceptionOccurred = true;
+                          if (env->terminatedOrTerminating()) {
+                            return;
+                          }
+                          env->isolate->ThrowException(value);
+                        });
+    if (!exceptionOccurred && (result != nullptr)) {
+      if (v8impl::V8LocalValueFromJsValue(result)->IsArray()) {
+        this->SetReturnValue(result);
+      }
+    }
+  }
+
+  inline void IndexSetterInvokeCallback() {
+    auto context = _cbinfo.GetIsolate()->GetCurrentContext();
+    auto env = v8impl::GetContextEnv(context);
+    auto indexSetterCb = _cb->genericIndexedPropertySetterCallback;
+
+    bool exceptionOccurred = false;
+    JSVM_Value result = nullptr;
+    JSVM_Value index = JsValueFromV8LocalValue(v8::Integer::NewFromUnsigned(env->isolate, _index));
+    JSVM_Value value = JsValueFromV8LocalValue(_value);
+    JSVM_Value thisArg = this->This();
+    env->CallIntoModule([&](JSVM_Env env) {
+                          if (indexSetterCb) {
+                            result = indexSetterCb(env, index, value, thisArg);
+                          }
+                        },
+                        [&](JSVM_Env env, v8::Local<v8::Value> value) {
+                          exceptionOccurred = true;
+                          if (env->terminatedOrTerminating()) {
+                            return;
+                          }
+                          env->isolate->ThrowException(value);
+                        });
+    if (!exceptionOccurred && (result != nullptr)) {
+      this->SetReturnValue(result);
+    }
+  }
+
+  inline void IndexGetterInvokeCallback() {
+    auto context = _cbinfo.GetIsolate()->GetCurrentContext();
+    auto env = v8impl::GetContextEnv(context);
+    auto indexGetterCb = _cb->genericIndexedPropertyGetterCallback;
+
+    JSVM_Value result = nullptr;
+    bool exceptionOccurred = false;
+    JSVM_Value index = JsValueFromV8LocalValue(v8::Integer::NewFromUnsigned(env->isolate, _index));
+    JSVM_Value thisArg = this->This();
+    env->CallIntoModule([&](JSVM_Env env) {
+                          if (indexGetterCb) {
+                            result = indexGetterCb(env, index, thisArg);
+                          }
+                        },
+                        [&](JSVM_Env env, v8::Local<v8::Value> value) {
+                          exceptionOccurred = true;
+                          if (env->terminatedOrTerminating()) {
+                            return;
+                          }
+                          env->isolate->ThrowException(value);
+                        });
+    if (!exceptionOccurred && (result != nullptr)) {
+      this->SetReturnValue(result);
+    }
+  }
+
+  inline void IndexDeleterInvokeCallback() {
+    auto context = _cbinfo.GetIsolate()->GetCurrentContext();
+    auto env = v8impl::GetContextEnv(context);
+    auto indexDeleterCb = _cb->genericIndexedPropertyDeleterCallback;
+
+    bool exceptionOccurred = false;
+    JSVM_Value result = nullptr;
+    JSVM_Value index = JsValueFromV8LocalValue(v8::Integer::NewFromUnsigned(env->isolate, _index));
+    JSVM_Value thisArg = this->This();
+    env->CallIntoModule([&](JSVM_Env env) {
+                          if (indexDeleterCb) {
+                            result = indexDeleterCb(env, index, thisArg);
+                          }
+                        },
+                        [&](JSVM_Env env, v8::Local<v8::Value> value) {
+                          exceptionOccurred = true;
+                          if (env->terminatedOrTerminating()) {
+                            return;
+                          }
+                          env->isolate->ThrowException(value);
+                        });
+    if (!exceptionOccurred && (result != nullptr)) {
+      if (v8impl::V8LocalValueFromJsValue(result)->IsBoolean()) {
+        this->SetReturnValue(result);
+      }
+    }
+  }
+
+  inline void IndexEnumeratorInvokeCallback() {
+    auto context = _cbinfo.GetIsolate()->GetCurrentContext();
+    auto env = v8impl::GetContextEnv(context);
+    auto enumeratorCb = _cb->genericIndexedPropertyEnumeratorCallback;
+
+    bool exceptionOccurred = false;
+    JSVM_Value result = nullptr;
+    JSVM_Value thisArg = this->This();
+    env->CallIntoModule([&](JSVM_Env env) {
+                          if (enumeratorCb) {
+                            result = enumeratorCb(env, thisArg);
+                          }
+                        },
+                        [&](JSVM_Env env, v8::Local<v8::Value> value) {
+                          exceptionOccurred = true;
+                          if (env->terminatedOrTerminating()) {
+                            return;
+                          }
+                          env->isolate->ThrowException(value);
+                        });
+    if (!exceptionOccurred && (result != nullptr)) {
+      if (v8impl::V8LocalValueFromJsValue(result)->IsArray()) {
+        this->SetReturnValue(result);
+      }
+    }
+  }
+
+  const v8::PropertyCallbackInfo<T>& _cbinfo;
+  JSVM_PropertyHandlerCfg _cb;
+  v8::Local<v8::Name> _property;
+  v8::Local<v8::Value> _value;
+  uint32_t _index;
+};
+
+template <typename T>
+class PropertyCallbackWrapper : public PropertyCallbackWrapperBase<T> {
+ public:
+  static void NameSetterInvoke(v8::Local<v8::Name> property, v8::Local<v8::Value> value,
+    const v8::PropertyCallbackInfo<v8::Value>& info) {
+    PropertyCallbackWrapper<v8::Value> propertyCbWrapper(property, value, info);
+    propertyCbWrapper.NameSetterInvokeCallback();
+  }
+
+  static void NameGetterInvoke(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
+    PropertyCallbackWrapper<v8::Value> propertyCbWrapper(property, v8::Local<v8::Value>(), info);
+    propertyCbWrapper.NameGetterInvokeCallback();
+  }
+
+  static void NameDeleterInvoke(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Boolean>& info) {
+    PropertyCallbackWrapper<v8::Boolean> propertyCbWrapper(property, v8::Local<v8::Value>(), info);
+    propertyCbWrapper.NameDeleterInvokeCallback();
+  }
+
+  static void NameEnumeratorInvoke(const v8::PropertyCallbackInfo<v8::Array>& info) {
+    PropertyCallbackWrapper<v8::Array> propertyCbWrapper(v8::Local<v8::Name>(), v8::Local<v8::Value>(), info);
+    propertyCbWrapper.NameEnumeratorInvokeCallback();
+  }
+
+  static void IndexSetterInvoke(uint32_t index, v8::Local<v8::Value> value,
+    const v8::PropertyCallbackInfo<v8::Value>& info) {
+    PropertyCallbackWrapper<v8::Value> propertyCbWrapper(index, value, info);
+    propertyCbWrapper.IndexSetterInvokeCallback();
+  }
+
+  static void IndexGetterInvoke(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info) {
+    PropertyCallbackWrapper<v8::Value> propertyCbWrapper(index, v8::Local<v8::Value>(), info);
+    propertyCbWrapper.IndexGetterInvokeCallback();
+  }
+
+  static void IndexDeleterInvoke(uint32_t index, const v8::PropertyCallbackInfo<v8::Boolean>& info) {
+    PropertyCallbackWrapper<v8::Boolean> propertyCbWrapper(index, v8::Local<v8::Value>(), info);
+    propertyCbWrapper.IndexDeleterInvokeCallback();
+  }
+
+  static void IndexEnumeratorInvoke(const v8::PropertyCallbackInfo<v8::Array>& info) {
+    PropertyCallbackWrapper<v8::Array> propertyCbWrapper(0, v8::Local<v8::Value>(), info);
+    propertyCbWrapper.IndexEnumeratorInvokeCallback();
+  }
+
+  explicit PropertyCallbackWrapper(v8::Local<v8::Name> name, v8::Local<v8::Value> value,
+      const v8::PropertyCallbackInfo<T>& cbinfo)
+      : PropertyCallbackWrapperBase<T>(0, name, value, cbinfo, 0), _cbInfo(cbinfo) {}
+
+  explicit PropertyCallbackWrapper(uint32_t index, v8::Local<v8::Value> value,
+      const v8::PropertyCallbackInfo<T>& cbinfo)
+      : PropertyCallbackWrapperBase<T>(index, v8::Local<v8::Name>(), value, cbinfo, 0), _cbInfo(cbinfo) {}
+
+  /*virtual*/
+  void SetReturnValue(JSVM_Value value) override {
+    v8::Local<T> val = v8impl::V8LocalValueFromJsValue(value).As<T>();
+    _cbInfo.GetReturnValue().Set(val);
+  }
+
+protected:
+  const v8::PropertyCallbackInfo<T>& _cbInfo;
 };
 
 inline JSVM_Status Wrap(JSVM_Env env,
@@ -3871,4 +4174,144 @@ JSVM_Status JSVM_CDECL OH_JSVM_IsDetachedArraybuffer(JSVM_Env env,
       value->IsArrayBuffer() && value.As<v8::ArrayBuffer>()->WasDetached();
 
   return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL
+OH_JSVM_DefineClassWithPropertyHandler(JSVM_Env env,
+                                       const char* utf8name,
+                                       size_t length,
+                                       JSVM_Callback constructor,
+                                       size_t propertyCount,
+                                       const JSVM_PropertyDescriptor* properties,
+                                       JSVM_PropertyHandlerCfg propertyHandlerCfg,
+                                       JSVM_Value* result) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, result);
+  CHECK_ARG(env, constructor);
+  CHECK_ARG(env, constructor->callback);
+  CHECK_ARG(env, propertyHandlerCfg);
+
+  if (propertyCount > 0) {
+    CHECK_ARG(env, properties);
+  }
+
+  v8::Isolate* isolate = env->isolate;
+  v8::EscapableHandleScope scope(isolate);
+  v8::Local<v8::FunctionTemplate> tpl;
+  STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+      env, constructor, &tpl));
+
+  v8::Local<v8::String> name_string;
+  CHECK_NEW_FROM_UTF8_LEN(env, name_string, utf8name, length);
+  tpl->SetClassName(name_string);
+
+  size_t static_property_count = 0;
+  for (size_t i = 0; i < propertyCount; i++) {
+    const JSVM_PropertyDescriptor* p = properties + i;
+
+    if ((p->attributes & JSVM_STATIC) != 0) { // attributes
+      // Static properties are handled separately below.
+      static_property_count++;
+      continue;
+    }
+
+    v8::Local<v8::Name> property_name;
+    STATUS_CALL(v8impl::V8NameFromPropertyDescriptor(env, p, &property_name));
+    v8::PropertyAttribute attributes = v8impl::V8PropertyAttributesFromDescriptor(p);
+
+    // This code is similar to that in OH_JSVM_DefineProperties(); the
+    // difference is it applies to a template instead of an object,
+    // and preferred PropertyAttribute for lack of PropertyDescriptor
+    // support on ObjectTemplate.
+    if (p->getter != nullptr || p->setter != nullptr) {
+      v8::Local<v8::FunctionTemplate> getter_tpl;
+      v8::Local<v8::FunctionTemplate> setter_tpl;
+      if (p->getter != nullptr) {
+        STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+            env, p->getter, &getter_tpl));
+      }
+      if (p->setter != nullptr) {
+        STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+            env, p->setter, &setter_tpl));
+      }
+
+      tpl->PrototypeTemplate()->SetAccessorProperty(property_name,
+                                                    getter_tpl,
+                                                    setter_tpl,
+                                                    attributes,
+                                                    v8::AccessControl::DEFAULT);
+    } else if (p->method != nullptr) {
+      v8::Local<v8::FunctionTemplate> t;
+      STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+          env, p->method, &t, v8::Signature::New(isolate, tpl)));
+
+      tpl->PrototypeTemplate()->Set(property_name, t, attributes);
+    } else {
+      v8::Local<v8::Value> value = v8impl::V8LocalValueFromJsValue(p->value);
+      tpl->PrototypeTemplate()->Set(property_name, value, attributes);
+    }
+  }
+
+  /* register property handler for instance object */
+  v8::Local<v8::Value> cbdata = v8impl::CallbackBundle::New(env, propertyHandlerCfg);
+  // register named property handler
+  v8::NamedPropertyHandlerConfiguration namedPropertyHandler;
+  if (propertyHandlerCfg->genericNamedPropertyGetterCallback) {
+    namedPropertyHandler.getter = v8impl::PropertyCallbackWrapper<v8::Value>::NameGetterInvoke;
+  }
+  if (propertyHandlerCfg->genericNamedPropertySetterCallback) {
+    namedPropertyHandler.setter = v8impl::PropertyCallbackWrapper<v8::Value>::NameSetterInvoke;
+  }
+  if (propertyHandlerCfg->genericNamedPropertyDeleterCallback) {
+    namedPropertyHandler.deleter = v8impl::PropertyCallbackWrapper<v8::Boolean>::NameDeleterInvoke;
+  }
+  if (propertyHandlerCfg->genericNamedPropertyEnumeratorCallback) {
+    namedPropertyHandler.enumerator = v8impl::PropertyCallbackWrapper<v8::Array>::NameEnumeratorInvoke;
+  }
+  namedPropertyHandler.data = cbdata;
+  tpl->InstanceTemplate()->SetHandler(namedPropertyHandler);
+
+  // register indexed property handle
+  v8::IndexedPropertyHandlerConfiguration indexPropertyHandler;
+  if (propertyHandlerCfg->genericIndexedPropertyGetterCallback) {
+    indexPropertyHandler.getter = v8impl::PropertyCallbackWrapper<v8::Value>::IndexGetterInvoke;
+  }
+  if (propertyHandlerCfg->genericIndexedPropertySetterCallback) {
+    indexPropertyHandler.setter = v8impl::PropertyCallbackWrapper<v8::Value>::IndexSetterInvoke;
+  }
+  if (propertyHandlerCfg->genericIndexedPropertyDeleterCallback) {
+    indexPropertyHandler.deleter = v8impl::PropertyCallbackWrapper<v8::Boolean>::IndexDeleterInvoke;
+  }
+  if (propertyHandlerCfg->genericIndexedPropertyEnumeratorCallback) {
+    indexPropertyHandler.enumerator = v8impl::PropertyCallbackWrapper<v8::Array>::IndexEnumeratorInvoke;
+  }
+  indexPropertyHandler.data = cbdata;
+  tpl->InstanceTemplate()->SetHandler(indexPropertyHandler);
+
+  // register call as function
+  if (propertyHandlerCfg->funcCallback && propertyHandlerCfg->funcCallback->callback) {
+    v8::Local<v8::Value> funcCbdata = v8impl::CallbackBundle::New(env, propertyHandlerCfg->funcCallback);
+    tpl->InstanceTemplate()->SetCallAsFunctionHandler(v8impl::FunctionCallbackWrapper::Invoke, funcCbdata);
+  }
+
+  v8::Local<v8::Context> context = env->context();
+  *result = v8impl::JsValueFromV8LocalValue(
+      scope.Escape(tpl->GetFunction(context).ToLocalChecked()));
+
+  if (static_property_count > 0) {
+    std::vector<JSVM_PropertyDescriptor> static_descriptors;
+    static_descriptors.reserve(static_property_count);
+
+    for (size_t i = 0; i < propertyCount; i++) {
+      const JSVM_PropertyDescriptor* p = properties + i;
+      if ((p->attributes & JSVM_STATIC) != 0) {
+        static_descriptors.push_back(*p);
+      }
+    }
+
+    STATUS_CALL(OH_JSVM_DefineProperties(
+        env, *result, static_descriptors.size(), static_descriptors.data()));
+  }
+
+  return GET_RETURN_STATUS(env);
 }
