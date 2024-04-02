@@ -409,13 +409,5 @@
     {
         "first_introduced": "10",
         "name": "OH_AVCapability_AreProfileAndLevelSupported"
-    },
-    {
-        "first_introduced": "12",
-        "name": "OH_AVCapability_IsFeatureSupported"
-    },
-    {
-        "first_introduced": "12",
-        "name": "OH_AVCapability_GetFeatureProperties"
     }
 ]
