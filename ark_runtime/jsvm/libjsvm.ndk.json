@@ -566,5 +566,9 @@
     {
         "first_introduced": "12",
         "name": "OH_JSVM_WaitForDebugger"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_JSVM_DefineClassWithPropertyHandler"
     }
 ]
