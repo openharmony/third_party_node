@@ -425,6 +425,8 @@ typedef struct {
 /**
  * @brief Printer discovery callback.
  *
+ * @param event The printer discovery event during printer discovery.
+ * @param printerInfo The printer infomation at the time of the discovery event.
  * @since 12
  */
 typedef void (*Print_PrinterDiscoveryCallback)(Print_DiscoveryEvent event, const Print_PrinterInfo *printerInfo);
@@ -432,6 +434,8 @@ typedef void (*Print_PrinterDiscoveryCallback)(Print_DiscoveryEvent event, const
 /**
  * @brief Printer change callback.
  *
+ * @param event The printer change event while the printer service is running.
+ * @param printerInfo The printer infomation at the time of the change event.
  * @since 12
  */
 typedef void (*Print_PrinterChangeCallback)(Print_PrinterEvent event, const Print_PrinterInfo *printerInfo);
