@@ -599,5 +599,21 @@ typedef struct {
  * @since 12
  */
 typedef JSVM_PropertyHandlerConfigurationStruct* JSVM_PropertyHandlerCfg;
+
+/**
+ * @brief Source code information.
+ *
+ * @since 12
+ */
+typedef struct {
+    /** Sourcemap url. */
+    const char* sourceMapUrl;
+    /** Resource name. */
+    const char* resourceName;
+    /** Resource line offset. */
+    size_t resourceLineOffset;
+    /** Resource column offset. */
+    size_t resourceColumnOffset;
+} JSVM_ScriptOrigin;
 /** @} */
 #endif /* ARK_RUNTIME_JSVM_JSVM_TYPE_H */
