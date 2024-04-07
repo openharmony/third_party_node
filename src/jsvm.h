@@ -2223,6 +2223,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_WaitForDebugger(JSVM_Env env,
  * @param properties: Array of property descriptors describing static and instance data
  * properties, accessors, and methods on the class See JSVM_PropertyDescriptor.
  * @param propertyHandlerCfg: The instance object triggers the corresponding callback function.
+ * @param callAsFunctionCallback: Calling an instance object as a function will trigger this callback.
  * @param result: A JSVM_Value representing the constructor function for the class.
  * @return Returns JSVM_OK if the API succeeded.
  * @since 12
@@ -2234,6 +2235,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_DefineClassWithPropertyHandler(JSVM_Env env,
                                                                size_t propertyCount,
                                                                const JSVM_PropertyDescriptor* properties,
                                                                JSVM_PropertyHandlerCfg propertyHandlerCfg,
+                                                               JSVM_Callback callAsFunctionCallback,
                                                                JSVM_Value* result);
 EXTERN_C_END
 
