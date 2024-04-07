@@ -4184,6 +4184,7 @@ OH_JSVM_DefineClassWithPropertyHandler(JSVM_Env env,
                                        size_t propertyCount,
                                        const JSVM_PropertyDescriptor* properties,
                                        JSVM_PropertyHandlerCfg propertyHandlerCfg,
+                                       JSVM_Callback callAsFunctionCallback,
                                        JSVM_Value* result) {
   JSVM_PREAMBLE(env);
   CHECK_ARG(env, result);
@@ -4289,8 +4290,8 @@ OH_JSVM_DefineClassWithPropertyHandler(JSVM_Env env,
   tpl->InstanceTemplate()->SetHandler(indexPropertyHandler);
 
   // register call as function
-  if (propertyHandlerCfg->funcCallback && propertyHandlerCfg->funcCallback->callback) {
-    v8::Local<v8::Value> funcCbdata = v8impl::CallbackBundle::New(env, propertyHandlerCfg->funcCallback);
+  if (callAsFunctionCallback && callAsFunctionCallback->callback) {
+    v8::Local<v8::Value> funcCbdata = v8impl::CallbackBundle::New(env, callAsFunctionCallback);
     tpl->InstanceTemplate()->SetCallAsFunctionHandler(v8impl::FunctionCallbackWrapper::Invoke, funcCbdata);
   }
 

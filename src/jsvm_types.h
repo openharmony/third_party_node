@@ -573,9 +573,6 @@ typedef struct {
     /** A callback function triggered by getting all indexed properties requests on an object. */
     JSVM_Value(JSVM_CDECL* genericIndexedPropertyEnumeratorCallback)(JSVM_Env env,
                                                                      JSVM_Value thisArg);
-
-    /** A callback function triggered by a call on an instance object. */
-    JSVM_Callback funcCallback;
 } JSVM_PropertyHandlerConfigurationStruct;
 
 /**
