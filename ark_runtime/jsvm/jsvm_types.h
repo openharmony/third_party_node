@@ -531,5 +531,59 @@ typedef struct {
     uint64_t upper;
 } JSVM_TypeTag;
 
+/**
+ * @brief When the object's getter, setter, deleter, and enumerator operations are performed, the corresponding
+ * callback will be triggered.
+ *
+ * @since 12
+ */
+typedef struct {
+    /** A callback function triggered by getting a named property of an instance object. */
+    JSVM_Value(JSVM_CDECL* genericNamedPropertyGetterCallback)(JSVM_Env env,
+                                                               JSVM_Value name,
+                                                               JSVM_Value thisArg);
+
+    /** A callback function triggered by setting a named property of an instance object. */
+    JSVM_Value(JSVM_CDECL* genericNamedPropertySetterCallback)(JSVM_Env env,
+                                                               JSVM_Value name,
+                                                               JSVM_Value property,
+                                                               JSVM_Value thisArg);
+
+    /** A callback function triggered by deleting a named property of an instance object. */
+    JSVM_Value(JSVM_CDECL* genericNamedPropertyDeleterCallback)(JSVM_Env env,
+                                                                JSVM_Value name,
+                                                                JSVM_Value thisArg);
+
+    /** A callback function triggered by getting all named properties requests on an object. */
+    JSVM_Value(JSVM_CDECL* genericNamedPropertyEnumeratorCallback)(JSVM_Env env,
+                                                                   JSVM_Value thisArg);
+
+    /** A callback function triggered by getting an indexed property of an instance object. */
+    JSVM_Value(JSVM_CDECL* genericIndexedPropertyGetterCallback)(JSVM_Env env,
+                                                                JSVM_Value index,
+                                                                JSVM_Value thisArg);
+
+    /** A callback function triggered by setting an indexed property of an instance object. */
+    JSVM_Value(JSVM_CDECL* genericIndexedPropertySetterCallback)(JSVM_Env env,
+                                                                 JSVM_Value index,
+                                                                 JSVM_Value property,
+                                                                 JSVM_Value thisArg);
+
+    /** A callback function triggered by deleting an indexed property of an instance object. */
+    JSVM_Value(JSVM_CDECL* genericIndexedPropertyDeleterCallback)(JSVM_Env env,
+                                                                  JSVM_Value index,
+                                                                  JSVM_Value thisArg);
+
+    /** A callback function triggered by getting all indexed properties requests on an object. */
+    JSVM_Value(JSVM_CDECL* genericIndexedPropertyEnumeratorCallback)(JSVM_Env env,
+                                                                     JSVM_Value thisArg);
+} JSVM_PropertyHandlerConfigurationStruct;
+
+/**
+ * @brief The pointer type of the structure which contains the property handlers.
+ *
+ * @since 12
+ */
+typedef JSVM_PropertyHandlerConfigurationStruct* JSVM_PropertyHandlerCfg;
 /** @} */
 #endif /* ARK_RUNTIME_JSVM_JSVM_TYPE_H */
