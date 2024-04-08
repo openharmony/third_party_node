@@ -151,6 +151,11 @@ enum OH_Huks_CipherMode {
     OH_HUKS_MODE_CTR = 3,
     /** Output Feedback (OFB) mode. */
     OH_HUKS_MODE_OFB = 4,
+    /**
+     * Cipher Feedback (CFB) mode.
+     * @since 12
+     */
+    OH_HUKS_MODE_CFB = 5,
     /** Counter with CBC-MAC (CCM) mode. */
     OH_HUKS_MODE_CCM = 31,
     /** Galois/Counter (GCM) mode. */
