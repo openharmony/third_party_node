@@ -246,12 +246,14 @@ def copy_std_lib(link_include_file):
     std_include = StringConstant.STD_INCLUDE.value
     if not os.path.exists(std_include):
         shutil.copytree(StringConstant.INCLUDE_LIB.value, std_include)
-    link_include_file.append(std_include)
+    if std_include not in link_include_file:
+        link_include_file.append(std_include)
 
 
 def find_include(link_include_path):
     for dir_path, _, _ in os.walk(StringConstant.CREATE_LIB_PATH.value):
-        link_include_path.append(dir_path)
+        if dir_path not in link_include_path:
+            link_include_path.append(dir_path)
 
 
 def copy_self_include(link_include_path, self_include_file, flag=-1):
@@ -262,14 +264,12 @@ def copy_self_include(link_include_path, self_include_file, flag=-1):
     else:
         std_include = StringConstant.SELF_INCLUDE.value
 
-    if std_include and not os.path.exists(std_include):
-        shutil.copytree(self_include_file, std_include)
-
-    for dir_path, _, files in os.walk(std_include):
-        for file in files:
-            if not file.endswith('.h'):
-                os.remove(os.path.join(dir_path, file))
-            elif dir_path not in link_include_path:
+    if not os.path.exists(std_include):
+        os.makedirs(std_include)
+    for dir_path, _, file_name_list in os.walk(self_include_file):
+        for file in file_name_list:
+            if (file.endswith('.h') and ('sysroot' not in dir_path)
+                    and (dir_path not in link_include_path)):
                 link_include_path.append(dir_path)
 
 
@@ -301,7 +301,8 @@ def parser_include_ast(gn_file_path, include_path, flag=-1):        # 对于单�
     copy_std_lib(link_include_path)
     find_include(link_include_path)
     link_include(gn_file_path, StringConstant.FUNK_NAME.value, link_include_path)
-    copy_self_include(link_include_path, gn_file_path, flag)
+    if len(link_include_path) <= 1:
+        copy_self_include(link_include_path, gn_file_path, flag)
 
     modes = stat.S_IRWXO | stat.S_IRWXG | stat.S_IRWXU
     fd = os.open('include_file_suffix.txt', os.O_WRONLY | os.O_CREAT, mode=modes)

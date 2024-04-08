@@ -333,7 +333,6 @@ def process_each_comment(comment_object, file_doc_info: FileDocInfo, api_info) -
 
 
 def process_tag_missing(comment_object, file_doc_info: FileDocInfo, api_info):
-    print(api_info['kind'])
     api_result_info_list = []
     if api_info['kind'] not in process_tag_missing_function.keys():
         return []
