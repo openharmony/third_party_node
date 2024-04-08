@@ -454,14 +454,10 @@ typedef enum {
 typedef enum {
     /**
      * Share mode
-     *
-     * @since 12
      */
     AUDIOSTREAM_INTERRUPT_MODE_SHARE = 0,
     /**
      * Independent mode
-     *
-     * @since 12
      */
     AUDIOSTREAM_INTERRUPT_MODE_INDEPENDENT = 1
 } OH_AudioInterrupt_Mode;
