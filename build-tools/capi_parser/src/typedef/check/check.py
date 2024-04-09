@@ -159,13 +159,15 @@ be reused please delete the extra tags.'
 class OutputTxt:
     id = -1
     level = -1
+    since = ''
     location = ''
     file_path = ''
     message = ''
 
-    def __init__(self, id_param, level_param, location_param, file_path_param, message_param):
+    def __init__(self, id_param, level_param, api_since, location_param, file_path_param, message_param):
         self.id = id_param
         self.level = level_param
+        self.since = api_since
         self.location = location_param
         self.file_path = file_path_param
         self.message = message_param
@@ -181,6 +183,12 @@ class OutputTxt:
 
     def set_level(self, level_param):
         self.level = level_param
+
+    def get_since(self):
+        return self.since
+
+    def set_since(self, api_since):
+        self.level = api_since
 
     def get_location(self):
         return self.location
