@@ -36,6 +36,7 @@
  */
 #ifndef FFRT_API_C_TASK_H
 #define FFRT_API_C_TASK_H
+#include <stdint.h>
 #include "type_def.h"
 
 /**
@@ -120,6 +121,26 @@ FFRT_C_API void ffrt_task_attr_set_delay(ffrt_task_attr_t* attr, uint64_t delay_
 FFRT_C_API uint64_t ffrt_task_attr_get_delay(const ffrt_task_attr_t* attr);
 
 /**
+ * @brief Sets the task priority.
+ *
+ * @param attr Indicates a pointer to the task attribute.
+ * @param priority Indicates the execute priority of concurrent queue task.
+ * @since 12
+ * @version 1.0
+ */
+FFRT_C_API void ffrt_task_attr_set_priority(ffrt_task_attr_t* attr, int priority);
+
+/**
+ * @brief Obtains the task priority.
+ *
+ * @param attr Indicates a pointer to the task attribute.
+ * @return Returns the priority of concurrent queue task.
+ * @since 12
+ * @version 1.0
+ */
+FFRT_C_API int ffrt_task_attr_get_priority(const ffrt_task_attr_t* attr);
+
+/**
  * @brief Updates the QoS of this task.
  *
  * @param qos Indicates the new QoS.
@@ -129,6 +150,15 @@ FFRT_C_API uint64_t ffrt_task_attr_get_delay(const ffrt_task_attr_t* attr);
  * @version 1.0
  */
 FFRT_C_API int ffrt_this_task_update_qos(ffrt_qos_t qos);
+
+/**
+ * @brief Obtains the qos of this task.
+ *
+ * @return Returns the task qos.
+ * @since 12
+ * @version 1.0
+ */
+FFRT_C_API ffrt_qos_t ffrt_this_task_get_qos();
 
 /**
  * @brief Obtains the ID of this task.
@@ -204,4 +234,11 @@ FFRT_C_API void ffrt_wait_deps(const ffrt_deps_t* deps);
  */
 FFRT_C_API void ffrt_wait(void);
 
+/**
+ * @brief Sets the thread stack size of a specified QoS level.
+ *
+ * @since 10
+ * @version 1.0
+ */
+FFRT_C_API ffrt_error_t ffrt_set_worker_stack_size(ffrt_qos_t qos, size_t stack_size);
 #endif
