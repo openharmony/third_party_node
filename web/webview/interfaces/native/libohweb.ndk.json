@@ -57,10 +57,6 @@
     },
     {
         "first_introduced": "12",
-        "name": "ArkWeb_RequestHeader"
-    },
-    {
-        "first_introduced": "12",
         "name": "ArkWeb_HttpBodyStream"
     },
     {
@@ -74,22 +70,6 @@
     {
         "first_introduced": "12",
         "name": "OH_ArkWebRequestHeaderList_GetHeader"
-    },
-    {
-        "first_introduced": "12",
-        "name": "OH_ArkWebRequestHeader_Create"
-    },
-    {
-        "first_introduced": "12",
-        "name": "OH_ArkWebRequestHeader_Destroy"
-    },
-    {
-        "first_introduced": "12",
-        "name": "OH_ArkWebRequestHeader_GetName"
-    },
-    {
-        "first_introduced": "12",
-        "name": "OH_ArkWebRequestHeader_GetValue"
     },
     {
         "first_introduced": "12",
