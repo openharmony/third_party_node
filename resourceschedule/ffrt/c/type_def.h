@@ -36,7 +36,6 @@
  */
 #ifndef FFRT_API_C_TYPE_DEF_H
 #define FFRT_API_C_TYPE_DEF_H
-
 #include <stdint.h>
 #include <errno.h>
 
@@ -48,7 +47,7 @@
 
 /**
  * @brief Enumerates the task priority types.
- * 
+ *
  */
 typedef enum {
     /** should be distributed at once if possible, handle time equals to send time, prior to high level */
