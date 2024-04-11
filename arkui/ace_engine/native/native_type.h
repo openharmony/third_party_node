@@ -92,6 +92,18 @@ typedef struct ArkUI_NativeDialog* ArkUI_NativeDialogHandle;
 typedef struct ArkUI_WaterFlowSectionOption ArkUI_WaterFlowSectionOption;
 
 /**
+ * @brief 事件回调类型。
+ *
+ * @since 12
+ */
+typedef struct {
+    /** 自定义类型。*/
+    void* userData;
+    /** 事件回调。*/
+    void(*callback)(void* userData);
+} ArkUI_ContextCallback;
+
+/**
  * @brief Provides the number types of ArkUI in the native code.
  *
  * @since 12
@@ -1368,6 +1380,18 @@ typedef struct {
     /** Vertical coordinate, in px. */
     int32_t y;
 } ArkUI_IntOffset;
+
+/**
+ * @brief 在动画中定义onFinish回调的类型。
+ *
+ * @since 12
+ */
+typedef enum {
+    /** 当整个动画结束并立即删除时，将触发回调。 */
+    ARKUI_FINISH_CALLBACK_REMOVED = 0,
+    /** 当动画在逻辑上处于下降状态，但可能仍处于其长尾状态时，将触发回调。*/
+    ARKUI_FINISH_CALLBACK_LOGICALLY,
+} ArkUI_FinishCallbackType;
 
 /**
 * @brief Creates a size constraint.
