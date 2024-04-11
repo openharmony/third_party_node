@@ -108,9 +108,9 @@ typedef enum {
     ARKUI_NODE_FLEX,
     /** Refresh component. */
     ARKUI_NODE_REFRESH,
-    /** Waterfall container. */
+    /** Water flow container. */
     ARKUI_NODE_WATER_FLOW,
-    /** Waterfall item container. */
+    /** Water flow item. */
     ARKUI_NODE_FLOW_ITEM,
 } ArkUI_NodeType;
 
@@ -868,7 +868,7 @@ typedef enum {
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .string: mask text.\n
      * .value[0]?.i32: position of the overlay relative to the component. Optional.
-     * The value is an enum of {@link ArkUI_Alignment}.
+     * The parameter type is {@link ArkUI_Alignment}.
      * The default value is <b>ARKUI_ALIGNMENT_TOP_START.</b> \n
      * .value[1]?.f32: offset of the overlay relative to the upper left corner of itself on the x-axis, in vp. Optional. \n
      * .value[2]?.f32: offset of the overlay relative to the upper left corner of itself on the y-axis, in vp. Optional.
@@ -876,7 +876,7 @@ typedef enum {
      * Format of the return value {@link ArkUI_AttributeItem}:\n
      * .string: mask text.\n
      * .value[0].i32: position of the overlay relative to the component.
-     * The value is an enum of {@link ArkUI_Alignment}.
+     * The parameter type is {@link ArkUI_Alignment}.
      * The default value is <b>ARKUI_ALIGNMENT_TOP_START.</b> \n
      * .value[1].f32: offset of the overlay relative to the upper left corner of itself on the x-axis, in vp. \n
      * .value[2].f32: offset of the overlay relative to the upper left corner of itself on the y-axis, in vp.
@@ -1040,12 +1040,16 @@ typedef enum {
      * This attribute can be set, reset, and obtained as required through APIs.
      *
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
-     * .value[0].i32: blend mode. The parameter type is {@link ArkUI_BlendMode}.
-     * The default value is <b>ARKUI_BLEND_MODE_NONE</b>. \n
+     * .value[0].i32: blend mode. The parameter type is {@link ArkUI_BlendMode}. The default value is
+     * <b>ARKUI_BLEND_MODE_NONE</b>. \n
+     * .value[1].?i32: how the specified blend mode is applied. The parameter type is {@link ArkUI_BlendApplyType}.
+     * The default value is <b>ARKUI_BLEND_APPLY_TYPE_FAST</b>. \n
      * \n
      * Format of the return value {@link ArkUI_AttributeItem}:\n
-     * .value[0].i32: blend mode. The parameter type is {@link ArkUI_BlendMode}.
-     * The default value is <b>ARKUI_BLEND_MODE_NONE</b>. \n
+     * .value[0].i32: blend mode. The parameter type is {@link ArkUI_BlendMode}. The default value is
+     * <b>ARKUI_BLEND_MODE_NONE</b>. \n
+     * .value[1].i32: how the specified blend mode is applied. The parameter type is {@link ArkUI_BlendApplyType}.
+     * The default value is <b>ARKUI_BLEND_APPLY_TYPE_FAST</b>. \n
      *
      */
     NODE_BLEND_MODE,
@@ -1498,10 +1502,10 @@ typedef enum {
      * @brief Defines the text overflow attribute, which can be set, reset, and obtained as required through APIs.
      *
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
-     * .value[0].i32: display mode when the text is too long. \n
+     * .value[0].i32: display mode when the text is too long. {@ArkUI_TextOverflow}\n
      * \n
      * Format of the return value {@link ArkUI_AttributeItem}:\n
-     * .value[0].i32: display mode when the text is too long. \n
+     * .value[0].i32: display mode when the text is too long. {@ArkUI_TextOverflow}\n
      *
      */
     NODE_TEXT_OVERFLOW,
@@ -3298,10 +3302,26 @@ typedef enum {
      *
      */
     NODE_LIST_SPACE,
+    /**
+    * @brief Defines the list adapter. The attribute can be set, reset, and obtained as required through APIs.
+    *
+    * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+    * .object: {@link ArkUI_NodeAdapter} object as the adapter. \n
+    */
+    NODE_LIST_NODE_ADAPTER,
 
     /**
-     * @brief Defines whether to enable loop playback for the swiper. This attribute can be set, reset, and obtained
-     * as required through APIs.
+    * @brief Sets the number of cached items in the list adapter.
+    * This attribute can be set, reset, and obtained as required through APIs.
+    *
+    * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+    * .value[0].i32: number of cached items in the list adapter. \n
+    */
+    NODE_LIST_CACHED_COUNT,
+
+    /**
+     * @brief Defines whether to enable loop playback for the swiper.
+     * This attribute can be set, reset, and obtained as required through APIs.
      *
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .value[0].i32: whether to enable loop playback. The value <b>1</b> means to enable loop playback, and <b>0</b>
@@ -3486,6 +3506,23 @@ typedef enum {
     NODE_SWIPER_EDGE_EFFECT_MODE,
 
     /**
+    * @brief Defines the swiper adapter. The attribute can be set, reset, and obtained as required through APIs.
+    *
+    * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+    * .object: {@link ArkUI_NodeAdapter} object as the adapter. \n
+    */
+    NODE_SWIPER_NODE_ADAPTER,
+
+    /**
+    * @brief Sets the number of cached items in the swiper adapter.
+    * This attribute can be set, reset, and obtained as required through APIs.
+    *
+    * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+    * .value[0].i32: number of cached items in the swiper adapter. \n
+    */
+    NODE_SWIPER_CACHED_COUNT,
+
+    /**
      * @brief Defines the header of the list item group.
      * This attribute can be set, reset, and obtained as required through APIs.
      *
@@ -3647,15 +3684,16 @@ typedef enum {
      *
      */
     NODE_WATER_FLOW_LAYOUT_DIRECTION = MAX_NODE_SCOPE_NUM * ARKUI_NODE_WATER_FLOW,
+
     /**
-     * @brief Sets the number of columns in the layout. If this parameter is not set, one column is used by default.
-     * This attribute can be set, reset, and obtained as required through APIs.
+     * @brief Sets the number of columns in the water flow layout. If this parameter is not set, one column is used
+     * by default. This attribute can be set, reset, and obtained as required through APIs.
      * For example, <b>'1fr 1fr 2fr'</b> indicates three columns, with the first column taking up 1/4 of the parent
      * component's full width, the second column 1/4, and the third column 2/4.
      * You can use <b>columnsTemplate('repeat(auto-fill,track-size)')</b> to automatically calculate the number of
      * columns based on the specified column width <b>track-size</b>.
-     * <b>repeat</b> and <b>auto-fill</b> are keywords. The units for <b>track-size</b> can be px, vp (default), %, or
-     * a valid number.
+     * <b>repeat</b> and <b>auto-fill</b> are keywords. The units for <b>track-size</b> can be px, vp (default), %,
+     * or a valid number.
      *
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .string: number of columns in the layout.\n
@@ -3667,11 +3705,10 @@ typedef enum {
     NODE_WATER_FLOW_COLUMN_TEMPLATE,
 
     /**
-     * @brief Sets the number of rows in the layout. If this parameter is not set, one row is used by default.
-     * This attribute can be set, reset, and obtained as required through APIs.
-     * For example, <b>'1fr 1fr 2fr'</b> indicates three rows,
-     * with the first row taking up 1/4 of the parent component's
-     * full height, the second row 1/4, and the third row 2/4.
+     * @brief Sets the number of rows in the water flow layout. If this parameter is not set, one row is used
+     * by default. This attribute can be set, reset, and obtained as required through APIs.
+     * For example, <b>'1fr 1fr 2fr'</b> indicates three rows, with the first row taking up 1/4 of the parent
+     * component's full height, the second row 1/4, and the third row 2/4.
      * You can use <b>rowsTemplate('repeat(auto-fill,track-size)')</b> to automatically calculate the number of rows
      * based on the specified row height <b>track-size</b>.
      * <b>repeat</b> and <b>auto-fill</b> are keywords. The units for <b>track-size</b> can be px, vp (default), %,
@@ -3687,8 +3724,7 @@ typedef enum {
     NODE_WATER_FLOW_ROW_TEMPLATE,
 
     /**
-     * @brief Sets the gap between columns.
-     * This attribute can be set, reset, and obtained as required through APIs.
+     * @brief Sets the gap between columns. This attribute can be set, reset, and obtained as required through APIs.
      *
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .value[0].f32: gap between columns, in vp.\n
@@ -3700,8 +3736,7 @@ typedef enum {
     NODE_WATER_FLOW_COLUMN_GAP,
 
     /**
-     * @brief Sets the gap between rows.
-     * This attribute can be set, reset, and obtained as required through APIs.
+     * @brief Sets the gap between rows. This attribute can be set, reset, and obtained as required through APIs.
      *
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .value[0].f32: gap between lines, in vp.\n
@@ -3724,6 +3759,23 @@ typedef enum {
      *
      */
     NODE_WATER_FLOW_SECTION_OPTION,
+
+    /**
+    * @brief Defines the water flow adapter. The attribute can be set, reset, and obtained as required through APIs.
+    *
+    * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+    * .object: {@link ArkUI_NodeAdapter} object as the adapter. \n
+    */
+    NODE_WATER_FLOW_NODE_ADAPTER,
+
+    /**
+    * @brief Sets the number of cached items in the water flow adapter.
+    * This attribute can be set, reset, and obtained as required through APIs.
+    *
+    * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+    * .value[0].i32: number of cached items in the water flowadapter. \n
+    */
+    NODE_WATER_FLOW_CACHED_COUNT,
 } ArkUI_NodeAttributeType;
 
 #define MAX_COMPONENT_EVENT_ARG_NUM 12
@@ -4215,8 +4267,8 @@ typedef enum {
      * @brief Defines the event triggered when the <b>ARKUI_NODE_SCROLL</b> component is about to scroll.
      *
      * Notes for triggering the event:\n
-     * 1. This event is triggered when scrolling by the <b>ARKUI_NODE_SCROLL</b> component or other input settings,
-     * such as keyboard and mouse operations, is about to start. \n
+     * 1. This event is triggered when scrolling is started by the <b>ARKUI_NODE_SCROLL</b> component or other
+     * input settings, such as keyboard and mouse operations. \n
      * 2. Scrolling can be initiated by calling the controller API. \n
      * 3. The out-of-bounds bounce effect is supported. \n
      * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
@@ -4348,6 +4400,235 @@ typedef enum {
  * @since 12
  */
 typedef struct ArkUI_NodeCustomEvent ArkUI_NodeCustomEvent;
+
+/**
+ * @brief Defines the component adapter, which is used for lazy loading of elements of scrollable components.
+ *
+ * @since 12
+ */
+typedef struct ArkUI_NodeAdapter* ArkUI_NodeAdapterHandle;
+
+/**
+ * @brief Defines the component adapter event.
+ *
+ * @since 12
+ */
+typedef struct ArkUI_NodeAdapterEvent ArkUI_NodeAdapterEvent;
+
+/**
+ * @brief Enumerates component adapter events.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** This event occurs when the component is attached to the adapter. */
+    NODE_ADAPTER_EVENT_WILL_ATTACH_TO_NODE = 1,
+    /** This event occurs when the component is detached from the adapter. */
+    NODE_ADAPTER_EVENT_WILL_DETACH_FROM_NODE = 2,
+    /** This event occurs when the adapter obtains the unique ID of the new element to add. */
+    NODE_ADAPTER_EVENT_ON_GET_NODE_ID = 3,
+    /** This event occurs when the adapter obtains the content of the new element to add. */
+    NODE_ADAPTER_EVENT_ON_ADD_NODE_TO_ADAPTER = 4,
+    /** This event occurs when the adapter removes an element. */
+    NODE_ADAPTER_EVENT_ON_REMOVE_NODE_FROM_ADAPTER = 5,
+} ArkUI_NodeAdapterEventType;
+
+/**
+* @brief Creates a component adapter.
+*
+* @since 12
+*/
+ArkUI_NodeAdapterHandle OH_ArkUI_NodeAdapter_Create();
+
+/**
+* @brief Destroys a component adapter.
+*
+* @param handle Indicates the target component adapter.
+* @since 12
+*/
+void OH_ArkUI_NodeAdapter_Dispose(ArkUI_NodeAdapterHandle handle);
+
+/**
+* @brief Sets the total number of elements in the specified adapter.
+*
+* @param handle Indicates the target component adapter.
+* @param size Indicates the number of elements.
+* @return Returns 0 if success.
+* Returns 401 if a parameter exception occurs.
+* @since 12
+*/
+int32_t OH_ArkUI_NodeAdapter_SetTotalNodeCount(ArkUI_NodeAdapterHandle handle, uint32_t size);
+
+/**
+* @brief Obtains the total number of elements in the specified adapter.
+*
+* @param handle Indicates the target component adapter.
+* @return Returns the total number of elements in the adapter.
+* @since 12
+*/
+uint32_t OH_ArkUI_NodeAdapter_GetTotalNodeCount(ArkUI_NodeAdapterHandle handle);
+
+/**
+* @brief Registers an event callback for the adapter.
+*
+* @param handle Indicates the target component adapter.
+* @param userData Indicates custom data.
+* @param receiver Indicates the event receiver callback.
+* @return Returns 0 if success.
+* Returns 401 if a parameter exception occurs.
+* @since 12
+*/
+int32_t OH_ArkUI_NodeAdapter_RegisterEventReceiver(
+ArkUI_NodeAdapterHandle handle, void* userData, void (*receiver)(ArkUI_NodeAdapterEvent* event));
+
+/**
+* @brief Deregisters an event callback for the adapter.
+*
+* @param handle Indicates the target component adapter.
+* @since 12
+*/
+void OH_ArkUI_NodeAdapter_UnregisterEventReceiver(ArkUI_NodeAdapterHandle handle);
+
+/**
+* @brief Instructs the specified adapter to reload all elements.
+*
+* @param handle Indicates the target component adapter.
+* @return Returns 0 if success.
+* Returns 401 if a parameter exception occurs.
+* @since 12
+*/
+int32_t OH_ArkUI_NodeAdapter_ReloadAllItems(ArkUI_NodeAdapterHandle handle);
+
+/**
+* @brief Instructs the specified adapter to reload certain elements.
+*
+* @param handle Indicates the target component adapter.
+* @param startPosition Indicates the start position of the elements to reload.
+* @param itemCount Indicates the number of the elements to reload.
+* @return Returns 0 if success.
+* Returns 401 if a parameter exception occurs.
+* @since 12
+*/
+int32_t OH_ArkUI_NodeAdapter_ReloadItem(
+ArkUI_NodeAdapterHandle handle, uint32_t startPosition, uint32_t itemCount);
+
+/**
+* @brief Instructs the specified adapter to remove certain elements.
+*
+* @param handle Indicates the target component adapter.
+* @param startPosition Indicates the start position of the elements to remove.
+* @param itemCount Indicates the number of the elements to remove.
+* @return Returns 0 if success.
+* Returns 401 if a parameter exception occurs.
+* @since 12
+*/
+int32_t OH_ArkUI_NodeAdapter_RemoveItem(
+ArkUI_NodeAdapterHandle handle, uint32_t startPosition, uint32_t itemCount);
+
+/**
+* @brief Instructs the specified adapter to insert certain elements.
+*
+* @param handle Indicates the target component adapter.
+* @param startPosition Indicates the start position of the elements to insert.
+* @param itemCount Indicates the number of the elements to insert.
+* @return Returns 0 if success.
+* Returns 401 if a parameter exception occurs.
+* @since 12
+*/
+int32_t OH_ArkUI_NodeAdapter_InsertItem(
+ArkUI_NodeAdapterHandle handle, uint32_t startPosition, uint32_t itemCount);
+
+/**
+* @brief Instructs the specified adapter to move certain elements.
+*
+* @param handle Indicates the target component adapter.
+* @param from Indicates the start position of the elements to move.
+* @param to  Indicates the end position of the elements to move.
+* @return Returns 0 if success.
+* Returns 401 if a parameter exception occurs.
+* @since 12
+*/
+int32_t OH_ArkUI_NodeAdapter_MoveItem(ArkUI_NodeAdapterHandle handle, uint32_t from, uint32_t to);
+
+/**
+* @brief Obtains all elements stored in the specified adapter.
+*
+* This API returns the pointer to the array of the elements. You need to manually release the memory data
+* to which the pointer points.
+*
+* @param handle Indicates the target component adapter.
+* @param items Indicates the pointer to the array of the elements in the adapter.
+* @param size Indicates the number of elements.
+* @return Returns 0 if success.
+* Returns 401 if a parameter exception occurs.
+* @since 12
+*/
+int32_t OH_ArkUI_NodeAdapter_GetAllItems(ArkUI_NodeAdapterHandle handle, ArkUI_NodeHandle** items, uint32_t* size);
+
+/**
+* @brief Obtains the custom data passed in during registration of the specified event.
+*
+* @param event Indicates the target adapter event.
+* @since 12
+*/
+void* OH_ArkUI_NodeAdapterEvent_GetUserData(ArkUI_NodeAdapterEvent* event);
+
+/**
+* @brief Obtains the event type.
+*
+* @param event Indicates the target adapter event.
+* @return Returns the event type.
+* @since 12
+*/
+ArkUI_NodeAdapterEventType OH_ArkUI_NodeAdapterEvent_GetType(ArkUI_NodeAdapterEvent* event);
+
+/**
+* @brief Obtains the element to be removed for the event to be destroyed.
+*
+* @param event Indicates the target adapter event.
+* @return Returns the element to be removed.
+* @since 12
+*/
+ArkUI_NodeHandle OH_ArkUI_NodeAdapterEvent_GetRemovedNode(ArkUI_NodeAdapterEvent* event);
+
+/**
+* @brief Obtains the index of the element to be operated for the specified adapter event.
+*
+* @param event Indicates the target adapter event.
+* @return Returns the index of the element.
+* @since 12
+*/
+uint32_t OH_ArkUI_NodeAdapterEvent_GetItemIndex(ArkUI_NodeAdapterEvent* event);
+
+/**
+* @brief Obtains the scrollable container node that uses the specified adapter.
+*
+* @param event Indicates the target adapter event.
+* @return Returns 0 if success.
+* Returns 401 if a parameter exception occurs.
+* @since 12
+*/
+ArkUI_NodeHandle OH_ArkUI_NodeAdapterEvent_GetHostNode(ArkUI_NodeAdapterEvent* event);
+
+/**
+* @brief Sets the component to be added to the specified adapter.
+*
+* @param event Indicates the target adapter event.
+* @param node Indicates the component to be added.
+* @return Returns <b>0</b> if the operation is successful; returns <b>401</b> if a parameter error occurs.
+* @since 12
+*/
+int32_t OH_ArkUI_NodeAdapterEvent_SetItem(ArkUI_NodeAdapterEvent* event, ArkUI_NodeHandle node);
+
+/**
+* @brief Sets the component ID to be generated.
+*
+* @param event Indicates the target adapter event.
+* @param id Indicates the component ID to set.
+* @return Returns <b>0</b> if the operation is successful; returns <b>401</b> if a parameter error occurs.
+* @since 12
+*/
+int32_t OH_ArkUI_NodeAdapterEvent_SetNodeId(ArkUI_NodeAdapterEvent* event, int32_t id);
 
 /**
  * @brief Declares a collection of native node APIs provided by ArkUI.

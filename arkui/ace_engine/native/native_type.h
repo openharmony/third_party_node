@@ -643,12 +643,12 @@ typedef enum {
 
 
 /**
- * @brief Defines the accessibility service model.
+ * @brief Enumerates the accessibility modes.
  *
  * @since 12
  */
 typedef enum {
-     /** Whether the component can be identified by the accessibility service is dependent on the component. */
+    /** Whether the component can be identified by the accessibility service is dependent on the component. */
     ARKUI_ACCESSIBILITY_MODE_AUTO = 0,
     /** The component can be identified by the accessibility service. */
     ARKUI_ACCESSIBILITY_MODE_ENABLED,
@@ -1409,6 +1409,22 @@ typedef enum {
 } ArkUI_FinishCallbackType;
 
 /**
+ * @brief Describes the margins of a component.
+ *
+ * @since 12
+ */
+typedef struct {
+    /** Top margin, in vp. */
+    float top;
+    /** Right margin, in vp. */
+    float right;
+    /** Bottom margin, in vp. */
+    float bottom;
+    /** Left margin, in vp. */
+    float left;
+} ArkUI_Margin;
+
+/**
 * @brief Creates a size constraint.
 *
 * @since 12
@@ -1562,7 +1578,7 @@ ArkUI_IntSize OH_ArkUI_DrawContext_GetSize(ArkUI_DrawContext* context);
 /**
 * @brief Creates water flow section configuration.
 *
-* @return Indicates the pointer to a water flow section configuration.
+* @return Returns the water flow section configuration.
 * @since 12
 */
 ArkUI_WaterFlowSectionOption* OH_ArkUI_WaterFlowSectionOption_Create();
@@ -1580,7 +1596,7 @@ void OH_ArkUI_WaterFlowSectionOption_Dispose(ArkUI_WaterFlowSectionOption* optio
 *
 * @param option Indicates the pointer to a water flow section configuration.
 * @param index Indicates the index of the target water flow section.
-* @param itemCount Indicates the number of items to set.
+* @param itemCount Indicates the number of items in the water flow section.
 * @since 12
 */
 void OH_ArkUI_WaterFlowSectionOption_SetItemCount(ArkUI_WaterFlowSectionOption* option,
@@ -1598,6 +1614,17 @@ void OH_ArkUI_WaterFlowSectionOption_SetCrossCount(ArkUI_WaterFlowSectionOption*
     int32_t index, int32_t crossCount);
 
 /**
+* @brief Obtains the number of columns (in a vertical layout) or rows (in a horizontal layout) in the water flow section
+* that matches the specified index.
+*
+* @param option Indicates the pointer to a water flow section configuration.
+* @param index Indicates the index of the target water flow section.
+* @return Returns the number of columns or rows.
+* @since 12
+*/
+int32_t OH_ArkUI_WaterFlowSectionOption_GetCrossCount(ArkUI_WaterFlowSectionOption* option, int32_t index);
+
+/**
 * @brief Sets the gap between columns in the specified water flow section.
 *
 * @param option Indicates the pointer to a water flow section configuration.
@@ -1609,6 +1636,16 @@ void OH_ArkUI_WaterFlowSectionOption_SetColumnGap(ArkUI_WaterFlowSectionOption* 
     int32_t index, float columnGap);
 
 /**
+* @brief Obtains the gap between columns in the water flow section that matches the specified index.
+*
+* @param option Indicates the pointer to a water flow section configuration.
+* @param index Indicates the index of the target water flow section.
+* @return Returns the gap between columns.
+* @since 12
+*/
+float OH_ArkUI_WaterFlowSectionOption_GetColumnGap(ArkUI_WaterFlowSectionOption* option, int32_t index);
+
+/**
 * @brief Sets the gap between rows in the specified water flow section.
 *
 * @param option Indicates the pointer to a water flow section configuration.
@@ -1618,6 +1655,16 @@ void OH_ArkUI_WaterFlowSectionOption_SetColumnGap(ArkUI_WaterFlowSectionOption* 
 */
 void OH_ArkUI_WaterFlowSectionOption_SetRowGap(ArkUI_WaterFlowSectionOption* option,
     int32_t index, float rowGap);
+
+/**
+* @brief Obtains the gap between rows in the water flow section that matches the specified index.
+*
+* @param option Indicates the pointer to a water flow section configuration.
+* @param index Indicates the index of the target water flow section.
+* @return Returns the gap between rows.
+* @since 12
+*/
+float OH_ArkUI_WaterFlowSectionOption_GetRowGap(ArkUI_WaterFlowSectionOption* option, int32_t index);
 
 /**
 * @brief Sets the margins for the specified water flow section.
@@ -1632,6 +1679,16 @@ void OH_ArkUI_WaterFlowSectionOption_SetRowGap(ArkUI_WaterFlowSectionOption* opt
 */
 void OH_ArkUI_WaterFlowSectionOption_SetMargin(ArkUI_WaterFlowSectionOption* option, int32_t index,
     float marginTop, float marginRight, float marginBottom, float marginLeft);
+
+/**
+* @brief Obtains the margins of the water flow section that matches the specified index.
+*
+* @param option Indicates the pointer to a water flow section configuration.
+* @param index Indicates the index of the target water flow section.
+* @return Returns the margins.
+* @since 12
+*/
+ArkUI_Margin OH_ArkUI_WaterFlowSectionOption_GetMargin(ArkUI_WaterFlowSectionOption* option, int32_t index);
 #ifdef __cplusplus
 };
 #endif
