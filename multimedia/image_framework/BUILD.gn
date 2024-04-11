@@ -74,7 +74,7 @@ ohos_ndk_headers("image_packer_ndk_header") {
 }
 
 ohos_ndk_library("libohimage") {
-  output_name = "image"
+  output_name = "ohimage"
   output_extension = "so"
   ndk_description_file = "./libohimage.ndk.json"
   min_compact_version = "12"
