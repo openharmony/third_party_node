@@ -41,5 +41,21 @@
     { "name": "ffrt_submit_h_base" },
     { "name": "ffrt_task_handle_destroy" },
     { "name": "ffrt_wait_deps" },
-    { "name": "ffrt_wait" }
+    { "name": "ffrt_wait" },
+    { "name": "ffrt_loop_create" },
+    { "name": "ffrt_loop_destroy" },
+    { "name": "ffrt_loop_run" },
+    { "name": "ffrt_loop_stop" },
+    { "name": "ffrt_loop_epoll_ctl" },
+    { "name": "ffrt_loop_timer_start" },
+    { "name": "ffrt_loop_timer_stop" },
+    { "name": "ffrt_queue_attr_set_max_concurrency" },
+    { "name": "ffrt_queue_atte_get_max_concurrency" },
+    { "name": "ffrt_qet_main_queue" },
+    { "name": "ffrt_get_current_queue" },
+    { "name": "ffrt_task_attr_set_queue_priority" },
+    { "name": "ffrt_task_attr_get_queue_priority" },
+    { "name": "ffrt_this_task_get_qos" },
+    { "name": "ffrt_timer_start" },
+    { "name": "ffrt_timer_stop" }
 ]
