@@ -72,3 +72,36 @@ ohos_ndk_headers("image_packer_ndk_header") {
   dest_dir = "$ndk_headers_out_dir/multimedia/image_framework"
   sources = [ "./include/image_packer_mdk.h" ]
 }
+
+ohos_ndk_library("libohimage") {
+  output_name = "image"
+  output_extension = "so"
+  ndk_description_file = "./libohimage.ndk.json"
+  min_compact_version = "12"
+  system_capability = "SystemCapability.Multimedia.Image.Core"
+  system_capability_headers =
+      [ "multimedia/image_framework/image/image_native.h" ]
+}
+
+ohos_ndk_headers("ohimage_header") {
+  dest_dir = "$ndk_headers_out_dir/multimedia/image_framework/image"
+  sources = [
+    "./include/image/image_common.h",
+    "./include/image/image_native.h",
+  ]
+}
+
+ohos_ndk_library("libimage_receiver") {
+  output_name = "image_receiver"
+  output_extension = "so"
+  ndk_description_file = "./libimage_receiver.ndk.json"
+  min_compact_version = "12"
+  system_capability = "SystemCapability.Multimedia.Image.ImageReceiver"
+  system_capability_headers =
+      [ "multimedia/image_framework/image/image_receiver_native.h" ]
+}
+
+ohos_ndk_headers("image_receiver_header") {
+  dest_dir = "$ndk_headers_out_dir/multimedia/image_framework/image"
+  sources = [ "./include/image/image_receiver_native.h" ]
+}

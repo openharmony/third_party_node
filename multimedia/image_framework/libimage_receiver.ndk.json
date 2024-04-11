@@ -1,0 +1,62 @@
+[
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageReceiverOptions_Create"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageReceiverOptions_GetSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageReceiverOptions_SetSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageReceiverOptions_GetCapacity"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageReceiverOptions_SetCapacity"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageReceiverOptions_Release"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageReceiverNative_Create"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageReceiverNative_GetReceivingSurfaceId"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageReceiverNative_ReadLatestImage"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageReceiverNative_ReadNextImage"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageReceiverNative_On"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageReceiverNative_Off"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageReceiverNative_GetSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageReceiverNative_GetCapacity"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageReceiverNative_Release"
+    }
+]
