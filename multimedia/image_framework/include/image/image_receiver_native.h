@@ -249,8 +249,6 @@ Image_ErrorCode OH_ImageReceiverNative_GetCapacity(OH_ImageReceiverNative* recei
 /**
  * @brief Releases an {@link OH_ImageReceiverNative} object.
  *
- * This API is not used to release an <b>OH_ImageReceiverNative</b> object at the application layer.
- *
  * @param receiver Indicates the pointer to an {@link OH_ImageReceiverNative} object.
  * @return Returns {@link Image_ErrorCode} IMAGE_SUCCESS - if the operation is successful.
  * returns {@link Image_ErrorCode} IMAGE_BAD_PARAMETER - if bad parameter.
