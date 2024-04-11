@@ -5033,6 +5033,34 @@ typedef struct {
      */
     int32_t (*removeNodeCustomEventReceiver)(ArkUI_NodeHandle node,
         void (*eventReceiver)(ArkUI_NodeCustomEvent* event));
+
+    /**
+     * @brief Saves custom data on the specified component.
+     *
+     * @param node Indicates the component on which the custom data will be saved.
+     * @param userData Indicates the custom data to be saved.
+     * @return Returns 0 if success.
+     * Returns 401 if a parameter exception occurs.
+     */
+    int32_t (*setUserData)(ArkUI_NodeHandle node, void* userData);
+
+    /**
+     * @brief Obtains the custom data saved on the specified component.
+     *
+     * @param node Indicates the target component.
+     * @return Returns the custom data.
+     */
+    void* (*getUserData)(ArkUI_NodeHandle node);
+
+    /**
+     * @brief Sets the unit for a component.
+     *
+     * @param node Indicates the component for which you want to set the unit.
+     * @param unit Indicates the unit, which is an enumerated value of {@link ArkUI_LengthMetricUnit}.
+     * The default value is <b>ARKUI_LENGTH_METRIC_UNIT_DEFAULT</b>.
+     * @return Returns <b>0</b> if the operation is successful; returns <b>401</b> if a parameter error occurs.
+     */
+    int32_t (*setLengthMetricUnit)(ArkUI_NodeHandle node, ArkUI_LengthMetricUnit unit);
 } ArkUI_NativeNodeAPI_1;
 
 
