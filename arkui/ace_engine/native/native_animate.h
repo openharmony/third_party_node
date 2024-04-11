@@ -138,7 +138,7 @@ ArkUI_AnimationCurve OH_ArkUI_AnimateOption_GetCurve(ArkUI_AnimateOption* option
 * @return Returns the animation delay.
 * @since 12
 */
-uint32_t OH_ArkUI_AnimateOption_GetDelay(ArkUI_AnimateOption* option);
+int32_t OH_ArkUI_AnimateOption_GetDelay(ArkUI_AnimateOption* option);
 
 /**
 * @brief Obtains the number of times that an animation is played.
@@ -147,7 +147,7 @@ uint32_t OH_ArkUI_AnimateOption_GetDelay(ArkUI_AnimateOption* option);
 * @return Returns the number of times that the animation is played.
 * @since 12
 */
-uint32_t OH_ArkUI_AnimateOption_GetIterations(ArkUI_AnimateOption* option);
+int32_t OH_ArkUI_AnimateOption_GetIterations(ArkUI_AnimateOption* option);
 
 /**
 * @brief Obtains the animation playback mode.
@@ -174,7 +174,7 @@ ArkUI_ExpectedFrameRateRange* OH_ArkUI_AnimateOption_GetExpectedFrameRateRange(A
 * @param value Indicates the duration, in milliseconds.
 * @since 12
 */
-void OH_ArkUI_AnimateOption_SetDuration(ArkUI_AnimateOption* option, uint32_t value);
+void OH_ArkUI_AnimateOption_SetDuration(ArkUI_AnimateOption* option, int32_t value);
 
 /**
 * @brief Sets the animation playback speed.
@@ -201,7 +201,7 @@ void OH_ArkUI_AnimateOption_SetCurve(ArkUI_AnimateOption* option, ArkUI_Animatio
 * @param value Indicates the animation delay.
 * @since 12
 */
-void OH_ArkUI_AnimateOption_SetDelay(ArkUI_AnimateOption* option, uint32_t value);
+void OH_ArkUI_AnimateOption_SetDelay(ArkUI_AnimateOption* option, int32_t value);
 
 /**
 * @brief Sets the number of times that an animation is played.
@@ -210,7 +210,7 @@ void OH_ArkUI_AnimateOption_SetDelay(ArkUI_AnimateOption* option, uint32_t value
 * @param value Indicates the number of times that the animation is played.
 * @since 12
 */
-void OH_ArkUI_AnimateOption_SetIterations(ArkUI_AnimateOption* option, uint32_t value);
+void OH_ArkUI_AnimateOption_SetIterations(ArkUI_AnimateOption* option, int32_t value);
 
 /**
 * @brief Sets the animation playback mode.
