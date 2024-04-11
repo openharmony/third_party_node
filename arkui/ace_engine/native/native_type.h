@@ -92,17 +92,31 @@ typedef struct ArkUI_NativeDialog* ArkUI_NativeDialogHandle;
 typedef struct ArkUI_WaterFlowSectionOption ArkUI_WaterFlowSectionOption;
 
 /**
- * @brief 事件回调类型。
+  * @brief Defines the ArkUI native context object. 
+  *
+  * @since 12
+  */
+
+struct ArkUI_Context;
+
+/**
+  * @brief Defines the pointer to the context instance object pointer definition of ArkUI on the native side.
+  *
+  * @since 12
+  */
+typedef struct ArkUI_Context* ArkUI_ContextHandle;
+
+/**
+ * @brief Defines the event callback type.
  *
  * @since 12
  */
 typedef struct {
-    /** 自定义类型。*/
+    /** Custom type. */
     void* userData;
-    /** 事件回调。*/
+     /** Event callback. */
     void(*callback)(void* userData);
 } ArkUI_ContextCallback;
-
 /**
  * @brief Provides the number types of ArkUI in the native code.
  *
@@ -1382,14 +1396,15 @@ typedef struct {
 } ArkUI_IntOffset;
 
 /**
- * @brief 在动画中定义onFinish回调的类型。
+ * @brief Enumerates the animation onFinish callback types.
  *
  * @since 12
  */
 typedef enum {
-    /** 当整个动画结束并立即删除时，将触发回调。 */
+    /** The callback is invoked when the entire animation is removed once it has finished. */
     ARKUI_FINISH_CALLBACK_REMOVED = 0,
-    /** 当动画在逻辑上处于下降状态，但可能仍处于其长尾状态时，将触发回调。*/
+    /** The callback is invoked when the animation logically enters the falling state, though it may still be in its
+      * long tail state. */
     ARKUI_FINISH_CALLBACK_LOGICALLY,
 } ArkUI_FinishCallbackType;
 

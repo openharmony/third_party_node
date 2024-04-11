@@ -25,198 +25,207 @@ extern "C" {
 #endif
 
 /**
-* @brief 设置动画的期望帧率。
+* @brief Defines the expected frame rate range of the animation.
 *
 * @since 12
 */
 typedef struct {
-    /** 期望的最小帧率。*/
+    /** Expected minimum frame rate. */
     uint32_t min;
-    /** 期望的最大帧率。*/
+    /** Expected maximum frame rate. */
     uint32_t max;
-    /** 期望的最优帧率。*/
+    /** Expected optimal frame rate. */
     uint32_t expected;
 } ArkUI_ExpectedFrameRateRange;
 
 /**
-* @brief 动画播放完成回调类型。
+* @brief Defines the callback type for when the animation playback is complete.
 *
 * @since 12
 */
 typedef struct {
-    /** 在动画中定义onFinish回调的类型。*/
+    /** Type of the <b>onFinish</b> callback. */
     ArkUI_FinishCallbackType type;
-    /** 动画播放完成回调。*/
+    /** Callback invoked when the animation playback is complete. */
     void (*callback)(void* userData);
-    /** 自定义类型。*/
+    /** Custom type. */
     void* userData;
 } ArkUI_AnimateCompleteCallback;
 
 /**
-* @brief 设置动画效果相关参数。
+* @brief Defines the animation configuration.
 *
 * @since 12
 */
 typedef struct ArkUI_AnimateOption ArkUI_AnimateOption;
 
 /**
- * @brief ArkUI提供的Native侧动画接口集合。
+ * @brief Implements the native animation APIs provided by ArkUI.
  *
  * @version 1
  * @since 12
  */
 typedef struct {
     /**
-    * @brief 显式动画接口
+    * @brief Defines an explicit animation.
     *
-    * @note event闭包中要设置的组件属性，必须在其之前设置过。
+    * @note Make sure the component attributes to be set in the event closure have been set before.
     *
-    * @param option 设置动画效果相关参数。
-    * @param update 指定动效的闭包函数，在闭包函数中导致的状态变化系统会自动插入过渡动画。
-    * @param complete 设置动画播放完成回调参数。
-    * @return 返回错误码，0 - 成功， 401 - 参数错误。
+    * @param context UIContext。
+    * @param option Indicates the pointer to an animation configuration.
+    * @param update Indicates the animation closure. The system automatically inserts a transition animation
+    * for the state change caused by the closure.
+    * @param complete Indicates the callback to be invoked when the animation playback is complete.
+    * @return Returns <b>0</b> if the operation is successful; returns <b>401</b> if a parameter error occurs.
     */
-    int32_t (*animateTo)(
-        ArkUI_AnimateOption* option, ArkUI_ContextCallback* update, ArkUI_AnimateCompleteCallback* complete);
+    int32_t (*animateTo)(ArkUI_ContextHandle context, ArkUI_AnimateOption* option, ArkUI_ContextCallback* update,
+        ArkUI_AnimateCompleteCallback* complete);
 } ArkUI_NativeAnimateAPI_1;
 
 /**
-* @brief 创建动画效果参数。
+* @brief Defines the animation configuration.
 *
-* @return 新的动画效果参数指针。
+* @since 12
+*/
+typedef struct ArkUI_AnimateOption ArkUI_AnimateOption;
+
+/**
+* @brief Creates an animation configuration.
+*
+* @return Returns the pointer to the created animation configuration.
 * @since 12
 */
 ArkUI_AnimateOption* OH_ArkUI_AnimateOption_Create();
 
 /**
-* @brief 销毁动画效果参数指针。
+* @brief Destroys an animation configuration.
 *
 * @since 12
 */
 void OH_ArkUI_AnimateOption_Dispose(ArkUI_AnimateOption* option);
 
 /**
-* @brief 获取动画持续时间，单位为ms(毫秒)。
+* @brief Obtains the animation duration, in milliseconds.
 *
-* @param option 动画效果参数。
-* @return 持续时间。
+* @param option Indicates the pointer to an animation configuration.
+* @return Returns the duration.
 * @since 12
 */
 uint32_t OH_ArkUI_AnimateOption_GetDuration(ArkUI_AnimateOption* option);
 
 /**
-* @brief 获取动画播放速度。
+* @brief Obtains the animation playback speed.
 *
-* @param option 动画效果参数。
-* @return 动画播放速度。
+* @param option Indicates the pointer to an animation configuration.
+* @return Returns the animation playback speed.
 * @since 12
 */
 float OH_ArkUI_AnimateOption_GetTempo(ArkUI_AnimateOption* option);
 
 /**
-* @brief 获取动画曲线。
+* @brief Obtains the animation curve.
 *
-* @param option 动画效果参数。
-* @return 动画曲线。
+* @param option Indicates the pointer to an animation configuration.
+* @return Returns the animated curve.
 * @since 12
 */
 ArkUI_AnimationCurve OH_ArkUI_AnimateOption_GetCurve(ArkUI_AnimateOption* option);
 
 /**
-* @brief 获取动画延迟播放时间，单位为ms(毫秒)。
+* @brief Obtains the animation delay, in milliseconds.
 *
-* @param option 动画效果参数。
-* @return 动画延迟播放时间。
+* @param option Indicates the pointer to an animation configuration.
+* @return Returns the animation delay.
 * @since 12
 */
-int32_t OH_ArkUI_AnimateOption_GetDelay(ArkUI_AnimateOption* option);
+uint32_t OH_ArkUI_AnimateOption_GetDelay(ArkUI_AnimateOption* option);
 
 /**
-* @brief 获取动画播放次数。
+* @brief Obtains the number of times that an animation is played.
 *
-* @param option 动画效果参数。
-* @return 动画播放次数。
+* @param option Indicates the pointer to an animation configuration.
+* @return Returns the number of times that the animation is played.
 * @since 12
 */
-int32_t OH_ArkUI_AnimateOption_GetIterations(ArkUI_AnimateOption* option);
+uint32_t OH_ArkUI_AnimateOption_GetIterations(ArkUI_AnimateOption* option);
 
 /**
-* @brief 获取动画播放模式。
+* @brief Obtains the animation playback mode.
 *
-* @param option 动画效果参数。
-* @return 动画播放模式。
+* @param option Indicates the pointer to an animation configuration.
+* @return Returns the animation playback mode.
 * @since 12
 */
 ArkUI_AnimationPlayMode OH_ArkUI_AnimateOption_GetPlayMode(ArkUI_AnimateOption* option);
 
 /**
-* @brief 获取动画的期望帧率。
+* @brief Obtains the expected frame rate range of an animation.
 *
-* @param option 动画效果参数。
-* @return 动画的期望帧率。
+* @param option Indicates the pointer to an animation configuration.
+* @return Returns the expected frame rate range.
 * @since 12
 */
 ArkUI_ExpectedFrameRateRange* OH_ArkUI_AnimateOption_GetExpectedFrameRateRange(ArkUI_AnimateOption* option);
 
 /**
-* @brief 设置动画持续时间。
+* @brief Sets the animation duration.
 *
-* @param option 动画效果参数。
-* @param value 持续时间，单位为ms(毫秒)。
+* @param option Indicates the pointer to an animation configuration.
+* @param value Indicates the duration, in milliseconds.
 * @since 12
 */
-void OH_ArkUI_AnimateOption_SetDuration(ArkUI_AnimateOption* option, int32_t value);
+void OH_ArkUI_AnimateOption_SetDuration(ArkUI_AnimateOption* option, uint32_t value);
 
 /**
-* @brief 设置动画播放速度。
+* @brief Sets the animation playback speed.
 *
-* @param option 动画效果参数。
-* @param value 动画播放速度。
+* @param option Indicates the pointer to an animation configuration.
+* @param value Indicates the animation playback speed.
 * @since 12
 */
 void OH_ArkUI_AnimateOption_SetTempo(ArkUI_AnimateOption* option, float value);
 
 /**
-* @brief 设置动画曲线。
+* @brief Sets the animation curve.
 *
-* @param option 动画效果参数。
-* @param value 动画曲线。
+* @param option Indicates the pointer to an animation configuration.
+* @param value Indicates the animated curve.
 * @since 12
 */
 void OH_ArkUI_AnimateOption_SetCurve(ArkUI_AnimateOption* option, ArkUI_AnimationCurve value);
 
 /**
-* @brief 设置动画延迟播放时间。
+* @brief Sets the animation delay.
 *
-* @param option 动画效果参数。
-* @param value 动画延迟播放时间。
+* @param option Indicates the pointer to an animation configuration.
+* @param value Indicates the animation delay.
 * @since 12
 */
-void OH_ArkUI_AnimateOption_SetDelay(ArkUI_AnimateOption* option, int32_t value);
+void OH_ArkUI_AnimateOption_SetDelay(ArkUI_AnimateOption* option, uint32_t value);
 
 /**
-* @brief 设置动画播放次数。
+* @brief Sets the number of times that an animation is played.
 *
-* @param option 动画效果参数。
-* @param value 动画播放次数。
+* @param option Indicates the pointer to an animation configuration.
+* @param value Indicates the number of times that the animation is played.
 * @since 12
 */
-void OH_ArkUI_AnimateOption_SetIterations(ArkUI_AnimateOption* option, int32_t value);
+void OH_ArkUI_AnimateOption_SetIterations(ArkUI_AnimateOption* option, uint32_t value);
 
 /**
-* @brief 设置动画播放模式。
+* @brief Sets the animation playback mode.
 *
-* @param option 动画效果参数。
-* @param value 动画播放模式。
+* @param option Indicates the pointer to an animation configuration.
+* @param value Indicates the animation playback mode.
 * @since 12
 */
 void OH_ArkUI_AnimateOption_SetPlayMode(ArkUI_AnimateOption* option, ArkUI_AnimationPlayMode value);
 
 /**
-* @brief 设置动画的期望帧率。
+* @brief Sets the expected frame rate range of an animation.
 *
-* @param option 动画效果参数。
-* @param value 动画的期望帧率。
+* @param option Indicates the pointer to an animation configuration.
+* @param value Indicates the expected frame rate range.
 * @since 12
 */
 void OH_ArkUI_AnimateOption_SetExpectedFrameRateRange(ArkUI_AnimateOption* option, ArkUI_ExpectedFrameRateRange* value);

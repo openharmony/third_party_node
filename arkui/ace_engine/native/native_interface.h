@@ -54,7 +54,7 @@ typedef enum {
     ARKUI_NATIVE_DIALOG,
     /** API related to gestures. For details, see the struct definition in <arkui/native_gesture.h>. */
     ARKUI_NATIVE_GESTURE,
-    /** 动画相关接口类型。*/
+    /** API related to animations. For details, see the struct definition in <arkui/native_animate.h>.*/
     ARKUI_NATIVE_ANIMATE,
 } ArkUI_NativeAPIVariantKind;
 

@@ -56,6 +56,19 @@ extern "C" {
  */
 int32_t OH_ArkUI_GetNodeHandleFromNapiValue(napi_env env, napi_value frameNode, ArkUI_NodeHandle* handle);
 
+/**
+  * @brief Obtains a <b>UIContext</b> object on the ArkTS side and maps it to an <b>ArkUI_ContextHandle</b> object on the
+  * native side.
+  *
+  * @param env ndicates the NAPI environment pointer.
+  * @param value Indicates the <b>UIContext</b> object created on the ArkTS side.
+  * @param context Indicates the pointer to the <b>ArkUI_ContextHandle</b> object.
+  * @return Returns 0 if success.
+  * Returns 401 if a parameter exception occurs.
+  * @since 12
+  */
+int32_t OH_ArkUI_GetContextFromNapiValue(napi_env env, napi_value value, ArkUI_ContextHandle* context);
+
 #ifdef __cplusplus
 };
 #endif
