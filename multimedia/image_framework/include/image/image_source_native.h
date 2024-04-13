@@ -61,6 +61,26 @@ struct OH_ImageSource_Info;
 typedef struct OH_ImageSource_Info OH_ImageSource_Info;
 
 /**
+ * @brief Enumerates decoding dynamic range..
+ *
+ * @since 12
+ */
+typedef enum {
+    /*
+    * Dynamic range depends on the image.
+    */
+    IMAGE_DYNAMIC_RANGE_AUTO = 0,
+    /*
+    * Standard dynamic range.
+    */
+    IMAGE_DYNAMIC_RANGE_SDR = 1,
+    /*
+    * High dynamic range.
+    */
+    IMAGE_DYNAMIC_RANGE_HDR = 2,
+} IMAGE_DYNAMIC_RANGE;
+
+/**
  * @brief Create a pointer for OH_ImageSource_Info struct.
  *
  * @param info The OH_ImageSource_Info pointer will be operated.
@@ -88,6 +108,17 @@ Image_ErrorCode OH_ImageSourceInfo_GetWidth(OH_ImageSource_Info *info, uint32_t 
  * @since 12
  */
 Image_ErrorCode OH_ImageSourceInfo_GetHeight(OH_ImageSource_Info *info, uint32_t *height);
+
+/**
+ * @brief Get isHdr for OH_ImageSource_Info struct.
+ *
+ * @param info The OH_ImageSource_Info pointer will be operated. Pointer connot be null.
+ * @param isHdr Whether the image has a high dynamic range.
+ * @return Returns {@link Image_ErrorCode} IMAGE_SUCCESS - The operation is successful.
+ * returns {@link Image_ErrorCode} IMAGE_BAD_PARAMETER - Parameter error.Possible causes:Parameter verification failed.
+ * @since 12
+ */
+Image_ErrorCode OH_ImageSourceInfo_GetDynamicRange(OH_ImageSource_Info *info, bool *isHdr);
 
 /**
  * @brief delete OH_ImageSource_Info pointer.
@@ -221,6 +252,30 @@ Image_ErrorCode OH_DecodingOptions_GetDesiredRegion(OH_DecodingOptions *options,
  */
 Image_ErrorCode OH_DecodingOptions_SetDesiredRegion(OH_DecodingOptions *options,
     Image_Region *desiredRegion);
+
+/**
+ * @brief Set desiredDynamicRange number for OH_DecodingOptions struct.
+ *
+ * @param options The OH_DecodingOptions pointer will be operated. Pointer connot be null.
+ * @param desiredDynamicRange the number of desired dynamic range {@link IMAGE_DYNAMIC_RANGE}. Pointer connot be null.
+ * @return Returns {@link Image_ErrorCode} IMAGE_SUCCESS - The operation is successful.
+ * returns {@link Image_ErrorCode} IMAGE_BAD_PARAMETER - Parameter error.Possible causes:Parameter verification failed.
+ * @since 12
+ */
+Image_ErrorCode OH_DecodingOptions_GetDesiredDynamicRange(OH_DecodingOptions *options,
+    int32_t *desiredDynamicRange);
+
+/**
+ * @brief Set desiredDynamicRange number for OH_DecodingOptions struct.
+ *
+ * @param options The OH_DecodingOptions pointer will be operated. Pointer connot be null.
+ * @param desiredDynamicRange the number of desired dynamic range {@link IMAGE_DYNAMIC_RANGE}.
+ * @return Returns {@link Image_ErrorCode} IMAGE_SUCCESS - The operation is successful.
+ * returns {@link Image_ErrorCode} IMAGE_BAD_PARAMETER - Parameter error.Possible causes:Parameter verification failed.
+ * @since 12
+ */
+Image_ErrorCode OH_DecodingOptions_SetDesiredDynamicRange(OH_DecodingOptions *options,
+    int32_t desiredDynamicRange);
 
 /**
  * @brief delete OH_DecodingOptions pointer.

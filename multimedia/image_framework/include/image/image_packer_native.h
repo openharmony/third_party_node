@@ -59,6 +59,22 @@ struct OH_PackingOptions;
 typedef struct OH_PackingOptions OH_PackingOptions;
 
 /**
+ * @brief Enumerates packing dynamic range.
+ *
+ * @since 12
+ */
+typedef enum {
+    /*
+    * Packing according to the content of the image.
+    */
+    IMAGE_PACKER_DYNAMIC_RANGE_AUTO = 0,
+    /*
+    * Packing to standard dynamic range.
+    */
+    IMAGE_PACKER_DYNAMIC_RANGE_SDR = 1,
+} IMAGE_PACKER_DYNAMIC_RANGE;
+
+/**
  * @brief Create a pointer for PackingOptions struct.
  *
  * @param options The PackingOptions pointer will be operated.
@@ -111,6 +127,28 @@ Image_ErrorCode OH_PackingOptions_GetQuality(OH_PackingOptions *options,
  */
 Image_ErrorCode OH_PackingOptions_SetQuality(OH_PackingOptions *options,
     uint32_t quality);
+
+/**
+ * @brief Get desiredDynamicRange for PackingOptions struct.
+ *
+ * @param options The PackingOptions pointer will be operated. Pointer connot be null.
+ * @param desiredDynamicRange The number of dynamic range {@link IMAGE_PACKER_DYNAMIC_RANGE}. Pointer connot be null.
+ * @return Returns {@link Image_ErrorCode} IMAGE_SUCCESS - The operation is successful.
+ * returns {@link Image_ErrorCode} IMAGE_BAD_PARAMETER - Parameter error.Possible causes:Parameter verification failed.
+ * @since 12
+ */
+Image_ErrorCode OH_PackingOptions_GetDesiredDynamicRange(OH_PackingOptions *options, int32_t* desiredDynamicRange);
+
+/**
+ * @brief Set desiredDynamicRange number for PackingOptions struct.
+ *
+ * @param options The PackingOptions pointer will be operated. Pointer connot be null.
+ * @param desiredDynamicRange The number of dynamic range {@link IMAGE_PACKER_DYNAMIC_RANGE}.
+ * @return Returns {@link Image_ErrorCode} IMAGE_SUCCESS - The operation is successful.
+ * returns {@link Image_ErrorCode} IMAGE_BAD_PARAMETER - Parameter error.Possible causes:Parameter verification failed.
+ * @since 12
+ */
+Image_ErrorCode OH_PackingOptions_SetDesiredDynamicRange(OH_PackingOptions *options, int32_t desiredDynamicRange);
 
 /**
  * @brief delete OH_PackingOptions pointer.
