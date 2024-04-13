@@ -92,11 +92,10 @@ typedef struct ArkUI_NativeDialog* ArkUI_NativeDialogHandle;
 typedef struct ArkUI_WaterFlowSectionOption ArkUI_WaterFlowSectionOption;
 
 /**
-  * @brief Defines the ArkUI native context object. 
+  * @brief Defines the ArkUI native context object.
   *
   * @since 12
   */
-
 struct ArkUI_Context;
 
 /**
