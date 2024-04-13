@@ -114,8 +114,8 @@ typedef struct ArkUI_Context* ArkUI_ContextHandle;
 typedef struct {
     /** Custom type. */
     void* userData;
-     /** Event callback. */
-    void(*callback)(void* userData);
+    /** Event callback. */
+    void (*callback)(void* userData);
 } ArkUI_ContextCallback;
 /**
  * @brief Provides the number types of ArkUI in the native code.
