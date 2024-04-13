@@ -242,5 +242,9 @@
     {
         "first_introduced": "12",
         "name": "OH_AudioStreamBuilder_SetWriteDataWithMetadataCallback"
+    },
+    {
+        "first_introduced":"12",
+        "name": "OH_AudioStreamBuilder_SetRendererInterruptMode"
     }
 ]

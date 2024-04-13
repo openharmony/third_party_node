@@ -447,6 +447,22 @@ typedef enum {
 } OH_AudioStream_AudioEffectMode;
 
 /**
+ * Defines the audio interrupt mode.
+ *
+ * @since 12
+ */
+typedef enum {
+    /**
+     * Share mode
+     */
+    AUDIOSTREAM_INTERRUPT_MODE_SHARE = 0,
+    /**
+     * Independent mode
+     */
+    AUDIOSTREAM_INTERRUPT_MODE_INDEPENDENT = 1
+} OH_AudioInterrupt_Mode;
+
+/**
  * Declaring the audio stream builder.
  * The instance of builder is used for creating audio stream.
  *
