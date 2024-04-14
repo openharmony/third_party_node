@@ -212,6 +212,121 @@ typedef struct _IO_cookie_io_functions_t {
 #define off64_t off_t
 #endif
 
+/**
+ * @brief Enumerates fd owner type.
+ *
+ * @since 12
+ */
+enum fdsan_owner_type {
+    /* Default type value */
+    FDSAN_OWNER_TYPE_DEFAULT = 0,
+    /* Max value */
+    FDSAN_OWNER_TYPE_MAX = 255,
+    /* File */
+    FDSAN_OWNER_TYPE_FILE = 1,
+    /* Directory */
+    FDSAN_OWNER_TYPE_DIRECTORY = 2,
+    /* Unique fd */
+    FDSAN_OWNER_TYPE_UNIQUE_FD = 3,
+    /* Zip archive */
+    FDSAN_OWNER_TYPE_ZIP_ARCHIVE = 4,
+};
+
+/**
+ * @brief Create an owner tag using specified fdsan_owner_type and at least 56 bits tag value.
+ *
+ * @param type: Indicate the specified fdsan_owner_type.
+ * @param tag: Indicate the specified tag value, at least 56 bits, usually specified as sturct address such as FILE*.
+ * @return Return the created tag, which can be used to exchange.
+ * @since 12
+ */
+uint64_t fdsan_create_owner_tag(enum fdsan_owner_type type, uint64_t tag);
+
+/**
+ * @brief Exchange owner tag for specified fd.
+ *
+ * This method will check if param expected_tag is euqal to current owner tag, fdsan error will occur if not.
+ *
+ * @param fd: Specified fd.
+ * @param expected_tag: Used to check if equal to current owner tag.
+ * @param new_tag: Used to exchange the specified fd owner tag.
+ * @since 12
+ */
+void fdsan_exchange_owner_tag(int fd, uint64_t expected_tag, uint64_t new_tag);
+
+/**
+ * @brief Check fd owner tag and close fd.
+ *
+ * This method will check if param tag is euqal to current owner tag, fdsan error will occur if not,
+ * then call syscall to close fd.
+ *
+ * @param fd: Specified fd.
+ * @param tag: Used to check if equal to current owner tag.
+ * @return Return close result, 0 success and -1 if fail.
+ * @since 12
+ */
+int fdsan_close_with_tag(int fd, uint64_t tag);
+
+/**
+ * @brief Get specified fd's owner tag.
+ *
+ * @param fd: Specified fd.
+ * @return Return tag value of specified fd, return 0 if fd is not in fd table.
+ * @since 12
+ */
+uint64_t fdsan_get_owner_tag(int fd);
+
+/**
+ * @brief Get owner fd type
+ *
+ * @param tag: Specified tag, which usually comes from {@link fdsan_get_owner_tag}
+ * @return Return type value of tag, possible value: FILE*, DIR*, unique_fd, ZipArchive, unknown type and so on.
+ * @since 12
+ */
+const char* fdsan_get_tag_type(uint64_t tag);
+
+/**
+ * @brief Get owner fd tag value.
+ *
+ * @param tag: Specified tag, which usually comes from {@link fdsan_get_owner_tag}
+ * @return Return value of tag, last 56 bits are valid.
+ * @since 12
+ */
+uint64_t fdsan_get_tag_value(uint64_t tag);
+
+/**
+ * @brief Enumerates fdsan error level.
+ *
+ * @since 12
+ */
+enum fdsan_error_level {
+    /* Do nothing if fdsan error occurs. */
+    FDSAN_ERROR_LEVEL_DISABLED,
+    /* Warning once if fdsan error occurs, and then downgrade to FDSAN_ERROR_LEVEL_DISABLED. */
+    FDSAN_ERROR_LEVEL_WARN_ONCE,
+    /* Keep warning only if fdsan error occurs. */
+    FDSAN_ERROR_LEVEL_WARN_ALWAYS,
+    /* Abort on fdsan error. */
+    FDSAN_ERROR_LEVEL_FATAL,
+};
+
+/**
+ * @brief Get fdsan error level.
+ *
+ * @return Return fdsan error level enumerate value.
+ * @since 12
+ */
+enum fdsan_error_level fdsan_get_error_level();
+
+/**
+ * @brief Set fdsan error level.
+ *
+ * @param new_level: Used to set fdsan error level.
+ * @return Return old fdsan error level enumerate value.
+ * @since 12
+ */
+enum fdsan_error_level fdsan_set_error_level(enum fdsan_error_level new_level);
+
 #include <fortify/stdio.h>
 
 #ifdef __cplusplus
