@@ -2237,6 +2237,11 @@ JSVM_EXTERN JSVM_Status OH_JSVM_DefineClassWithPropertyHandler(JSVM_Env env,
                                                                JSVM_PropertyHandlerCfg propertyHandlerCfg,
                                                                JSVM_Callback callAsFunctionCallback,
                                                                JSVM_Value* result);
+
+JSVM_EXTERN JSVM_Status OH_JSVM_PumpMessageLoop(JSVM_VM vm,
+                                                bool* result);
+
+JSVM_EXTERN JSVM_Status OH_JSVM_PerformMicrotaskCheckpoint(JSVM_VM vm);
 EXTERN_C_END
 
 /** @} */
