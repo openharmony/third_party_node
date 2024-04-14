@@ -1644,7 +1644,7 @@ JSVM_EXTERN JSVM_Status JSVM_CDECL OH_JSVM_WaitForDebugger(JSVM_Env env, bool br
   return GET_RETURN_STATUS(env);
 }
 
-JSVM_EXTERN JSVM_Status JSVM_CDECL OH_JSVM_PumpMessageLoop(JSVM_VM vm, bool *result) {
+JSVM_EXTERN JSVM_Status JSVM_CDECL OH_JSVM_PumpMessageLoop(JSVM_VM vm, bool* result) {
   auto isolate = reinterpret_cast<v8::Isolate*>(vm);
   *result = v8::platform::PumpMessageLoop(v8impl::g_platform.get(), isolate);
   return JSVM_OK;
