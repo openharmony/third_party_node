@@ -34,8 +34,8 @@ ohos_ndk_library("libpixelmap") {
   min_compact_version = "12"
   system_capability = "SystemCapability.Multimedia.Image.Core"
   system_capability_headers = [
-    "multimedia/image_framework/pixelmap_native.h",
-    "multimedia/image_framework/image_common.h",
+    "multimedia/image_framework/image/pixelmap_native.h",
+    "multimedia/image_framework/image/image_common.h",
   ]
 }
 
@@ -90,8 +90,8 @@ ohos_ndk_library("libimage_source") {
   min_compact_version = "12"
   system_capability = "SystemCapability.Multimedia.Image.ImageSource"
   system_capability_headers = [
-    "multimedia/image_framework/image_source_native.h",
-    "multimedia/image_framework/image_common.h",
+    "multimedia/image_framework/image/image_source_native.h",
+    "multimedia/image_framework/image/image_common.h",
   ]
 }
 
@@ -150,8 +150,8 @@ ohos_ndk_library("libimage_packer") {
   min_compact_version = "12"
   system_capability = "SystemCapability.Multimedia.Image.ImagePacker"
   system_capability_headers = [
-    "multimedia/image_framework/image_packer_native.h",
-    "multimedia/image_framework/image_common.h",
+    "multimedia/image_framework/image/image_packer_native.h",
+    "multimedia/image_framework/image/image_common.h",
   ]
 }
 
