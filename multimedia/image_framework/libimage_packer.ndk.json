@@ -1,0 +1,50 @@
+[
+    {
+        "first_introduced": "12",
+        "name": "OH_PackingOptions_Create"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PackingOptions_GetMimeType"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PackingOptions_SetMimeType"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PackingOptions_GetQuality"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PackingOptions_SetQuality"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PackingOptions_Release"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImagePackerNative_Create"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImagePackerNative_PackToDataFromImageSource"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImagePackerNative_PackToDataFromPixelmap"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImagePackerNative_PackToFileFromImageSource"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImagePackerNative_PackToFileFromPixelmap"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImagePackerNative_Release"
+    }
+]

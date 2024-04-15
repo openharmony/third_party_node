@@ -252,6 +252,17 @@ OH_AudioStream_Result OH_AudioStreamBuilder_SetFrameSizeInCallback(OH_AudioStrea
 OH_AudioStream_Result OH_AudioStreamBuilder_SetWriteDataWithMetadataCallback(OH_AudioStreamBuilder* builder,
     OH_AudioRenderer_WriteDataWithMetadataCallback callback, void* userData);
 
+/**
+ * @brief Set the interrupt mode of the stream client
+ *
+ * @param builder Reference provided by OH_AudioStreamBuilder_Create()
+ * @param mode The audio interrupt mode
+ * @return {@link #AUDIOSTREAM_SUCCESS} or an undesired error.
+ * @since 12
+ */
+OH_AudioStream_Result OH_AudioStreamBuilder_SetRendererInterruptMode(OH_AudioStreamBuilder* builder,
+    OH_AudioInterrupt_Mode mode);
+
 #ifdef __cplusplus
 }
 #endif
