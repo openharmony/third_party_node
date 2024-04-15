@@ -36,7 +36,6 @@
 #ifndef ARKUI_NATIVE_NODE_H
 #define ARKUI_NATIVE_NODE_H
 
-#include "native_event.h"
 #include "native_type.h"
 #include "ui_input_event.h"
 
@@ -3906,6 +3905,14 @@ typedef enum {
      * application screen, in vp. \n
      */
     NODE_ON_CLICK,
+    /**
+     * @brief Defines event interception.
+     *
+     * This event is triggered when the component is touched. \n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_UIInputEvent}. \n
+     */
+    NODE_ON_TOUCH_INTERCEPT,
     /**
      * @brief Defines the image loading success event.
      *
