@@ -92,6 +92,31 @@ typedef struct ArkUI_NativeDialog* ArkUI_NativeDialogHandle;
 typedef struct ArkUI_WaterFlowSectionOption ArkUI_WaterFlowSectionOption;
 
 /**
+ * @brief Defines the ArkUI native context object.
+ *
+ * @since 12
+ */
+struct ArkUI_Context;
+
+/**
+  * @brief Defines the pointer to the context instance object pointer definition of ArkUI on the native side.
+  *
+  * @since 12
+  */
+typedef struct ArkUI_Context* ArkUI_ContextHandle;
+
+/**
+ * @brief Defines the event callback type.
+ *
+ * @since 12
+ */
+typedef struct {
+    /** Custom type. */
+    void* userData;
+    /** Event callback. */
+    void (*callback)(void* userData);
+} ArkUI_ContextCallback;
+/**
  * @brief Provides the number types of ArkUI in the native code.
  *
  * @since 12
@@ -1368,6 +1393,19 @@ typedef struct {
     /** Vertical coordinate, in px. */
     int32_t y;
 } ArkUI_IntOffset;
+
+/**
+ * @brief Enumerates the animation onFinish callback types.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** The callback is invoked when the entire animation is removed once it has finished. */
+    ARKUI_FINISH_CALLBACK_REMOVED = 0,
+    /** The callback is invoked when the animation logically enters the falling state, though it may still be in its
+      * long tail state. */
+    ARKUI_FINISH_CALLBACK_LOGICALLY,
+} ArkUI_FinishCallbackType;
 
 /**
  * @brief Describes the margins of a component.
