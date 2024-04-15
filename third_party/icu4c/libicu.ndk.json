@@ -1774,5 +1774,45 @@
     {
         "first_introduced": "12",
         "name":"utrans_getSourceSet"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uidna_openUTS46"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uidna_close"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uidna_labelToASCII"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uidna_labelToUnicode"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uidna_nameToASCII"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uidna_nameToUnicode"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uidna_labelToASCII_UTF8"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uidna_labelToUnicodeUTF8"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uidna_nameToASCII_UTF8"
+    },
+    {
+        "first_introduced": "12",
+        "name":"uidna_nameToUnicodeUTF8"
     }
 ]
