@@ -23,6 +23,7 @@ class ToolNameType(enum.Enum):
     COLLECT = 'collect'
     DIFF = 'diff'
     CHECK = 'check'
+    COLLECT_H = 'collect_h'
 
 
 tool_name_type_set = [
@@ -50,6 +51,8 @@ def run_tools(options):
         diff.process_dir(options.diff_path_old, options.diff_path_new)
     elif tool_name == ToolNameType['CHECK'].value:
         check.curr_entry(options.parser_path)
+    elif tool_name == ToolNameType['COLLECT_H'].value:
+        parser.parser_direct(options.parser_path)
     else:
         print("工具名称错误")
 

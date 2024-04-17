@@ -48,6 +48,24 @@ class DiffProcessorPermission:
     }
     variable_list = []  # 命题集合
 
+    @staticmethod
+    def get_bool_in_list(self, number_list, bin_len):
+        state_list = [bin(i) for i in number_list]
+        state_list = [x[2:] for x in state_list]
+        state_list = ['0' * (bin_len - len(x)) + x for x in state_list]
+        state_list = [tuple([bool(eval(y)) for y in x]) for x in state_list]
+        return tuple(state_list)
+
+    @staticmethod
+    def process_value(self, state_value):
+        calculate = CalculateValue()
+        for state in state_value:
+            if state_value[state]:
+                calculate.pass_data.append(state)
+            else:
+                calculate.fail_data.append(state)
+        return calculate
+
     def find_variable_list(self, string):  # return all variable_list in the string.
         for char in self.splitchar:
             string = re.sub(re.compile(self.splitchar[char]['splitchar']), '', string)
@@ -62,14 +80,6 @@ class DiffProcessorPermission:
             string = re.sub(re.compile(self.splitchar[char]['splitchar']), self.splitchar[char]['transferchar'], string)
         return string
 
-    @staticmethod
-    def get_bool_in_list(self, number_list, bin_len):
-        state_list = [bin(i) for i in number_list]
-        state_list = [x[2:] for x in state_list]
-        state_list = ['0' * (bin_len - len(x)) + x for x in state_list]
-        state_list = [tuple([bool(eval(y)) for y in x]) for x in state_list]
-        return tuple(state_list)
-
     def calculate(self, string: str, variable_length: int, state_list):
         state_value = {i: None for i in range(2 ** variable_length)}
         for state_index in range(2 ** variable_length):
@@ -79,16 +89,6 @@ class DiffProcessorPermission:
                     self.variable_list[variable_index], str(state_list[state_index][variable_index]))
             state_value[state_index] = eval(modify_string)
         return state_value
-
-    @staticmethod
-    def process_value(self, state_value):
-        calculate = CalculateValue()
-        for state in state_value:
-            if state_value[state]:
-                calculate.pass_data.append(state)
-            else:
-                calculate.fail_data.append(state)
-        return calculate
 
     def calculate_paradigm(self, string):
         self.variable_list = self.find_variable_list(string)
