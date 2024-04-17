@@ -269,6 +269,10 @@
     },
     {
         "first_introduced": "12",
+        "name": "OH_FEATURE_PROPERTY_KEY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT"
+    },
+    {
+        "first_introduced": "12",
         "name": "OH_MD_KEY_VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY"
     },
     {
@@ -278,6 +282,26 @@
     {
         "first_introduced": "12",
         "name": "OH_MD_KEY_VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_ENCODER_LTR_FRAME_COUNT"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_ENCODER_PER_FRAME_MARK_LTR"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_ENCODER_PER_FRAME_USE_LTR"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_PER_FRAME_IS_LTR"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_PER_FRAME_POC"
     },
     {
         "first_introduced": "12",

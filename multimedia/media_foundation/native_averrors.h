@@ -70,6 +70,14 @@ typedef enum OH_AVErrCode {
      * extend err start.
      */
     AV_ERR_EXTEND_START = 100,
+    /** drm error base.
+     * @since 12
+     */
+    AV_ERR_DRM_BASE = 200,
+    /** drm decypt failed.
+     * @since 12
+     */
+    AV_ERR_DRM_DECRYPT_FAILED = 201,
 } OH_AVErrCode;
 
 #ifdef __cplusplus
