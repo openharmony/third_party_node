@@ -409,7 +409,7 @@ extern const char *OH_MD_KEY_VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE;
 extern const char *OH_MD_KEY_VIDEO_ENCODER_LTR_FRAME_COUNT;
 /**
  * @brief Key for describing mark this frame as a long term reference frame, value type is int32_t (0 or 1): 1 is mark,
- * 0 otherwise. It takes effect only when the count of used long term reference frames is configured. This is an
+ * 0 otherwise. It takes effect only when the number of used long term reference frames is configured. This is an
  * optional key that applies only to video encoder input loop. It takes effect immediately.
  *
  * @syscap SystemCapability.Multimedia.Media.CodecBase
