@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <meta name="nodejs.org:node-version" content="v18.18.2">
-  <title>Stream | Node.js v18.18.2 Documentation</title>
+  <meta name="nodejs.org:node-version" content="v18.20.1">
+  <title>Stream | Node.js v18.20.1 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic&display=fallback">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/hljs.css">
@@ -96,7 +96,7 @@
     <div id="column1" data-id="stream" class="interior">
       <header class="header">
         <div class="header-container">
-          <h1>Node.js v18.18.2 documentation</h1>
+          <h1>Node.js v18.20.1 documentation</h1>
           <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark mode/light mode" aria-label="Toggle dark mode/light mode" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon dark-icon" height="24" width="24">
               <path fill="none" d="M0 0h24v24H0z" />
@@ -111,7 +111,7 @@
         </div>
         <div id="gtoc">
           <ul>
-            <li class="pinned-header">Node.js v18.18.2</li>
+            <li class="pinned-header">Node.js v18.20.1</li>
             
     <li class="picker-header">
       <a href="#">
@@ -414,7 +414,8 @@
         <span class="collapsed-arrow">&#x25ba;</span><span class="expanded-arrow">&#x25bc;</span>
         Other versions
       </a>
-      <div class="picker"><ol id="alt-docs"><li><a href="https://nodejs.org/docs/latest-v20.x/api/stream.html">20.x</a></li>
+      <div class="picker"><ol id="alt-docs"><li><a href="https://nodejs.org/docs/latest-v21.x/api/stream.html">21.x</a></li>
+<li><a href="https://nodejs.org/docs/latest-v20.x/api/stream.html">20.x <b>LTS</b></a></li>
 <li><a href="https://nodejs.org/docs/latest-v19.x/api/stream.html">19.x</a></li>
 <li><a href="https://nodejs.org/docs/latest-v18.x/api/stream.html">18.x <b>LTS</b></a></li>
 <li><a href="https://nodejs.org/docs/latest-v17.x/api/stream.html">17.x</a></li>
@@ -662,10 +663,10 @@
 </ul></details>
 
       <div id="apicontent">
-        <h2>Stream<a class="srclink" href="https://github.com/nodejs/node/blob/8a01b3dcb7d08a48bfd3e6bf85ef49faa1454839/lib/stream.js#L54">[src]</a><span><a class="mark" href="#stream" id="stream">#</a></span><a aria-hidden="true" class="legacy" id="stream_stream"></a></h2>
+        <h2>Stream<a class="srclink" href="https://github.com/nodejs/node/blob/1d526a47af29d59ad196c4e05606b0ec6f8090d9/lib/stream.js#L54">[src]</a><span><a class="mark" href="#stream" id="stream">#</a></span><a aria-hidden="true" class="legacy" id="stream_stream"></a></h2>
 
 <p></p><div class="api_stability api_stability_2"><a href="documentation.html#stability-index">Stability: 2</a> - Stable</div><p></p>
-<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v18.18.2/lib/stream.js">lib/stream.js</a></p>
+<p><strong>Source Code:</strong> <a href="https://github.com/nodejs/node/blob/v18.20.1/lib/stream.js">lib/stream.js</a></p>
 <p>A stream is an abstract interface for working with streaming data in Node.js.
 The <code>node:stream</code> module provides an API for implementing the stream interface.</p>
 <p>There are many stream objects provided by Node.js. For instance, a
@@ -901,7 +902,7 @@ rs.<span class="hljs-title function_">resume</span>(); <span class="hljs-comment
 
 <span class="hljs-title function_">run</span>().<span class="hljs-title function_">catch</span>(<span class="hljs-variable language_">console</span>.<span class="hljs-property">error</span>);
 rs.<span class="hljs-title function_">resume</span>(); <span class="hljs-comment">// Drain the stream.</span></code><button class="copy-button">copy</button></pre>
-<p>The <code>finished</code> API provides <a href="#streamfinishedstream-options-callback">callback version</a>:</p>
+<p>The <code>finished</code> API also provides a <a href="#streamfinishedstream-options-callback">callback version</a>.</p>
 <h4>Object mode<span><a class="mark" href="#object-mode" id="object-mode">#</a></span><a aria-hidden="true" class="legacy" id="stream_object_mode"></a></h4>
 <p>All streams created by Node.js APIs operate exclusively on strings and <code>Buffer</code>
 (or <code>Uint8Array</code>) objects. It is possible, however, for stream implementations
@@ -2322,7 +2323,15 @@ emitted an error during iteration.</p>
 <span class="hljs-title function_">showBoth</span>();</code> <button class="copy-button">copy</button></pre>
 <h6><code>readable.map(fn[, options])</code><span><a class="mark" href="#readablemapfn-options" id="readablemapfn-options">#</a></span><a aria-hidden="true" class="legacy" id="stream_readable_map_fn_options"></a></h6>
 <div class="api_metadata">
-<span>Added in: v17.4.0, v16.14.0</span>
+<details class="changelog"><summary>History</summary>
+<table>
+<tbody><tr><th>Version</th><th>Changes</th></tr>
+<tr><td>v18.19.0</td>
+<td><p>added <code>highWaterMark</code> in options.</p></td></tr>
+<tr><td>v17.4.0, v16.14.0</td>
+<td><p><span>Added in: v17.4.0, v16.14.0</span></p></td></tr>
+</tbody></table>
+</details>
 </div>
 <p></p><div class="api_stability api_stability_1"><a href="documentation.html#stability-index">Stability: 1</a> - Experimental</div><p></p>
 <ul>
@@ -2342,6 +2351,8 @@ abort the <code>fn</code> call early.</li>
 <ul>
 <li><code>concurrency</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;number></a> the maximum concurrent invocation of <code>fn</code> to call
 on the stream at once. <strong>Default:</strong> <code>1</code>.</li>
+<li><code>highWaterMark</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;number></a> how many items to buffer while waiting for user
+consumption of the mapped items. <strong>Default:</strong> <code>concurrency * 2 - 1</code>.</li>
 <li><code>signal</code> <a href="globals.html#class-abortsignal" class="type">&#x3C;AbortSignal></a> allows destroying the stream if the signal is
 aborted.</li>
 </ul>
@@ -2370,7 +2381,15 @@ promise will be <code>await</code>ed before being passed to the result stream.</
 }</code> <button class="copy-button">copy</button></pre>
 <h6><code>readable.filter(fn[, options])</code><span><a class="mark" href="#readablefilterfn-options" id="readablefilterfn-options">#</a></span><a aria-hidden="true" class="legacy" id="stream_readable_filter_fn_options"></a></h6>
 <div class="api_metadata">
-<span>Added in: v17.4.0, v16.14.0</span>
+<details class="changelog"><summary>History</summary>
+<table>
+<tbody><tr><th>Version</th><th>Changes</th></tr>
+<tr><td>v18.19.0</td>
+<td><p>added <code>highWaterMark</code> in options.</p></td></tr>
+<tr><td>v17.4.0, v16.14.0</td>
+<td><p><span>Added in: v17.4.0, v16.14.0</span></p></td></tr>
+</tbody></table>
+</details>
 </div>
 <p></p><div class="api_stability api_stability_1"><a href="documentation.html#stability-index">Stability: 1</a> - Experimental</div><p></p>
 <ul>
@@ -2389,6 +2408,8 @@ abort the <code>fn</code> call early.</li>
 <ul>
 <li><code>concurrency</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;number></a> the maximum concurrent invocation of <code>fn</code> to call
 on the stream at once. <strong>Default:</strong> <code>1</code>.</li>
+<li><code>highWaterMark</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&#x3C;number></a> how many items to buffer while waiting for user
+consumption of the filtered items. <strong>Default:</strong> <code>concurrency * 2 - 1</code>.</li>
 <li><code>signal</code> <a href="globals.html#class-abortsignal" class="type">&#x3C;AbortSignal></a> allows destroying the stream if the signal is
 aborted.</li>
 </ul>

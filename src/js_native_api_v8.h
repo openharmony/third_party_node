@@ -128,6 +128,9 @@ struct JSVM_Env__ {
     CallIntoModule([&](JSVM_Env env) { cb(env, data, hint); });
   }
 
+  // Invoke finalizer from V8 garbage collector.
+  void InvokeFinalizerFromGC(v8impl::RefTracker* finalizer);
+
   // Enqueue the finalizer to the JSVM_Env's own queue of the second pass
   // weak callback.
   // Implementation should drain the queue at the time it is safe to call
@@ -143,6 +146,19 @@ struct JSVM_Env__ {
   }
 
   virtual void DeleteMe();
+
+  void CheckGCAccess() {
+    if (module_api_version == JSVM_VERSION_EXPERIMENTAL && in_gc_finalizer) {
+      v8impl::OnFatalError(
+          nullptr,
+          "Finalizer is calling a function that may affect GC state.\n"
+          "The finalizers are run directly from GC and must not affect GC "
+          "state.\n"
+          "Use `node_api_post_finalizer` from inside of the finalizer to work "
+          "around this issue.\n"
+          "It schedules the call as a new task in the event loop.");
+    }
+  }
 
   v8::Isolate* const isolate;  // Shortcut for context()->GetIsolate()
   v8impl::Persistent<v8::Context> context_persistent;
@@ -162,6 +178,7 @@ struct JSVM_Env__ {
   int refs = 1;
   void* instance_data = nullptr;
   int32_t module_api_version = NODE_API_DEFAULT_MODULE_API_VERSION;
+  bool in_gc_finalizer = false;
 
  private:
   v8impl::Agent* inspector_agent_;
@@ -213,6 +230,12 @@ inline JSVM_Status jsvm_set_last_error(JSVM_Env env,
     if ((env) == nullptr) {                                                    \
       return JSVM_INVALID_ARG;                                                 \
     }                                                                          \
+  } while (0)
+
+#define CHECK_ENV_NOT_IN_GC(env)                                               \
+  do {                                                                         \
+    CHECK_ENV((env));                                                          \
+    (env)->CheckGCAccess();                                                    \
   } while (0)
 
 #define CHECK_ARG(env, arg)                                                    \
@@ -285,14 +308,6 @@ inline JSVM_Status jsvm_set_last_error(JSVM_Env env,
     if (!(condition)) {                                                        \
       OH_JSVM_ThrowRangeError((env), (error), (message));                       \
       return jsvm_set_last_error((env), JSVM_GENERIC_FAILURE);                 \
-    }                                                                          \
-  } while (0)
-
-#define RETURN_STATUS_IF_FALSE_WITH_PREAMBLE(env, condition, status)           \
-  do {                                                                         \
-    if (!(condition)) {                                                        \
-      return jsvm_set_last_error(                                              \
-          (env), try_catch.HasCaught() ? JSVM_PENDING_EXCEPTION : (status));   \
     }                                                                          \
   } while (0)
 
@@ -383,8 +398,28 @@ enum class Ownership {
   kUserland,
 };
 
+// Wrapper around Finalizer that can be tracked.
+class TrackedFinalizer : public Finalizer, public RefTracker {
+ protected:
+  TrackedFinalizer(JSVM_Env env,
+                   JSVM_Finalize finalizeCallback,
+                   void* finalizeData,
+                   void* finalizeHint);
+
+ public:
+  static TrackedFinalizer* New(JSVM_Env env,
+                               JSVM_Finalize finalizeCallback,
+                               void* finalizeData,
+                               void* finalizeHint);
+  ~TrackedFinalizer() override;
+
+ protected:
+  void Finalize() override;
+  void FinalizeCore(bool deleteMe);
+};
+
 // Wrapper around Finalizer that implements reference counting.
-class RefBase : public Finalizer, public RefTracker {
+class RefBase : public TrackedFinalizer {
  protected:
   RefBase(JSVM_Env env,
           uint32_t initialRefcount,
@@ -400,7 +435,6 @@ class RefBase : public Finalizer, public RefTracker {
                       JSVM_Finalize finalizeCallback,
                       void* finalizeData,
                       void* finalizeHint);
-  virtual ~RefBase();
 
   void* Data();
   uint32_t Ref();

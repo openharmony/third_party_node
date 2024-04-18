@@ -444,7 +444,7 @@ Reads data from the file and stores that in the given buffer.
 If the file is not modified concurrently, the end-of-file is reached when the
 number of bytes read is zero.
 
-#### `filehandle.readableWebStream(options)`
+#### `filehandle.readableWebStream([options])`
 
 <!-- YAML
 added: v17.0.0
@@ -991,7 +991,8 @@ changes:
   * `errorOnExist` {boolean} when `force` is `false`, and the destination
     exists, throw an error. **Default:** `false`.
   * `filter` {Function} Function to filter copied files/directories. Return
-    `true` to copy the item, `false` to ignore it. Can also return a `Promise`
+    `true` to copy the item, `false` to ignore it. When ignoring a directory,
+    all of its contents will be skipped as well. Can also return a `Promise`
     that resolves to `true` or `false` **Default:** `undefined`.
     * `src` {string} source path to copy.
     * `dest` {string} destination path to copy to.
@@ -1153,6 +1154,9 @@ makeDirectory().catch(console.error);
 <!-- YAML
 added: v10.0.0
 changes:
+  - version: v18.19.0
+    pr-url: https://github.com/nodejs/node/pull/48828
+    description: The `prefix` parameter now accepts buffers and URL.
   - version:
       - v16.5.0
       - v14.18.0
@@ -1160,7 +1164,7 @@ changes:
     description: The `prefix` parameter now accepts an empty string.
 -->
 
-* `prefix` {string}
+* `prefix` {string|Buffer|URL}
 * `options` {string|Object}
   * `encoding` {string} **Default:** `'utf8'`
 * Returns: {Promise}  Fulfills with a string containing the file system path
@@ -2319,7 +2323,8 @@ changes:
   * `errorOnExist` {boolean} when `force` is `false`, and the destination
     exists, throw an error. **Default:** `false`.
   * `filter` {Function} Function to filter copied files/directories. Return
-    `true` to copy the item, `false` to ignore it. Can also return a `Promise`
+    `true` to copy the item, `false` to ignore it. When ignoring a directory,
+    all of its contents will be skipped as well. Can also return a `Promise`
     that resolves to `true` or `false` **Default:** `undefined`.
     * `src` {string} source path to copy.
     * `dest` {string} destination path to copy to.
@@ -3225,6 +3230,9 @@ See the POSIX mkdir(2) documentation for more details.
 <!-- YAML
 added: v5.10.0
 changes:
+  - version: v18.19.0
+    pr-url: https://github.com/nodejs/node/pull/48828
+    description: The `prefix` parameter now accepts buffers and URL.
   - version: v18.0.0
     pr-url: https://github.com/nodejs/node/pull/41678
     description: Passing an invalid callback to the `callback` argument
@@ -3248,7 +3256,7 @@ changes:
     description: The `callback` parameter is optional now.
 -->
 
-* `prefix` {string}
+* `prefix` {string|Buffer|URL}
 * `options` {string|Object}
   * `encoding` {string} **Default:** `'utf8'`
 * `callback` {Function}
@@ -5184,7 +5192,8 @@ changes:
   * `errorOnExist` {boolean} when `force` is `false`, and the destination
     exists, throw an error. **Default:** `false`.
   * `filter` {Function} Function to filter copied files/directories. Return
-    `true` to copy the item, `false` to ignore it. **Default:** `undefined`
+    `true` to copy the item, `false` to ignore it. When ignoring a directory,
+    all of its contents will be skipped as well. **Default:** `undefined`
     * `src` {string} source path to copy.
     * `dest` {string} destination path to copy to.
     * Returns: {boolean}
@@ -5478,6 +5487,9 @@ See the POSIX mkdir(2) documentation for more details.
 <!-- YAML
 added: v5.10.0
 changes:
+  - version: v18.19.0
+    pr-url: https://github.com/nodejs/node/pull/48828
+    description: The `prefix` parameter now accepts buffers and URL.
   - version:
       - v16.5.0
       - v14.18.0
@@ -5485,7 +5497,7 @@ changes:
     description: The `prefix` parameter now accepts an empty string.
 -->
 
-* `prefix` {string}
+* `prefix` {string|Buffer|URL}
 * `options` {string|Object}
   * `encoding` {string} **Default:** `'utf8'`
 * Returns: {string}
@@ -6425,11 +6437,27 @@ The file name that this {fs.Dirent} object refers to. The type of this
 value is determined by the `options.encoding` passed to [`fs.readdir()`][] or
 [`fs.readdirSync()`][].
 
+#### `dirent.parentPath`
+
+<!-- YAML
+added:
+  - v18.20.0
+-->
+
+> Stability: 1 – Experimental
+
+* {string}
+
+The path to the parent directory of the file this {fs.Dirent} object refers to.
+
 #### `dirent.path`
 
 <!-- YAML
 added: v18.17.0
+deprecated: v18.20.0
 -->
+
+> Stability: 0 - Deprecated: Use [`dirent.parentPath`][] instead.
 
 * {string}
 
@@ -7970,6 +7998,7 @@ the file contents.
 [`Number.MAX_SAFE_INTEGER`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER
 [`ReadDirectoryChangesW`]: https://docs.microsoft.com/en-us/windows/desktop/api/winbase/nf-winbase-readdirectorychangesw
 [`UV_THREADPOOL_SIZE`]: cli.md#uv_threadpool_sizesize
+[`dirent.parentPath`]: #direntparentpath
 [`event ports`]: https://illumos.org/man/port_create
 [`filehandle.createReadStream()`]: #filehandlecreatereadstreamoptions
 [`filehandle.createWriteStream()`]: #filehandlecreatewritestreamoptions
