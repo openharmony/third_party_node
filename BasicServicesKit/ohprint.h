@@ -130,7 +130,7 @@ typedef enum {
  * @since 12
  */
 typedef struct {
-    /** Number of strings. */
+    /** Number of string. */
     uint32_t count;
     /** String pointer array. */
     char **list;
