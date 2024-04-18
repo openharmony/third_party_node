@@ -65,7 +65,7 @@ typedef struct OH_AudioRoutingManager OH_AudioRoutingManager;
  * @param audioDeviceDescriptorArray the {@link OH_AudioDeviceDescriptorArray}
  * pointer variable which will be set the audio device descriptors value.
  * Do not release the audioDeviceDescriptorArray pointer separately
- * instead call {@link OH_AudioRoutingManager_ReleaseDevices} to relase all the DeviceDescriptor array
+ * instead call {@link OH_AudioRoutingManager_ReleaseDevices} to relase the DeviceDescriptor array
  * when it is no use anymore.
  * @since 12
  */
@@ -95,7 +95,7 @@ OH_AudioCommon_Result OH_AudioManager_GetAudioRoutingManager(OH_AudioRoutingMana
  * @param audioDeviceDescriptorArray the {@link OH_AudioDeviceDescriptorArray}
  * pointer variable which will be set the audio device descriptors value
  * Do not release the audioDeviceDescriptorArray pointer separately
- * instead call {@link OH_AudioRoutingManager_ReleaseDevices} to relase all the DeviceDescriptor array
+ * instead call {@link OH_AudioRoutingManager_ReleaseDevices} to relase the DeviceDescriptor array
  * when it is no use anymore.
  * @return {@link #AUDIOCOMMON_RESULT_SUCCESS} or {@link #AUDIOCOMMON_RESULT_ERROR_INVALID_PARAM}
  * or {@link #AUDIOCOMMON_RESULT_ERROR_NO_MEMORY}.
