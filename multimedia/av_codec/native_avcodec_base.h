@@ -362,6 +362,15 @@ extern const char *OH_MD_KEY_AUDIO_OBJECT_NUMBER;
 extern const char *OH_MD_KEY_AUDIO_VIVID_METADATA;
 
 /**
+ * @brief Key for querying the maximum long-term reference count of video encoder, value type is int32_t.
+ * You should query the count through interface {@link OH_AVCapability_GetFeatureProperties}
+ * with enum {@link VIDEO_ENCODER_LONG_TERM_REFERENCE}.
+ *
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 12
+ */
+extern const char *OH_FEATURE_PROPERTY_KEY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT;
+/**
  * @brief Key for enable the temporal scalability mode, value type is int32_t (0 or 1): 1 is enabled, 0 otherwise.
  * The default value is 0. To query supported, you should use the interface {@link OH_AVCapability_IsFeatureSupported}
  * with enum {@link VIDEO_ENCODER_TEMPORAL_SCALABILITY}. This is an optional key that applies only to video encoder.
@@ -388,6 +397,50 @@ extern const char *OH_MD_KEY_VIDEO_ENCODER_TEMPORAL_GOP_SIZE;
  * @since 12
  */
 extern const char *OH_MD_KEY_VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE;
+/**
+ * @brief Key for describing the count of used long-term reference frames, value type is int32_t, must be within the
+ * supported range. To get supported range, you should query wthether the capability is supported through the interface
+ * {@link OH_AVCapability_GetFeatureProperties} with enum {@link VIDEO_ENCODER_LONG_TERM_REFERENCE}, otherwise, not set
+ * the key. This is an optional key that applies only to video encoder. It is used in configure.
+ *
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 12
+ */
+extern const char *OH_MD_KEY_VIDEO_ENCODER_LTR_FRAME_COUNT;
+/**
+ * @brief Key for describing mark this frame as a long term reference frame, value type is int32_t (0 or 1): 1 is mark,
+ * 0 otherwise. It takes effect only when the number of used long term reference frames is configured. This is an
+ * optional key that applies only to video encoder input loop. It takes effect immediately.
+ *
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 12
+ */
+extern const char *OH_MD_KEY_VIDEO_ENCODER_PER_FRAME_MARK_LTR;
+/**
+ * @brief Key for describing the long term reference frame poc referenced by this frame, value type is int32_t. This is
+ * an optional key that applies only to video encoder input loop. It takes effect immediately.
+ *
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 12
+ */
+extern const char *OH_MD_KEY_VIDEO_ENCODER_PER_FRAME_USE_LTR;
+/**
+ * @brief Key for indicating this frame is a long-term reference frame, value type is int32_t (0 or 1): 1 is LTR,
+ * 0 otherwise. This is an optional key that applies only to video encoder output loop.
+ * It indicates the attribute of the frame.
+ *
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 12
+ */
+extern const char *OH_MD_KEY_VIDEO_PER_FRAME_IS_LTR;
+/**
+ * @brief Key for describing the frame poc, value type is int32_t. This is an optional key that applies only to video
+ * encoder output loop. It indicates the attribute of the frame.
+ *
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 12
+ */
+extern const char *OH_MD_KEY_VIDEO_PER_FRAME_POC;
 /**
  * @brief Key for describing the top-coordinate (y) of the crop rectangle, value type is int32_t. This is the top-most
  * row included in the crop frame, where row indices start at 0.
