@@ -22,7 +22,7 @@ StringConstant.INCLUDE_LIB：# 拉到本地仓的三方库路径
 
 options:
   -h, --help            show this help message and exit
-  -N {collect,diff}, --tool-name {collect,diff}
+  -N {collect, check, diff, collect_h}, --tool-name {collect, check, diff, collect_h}
                         工具名称
   -P PARSER_PATH, --parser-path PARSER_PATH
                         解析路径
@@ -38,3 +38,14 @@ options:
 3）在test/testCase/run_main.py添加对应的方法执行测试用例的解析，将结果输出到test/output下，与expect对比期望结果
 
 添加的方法需要以test_开头
+
+## 5.统计工具使用指令
+
+注意：工作路都在interface_sdk_c下(也就是C仓下)
+1）统计工具(C仓-含gn文件)
+在工作路径下执行：py main.py路径(相对工作路径) -N collect -P 目录文件路径
+生成文件名：result_total.xlsx--扫描结果api数据
+
+2）统计工具(直接获取)(这个也可以获取到文件级的kit、子系统和文件当前接口数)
+在工作路径下执行：py main.py路径(相对工作路径) -N collect_h -P 目录文件路径/头文件路径
+生成文件名：file_api_json.json--文件级接口数据；parser_direct_data.xlsx--扫描结果api数据

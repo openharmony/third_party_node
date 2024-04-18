@@ -1,0 +1,646 @@
+{
+  "data": [
+    { "filePath": "ai/neural_network_runtime/neural_network_core.h", "kitName": "NA", "subSystem": "AI业务" },
+    {
+      "filePath": "ai/neural_network_runtime/neural_network_runtime.h",
+      "kitName": "NeuralNetworkRuntimeKit",
+      "subSystem": "AI业务"
+    },
+    {
+      "filePath": "ai/neural_network_runtime/neural_network_runtime_type.h",
+      "kitName": "NeuralNetworkRuntimeKit",
+      "subSystem": "AI业务"
+    },
+    {
+      "filePath": "arkui/ace_engine/native/native_interface_xcomponent.h",
+      "kitName": "ArkUI",
+      "subSystem": "ArkUI开发框架"
+    },
+    {
+      "filePath": "arkui/ace_engine/native/native_xcomponent_key_event.h",
+      "kitName": "ArkUI",
+      "subSystem": "ArkUI开发框架"
+    },
+    { "filePath": "arkui/ace_engine/native/native_dialog.h", "kitName": "NA", "subSystem": "ArkUI开发框架" },
+    { "filePath": "arkui/ace_engine/native/native_event.h", "kitName": "NA", "subSystem": "ArkUI开发框架" },
+    { "filePath": "arkui/ace_engine/native/native_gesture.h", "kitName": "NA", "subSystem": "ArkUI开发框架" },
+    { "filePath": "arkui/ace_engine/native/native_interface.h", "kitName": "ArkUI", "subSystem": "ArkUI开发框架" },
+    { "filePath": "arkui/ace_engine/native/native_node.h", "kitName": "ArkUI", "subSystem": "ArkUI开发框架" },
+    { "filePath": "arkui/ace_engine/native/native_node_napi.h", "kitName": "ArkUI", "subSystem": "ArkUI开发框架" },
+    { "filePath": "arkui/ace_engine/native/native_type.h", "kitName": "ArkUI", "subSystem": "ArkUI开发框架" },
+    { "filePath": "arkui/ace_engine/native/ui_input_event.h", "kitName": "ArkUI", "subSystem": "ArkUI开发框架" },
+    { "filePath": "arkui/napi/common.h", "kitName": "ArkUI", "subSystem": "ArkUI开发框架" },
+    { "filePath": "arkui/napi/native_api.h", "kitName": "ArkUI", "subSystem": "ArkUI开发框架" },
+    { "filePath": "ark_runtime/jsvm/jsvm.h", "kitName": "ArkTS", "subSystem": "方舟编译允许时" },
+    { "filePath": "ark_runtime/jsvm/jsvm_types.h", "kitName": "ArkTS", "subSystem": "方舟编译允许时" },
+    {
+      "filePath": "bundlemanager/bundle_framework/bundle/include/native_interface_bundle.h",
+      "kitName": "AbilityKit",
+      "subSystem": "包管理"
+    },
+    {
+      "filePath": "commonlibrary/memory_utils/libpurgeablemem/purgeable_memory.h",
+      "kitName": "NA",
+      "subSystem": "内核"
+    },
+    {
+      "filePath": "distributeddatamgr/relational_store/include/oh_cursor.h",
+      "kitName": "ArkData",
+      "subSystem": "分布式数据管理"
+    },
+    {
+      "filePath": "distributeddatamgr/relational_store/include/oh_predicates.h",
+      "kitName": "ArkData",
+      "subSystem": "分布式数据管理"
+    },
+    {
+      "filePath": "distributeddatamgr/relational_store/include/oh_value_object.h",
+      "kitName": "ArkData",
+      "subSystem": "分布式数据管理"
+    },
+    {
+      "filePath": "distributeddatamgr/relational_store/include/oh_values_bucket.h",
+      "kitName": "ArkData",
+      "subSystem": "分布式数据管理"
+    },
+    {
+      "filePath": "distributeddatamgr/relational_store/include/relational_store.h",
+      "kitName": "ArkData",
+      "subSystem": "分布式数据管理"
+    },
+    {
+      "filePath": "distributeddatamgr/relational_store/include/relational_store_error_code.h",
+      "kitName": "ArkData",
+      "subSystem": "分布式数据管理"
+    },
+    {
+      "filePath": "distributeddatamgr/relational_store/include/data_asset.h",
+      "kitName": "ArkData",
+      "subSystem": "分布式数据管理"
+    },
+    {
+      "filePath": "drivers/external_device_manager/hid/hid_ddk_api.h",
+      "kitName": "DriverDevelopmentKit",
+      "subSystem": "驱动"
+    },
+    {
+      "filePath": "drivers/external_device_manager/hid/hid_ddk_types.h",
+      "kitName": "DriverDevelopmentKit",
+      "subSystem": "驱动"
+    },
+    {
+      "filePath": "drivers/external_device_manager/usb/usb_ddk_api.h",
+      "kitName": "DriverDevelopmentKit",
+      "subSystem": "驱动"
+    },
+    {
+      "filePath": "drivers/external_device_manager/usb/usb_ddk_types.h",
+      "kitName": "DriverDevelopmentKit",
+      "subSystem": "驱动"
+    },
+    { "filePath": "filemanagement/fileio/include/error_code.h", "kitName": "NA", "subSystem": "文件管理" },
+    { "filePath": "filemanagement/environment/include/oh_environment.h", "kitName": "NA", "subSystem": "文件管理" },
+    { "filePath": "filemanagement/fileio/include/error_code.h", "kitName": "NA", "subSystem": "文件管理" },
+    { "filePath": "filemanagement/fileio/include/oh_fileio.h", "kitName": "NA", "subSystem": "文件管理" },
+    { "filePath": "filemanagement/fileio/include/error_code.h", "kitName": "NA", "subSystem": "文件管理" },
+    { "filePath": "filemanagement/fileshare/include/oh_file_share.h", "kitName": "NA", "subSystem": "文件管理" },
+    { "filePath": "filemanagement/fileio/include/error_code.h", "kitName": "NA", "subSystem": "文件管理" },
+    { "filePath": "filemanagement/file_uri/include/oh_file_uri.h", "kitName": "NA", "subSystem": "文件管理" },
+    { "filePath": "global/resource_management/include/raw_dir.h", "kitName": "NA", "subSystem": "全球化" },
+    { "filePath": "global/resource_management/include/raw_file.h", "kitName": "NA", "subSystem": "全球化" },
+    { "filePath": "global/resource_management/include/raw_file_manager.h", "kitName": "NA", "subSystem": "全球化" },
+    { "filePath": "third_party/egl/EGL/egl.h", "kitName": "NA", "subSystem": "ArkUI开发框架" },
+    { "filePath": "third_party/egl/EGL/eglext.h", "kitName": "NA", "subSystem": "ArkUI开发框架" },
+    { "filePath": "third_party/egl/EGL/eglplatform.h", "kitName": "NA", "subSystem": "ArkUI开发框架" },
+    { "filePath": "third_party/openGLES/GLES2/gl2.h", "kitName": "NA", "subSystem": "ArkUI开发框架" },
+    { "filePath": "third_party/openGLES/GLES2/gl2ext.h", "kitName": "NA", "subSystem": "ArkUI开发框架" },
+    { "filePath": "third_party/openGLES/GLES2/gl2platform.h", "kitName": "NA", "subSystem": "ArkUI开发框架" },
+    { "filePath": "third_party/openGLES/GLES3/gl3.h", "kitName": "NA", "subSystem": "ArkUI开发框架" },
+    { "filePath": "third_party/openGLES/GLES3/gl31.h", "kitName": "NA", "subSystem": "ArkUI开发框架" },
+    { "filePath": "third_party/openGLES/GLES3/gl32.h", "kitName": "NA", "subSystem": "ArkUI开发框架" },
+    { "filePath": "third_party/openGLES/GLES3/gl3platform.h", "kitName": "NA", "subSystem": "ArkUI开发框架" },
+    {
+      "filePath": "graphic/graphic_2d/native_buffer/native_buffer.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_bitmap.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_brush.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_canvas.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_color.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_color_filter.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_color_space.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_filter.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_font.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_font_collection.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_font_mgr.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_gpu_context.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_image.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_mask_filter.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_matrix.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_memory_stream.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_path.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_path_effect.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_pen.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_pixel_map.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_point.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_rect.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_region.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_register_font.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_round_rect.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_sampling_options.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_shader_effect.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_surface.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_text_blob.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_text_declaration.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_text_typography.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_typeface.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    {
+      "filePath": "graphic/graphic_2d/native_drawing/drawing_types.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    { "filePath": "graphic/graphic_2d/native_image/native_image.h", "kitName": "NA", "subSystem": "图形图像" },
+    { "filePath": "graphic/graphic_2d/native_vsync/native_vsync.h", "kitName": "NA", "subSystem": "图形图像" },
+    { "filePath": "graphic/graphic_2d/native_window/buffer_handle.h", "kitName": "NA", "subSystem": "图形图像" },
+    {
+      "filePath": "graphic/graphic_2d/native_window/external_window.h",
+      "kitName": "ArkGraphicsD",
+      "subSystem": "图形图像"
+    },
+    { "filePath": "third_party/vulkan-headers/vulkan/vk_platform.h", "kitName": "NA", "subSystem": "图形图像" },
+    { "filePath": "third_party/vulkan-headers/vulkan/vulkan.h", "kitName": "NA", "subSystem": "图形图像" },
+    { "filePath": "third_party/vulkan-headers/vulkan/vulkan_core.h", "kitName": "NA", "subSystem": "图形图像" },
+    { "filePath": "third_party/vulkan-headers/vulkan/vulkan_ohos.h", "kitName": "NA", "subSystem": "图形图像" },
+    {
+      "filePath": "hiviewdfx/hiappevent/include/hiappevent/hiappevent.h",
+      "kitName": "PerformanceAnalysisKit",
+      "subSystem": "DFX"
+    },
+    {
+      "filePath": "hiviewdfx/hiappevent/include/hiappevent/hiappevent_cfg.h",
+      "kitName": "PerformanceAnalysisKit",
+      "subSystem": "DFX"
+    },
+    {
+      "filePath": "hiviewdfx/hiappevent/include/hiappevent/hiappevent_event.h",
+      "kitName": "PerformanceAnalysisKit",
+      "subSystem": "DFX"
+    },
+    {
+      "filePath": "hiviewdfx/hiappevent/include/hiappevent/hiappevent_param.h",
+      "kitName": "PerformanceAnalysisKit",
+      "subSystem": "DFX"
+    },
+    {
+      "filePath": "hiviewdfx/hidebug/include/hidebug/hidebug.h",
+      "kitName": "PerformanceAnalysisKit",
+      "subSystem": "DFX"
+    },
+    {
+      "filePath": "hiviewdfx/hidebug/include/hidebug/hidebug_type.h",
+      "kitName": "PerformanceAnalysisKit",
+      "subSystem": "DFX"
+    },
+    { "filePath": "hiviewdfx/hilog/include/hilog/log.h", "kitName": "PerformanceAnalysisKit", "subSystem": "DFX" },
+    {
+      "filePath": "hiviewdfx/hitrace/include/hitrace/trace.h",
+      "kitName": "PerformanceAnalysisKit",
+      "subSystem": "DFX"
+    },
+    {
+      "filePath": "multimedia/audio_framework/audio_capturer/native_audiocapturer.h",
+      "kitName": "AudioKit",
+      "subSystem": "OS媒体软件"
+    },
+    {
+      "filePath": "multimedia/audio_framework/audio_renderer/native_audiorenderer.h",
+      "kitName": "AudioKit",
+      "subSystem": "OS媒体软件"
+    },
+    {
+      "filePath": "multimedia/audio_framework/common/native_audiostream_base.h",
+      "kitName": "AudioKit",
+      "subSystem": "OS媒体软件"
+    },
+    {
+      "filePath": "multimedia/audio_framework/common/native_audiostreambuilder.h",
+      "kitName": "AudioKit",
+      "subSystem": "OS媒体软件"
+    },
+    { "filePath": "multimedia/av_codec/native_avcodec_audiocodec.h", "kitName": "AudioKit", "subSystem": "OS媒体软件" },
+    {
+      "filePath": "multimedia/av_codec/native_avcodec_audiodecoder.h",
+      "kitName": "AudioKit",
+      "subSystem": "OS媒体软件"
+    },
+    {
+      "filePath": "multimedia/av_codec/native_avcodec_audioencoder.h",
+      "kitName": "AudioKit",
+      "subSystem": "OS媒体软件"
+    },
+    { "filePath": "multimedia/av_codec/native_avdemuxer.h", "kitName": "AudioKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/av_codec/native_avmuxer.h", "kitName": "AudioKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/av_codec/native_avsource.h", "kitName": "AudioKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/av_codec/avcodec_audio_channel_layout.h", "kitName": "NA", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/av_codec/native_avcapability.h", "kitName": "AudioKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/av_codec/native_avcodec_base.h", "kitName": "AudioKit", "subSystem": "OS媒体软件" },
+    {
+      "filePath": "multimedia/av_codec/native_avcodec_videodecoder.h",
+      "kitName": "AudioKit",
+      "subSystem": "OS媒体软件"
+    },
+    {
+      "filePath": "multimedia/av_codec/native_avcodec_videoencoder.h",
+      "kitName": "AudioKit",
+      "subSystem": "OS媒体软件"
+    },
+    { "filePath": "multimedia/camera_framework/camera.h", "kitName": "CameraKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/camera_framework/camera_input.h", "kitName": "CameraKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/camera_framework/camera_manager.h", "kitName": "CameraKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/camera_framework/capture_session.h", "kitName": "CameraKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/camera_framework/metadata_output.h", "kitName": "CameraKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/camera_framework/photo_output.h", "kitName": "CameraKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/camera_framework/preview_output.h", "kitName": "CameraKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/camera_framework/video_output.h", "kitName": "CameraKit", "subSystem": "OS媒体软件" },
+    {
+      "filePath": "multimedia/drm_framework/common/native_drm_common.h",
+      "kitName": "DRMKit",
+      "subSystem": "OS媒体软件"
+    },
+    { "filePath": "multimedia/drm_framework/common/native_drm_err.h", "kitName": "DRMKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/drm_framework/native_mediakeysession.h", "kitName": "DRMKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/drm_framework/native_mediakeysystem.h", "kitName": "DRMKit", "subSystem": "OS媒体软件" },
+    {
+      "filePath": "multimedia/image_framework/include/image_pixel_map_mdk.h",
+      "kitName": "ImageKit",
+      "subSystem": "OS媒体软件"
+    },
+    {
+      "filePath": "multimedia/image_framework/include/image_pixel_map_napi.h",
+      "kitName": "ImageKit",
+      "subSystem": "OS媒体软件"
+    },
+    { "filePath": "multimedia/image_framework/include/image_mdk.h", "kitName": "ImageKit", "subSystem": "OS媒体软件" },
+    {
+      "filePath": "multimedia/image_framework/include/image_mdk_common.h",
+      "kitName": "ImageKit",
+      "subSystem": "OS媒体软件"
+    },
+    {
+      "filePath": "multimedia/image_framework/include/image_receiver_mdk.h",
+      "kitName": "ImageKit",
+      "subSystem": "OS媒体软件"
+    },
+    {
+      "filePath": "multimedia/image_framework/include/image_source_mdk.h",
+      "kitName": "ImageKit",
+      "subSystem": "OS媒体软件"
+    },
+    {
+      "filePath": "multimedia/image_framework/include/image_packer_mdk.h",
+      "kitName": "ImageKit",
+      "subSystem": "OS媒体软件"
+    },
+    { "filePath": "multimedia/media_foundation/native_avbuffer.h", "kitName": "AVCodecKit", "subSystem": "OS媒体软件" },
+    {
+      "filePath": "multimedia/media_foundation/native_avbuffer_info.h",
+      "kitName": "AVCodecKit",
+      "subSystem": "OS媒体软件"
+    },
+    { "filePath": "multimedia/media_foundation/native_averrors.h", "kitName": "AVCodecKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/media_foundation/native_avformat.h", "kitName": "AVCodecKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/media_foundation/native_avmemory.h", "kitName": "AVCodecKit", "subSystem": "OS媒体软件" },
+    {
+      "filePath": "multimedia/media_foundation/native_audio_channel_layout.h",
+      "kitName": "AVCodecKit",
+      "subSystem": "OS媒体软件"
+    },
+    { "filePath": "multimedia/player_framework/avplayer.h", "kitName": "MediaKit", "subSystem": "OS媒体软件" },
+    { "filePath": "multimedia/player_framework/avplayer_base.h", "kitName": "MediaKit", "subSystem": "OS媒体软件" },
+    {
+      "filePath": "multimedia/player_framework/native_avscreen_capture.h",
+      "kitName": "MediaKit",
+      "subSystem": "OS媒体软件"
+    },
+    {
+      "filePath": "multimedia/player_framework/native_avscreen_capture_base.h",
+      "kitName": "MediaKit",
+      "subSystem": "OS媒体软件"
+    },
+    {
+      "filePath": "multimedia/player_framework/native_avscreen_capture_errors.h",
+      "kitName": "MediaKit",
+      "subSystem": "OS媒体软件"
+    },
+    { "filePath": "multimodalinput/kits/c/input/oh_input_manager.h", "kitName": "InputKit", "subSystem": "多模输入" },
+    { "filePath": "multimodalinput/kits/c/input/oh_key_code.h", "kitName": "InputKit", "subSystem": "多模输入" },
+    { "filePath": "network/netmanager/include/net_connection.h", "kitName": "NA", "subSystem": "网络管理" },
+    { "filePath": "network/netmanager/include/net_connection_type.h", "kitName": "NA", "subSystem": "网络管理" },
+    { "filePath": "network/netssl/include/net_ssl_c.h", "kitName": "NA", "subSystem": "基础通信" },
+    { "filePath": "network/netssl/include/net_ssl_c_type.h", "kitName": "NA", "subSystem": "基础通信" },
+    {
+      "filePath": "network/netstack/net_websocket/net_websocket.h",
+      "kitName": "FunctionFlowRuntimeKit",
+      "subSystem": "资源调度"
+    },
+    {
+      "filePath": "network/netstack/net_websocket/net_websocket_type.h",
+      "kitName": "FunctionFlowRuntimeKit",
+      "subSystem": "资源调度"
+    },
+    {
+      "filePath": "resourceschedule/ffrt/c/condition_variable.h",
+      "kitName": "FunctionFlowRuntimeKit",
+      "subSystem": "资源调度"
+    },
+    { "filePath": "resourceschedule/ffrt/c/mutex.h", "kitName": "FunctionFlowRuntimeKit", "subSystem": "资源调度" },
+    { "filePath": "resourceschedule/ffrt/c/queue.h", "kitName": "FunctionFlowRuntimeKit", "subSystem": "资源调度" },
+    { "filePath": "resourceschedule/ffrt/c/sleep.h", "kitName": "FunctionFlowRuntimeKit", "subSystem": "资源调度" },
+    { "filePath": "resourceschedule/ffrt/c/task.h", "kitName": "FunctionFlowRuntimeKit", "subSystem": "资源调度" },
+    { "filePath": "resourceschedule/ffrt/c/type_def.h", "kitName": "FunctionFlowRuntimeKit", "subSystem": "资源调度" },
+    { "filePath": "resourceschedule/qos_manager/c/qos.h", "kitName": "NA", "subSystem": "内核" },
+    { "filePath": "security/asset/inc/asset_api.h", "kitName": "NA", "subSystem": "安全基础能力" },
+    { "filePath": "security/asset/inc/asset_type.h", "kitName": "NA", "subSystem": "安全基础能力" },
+    {
+      "filePath": "security/huks/include/native_huks_api.h",
+      "kitName": "UniversalKeystoreKit",
+      "subSystem": "安全基础能力"
+    },
+    {
+      "filePath": "security/huks/include/native_huks_param.h",
+      "kitName": "UniversalKeystoreKit",
+      "subSystem": "安全基础能力"
+    },
+    {
+      "filePath": "security/huks/include/native_huks_type.h",
+      "kitName": "UniversalKeystoreKit",
+      "subSystem": "安全基础能力"
+    },
+    { "filePath": "sensors/miscdevice/vibrator/include/vibrator.h", "kitName": "NA", "subSystem": "泛sensor服务" },
+    { "filePath": "sensors/miscdevice/vibrator/include/vibrator_type.h", "kitName": "NA", "subSystem": "泛sensor服务" },
+    { "filePath": "sensors/sensor/oh_sensor.h", "kitName": "NA", "subSystem": "泛sensor服务" },
+    { "filePath": "sensors/sensor/oh_sensor_type.h", "kitName": "NA", "subSystem": "泛sensor服务" },
+    { "filePath": "startup/init/syscap/include/deviceinfo.h", "kitName": "NA", "subSystem": "启动恢复" },
+    { "filePath": "startup/init/syscap/include/syscap_ndk.h", "kitName": "NA", "subSystem": "启动恢复" },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/parseerr.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/platform.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/ptypes.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/stringoptions.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/ubidi.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    { "filePath": "third_party/icu4c/ndk_headers/unicode/ubrk.h", "kitName": "LocalizationKit", "subSystem": "全球化" },
+    { "filePath": "third_party/icu4c/ndk_headers/unicode/ucal.h", "kitName": "LocalizationKit", "subSystem": "全球化" },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/uchar.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    { "filePath": "third_party/icu4c/ndk_headers/unicode/ucnv.h", "kitName": "LocalizationKit", "subSystem": "全球化" },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/ucnv_err.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    { "filePath": "third_party/icu4c/ndk_headers/unicode/ucol.h", "kitName": "LocalizationKit", "subSystem": "全球化" },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/uconfig.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    { "filePath": "third_party/icu4c/ndk_headers/unicode/udat.h", "kitName": "LocalizationKit", "subSystem": "全球化" },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/udisplaycontext.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/uenum.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/ufieldpositer.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    { "filePath": "third_party/icu4c/ndk_headers/unicode/uloc.h", "kitName": "LocalizationKit", "subSystem": "全球化" },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/umachine.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/umisc.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/unorm2.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    { "filePath": "third_party/icu4c/ndk_headers/unicode/unum.h", "kitName": "LocalizationKit", "subSystem": "全球化" },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/unumberformatter.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/uscript.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    { "filePath": "third_party/icu4c/ndk_headers/unicode/uset.h", "kitName": "LocalizationKit", "subSystem": "全球化" },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/utrans.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    {
+      "filePath": "third_party/icu4c/ndk_headers/unicode/utypes.h",
+      "kitName": "LocalizationKit",
+      "subSystem": "全球化"
+    },
+    { "filePath": "third_party/libuv/include/uv_ndk/uv.h", "kitName": "NA", "subSystem": "研发工具链" },
+    { "filePath": "third_party/libuv/include/uv/aix.h", "kitName": "NA", "subSystem": "研发工具链" },
+    { "filePath": "third_party/libuv/include/uv/bsd.h", "kitName": "NA", "subSystem": "研发工具链" },
+    { "filePath": "third_party/libuv/include/uv/darwin.h", "kitName": "NA", "subSystem": "研发工具链" },
+    { "filePath": "third_party/libuv/include/uv/errno.h", "kitName": "NA", "subSystem": "研发工具链" },
+    { "filePath": "third_party/libuv/include/uv/linux.h", "kitName": "NA", "subSystem": "研发工具链" },
+    { "filePath": "third_party/libuv/include/uv/os390.h", "kitName": "NA", "subSystem": "研发工具链" },
+    { "filePath": "third_party/libuv/include/uv/posix.h", "kitName": "NA", "subSystem": "研发工具链" },
+    { "filePath": "third_party/libuv/include/uv/stdint-msvc2008.h", "kitName": "NA", "subSystem": "研发工具链" },
+    { "filePath": "third_party/libuv/include/uv/sunos.h", "kitName": "NA", "subSystem": "研发工具链" },
+    { "filePath": "third_party/libuv/include/uv/threadpool.h", "kitName": "NA", "subSystem": "研发工具链" },
+    { "filePath": "third_party/libuv/include/uv/tree.h", "kitName": "NA", "subSystem": "研发工具链" },
+    { "filePath": "third_party/libuv/include/uv/unix.h", "kitName": "NA", "subSystem": "研发工具链" },
+    { "filePath": "third_party/libuv/include/uv/version.h", "kitName": "NA", "subSystem": "研发工具链" },
+    { "filePath": "third_party/libuv/include/uv/win.h", "kitName": "NA", "subSystem": "研发工具链" },
+    { "filePath": "third_party/mindspore/kits/context.h", "kitName": "MindSporeLiteKit", "subSystem": "AI业务" },
+    { "filePath": "third_party/mindspore/kits/data_type.h", "kitName": "MindSporeLiteKit", "subSystem": "AI业务" },
+    { "filePath": "third_party/mindspore/kits/format.h", "kitName": "MindSporeLiteKit", "subSystem": "AI业务" },
+    { "filePath": "third_party/mindspore/kits/model.h", "kitName": "MindSporeLiteKit", "subSystem": "AI业务" },
+    { "filePath": "third_party/mindspore/kits/status.h", "kitName": "MindSporeLiteKit", "subSystem": "AI业务" },
+    { "filePath": "third_party/mindspore/kits/tensor.h", "kitName": "MindSporeLiteKit", "subSystem": "AI业务" },
+    { "filePath": "third_party/mindspore/kits/types.h", "kitName": "MindSporeLiteKit", "subSystem": "AI业务" },
+    { "filePath": "third_party/openSLES/api/1.0.1/OpenSLES.h", "kitName": "NA", "subSystem": "ArkUI开发框架" },
+    {
+      "filePath": "third_party/openSLES/api/1.0.1/OpenSLES_OpenHarmony.h",
+      "kitName": "NA",
+      "subSystem": "ArkUI开发框架"
+    },
+    { "filePath": "third_party/openSLES/api/1.0.1/OpenSLES_Platform.h", "kitName": "NA", "subSystem": "ArkUI开发框架" },
+    { "filePath": "third_party/zlib/zconf.h", "kitName": "NA", "subSystem": "包管理" },
+    { "filePath": "third_party/zlib/zlib.h", "kitName": "NA", "subSystem": "包管理" },
+    { "filePath": "web/webview/interfaces/native/arkweb_error_code.h", "kitName": "NA", "subSystem": "web" },
+    { "filePath": "web/webview/interfaces/native/arkweb_interface.h", "kitName": "NA", "subSystem": "web" },
+    { "filePath": "web/webview/interfaces/native/arkweb_net_error_list.h", "kitName": "NA", "subSystem": "web" },
+    { "filePath": "web/webview/interfaces/native/arkweb_scheme_handler.h", "kitName": "NA", "subSystem": "web" },
+    { "filePath": "web/webview/interfaces/native/arkweb_type.h", "kitName": "NA", "subSystem": "web" },
+    { "filePath": "web/webview/interfaces/native/native_interface_arkweb.h", "kitName": "NA", "subSystem": "web" }
+  ]
+}
