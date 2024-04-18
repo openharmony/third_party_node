@@ -256,6 +256,23 @@ NAPI_EXTERN napi_status napi_deserialize(napi_env env, void* buffer, napi_value*
 */
 NAPI_EXTERN napi_status napi_delete_serialization_data(napi_env env, void* buffer);
 
+/**
+ * @brief Dispatch a task with specified priority from a native thread to an ArkTS thread, the task will execute
+ *        the given thread safe function.
+ *
+ * @param func Indicates the thread safe function.
+ * @param data Indicates the data anticipated to be transferred to the ArkTS thread.
+ * @param priority Indicates the priority of the task dispatched.
+ * @param isTail Indicates the way of the task dispatched into the native event queue. When "isTail" is true,
+ *        the task will be dispatched to the tail of the native event queue. Conversely, when "isTail" is false, the
+ *        tasks will be dispatched to the head of the native event queue.
+ * @return Return the function execution status.
+ * @since 12
+ */
+NAPI_EXTERN napi_status napi_call_threadsafe_function_with_priority(napi_threadsafe_function func,
+                                                                    void *data,
+                                                                    napi_task_priority priority,
+                                                                    bool isTail);
 #ifdef __cplusplus
 }
 #endif
