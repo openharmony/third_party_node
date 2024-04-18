@@ -968,7 +968,7 @@
                       "params": []
                     }
                   ],
-                  "desc": "<p>Creates and creates a new writer instance that can be used to write\ndata into the <code>WritableStream</code>.</p>"
+                  "desc": "<p>Creates and returns a new writer instance that can be used to write\ndata into the <code>WritableStream</code>.</p>"
                 }
               ],
               "properties": [
@@ -1256,15 +1256,16 @@
                   "desc": "<p>The amount of data required to fill the <a href=\"webstreams.html#class-writablestream\" class=\"type\">&lt;WritableStream&gt;</a>'s queue.</p>"
                 },
                 {
-                  "textRaw": "`ready` type: A promise that is fulfilled with `undefined` when the writer is ready to be used.",
-                  "name": "type",
+                  "textRaw": "`ready` Type: {Promise} Fulfilled with `undefined` when the writer is ready to be used.",
+                  "type": "Promise",
+                  "name": "Type",
                   "meta": {
                     "added": [
                       "v16.5.0"
                     ],
                     "changes": []
                   },
-                  "desc": "A promise that is fulfilled with `undefined` when the writer is ready to be used."
+                  "desc": "Fulfilled with `undefined` when the writer is ready to be used."
                 }
               ],
               "signatures": [
@@ -1681,8 +1682,8 @@
                 {
                   "params": [
                     {
-                      "textRaw": "`options` {Object}",
-                      "name": "options",
+                      "textRaw": "`init` {Object}",
+                      "name": "init",
                       "type": "Object",
                       "options": [
                         {
@@ -1752,8 +1753,8 @@
                 {
                   "params": [
                     {
-                      "textRaw": "`options` {Object}",
-                      "name": "options",
+                      "textRaw": "`init` {Object}",
+                      "name": "init",
                       "type": "Object",
                       "options": [
                         {

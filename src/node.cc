@@ -132,8 +132,6 @@
 
 namespace node {
 
-using builtins::BuiltinLoader;
-
 using v8::EscapableHandleScope;
 using v8::Isolate;
 using v8::Local;
@@ -275,15 +273,7 @@ MaybeLocal<Value> StartExecution(Environment* env, const char* main_script_id) {
   CHECK_NOT_NULL(main_script_id);
   Realm* realm = env->principal_realm();
 
-  // Arguments must match the parameters specified in
-  // BuiltinLoader::LookupAndCompile().
-  std::vector<Local<Value>> arguments = {env->process_object(),
-                                         env->builtin_module_require(),
-                                         env->internal_binding_loader(),
-                                         env->primordials()};
-
-  return scope.EscapeMaybe(
-      realm->ExecuteBootstrapper(main_script_id, &arguments));
+  return scope.EscapeMaybe(realm->ExecuteBootstrapper(main_script_id));
 }
 
 MaybeLocal<Value> StartExecution(Environment* env, StartExecutionCallback cb) {
@@ -755,6 +745,13 @@ int ProcessGlobalArgs(std::vector<std::string>* args,
                 "--no-harmony-import-assertions") == v8_args.end()) {
     v8_args.emplace_back("--harmony-import-assertions");
   }
+  // TODO(aduh95): remove this when the harmony-import-attributes flag
+  // is removed in V8.
+  if (std::find(v8_args.begin(),
+                v8_args.end(),
+                "--no-harmony-import-attributes") == v8_args.end()) {
+    v8_args.emplace_back("--harmony-import-attributes");
+  }
 
   auto env_opts = per_process::cli_options->per_isolate->per_env;
   if (std::find(v8_args.begin(), v8_args.end(),
@@ -1222,9 +1219,6 @@ int LoadSnapshotDataAndRun(const SnapshotData** snapshot_data_ptr,
     }
   }
 
-  if ((*snapshot_data_ptr) != nullptr) {
-    BuiltinLoader::RefreshCodeCache((*snapshot_data_ptr)->code_cache);
-  }
   NodeMainInstance main_instance(*snapshot_data_ptr,
                                  uv_default_loop(),
                                  per_process::v8_platform.Platform(),
