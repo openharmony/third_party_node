@@ -44,6 +44,17 @@
 #define CHECK_NEW_FROM_UTF8(env, result, str)                                  \
   CHECK_NEW_FROM_UTF8_LEN((env), (result), (str), JSVM_AUTO_LENGTH)
 
+#define CHECK_NEW_STRING_ARGS(env, str, length, result)                        \
+  do {                                                                         \
+    CHECK_ENV_NOT_IN_GC((env));                                                \
+    if ((length) > 0) CHECK_ARG((env), (str));                                 \
+    CHECK_ARG((env), (result));                                                \
+    RETURN_STATUS_IF_FALSE(                                                    \
+        (env),                                                                 \
+        ((length) == JSVM_AUTO_LENGTH) || (length) <= INT_MAX,                 \
+        JSVM_INVALID_ARG);                                                     \
+  } while (0)
+
 #define CREATE_TYPED_ARRAY(                                                    \
     env, type, size_of_element, buffer, byteOffset, length, out)              \
   do {                                                                         \
@@ -98,6 +109,21 @@ void JSVM_Env__::RunAndClearInterrupts() {
 
     while (auto head = queue.Shift())
       head->Call(this);
+  }
+}
+
+void JSVM_Env__::InvokeFinalizerFromGC(v8impl::RefTracker* finalizer) {
+  if (module_api_version != JSVM_VERSION_EXPERIMENTAL) {
+    EnqueueFinalizer(finalizer);
+  } else {
+    // The experimental code calls finalizers immediately to release native
+    // objects as soon as possible. In that state any code that may affect GC
+    // state causes a fatal error. To work around this issue the finalizer code
+    // can call node_api_post_finalizer.
+    auto restore_state = node::OnScopeLeave(
+        [this, saved = in_gc_finalizer] { in_gc_finalizer = saved; });
+    in_gc_finalizer = true;
+    finalizer->Finalize();
   }
 }
 
@@ -199,11 +225,7 @@ JSVM_Status NewString(JSVM_Env env,
                       size_t length,
                       JSVM_Value* result,
                       StringMaker string_maker) {
-  CHECK_ENV(env);
-  if (length > 0) CHECK_ARG(env, str);
-  CHECK_ARG(env, result);
-  RETURN_STATUS_IF_FALSE(
-      env, (length == JSVM_AUTO_LENGTH) || length <= INT_MAX, JSVM_INVALID_ARG);
+  CHECK_NEW_STRING_ARGS(env, str, length, result);
 
   auto isolate = env->isolate;
   auto str_maybe = string_maker(isolate);
@@ -222,6 +244,7 @@ JSVM_Status NewExternalString(JSVM_Env env,
                               bool* copied,
                               CreateAPI create_api,
                               StringMaker string_maker) {
+  CHECK_NEW_STRING_ARGS(env, str, length, result);
   JSVM_Status status;
 #if defined(V8_ENABLE_SANDBOX)
   status = create_api(env, str, length, result);
@@ -1019,6 +1042,59 @@ void Finalizer::ResetFinalizer() {
   finalize_hint_ = nullptr;
 }
 
+TrackedFinalizer::TrackedFinalizer(JSVM_Env env,
+                                   JSVM_Finalize finalizeCallback,
+                                   void* finalizeData,
+                                   void* finalizeHint)
+    : Finalizer(env, finalizeCallback, finalizeData, finalizeHint),
+      RefTracker() {
+  Link(finalizeCallback == nullptr ? &env->reflist : &env->finalizing_reflist);
+}
+
+TrackedFinalizer* TrackedFinalizer::New(JSVM_Env env,
+                                        JSVM_Finalize finalizeCallback,
+                                        void* finalizeData,
+                                        void* finalizeHint) {
+  return new TrackedFinalizer(
+      env, finalizeCallback, finalizeData, finalizeHint);
+}
+
+// When a TrackedFinalizer is being deleted, it may have been queued to call its
+// finalizer.
+TrackedFinalizer::~TrackedFinalizer() {
+  // Remove from the env's tracked list.
+  Unlink();
+  // Try to remove the finalizer from the scheduled second pass callback.
+  env_->DequeueFinalizer(this);
+}
+
+void TrackedFinalizer::Finalize() {
+  FinalizeCore(/*deleteMe:*/ true);
+}
+
+void TrackedFinalizer::FinalizeCore(bool deleteMe) {
+  // Swap out the field finalize_callback so that it can not be accidentally
+  // called more than once.
+  JSVM_Finalize finalizeCallback = finalize_callback_;
+  void* finalizeData = finalize_data_;
+  void* finalizeHint = finalize_hint_;
+  ResetFinalizer();
+
+  // Either the RefBase is going to be deleted in the finalize_callback or not,
+  // it should be removed from the tracked list.
+  Unlink();
+  // If the finalize_callback is present, it should either delete the
+  // derived RefBase, or the RefBase ownership was set to Ownership::kRuntime
+  // and the deleteMe parameter is true.
+  if (finalizeCallback != nullptr) {
+    env_->CallFinalizer(finalizeCallback, finalizeData, finalizeHint);
+  }
+
+  if (deleteMe) {
+    delete this;
+  }
+}
+
 // Wrapper around v8impl::Persistent that implements reference counting.
 RefBase::RefBase(JSVM_Env env,
                  uint32_t initialRefcount,
@@ -1026,20 +1102,9 @@ RefBase::RefBase(JSVM_Env env,
                  JSVM_Finalize finalizeCallback,
                  void* finalizeData,
                  void* finalizeHint)
-    : Finalizer(env, finalizeCallback, finalizeData, finalizeHint),
+    : TrackedFinalizer(env, finalizeCallback, finalizeData, finalizeHint),
       refcount_(initialRefcount),
-      ownership_(ownership) {
-  Link(finalizeCallback == nullptr ? &env->reflist : &env->finalizing_reflist);
-}
-
-// When a RefBase is being deleted, it may have been queued to call its
-// finalizer.
-RefBase::~RefBase() {
-  // Remove from the env's tracked list.
-  Unlink();
-  // Try to remove the finalizer from the scheduled second pass callback.
-  env_->DequeueFinalizer(this);
-}
+      ownership_(ownership) {}
 
 RefBase* RefBase::New(JSVM_Env env,
                       uint32_t initialRefcount,
@@ -1075,31 +1140,9 @@ uint32_t RefBase::RefCount() {
 }
 
 void RefBase::Finalize() {
-  Ownership ownership = ownership_;
-  // Swap out the field finalizeCallback so that it can not be accidentally
-  // called more than once.
-  JSVM_Finalize finalizeCallback = finalize_callback_;
-  void* finalizeData = finalize_data_;
-  void* finalizeHint = finalize_hint_;
-  ResetFinalizer();
-
-  // Either the RefBase is going to be deleted in the finalizeCallback or not,
-  // it should be removed from the tracked list.
-  Unlink();
-  // 1. If the finalizeCallback is present, it should either delete the
-  //    RefBase, or set ownership with Ownership::kRuntime.
-  // 2. If the finalizer is not present, the RefBase can be deleted after the
-  //    call.
-  if (finalizeCallback != nullptr) {
-    env_->CallFinalizer(finalizeCallback, finalizeData, finalizeHint);
-    // No access to `this` after finalizeCallback is called.
-  }
-
   // If the RefBase is not Ownership::kRuntime, userland code should delete it.
-  // Now delete it if it is Ownership::kRuntime.
-  if (ownership == Ownership::kRuntime) {
-    delete this;
-  }
+  // Delete it if it is Ownership::kRuntime.
+  FinalizeCore(/*deleteMe:*/ ownership_ == Ownership::kRuntime);
 }
 
 template <typename... Args>
@@ -1194,7 +1237,7 @@ void Reference::WeakCallback(const v8::WeakCallbackInfo<Reference>& data) {
   Reference* reference = data.GetParameter();
   // The reference must be reset during the weak callback as the API protocol.
   reference->persistent_.Reset();
-  reference->env_->EnqueueFinalizer(reference);
+  reference->env_->InvokeFinalizerFromGC(reference);
 }
 
 }  // end of namespace v8impl

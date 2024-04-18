@@ -93,7 +93,8 @@ void node_jsvm_env__::CallbackIntoModule(T&& call) {
       return;
     }
     node::Environment* node_env = env->node_env();
-    if (!node_env->options()->force_node_api_uncaught_exceptions_policy &&
+    if (env->module_api_version < JSVM_VERSION_EXPERIMENTAL &&
+        !node_env->options()->force_node_api_uncaught_exceptions_policy &&
         !enforceUncaughtExceptionPolicy) {
       ProcessEmitDeprecationWarning(
           node_env,
