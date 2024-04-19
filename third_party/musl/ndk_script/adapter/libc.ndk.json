@@ -6,6 +6,7 @@
     { "name": "__duplocale" },
     { "name": "__errno_location" },
     { "name": "__fbufsize" },
+    { "name": "__fd_chk"},
     { "name": "__flbf" },
     { "name": "__flt_rounds" },
     { "name": "__fpclassify" },
