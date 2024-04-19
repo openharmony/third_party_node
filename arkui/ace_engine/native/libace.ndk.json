@@ -593,6 +593,10 @@
     },
     {
         "first_introduced": "12",
+        "name": "OH_ArkUI_WaterFlowSectionOption_GetItemCount"
+    },      
+    {
+        "first_introduced": "12",
         "name": "OH_ArkUI_WaterFlowSectionOption_GetCrossCount"
     },
     {
