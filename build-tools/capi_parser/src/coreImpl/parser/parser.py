@@ -22,7 +22,7 @@ import re
 import shutil
 import stat
 from utils.constants import StringConstant, RegularExpressions
-from typedef.parser.parser import ParserGetResultTable
+from typedef.parser.parser import ParserGetResultTable, OneFileApiMessage, NodeKind
 from coreImpl.parser import parse_include, generating_tables  # 引入解析文件 # 引入得到结果表格文件
 
 
@@ -246,12 +246,14 @@ def copy_std_lib(link_include_file):
     std_include = StringConstant.STD_INCLUDE.value
     if not os.path.exists(std_include):
         shutil.copytree(StringConstant.INCLUDE_LIB.value, std_include)
-    link_include_file.append(std_include)
+    if std_include not in link_include_file:
+        link_include_file.append(std_include)
 
 
 def find_include(link_include_path):
     for dir_path, _, _ in os.walk(StringConstant.CREATE_LIB_PATH.value):
-        link_include_path.append(dir_path)
+        if dir_path not in link_include_path:
+            link_include_path.append(dir_path)
 
 
 def copy_self_include(link_include_path, self_include_file, flag=-1):
@@ -262,14 +264,12 @@ def copy_self_include(link_include_path, self_include_file, flag=-1):
     else:
         std_include = StringConstant.SELF_INCLUDE.value
 
-    if std_include and not os.path.exists(std_include):
-        shutil.copytree(self_include_file, std_include)
-
-    for dir_path, _, files in os.walk(std_include):
-        for file in files:
-            if not file.endswith('.h'):
-                os.remove(os.path.join(dir_path, file))
-            elif dir_path not in link_include_path:
+    if not os.path.exists(std_include):
+        os.makedirs(std_include)
+    for dir_path, _, file_name_list in os.walk(self_include_file):
+        for file in file_name_list:
+            if (file.endswith('.h') and ('sysroot' not in dir_path)
+                    and (dir_path not in link_include_path)):
                 link_include_path.append(dir_path)
 
 
@@ -301,7 +301,8 @@ def parser_include_ast(gn_file_path, include_path, flag=-1):        # 对于单�
     copy_std_lib(link_include_path)
     find_include(link_include_path)
     link_include(gn_file_path, StringConstant.FUNK_NAME.value, link_include_path)
-    copy_self_include(link_include_path, gn_file_path, flag)
+    if len(link_include_path) <= 1:
+        copy_self_include(link_include_path, gn_file_path, flag)
 
     modes = stat.S_IRWXO | stat.S_IRWXG | stat.S_IRWXU
     fd = os.open('include_file_suffix.txt', os.O_WRONLY | os.O_CREAT, mode=modes)
@@ -322,3 +323,101 @@ def parser_include_ast(gn_file_path, include_path, flag=-1):        # 对于单�
                 delete_typedef_child(child)
 
     return data
+
+
+def get_dir_file_path(dir_path):
+    file_path_list = []
+    link_include_path = []  # 装链接头文件路径
+    for dir_path, dir_names, filenames in os.walk(dir_path):
+        for dir_name in dir_names:
+            link_include_path.append(os.path.join(dir_path, dir_name))
+        for file in filenames:
+            if file.endswith('.h'):
+                file_path_list.append(os.path.join(dir_path, file))
+
+    return file_path_list, link_include_path
+
+
+def get_file_api_num(file_data, kind_list):
+    api_number = 0
+    if 'children' in file_data:
+        for child in file_data['children']:
+            if 'kind' in child and child['kind'] in kind_list:
+                api_number += 1
+    return api_number
+
+
+def get_file_api_json(data_total):
+    api_obj_total_list = []
+    kind_list = [
+        NodeKind.MACRO_DEFINITION.value,
+        NodeKind.STRUCT_DECL.value,
+        NodeKind.UNION_DECL.value,
+        NodeKind.ENUM_DECL.value,
+        NodeKind.FUNCTION_DECL.value,
+        NodeKind.VAR_DECL.value
+    ]
+    for one_file_data in data_total:
+        file_api_num = get_file_api_num(one_file_data, kind_list)
+        if 'name' in one_file_data and 'kit_name' in one_file_data and 'sub_system' in one_file_data:
+            api_message_obj = OneFileApiMessage(one_file_data['name'], one_file_data['kit_name'],
+                                                one_file_data['sub_system'], file_api_num)
+            current_file = os.path.dirname(__file__)
+            kit_json_file_path = os.path.abspath(os.path.join(current_file,
+                                                              r"kit_sub_system/c_file_kit_sub_system.json"))
+            complete_kit_or_system(api_message_obj, kit_json_file_path)
+
+            api_obj_total_list.append(api_message_obj)
+    api_obj_total_json = json.dumps(api_obj_total_list, default=lambda obj: obj.__dict__, indent=4,
+                                    ensure_ascii=False)
+    return api_obj_total_json
+
+
+def generate_file_api_json(json_data):
+    with open(StringConstant.FILE_LEVEL_API_DATA.value, 'w', encoding='utf-8') as fs:
+        fs.write(json_data)
+        fs.close()
+
+
+def complete_kit_or_system(api_message: OneFileApiMessage, json_path):
+    if (not api_message.get_kit_name()) or (not api_message.get_sub_system()):
+        kit_name, sub_system_name = get_kit_system_data(json_path,
+                                                        api_message.get_file_path())
+        if not api_message.get_kit_name():
+            api_message.set_kit_name(kit_name)
+        if not api_message.get_sub_system():
+            api_message.set_sub_system(sub_system_name)
+
+
+def get_kit_system_data(json_path, relative_path):
+    kit_name = ''
+    sub_system_name = ''
+    with open(json_path, 'r', encoding='utf-8') as fs:
+        kit_system_data = json.load(fs)
+        for data in kit_system_data['data']:
+            if 'filePath' in data and relative_path == data['filePath'].replace('/', '\\'):
+                kit_name = data['kitName']
+                sub_system_name = data['subSystem']
+                break
+    return kit_name, sub_system_name
+
+
+def parser_direct(path):  # 目录路径
+    file_path_list = []
+    link_include_path = []  # 装链接头文件路径
+    dir_path = ''
+    if os.path.isdir(path):
+        file_path_total, link_include_total = get_dir_file_path(path)
+        file_path_list.extend(file_path_total)
+        link_include_path.extend(link_include_total)
+        dir_path = path
+    else:
+        if path.endswith('.h'):
+            file_path_list.append(path)
+            dir_path = os.path.dirname(path)
+    data_total = parse_include.get_include_file(file_path_list, link_include_path, dir_path)
+    file_api_json = get_file_api_json(data_total)
+    generate_file_api_json(file_api_json)
+    generating_tables.get_api_data(data_total, StringConstant.PARSER_DIRECT_EXCEL_NAME.value)
+
+    return data_total

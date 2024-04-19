@@ -1,0 +1,30 @@
+[
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageNative_GetImageSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageNative_GetComponentTypes"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageNative_GetByteBuffer"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageNative_GetBufferSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageNative_GetRowStride"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageNative_GetPixelStride"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageNative_Release"
+    }
+]

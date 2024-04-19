@@ -1,0 +1,114 @@
+[
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceInfo_Create"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceInfo_GetWidth"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceInfo_GetHeight"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceInfo_Release"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_DecodingOptions_Create"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_DecodingOptions_GetPixelFormat"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_DecodingOptions_SetPixelFormat"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_DecodingOptions_GetIndex"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_DecodingOptions_SetIndex"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_DecodingOptions_GetRotate"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_DecodingOptions_SetRotate"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_DecodingOptions_GetDesiredSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_DecodingOptions_SetDesiredSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_DecodingOptions_GetDesiredRegion"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_DecodingOptions_SetDesiredRegion"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_DecodingOptions_Release"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceNative_CreateFromUri"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceNative_CreateFromFd"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceNative_CreateFromData"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceNative_CreateFromRawFile"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceNative_CreatePixelmap"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceNative_CreatePixelmapList"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceNative_GetDelayTimeList"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceNative_GetImageInfo"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceNative_GetImageProperty"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceNative_ModifyImageProperty"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceNative_GetFrameCount"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ImageSourceNative_Release"
+    }
+]

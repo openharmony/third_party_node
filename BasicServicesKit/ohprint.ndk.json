@@ -1,0 +1,70 @@
+[
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_Init"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_Release"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_StartPrinterDiscovery"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_StopPrinterDiscovery"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_ConnectPrinter"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_StartPrintJob"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_RegisterPrinterChangeListener"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_UnregisterPrinterChangeListener"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_QueryPrinterList"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_ReleasePrinterList"
+    },
+    { 
+        "first_introduced": "12",
+        "name": "OH_Print_QueryPrinterInfo"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_ReleasePrinterInfo"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_LaunchPrinterManager"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_QueryPrinterProperties"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_ReleasePrinterProperties"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_UpdatePrinterProperties"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Print_RestorePrinterProperties"
+    }
+]

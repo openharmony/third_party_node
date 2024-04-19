@@ -218,6 +218,44 @@ NAPI_EXTERN napi_status napi_run_event_loop(napi_env env, napi_event_mode mode);
  */
 NAPI_EXTERN napi_status napi_stop_event_loop(napi_env env);
 
+/**
+ * @brief Serialize a JS object.
+ *
+ * @param env Current running virtual machine context.
+ * @param object The JavaScript value to serialize.
+ * @param transfer_list List of data to transfer in transfer mode.
+ * @param clone_list List of Sendable data to transfer in clone mode.
+ * @param result Serialization result of the JS object.
+ * @return Returns the function execution status.
+ * @since 12
+*/
+NAPI_EXTERN napi_status napi_serialize(napi_env env,
+                                       napi_value object,
+                                       napi_value transfer_list,
+                                       napi_value clone_list,
+                                       void** result);
+
+/**
+ * @brief Restore serialization data to a ArkTS object.
+ *
+ * @param env Current running virtual machine context.
+ * @param buffer Data to deserialize.
+ * @param object ArkTS object obtained by deserialization.
+ * @return Returns the function execution status.
+ * @since 12
+*/
+NAPI_EXTERN napi_status napi_deserialize(napi_env env, void* buffer, napi_value* object);
+
+/**
+ * @brief Delete serialization data.
+ *
+ * @param env Current running virtual machine context.
+ * @param buffer Data to delete.
+ * @return Returns the function execution status.
+ * @since 12
+*/
+NAPI_EXTERN napi_status napi_delete_serialization_data(napi_env env, void* buffer);
+
 #ifdef __cplusplus
 }
 #endif

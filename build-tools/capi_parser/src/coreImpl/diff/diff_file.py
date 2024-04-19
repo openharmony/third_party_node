@@ -51,14 +51,19 @@ def generate_excel(result_info_list):
         info_data.append(diff_info.new_api_full_text)
         result = '是' if diff_info.is_compatible else '否'
         info_data.append(result)
+        api_result = '是' if diff_info.is_api_change else '否'
+        info_data.append(api_result)
+        info_data.append(diff_info.api_modification_type)
         data.append(info_data)
     wb = op.Workbook()
     ws = wb['Sheet']
     ws.append(['api名称', '所在行', '所在列', '所在文件', '节点类型',
-               '变更类型', '变更信息', '旧版节点内容', '新版节点内容', '兼容'])
+               '变更类型', '变更信息', '旧版节点内容', '新版节点内容',
+               '兼容', 'API变化', 'API修改类型'])
     for title in data:
         d = title[0], title[1], title[2], title[3], title[4],\
-            title[5], title[6], title[7], title[8], title[9]
+            title[5], title[6], title[7], title[8], title[9],\
+            title[10], title[11]
         ws.append(d)
     wb.save('diff.xlsx')
 

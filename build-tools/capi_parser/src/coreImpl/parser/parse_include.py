@@ -252,8 +252,7 @@ def define_comment(cursor, current_file, data):
             data['comment'] = matches.group()
 
 
-def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解析数据的整理
-    # 通用
+def get_default_node_data(cursor, gn_path=None):
     data = {
         "name": cursor.spelling,
         "kind": '',
@@ -261,8 +260,17 @@ def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解
         "gn_path": gn_path,
         "node_content": {},
         "comment": '',
-        "syscap": ''
+        "syscap": '',
+        "since": '',
+        "kit_name": '',
+        "sub_system": '',
     }
+    return data
+
+
+def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解析数据的整理
+    # 通用
+    data = get_default_node_data(cursor, gn_path)
     get_comment(cursor, data)
     if key == 0:
         data["kind"] = CursorKind.TRANSLATION_UNIT.name
@@ -278,6 +286,8 @@ def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解
         if cursor.kind.name == CursorKind.MACRO_DEFINITION.name:
             define_comment(cursor, current_file, data)
     get_syscap_value(data)
+    get_since_value(data)
+    get_kit_value(data)
     processing_special_node(cursor, data, key, gn_path)  # 节点处理
     children = list(cursor.get_children())  # 判断是否有子节点，有就追加children，没有根据情况来
     if len(children) > 0:
@@ -300,6 +310,8 @@ def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解
                     and (child.location.file.name == current_file):
                 processing_ast_node(child, current_file, data, name, gn_path)
     else:
+        if cursor.kind == CursorKind.FUNCTION_DECL:  # 防止clang默认处理(对于头文件没有的情况)出现没有该键值对
+            data["parm"] = []
         processing_no_child(cursor, data)  # 处理没有子节点的节点
     return data
 
@@ -310,6 +322,23 @@ def get_syscap_value(data: dict):
         matches = re.search(pattern, data['comment'])
         if matches:
             data["syscap"] = matches.group(0)
+            data["syscap"] = re.sub('@syscap', '', data["syscap"], flags=re.IGNORECASE)
+
+
+def get_since_value(data: dict):
+    if 'none_comment' != data["comment"]:
+        pattern = r'@(since).*?(?=\n)'
+        matches = re.search(pattern, data['comment'])
+        if matches:
+            data["since"] = matches.group(0).replace('@since', '')
+
+
+def get_kit_value(data: dict):
+    if 'none_comment' != data["comment"]:
+        pattern = r'@(kit).*?(?=\n)'
+        matches = re.search(pattern, data['comment'])
+        if matches:
+            data["kit_name"] = matches.group(0).replace('@kit', '')
 
 
 def get_comment(cursor, data: dict):

@@ -1,0 +1,114 @@
+[
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapInitializationOptions_Create"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapInitializationOptions_GetWidth"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapInitializationOptions_SetWidth"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapInitializationOptions_GetHeight"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapInitializationOptions_SetHeight"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapInitializationOptions_GetPixelFormat"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapInitializationOptions_SetPixelFormat"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapInitializationOptions_GetAlphaType"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapInitializationOptions_SetAlphaType"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapInitializationOptions_Release"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapImageInfo_Create"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapImageInfo_GetWidth"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapImageInfo_GetHeight"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapImageInfo_GetRowStride"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapImageInfo_GetPixelFormat"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapImageInfo_GetAlphaType"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapImageInfo_Release"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapNative_CreatePixelmap"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapNative_ReadPixels"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapNative_WritePixels"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapNative_GetImageInfo"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapNative_Opacity"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapNative_Scale"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapNative_Translate"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapNative_Rotate"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapNative_Flip"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapNative_Crop"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapNative_Release"
+    }
+]

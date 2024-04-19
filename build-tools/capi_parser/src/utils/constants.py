@@ -31,6 +31,8 @@ class StringConstant(enum.Enum):
     SELF_INCLUDE_NEW = r'.\sysroot\self_include_files_new'
     SYSROOT = r'.\sysroot'
     RESULT_HEAD_NAME = "result_total.xlsx"
+    PARSER_DIRECT_EXCEL_NAME = 'parser_direct_data.xlsx'
+    FILE_LEVEL_API_DATA = r'.\file_api_json.json'
 
 
 class RegularExpressions(enum.Enum):

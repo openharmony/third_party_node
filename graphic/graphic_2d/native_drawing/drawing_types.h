@@ -129,6 +129,14 @@ typedef struct {
 } OH_Drawing_Point2D;
 
 /**
+ * @brief Defines a corner radii, which is on x-axis and y-axis.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef OH_Drawing_Point2D OH_Drawing_Corner_Radii;
+
+/**
  * @brief Defines a point of 3d, which is used to describe the coordinate point.
  *
  * @since 12
@@ -179,6 +187,14 @@ typedef struct OH_Drawing_Matrix OH_Drawing_Matrix;
  * @version 1.0
  */
 typedef struct OH_Drawing_ShaderEffect OH_Drawing_ShaderEffect;
+
+/**
+ * @brief Defines a shadowLayer, which is used to draw shaded parts.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct OH_Drawing_ShadowLayer OH_Drawing_ShadowLayer;
 
 /**
  * @brief Defines a filter, which is used to store maskFilter and colorFilter.
@@ -260,6 +276,22 @@ typedef struct OH_Drawing_SamplingOptions OH_Drawing_SamplingOptions;
  * @version 1.0
  */
 typedef struct OH_Drawing_TextBlobBuilder OH_Drawing_TextBlobBuilder;
+
+/**
+ * @brief Defines a GPU context, which is used to describe the GPU backend context.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct OH_Drawing_GpuContext OH_Drawing_GpuContext;
+
+/**
+ * @brief Defines a surface, which is used to manage the pixels that a canvas draws into.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct OH_Drawing_Surface OH_Drawing_Surface;
 
 /**
  * @brief Enumerates storage formats of bitmap pixels.
@@ -442,6 +474,22 @@ typedef enum {
     /** uses two byte words to represent glyph indices */
     TEXT_ENCODING_GLYPH_ID,
 } OH_Drawing_TextEncoding;
+
+/**
+ * @brief Defines a OH_Drawing_FontMgr, which is used to manage font family.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct OH_Drawing_FontMgr OH_Drawing_FontMgr;
+
+/**
+ * @brief Defines a OH_Drawing_FontStyleSet, which is used to manage font style.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct OH_Drawing_FontStyleSet OH_Drawing_FontStyleSet;
 
 #ifdef __cplusplus
 }

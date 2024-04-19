@@ -60,6 +60,10 @@
         "name": "OH_AVCODEC_MIMETYPE_AUDIO_G711MU"
     },
     {
+        "first_introduced": "12",
+        "name": "OH_AVCODEC_MIMETYPE_AUDIO_APE"
+    },
+    {
         "first_introduced": "9",
         "name": "OH_ED_KEY_TIME_STAMP"
     },
@@ -264,6 +268,78 @@
         "name": "OH_MD_KEY_AUDIO_VIVID_METADATA"
     },
     {
+        "first_introduced": "12",
+        "name": "OH_FEATURE_PROPERTY_KEY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_ENCODER_TEMPORAL_GOP_SIZE"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_ENCODER_LTR_FRAME_COUNT"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_ENCODER_PER_FRAME_MARK_LTR"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_ENCODER_PER_FRAME_USE_LTR"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_PER_FRAME_IS_LTR"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_PER_FRAME_POC"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_CROP_TOP"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_CROP_BOTTOM"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_CROP_LEFT"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_CROP_RIGHT"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_STRIDE"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_SLICE_HEIGHT"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_ENABLE_LOW_LATENCY"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_ENCODER_QP_MAX"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_MD_KEY_VIDEO_ENCODER_QP_MIN"
+    },
+    {
         "first_introduced": "10",
         "name": "OH_AVCodec_GetCapability"
     },
@@ -361,5 +437,13 @@
     {
         "first_introduced": "10",
         "name": "OH_AVCapability_AreProfileAndLevelSupported"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AVCapability_IsFeatureSupported"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AVCapability_GetFeatureProperties"
     }
 ]

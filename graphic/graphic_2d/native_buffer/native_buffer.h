@@ -58,6 +58,10 @@ enum OH_NativeBuffer_Usage {
     NATIVEBUFFER_USAGE_CPU_READ = (1ULL << 0),        /// < CPU read buffer */
     NATIVEBUFFER_USAGE_CPU_WRITE = (1ULL << 1),       /// < CPU write memory */
     NATIVEBUFFER_USAGE_MEM_DMA = (1ULL << 3),         /// < Direct memory access (DMA) buffer */
+    NATIVEBUFFER_USAGE_HW_RENDER = (1ULL << 8),       /// < For GPU write case */
+    NATIVEBUFFER_USAGE_HW_TEXTURE = (1ULL << 9),      /// < For GPU read case */
+    NATIVEBUFFER_USAGE_CPU_READ_OFTEN = (1ULL << 16), /// < Often be mapped for direct CPU reads */
+    NATIVEBUFFER_USAGE_ALIGNMENT_512 = (1ULL << 18),  /// < 512 bytes alignment */
 };
 
 /**
@@ -105,47 +109,47 @@ enum OH_NativeBuffer_Format {
      * YUV422 interleaved format
      * @since 12
      */
-    NATIVEBUFFER_PIXEL_FMT_YUV_422_T,
+    NATIVEBUFFER_PIXEL_FMT_YUV_422_I,
     /**
      * YCBCR422 semi-plannar format
      * @since 12
      */
     NATIVEBUFFER_PIXEL_FMT_YCBCR_422_SP,
     /**
-     * YCRCR422 semi-plannar format
+     * YCRCB422 semi-plannar format
      * @since 12
      */
-    NATIVEBUFFER_PIXEL_FMT_YCRCR_422_SP,
+    NATIVEBUFFER_PIXEL_FMT_YCRCB_422_SP,
     /**
      * YCBCR420 semi-plannar format
      * @since 12
      */
     NATIVEBUFFER_PIXEL_FMT_YCBCR_420_SP,
     /**
-     * YCRCR420 semi-plannar format
+     * YCRCB420 semi-plannar format
      * @since 12
      */
-    NATIVEBUFFER_PIXEL_FMT_YCRCR_420_SP,
+    NATIVEBUFFER_PIXEL_FMT_YCRCB_420_SP,
     /**
      * YCBCR422 plannar format
      * @since 12
      */
     NATIVEBUFFER_PIXEL_FMT_YCBCR_422_P,
     /**
-     * YCRCR422 plannar format
+     * YCRCB422 plannar format
      * @since 12
      */
-    NATIVEBUFFER_PIXEL_FMT_YCRCR_422_P,
+    NATIVEBUFFER_PIXEL_FMT_YCRCB_422_P,
     /**
      * YCBCR420 plannar format
      * @since 12
      */
     NATIVEBUFFER_PIXEL_FMT_YCBCR_420_P,
     /**
-     * YCRCR420 plannar format
+     * YCRCB420 plannar format
      * @since 12
      */
-    NATIVEBUFFER_PIXEL_FMT_YCRCR_420_P,
+    NATIVEBUFFER_PIXEL_FMT_YCRCB_420_P,
     /**
      * YUYV422 packed format
      * @since 12
@@ -171,6 +175,21 @@ enum OH_NativeBuffer_Format {
      * @since 12
      */
     NATIVEBUFFER_PIXEL_FMT_RGBA_1010102,
+    /**
+     * YCBCR420 semi-planar 10bit packed format
+     * @since 12
+     */
+    NATIVEBUFFER_PIXEL_FMT_YCBCR_P010,
+    /**
+     * YCRCB420 semi-planar 10bit packed format
+     * @since 12
+     */
+    NATIVEBUFFER_PIXEL_FMT_YCRCB_P010,
+    /**
+     * Raw 10bit packed format
+     * @since 12
+     */
+    NATIVEBUFFER_PIXEL_FMT_RAW10,
     /**
      * vender mask format
      * @since 12

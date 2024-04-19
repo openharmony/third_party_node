@@ -42,7 +42,6 @@
 #include <vector>
 #endif
 
-#include "arkui/native_event.h"
 #include "arkui/native_type.h"
 #include "arkui/ui_input_event.h"
 
