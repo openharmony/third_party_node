@@ -43,4 +43,28 @@ typedef enum {
     napi_event_mode_nowait = 1,
 } napi_event_mode;
 
+/**
+ * @brief Indicates the priority of a task dispatched from native thread to ArkTS thread.
+ *
+ * @since 12
+ */
+typedef enum {
+    /**
+     * The immediate priority tasks should be promptly processed whenever feasible.
+     */
+    napi_priority_immediate = 0,
+    /**
+     * The high priority tasks, as sorted by their handle time, should be prioritized over tasks with low priority.
+     */
+    napi_priority_high = 1,
+    /**
+     * The low priority tasks, as sorted by their handle time, should be processed before idle priority tasks.
+     */
+    napi_priority_low = 2,
+    /**
+     * The idle priority tasks should be processed immediately only if there are no other priority tasks.
+     */
+    napi_priority_idle = 3,
+} napi_task_priority;
+
 #endif /* FOUNDATION_ACE_NAPI_INTERFACES_KITS_NAPI_NATIVE_API_H */

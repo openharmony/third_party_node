@@ -194,5 +194,9 @@
     {
         "first_introduced": "12",
         "name": "napi_delete_serialization_data"
+    },
+    {
+        "first_introduced": "12",
+        "name": "napi_call_threadsafe_function_with_priority"
     }
 ]
