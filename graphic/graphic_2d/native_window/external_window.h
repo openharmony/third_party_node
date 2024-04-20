@@ -581,6 +581,18 @@ int32_t OH_NativeWindow_GetSurfaceId(OHNativeWindow *window, uint64_t *surfaceId
  * @version 1.0
  */
 int32_t OH_NativeWindow_CreateNativeWindowFromSurfaceId(uint64_t surfaceId, OHNativeWindow **window);
+
+/**
+ * @brief Sets scalingMode of a native window.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeWindow
+ * @param window indicates the pointer to an <b>OHNativeWindow</b> instance.
+ * @param scalingMode Indicates the enum value to <b>OHScalingModeV2</b>
+ * @return Returns an error code, 0 is Success, otherwise, failed.
+ * @since 12
+ * @version 1.0
+ */
+int32_t OH_NativeWindow_NativeWindowSetScalingModeV2(OHNativeWindow *window, OHScalingModeV2 scalingMode);
 #ifdef __cplusplus
 }
 #endif

@@ -20,10 +20,10 @@ import os
 import openpyxl
 
 
-def compare_json_file(js_file1, js_file2):  # 获取对比结果
-    with open(js_file1, 'r', encoding='utf-8') as js1:
+def compare_json_file(generate_json, original_json):  # 获取对比结果
+    with open(generate_json, 'r', encoding='utf-8') as js1:
         data1 = json.load(js1)
-    with open(js_file2, 'r') as js2:
+    with open(original_json, 'r') as js2:
         data2 = json.load(js2)
     compare_result = []
     only_file1 = []  # 装file1独有的
@@ -44,9 +44,9 @@ def compare_json_file(js_file1, js_file2):  # 获取对比结果
     return compare_result, only_file1, only_file2
 
 
-def get_difference_data(compare_result, data2):
+def get_difference_data(compare_result, original_data):
     only_file2 = []
-    for item in data2:
+    for item in original_data:
         name2 = item["name"]
         key = 0
         for it in compare_result:
@@ -106,65 +106,73 @@ def filter_func(item):
     return item
 
 
-def generate_excel(array, name, only_file1, only_file2):
-    # 将列名换为中文名
-    columns_map = {
-        'name': '名称',
-        'kind': '节点类型',
-        'type': '类型',
-        'gn_path': 'gn文件路径',
-        'node_content': '节点内容',
-        'syscap': 'syscap值',
-        'since': 'since版本',
-        'location': '位置行',
-        'return_type': '返回类型',
-        'parm': '参数',
-        'location_path': '文件相对路径'
-    }
+def collated_api_data(api_data: list):
+    collated_data_total = []
+    for api in api_data:
+        api_content = ''
+        if 'node_content' in api and 'content' in api['node_content']:
+            api_content = api['node_content']['content']
+            api_content = api_content.replace('\r', '').replace('\n', '')
+        collated_data = [
+            api.get('name'),
+            api_content,
+            api.get('kind'),
+            api.get('since'),
+            api.get('syscap'),
+            api.get('kit_name'),
+            api.get('location_path'),
+            api.get('sub_system')
+        ]
+        collated_data_total.append(collated_data)
+    return collated_data_total
 
+
+def generate_excel(array, name, generate_json_unique, original_json_unique):
+    first_line_infor = ['方法名', '方法内容', '类型', '版本', 'syscap', 'kit',
+                        '文件路径', '子系统']
     workbook = openpyxl.Workbook()
     work_sheet1 = workbook.active
     work_sheet1.title = '对比结果'
-    write_dict_to_worksheet(work_sheet1, array, header=columns_map)
+    work_sheet1.append(first_line_infor)
+    array_update = collated_api_data(array)
+    write_information_to_worksheet(work_sheet1, array_update)
 
     work_sheet2 = workbook.create_sheet('生成json独有')
-    write_dict_to_worksheet(work_sheet2, only_file1, header=columns_map)
+    work_sheet2.append(first_line_infor)
+    generate_json_unique_update = collated_api_data(generate_json_unique)
+    write_information_to_worksheet(work_sheet2, generate_json_unique_update)
 
     work_sheet3 = workbook.create_sheet('原有json独有')
-    write_dict_to_worksheet(work_sheet3, only_file2)
+    write_original_infor_to_worksheet(work_sheet3, original_json_unique)
     workbook.save(name)
 
 
-def write_dict_to_worksheet(work_sheet, result_data, header=None):
-    if header is None:
-        header = {
-            'name': '名称'
-        }
-    row_num = 1
-    for col_num, col_value in enumerate(header.values()):
-        work_sheet.cell(row_num, col_num + 1, col_value)
-
-    row_num = 2
-    for data in result_data:
-        for col_num, col_value in enumerate(data.values()):
-            processing_worksheet_data(work_sheet, col_value, row_num, col_num)
-        row_num += 1
+def write_information_to_worksheet(work_sheet, information_data):
+    for data in information_data:
+        write_data = data[0], data[1], data[2], data[3], data[4], \
+                     data[5], data[6], data[7]
+        work_sheet.append(write_data)
 
 
-def processing_worksheet_data(work_sheet, col_value, row_num, col_num):
-    if isinstance(col_value, dict):
-        param_data = []
-        for dict_value in col_value.values():
-            if isinstance(dict_value, int):
-                dict_value = str(dict_value)
-            param_data.append(dict_value)
-        param_str = ','.join(param_data)
-        work_sheet.cell(row_num, col_num + 1, param_str)
-    elif isinstance(col_value, list):
-        list_data = ','.join(col_value)
-        work_sheet.cell(row_num, col_num + 1, list_data)
-    else:
-        work_sheet.cell(row_num, col_num + 1, col_value)
+def write_original_infor_to_worksheet(work_sheet, original_data):
+    first_line_infor = ['first_introduced', '名称']
+    work_sheet.append(first_line_infor)
+    collated_original_total = []
+    for element in original_data:
+        original_list = []
+        if 'first_introduced' in element:
+            original_list.append(element['first_introduced'])
+        else:
+            original_list.append('')
+        if 'name' in element:
+            original_list.append(element['name'])
+        else:
+            original_list.append('')
+        collated_original_total.append(original_list)
+
+    for collated_element in collated_original_total:
+        write_data = collated_element[0], collated_element[1]
+        work_sheet.append(write_data)
 
 
 def del_repetition_value(only_file_list, compare_list):
@@ -191,3 +199,10 @@ def get_json_file(json_file_new, json_file):  # 获取生成的json文件
         only_file2.extend(only_file2_part)
     only_file1_new = del_repetition_value(only_file1, result_list)
     return result_list, head_name, only_file1_new, only_file2  # 返回对比数据，和所需表格名
+
+
+def get_api_data(parser_data, excel_file_name):
+    generate_json_unique = []
+    original_json_unique = []
+    api_data_list = filter_compare(parser_data)
+    generate_excel(api_data_list, excel_file_name, generate_json_unique, original_json_unique)

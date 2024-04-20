@@ -153,6 +153,105 @@ compatible_list = [
     DiffType.DOC_TAG_RIGHT_BRACE_HAVE_TO_NA,
 ]
 
+api_new_list = [DiffType.ADD_API]
+
+api_delete_list = [DiffType.REDUCE_API]
+
+non_api_change_list = [
+    DiffType.ADD_DOC,
+    DiffType.REDUCE_DOC,
+    DiffType.ADD_DOC_TAG,
+    DiffType.REDUCE_DOC_TAG
+]
+
+api_prototype_change_list = [
+    DiffType.DEFINE_NAME_CHANGE,
+    DiffType.DEFINE_TEXT_CHANGE,
+    DiffType.FUNCTION_PARAM_POS_CHANGE,
+    DiffType.FUNCTION_NAME_CHANGE,
+    DiffType.FUNCTION_RETURN_CHANGE,
+    DiffType.FUNCTION_PARAM_NAME_CHANGE,
+    DiffType.FUNCTION_PARAM_TYPE_CHANGE,
+    DiffType.FUNCTION_PARAM_REDUCE,
+    DiffType.FUNCTION_PARAM_ADD,
+    DiffType.STRUCT_NAME_CHANGE,
+    DiffType.STRUCT_MEMBER_TYPE_CHANGE,
+    DiffType.STRUCT_MEMBER_NAME_CHANGE,
+    DiffType.STRUCT_MEMBER_ADD,
+    DiffType.STRUCT_MEMBER_REDUCE,
+    DiffType.UNION_MEMBER_TYPE_CHANGE,
+    DiffType.UNION_MEMBER_NAME_CHANGE,
+    DiffType.UNION_NAME_CHANGE,
+    DiffType.UNION_MEMBER_ADD,
+    DiffType.UNION_MEMBER_REDUCE,
+    DiffType.ENUM_NAME_CHANGE,
+    DiffType.ENUM_MEMBER_NAME_CHANGE,
+    DiffType.ENUM_MEMBER_VALUE_CHANGE,
+    DiffType.ENUM_MEMBER_ADD,
+    DiffType.ENUM_MEMBER_REDUCE,
+    DiffType.VARIABLE_NAME_CHANGE,
+    DiffType.VARIABLE_TYPE_CHANGE,
+    DiffType.VARIABLE_VALUE_CHANGE,
+    DiffType.CONSTANT_NAME_CHANGE,
+    DiffType.CONSTANT_TYPE_CHANGE,
+    DiffType.CONSTANT_VALUE_CHANGE,
+    DiffType.TYPEDEF_NAME_TYPE_CHANGE
+]
+
+api_constraint_change_list = [
+    DiffType.DOC_TAG_ADDTOGROUP_NA_TO_HAVE,
+    DiffType.DOC_TAG_ADDTOGROUP_HAVE_TO_NA,
+    DiffType.DOC_TAG_ADDTOGROUP_A_TO_B,
+    DiffType.DOC_TAG_BRIEF_NA_TO_HAVE,
+    DiffType.DOC_TAG_BRIEF_HAVE_TO_NA,
+    DiffType.DOC_TAG_BRIEF_A_TO_B,
+    DiffType.DOC_TAG_DEPRECATED_NA_TO_HAVE,
+    DiffType.DOC_TAG_DEPRECATED_HAVE_TO_NA,
+    DiffType.DOC_TAG_DEPRECATED_A_TO_B,
+    DiffType.DOC_TAG_FILE_NA_TO_HAVE,
+    DiffType.DOC_TAG_FILE_HAVE_TO_NA,
+    DiffType.DOC_TAG_FILE_A_TO_B,
+    DiffType.DOC_TAG_LIBRARY_NA_TO_HAVE,
+    DiffType.DOC_TAG_LIBRARY_HAVE_TO_NA,
+    DiffType.DOC_TAG_LIBRARY_A_TO_B,
+    DiffType.DOC_TAG_PARAM_NA_TO_HAVE,
+    DiffType.DOC_TAG_PARAM_HAVE_TO_NA,
+    DiffType.DOC_TAG_PARAM_NAME_A_TO_B,
+    DiffType.DOC_TAG_PARAM_A_TO_B,
+    DiffType.DOC_TAG_PERMISSION_NA_TO_HAVE,
+    DiffType.DOC_TAG_PERMISSION_HAVE_TO_NA,
+    DiffType.DOC_TAG_PERMISSION_RANGE_BIGGER,
+    DiffType.DOC_TAG_PERMISSION_RANGE_SMALLER,
+    DiffType.DOC_TAG_PERMISSION_RANGE_CHANGE,
+    DiffType.DOC_TAG_SINCE_NA_TO_HAVE,
+    DiffType.DOC_TAG_SINCE_A_TO_B,
+    DiffType.DOC_TAG_SYSCAP_NA_TO_HAVE,
+    DiffType.DOC_TAG_SYSCAP_HAVE_TO_NA,
+    DiffType.DOC_TAG_SYSCAP_A_TO_B,
+    DiffType.DOC_TAG_LEFT_BRACE_NA_TO_HAVE,
+    DiffType.DOC_TAG_LEFT_BRACE_HAVE_TO_NA,
+    DiffType.DOC_TAG_RIGHT_BRACE_NA_TO_HAVE,
+    DiffType.DOC_TAG_RIGHT_BRACE_HAVE_TO_NA,
+]
+
+api_modification_type_dict = {
+    'api_new_list': 'API新增',
+    'api_delete_list': 'API删除',
+    'non_api_change_list': '非API变更',
+    'api_prototype_change_list': 'API修改(原型修改)',
+    'api_constraint_change_list': 'API修改(约束变化)'
+}
+
+
+class ApiInfo:
+    is_api_change = False
+
+    def set_is_api_change(self, is_api_change):
+        self.is_api_change = is_api_change
+
+    def get_is_api_change(self):
+        return self.is_api_change
+
 
 class DiffInfo:
     api_name: str = ''
@@ -165,11 +264,14 @@ class DiffInfo:
     api_column: int = 0
     api_file_path: str = ''
     is_compatible = False
+    is_api_change = False
+    api_modification_type = ''
 
     def __init__(self, diff_type: DiffType):
         self.diff_type = diff_type
         self.diff_message = diff_type.value
         self.set_diff_type(diff_type)
+        self.set_api_modification_type(diff_type)
 
     def set_api_line(self, api_line):
         self.api_line = api_line
@@ -233,6 +335,27 @@ class DiffInfo:
     def get_is_compatible(self):
         return self.is_compatible
 
+    def set_is_api_change(self, is_api_change):
+        self.is_api_change = is_api_change
+
+    def get_is_api_change(self):
+        return self.is_api_change
+
+    def set_api_modification_type(self, diff_type):
+        if diff_type in api_new_list:
+            self.api_modification_type = api_modification_type_dict['api_new_list']
+        elif diff_type in api_delete_list:
+            self.api_modification_type = api_modification_type_dict['api_delete_list']
+        elif diff_type in non_api_change_list:
+            self.api_modification_type = api_modification_type_dict['non_api_change_list']
+        elif diff_type in api_prototype_change_list:
+            self.api_modification_type = api_modification_type_dict['api_prototype_change_list']
+        elif diff_type in api_constraint_change_list:
+            self.api_modification_type = api_modification_type_dict['api_constraint_change_list']
+
+    def get_api_modification_type(self):
+        return self.api_modification_type
+
 
 class OutputJson:
     api_name: str = ''
@@ -245,6 +368,8 @@ class OutputJson:
     api_column: int = 0
     api_file_path: str = ''
     is_compatible = False
+    is_api_change = False
+    api_modification_type = ''
 
     def __init__(self, diff_info):
         self.api_name = diff_info.api_name
@@ -257,3 +382,5 @@ class OutputJson:
         self.api_column = diff_info.api_column
         self.api_file_path = diff_info.api_file_path
         self.is_compatible = diff_info.is_compatible
+        self.is_api_change = diff_info.is_api_change
+        self.api_modification_type = diff_info.api_modification_type

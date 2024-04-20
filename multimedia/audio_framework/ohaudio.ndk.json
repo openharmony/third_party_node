@@ -246,5 +246,61 @@
     {
         "first_introduced":"12",
         "name": "OH_AudioStreamBuilder_SetRendererInterruptMode"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioManager_GetAudioRoutingManager"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioRoutingManager_GetDevices"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioRoutingManager_RegisterDeviceChangeCallback"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioRoutingManager_UnregisterDeviceChangeCallback"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioRoutingManager_ReleaseDevices"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioDeviceDescriptor_GetDeviceRole"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioDeviceDescriptor_GetDeviceType"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioDeviceDescriptor_GetDeviceId"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioDeviceDescriptor_GetDeviceName"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioDeviceDescriptor_GetDeviceAddress"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioDeviceDescriptor_GetDeviceSampleRates"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioDeviceDescriptor_GetDeviceChannelCounts"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioDeviceDescriptor_GetDeviceDisplayName"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioDeviceDescriptor_GetDeviceEncodingTypes"
     }
 ]

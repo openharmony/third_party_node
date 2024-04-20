@@ -19,7 +19,7 @@ import os
 from collections import OrderedDict
 from clang.cindex import CursorKind
 from coreImpl.diff.diff_processor_permission import compare_permission, RangeChange
-from typedef.diff.diff import TAGS, DiffType, DiffInfo, Scene
+from typedef.diff.diff import TAGS, DiffType, DiffInfo, Scene, ApiInfo
 
 current_file = os.path.dirname(__file__)
 
@@ -28,6 +28,9 @@ def wrap_diff_info(old_info, new_info, diff_info: DiffInfo):
     if old_info is not None:
         if 'temporary_name' in old_info['name']:
             old_info['name'] = ''
+        if (not diff_info.is_api_change) and 'kind' in old_info \
+                and 'MACRO_DEFINITION' != old_info['kind']:
+            diff_info.set_is_api_change(True)
         diff_info.set_api_name(old_info['name'])
         diff_info.set_api_type(old_info['kind'])
         diff_info.set_api_line(old_info['location']['location_line'])
@@ -38,6 +41,9 @@ def wrap_diff_info(old_info, new_info, diff_info: DiffInfo):
     if new_info is not None:
         if 'temporary_name' in new_info['name']:
             new_info['name'] = ''
+        if (not diff_info.is_api_change) and 'kind' in new_info \
+                and 'MACRO_DEFINITION' != new_info['kind']:
+            diff_info.set_is_api_change(True)
         diff_info.set_api_name(new_info['name'])
         diff_info.set_api_type(new_info['kind'])
         diff_info.set_api_line(new_info['location']['location_line'])
@@ -69,6 +75,14 @@ def get_member_result_diff(old_target, new_target):
     return old_member_result_map, new_member_result_map, all_key_list
 
 
+def get_initial_result_obj(diff_type: DiffType, new_node, old_node=None):
+    result_message_obj = DiffInfo(diff_type)
+    if 'kind' in new_node and 'MACRO_DEFINITION' != new_node['kind']:
+        result_message_obj.set_is_api_change(True)
+
+    return result_message_obj
+
+
 def process_function(old, new):
     diff_info_list = []
     process_func_return(old, new, diff_info_list)   # 处理返回值
@@ -78,7 +92,8 @@ def process_function(old, new):
 
 def process_func_return(old, new, diff_info_list):
     if old['return_type'] != new['return_type']:
-        diff_info = wrap_diff_info(old, new, DiffInfo(DiffType.FUNCTION_RETURN_CHANGE))
+        result_message_obj = get_initial_result_obj(DiffType.FUNCTION_RETURN_CHANGE, new, old)
+        diff_info = wrap_diff_info(old, new, result_message_obj)
         diff_info_list.append(diff_info)
 
 
@@ -88,34 +103,38 @@ def process_func_param(old, new, diff_info_list):
         new_len = len(new['parm'])
         for i in range(max(old_len, new_len)):
             if (i + 1) > new_len:  # 减少参数
-                diff_info = wrap_diff_info(old['parm'][i], new, DiffInfo(DiffType.FUNCTION_PARAM_REDUCE))
+                result_message_obj = get_initial_result_obj(DiffType.FUNCTION_PARAM_REDUCE, new, old)
+                diff_info = wrap_diff_info(old['parm'][i], new, result_message_obj)
                 diff_info_list.append(diff_info)
 
             elif (i + 1) > old_len:  # 增加参数
-                diff_info = wrap_diff_info(old, new['parm'][i], DiffInfo(DiffType.FUNCTION_PARAM_ADD))
+                result_message_obj = get_initial_result_obj(DiffType.FUNCTION_PARAM_ADD, new, old)
+                diff_info = wrap_diff_info(old, new['parm'][i], result_message_obj)
                 diff_info_list.append(diff_info)
 
             else:
-                process_param_scene(old['parm'], new['parm'], diff_info_list, i)
+                process_param_scene(old['parm'], new['parm'], diff_info_list, i, new)
 
     elif 'parm' not in old and 'parm' in new:   # 旧无新有
-        diff_info = wrap_diff_info(old, new, DiffInfo(DiffType.FUNCTION_PARAM_ADD))
+        result_message_obj = get_initial_result_obj(DiffType.FUNCTION_PARAM_ADD, new, old)
+        diff_info = wrap_diff_info(old, new, result_message_obj)
         diff_info_list.append(diff_info)
 
     elif 'parm' in old and 'parm' not in new:   # 旧有新无
-        diff_info = wrap_diff_info(old, new, DiffInfo(DiffType.FUNCTION_PARAM_REDUCE))
+        result_message_obj = get_initial_result_obj(DiffType.FUNCTION_PARAM_REDUCE, new, old)
+        diff_info = wrap_diff_info(old, new, result_message_obj)
         diff_info_list.append(diff_info)
 
 
-def process_param_scene(old_param, new_param, diff_info_list, index):
+def process_param_scene(old_param, new_param, diff_info_list, index, parent_new):
     if old_param[index]['type'] != new_param[index]['type']:
-        diff_info = wrap_diff_info(old_param[index], new_param[index],
-                                   DiffInfo(DiffType.FUNCTION_PARAM_TYPE_CHANGE))
+        result_message_obj = get_initial_result_obj(DiffType.FUNCTION_PARAM_TYPE_CHANGE, parent_new)
+        diff_info = wrap_diff_info(old_param[index], new_param[index], result_message_obj)
         diff_info_list.append(diff_info)
 
     if old_param[index]['name'] != new_param[index]['name']:
-        diff_info = wrap_diff_info(old_param[index], new_param[index],
-                                   DiffInfo(DiffType.FUNCTION_PARAM_NAME_CHANGE))
+        result_message_obj = get_initial_result_obj(DiffType.FUNCTION_PARAM_NAME_CHANGE, parent_new)
+        diff_info = wrap_diff_info(old_param[index], new_param[index], result_message_obj)
         diff_info_list.append(diff_info)
 
 
@@ -128,20 +147,24 @@ def process_define(old, new):
 
 def process_define_name(old, new, diff_define_list):
     if old['name'] != new['name']:
-        diff_info = wrap_diff_info(old, new, DiffInfo(DiffType.DEFINE_NAME_CHANGE))
+        result_message_obj = get_initial_result_obj(DiffType.DEFINE_NAME_CHANGE, new, old)
+        diff_info = wrap_diff_info(old, new, result_message_obj)
         diff_define_list.append(diff_info)
 
 
 def process_define_text(old, new, diff_define_list):
     if 'text' not in old and 'text' in new:     # 旧无新有
-        diff_info = wrap_diff_info(old, new, DiffInfo(DiffType.DEFINE_TEXT_CHANGE))
+        result_message_obj = get_initial_result_obj(DiffType.DEFINE_TEXT_CHANGE, new, old)
+        diff_info = wrap_diff_info(old, new, result_message_obj)
         diff_define_list.append(diff_info)
     elif 'text' in old and 'text' not in new:   # 旧有新无
-        diff_info = wrap_diff_info(old, new, DiffInfo(DiffType.DEFINE_TEXT_CHANGE))
+        result_message_obj = get_initial_result_obj(DiffType.DEFINE_TEXT_CHANGE, new, old)
+        diff_info = wrap_diff_info(old, new, result_message_obj)
         diff_define_list.append(diff_info)
     elif 'text' in old and 'text' in new:
         if old['text'] != new['text']:
-            diff_info = wrap_diff_info(old, new, DiffInfo(DiffType.DEFINE_TEXT_CHANGE))
+            result_message_obj = get_initial_result_obj(DiffType.DEFINE_TEXT_CHANGE, new, old)
+            diff_info = wrap_diff_info(old, new, result_message_obj)
             diff_define_list.append(diff_info)
 
 
@@ -154,7 +177,8 @@ def process_struct(old, new):
 
 def process_struct_name(old, new, diff_struct_list):
     if old['name'] != new['name']:
-        diff_info = wrap_diff_info(old, new, DiffInfo(DiffType.STRUCT_NAME_CHANGE))
+        result_message_obj = get_initial_result_obj(DiffType.STRUCT_NAME_CHANGE, new, old)
+        diff_info = wrap_diff_info(old, new, result_message_obj)
         diff_struct_list.append(diff_info)
 
 
@@ -164,23 +188,27 @@ def process_struct_member(old, new, diff_struct_list):
                                                                                       new['members'])
         for key in all_key_result:
             if old_member_result.get(key) is None:
+                result_message_obj = get_initial_result_obj(DiffType.STRUCT_MEMBER_ADD, new, old)
                 diff_info = wrap_diff_info(old_member_result.get(key), new_member_result.get(key),
-                                           DiffInfo(DiffType.STRUCT_MEMBER_ADD))
+                                           result_message_obj)
                 diff_struct_list.append(diff_info)
             elif new_member_result.get(key) is None:
+                result_message_obj = get_initial_result_obj(DiffType.STRUCT_MEMBER_REDUCE, new, old)
                 diff_info = wrap_diff_info(old_member_result.get(key), new_member_result.get(key),
-                                           DiffInfo(DiffType.STRUCT_MEMBER_REDUCE))
+                                           result_message_obj)
                 diff_struct_list.append(diff_info)
             else:
                 process_struct_member_scene(old_member_result.get(key),
                                             new_member_result.get(key), diff_struct_list)
 
     elif 'members' not in old and 'members' in new:    # 旧无新有
-        diff_info = wrap_diff_info(old, new, DiffInfo(DiffType.STRUCT_MEMBER_ADD))
+        result_message_obj = get_initial_result_obj(DiffType.STRUCT_MEMBER_ADD, new, old)
+        diff_info = wrap_diff_info(old, new, result_message_obj)
         diff_struct_list.append(diff_info)
 
     elif 'members' in old and 'members' not in new:    # 旧有新无
-        diff_info = wrap_diff_info(old, new, DiffInfo(DiffType.STRUCT_MEMBER_REDUCE))
+        result_message_obj = get_initial_result_obj(DiffType.STRUCT_MEMBER_REDUCE, new, old)
+        diff_info = wrap_diff_info(old, new, result_message_obj)
         diff_struct_list.append(diff_info)
 
 
@@ -202,13 +230,15 @@ def process_struct_member_scene(old_member, new_member, diff_struct_list):
     if (not(old_member['location']['location_path'] in old_member['type'])) and \
             (not(new_member['location']['location_path'] in new_member['type'])):
         if old_member['type'] != new_member['type']:
+            result_message_obj = get_initial_result_obj(DiffType.STRUCT_MEMBER_TYPE_CHANGE, new_member, old_member)
             diff_info = wrap_diff_info(old_member, new_member,
-                                       DiffInfo(DiffType.STRUCT_MEMBER_TYPE_CHANGE))
+                                       result_message_obj)
             diff_struct_list.append(diff_info)
 
     if old_member['name'] != new_member['name']:
+        result_message_obj = get_initial_result_obj(DiffType.STRUCT_MEMBER_NAME_CHANGE, new_member, old_member)
         diff_info = wrap_diff_info(old_member, new_member,
-                                   DiffInfo(DiffType.STRUCT_MEMBER_NAME_CHANGE))
+                                   result_message_obj)
         diff_struct_list.append(diff_info)
 
 
@@ -221,7 +251,8 @@ def process_union(old, new):
 
 def process_union_name(old, new, diff_union_list):
     if old['name'] != new['name']:
-        diff_info = wrap_diff_info(old, new, DiffInfo(DiffType.UNION_NAME_CHANGE))
+        result_message_obj = get_initial_result_obj(DiffType.STRUCT_MEMBER_NAME_CHANGE, new, old)
+        diff_info = wrap_diff_info(old, new, result_message_obj)
         diff_union_list.append(diff_info)
 
 
@@ -231,10 +262,14 @@ def process_union_member(old, new, diff_union_list):
                                                                                       new['members'])
         for key in all_key_result:
             if old_member_result.get(key) is None:
+                result_message_obj = get_initial_result_obj(DiffType.STRUCT_MEMBER_NAME_CHANGE, new, old)
+
                 diff_info = wrap_diff_info(old_member_result.get(key), new_member_result.get(key),
                                            DiffInfo(DiffType.UNION_MEMBER_ADD))
                 diff_union_list.append(diff_info)
             elif new_member_result.get(key) is None:
+                result_message_obj = get_initial_result_obj(DiffType.STRUCT_MEMBER_NAME_CHANGE, new, old)
+
                 diff_info = wrap_diff_info(old_member_result.get(key), new_member_result.get(key),
                                            DiffInfo(DiffType.UNION_MEMBER_REDUCE))
                 diff_union_list.append(diff_info)
