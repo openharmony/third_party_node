@@ -50,6 +50,13 @@ extern "C" {
 struct ArkUI_Node;
 
 /**
+ * @brief Defines the pointer type of the ArkUI node content
+ *
+ * @since 12
+ */
+typedef struct ArkUI_NodeContent* ArkUI_NodeContentHandle;
+
+/**
  * @brief Defines the custom dialog box controller of ArkUI on the native side.
  *
  * @since 12
