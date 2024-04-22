@@ -1,0 +1,14 @@
+[
+    {
+        "name": "OH_DDK_CreateAshmem"
+    },
+    {
+        "name": "OH_DDK_MapAshmem"
+    },
+    {
+        "name": "OH_DDK_UnmapAshmem"
+    },
+    {
+        "name": "OH_DDK_DestroyAshmem"
+    }
+]
