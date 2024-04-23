@@ -49,6 +49,29 @@ extern "C" {
 #endif
 
 /**
+ * @brief MediaKeySession field.
+ * @since 12
+ * @version 1.0
+ */
+typedef struct MediaKeySession MediaKeySession;
+/**
+ * @brief DRM_MediaKeySystemInfo field.
+ * @since 12
+ * @version 1.0
+ */
+typedef struct DRM_MediaKeySystemInfo DRM_MediaKeySystemInfo;
+
+/**
+ * @brief Call back will be invoked when updating DRM information.
+ * @param player Player instance.
+ * @param mediaKeySystemInfo DRM information.
+ * @return DRM_ERR_INVALID_VAL when the params checked failure, return DRM_ERR_OK when function called successfully.
+ * @since 12
+ * @version 1.0
+ */
+typedef void (*Player_MediaKeySystemInfoCallback)(OH_AVPlayer *player, DRM_MediaKeySystemInfo* mediaKeySystemInfo);
+
+/**
  * @brief Create a player
  * @syscap SystemCapability.Multimedia.Media.AVPlayer
  * @return Returns a pointer to an OH_AVPlayer instance
