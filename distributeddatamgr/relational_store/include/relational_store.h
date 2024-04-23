@@ -554,6 +554,12 @@ typedef enum Rdb_SubscribeType {
      * @brief Subscription to cloud data change details.
      */
     RDB_SUBSCRIBE_TYPE_CLOUD_DETAILS,
+
+    /**
+     * @brief Subscription to local data change details.
+     * @since 12
+     */
+    RDB_SUBSCRIBE_TYPE_LOCAL_DETAILS,
 } Rdb_SubscribeType;
 
 /**
@@ -613,10 +619,12 @@ typedef struct Rdb_DataObserver {
 
 /**
  * @brief Registers an observer for the database.
- * When data in the distributed database changes, the callback will be invoked.
+ * When data in the distributed database or the local database changes, the callback will be invoked.
  *
  * @param store Represents a pointer to an {@link OH_Rdb_Store} instance.
  * @param type Indicates the subscription type, which is defined in {@link Rdb_SubscribeType}.
+ * If its value is RDB_SUBSCRIBE_TYPE_LOCAL_DETAILS, the callback will be invoked for data changes
+ * in the local database.
  * @param observer The {@link Rdb_DataObserver} of change events in the database.
  * @return Returns the status code of the execution. See {@link OH_Rdb_ErrCode}.
  * @see OH_Rdb_Store.
