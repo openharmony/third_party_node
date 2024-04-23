@@ -427,6 +427,45 @@ OH_AVErrCode OH_AVPlayer_DeselectTrack(OH_AVPlayer *player, int32_t index);
  */
 OH_AVErrCode OH_AVPlayer_GetCurrentTrack(OH_AVPlayer *player, int32_t trackType, int32_t *index);
 
+/**
+ * @brief Method to set player media key system info callback.
+ * @syscap SystemCapability.Multimedia.Media.AVPlayer
+ * @param player Pointer to an OH_AVPlayer instance
+ * @param callback object pointer.
+ * @return Returns {@link AV_ERR_OK} if the drm info callback is set; returns an error code defined
+ * in {@link native_averrors.h} otherwise.
+ * @since 12
+ * @version 1.0
+ */
+OH_AVErrCode OH_AVPlayer_SetMediaKeySystemInfoCallback(OH_AVPlayer *player,
+    Player_MediaKeySystemInfoCallback callback);
+
+/**
+ * @brief Obtains media key system info to create media key session.
+ * @syscap SystemCapability.Multimedia.Media.AVPlayer
+ * @param player Pointer to an OH_AVPlayer instance
+ * @param mediaKeySystemInfo Media key system info.
+ * @return Returns {@link AV_ERR_OK} if the current position is get; returns an error code defined
+ * in {@link native_averrors.h} otherwise.
+ * @since 12
+ * @version 1.0
+ */
+OH_AVErrCode OH_AVPlayer_GetMediaKeySystemInfo(OH_AVPlayer *player, DRM_MediaKeySystemInfo *mediaKeySystemInfo);
+
+/**
+ * @brief Set decryption info.
+ *
+ * @syscap SystemCapability.Multimedia.Media.AVPlayer
+ * @param player Pointer to an OH_AVPlayer instance
+ * @param mediaKeySession A media key session instance with decryption function.
+ * @param secureVideoPath Require secure decoder or not.
+ * @return Returns {@link AV_ERR_OK} if set successfully; returns an error code defined
+ * in {@link native_averrors.h} otherwise.
+ * @since 12
+ * @version 1.0
+*/
+OH_AVErrCode OH_AVPlayer_SetDecryptionConfig(OH_AVPlayer *player, MediaKeySession *mediaKeySession,
+    bool secureVideoPath);
 
 #ifdef __cplusplus
 }
