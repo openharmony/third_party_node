@@ -34,17 +34,14 @@ ohos_ndk_library("libpixelmap") {
   min_compact_version = "12"
   system_capability = "SystemCapability.Multimedia.Image.Core"
   system_capability_headers = [
-    "multimedia/image_framework/pixelmap_native.h",
-    "multimedia/image_framework/image_common.h",
+    "multimedia/image_framework/image/pixelmap_native.h",
+    "multimedia/image_framework/image/image_common.h",
   ]
 }
 
 ohos_ndk_headers("libpixelmap_header") {
-  dest_dir = "$ndk_headers_out_dir/multimedia/image_framework"
-  sources = [
-    "./include/image/image_common.h",
-    "./include/image/pixelmap_native.h",
-  ]
+  dest_dir = "$ndk_headers_out_dir/multimedia/image_framework/image"
+  sources = [ "./include/image/pixelmap_native.h" ]
 }
 
 ohos_ndk_library("libimage_ndk") {
@@ -90,13 +87,13 @@ ohos_ndk_library("libimage_source") {
   min_compact_version = "12"
   system_capability = "SystemCapability.Multimedia.Image.ImageSource"
   system_capability_headers = [
-    "multimedia/image_framework/image_source_native.h",
-    "multimedia/image_framework/image_common.h",
+    "multimedia/image_framework/image/image_source_native.h",
+    "multimedia/image_framework/image/image_common.h",
   ]
 }
 
 ohos_ndk_headers("libimage_source_header") {
-  dest_dir = "$ndk_headers_out_dir/multimedia/image_framework"
+  dest_dir = "$ndk_headers_out_dir/multimedia/image_framework/image"
   sources = [ "./include/image/image_source_native.h" ]
 }
 
@@ -150,12 +147,12 @@ ohos_ndk_library("libimage_packer") {
   min_compact_version = "12"
   system_capability = "SystemCapability.Multimedia.Image.ImagePacker"
   system_capability_headers = [
-    "multimedia/image_framework/image_packer_native.h",
-    "multimedia/image_framework/image_common.h",
+    "multimedia/image_framework/image/image_packer_native.h",
+    "multimedia/image_framework/image/image_common.h",
   ]
 }
 
 ohos_ndk_headers("libimage_packer_header") {
-  dest_dir = "$ndk_headers_out_dir/multimedia/image_framework"
+  dest_dir = "$ndk_headers_out_dir/multimedia/image_framework/image"
   sources = [ "./include/image/image_packer_native.h" ]
 }
