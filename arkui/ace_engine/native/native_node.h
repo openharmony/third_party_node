@@ -5146,6 +5146,84 @@ ArkUI_NodeHandle OH_ArkUI_NodeCustomEvent_GetNodeHandle(ArkUI_NodeCustomEvent* e
 */
 ArkUI_NodeCustomEventType OH_ArkUI_NodeCustomEvent_GetEventType(ArkUI_NodeCustomEvent* event);
 
+/**
+ * @brief Defines the node content event type.
+ * 
+ * @since 12
+ */
+typedef enum {
+    /** Defines the attach event. */
+    NOTE_CONTENT_EVENT_ON_ATTACH_TO_WINDOW = 0,
+    /** Defines the detach event. */
+    NOTE_CONTENT_EVENT_ON_DETACH_FROM_WINDOW = 1,
+} ArkUI_NodeContentEventType;
+
+/**
+ * @brief Defines the general structure of a node content event.
+ * @since 12
+ */
+typedef struct ArkUI_NodeContentEvent ArkUI_NodeContentEvent;
+
+/**
+ * @brief Defines the callback function of a node content event.
+ * @since 12
+ */
+typedef void(*ArkUI_NodeContentCallback)(ArkUI_NodeContentEvent* event);
+
+/**
+ * @brief register a callback functoin to a node content.
+ *
+ * @param content Indicates the pointer to the node content instance.
+ * @param callback Indicates the callback function.
+ * @return Returns 0 if success,
+ *         Returns 401 if parameter exception occurs.
+ * @since 12
+ */
+int32_t OH_ArkUI_NodeContent_RegisterCallback(ArkUI_NodeContentHandle content, ArkUI_NodeContentCallback callback);
+
+/**
+ * @brief Obtains the type of a node content event.
+ *
+ * @param event Indicates the pointer to the node content event.
+ * @return Returns the type of the node content event.
+ * @since 12
+ */
+ArkUI_NodeContentEventType OH_ArkUI_NodeContentEvent_GetEventType(ArkUI_NodeContentEvent* event);
+
+/**
+ * @brief Add a node to a node content.
+ *
+ * @param content Indicates the pointer to the node content instance.
+ * @param node Indicates the pointer to the node
+ * @return Returns 0 if success,
+ *         Returns 401 if parameter exception occurs.
+ * @since 12
+ */
+int32_t OH_ArkUI_NodeContent_AddNode(ArkUI_NodeContentHandle content, ArkUI_NodeHandle node);
+
+/**
+ * @brief remove a node from a node content.
+ *
+ * @param content Indicates the pointer to the node content instance.
+ * @param node Indicates the pointer to the node
+ * @return Returns 0 if success,
+ *         Returns 401 if parameter exception occurs.
+ * @since 12
+ */
+int32_t OH_ArkUI_NodeContent_RemoveNode(ArkUI_NodeContentHandle content, ArkUI_NodeHandle node);
+
+/**
+ * @brief insert a node into a node content at a given position.
+ *
+ * @param content Indicates the pointer to the node content instance.
+ * @param node Indicates the pointer to the node
+ * @param position Indicates the position for inserting the node
+ * @return Returns 0 if success,
+ *         Returns 401 if parameter exception occurs.
+ * @since 12
+ */
+int32_t OH_ArkUI_NodeContent_InsertNode(ArkUI_NodeContentHandle content, ArkUI_NodeHandle node, int32_t position);
+
 #ifdef __cplusplus
 };
 #endif
