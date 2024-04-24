@@ -140,13 +140,13 @@ void sync(void);
 pid_t setpgrp(void);
 
 /**
- * @brief Encrypts a password using the DES algorithm.
+ * @brief Encrypts a password using the DES algorithm
  * 
  * The `crypt` function encrypts the given password string using the DES algorithm
- * and returns the encrypted string. It is commonly used for storing and verifying user passwords.
+ * and returns the encrypted string. It is commonly used for storing and verifying user passwords
  * 
  * @param (const char *) The password string to be encrypted.
- * @param (const char *) The salt value string used to increase the randomness of encryption.
+ * @param (const char *) The salt value string used to increase the randomness of encryption
  * 
  * @return Return the encrypted string or NULL in case of an error.
  * @since 12
