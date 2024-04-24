@@ -42,7 +42,6 @@ ohos_ndk_library("libpixelmap") {
 ohos_ndk_headers("libpixelmap_header") {
   dest_dir = "$ndk_headers_out_dir/multimedia/image_framework/image"
   sources = [
-    "./include/image/image_common.h",
     "./include/image/pixelmap_native.h",
   ]
 }
