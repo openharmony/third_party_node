@@ -197,7 +197,7 @@ int syncfs(int);
  * @param (const char *) Path to the file.
  * @param (int) The access permissions to be tested.
  * 
- * @return On success, zero is returned, On error, -1 is returned
+ * @return On success, zero is returned. On error, -1 is returned
  * 
  * @since 12
 */
