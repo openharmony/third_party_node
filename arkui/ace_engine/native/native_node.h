@@ -5153,9 +5153,9 @@ ArkUI_NodeCustomEventType OH_ArkUI_NodeCustomEvent_GetEventType(ArkUI_NodeCustom
  */
 typedef enum {
     /** Defines the attach event. */
-    NOTE_CONTENT_EVENT_ON_ATTACH_TO_WINDOW = 0,
+    NODE_CONTENT_EVENT_ON_ATTACH_TO_WINDOW = 0,
     /** Defines the detach event. */
-    NOTE_CONTENT_EVENT_ON_DETACH_FROM_WINDOW = 1,
+    NODE_CONTENT_EVENT_ON_DETACH_FROM_WINDOW = 1,
 } ArkUI_NodeContentEventType;
 
 /**
