@@ -314,7 +314,9 @@ int32_t OH_SensorEvent_GetAccuracy(Sensor_Event* sensorEvent, Sensor_Accuracy *a
  * the x, y, and z axes of the device, respectively, in m/s2.
  * SENSOR_TYPE_GYROSCOPE: data[0], data[1], and data[2], indicating the angular velocity of rotation around
  *  the x, y, and z axes of the device, respectively, in rad/s.
- * SENSOR_TYPE_AMBIENT_LIGHT: data[0], indicating the ambient light intensity, in lux.
+ * SENSOR_TYPE_AMBIENT_LIGHT: data[0], indicating the ambient light intensity, in lux. Since api version 12,
+ * two additional data will be returned, where data[1] indicating the color temperature, in kelvin; data[2]
+ * indicating the infrared luminance, in cd/m2.
  * SENSOR_TYPE_MAGNETIC_FIELD: data[0], data[1], and data[2], indicating the magnetic field strength around
  * the x, y, and z axes of the device, respectively, in μT.
  * SENSOR_TYPE_BAROMETER: data[0], indicating the atmospheric pressure, in hPa.
@@ -339,40 +341,6 @@ int32_t OH_SensorEvent_GetAccuracy(Sensor_Event* sensorEvent, Sensor_Accuracy *a
  * @return Returns <b>SENSOR_SUCCESS</b> if the operation is successful;
  * returns an error code defined in {@link Sensor_Result} otherwise.
  * @since 11
- */
-/**
- * @brief Obtains sensor data. The data length and content depend on the sensor type.
- * The format of the sensor data reported is as follows:
- * SENSOR_TYPE_ACCELEROMETER: data[0], data[1], and data[2], indicating the acceleration around
- * the x, y, and z axes of the device, respectively, in m/s2.
- * SENSOR_TYPE_GYROSCOPE: data[0], data[1], and data[2], indicating the angular velocity of rotation around
- *  the x, y, and z axes of the device, respectively, in rad/s.
- * SENSOR_TYPE_AMBIENT_LIGHT: data[0], indicating the ambient light intensity, in lux; data[1], indicating
- * the color temperature, in kelvin; data[2], indicating the infrared luminance, in cd/m2.
- * SENSOR_TYPE_MAGNETIC_FIELD: data[0], data[1], and data[2], indicating the magnetic field strength around
- * the x, y, and z axes of the device, respectively, in μT.
- * SENSOR_TYPE_BAROMETER: data[0], indicating the atmospheric pressure, in hPa.
- * SENSOR_TYPE_HALL: data[0], indicating the opening/closing state of the flip cover. The value <b>0</b> means that
- * the flip cover is opened, and a value greater than <b>0</b> means that the flip cover is closed.
- * SENSOR_TYPE_PROXIMITY: data[0], indicates the approaching state. The value <b>0</b> means the two objects are close
- * to each other, and a value greater than <b>0</b> means that they are far away from each other.
- * SENSOR_TYPE_ORIENTATION: data[0], data[1], and data[2], indicating the rotation angles of a device around
- * the z, x, and y axes, respectively, in degree.
- * SENSOR_TYPE_GRAVITY: data[0], data[1], and data[2], indicating the gravitational acceleration around
- * the x, y, and z axes of a device, respectively, in m/s2.
- * SENSOR_TYPE_ROTATION_VECTOR: data[0], data[1] and data[2], indicating the rotation angles of a device around
- * the x, y, and z axes, respectively, in degree. data[3] indicates the rotation vector.
- * SENSOR_TYPE_PEDOMETER_DETECTION: data[0], indicating the pedometer detection status.
- * The value <b>1</b> means that the number of detected steps changes.
- * SENSOR_TYPE_PEDOMETER: data[0], indicating the number of steps a user has walked.
- * SENSOR_TYPE_HEART_RATE: data[0], indicating the heart rate value.
- *
- * @param sensorEvent - Pointer to the sensor data information.
- * @param data - Double pointer to the sensor data.
- * @param length - Pointer to the array length.
- * @return Returns <b>SENSOR_SUCCESS</b> if the operation is successful;
- * returns an error code defined in {@link Sensor_Result} otherwise.
- * @since 12
  */
 int32_t OH_SensorEvent_GetData(Sensor_Event* sensorEvent, float **data, uint32_t *length);
 
