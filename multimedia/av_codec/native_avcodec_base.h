@@ -227,6 +227,22 @@ extern const char *OH_AVCODEC_MIMETYPE_AUDIO_G711MU;
 extern const char *OH_AVCODEC_MIMETYPE_AUDIO_APE;
 
 /**
+ * @brief Enumerates the MIME type of versatile video coding.
+ *
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 12
+ */
+extern const char *OH_AVCODEC_MIMETYPE_VIDEO_VVC;
+
+/**
+ * @brief Enumerates the MIME type of subtitle.
+ *
+ * @syscap SystemCapability.Multimedia.Media.CodecBase
+ * @since 12
+ */
+extern const char *OH_AVCODEC_MIMETYPE_SUBTITLE_SRT;
+
+/**
  * @brief The extra data's key of surface Buffer
  * @syscap SystemCapability.Multimedia.Media.CodecBase
  * @since 9
