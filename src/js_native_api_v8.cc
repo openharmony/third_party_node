@@ -3462,7 +3462,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_CreateReference(JSVM_Env env,
   v8::Local<v8::Value> v8_value = v8impl::V8LocalValueFromJsValue(value);
   if (env->module_api_version != JSVM_VERSION_EXPERIMENTAL) {
     if (!(v8_value->IsObject() || v8_value->IsFunction() ||
-          v8_value->IsSymbol())) {
+          v8_value->IsSymbol() || v8_value->IsString())) {
       return jsvm_set_last_error(env, JSVM_INVALID_ARG);
     }
   }
