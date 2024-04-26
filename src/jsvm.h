@@ -1445,7 +1445,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_RelaxedEquals(JSVM_Env env,
  * @param arraybuffer: The JavaScript ArrayBuffer to be detached.
  * @return Returns JSVM_OK if the API succeeded.If a non-detachable ArrayBuffer
  * is passed in it returns JSVM_DETACHABLE_ARRAYBUFFER_EXPECTED.
- * @since 11
+ * @since 12
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_DetachArraybuffer(JSVM_Env env,
                                                   JSVM_Value arraybuffer);
