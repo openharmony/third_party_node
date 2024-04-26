@@ -423,13 +423,7 @@ typedef enum {
      *
      * @since 10
      */
-    AUDIOSTREAM_SOURCE_TYPE_VOICE_COMMUNICATION = 7,
-    /**
-     * Remote cast source type.
-     *
-     * @since 12
-     */
-    AUDIOSTREAM_SOURCE_TYPE_REMOTE_CAST = 11,
+    AUDIOSTREAM_SOURCE_TYPE_VOICE_COMMUNICATION = 7
 } OH_AudioStream_SourceType;
 
 /**
