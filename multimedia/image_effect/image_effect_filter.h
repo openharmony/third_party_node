@@ -37,7 +37,7 @@
 
 #include <stdint.h>
 #include "image_effect_errors.h"
-#include "multimedia/image_framework/pixelmap_native.h"
+#include "multimedia/image_framework/image/pixelmap_native.h"
 
 #ifdef __cplusplus
 extern "C" {
