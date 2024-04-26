@@ -24,6 +24,7 @@ class ToolNameType(enum.Enum):
     DIFF = 'diff'
     CHECK = 'check'
     COLLECT_H = 'collect_h'
+    COLLECT_FILE = 'collect_file'
 
 
 tool_name_type_set = [
@@ -53,6 +54,8 @@ def run_tools(options):
         check.curr_entry(options.parser_path)
     elif tool_name == ToolNameType['COLLECT_H'].value:
         parser.parser_direct(options.parser_path)
+    elif tool_name == ToolNameType['COLLECT_FILE'].value:
+        parser.parser_file_level(options.output_path)
     else:
         print("工具名称错误")
 
@@ -77,6 +80,13 @@ class Config(object):
             "required": True,
             "type": str,
             "help": "解析路径"
+        },
+        {
+            "name": "--output-path",
+            "abbr": "-O",
+            "required": True,
+            "type": str,
+            "help": "collect_file工具输出文件路径"
         },
         {
             "name": "--diff-path-old",
