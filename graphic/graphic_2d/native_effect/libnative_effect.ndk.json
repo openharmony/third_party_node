@@ -1,0 +1,10 @@
+[
+    { "name": "OH_Filter_CreateEffect" },
+    { "name": "OH_Filter_Release" },
+    { "name": "OH_Filter_Blur" },
+    { "name": "OH_Filter_Brighten" },
+    { "name": "OH_Filter_GrayScale" },
+    { "name": "OH_Filter_Invert" },
+    { "name": "OH_Filter_SetColorMatrix" },
+    { "name": "OH_Filter_GetEffectPixelMap" }
+]
