@@ -29,6 +29,14 @@
     },
     {
         "first_introduced": "12",
+        "name": "OH_PixelmapInitializationOptions_GetSrcPixelFormat"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapInitializationOptions_SetSrcPixelFormat"
+    },
+    {
+        "first_introduced": "12",
         "name": "OH_PixelmapInitializationOptions_GetAlphaType"
     },
     {
@@ -110,5 +118,13 @@
     {
         "first_introduced": "12",
         "name": "OH_PixelmapNative_Release"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapNative_ConvertAlphaFormat"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PixelmapNative_CreateEmptyPixelmap"
     }
 ]
