@@ -36,6 +36,9 @@
         "name": "OH_Usb_SendPipeRequest"
     },
     {
+        "name": "OH_Usb_SendPipeRequestWithAshmem"
+    },
+    {
         "name": "OH_Usb_CreateDeviceMemMap"
     },
     {
