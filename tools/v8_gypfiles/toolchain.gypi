@@ -272,6 +272,11 @@
             'cflags': [ '-mbranch-protection=standard' ],
           }],
         ],
+       'target_conditions': [
+          ['_toolset == "target"', {
+            'cflags': [ '-fvisibility-inlines-hidden', '-fvisibility=hidden' ],
+          }],
+        ],
       }],
       ['v8_target_arch=="riscv64"', {
         'defines': [
