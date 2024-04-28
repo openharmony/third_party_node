@@ -316,6 +316,17 @@ Image_ErrorCode OH_PixelmapImageInfo_GetPixelFormat(OH_Pixelmap_ImageInfo *info,
 Image_ErrorCode OH_PixelmapImageInfo_GetAlphaType(OH_Pixelmap_ImageInfo *info, int32_t *alphaType);
 
 /**
+ * @brief Get isHdr boolean for imageinfo struct.
+ *
+ * @param info The imageinfo pointer will be operated. Pointer connot be null.
+ * @param isHdr Whether the image has a high dynamic range.
+ * @return Returns {@link Image_ErrorCode} IMAGE_SUCCESS - The operation is successful.
+ * returns {@link Image_ErrorCode} IMAGE_BAD_PARAMETER - Parameter error.Possible causes:Parameter verification failed.
+ * @since 12
+ */
+Image_ErrorCode OH_PixelmapImageInfo_GetDynamicRange(OH_Pixelmap_ImageInfo *info, bool *isHdr);
+
+/**
  * @brief Delete imageinfo struct pointer.
  *
  * @param info The imageinfo pointer will be operated.
