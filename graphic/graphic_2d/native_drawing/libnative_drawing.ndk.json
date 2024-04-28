@@ -138,8 +138,88 @@
     { "name": "OH_Drawing_FilterDestroy" },
     { "name": "OH_Drawing_FontCreate" },
     { "name": "OH_Drawing_FontDestroy" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontGetEdging"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontGetHinting"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontGetScaleX"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontGetSize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontGetSkewX"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontGetWidths"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontIsBaselineSnap"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontIsEmbeddedBitmaps"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontIsEmbolden"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontIsForceAutoHinting"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontIsLinearMetrics"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontIsSubpixel"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontSetBaselineSnap"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontSetEdging"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontSetEmbeddedBitmaps"
+    },
     { "name": "OH_Drawing_FontSetFakeBoldText" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontSetForceAutoHinting"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontSetHinting"
+    },
     { "name": "OH_Drawing_FontSetLinearText" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontSetScaleX"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontSetSubpixel"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FontTextToGlyphs"
+    },
     { "name": "OH_Drawing_FontSetTextSize" },
     { "name": "OH_Drawing_FontCountText" },
     { "name": "OH_Drawing_FontSetTextSkewX" },
@@ -444,6 +524,10 @@
     { "name": "OH_Drawing_TextBlobCreateFromPosText" },
     { "name": "OH_Drawing_TextBlobCreateFromString" },
     { "name": "OH_Drawing_TextBlobGetBounds" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_TextBlobUniqueID"
+    },
     { "name": "OH_Drawing_TextBlobBuilderAllocRunPos" },
     { "name": "OH_Drawing_TextBlobBuilderCreate" },
     { "name": "OH_Drawing_TextBlobBuilderDestroy" },
