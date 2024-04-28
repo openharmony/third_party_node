@@ -1429,7 +1429,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_StrictEquals(JSVM_Env env,
  * @param env: The environment that the API is invoked under.
  * @param lhs: The JavaScript value to check.
  * @param rhs: The JavaScript value to check against.
- * @param result: Whether the two JSVM_Value objects are equal.
+ * @param result: Whether the two JSVM_Value objects are relaxed equal.
  * @return Returns JSVM_OK if the API succeeded.
  * @since 12
  */
