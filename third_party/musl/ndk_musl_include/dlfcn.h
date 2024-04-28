@@ -25,6 +25,19 @@ char  *dlerror(void);
 void  *dlopen(const char *, int);
 void  *dlsym(void *__restrict, const char *__restrict);
 
+
+/**
+ * @brief Obtain address of a symbol in a shared object or executable
+ * 
+ * @param (void *__restrict) the handle to the dynamic link library
+ * @param (const char *restrict) the name of the symbol to be looked up
+ * @param (const char *restrict) the specific version of the symbol to be looked up
+ * 
+ * @return On success, return the address associated with symbol. On failure, return NULL
+ * @since 12
+*/
+void *dlvsym(void *__restrict, const char *__restrict, const char *__restrict);
+
 /* namespace apis */
 #define NS_NAME_MAX 255
 typedef struct {

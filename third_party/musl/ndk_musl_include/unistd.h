@@ -138,6 +138,20 @@ int lockf(int, int, off_t);
 int nice(int);
 void sync(void);
 pid_t setpgrp(void);
+
+/**
+ * @brief Encrypts a password using the DES algorithm
+ * 
+ * The `crypt` function encrypts the given password string using the DES algorithm
+ * and returns the encrypted string. It is commonly used for storing and verifying user passwords
+ * 
+ * @param (const char *) The password string to be encrypted.
+ * @param (const char *) The salt value string used to increase the randomness of encryption
+ * 
+ * @return Return the encrypted string or NULL in case of an error.
+ * @since 12
+*/
+char *crypt(const char *, const char *);
 void swab(const void *__restrict, void *__restrict, ssize_t);
 #endif
 
@@ -176,6 +190,18 @@ int setresgid(gid_t, gid_t, gid_t);
 int getresuid(uid_t *, uid_t *, uid_t *);
 int getresgid(gid_t *, gid_t *, gid_t *);
 int syncfs(int);
+
+/**
+ * @brief Check permissions and existence of the file identified by pathname.
+ * 
+ * @param (const char *) Path to the file.
+ * @param (int) The access permissions to be tested.
+ * 
+ * @return On success, zero is returned. On error, -1 is returned
+ * 
+ * @since 12
+*/
+int eaccess(const char *, int);
 ssize_t copy_file_range(int, off_t *, int, off_t *, size_t, unsigned);
 pid_t gettid(void);
 #endif
