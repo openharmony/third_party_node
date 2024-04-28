@@ -14,6 +14,10 @@
     { "name": "OH_NativeWindow_NativeObjectUnreference" },
     { "name": "OH_NativeWindow_GetNativeObjectMagic" },
     { "name": "OH_NativeWindow_NativeWindowSetScalingMode" },
+    {
+        "first_introduced": "12",
+        "name": "OH_NativeWindow_NativeWindowSetScalingModeV2"
+    },
     { "name": "OH_NativeWindow_NativeWindowSetMetaData" },
     { "name": "OH_NativeWindow_NativeWindowSetMetaDataSet" },
     { "name": "OH_NativeWindow_NativeWindowSetTunnelHandle" },
