@@ -2390,6 +2390,23 @@ JSVM_Status JSVM_CDECL OH_JSVM_StrictEquals(JSVM_Env env,
   return GET_RETURN_STATUS(env);
 }
 
+JSVM_Status JSVM_CDECL OH_JSVM_RelaxedEquals(JSVM_Env env,
+                                          JSVM_Value lhs,
+                                          JSVM_Value rhs,
+                                          bool* result) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, lhs);
+  CHECK_ARG(env, rhs);
+  CHECK_ARG(env, result);
+
+  v8::Local<v8::Value> a = v8impl::V8LocalValueFromJsValue(lhs);
+  v8::Local<v8::Value> b = v8impl::V8LocalValueFromJsValue(rhs);
+  v8::Local<v8::Context> context = env->context();
+
+  *result = a->Equals(context, b).FromJust();
+  return GET_RETURN_STATUS(env);
+}
+
 JSVM_Status JSVM_CDECL OH_JSVM_GetPrototype(JSVM_Env env,
                                           JSVM_Value object,
                                           JSVM_Value* result) {
