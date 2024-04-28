@@ -4376,3 +4376,49 @@ OH_JSVM_DefineClassWithPropertyHandler(JSVM_Env env,
 
   return GET_RETURN_STATUS(env);
 }
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsLocked(JSVM_Env env,
+                                        bool* isLocked) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, isLocked);
+
+  *isLocked = v8::Locker::IsLocked(env->isolate);
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_AcquireLock(JSVM_Env env) {
+  CHECK_ENV(env);
+
+  bool isLocked = v8::Locker::IsLocked(env->isolate);
+  if (!isLocked) {
+    env->locker = new v8::Locker(env->isolate);
+  }
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_ReleaseLock(JSVM_Env env) {
+  CHECK_ENV(env);
+
+  bool isLocked = v8::Locker::IsLocked(env->isolate);
+  if (isLocked && env->locker != nullptr) {
+    delete env->locker;
+    env->locker = nullptr;
+  }
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsCallable(JSVM_Env env,
+                                          JSVM_Value value,
+                                          bool* isCallable) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isCallable);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+
+  *isCallable = val->IsFunction();
+  return jsvm_clear_last_error(env);
+}
