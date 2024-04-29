@@ -58,6 +58,7 @@
   * Output: \n
   *     <...>-2638    (-------) [002] ....   458.904382: tracing_mark_write: C|2638|H:hitraceTest 500 \n
   *
+  * @library libhitracechain.so
   * @syscap SystemCapability.HiviewDFX.HiTrace
   * @since 10
   */
