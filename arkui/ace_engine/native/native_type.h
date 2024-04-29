@@ -113,6 +113,35 @@ struct ArkUI_Context;
 typedef struct ArkUI_Context* ArkUI_ContextHandle;
 
 /**
+ * @brief Defines the navigation indicator style for the swiper.
+ *
+ * @since 12
+ */
+typedef struct ArkUI_SwiperIndicator ArkUI_SwiperIndicator;
+
+/**
+  * @brief specifies the alignment rules for subcomponents set in relative containers.
+  *
+  * @since 12
+  */
+typedef struct ArkUI_AlignmentRuleOption ArkUI_AlignmentRuleOption;
+
+/**
+  * @brief guideLine parameters, used to define the id, direction and position of the guideline.
+  *
+  * @since 12
+  */
+typedef struct ArkUI_GuidelineOption ArkUI_GuidelineOption;
+
+/**
+  * @brief barrier parameter, used to define the id,
+  * direction and components of the barrier that it depends on when generating it.
+  *
+  * @since 12
+  */
+typedef struct ArkUI_BarrierOption ArkUI_BarrierOption;
+
+/**
  * @brief Defines the event callback type.
  *
  * @since 12
@@ -355,10 +384,10 @@ typedef enum {
     ARKUI_PROGRESS_TYPE_SCALE_RING,
     /** Capsule style. */
     ARKUI_PROGRESS_TYPE_CAPSULE,
-}ArkUI_ProgressType;
+} ArkUI_ProgressType;
 
 /**
- * @brief Enumerates the text decoration styles.
+ * @brief Enumerates the text decoration types.
  *
  * @since 12
  */
@@ -372,6 +401,24 @@ typedef enum {
     /** Line through the text. */
     ARKUI_TEXT_DECORATION_TYPE_LINE_THROUGH,
 } ArkUI_TextDecorationType;
+
+/**
+ * @brief Enumerates the text decoration styles.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** Single solid line. */
+    ARKUI_TEXT_DECORATION_STYLE_SOLID = 0,
+    /** Double solid line. */
+    ARKUI_TEXT_DECORATION_STYLE_DOUBLE,
+    /** Dotted line. */
+    ARKUI_TEXT_DECORATION_STYLE_DOTTED,
+    /** Dashed line. */
+    ARKUI_TEXT_DECORATION_STYLE_DASHED,
+    /** Wavy line. */
+    ARKUI_TEXT_DECORATION_STYLE_WAVY,
+} ArkUI_TextDecorationStyle;
 
 /**
  * @brief Enumerates the text cases.
@@ -545,7 +592,6 @@ typedef enum {
     ARKUI_STICKY_STYLE_BOTH = 3,
 } ArkUI_StickyStyle;
 
-
 /**
  * @brief Enumerates the border styles.
  *
@@ -647,6 +693,19 @@ typedef enum {
     ARKUI_SWIPER_ARROW_SHOW_ON_HOVER,
 } ArkUI_SwiperArrow;
 
+/**
+ * @brief Nested scrolling mode for Swiper components and parent components.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** Swiper only scrolls on its own and is not linked to its parent component. */
+    ARKUI_SWIPER_NESTED_SRCOLL_SELF_ONLY = 0,
+    /** The Swiper itself scrolls first, and the parent component scrolls after it reaches the edge. After the parent
+     * component scrolls to the edge, if the parent component has an edge effect, the parent component triggers the edge
+     * effect; otherwise, the Swiper triggers the edge effect. */
+    ARKUI_SWIPER_NESTED_SRCOLL_SELF_FIRST,
+} ArkUI_SwiperNestedScrollMode;
 
 /**
  * @brief Enumerates the accessibility modes.
@@ -680,7 +739,6 @@ typedef enum {
     ARKUI_TEXT_COPY_OPTIONS_CROSS_DEVICE,
 } ArkUI_TextCopyOptions;
 
-
 /**
  * @brief Defines how the adaptive height is determined for the text.
  *
@@ -694,7 +752,6 @@ typedef enum {
     /** Prioritize the layout constraint settings in terms of height. */
     ARKUI_TEXT_HEIGHT_ADAPTIVE_POLICY_LAYOUT_CONSTRAINT_FIRST,
 } ArkUI_TextHeightAdaptivePolicy;
-
 
 /**
  * @brief Defines nested scrolling options.
@@ -719,7 +776,6 @@ typedef enum {
     ARKUI_SCROLL_NESTED_MODE_PARALLEL,
 } ArkUI_ScrollNestedMode;
 
-
 /**
  * @brief Defines the edge to which the component scrolls.
  *
@@ -735,6 +791,40 @@ typedef enum {
     /** End position in the horizontal direction. */
     ARKUI_SCROLL_EDGE_END,
 } ArkUI_ScrollEdge;
+
+/**
+ * @brief Alignment when scrolling to specific items.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** Align the head. Align the head of the specified item with the head of the container.*/
+    ARKUI_SCROLL_ALIGNMENT_START = 0,
+    /** Center alignment. Align the axis direction of the specified item to the center of the container.*/
+    ARKUI_SCROLL_ALIGNMENT_CENTER,
+    /** Tail alignment. Align the tail of the specified item with the tail of the container.*/
+    ARKUI_SCROLL_ALIGNMENT_END,
+    /** Automatic alignment. If the specified item is completely in the display area, no adjustments will be made.
+     * Otherwise, according to the principle of the shortest sliding distance, align the head or tail of the specified
+     * item with the container, so that the specified item is completely in the display area.*/
+    ARKUI_SCROLL_ALIGNMENT_AUTO,
+} ArkUI_ScrollAlignment;
+
+/**
+ * @brief Define the current scrolling state.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** Idle state. Trigger when using the method provided by the controller to control scrolling, and trigger when
+     * dragging the scroll bar to scroll.*/
+    ARKUI_SCROLL_STATE_IDLE = 0,
+    /** Scroll state. Triggered when dragging the container with fingers to scroll.*/
+    ARKUI_SCROLL_STATE_SCROLL,
+    /** Inertial rolling state. Triggered when inertia rolling and bouncing back to the edge are performed after
+     * releasing the hand quickly.*/
+    ARKUI_SCROLL_STATE_FLING,
+} ArkUI_ScrollState;
 
 /**
  * @brief Enumerates the types of the slider in the block direction.
@@ -978,7 +1068,6 @@ typedef enum {
     /** High quality interpolation. This mode produces scaled images of the highest possible quality. */
     ARKUI_IMAGE_INTERPOLATION_HIGH,
 } ArkUI_ImageInterpolation;
-
 
 /**
  * @brief Enumerates the blend modes.
@@ -1415,6 +1504,51 @@ typedef enum {
 } ArkUI_FinishCallbackType;
 
 /**
+ * @brief Enumerates the alignment modes of items along the cross axis.
+  *
+ * @since 12
+ */
+typedef enum {
+    /** The list items are packed toward the start edge of the list container along the cross axis. */
+    ARKUI_LIST_ITEM_ALIGNMENT_START = 0,
+    /** The list items are centered in the list container along the cross axis. */
+    ARKUI_LIST_ITEM_ALIGNMENT_CENTER,
+    /** The list items are packed toward the end edge of the list container along the cross axis. */
+    ARKUI_LIST_ITEM_ALIGNMENT_END,
+} ArkUI_ListItemAlignment;
+
+/**
+  * @brief defines the direction of the barrier line.
+  *
+  * @since 12
+  */
+typedef enum {
+    /** The barrier is the leftmost of all its referencedIds. */
+    ARKUI_BARRIER_DIRECTION_START = 0,
+    /** The barrier is on the rightmost side of all its referencedIds. */
+    ARKUI_BARRIER_DIRECTION_END,
+    /** The barrier is at the top of all its referencedIds. */
+    ARKUI_BARRIER_DIRECTION_TOP,
+    /** The barrier is at the bottom of all its referencedIds. */
+    ARKUI_BARRIER_DIRECTION_BOTTOM
+} ArkUI_BarrierDirection;
+
+/**
+  * @brief defines the style of the chain.
+  *
+  * @since 12
+  */
+typedef enum {
+    /** Components are evenly distributed among constraint anchor points. */
+    ARKUI_RELATIVE_LAYOUT_CHAIN_STYLE_SPREAD = 0,
+    /** Except for the first and last two sub-components,
+      * other components are evenly distributed between the constraint anchor points. */
+    ARKUI_RELATIVE_LAYOUT_CHAIN_STYLE_SPREAD_INSIDE,
+    /** No gaps in subcomponents within the chain. */
+    ARKUI_RELATIVE_LAYOUT_CHAIN_STYLE_PACKED,
+} ArkUI_RelativeLayoutChainStyle;
+
+/**
  * @brief Describes the margins of a component.
  *
  * @since 12
@@ -1445,6 +1579,196 @@ typedef enum {
     /** fp. */
     ARKUI_LENGTH_METRIC_UNIT_FP
 } ArkUI_LengthMetricUnit;
+
+/**
+ * @brief Enumerates the render fit.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** Maintains the content size of the animation's final state,
+      * and the content is always centered with the component.*/
+    ARKUI_RENDER_FIT_CENTER = 0,
+    /** Maintains the content size of the animation's final state,
+      * and the content is always aligned with the top center of the component. */
+    ARKUI_RENDER_FIT_TOP,
+    /** Maintains the content size of the animation's final state,
+      * and the content is always aligned with the bottom center of the component. */
+    ARKUI_RENDER_FIT_BOTTOM,
+    /** Maintains the content size of the animation's final state,
+      * and the content is always aligned to the left of the component. */
+    ARKUI_RENDER_FIT_LEFT,
+    /** Maintains the content size of the animation's final state,
+      * and the content is always right-aligned with the component. */
+    ARKUI_RENDER_FIT_RIGHT,
+    /** Maintains the content size of the animation's final state,
+      * and the content is always aligned with the top left corner of the component. */
+    ARKUI_RENDER_FIT_TOP_LEFT,
+    /** Keep the content size of the animation final state,
+      * and the content is always aligned with the upper right corner of the component. */
+    ARKUI_RENDER_FIT_TOP_RIGHT,
+    /** Keep the content size of the animation final state,
+      * and the content always aligns with the lower-left corner of the component. */
+    ARKUI_RENDER_FIT_BOTTOM_LEFT,
+    /** Keep the content size of the animation final state,
+      *and the content always aligns with the lower-right corner of the component. */
+    ARKUI_RENDER_FIT_BOTTOM_RIGHT,
+    /** The aspect ratio of the animation's final state content is not considered,
+      *and the content is always scaled to the size of the component. */
+    ARKUI_RENDER_FIT_RESIZE_FILL,
+    /** Reduce or enlarge the aspect ratio of the animation final state content,
+      * so that the content is fully displayed in the component,
+      * and keep the center aligned with the component. */
+    ARKUI_RENDER_FIT_RESIZE_CONTAIN,
+    /** Keep the aspect ratio of the animation final state content to reduce or enlarge,
+      * so that the content is fully displayed in the component.
+      * When there is left over in the broad direction of the component,
+      * the content is aligned to the left of the component,
+      * and when there is left over in the high direction of the component,
+      * the content is aligned to the top of the component. */
+    ARKUI_RENDER_FIT_RESIZE_CONTAIN_TOP_LEFT,
+    /** Keep the aspect ratio of the animation final state content to reduce or enlarge,
+      * so that the content is fully displayed in the component.
+      * When there is left in the wide direction of the component,
+      * the content is aligned with the component on the right.
+      * When there is left in the high direction of the component,
+      * the content is aligned with the component on the bottom. */
+    ARKUI_RENDER_FIT_RESIZE_CONTAIN_BOTTOM_RIGHT,
+    /** Keep the aspect ratio of the animation final state content reduced or enlarged,
+      * so that both sides of the content are greater than or equal to both sides of the component,
+      * and keep the center aligned with the component to display the middle part of the content. */
+    ARKUI_RENDER_FIT_RESIZE_COVER,
+    /** Keep the aspect ratio of the final content of the animation reduced or enlarged
+      * so that both sides of the content are exactly greater than or equal to both sides of the component.
+      * When the content width is left, the content is aligned to the left of the component,
+      * and the left portion of the content is displayed. When the content is left in the high direction,
+      * the content and the component remain top aligned, showing the top side of the content. */
+    ARKUI_RENDER_FIT_RESIZE_COVER_TOP_LEFT,
+    /** Keep the aspect ratio of the final content of the animation reduced or enlarged so
+      * that both sides of the content are exactly greater than or equal to both sides of the component.
+      * When the content width is left, the content and the component remain right aligned,
+      * and the right part of the content is displayed. When the content is left in the high direction,
+      * the content and the component remain aligned at the bottom,
+      * and the bottom part of the content is displayed. */
+    ARKUI_RENDER_FIT_RESIZE_COVER_BOTTOM_RIGHT
+} ArkUI_RenderFit;
+
+/**
+ * @brief Enumerates the button types.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** Normal button (without rounded corners by default). */
+    ARKUI_BUTTON_TYPE_NORMAL = 0,
+    /** Capsule-type button (the round corner is half of the height by default). */
+    ARKUI_BUTTON_TYPE_CAPSULE,
+    /** Circle button. */
+    ARKUI_BUTTON_TYPE_CIRCLE,
+} ArkUI_ButtonType;
+
+/**
+ * @brief Enumerates the autofill types.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** Username. Password Vault, when enabled, can automatically save and fill in usernames. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_USER_NAME = 0,
+    /** Password. Password Vault, when enabled, can automatically save and fill in passwords. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_PASSWORD,
+    /** New password. Password Vault, when enabled, can automatically generate a new password. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_NEW_PASSWORD,
+    /** Full street address. The scenario-based autofill feature, when enabled, can automatically save and fill in full
+     *  street addresses. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_FULL_STREET_ADDRESS,
+    /** House number. The scenario-based autofill feature, when enabled, can automatically save and fill in house
+     *  numbers. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_HOUSE_NUMBER,
+    /** District and county. The scenario-based autofill feature, when enabled, can automatically save and fill in
+     *  districts and counties. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_DISTRICT_ADDRESS,
+    /** City. The scenario-based autofill feature, when enabled, can automatically save and fill in cities. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_CITY_ADDRESS,
+    /** Province. The scenario-based autofill feature, when enabled, can automatically save and fill in provinces. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_PROVINCE_ADDRESS,
+    /** Country. The scenario-based autofill feature, when enabled, can automatically save and fill in countries. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_COUNTRY_ADDRESS,
+    /** Full name. The scenario-based autofill feature, when enabled, can automatically save and fill in full names. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_PERSON_FULL_NAME,
+    /** Last name. The scenario-based autofill feature, when enabled, can automatically save and fill in last names. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_PERSON_LAST_NAME,
+    /** First name. The scenario-based autofill feature, when enabled, can automatically save and fill in first names.
+     */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_PERSON_FIRST_NAME,
+    /** Phone number. The scenario-based autofill feature, when enabled, can automatically save and fill in phone
+     *  numbers. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_PHONE_NUMBER,
+    /** Country code. The scenario-based autofill feature, when enabled, can automatically save and fill in country
+     *  codes. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_PHONE_COUNTRY_CODE,
+    /** Phone number with country code. The scenario-based autofill feature, when enabled, can automatically save and
+     *  fill in phone numbers with country codes. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_FULL_PHONE_NUMBER,
+    /** Email address. The scenario-based autofill feature, when enabled, can automatically save and fill in email
+     *  addresses. */
+    ARKUI_TEXTINPUT_CONTENT_EMAIL_ADDRESS,
+    /** Bank card number. The scenario-based autofill feature, when enabled, can automatically save and fill in bank
+     *  card numbers. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_BANK_CARD_NUMBER,
+    /** ID card number. The scenario-based autofill feature, when enabled, can automatically save and fill in ID card
+     *  numbers. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_ID_CARD_NUMBER,
+    /** Nickname. The scenario-based autofill feature, when enabled, can automatically save and fill in nicknames. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_NICKNAME,
+    /** Address information without street address. The scenario-based autofill feature, when enabled, can automatically
+     *  save and fill in address information without street addresses. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_DETAIL_INFO_WITHOUT_STREET,
+    /** Standard address. The scenario-based autofill feature, when enabled, can automatically save and fill in standard
+     *  addresses. */
+    ARKUI_TEXTINPUT_CONTENT_TYPE_FORMAT_ADDRESS,
+} ArkUI_TextInputContentType;
+
+/**
+ * @brief Defines the text input style.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** Default style. The caret width is fixed at 1.5 vp, and the caret height is subject to the background height and
+     *  font size of the selected text. */
+    ARKUI_TEXTINPUT_STYLE_DEFAULT = 0,
+    /** Inline input style. The background height of the selected text is the same as the height of the text box. */
+    ARKUI_TEXTINPUT_STYLE_INLINE
+} ArkUI_TextInputStyle;
+
+/**
+ * @brief Defines the entity type for text recognition.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** Phone Number.*/
+    ARKUI_TEXT_DATA_DETECTOR_TYPE_PHONE_NUMBER = 0,
+    /** Link. */
+    ARKUI_TEXT_DATA_DETECTOR_TYPE_URL,
+    /** Mailbox. */
+    ARKUI_TEXT_DATA_DETECTOR_TYPE_EMAIL,
+    /** Address. */
+    ARKUI_TEXT_DATA_DETECTOR_TYPE_ADDRESS,
+} ArkUI_TextDataDetectorType;
+
+/**
+ * @brief Define the navigation indicator type of the swiper.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** dot type. */
+    ARKUI_SWIPER_INDICATOR_TYPE_DOT,
+    /** digit type. */
+    ARKUI_SWIPER_INDICATOR_TYPE_DIGIT,
+} ArkUI_SwiperIndicatorType;
 
 /**
 * @brief Creates a size constraint.
@@ -1614,6 +1938,15 @@ ArkUI_WaterFlowSectionOption* OH_ArkUI_WaterFlowSectionOption_Create();
 void OH_ArkUI_WaterFlowSectionOption_Dispose(ArkUI_WaterFlowSectionOption* option);
 
 /**
+* @brief Sets the FlowItem block configuration information array length.
+*
+* @param option FlowItem Indicates the packet configuration.
+* @param size Array Length.
+* @since 12
+*/
+void OH_ArkUI_WaterFlowSectionOption_SetSize(ArkUI_WaterFlowSectionOption* option, int32_t size);
+
+/**
 * @brief Sets the number of items in a water flow section.
 *
 * @param option Indicates the pointer to a water flow section configuration.
@@ -1642,8 +1975,8 @@ int32_t OH_ArkUI_WaterFlowSectionOption_GetItemCount(ArkUI_WaterFlowSectionOptio
 * @param crossCount Indicates the number of columns or rows, depending on the layout direction.
 * @since 12
 */
-void OH_ArkUI_WaterFlowSectionOption_SetCrossCount(ArkUI_WaterFlowSectionOption* option,
-    int32_t index, int32_t crossCount);
+void OH_ArkUI_WaterFlowSectionOption_SetCrossCount(
+    ArkUI_WaterFlowSectionOption* option, int32_t index, int32_t crossCount);
 
 /**
 * @brief Obtains the number of columns (in a vertical layout) or rows (in a horizontal layout) in the water flow section
@@ -1731,6 +2064,541 @@ ArkUI_Margin OH_ArkUI_WaterFlowSectionOption_GetMargin(ArkUI_WaterFlowSectionOpt
 * @since 12
 */
 int32_t OH_ArkUI_WaterFlowSectionOption_GetItemCount(ArkUI_WaterFlowSectionOption* option, int32_t index);
+
+/**
+ * @brief Creates a navigation indicator.
+ *
+ * @param type Indicates the type of the indicator.
+ * @return Returns the pointer to the new indicator.
+ * @since 12
+*/
+ArkUI_SwiperIndicator* OH_ArkUI_SwiperIndicator_Create(ArkUI_SwiperIndicatorType type);
+
+/**
+ * @brief Destroys the pointer to the indicator.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @since 12
+*/
+void OH_ArkUI_SwiperIndicator_Dispose(ArkUI_SwiperIndicator* indicator);
+
+/**
+ * @brief Sets the distance between the navigation point and the start of the swiper.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @param value Indicates the distance between the navigation point and the start of the swiper.
+ * @since 12
+*/
+void OH_ArkUI_SwiperIndicator_SetStartPosition(ArkUI_SwiperIndicator* indicator, float value);
+
+/**
+ * @brief Obtains the distance between the navigation point and the start of the swiper.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @return Returns the distance between the navigation point and the start of the swiper.
+ * @since 12
+*/
+float OH_ArkUI_SwiperIndicator_GetStartPosition(ArkUI_SwiperIndicator* indicator);
+
+/**
+ * @brief Sets the distance between the navigation point and the top of the swiper.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @param value Indicates the distance between the navigation point and the top of the swiper.
+ * @since 12
+*/
+void OH_ArkUI_SwiperIndicator_SetTopPosition(ArkUI_SwiperIndicator* indicator, float value);
+
+/**
+ * @brief Obtains the distance between the navigation point and the top of the swiper.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @return Returns the distance between the navigation point and the top of the swiper.
+ * @since 12
+*/
+float OH_ArkUI_SwiperIndicator_GetTopPosition(ArkUI_SwiperIndicator* indicator);
+
+/**
+ * @brief Sets the distance between the navigation point and the right of the swiper.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @param value Indicates the distance between the navigation point and the right of the swiper.
+ * @since 12
+*/
+void OH_ArkUI_SwiperIndicator_SetEndPosition(ArkUI_SwiperIndicator* indicator, float value);
+
+/**
+ * @brief Obtains the distance between the navigation point and the end of the swiper.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @return Returns the distance between the navigation point and the end of the swiper.
+ * @since 12
+*/
+float OH_ArkUI_SwiperIndicator_GetEndPosition(ArkUI_SwiperIndicator* indicator);
+
+/**
+ * @brief Sets the distance between the navigation point and the bottom of the swiper.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @param value Indicates the distance between the navigation point and the bottom of the swiper.
+ * @since 12
+*/
+void OH_ArkUI_SwiperIndicator_SetBottomPosition(ArkUI_SwiperIndicator* indicator, float value);
+
+/**
+ * @brief Obtains the distance between the navigation point and the bottom of the swiper.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @return Returns the distance between the navigation point and the bottom of the swiper.
+ * @since 12
+*/
+float OH_ArkUI_SwiperIndicator_GetBottomPosition(ArkUI_SwiperIndicator* indicator);
+
+/**
+ * @brief Sets the width of the dot for the dot indicator.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @param value Indicates the width of the dot for the dot indicator.
+ * @since 12
+*/
+void OH_ArkUI_SwiperIndicator_SetItemWidth(ArkUI_SwiperIndicator* indicator, float value);
+
+/**
+ * @brief Obtains the width of the dot for the dot indicator.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @return Returns the width of the dot for the dot indicator.
+ * @since 12
+*/
+float OH_ArkUI_SwiperIndicator_GetItemWidth(ArkUI_SwiperIndicator* indicator);
+
+/**
+ * @brief Sets the height of the dot for the dot indicator.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @param value Indicates the height of the dot for the dot indicator.
+ * @since 12
+*/
+void OH_ArkUI_SwiperIndicator_SetItemHeight(ArkUI_SwiperIndicator* indicator, float value);
+
+/**
+ * @brief  Obtains the height of the dot for the dot indicator.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @return Returns the height of the dot for the dot indicator.
+ * @since 12
+*/
+float OH_ArkUI_SwiperIndicator_GetItemHeight(ArkUI_SwiperIndicator* indicator);
+
+/**
+ * @brief Sets the width of the selected dot for the dot indicator.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @param value Indicates the width of the selected dot for the dot indicator.
+ * @since 12
+*/
+void OH_ArkUI_SwiperIndicator_SetSelectedItemWidth(ArkUI_SwiperIndicator* indicator, float value);
+
+/**
+ * @brief  Obtains the width of the selected dot for the dot indicator.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @return Returns the width of the selected dot for the dot indicator.
+ * @since 12
+*/
+float OH_ArkUI_SwiperIndicator_GetSelectedItemWidth(ArkUI_SwiperIndicator* indicator);
+
+/**
+ * @brief Sets the height of the selected dot for the dot indicator.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @param value Indicates the height of the selected dot for the dot indicator.
+ * @since 12
+*/
+void OH_ArkUI_SwiperIndicator_SetSelectedItemHeight(ArkUI_SwiperIndicator* indicator, float value);
+
+/**
+ * @brief  Obtains the height of the selected dot for the dot indicator.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @return Returns the height of the selected dot for the dot indicator.
+ * @since 12
+*/
+float OH_ArkUI_SwiperIndicator_GetSelectedItemHeight(ArkUI_SwiperIndicator* indicator);
+
+/**
+ * @brief Sets whether to display the mask style of the dot navigation indicator.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @param mask Whether to display the mask style. True means to display.
+ * @since 12
+*/
+void OH_ArkUI_SwiperIndicator_SetMask(ArkUI_SwiperIndicator* indicator, int32_t mask);
+
+/**
+ * @brief Obtains whether to display the mask style of the dot navigation indicator.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @return Returns whether to display the mask style. True means to display.
+ * @since 12
+*/
+int32_t OH_ArkUI_SwiperIndicator_GetMask(ArkUI_SwiperIndicator* indicator);
+
+/**
+ * @brief Sets the color of the dot navigation indicator.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @param color the color of the dot navigation indicator, in 0xARGB format.
+ * @since 12
+*/
+void OH_ArkUI_SwiperIndicator_SetColor(ArkUI_SwiperIndicator* indicator, uint32_t color);
+
+/**
+ * @brief Obtains the color of the dot navigation indicator.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @return Returns the color of the dot navigation indicator, in 0xARGB format.
+ * @since 12
+*/
+uint32_t OH_ArkUI_SwiperIndicator_GetColor(ArkUI_SwiperIndicator* indicator);
+
+/**
+ * @brief Sets the color of the selected dot for the navigation indicator.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @param color the color of the selected dot, in 0xARGB format.
+ * @since 12
+*/
+void OH_ArkUI_SwiperIndicator_SetSelectedColor(ArkUI_SwiperIndicator* indicator, uint32_t selectedColor);
+
+/**
+ * @brief Obtains the color of the selected dot for the dot navigation indicator.
+ *
+ * @param indicator Indicates the pointer to the indicator.
+ * @return Returns the color of the selected dot, in 0xARGB format.
+ * @since 12
+*/
+uint32_t OH_ArkUI_SwiperIndicator_GetSelectedColor(ArkUI_SwiperIndicator* indicator);
+
+/**
+ * @brief Create auxiliary line information in the RelativeContaine container.
+ *
+ * @param size The number of auxiliary lines.
+ * @return auxiliary line information.
+ * @since 12
+ */
+ArkUI_GuidelineOption* OH_ArkUI_GuidelineOption_Create(int32_t size);
+
+/**
+ * @brief Destroy auxiliary line information.
+ *
+ * @param guideline auxiliary line information.
+ * @since 12
+ */
+void OH_ArkUI_GuidelineOption_Dispose(ArkUI_GuidelineOption* guideline);
+
+/**
+ * @brief Set the Id of the auxiliary line.
+ *
+ * @param guideline auxiliary line information.
+ * @param value id, must be unique and cannot have the same name as the component in the container.
+ * @param index auxiliary line index value.
+ * @since 12
+ */
+void OH_ArkUI_GuidelineOption_SetId(ArkUI_GuidelineOption* guideline, const char* value, int32_t index);
+
+/**
+ * @brief Set the direction of the auxiliary line.
+ *
+ * @param guideline auxiliary line information.
+ * @param value direction.
+ * @param index auxiliary line index value.
+ * @since 12
+ */
+void OH_ArkUI_GuidelineOption_SetDirection(ArkUI_GuidelineOption* guideline, ArkUI_Axis value, int32_t index);
+
+/**
+ * @brief Set the distance from the left or top of the container.
+ *
+ * @param guideline auxiliary line information.
+ * @param value The distance from the left or top of the container.
+ * @param index auxiliary line index value.
+ * @since 12
+ */
+void OH_ArkUI_GuidelineOption_SetPositionStart(ArkUI_GuidelineOption* guideline, float value, int32_t index);
+
+/**
+ * @brief Set the distance from the right or bottom of the container.
+ *
+ * @param guideline auxiliary line information.
+ * @param value The distance from the right side or bottom of the container.
+ * @param index auxiliary line index value.
+ * @since 12
+ */
+void OH_ArkUI_GuidelineOption_SetPositionEnd(ArkUI_GuidelineOption* guideline, float value, int32_t index);
+
+/**
+ * @brief Get the Id of the auxiliary line.
+ *
+ * @param guideline auxiliary line information.
+ * @param index auxiliary line index value.
+ * @return Id.
+ * @since 12
+ */
+const char* OH_ArkUI_GuidelineOption_GetId(ArkUI_GuidelineOption* guideline, int32_t index);
+
+/**
+ * @brief Get the direction of the auxiliary line.
+ *
+ * @param guideline auxiliary line information.
+ * @param index auxiliary line index value.
+ * @return direction.
+ * @since 12
+ */
+ArkUI_Axis OH_ArkUI_GuidelineOption_GetDirection(ArkUI_GuidelineOption* guideline, int32_t index);
+
+/**
+ * @brief Get the distance from the left or top of the container.
+ *
+ * @param guideline auxiliary line information.
+ * @param index auxiliary line index value.
+ * @return The distance from the left or top of the container.
+ * @since 12
+ */
+float OH_ArkUI_GuidelineOption_GetPositionStart(ArkUI_GuidelineOption* guideline, int32_t index);
+
+/**
+ * @brief Get the distance from the right side or bottom of the container.
+ *
+ * @param guideline auxiliary line information.
+ * @param index auxiliary line index value.
+ * @return The distance from the right side or bottom of the container.
+ * @since 12
+ */
+float OH_ArkUI_GuidelineOption_GetPositionEnd(ArkUI_GuidelineOption* guideline, int32_t index);
+
+/**
+ * @brief creates barrier information within the RelativeContaine container.
+ *
+ * @param size Number of barriers.
+ * @return barrier information.
+ * @since 12
+ */
+ArkUI_BarrierOption* OH_ArkUI_BarrierOption_Create(int32_t size);
+
+/**
+ * @brief Destroy barrier information.
+ *
+ * @param barrierStyle barrier information.
+ * @since 12
+ */
+void OH_ArkUI_BarrierOption_Dispose(ArkUI_BarrierOption* barrierStyle);
+
+/**
+ * @brief Set the Id of the barrier.
+ *
+ * @param barrierStyle barrier information.
+ * @param value id, must be unique and cannot have the same name as the component in the container.
+ * @param index Barrier index value.
+ * @since 12
+ */
+void OH_ArkUI_BarrierOption_SetId(ArkUI_BarrierOption* barrierStyle, const char* value, int32_t index);
+
+/**
+ * @brief Set the direction of the barrier.
+ *
+ * @param barrierStyle barrier information.
+ * @param value direction.
+ * @param index Barrier index value.
+ * @since 12
+ */
+void OH_ArkUI_BarrierOption_SetDirection(
+    ArkUI_BarrierOption* barrierStyle, ArkUI_BarrierDirection value, int32_t index);
+
+/**
+ * @brief Sets the dependent component of the barrier.
+ *
+ * @param barrierStyle barrier information.
+ * @param value The ID of the dependent component.
+ * @param index Barrier index value.
+ * @since 12
+ */
+void OH_ArkUI_BarrierOption_SetReferencedId(ArkUI_BarrierOption* barrierStyle, const char* value, int32_t index);
+
+/**
+ * @brief Get the Id of the barrier.
+ *
+ * @param barrierStyle auxiliary line information.
+ * @param index auxiliary line index value.
+ * @return The Id of the barrier.
+ * @since 12
+ */
+const char* OH_ArkUI_BarrierOption_GetId(ArkUI_BarrierOption* barrierStyle, int32_t index);
+
+/**
+ * @brief Gets the direction of the barrier.
+ *
+ * @param barrierStyle auxiliary line information.
+ * @param index auxiliary line index value.
+ * @return The direction of the barrier.
+ * @since 12
+ */
+ArkUI_BarrierDirection OH_ArkUI_BarrierOption_GetDirection(ArkUI_BarrierOption* barrierStyle, int32_t index);
+
+/**
+ * @brief Get the dependent components of the barrier.
+ *
+ * @param barrierStyle auxiliary line information.
+ * @param index auxiliary line index value.
+ * @param referencedIndex dependent component Id index value.
+ * @return The barrier's dependent components.
+ * @since 12
+ */
+const char* OH_ArkUI_BarrierOption_GetReferencedId(
+    ArkUI_BarrierOption* barrierStyle, int32_t index, int32_t referencedIndex);
+
+/**
+ * @brief Gets the number of dependent components of the barrier.
+ *
+ * @param barrierStyle auxiliary line information.
+ * @param index auxiliary line index value.
+ * @return The number of dependent components of the barrier.
+ * @since 12
+ */
+int32_t OH_ArkUI_BarrierOption_GetReferencedIdSize(ArkUI_BarrierOption* barrierStyle, int32_t index);
+
+/**
+ * @brief creates alignment rule information for subcomponents in relative containers.
+ *
+ * @return Alignment rule information.
+ * @since 12
+ */
+ArkUI_AlignmentRuleOption* OH_ArkUI_AlignmentRuleOption_Create();
+
+/**
+ * @brief Destroys the alignment rule information of subcomponents in relative containers.
+ *
+ * @param option Alignment rule information of subcomponents in the relative container.
+ * @since 12
+ */
+void OH_ArkUI_AlignmentRuleOption_Dispose(ArkUI_AlignmentRuleOption* option);
+
+/**
+ * @brief Set the start alignment parameter.
+ *
+ * @param option Alignment rule information of subcomponents in the relative container.
+ * @param id The id value of the anchor component.
+ * @param value Alignment relative to the anchor component.
+ * @since 12
+ */
+void OH_ArkUI_AlignmentRuleOption_SetStart(
+    ArkUI_AlignmentRuleOption* option, const char* id, ArkUI_HorizontalAlignment alignment);
+
+/**
+ * @brief Set the end alignment parameter.
+ *
+ * @param option Alignment rule information of subcomponents in the relative container.
+ * @param id The id value of the anchor component.
+ * @param value Alignment relative to the anchor component.
+ * @since 12
+ */
+void OH_ArkUI_AlignmentRuleOption_SetEnd(
+    ArkUI_AlignmentRuleOption* option, const char* id, ArkUI_HorizontalAlignment alignment);
+
+
+/**
+ * @brief Set the parameters for top alignment.
+ *
+ * @param option Alignment rule information of subcomponents in the relative container.
+ * @param id The id value of the anchor component.
+ * @param value Alignment relative to anchor component
+ * @since 12
+ */
+void OH_ArkUI_AlignmentRuleOption_SetTop(ArkUI_AlignmentRuleOption* option, const char* id,
+    ArkUI_VerticalAlignment alignment);
+
+/**
+ * @brief Set the bottom alignment parameters.
+ *
+ * @param option Alignment rule information of subcomponents in the relative container.
+ * @param id The id value of the anchor component.
+ * @param value Alignment relative to anchor component
+ * @since 12
+ */
+void OH_ArkUI_AlignmentRuleOption_SetBottom(
+    ArkUI_AlignmentRuleOption* option, const char* id, ArkUI_VerticalAlignment alignment);
+
+/**
+ * @brief Sets the horizontal offset parameter of the component under the anchor point constraint.
+ *
+ * @param option Alignment rule information of subcomponents in the relative container.
+ * @param horizontal bias value in the horizontal direction.
+ * @since 12
+ */
+void OH_ArkUI_AlignmentRuleOption_SetBiasHorizontal(ArkUI_AlignmentRuleOption* option, float horizontal);
+
+/**
+ * @brief Set the vertical offset parameter of the component under the anchor point constraint.
+ *
+ * @param option Alignment rule information of subcomponents in the relative container.
+ * @param horizontal bias value in the vertical direction.
+ * @since 12
+ */
+void OH_ArkUI_AlignmentRuleOption_SetBiasVertical(ArkUI_AlignmentRuleOption* option, float vertical);
+
+/**
+ * @brief Get the Id of the start-aligned parameter.
+ *
+ * @param option Alignment rule information of subcomponents in the relative container.
+ * @return The id value of the anchor component.
+ * @since 12
+ */
+const char* OH_ArkUI_AlignmentRuleOption_GetStartId(ArkUI_AlignmentRuleOption* option);
+
+/**
+ * @brief Get the end alignment parameter.
+ *
+ * @param option Alignment rule information of subcomponents in the relative container.
+ * @return End-aligned parameter id.
+ * @since 12
+ */
+const char* OH_ArkUI_AlignmentRuleOption_GetEndId(ArkUI_AlignmentRuleOption* option);
+
+/**
+ * @brief Get the top-aligned parameters.
+ *
+ * @param option Alignment rule information of subcomponents in the relative container.
+ * @return Top aligned parameter id.
+ * @since 12
+ */
+const char* OH_ArkUI_AlignmentRuleOption_GetTopId(ArkUI_AlignmentRuleOption* option);
+
+/**
+ * @brief Get the bottom alignment parameters.
+ *
+ * @param option Alignment rule information of subcomponents in the relative container.
+ * @return The id of the bottom-aligned parameter.
+ * @since 12
+ */
+const char* OH_ArkUI_AlignmentRuleOption_GetBottomId(ArkUI_AlignmentRuleOption* option);
+
+/**
+ * @brief Get the bias value in the horizontal direction.
+ *
+ * @param option Alignment rule information of subcomponents in the relative container.
+ * @return The bias value in the horizontal direction.
+ * @since 12
+ */
+float OH_ArkUI_AlignmentRuleOption_GetBiasHorizontal(ArkUI_AlignmentRuleOption* option);
+
+/**
+ * @brief Get the bias value in the vertical direction.
+ *
+ * @param option Alignment rule information of subcomponents in the relative container.
+ * @return bias value in vertical direction.
+ * @since 12
+*/
+float OH_ArkUI_AlignmentRuleOption_GetBiasVertical(ArkUI_AlignmentRuleOption* option);
 #ifdef __cplusplus
 };
 #endif
