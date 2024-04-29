@@ -2390,10 +2390,10 @@ JSVM_Status JSVM_CDECL OH_JSVM_StrictEquals(JSVM_Env env,
   return GET_RETURN_STATUS(env);
 }
 
-JSVM_Status JSVM_CDECL OH_JSVM_RelaxedEquals(JSVM_Env env,
-                                          JSVM_Value lhs,
-                                          JSVM_Value rhs,
-                                          bool* result) {
+JSVM_Status JSVM_CDECL OH_JSVM_Equals(JSVM_Env env,
+                                      JSVM_Value lhs,
+                                      JSVM_Value rhs,
+                                      bool* result) {
   JSVM_PREAMBLE(env);
   CHECK_ARG(env, lhs);
   CHECK_ARG(env, rhs);
