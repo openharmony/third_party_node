@@ -593,6 +593,16 @@ int32_t OH_NativeWindow_CreateNativeWindowFromSurfaceId(uint64_t surfaceId, OHNa
  * @version 1.0
  */
 int32_t OH_NativeWindow_NativeWindowSetScalingModeV2(OHNativeWindow *window, OHScalingModeV2 scalingMode);
+
+/**
+ * @brief Set native window buffer hold.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeWindow
+ * @param window Indicates the pointer to an <b>OHNativeWindow</b> instance.
+ * @since 12
+ * @version 1.0
+ */
+void OH_NativeWindow_SetBufferHold(OHNativeWindow *window);
 #ifdef __cplusplus
 }
 #endif
