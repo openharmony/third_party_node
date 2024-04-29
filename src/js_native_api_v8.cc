@@ -1314,13 +1314,14 @@ OH_JSVM_DestroyVM(JSVM_VM vm) {
   auto creator = v8impl::GetIsolateSnapshotCreator(isolate);
   auto data = v8impl::GetIsolateData(isolate);
 
-  if (creator) {
+  if (creator != nullptr) {
     delete creator;
   } else {
-    delete isolate->GetArrayBufferAllocator();
     isolate->Dispose();
   }
-  delete data;
+  if (data != nullptr) {
+      delete data;
+  }
 
   return JSVM_OK;
 }
