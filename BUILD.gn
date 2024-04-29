@@ -13,12 +13,18 @@
 
 import("//build/ohos.gni")
 
+config("node_header_config") {
+  include_dirs = [ "src" ]
+}
+
 ohos_static_library("node_header_notice") {
+  public_configs = [ ":node_header_config" ]
   sources = [
     "//third_party/node/src/js_native_api.h",
     "//third_party/node/src/js_native_api_types.h",
     "//third_party/node/src/node_api.h",
     "//third_party/node/src/node_api_types.h",
+    "src/jsvm.h",
   ]
   part_name = "node"
   subsystem_name = "thirdparty"
