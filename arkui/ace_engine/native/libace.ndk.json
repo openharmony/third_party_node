@@ -1010,5 +1010,53 @@
     {
         "first_introduced": "12",
         "name": "OH_ArkUI_SwiperIndicator_GetSelectedColor"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_DrawableDescriptor_CreateFromPixelMap"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_DrawableDescriptor_CreateFromAnimatedPixelMap"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_DrawableDescriptor_Dispose"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_DrawableDescriptor_GetStaticPixelMap"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_DrawableDescriptor_GetAnimatedPixelMapArray"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_DrawableDescriptor_GetAnimatedPixelMapArraySize"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_DrawableDescriptor_SetAnimationDuration"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_DrawableDescriptor_GetAnimationDuration"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_DrawableDescriptor_SetAnimationIteration"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_DrawableDescriptor_GetAnimationIteration"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_GetDrawableDescriptorFromNapiValue"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_GetDrawableDescriptorFromResourceNapiValue"
     }
 ]

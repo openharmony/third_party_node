@@ -182,13 +182,13 @@ typedef enum {
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .string: image address;\n
      * .value[0]?.i32: whether to repeat the image. Optional. The parameter type is {@link ArkUI_ImageRepeat}.
-     * .objcet: The parameter type is {@link ArkUI_DrawableDescriptor}. Either .string or .object must be set.\n
+     * .object: The parameter type is {@link ArkUI_DrawableDescriptor}. Either .string or .object must be set.\n
      * The default value is <b>ARKUI_IMAGE_REPEAT_NONE</b>.\n
      * \n
      * Format of the return value {@link ArkUI_AttributeItem}:\n
      * .string: image address;\n
      * .value[0].i32: whether to repeat the image. The parameter type is {@link ArkUI_ImageRepeat}.\n
-     * .objcet: The parameter type is {@link ArkUI_DrawableDescriptor}.\n
+     * .object: The parameter type is {@link ArkUI_DrawableDescriptor}.\n
      *
      */
     NODE_BACKGROUND_IMAGE,
@@ -1960,11 +1960,11 @@ typedef enum {
      *
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .string: image address of the image span.\n
-     * .objcet: The parameter type is {@link ArkUI_DrawableDescriptor}. Either .string or .object must be set.\n
+     * .object: The parameter type is {@link ArkUI_DrawableDescriptor}. Either .string or .object must be set.\n
      * \n
      * Format of the return value {@link ArkUI_AttributeItem}:\n
      * .string: image address of the image span.\n
-     * .objcet: The parameter type is {@link ArkUI_DrawableDescriptor}.\n
+     * .object: The parameter type is {@link ArkUI_DrawableDescriptor}.\n
      *
      */
     NODE_IMAGE_SPAN_SRC = MAX_NODE_SCOPE_NUM * ARKUI_NODE_IMAGE_SPAN,
@@ -1988,11 +1988,11 @@ typedef enum {
      *
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .string: image source.\n
-     * .objcet: The parameter type is {@link ArkUI_DrawableDescriptor}. Either .string or .object must be set.\n
+     * .object: The parameter type is {@link ArkUI_DrawableDescriptor}. Either .string or .object must be set.\n
      * \n
      * Format of the return value {@link ArkUI_AttributeItem}:\n
      * .string: image source.\n
-     * .objcet: The parameter type is {@link ArkUI_DrawableDescriptor}.\n
+     * .object: The parameter type is {@link ArkUI_DrawableDescriptor}.\n
      *
      */
     NODE_IMAGE_SRC = MAX_NODE_SCOPE_NUM * ARKUI_NODE_IMAGE,
@@ -3952,6 +3952,7 @@ typedef enum {
      * The default value is <b>ARKUI_CURVE_EASE</b>. \n
      * .value[4]?.i32: whether to enable the default spring animation. Optional. The default value <b>0</b> means not
      * to enable the default spring animation. \n
+     * .value[5]?.i32: Optional value, sets whether scrolling can cross the boundary. \n
      * \n
      * Format of the return value {@link ArkUI_AttributeItem}:\n
      * .value[0].f32: horizontal scrolling offset, in vp. \n
