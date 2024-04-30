@@ -90,7 +90,7 @@ typedef struct Region {
  * @brief Indicates the operation code in the function OH_NativeWindow_NativeWindowHandleOpt.
  * @since 8
  */
-enum NativeWindowOperation {
+typedef enum NativeWindowOperation {
     /**
      * set native window buffer geometry,
      * variable parameter in function is
@@ -228,7 +228,7 @@ enum NativeWindowOperation {
      * @since 12
      */
     GET_APP_FRAMEWORK_TYPE,
-};
+} NativeWindowOperation;
 
 /**
  * @brief Indicates Scaling Mode.
@@ -636,6 +636,28 @@ int32_t OH_NativeWindow_GetSurfaceId(OHNativeWindow *window, uint64_t *surfaceId
  * @version 1.0
  */
 int32_t OH_NativeWindow_CreateNativeWindowFromSurfaceId(uint64_t surfaceId, OHNativeWindow **window);
+
+/**
+ * @brief Sets scalingMode of a native window.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeWindow
+ * @param window indicates the pointer to an <b>OHNativeWindow</b> instance.
+ * @param scalingMode Indicates the enum value to <b>OHScalingModeV2</b>
+ * @return Returns an error code, 0 is Success, otherwise, failed.
+ * @since 12
+ * @version 1.0
+ */
+int32_t OH_NativeWindow_NativeWindowSetScalingModeV2(OHNativeWindow *window, OHScalingModeV2 scalingMode);
+
+/**
+ * @brief Set native window buffer hold.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeWindow
+ * @param window Indicates the pointer to an <b>OHNativeWindow</b> instance.
+ * @since 12
+ * @version 1.0
+ */
+void OH_NativeWindow_SetBufferHold(OHNativeWindow *window);
 #ifdef __cplusplus
 }
 #endif

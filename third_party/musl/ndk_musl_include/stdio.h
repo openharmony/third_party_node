@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <features.h>
+#include <stdint.h>
 
 #define __NEED_FILE
 #define __NEED___isoc_va_list

@@ -161,6 +161,10 @@
     },
     {
         "first_introduced": "12",
+        "name": "OH_ArkUI_GestureEvent_GetRawInputEvent"
+    },
+    {
+        "first_introduced": "12",
         "name": "OH_ArkUI_LongPress_GetRepeatCount"
     },
     {
@@ -593,6 +597,10 @@
     },
     {
         "first_introduced": "12",
+        "name": "OH_ArkUI_WaterFlowSectionOption_GetItemCount"
+    },      
+    {
+        "first_introduced": "12",
         "name": "OH_ArkUI_WaterFlowSectionOption_GetCrossCount"
     },
     {
@@ -678,5 +686,33 @@
     {
         "first_introduced": "12",
         "name": "OH_ArkUI_PointerEvent_SetInterceptHitTestMode"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_NodeContent_AddNode"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_NodeContent_InsertNode"
+    },    
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_NodeContent_RemoveNode"
+    },  
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_NodeContent_RegisterCallback"
+    },  
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_NodeContentEvent_GetEventType"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_ArkUI_GetNodeContentFromNapiValue"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_NativeXComponent_GetNativeXComponent"
     }
 ]

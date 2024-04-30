@@ -67,6 +67,10 @@ typedef enum {
     * Premultiplied format
     */
     PIXELMAP_ALPHA_TYPE_PREMULTIPLIED = 2,
+    /*
+     * Unpremultiplied format
+     */
+    PIXELMAP_ALPHA_TYPE_UNPREMULTIPLIED = 3,
 }PIXELMAP_ALPHA_TYPE;
 
 typedef enum {
@@ -192,6 +196,28 @@ Image_ErrorCode OH_PixelmapInitializationOptions_SetPixelFormat(OH_Pixelmap_Init
     int32_t pixelFormat);
 
 /**
+ * @brief Get pixelFormat number for InitializationOtions struct.
+ *
+ * @param options The InitializationOtions pointer will be operated.
+ * @param srcpixelFormat the number of image srcpixelFormat.
+ * @return Returns {@link Image_ErrorCode}
+ * @since 12
+ */
+Image_ErrorCode OH_PixelmapInitializationOptions_GetSrcPixelFormat(OH_Pixelmap_InitializationOptions *options,
+    int32_t *srcpixelFormat);
+
+/**
+ * @brief Set pixelFormat number for InitializationOtions struct.
+ *
+ * @param options The InitializationOtions pointer will be operated.
+ * @param srcpixelFormat the number of image srcpixelFormat.
+ * @return Returns {@link Image_ErrorCode}
+ * @since 12
+ */
+Image_ErrorCode OH_PixelmapInitializationOptions_SetSrcPixelFormat(OH_Pixelmap_InitializationOptions *options,
+    int32_t srcpixelFormat);
+
+/**
  * @brief Get alphaType number for InitializationOtions struct.
  *
  * @param options The InitializationOtions pointer will be operated.
@@ -288,6 +314,17 @@ Image_ErrorCode OH_PixelmapImageInfo_GetPixelFormat(OH_Pixelmap_ImageInfo *info,
  * @since 12
  */
 Image_ErrorCode OH_PixelmapImageInfo_GetAlphaType(OH_Pixelmap_ImageInfo *info, int32_t *alphaType);
+
+/**
+ * @brief Get isHdr boolean for imageinfo struct.
+ *
+ * @param info The imageinfo pointer will be operated. Pointer connot be null.
+ * @param isHdr Whether the image has a high dynamic range.
+ * @return Returns {@link Image_ErrorCode} IMAGE_SUCCESS - The operation is successful.
+ * returns {@link Image_ErrorCode} IMAGE_BAD_PARAMETER - Parameter error.Possible causes:Parameter verification failed.
+ * @since 12
+ */
+Image_ErrorCode OH_PixelmapImageInfo_GetDynamicRange(OH_Pixelmap_ImageInfo *info, bool *isHdr);
 
 /**
  * @brief Delete imageinfo struct pointer.
@@ -416,6 +453,28 @@ Image_ErrorCode OH_PixelmapNative_Crop(OH_PixelmapNative *pixelmap, Image_Region
  */
 Image_ErrorCode OH_PixelmapNative_Release(OH_PixelmapNative *pixelmap);
 
+/**
+ * @brief Converting images to alpha format
+ *
+ * @param srcpixelmap The source pixel map pointer will be operated.
+ * @param dstpixelmap The destination pixel map pointer will be operated.
+ * @param isPremul Whether it is pre-multiplied, true for prediction, false for non-pre-multiplied.
+ * @return Returns {@link Image_ErrorCode}
+ * @since 12
+ */
+Image_ErrorCode OH_PixelmapNative_ConvertAlphaFormat(OH_PixelmapNative* srcpixelmap,
+    OH_PixelmapNative* dstpixelmap, const bool isPremul);
+
+/**
+ * @brief Create a empty <b>PixelMap</b> object.
+ *
+ * @param options IPixel properties, including the alpha type, size, pixel format, and editable.
+ * @param pixelmap Pixelmap pointer for created.
+ * @return Returns {@link Image_ErrorCode}
+ * @since 12
+ */
+Image_ErrorCode OH_PixelmapNative_CreateEmptyPixelmap(
+    OH_Pixelmap_InitializationOptions *options, OH_PixelmapNative **pixelmap);
 
 #ifdef __cplusplus
 };

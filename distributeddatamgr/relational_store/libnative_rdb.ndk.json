@@ -45,5 +45,8 @@
 	{"name":"OH_Rdb_Subscribe"},
 	{"name":"OH_Rdb_Unsubscribe"},
 	{"name":"OH_Rdb_SubscribeAutoSyncProgress"},
-	{"name":"OH_Rdb_UnsubscribeAutoSyncProgress"}
+	{"name":"OH_Rdb_UnsubscribeAutoSyncProgress"},
+	{"name":"OH_Rdb_LockRow"},
+	{"name":"OH_Rdb_UnlockRow"},
+	{"name":"OH_Rdb_QueryLockedRow"}
 ]

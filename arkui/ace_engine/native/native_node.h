@@ -1656,6 +1656,17 @@ typedef enum {
      */
     NODE_TEXT_ELLIPSIS_MODE,
     /**
+     * @brief Defines the text line spacing attribute, which can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: line spacing, in fp.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: line spacing, in fp.\n
+     *
+     */
+    NODE_TEXT_LINE_SPACING,
+    /**
      * @brief Defines the text content attribute, which can be set, reset, and obtained as required through APIs.
      *
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
@@ -4283,7 +4294,7 @@ typedef enum {
      * {@link ArkUI_NodeComponentEvent} contains two parameters: \n
      * <b>ArkUI_NodeComponentEvent.data[0].f32</b>: scroll offset of each frame. The offset is positive when the
      * component is scrolled up and negative when the component is scrolled down. \n
-     * <b>ArkUI_NodeComponentEvent.data[1].f32</b>: current scroll state. \n
+     * <b>ArkUI_NodeComponentEvent.data[1].i32</b>: current scroll state. \n
      */
     NODE_ON_WILL_SCROLL = MAX_NODE_SCOPE_NUM * ARKUI_NODE_WATER_FLOW,
 } ArkUI_NodeEventType;
@@ -5134,6 +5145,84 @@ ArkUI_NodeHandle OH_ArkUI_NodeCustomEvent_GetNodeHandle(ArkUI_NodeCustomEvent* e
 * @since 12
 */
 ArkUI_NodeCustomEventType OH_ArkUI_NodeCustomEvent_GetEventType(ArkUI_NodeCustomEvent* event);
+
+/**
+ * @brief Defines the node content event type.
+ * 
+ * @since 12
+ */
+typedef enum {
+    /** Defines the attach event. */
+    NODE_CONTENT_EVENT_ON_ATTACH_TO_WINDOW = 0,
+    /** Defines the detach event. */
+    NODE_CONTENT_EVENT_ON_DETACH_FROM_WINDOW = 1,
+} ArkUI_NodeContentEventType;
+
+/**
+ * @brief Defines the general structure of a node content event.
+ * @since 12
+ */
+typedef struct ArkUI_NodeContentEvent ArkUI_NodeContentEvent;
+
+/**
+ * @brief Defines the callback function of a node content event.
+ * @since 12
+ */
+typedef void(*ArkUI_NodeContentCallback)(ArkUI_NodeContentEvent* event);
+
+/**
+ * @brief register a callback functoin to a node content.
+ *
+ * @param content Indicates the pointer to the node content instance.
+ * @param callback Indicates the callback function.
+ * @return Returns 0 if success,
+ *         Returns 401 if parameter exception occurs.
+ * @since 12
+ */
+int32_t OH_ArkUI_NodeContent_RegisterCallback(ArkUI_NodeContentHandle content, ArkUI_NodeContentCallback callback);
+
+/**
+ * @brief Obtains the type of a node content event.
+ *
+ * @param event Indicates the pointer to the node content event.
+ * @return Returns the type of the node content event.
+ * @since 12
+ */
+ArkUI_NodeContentEventType OH_ArkUI_NodeContentEvent_GetEventType(ArkUI_NodeContentEvent* event);
+
+/**
+ * @brief Add a node to a node content.
+ *
+ * @param content Indicates the pointer to the node content instance.
+ * @param node Indicates the pointer to the node
+ * @return Returns 0 if success,
+ *         Returns 401 if parameter exception occurs.
+ * @since 12
+ */
+int32_t OH_ArkUI_NodeContent_AddNode(ArkUI_NodeContentHandle content, ArkUI_NodeHandle node);
+
+/**
+ * @brief remove a node from a node content.
+ *
+ * @param content Indicates the pointer to the node content instance.
+ * @param node Indicates the pointer to the node
+ * @return Returns 0 if success,
+ *         Returns 401 if parameter exception occurs.
+ * @since 12
+ */
+int32_t OH_ArkUI_NodeContent_RemoveNode(ArkUI_NodeContentHandle content, ArkUI_NodeHandle node);
+
+/**
+ * @brief insert a node into a node content at a given position.
+ *
+ * @param content Indicates the pointer to the node content instance.
+ * @param node Indicates the pointer to the node
+ * @param position Indicates the position for inserting the node
+ * @return Returns 0 if success,
+ *         Returns 401 if parameter exception occurs.
+ * @since 12
+ */
+int32_t OH_ArkUI_NodeContent_InsertNode(ArkUI_NodeContentHandle content, ArkUI_NodeHandle node, int32_t position);
 
 #ifdef __cplusplus
 };

@@ -314,7 +314,9 @@ int32_t OH_SensorEvent_GetAccuracy(Sensor_Event* sensorEvent, Sensor_Accuracy *a
  * the x, y, and z axes of the device, respectively, in m/s2.
  * SENSOR_TYPE_GYROSCOPE: data[0], data[1], and data[2], indicating the angular velocity of rotation around
  *  the x, y, and z axes of the device, respectively, in rad/s.
- * SENSOR_TYPE_AMBIENT_LIGHT: data[0], indicating the ambient light intensity, in lux.
+ * SENSOR_TYPE_AMBIENT_LIGHT: data[0], indicating the ambient light intensity, in lux. Since api version 12,
+ * two additional data will be returned, where data[1] indicating the color temperature, in kelvin; data[2]
+ * indicating the infrared luminance, in cd/m2.
  * SENSOR_TYPE_MAGNETIC_FIELD: data[0], data[1], and data[2], indicating the magnetic field strength around
  * the x, y, and z axes of the device, respectively, in μT.
  * SENSOR_TYPE_BAROMETER: data[0], indicating the atmospheric pressure, in hPa.

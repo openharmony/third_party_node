@@ -14,11 +14,16 @@
     { "name": "OH_NativeWindow_NativeObjectUnreference" },
     { "name": "OH_NativeWindow_GetNativeObjectMagic" },
     { "name": "OH_NativeWindow_NativeWindowSetScalingMode" },
+    {
+        "first_introduced": "12",
+        "name": "OH_NativeWindow_NativeWindowSetScalingModeV2"
+    },
     { "name": "OH_NativeWindow_NativeWindowSetMetaData" },
     { "name": "OH_NativeWindow_NativeWindowSetMetaDataSet" },
     { "name": "OH_NativeWindow_NativeWindowSetTunnelHandle" },
     { "name": "OH_NativeWindow_GetSurfaceId"},
     { "name": "OH_NativeWindow_CreateNativeWindowFromSurfaceId"},
     { "name": "OH_NativeWindow_NativeWindowAttachBuffer" },
-    { "name": "OH_NativeWindow_NativeWindowDetachBuffer" }
+    { "name": "OH_NativeWindow_NativeWindowDetachBuffer" },
+    { "name": "OH_NativeWindow_SetBufferHold" }
 ]

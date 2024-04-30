@@ -26,5 +26,17 @@
   { "name": "OH_AVPlayer_SetPlayerCallback" },
   { "name": "OH_AVPlayer_SelectTrack" },
   { "name": "OH_AVPlayer_DeselectTrack" },
-  { "name": "OH_AVPlayer_GetCurrentTrack" }
+  { "name": "OH_AVPlayer_GetCurrentTrack" },
+  {
+    "first_introduced": "12",
+    "name": "OH_AVPlayer_SetMediaKeySystemInfoCallback"
+  },
+  {
+    "first_introduced": "12",
+    "name": "OH_AVPlayer_GetMediaKeySystemInfo"
+  },
+  {
+    "first_introduced": "12",
+    "name": "OH_AVPlayer_SetDecryptionConfig"
+  }
 ]

@@ -16,6 +16,7 @@ import("//build/ohos.gni")
 ohos_ndk_headers("usb_header") {
   dest_dir = "$ndk_headers_out_dir/usb/"
   sources = [
+    "../base/ddk_types.h",
     "usb_ddk_api.h",
     "usb_ddk_types.h",
   ]
@@ -29,5 +30,6 @@ ohos_ndk_library("libusb_ndk") {
   system_capability_headers = [
     "usb/usb_ddk_api.h",
     "usb/usb_ddk_types.h",
+    "base/ddk_types.h",
   ]
 }
