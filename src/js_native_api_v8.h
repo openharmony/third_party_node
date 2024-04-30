@@ -483,6 +483,65 @@ class Reference : public RefBase {
   bool can_be_weak_;
 };
 
+typedef JSVM_Value (* GetterCallback)(JSVM_Env, JSVM_Value, JSVM_Value, JSVM_Value);
+typedef JSVM_Value (* SetterCallback)(JSVM_Env, JSVM_Value, JSVM_Value, JSVM_Value, JSVM_Value);
+typedef JSVM_Value (* DeleterCallback)(JSVM_Env, JSVM_Value, JSVM_Value, JSVM_Value);
+typedef JSVM_Value (* EnumeratorCallback)(JSVM_Env, JSVM_Value, JSVM_Value);
+
+struct JSVM_PropertyHandlerCfgStruct {
+  GetterCallback namedGetterCallback_;
+  SetterCallback namedSetterCallback_;
+  DeleterCallback nameDeleterCallback_;
+  EnumeratorCallback namedEnumeratorCallback_;
+  GetterCallback indexedGetterCallback_;
+  SetterCallback indexedSetterCallback_;
+  DeleterCallback indexedDeleterCallback_;
+  EnumeratorCallback indexedEnumeratorCallback_;
+  JSVM_Ref namedPropertyData_;
+  JSVM_Ref indexedPropertyData_;
+};
+
+inline JSVM_PropertyHandlerCfgStruct* CreatePropertyCfg(JSVM_Env env, JSVM_PropertyHandlerCfg propertyCfg)
+{
+  JSVM_PropertyHandlerCfgStruct* newPropertyCfg = new JSVM_PropertyHandlerCfgStruct;
+  if (newPropertyCfg != nullptr && propertyCfg != nullptr) {
+    newPropertyCfg->namedGetterCallback_ = propertyCfg->genericNamedPropertyGetterCallback;
+    newPropertyCfg->namedSetterCallback_ = propertyCfg->genericNamedPropertySetterCallback;
+    newPropertyCfg->nameDeleterCallback_ = propertyCfg->genericNamedPropertyDeleterCallback;
+    newPropertyCfg->namedEnumeratorCallback_ = propertyCfg->genericNamedPropertyEnumeratorCallback;
+    newPropertyCfg->indexedGetterCallback_ = propertyCfg->genericIndexedPropertyGetterCallback;
+    newPropertyCfg->indexedSetterCallback_ = propertyCfg->genericIndexedPropertySetterCallback;
+    newPropertyCfg->indexedDeleterCallback_ = propertyCfg->genericIndexedPropertyDeleterCallback;
+    newPropertyCfg->indexedEnumeratorCallback_ = propertyCfg->genericIndexedPropertyEnumeratorCallback;
+    newPropertyCfg->namedPropertyData_ = nullptr;
+    newPropertyCfg->indexedPropertyData_ = nullptr;
+    if (propertyCfg->namedPropertyData != nullptr) {
+      v8::Local<v8::Value> v8_value = v8impl::V8LocalValueFromJsValue(propertyCfg->namedPropertyData);
+      v8impl::Reference* reference = v8impl::Reference::New(env, v8_value, 1, v8impl::Ownership::kUserland);
+      newPropertyCfg->namedPropertyData_ = reinterpret_cast<JSVM_Ref>(reference);
+    }
+
+    if (propertyCfg->indexedPropertyData != nullptr) {
+      v8::Local<v8::Value> v8_value = v8impl::V8LocalValueFromJsValue(propertyCfg->indexedPropertyData);
+      v8impl::Reference* reference = v8impl::Reference::New(env, v8_value, 1, v8impl::Ownership::kUserland);
+      newPropertyCfg->indexedPropertyData_ = reinterpret_cast<JSVM_Ref>(reference);
+    }
+  }
+
+  return newPropertyCfg;
+}
+
+inline void CfgFinalizedCallback(JSVM_Env env, void* finalizeData, void* finalizeHint)
+{
+  auto cfg = reinterpret_cast<JSVM_PropertyHandlerCfgStruct *>(finalizeData);
+  if (cfg->namedPropertyData_ != nullptr) {
+    delete reinterpret_cast<v8impl::Reference*>(cfg->namedPropertyData_);
+  }
+  if (cfg->indexedPropertyData_ != nullptr) {
+    delete reinterpret_cast<v8impl::Reference*>(cfg->indexedPropertyData_);
+  }
+  delete cfg;
+}
 }  // end of namespace v8impl
 
 #endif  // SRC_JS_NATIVE_API_V8_H_
