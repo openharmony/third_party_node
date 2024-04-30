@@ -142,6 +142,16 @@ size_t wcsftime (wchar_t *__restrict, size_t, const wchar_t *__restrict, const s
 
 #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
 size_t wcsftime_l (wchar_t *__restrict, size_t, const wchar_t *__restrict, const struct tm *__restrict, locale_t);
+
+/**
+ * @brief converts the input string const wchar_t * to a double-precision value
+ * @param const wchar_t * Null-terminated string to convert
+ * @param wchar_t ** Pointer to character that stops scan
+ * @param locale_t The locale to use
+ * @return double-precision value converted from the input string
+ * @since 12
+ */
+double wcstod_l (const wchar_t *__restrict, wchar_t **__restrict, locale_t);
 #endif
 
 #if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) \
