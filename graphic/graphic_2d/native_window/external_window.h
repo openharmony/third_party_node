@@ -90,7 +90,7 @@ typedef struct Region {
  * @brief Indicates the operation code in the function OH_NativeWindow_NativeWindowHandleOpt.
  * @since 8
  */
-enum NativeWindowOperation {
+typedef enum NativeWindowOperation {
     /**
      * set native window buffer geometry,
      * variable parameter in function is
@@ -200,7 +200,7 @@ enum NativeWindowOperation {
      * @since 12
      */
     GET_BUFFERQUEUE_SIZE,
-};
+} NativeWindowOperation;
 
 /**
  * @brief Indicates Scaling Mode.
