@@ -3760,6 +3760,30 @@ typedef enum {
      * The type is 0xARGB, and the default value is 0xFFFFFFF. \n
      */
     NODE_RADIO_STYLE,
+    /**
+     * @brief Sets the value of the current radio.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Attribute setting method {@Link ArkUI_AttributeItem} Parameter format:\n
+     * .string: radio value.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: radio value.\n
+     *
+     */
+    NODE_RADIO_VALUE,
+    /**
+     * @brief Set the group name of the current Radio group, only one radio of the same group can be selected.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Attribute setting method {@Link ArkUI_AttributeItem} Parameter format:\n
+     * .string: name of the group to which the current option box belongs.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: name of the group to which the current option box belongs.\n
+     *
+     */
+    NODE_RADIO_GROUP,
 
     /**
      * @brief Defines the alignment mode of the child components in the container. This attribute can be set, reset,
@@ -4620,6 +4644,25 @@ typedef enum {
      *
      */
     NODE_WATER_FLOW_SCROLL_TO_INDEX,
+
+    /**
+     * @brief Defines the size constraints to apply to water flow items.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: minimum width, in vp.\n
+     * .value[1].f32: maximum width, in vp.\n
+     * .value[2].f32: minimum height, in vp.\n
+     * .value[3].f32: maximum height, in vp.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: minimum width, in vp.\n
+     * .value[1].f32: maximum width, in vp.\n
+     * .value[2].f32: minimum height, in vp.\n
+     * .value[3].f32: maximum height, in vp.\n
+     *
+     */
+    NODE_WATER_FLOW_ITEM_CONSTRAINT_SIZE,
 
     /**
      * @brief Set the auxiliary line in the RelativeContaine container, supporting property setting,
