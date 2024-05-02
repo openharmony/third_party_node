@@ -51,6 +51,13 @@ extern "C" {
 struct NativePixelMap_;
 
 /**
+ * @brief Introduces the native pixel map information defined by image framework.
+ * @since 12
+ * @version 1.0
+ */
+struct OH_PixelmapNative;
+
+/**
  * @brief Gets an <b>OH_Drawing_PixelMap</b> object.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
@@ -60,6 +67,30 @@ struct NativePixelMap_;
  * @version 1.0
  */
 OH_Drawing_PixelMap* OH_Drawing_PixelMapGetFromNativePixelMap(NativePixelMap_*);
+
+/**
+ * @brief Gets an <b>OH_Drawing_PixelMap</b> object.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_PixelmapNative Indicates a pointer to the <b>OH_PixelmapNative</b> object supported by image framework.
+ * @return Returns the pointer to the <b>OH_Drawing_PixelMap</b> object.
+ *         If nullptr is returned, the get operation fails.
+ *         The possible cause of the failure is that a nullptr is passed.
+ * @since 12
+ * @version 1.0
+ */
+OH_Drawing_PixelMap* OH_Drawing_PixelMapGetFromOhPixelMapNative(OH_PixelmapNative*);
+
+/**
+ * @brief Dissolves the relationship between <b>OH_Drawing_PixelMap</b> object and <b>NativePixelMap_</b> or
+          <b>OH_PixelmapNative</b> which is build by 'GetFrom' function.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_PixelMap Indicates a pointer to the <b>OH_Drawing_PixelMap</b>.
+ * @since 12
+ * @version 1.0
+ */
+void OH_Drawing_PixelMapDissolve(OH_Drawing_PixelMap*);
 
 #ifdef __cplusplus
 }
