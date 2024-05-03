@@ -57,6 +57,8 @@ typedef enum {
     ARKUI_UIINPUTEVENT_TYPE_UNKNOWN = 0,
     ARKUI_UIINPUTEVENT_TYPE_TOUCH = 1,
     ARKUI_UIINPUTEVENT_TYPE_AXIS = 2,
+    /** Mouse event. */
+    ARKUI_UIINPUTEVENT_TYPE_MOUSE = 3,
 } ArkUI_UIInputEvent_Type;
 
 /**
@@ -140,6 +142,42 @@ typedef enum {
      */
     HTM_NONE,
 } HitTestMode;
+
+/**
+ * @brief Define the Action Code for mouse events.
+ *
+ * @since 12
+ */
+enum {
+    /** Invalid. */
+    UI_MOUSE_EVENT_ACTION_UNKNOWN = 0,
+    /** Press. */
+    UI_MOUSE_EVENT_ACTION_PRESS = 1,
+    /** Release. */
+    UI_MOUSE_EVENT_ACTION_RELEASE = 2,
+    /** Move. */
+    UI_MOUSE_EVENT_ACTION_MOVE = 3,
+};
+
+/**
+ * @brief Define the button type for mouse events.
+ *
+ * @since 12
+ */
+enum {
+    /** None. */
+    UI_MOUSE_EVENT_BUTTON_NONE = 0,
+    /** Left. */
+    UI_MOUSE_EVENT_BUTTON_LEFT = 1,
+    /** Right. */
+    UI_MOUSE_EVENT_BUTTON_RIGHT = 2,
+    /** Middle. */
+    UI_MOUSE_EVENT_BUTTON_MIDDLE = 3,
+    /** Back. */
+    UI_MOUSE_EVENT_BUTTON_BACK = 4,
+    /** Forward. */
+    UI_MOUSE_EVENT_BUTTON_FORWARD = 5,
+};
 
 /**
  * @brief Obtains the type of this UI input event.
@@ -628,6 +666,26 @@ double OH_ArkUI_AxisEvent_GetPinchAxisScaleValue(const ArkUI_UIInputEvent* event
  * @since 12
  */
 int32_t OH_ArkUI_PointerEvent_SetInterceptHitTestMode(const ArkUI_UIInputEvent* event, HitTestMode mode);
+
+/**
+ * @brief Get the value of the button type for mouse events.
+ *
+ * @param event Represents a pointer to the current UI input event.
+ * @return Return to the mouse button type, where <b>1</b> is the left button, <b>2</b> is the right button,
+ * <b>4</b> is the middle button, <b>8</b> is the back button, and <b>16</b> is the forward button.
+ * @since 12
+ */
+int32_t OH_ArkUI_MouseEvent_GetMouseButton(const ArkUI_UIInputEvent* event);
+
+/**
+ * @brief Get the value of the mouse action type for mouse events.
+ *
+ * @param event Represents a pointer to the current UI input event.
+ * @return Returns the type of mouse action, where <b>1</b> represents button pressed,
+ * <b>2</b> represents button released, and <b>3</b> represents mouse movement.
+ * @since 12
+ */
+int32_t OH_ArkUI_MouseEvent_GetMouseAction(const ArkUI_UIInputEvent* event);
 
 #ifdef __cplusplus
 };
