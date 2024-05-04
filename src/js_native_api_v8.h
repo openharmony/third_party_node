@@ -179,6 +179,7 @@ struct JSVM_Env__ {
   void* instance_data = nullptr;
   int32_t module_api_version = NODE_API_DEFAULT_MODULE_API_VERSION;
   bool in_gc_finalizer = false;
+  v8::Locker* locker = nullptr;
 
  private:
   v8impl::Agent* inspector_agent_;
