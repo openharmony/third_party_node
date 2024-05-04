@@ -2513,7 +2513,7 @@ void OH_ArkUI_AlignmentRuleOption_SetEnd(
 * @param value Alignment relative to anchor component
 * @since 12
 */
-void OH_ArkUI_AlignRuleOption_SetCenterHorizontal(
+void OH_ArkUI_AlignmentRuleOption_SetCenterHorizontal(
     ArkUI_AlignmentRuleOption* option, const char* id, ArkUI_HorizontalAlignment alignment);
 
 /**
@@ -2546,7 +2546,7 @@ void OH_ArkUI_AlignmentRuleOption_SetBottom(
 * @param value Alignment relative to the anchor component.
 * @since 12
 */
-void OH_ArkUI_AlignRuleOption_SetCenterVertical(
+void OH_ArkUI_AlignmentRuleOption_SetCenterVertical(
     ArkUI_AlignmentRuleOption* option, const char* id, ArkUI_VerticalAlignment alignment);
 
 /**
@@ -2583,7 +2583,7 @@ const char* OH_ArkUI_AlignmentRuleOption_GetStartId(ArkUI_AlignmentRuleOption* o
 * @return The alignment of the parameters.
 * @since 12
 */
-ArkUI_HorizontalAlignment OH_ArkUI_AlignRuleOption_GetStartAlignment(ArkUI_AlignmentRuleOption* option);
+ArkUI_HorizontalAlignment OH_ArkUI_AlignmentRuleOption_GetStartAlignment(ArkUI_AlignmentRuleOption* option);
 
 /**
  * @brief Get the end alignment parameter.
@@ -2601,7 +2601,7 @@ const char* OH_ArkUI_AlignmentRuleOption_GetEndId(ArkUI_AlignmentRuleOption* opt
 * @return The alignment of the right-aligned parameter.
 * @since 12
 */
-ArkUI_HorizontalAlignment OH_ArkUI_AlignRuleOption_GetEndAlignment(ArkUI_AlignmentRuleOption* option);
+ArkUI_HorizontalAlignment OH_ArkUI_AlignmentRuleOption_GetEndAlignment(ArkUI_AlignmentRuleOption* option);
 
 /**
 * @brief Gets the parameters of horizontal center alignment.
@@ -2610,7 +2610,7 @@ ArkUI_HorizontalAlignment OH_ArkUI_AlignRuleOption_GetEndAlignment(ArkUI_Alignme
 * @return The id of the parameter of horizontal center alignment.
 * @since 12
 */
-const char* OH_ArkUI_AlignRuleOption_GetCenterIdHorizontal(ArkUI_AlignmentRuleOption* option);
+const char* OH_ArkUI_AlignmentRuleOption_GetCenterIdHorizontal(ArkUI_AlignmentRuleOption* option);
 
 /**
 * @brief Gets the parameters of horizontal center alignment.
@@ -2619,7 +2619,7 @@ const char* OH_ArkUI_AlignRuleOption_GetCenterIdHorizontal(ArkUI_AlignmentRuleOp
 * @return The alignment of the horizontally centered alignment parameter.
 * @since 12
 */
-ArkUI_HorizontalAlignment OH_ArkUI_AlignRuleOption_GetCenterAlignmentHorizontal(ArkUI_AlignmentRuleOption* option);
+ArkUI_HorizontalAlignment OH_ArkUI_AlignmentRuleOption_GetCenterAlignmentHorizontal(ArkUI_AlignmentRuleOption* option);
 
 /**
  * @brief Get the top-aligned parameters.
@@ -2637,7 +2637,7 @@ const char* OH_ArkUI_AlignmentRuleOption_GetTopId(ArkUI_AlignmentRuleOption* opt
 * @return The alignment of the top-aligned parameter.
 * @since 12
 */
-ArkUI_VerticalAlignment OH_ArkUI_AlignRuleOption_GetTopAlignment(ArkUI_AlignmentRuleOption* option);
+ArkUI_VerticalAlignment OH_ArkUI_AlignmentRuleOption_GetTopAlignment(ArkUI_AlignmentRuleOption* option);
 
 /**
  * @brief Get the bottom alignment parameters.
@@ -2655,7 +2655,7 @@ const char* OH_ArkUI_AlignmentRuleOption_GetBottomId(ArkUI_AlignmentRuleOption* 
 * @return The alignment of the bottom-aligned parameter.
 * @since 12
 */
-ArkUI_VerticalAlignment OH_ArkUI_AlignRuleOption_GetBottomAligment(ArkUI_AlignmentRuleOption* option);
+ArkUI_VerticalAlignment OH_ArkUI_AlignmentRuleOption_GetBottomAligment(ArkUI_AlignmentRuleOption* option);
 
 /**
 * @brief Gets the parameters of vertical center alignment.
@@ -2664,7 +2664,7 @@ ArkUI_VerticalAlignment OH_ArkUI_AlignRuleOption_GetBottomAligment(ArkUI_Alignme
 * @return The id of the vertical center alignment parameter.
 * @since 12
 */
-const char* OH_ArkUI_AlignRuleOption_GetCenterIdVertical(ArkUI_AlignmentRuleOption* option);
+const char* OH_ArkUI_AlignmentRuleOption_GetCenterIdVertical(ArkUI_AlignmentRuleOption* option);
 
 /**
 * @brief Gets the parameters of vertical center alignment.
@@ -2673,7 +2673,7 @@ const char* OH_ArkUI_AlignRuleOption_GetCenterIdVertical(ArkUI_AlignmentRuleOpti
 * @return The alignment of the vertical center alignment parameter.
 * @since 12
 */
-ArkUI_VerticalAlignment OH_ArkUI_AlignRuleOption_GetCenterAlignmentVertical(ArkUI_AlignmentRuleOption* option);
+ArkUI_VerticalAlignment OH_ArkUI_AlignmentRuleOption_GetCenterAlignmentVertical(ArkUI_AlignmentRuleOption* option);
 
 /**
  * @brief Get the bias value in the horizontal direction.

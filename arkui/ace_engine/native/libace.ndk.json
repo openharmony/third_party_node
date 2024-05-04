@@ -837,7 +837,7 @@
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkUI_AlignRuleOption_SetCenterHorizontal"
+        "name": "OH_ArkUI_AlignmentRuleOption_SetCenterHorizontal"
     },
     {
         "first_introduced": "12",
@@ -849,7 +849,7 @@
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkUI_AlignRuleOption_SetCenterVertical"
+        "name": "OH_ArkUI_AlignmentRuleOption_SetCenterVertical"
     },
     {
         "first_introduced": "12",
@@ -865,7 +865,7 @@
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkUI_AlignRuleOption_GetStartAlignment"
+        "name": "OH_ArkUI_AlignmentRuleOption_GetStartAlignment"
     },
     {
         "first_introduced": "12",
@@ -873,15 +873,15 @@
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkUI_AlignRuleOption_GetEndAlignment"
+        "name": "OH_ArkUI_AlignmentRuleOption_GetEndAlignment"
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkUI_AlignRuleOption_GetCenterIdHorizontal"
+        "name": "OH_ArkUI_AlignmentRuleOption_GetCenterIdHorizontal"
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkUI_AlignRuleOption_GetCenterAlignmentHorizontal"
+        "name": "OH_ArkUI_AlignmentRuleOption_GetCenterAlignmentHorizontal"
     },
     {
         "first_introduced": "12",
@@ -889,7 +889,7 @@
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkUI_AlignRuleOption_GetTopAlignment"
+        "name": "OH_ArkUI_AlignmentRuleOption_GetTopAlignment"
     },
     {
         "first_introduced": "12",
@@ -897,15 +897,15 @@
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkUI_AlignRuleOption_GetBottomAligment"
+        "name": "OH_ArkUI_AlignmentRuleOption_GetBottomAligment"
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkUI_AlignRuleOption_GetCenterIdVertical"
+        "name": "OH_ArkUI_AlignmentRuleOption_GetCenterIdVertical"
     },
     {
         "first_introduced": "12",
-        "name": "OH_ArkUI_AlignRuleOption_GetCenterAlignmentVertical"
+        "name": "OH_ArkUI_AlignmentRuleOption_GetCenterAlignmentVertical"
     },
     {
         "first_introduced": "12",
