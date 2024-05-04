@@ -2577,7 +2577,7 @@ void OH_ArkUI_AlignmentRuleOption_SetBiasVertical(ArkUI_AlignmentRuleOption* opt
 const char* OH_ArkUI_AlignmentRuleOption_GetStartId(ArkUI_AlignmentRuleOption* option);
 
 /**
-* @brief Gets the alignment of the left-aligned parameter.
+* @brief Gets the alignment of the start-aligned parameter.
 *
 * @param option Alignment rule information of subcomponents in the relative container.
 * @return The alignment of the parameters.
@@ -2595,10 +2595,10 @@ ArkUI_HorizontalAlignment OH_ArkUI_AlignmentRuleOption_GetStartAlignment(ArkUI_A
 const char* OH_ArkUI_AlignmentRuleOption_GetEndId(ArkUI_AlignmentRuleOption* option);
 
 /**
-* @brief Get the right alignment parameter.
+* @brief Get the end alignment parameter.
 *
 * @param option Alignment rule information of subcomponents in the relative container.
-* @return The alignment of the right-aligned parameter.
+* @return The alignment of the end-aligned parameter.
 * @since 12
 */
 ArkUI_HorizontalAlignment OH_ArkUI_AlignmentRuleOption_GetEndAlignment(ArkUI_AlignmentRuleOption* option);
@@ -2655,7 +2655,7 @@ const char* OH_ArkUI_AlignmentRuleOption_GetBottomId(ArkUI_AlignmentRuleOption* 
 * @return The alignment of the bottom-aligned parameter.
 * @since 12
 */
-ArkUI_VerticalAlignment OH_ArkUI_AlignmentRuleOption_GetBottomAligment(ArkUI_AlignmentRuleOption* option);
+ArkUI_VerticalAlignment OH_ArkUI_AlignmentRuleOption_GetBottomAlignment(ArkUI_AlignmentRuleOption* option);
 
 /**
 * @brief Gets the parameters of vertical center alignment.
