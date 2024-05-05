@@ -241,6 +241,29 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CompileScript(JSVM_Env env,
                                               JSVM_Script* result);
 
 /**
+ * @brief This function compiles a string of JavaScript code with the source code information
+ * and returns the compiled script.
+ *
+ * @param env: The environment that the JSVM-API call is invoked under.
+ * @param script: A JavaScript string containing the script to be compiled.
+ * @param cachedData: Optional code cache data for the script.
+ * @param cacheDataLength: The length of cachedData array.
+ * @param eagerCompile: Whether to compile the script eagerly.
+ * @param cacheRejected: Whether the code cache rejected by compilation.
+ * @param origin: The information of source code.
+ * @param result: The compiled script.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_CompileScriptWithOrigin(JSVM_Env env,
+                                                        JSVM_Value script,
+                                                        const uint8_t* cachedData,
+                                                        size_t cacheDataLength,
+                                                        bool eagerCompile,
+                                                        bool* cacheRejected,
+                                                        JSVM_ScriptOrigin* origin,
+                                                        JSVM_Script* result);
+/**
  * @brief This function creates code cache for the compiled script.
  *
  * @param env: The environment that the JSVM-API call is invoked under.
