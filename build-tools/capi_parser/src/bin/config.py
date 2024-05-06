@@ -82,13 +82,6 @@ class Config(object):
             "help": "解析路径"
         },
         {
-            "name": "--output-path",
-            "abbr": "-O",
-            "required": True,
-            "type": str,
-            "help": "collect_file工具输出文件路径"
-        },
-        {
             "name": "--diff-path-old",
             "abbr": "-old",
             "required": False,
@@ -101,6 +94,13 @@ class Config(object):
             "required": False,
             "type": str,
             "help": "新文件路径"
+        },
+        {
+            "name": "--output-path",
+            "abbr": "-O",
+            "required": False,
+            "type": str,
+            "help": "collect_file工具输出文件路径"
         }
 
     ]

@@ -17,6 +17,7 @@
 
 import re
 import os
+import json
 import clang.cindex
 from clang.cindex import Config
 from clang.cindex import Index
@@ -24,6 +25,7 @@ from clang.cindex import CursorKind
 from clang.cindex import TypeKind
 from utils.constants import StringConstant
 from utils.constants import RegularExpressions
+from typedef.parser.parser import NodeKind
 
 
 def find_parent(cursor):  # 获取父节点
@@ -52,23 +54,13 @@ def processing_root_parent(cursor_parent):
     return None
 
 
-def processing_no_child(cursor, data):  # 处理没有子节点的节点
+def processing_no_child(cursor, data, last_data):  # 处理没有子节点的节点
+    if last_data and 'module_name' in last_data:
+        data['module_name'] = last_data['module_name']
     if cursor.kind == CursorKind.INTEGER_LITERAL:  # 整型字面量类型节点，没有子节点
-        parent_kind = find_parent(cursor)  # 判断是属于那类的
-        if parent_kind:
-            if parent_kind == CursorKind.STRUCT_DECL:
-                data["name"] = 'struct_int_no_spelling'
-            elif parent_kind == CursorKind.UNION_DECL:
-                data["name"] = 'union_int_no_spelling'
-            elif parent_kind == CursorKind.ENUM_DECL:
-                data["name"] = 'enum_int_no_spelling'
-            elif parent_kind == CursorKind.VAR_DECL:
-                data["name"] = 'var_int_no_spelling'
-            else:
-                data["name"] = "integer_no_spelling"
-            tokens = cursor.get_tokens()
-            for token in tokens:
-                data["integer_value"] = token.spelling  # 获取整型变量值
+        tokens = cursor.get_tokens()
+        for token in tokens:
+            data["integer_value"] = token.spelling  # 获取整型变量值
 
 
 def get_token(cursor):
@@ -264,12 +256,22 @@ def get_default_node_data(cursor, gn_path=None):
         "since": '',
         "kit_name": '',
         "sub_system": '',
+        "module_name": '',
+        "permission": '',
+        "class_name": 'global',
+        "deprecate_since": '',
+        "error_num": 'NA',
+        "is_system_api": 'NA',
+        "model_constraint": 'NA',
+        "cross_platform": 'NA',
+        "form": 'NA',
+        "atomic_service": 'NA',
+        "decorator": 'NA'
     }
     return data
 
 
-def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解析数据的整理
-    # 通用
+def parser_data_assignment(cursor, current_file, gn_path=None, comment=None, key=0):
     data = get_default_node_data(cursor, gn_path)
     get_comment(cursor, data)
     if key == 0:
@@ -281,14 +283,31 @@ def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解
             data["name"] = relative_path
     else:
         content = node_extent(cursor, current_file)
-        data["node_content"] = content
+        data["node_content"] = dict(content)
         data["kind"] = cursor.kind.name
         if cursor.kind.name == CursorKind.MACRO_DEFINITION.name:
             define_comment(cursor, current_file, data)
+    struct_union_enum = [NodeKind.STRUCT_DECL.value, NodeKind.UNION_DECL.value,
+                         NodeKind.ENUM_DECL.value]
+    if data.get('kind') in struct_union_enum and 'class_name' in data:
+        data['class_name'] = data.get('name')
     get_syscap_value(data)
     get_since_value(data)
     get_kit_value(data)
+    get_permission_value(data)
+    get_module_name_value(data)
+    get_deprecate_since_value(data)
     processing_special_node(cursor, data, key, gn_path)  # 节点处理
+    get_file_kit_or_system(data)
+
+    return data
+
+
+def ast_to_dict(cursor, current_file, last_data, gn_path=None, comment=None, key=0):  # 解析数据的整理
+    # 通用赋值
+    data = parser_data_assignment(cursor, current_file, gn_path, comment, key)
+    if last_data and 'module_name' in last_data:
+        data['module_name'] = last_data['module_name']
     children = list(cursor.get_children())  # 判断是否有子节点，有就追加children，没有根据情况来
     if len(children) > 0:
         if key != 0:
@@ -312,33 +331,115 @@ def ast_to_dict(cursor, current_file, gn_path=None, comment=None, key=0):  # 解
     else:
         if cursor.kind == CursorKind.FUNCTION_DECL:  # 防止clang默认处理(对于头文件没有的情况)出现没有该键值对
             data["parm"] = []
-        processing_no_child(cursor, data)  # 处理没有子节点的节点
+        processing_no_child(cursor, data, last_data)  # 处理没有子节点的节点
     return data
 
 
 def get_syscap_value(data: dict):
+    syscap_list = []
     if 'none_comment' != data["comment"]:
         pattern = r'@([Ss]yscap).*?(?=\n)'
-        matches = re.search(pattern, data['comment'])
-        if matches:
-            data["syscap"] = matches.group(0)
-            data["syscap"] = re.sub('@syscap', '', data["syscap"], flags=re.IGNORECASE)
+        matches = re.finditer(pattern, data['comment'], re.DOTALL | re.MULTILINE)
+        for mat in matches:
+            syscap_list.append(mat.group())
+    if len(syscap_list) > 1:
+        data["syscap"] = re.sub('@syscap', '', syscap_list[len(syscap_list) - 1], flags=re.IGNORECASE)
+    elif 1 == len(syscap_list):
+        data["syscap"] = re.sub('@syscap', '', syscap_list[0], flags=re.IGNORECASE)
 
 
 def get_since_value(data: dict):
+    since_list = []
     if 'none_comment' != data["comment"]:
         pattern = r'@(since).*?(?=\n)'
-        matches = re.search(pattern, data['comment'])
-        if matches:
-            data["since"] = matches.group(0).replace('@since', '')
+        matches = re.finditer(pattern, data['comment'], re.DOTALL | re.MULTILINE)
+        for mat in matches:
+            since_list.append(mat.group())
+    if len(since_list) > 1:
+        data["since"] = since_list[len(since_list) - 1].replace('@since', '')
+    elif 1 == len(since_list):
+        data["since"] = since_list[0].replace('@since', '')
 
 
 def get_kit_value(data: dict):
+    kit_list = []
     if 'none_comment' != data["comment"]:
         pattern = r'@(kit).*?(?=\n)'
-        matches = re.search(pattern, data['comment'])
-        if matches:
-            data["kit_name"] = matches.group(0).replace('@kit', '')
+        matches = re.finditer(pattern, data['comment'], re.DOTALL | re.MULTILINE)
+        for mat in matches:
+            kit_list.append(mat.group())
+    if len(kit_list) > 1:
+        data["kit_name"] = kit_list[len(kit_list) - 1].replace('@kit', '')
+    elif 1 == len(kit_list):
+        data["kit_name"] = kit_list[0].replace('@kit', '')
+
+
+def get_module_name_value(data: dict):
+    module_name_list = []
+    if 'none_comment' != data["comment"]:
+        pattern = r'@(addtogroup).*?(?=\n)'
+        matches = re.finditer(pattern, data['comment'], re.DOTALL | re.MULTILINE)
+        for mat in matches:
+            module_name_list.append(mat.group())
+    if len(module_name_list) > 1:
+        data["module_name"] = module_name_list[len(module_name_list) - 1].replace('@addtogroup', '')
+    elif 1 == len(module_name_list):
+        data["module_name"] = module_name_list[0].replace('@addtogroup', '')
+
+
+def get_permission_value(data: dict):
+    permission_list = []
+    if 'none_comment' != data["comment"]:
+        pattern = r'@(permission).*?(?=\n)'
+        matches = re.finditer(pattern, data['comment'], re.DOTALL | re.MULTILINE)
+        for mat in matches:
+            permission_list.append(mat.group())
+    if len(permission_list) > 1:
+        data["permission"] = permission_list[len(permission_list) - 1].replace('@permission', '')
+    elif 1 == len(permission_list):
+        data["permission"] = permission_list[0].replace('@permission', '')
+
+
+def get_deprecate_since_value(data: dict):
+    deprecate_list = []
+    if 'none_comment' != data["comment"]:
+        pattern = r'@(deprecated).*?(?=\n)'
+        matches = re.finditer(pattern, data['comment'], re.DOTALL | re.MULTILINE)
+        for mat in matches:
+            deprecate_list.append(mat.group())
+    if len(deprecate_list) > 1:
+        data["deprecate_since"] = (deprecate_list[len(deprecate_list) - 1].replace('@deprecated', '')
+                                   .replace('since', ''))
+    elif 1 == len(deprecate_list):
+        data["deprecate_since"] = (deprecate_list[0].replace('@deprecated', '')
+                                   .replace('since', ''))
+
+
+def get_file_kit_or_system(node_data):
+    current_file = os.path.dirname(__file__)
+    kit_json_file_path = os.path.abspath(os.path.join(current_file,
+                                                      r"kit_sub_system/c_file_kit_sub_system.json"))
+    if 'kit_name' in node_data and 'sub_system' in node_data and \
+            (not node_data['kit_name'] or not node_data['sub_system']):
+        relative_path = node_data.get('location').get('location_path').replace('\\', '/')
+        kit_name, sub_system = get_kit_system_data(kit_json_file_path, relative_path)
+        if not node_data['kit_name']:
+            node_data['kit_name'] = kit_name
+        if not node_data['sub_system']:
+            node_data['sub_system'] = sub_system
+
+
+def get_kit_system_data(json_path, relative_path):
+    kit_name = ''
+    sub_system_name = ''
+    with open(json_path, 'r', encoding='utf-8') as fs:
+        kit_system_data = json.load(fs)
+        for data in kit_system_data['data']:
+            if 'filePath' in data and relative_path in data['filePath']:
+                kit_name = data['kitName']
+                sub_system_name = data['subSystem']
+                break
+    return kit_name, sub_system_name
 
 
 def get_comment(cursor, data: dict):
@@ -349,7 +450,7 @@ def get_comment(cursor, data: dict):
 
 
 def processing_ast_node(child, current_file, data, name, gn_path):
-    child_data = ast_to_dict(child, current_file, gn_path, key=1)
+    child_data = ast_to_dict(child, current_file, data, gn_path, key=1)
     if child.kind == CursorKind.TYPE_REF:
         data["type_ref"] = child_data
     else:
@@ -357,7 +458,8 @@ def processing_ast_node(child, current_file, data, name, gn_path):
 
 
 def preorder_travers_ast(cursor, total, comment, current_file, gn_path=None):  # 获取属性
-    ast_dict = ast_to_dict(cursor, current_file, gn_path, comment)  # 获取节点属性
+    previous_data = {}
+    ast_dict = ast_to_dict(cursor, current_file, previous_data, gn_path, comment)  # 获取节点属性
     total.append(ast_dict)  # 追加到数据统计列表里面
 
 
