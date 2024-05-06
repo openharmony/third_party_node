@@ -302,5 +302,13 @@
     {
         "first_introduced": "12",
         "name": "OH_AudioDeviceDescriptor_GetDeviceEncodingTypes"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioStreamBuilder_SetRendererPrivacy"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AudioRenderer_GetRendererPrivacy"
     }
 ]
