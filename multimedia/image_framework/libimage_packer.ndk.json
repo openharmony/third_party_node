@@ -21,6 +21,14 @@
     },
     {
         "first_introduced": "12",
+        "name": "OH_PackingOptions_GetDesiredDynamicRange"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_PackingOptions_SetDesiredDynamicRange"
+    },
+    {
+        "first_introduced": "12",
         "name": "OH_PackingOptions_Release"
     },
     {

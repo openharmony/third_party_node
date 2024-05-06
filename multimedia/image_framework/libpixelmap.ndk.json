@@ -73,6 +73,10 @@
     },
     {
         "first_introduced": "12",
+        "name": "OH_PixelmapImageInfo_GetDynamicRange"
+    },
+    {
+        "first_introduced": "12",
         "name": "OH_PixelmapImageInfo_Release"
     },
     {
