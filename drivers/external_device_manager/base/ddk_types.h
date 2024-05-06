@@ -73,15 +73,15 @@ typedef struct DDK_Ashmem {
  * @since 12
  */
 typedef enum {
-    /** Operation success */
+    /** @error Operation success */
     DDK_SUCCESS = 0,
-    /** Operation failed */
+    /** @error Operation failed */
     DDK_FAILURE = 28600001,
-    /** Invalid parameter */
+    /** @error Invalid parameter */
     DDK_INVALID_PARAMETER,
-    /** Invalid operation */
+    /** @error Invalid operation */
     DDK_INVALID_OPERATION,
-    /** Null pointer exception */
+    /** @error Null pointer exception */
     DDK_NULL_PTR
 } DDK_RetCode;
 #ifdef __cplusplus
