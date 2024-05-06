@@ -73,7 +73,7 @@ int32_t OH_Hid_CreateDevice(Hid_Device *hidDevice, Hid_EventProperties *hidEvent
  * event code (<b>Hid_SynEvent</b> for a synchronization event code, <b>Hid_KeyCode</b> for a key code,
  * <b>Hid_AbsAxes</b> for an absolute coordinate code, <b>Hid_RelAxes</b> for a relative coordinate event,
  * and <b>Hid_MscEvent</b> for other input event code), and value input by the device.
- * @param length of the event list (number of events sent at a time).
+ * @param length Length of the event list (number of events sent at a time).
  * @return {@link HID_DDK_SUCCESS} operation successful.
  *         {@link HID_DDK_NO_PERM} permission check failed.
  *         {@link HID_DDK_INVALID_OPERATION} connect hid ddk service failed or the caller is not the creator of device.
