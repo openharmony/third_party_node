@@ -179,13 +179,13 @@ struct Input_TouchEvent;
  * @since 12
  */
 typedef enum {
-    /** Success */
+    /** @error Success return code on sucess*/
     INPUT_SUCCESS = 0,
-    /** Permission verification failed */
+    /** @error Permission verification failed */
     INPUT_PERMISSION_DENIED = 201,
-    /** Non-system application */
+    /** @error Non-system application */
     INPUT_NOT_SYSTEM_APPLICATION = 202,
-    /** Parameter check failed */
+    /** @error Parameter check failed */
     INPUT_PARAMETER_ERROR = 401
 } Input_Result;
 
@@ -193,8 +193,9 @@ typedef enum {
  * @brief Queries the key state.
  *
  * @param keyState Key state.
- * @HTTP4O4 Returns {@Link Input_Result#INPUT_SUCCESS} if the operation is successful;
- * returns an error code defined in {@Link Input_Result} otherwise.
+ * @return OH_Input_GetKeyState function result code.
+ *         {@link INPUT_SUCCESS} get KeyState sucess.\n
+ *         {@link INPUT_PARAMETER_ERROR} keyCode is invalid.\n
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -203,8 +204,8 @@ Input_Result OH_Input_GetKeyState(struct Input_KeyState* keyState);
 /**
  * @brief Creates a key status enumeration object.
  *
- * @return Returns an {@link Input_KeyState} pointer object if the operation is successful.
- * returns a null pointer otherwise.
+ * @return Returns an {@Input_KeyState} pointer object if the operation is successful.
+ * Otherwise, a null pointer is returned. The possible cause is memory allocation failure.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -283,9 +284,10 @@ int32_t OH_Input_GetKeySwitch(const struct Input_KeyState* keyState);
  * @brief Inject system keys.
  *
  * @param keyEvent - the key event to be injected.
- * @return 0 - Success.
- *         201 - Missing permissions.
- *         401 - Parameter error.
+ * @return OH_Input_InjectKeyEvent function result code.
+ *         {@link INPUT_SUCCESS} inject keyEvent sucess.\n
+ *         {@link INPUT_PERMISSION_DENIED} Permission verification failed.\n
+ *         {@link INPUT_PARAMETER_ERROR} keyCode is less 0, can not process.\n
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -295,7 +297,7 @@ int32_t OH_Input_InjectKeyEvent(const struct Input_KeyEvent* keyEvent);
  * @brief Creates a key event object.
  *
  * @return Returns an {@link Input_KeyEvent} pointer object if the operation is successful.
- * returns a null pointer otherwise.
+ * Otherwise, a null pointer is returned. The possible cause is memory allocation failure.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -374,9 +376,10 @@ int64_t OH_Input_GetKeyEventActionTime(const struct Input_KeyEvent* keyEvent);
  * @brief Inject mouse event.
  *
  * @param mouseEvent - the mouse event to be injected.
- * @return 0 - Success.
- *         201 - Missing permissions.
- *         401 - Parameter error.
+ * @return OH_Input_InjectMouseEvent function result code.
+ *         {@link INPUT_SUCCESS} inject mouseEvent sucess.\n
+ *         {@link INPUT_PERMISSION_DENIED} Permission verification failed.\n
+ *         {@link INPUT_PARAMETER_ERROR} Parameter check failed.\n
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -386,7 +389,7 @@ int32_t OH_Input_InjectMouseEvent(const struct Input_MouseEvent* mouseEvent);
  * @brief Creates a mouse event object.
  *
  * @return Returns an {@link Input_MouseEvent} pointer object if the operation is successful.
- * returns a null pointer otherwise.
+ * Otherwise, a null pointer is returned. The possible cause is memory allocation failure.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -545,9 +548,9 @@ int64_t OH_Input_GetMouseEventActionTime(const struct Input_MouseEvent* mouseEve
  * @brief Inject touch event.
  *
  * @param touchEvent - the touch event to be injected.
- * @return 0 - Success.
- *         201 - Missing permissions.
- *         401 - Parameter error.
+ * @return OH_Input_InjectTouchEvent function result code.
+ *         {@link INPUT_SUCCESS} inject touchEvent sucess.\n
+ *         {@link INPUT_PARAMETER_ERROR} Parameter check failed.\n
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
@@ -557,7 +560,7 @@ int32_t OH_Input_InjectTouchEvent(const struct Input_TouchEvent* touchEvent);
  * @brief Creates a touch event object.
  *
  * @return Returns an {@link Input_TouchEvent} pointer object if the operation is successful.
- * returns a null pointer otherwise.
+ * Otherwise, a null pointer is returned. The possible cause is memory allocation failure.
  * @syscap SystemCapability.MultimodalInput.Input.Core
  * @since 12
  */
