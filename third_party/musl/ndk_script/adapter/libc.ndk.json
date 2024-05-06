@@ -1440,6 +1440,10 @@
     { "name": "wcsspn" },
     { "name": "wcsstr" },
     { "name": "wcstod" },
+    {
+        "first_introduced": "12",
+        "name": "wcstod_l"
+    },
     { "name": "wcstof" },
     { "name": "wcstoimax" },
     { "name": "wcstok" },

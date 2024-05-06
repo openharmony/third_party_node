@@ -1654,20 +1654,6 @@ typedef enum {
 } ArkUI_RenderFit;
 
 /**
- * @brief Enumerates the theme color.
- *
- * @since 12
- */
-typedef enum {
-    /** Follow the system dark light mode. */
-    ARKUI_THEME_COLOR_MODE_SYSTEM = 0,
-    /** Fixed use light color mode. */
-    ARKUI_THEME_COLOR_MODE_LIGHT,
-    /** Fixed use dark mode. */
-    ARKUI_THEME_COLOR_MODE_DARK
-} ArkUI_ThemeColorMode;
-
-/**
  * @brief Enumerates the button types.
  *
  * @since 12
@@ -2520,14 +2506,14 @@ void OH_ArkUI_AlignmentRuleOption_SetEnd(
     ArkUI_AlignmentRuleOption* option, const char* id, ArkUI_HorizontalAlignment alignment);
 
 /**
- * @brief Set the parameters for horizontal center alignment.
- *
- * @param option Alignment rule information of subcomponents in the relative container.
- * @param id The id value of the anchor component.
- * @param value Alignment relative to anchor component
- * @since 12
- */
-void OH_ArkUI_AlignmentRuleOption_SetMiddle(
+* @brief Set the parameters for horizontal center alignment.
+*
+* @param option Alignment rule information of subcomponents in the relative container.
+* @param id The id value of the anchor component.
+* @param value Alignment relative to anchor component
+* @since 12
+*/
+void OH_ArkUI_AlignmentRuleOption_SetCenterHorizontal(
     ArkUI_AlignmentRuleOption* option, const char* id, ArkUI_HorizontalAlignment alignment);
 
 /**
@@ -2538,7 +2524,8 @@ void OH_ArkUI_AlignmentRuleOption_SetMiddle(
  * @param value Alignment relative to anchor component
  * @since 12
  */
-void OH_ArkUI_AlignmentRuleOption_SetTop(ArkUI_AlignmentRuleOption* option, const char* id, ArkUI_VerticalAlignment alignment);
+void OH_ArkUI_AlignmentRuleOption_SetTop(ArkUI_AlignmentRuleOption* option, const char* id,
+    ArkUI_VerticalAlignment alignment);
 
 /**
  * @brief Set the bottom alignment parameters.
@@ -2552,14 +2539,14 @@ void OH_ArkUI_AlignmentRuleOption_SetBottom(
     ArkUI_AlignmentRuleOption* option, const char* id, ArkUI_VerticalAlignment alignment);
 
 /**
- * @brief Set the parameters for vertical center alignment.
- *
- * @param option Alignment rule information of subcomponents in the relative container.
- * @param id The id value of the anchor component.
- * @param value Alignment relative to the anchor component.
- * @since 12
- */
-void OH_ArkUI_AlignmentRuleOption_SetCenter(
+* @brief Set the parameters for vertical center alignment.
+*
+* @param option Alignment rule information of subcomponents in the relative container.
+* @param id The id value of the anchor component.
+* @param value Alignment relative to the anchor component.
+* @since 12
+*/
+void OH_ArkUI_AlignmentRuleOption_SetCenterVertical(
     ArkUI_AlignmentRuleOption* option, const char* id, ArkUI_VerticalAlignment alignment);
 
 /**
@@ -2590,13 +2577,13 @@ void OH_ArkUI_AlignmentRuleOption_SetBiasVertical(ArkUI_AlignmentRuleOption* opt
 const char* OH_ArkUI_AlignmentRuleOption_GetStartId(ArkUI_AlignmentRuleOption* option);
 
 /**
- * @brief Gets the alignment of the start-aligned parameter.
- *
- * @param option Alignment rule information of subcomponents in the relative container.
- * @return The alignment of the parameters.
- * @since 12
- */
-ArkUI_HorizontalAlignment OH_ArkUI_AlignmentRuleOption_GetStartAlign(ArkUI_AlignmentRuleOption* option);
+* @brief Gets the alignment of the start-aligned parameter.
+*
+* @param option Alignment rule information of subcomponents in the relative container.
+* @return The alignment of the parameters.
+* @since 12
+*/
+ArkUI_HorizontalAlignment OH_ArkUI_AlignmentRuleOption_GetStartAlignment(ArkUI_AlignmentRuleOption* option);
 
 /**
  * @brief Get the end alignment parameter.
@@ -2608,31 +2595,31 @@ ArkUI_HorizontalAlignment OH_ArkUI_AlignmentRuleOption_GetStartAlign(ArkUI_Align
 const char* OH_ArkUI_AlignmentRuleOption_GetEndId(ArkUI_AlignmentRuleOption* option);
 
 /**
- * @brief Get the end alignment parameter.
- *
- * @param option Alignment rule information of subcomponents in the relative container.
- * @return The alignment of the end-aligned parameter.
- * @since 12
- */
-ArkUI_HorizontalAlignment OH_ArkUI_AlignmentRuleOption_GetEndAlign(ArkUI_AlignmentRuleOption* option);
+* @brief Get the end alignment parameter.
+*
+* @param option Alignment rule information of subcomponents in the relative container.
+* @return The alignment of the end-aligned parameter.
+* @since 12
+*/
+ArkUI_HorizontalAlignment OH_ArkUI_AlignmentRuleOption_GetEndAlignment(ArkUI_AlignmentRuleOption* option);
 
 /**
- * @brief Gets the parameters of horizontal center alignment.
- *
- * @param option Alignment rule information of subcomponents in the relative container.
- * @return The id of the parameter of horizontal center alignment.
- * @since 12
- */
-const char* OH_ArkUI_AlignmentRuleOption_GetMiddleId(ArkUI_AlignmentRuleOption* option);
+* @brief Gets the parameters of horizontal center alignment.
+*
+* @param option Alignment rule information of subcomponents in the relative container.
+* @return The id of the parameter of horizontal center alignment.
+* @since 12
+*/
+const char* OH_ArkUI_AlignmentRuleOption_GetCenterIdHorizontal(ArkUI_AlignmentRuleOption* option);
 
 /**
- * @brief Gets the parameters of horizontal center alignment.
- *
- * @param option Alignment rule information of subcomponents in the relative container.
- * @return The alignment of the horizontally centered alignment parameter.
- * @since 12
- */
-ArkUI_HorizontalAlignment OH_ArkUI_AlignmentRuleOption_GetMiddleAlign(ArkUI_AlignmentRuleOption* option);
+* @brief Gets the parameters of horizontal center alignment.
+*
+* @param option Alignment rule information of subcomponents in the relative container.
+* @return The alignment of the horizontally centered alignment parameter.
+* @since 12
+*/
+ArkUI_HorizontalAlignment OH_ArkUI_AlignmentRuleOption_GetCenterAlignmentHorizontal(ArkUI_AlignmentRuleOption* option);
 
 /**
  * @brief Get the top-aligned parameters.
@@ -2644,13 +2631,13 @@ ArkUI_HorizontalAlignment OH_ArkUI_AlignmentRuleOption_GetMiddleAlign(ArkUI_Alig
 const char* OH_ArkUI_AlignmentRuleOption_GetTopId(ArkUI_AlignmentRuleOption* option);
 
 /**
- * @brief Get the top-aligned parameters.
- *
- * @param option Alignment rule information of subcomponents in the relative container.
- * @return The alignment of the top-aligned parameter.
- * @since 12
- */
-ArkUI_VerticalAlignment OH_ArkUI_AlignmentRuleOption_GetTopAlign(ArkUI_AlignmentRuleOption* option);
+* @brief Get the top-aligned parameters.
+*
+* @param option Alignment rule information of subcomponents in the relative container.
+* @return The alignment of the top-aligned parameter.
+* @since 12
+*/
+ArkUI_VerticalAlignment OH_ArkUI_AlignmentRuleOption_GetTopAlignment(ArkUI_AlignmentRuleOption* option);
 
 /**
  * @brief Get the bottom alignment parameters.
@@ -2662,31 +2649,31 @@ ArkUI_VerticalAlignment OH_ArkUI_AlignmentRuleOption_GetTopAlign(ArkUI_Alignment
 const char* OH_ArkUI_AlignmentRuleOption_GetBottomId(ArkUI_AlignmentRuleOption* option);
 
 /**
- * @brief Get the bottom alignment parameters.
- *
- * @param option Alignment rule information of subcomponents in the relative container.
- * @return The alignment of the bottom-aligned parameter.
- * @since 12
- */
-ArkUI_VerticalAlignment OH_ArkUI_AlignmentRuleOption_GetBottomAlign(ArkUI_AlignmentRuleOption* option);
+* @brief Get the bottom alignment parameters.
+*
+* @param option Alignment rule information of subcomponents in the relative container.
+* @return The alignment of the bottom-aligned parameter.
+* @since 12
+*/
+ArkUI_VerticalAlignment OH_ArkUI_AlignmentRuleOption_GetBottomAlignment(ArkUI_AlignmentRuleOption* option);
 
 /**
- * @brief Gets the parameters of vertical center alignment.
- *
- * @param option Alignment rule information of subcomponents in the relative container.
- * @return The id of the vertical center alignment parameter.
- * @since 12
- */
-const char* OH_ArkUI_AlignmentRuleOption_GetCenterId(ArkUI_AlignmentRuleOption* option);
+* @brief Gets the parameters of vertical center alignment.
+*
+* @param option Alignment rule information of subcomponents in the relative container.
+* @return The id of the vertical center alignment parameter.
+* @since 12
+*/
+const char* OH_ArkUI_AlignmentRuleOption_GetCenterIdVertical(ArkUI_AlignmentRuleOption* option);
 
 /**
- * @brief Gets the parameters of vertical center alignment.
- *
- * @param option Alignment rule information of subcomponents in the relative container.
- * @return The alignment of the vertical center alignment parameter.
- * @since 12
- */
-ArkUI_VerticalAlignment OH_ArkUI_AlignmentRuleOption_GetCenterAlign(ArkUI_AlignmentRuleOption* option);
+* @brief Gets the parameters of vertical center alignment.
+*
+* @param option Alignment rule information of subcomponents in the relative container.
+* @return The alignment of the vertical center alignment parameter.
+* @since 12
+*/
+ArkUI_VerticalAlignment OH_ArkUI_AlignmentRuleOption_GetCenterAlignmentVertical(ArkUI_AlignmentRuleOption* option);
 
 /**
  * @brief Get the bias value in the horizontal direction.

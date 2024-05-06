@@ -541,42 +541,56 @@ typedef struct {
     /** A callback function triggered by getting a named property of an instance object. */
     JSVM_Value(JSVM_CDECL* genericNamedPropertyGetterCallback)(JSVM_Env env,
                                                                JSVM_Value name,
-                                                               JSVM_Value thisArg);
+                                                               JSVM_Value thisArg,
+                                                               JSVM_Value namedPropertyData);
 
     /** A callback function triggered by setting a named property of an instance object. */
     JSVM_Value(JSVM_CDECL* genericNamedPropertySetterCallback)(JSVM_Env env,
                                                                JSVM_Value name,
                                                                JSVM_Value property,
-                                                               JSVM_Value thisArg);
+                                                               JSVM_Value thisArg,
+                                                               JSVM_Value namedPropertyData);
 
     /** A callback function triggered by deleting a named property of an instance object. */
     JSVM_Value(JSVM_CDECL* genericNamedPropertyDeleterCallback)(JSVM_Env env,
                                                                 JSVM_Value name,
-                                                                JSVM_Value thisArg);
+                                                                JSVM_Value thisArg,
+                                                                JSVM_Value namedPropertyData);
 
     /** A callback function triggered by getting all named properties requests on an object. */
     JSVM_Value(JSVM_CDECL* genericNamedPropertyEnumeratorCallback)(JSVM_Env env,
-                                                                   JSVM_Value thisArg);
+                                                                   JSVM_Value thisArg,
+                                                                   JSVM_Value namedPropertyData);
 
     /** A callback function triggered by getting an indexed property of an instance object. */
     JSVM_Value(JSVM_CDECL* genericIndexedPropertyGetterCallback)(JSVM_Env env,
-                                                                JSVM_Value index,
-                                                                JSVM_Value thisArg);
+                                                                 JSVM_Value index,
+                                                                 JSVM_Value thisArg,
+                                                                 JSVM_Value indexedPropertyData);
 
     /** A callback function triggered by setting an indexed property of an instance object. */
     JSVM_Value(JSVM_CDECL* genericIndexedPropertySetterCallback)(JSVM_Env env,
                                                                  JSVM_Value index,
                                                                  JSVM_Value property,
-                                                                 JSVM_Value thisArg);
+                                                                 JSVM_Value thisArg,
+                                                                 JSVM_Value indexedPropertyData);
 
     /** A callback function triggered by deleting an indexed property of an instance object. */
     JSVM_Value(JSVM_CDECL* genericIndexedPropertyDeleterCallback)(JSVM_Env env,
                                                                   JSVM_Value index,
-                                                                  JSVM_Value thisArg);
+                                                                  JSVM_Value thisArg,
+                                                                  JSVM_Value indexedPropertyData);
 
     /** A callback function triggered by getting all indexed properties requests on an object. */
     JSVM_Value(JSVM_CDECL* genericIndexedPropertyEnumeratorCallback)(JSVM_Env env,
-                                                                     JSVM_Value thisArg);
+                                                                     JSVM_Value thisArg,
+                                                                     JSVM_Value indexedPropertyData);
+
+    /** data will be utilized by the named property callbacks in this struct. */
+    JSVM_Value namedPropertyData;
+
+    /** data will be utilized by the indexed property callbacks in this struct. */
+    JSVM_Value indexedPropertyData;
 } JSVM_PropertyHandlerConfigurationStruct;
 
 /**
@@ -585,5 +599,21 @@ typedef struct {
  * @since 12
  */
 typedef JSVM_PropertyHandlerConfigurationStruct* JSVM_PropertyHandlerCfg;
+
+/**
+ * @brief Source code information.
+ *
+ * @since 12
+ */
+typedef struct {
+    /** Sourcemap url. */
+    const char* sourceMapUrl;
+    /** Resource name. */
+    const char* resourceName;
+    /** Resource line offset. */
+    size_t resourceLineOffset;
+    /** Resource column offset. */
+    size_t resourceColumnOffset;
+} JSVM_ScriptOrigin;
 /** @} */
 #endif /* ARK_RUNTIME_JSVM_JSVM_TYPE_H */

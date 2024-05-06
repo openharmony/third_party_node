@@ -48,6 +48,13 @@ extern "C" {
 typedef void *OH_AI_TensorHandle;
 
 /**
+ * @brief tensor allocator handle.
+ *
+ * @since 12
+ */
+typedef void *OH_AI_AllocatorHandle;
+
+/**
  * @brief Create a tensor object.
  * @param name The name of the tensor.
  * @param type The data type of the tensor.
@@ -197,6 +204,30 @@ OH_AI_API size_t OH_AI_TensorGetDataSize(const OH_AI_TensorHandle tensor);
  * @since 10
  */
 OH_AI_API OH_AI_Status OH_AI_TensorSetUserData(OH_AI_TensorHandle tensor, void *data, size_t data_size);
+
+/**
+ * @brief Get allocator for the tensor.
+ *
+ * The main purpose of this interface is providing a way of getting memory allocator of the tensor.
+ *
+ * @param tensor Tensor object handle.
+ * @return handle of the tensor's allocator.
+ * @since 12
+ */
+OH_AI_API OH_AI_AllocatorHandle OH_AI_TensorGetAllocator(OH_AI_TensorHandle tensor);
+
+/**
+ * @brief Set allocator to the tensor.
+ *
+ * The main purpose of this interface is providing a way of setting memory allocator, so tensor's memory will be
+ * allocated by this allocator.
+ *
+ * @param tensor Tensor object handle.
+ * @param allocator A allocator handle.
+ * @return OH_AI_STATUS_SUCCESS if success, or detail error code if failed.
+ * @since 12
+ */
+OH_AI_API OH_AI_Status OH_AI_TensorSetAllocator(OH_AI_TensorHandle tensor, OH_AI_AllocatorHandle allocator);
 
 #ifdef __cplusplus
 }

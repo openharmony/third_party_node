@@ -44,6 +44,10 @@
         "name": "OH_JSVM_CompileScript"
     },
     {
+        "first_introduced": "12",
+        "name": "OH_JSVM_CompileScriptWithOrigin"
+    },
+    {
         "first_introduced": "11",
         "name": "OH_JSVM_CreateCodeCache"
     },
@@ -574,5 +578,29 @@
     {
         "first_introduced": "12",
         "name": "OH_JSVM_Equals"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_JSVM_IsLocked"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_JSVM_AcquireLock"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_JSVM_ReleaseLock"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_JSVM_PumpMessageLoop"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_JSVM_PerformMicrotaskCheckpoint"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_JSVM_IsCallable"
     }
 ]

@@ -332,7 +332,7 @@ def get_dir_file_path(dir_path):
         for dir_name in dir_names:
             link_include_path.append(os.path.join(dir_path, dir_name))
         for file in filenames:
-            if file.endswith('.h'):
+            if 'build-tools' not in dir_path and file.endswith('.h'):
                 file_path_list.append(os.path.join(dir_path, file))
 
     return file_path_list, link_include_path
@@ -362,19 +362,21 @@ def get_file_api_json(data_total):
         if 'name' in one_file_data and 'kit_name' in one_file_data and 'sub_system' in one_file_data:
             api_message_obj = OneFileApiMessage(one_file_data['name'], one_file_data['kit_name'],
                                                 one_file_data['sub_system'], file_api_num)
+            api_message_obj.set_file_path(api_message_obj.get_file_path().replace('\\', '/'))
             current_file = os.path.dirname(__file__)
             kit_json_file_path = os.path.abspath(os.path.join(current_file,
                                                               r"kit_sub_system/c_file_kit_sub_system.json"))
             complete_kit_or_system(api_message_obj, kit_json_file_path)
-
             api_obj_total_list.append(api_message_obj)
     api_obj_total_json = json.dumps(api_obj_total_list, default=lambda obj: obj.__dict__, indent=4,
                                     ensure_ascii=False)
     return api_obj_total_json
 
 
-def generate_file_api_json(json_data):
-    with open(StringConstant.FILE_LEVEL_API_DATA.value, 'w', encoding='utf-8') as fs:
+def generate_file_api_json(json_data, output_path=''):
+    if not output_path:
+        output_path = StringConstant.FILE_LEVEL_API_DATA.value
+    with open(output_path, 'w', encoding='utf-8') as fs:
         fs.write(json_data)
         fs.close()
 
@@ -395,7 +397,7 @@ def get_kit_system_data(json_path, relative_path):
     with open(json_path, 'r', encoding='utf-8') as fs:
         kit_system_data = json.load(fs)
         for data in kit_system_data['data']:
-            if 'filePath' in data and relative_path == data['filePath'].replace('/', '\\'):
+            if 'filePath' in data and relative_path in data['filePath']:
                 kit_name = data['kitName']
                 sub_system_name = data['subSystem']
                 break
@@ -419,5 +421,25 @@ def parser_direct(path):  # 目录路径
     file_api_json = get_file_api_json(data_total)
     generate_file_api_json(file_api_json)
     generating_tables.get_api_data(data_total, StringConstant.PARSER_DIRECT_EXCEL_NAME.value)
+
+    return data_total
+
+
+def parser_file_level(output_path):
+    current_file = os.path.dirname(__file__)
+    parser_path = os.path.abspath(os.path.join(current_file, r'../../../../..'))
+    file_path_list = []
+    link_include_path = []  # 装链接头文件路径
+    dir_path = ''
+    if os.path.isdir(parser_path):
+        file_path_total, link_include_total = get_dir_file_path(parser_path)
+        file_path_list.extend(file_path_total)
+        link_include_path.extend(link_include_total)
+        dir_path = parser_path
+    else:
+        print('c_path is incorrect')
+    data_total = parse_include.get_include_file(file_path_list, link_include_path, dir_path)
+    file_api_json = get_file_api_json(data_total)
+    generate_file_api_json(file_api_json, output_path)
 
     return data_total

@@ -13,6 +13,10 @@
     },
     {
         "first_introduced": "12",
+        "name": "OH_ImageSourceInfo_GetDynamicRange"
+    },
+    {
+        "first_introduced": "12",
         "name": "OH_ImageSourceInfo_Release"
     },
     {
@@ -58,6 +62,14 @@
     {
         "first_introduced": "12",
         "name": "OH_DecodingOptions_SetDesiredRegion"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_DecodingOptions_GetDesiredDynamicRange"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_DecodingOptions_SetDesiredDynamicRange"
     },
     {
         "first_introduced": "12",

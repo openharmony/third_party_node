@@ -241,6 +241,30 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CompileScript(JSVM_Env env,
                                               JSVM_Script* result);
 
 /**
+ * @brief This function compiles a string of JavaScript code with the source code information
+ * and returns the compiled script.
+ *
+ * @param env: The environment that the JSVM-API call is invoked under.
+ * @param script: A JavaScript string containing the script to be compiled.
+ * @param cachedData: Optional code cache data for the script.
+ * @param cacheDataLength: The length of cachedData array.
+ * @param eagerCompile: Whether to compile the script eagerly.
+ * @param cacheRejected: Whether the code cache rejected by compilation.
+ * @param origin: The information of source code.
+ * @param result: The compiled script.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_CompileScriptWithOrigin(JSVM_Env env,
+                                                        JSVM_Value script,
+                                                        const uint8_t* cachedData,
+                                                        size_t cacheDataLength,
+                                                        bool eagerCompile,
+                                                        bool* cacheRejected,
+                                                        JSVM_ScriptOrigin* origin,
+                                                        JSVM_Script* result);
+
+/**
  * @brief This function creates code cache for the compiled script.
  *
  * @param env: The environment that the JSVM-API call is invoked under.
@@ -2252,6 +2276,69 @@ JSVM_EXTERN JSVM_Status OH_JSVM_DefineClassWithPropertyHandler(JSVM_Env env,
                                                                JSVM_Callback callAsFunctionCallback,
                                                                JSVM_Value* result);
 
+/**
+ * @brief Determines whether the current thread holds the lock for the specified environment.
+ * Only threads that hold locks can use the environment.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param isLocked: Flag indicating whether the current thread holds the lock for the specified environment.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_IsLocked(JSVM_Env env,
+                                         bool* isLocked);
+
+/**
+ * @brief Acquire the lock for the specified environment. Only threads that hold locks can use the environment.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_AcquireLock(JSVM_Env env);
+
+/**
+ * @brief Release the lock for the specified environment. Only threads that hold locks can use the environment.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_ReleaseLock(JSVM_Env env);
+
+/**
+ * @brief Starts the running of the task queue inside the VM.
+ * This task queue can be executed by an external event loop.
+ *
+ * @param env: The VM instance on which to start the task queue.
+ * @param result: Whether the task queue was successfully started.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_PumpMessageLoop(JSVM_VM vm,
+                                                bool* result);
+
+/**
+ * @brief Check to see if there are any microtasks waiting in the queue, and if there are, execute them.
+ *
+ * @param env: The VM instance on which to check microtasks.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_PerformMicrotaskCheckpoint(JSVM_VM vm);
+
+/**
+ * @brief This API checks if the value passed in is callable.
+ *
+ * @param env: The VM instance on which to check microtasks.
+ * @param value: The JavaScript value to check.
+ * @param isCallable: Whether the given value is callable.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_IsCallable(JSVM_Env env,
+                                           JSVM_Value value,
+                                           bool* isCallable);
 EXTERN_C_END
 
 /** @} */

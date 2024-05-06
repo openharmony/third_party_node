@@ -90,7 +90,7 @@ typedef struct Region {
  * @brief Indicates the operation code in the function OH_NativeWindow_NativeWindowHandleOpt.
  * @since 8
  */
-enum NativeWindowOperation {
+typedef enum NativeWindowOperation {
     /**
      * set native window buffer geometry,
      * variable parameter in function is
@@ -200,7 +200,35 @@ enum NativeWindowOperation {
      * @since 12
      */
     GET_BUFFERQUEUE_SIZE,
-};
+    /**
+     * set surface source type,
+     * variable parameter in function is
+     * [in] int32_t sourceType.
+     * @since 12
+     */
+    SET_SOURCE_TYPE,
+    /**
+     * get surface source type,
+     * variable parameter in function is
+     * [out] int32_t *sourceType.
+     * @since 12
+     */
+    GET_SOURCE_TYPE,
+    /**
+     * set app framework type,
+     * variable parameter in function is
+     * [in] char* frameworkType. maximum length is 64 bytes, otherwise the setting fails.
+     * @since 12
+     */
+    SET_APP_FRAMEWORK_TYPE,
+    /**
+     * get app framework type,
+     * variable parameter in function is
+     * [out] char** frameworkType.
+     * @since 12
+     */
+    GET_APP_FRAMEWORK_TYPE,
+} NativeWindowOperation;
 
 /**
  * @brief Indicates Scaling Mode.
@@ -305,6 +333,33 @@ typedef struct OHExtDataHandle {
     /**< the reserved data */
     int32_t reserve[0];
 } OHExtDataHandle;
+
+/**
+ * @brief Indicates the source type of surface.
+ * @since 12
+ */
+typedef enum {
+    /*
+     * the default source type of surface.
+     */
+    OH_SURFACE_SOURCE_DEFAULT = 0,
+    /*
+     * the surface is created by ui.
+     */
+    OH_SURFACE_SOURCE_UI,
+    /*
+     * the surface is created by game.
+     */
+    OH_SURFACE_SOURCE_GAME,
+    /*
+     * the surface is created by camera.
+     */
+    OH_SURFACE_SOURCE_CAMERA,
+    /*
+     * the surface is created by video.
+     */
+    OH_SURFACE_SOURCE_VIDEO,
+} OHSurfaceSource;
 
 /**
  * @brief Creates a <b>OHNativeWindow</b> instance. A new <b>OHNativeWindow</b> instance is created each time this function is called.
