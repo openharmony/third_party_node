@@ -1920,6 +1920,18 @@ typedef enum {
      *
      */
     NODE_TEXT_ENABLE_DATA_DETECTOR_CONFIG,
+    /**
+     * @brief Defines the background color of the selected text.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: color value, in 0xARGB format. For example, 0xFFFF0000 indicates red. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: color value, in 0xARGB format. \n
+     *
+     */
+    NODE_TEXT_SELECTED_BACKGROUND_COLOR,
 
     /**
      * @brief Defines the text content attribute, which can be set, reset, and obtained as required through APIs.
@@ -2605,6 +2617,17 @@ typedef enum {
      */
     NODE_TEXT_INPUT_WORD_BREAK,
     /**
+     * @brief When this property is set, the height of the textInput component is calculated using this property.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: set the value of numberOfLines.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: the value of numberOfLines.\n
+     *
+     */
+    NODE_TEXT_INPUT_NUMBER_OF_LINES,
+    /**
      * @brief Defines the default placeholder text for the multi-line text box.
      * This attribute can be set, reset, and obtained as required through APIs.
      *
@@ -2874,6 +2897,17 @@ typedef enum {
      *
      */
     NODE_TEXT_AREA_CONTENT_TYPE,
+    /**
+     * @brief When this property is set, the height of the textArea component is calculated using this property.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: set the value of numberOfLines.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: Set the value of numberOfLines\n
+     *
+     */
+    NODE_TEXT_AREA_NUMBER_OF_LINES,
     /**
      * @brief Defines the button text content. This attribute can be set, reset, and obtained as required through APIs.
      *
