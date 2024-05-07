@@ -36,8 +36,17 @@ def wrap_diff_info(old_info, new_info, diff_info: DiffInfo):
         diff_info.set_api_line(old_info['location']['location_line'])
         diff_info.set_api_column(old_info['location']['location_column'])
         diff_info.set_api_file_path(old_info['location']['location_path'])
+        diff_info.set_kit_name(old_info['kit_name'])
+        diff_info.set_sub_system(old_info['sub_system'])
+        diff_info.set_class_name(old_info.get('class_name'))
         if 'content' in old_info['node_content']:
-            diff_info.set_old_api_full_text(old_info['node_content']['content'])
+            old_content = '类名:{};\nAPI命称:{};\n差异内容:{};\n位置:{},{}\n'.format(diff_info.class_name,
+                                                                           diff_info.api_name,
+                                                                           old_info['node_content']['content'],
+                                                                           diff_info.api_line,
+                                                                           diff_info.api_column)
+            diff_info.set_old_api_full_text(old_content)
+
     if new_info is not None:
         if 'temporary_name' in new_info['name']:
             new_info['name'] = ''
@@ -49,8 +58,16 @@ def wrap_diff_info(old_info, new_info, diff_info: DiffInfo):
         diff_info.set_api_line(new_info['location']['location_line'])
         diff_info.set_api_column(new_info['location']['location_column'])
         diff_info.set_api_file_path(new_info['location']['location_path'])
+        diff_info.set_kit_name(new_info['kit_name'])
+        diff_info.set_sub_system(new_info['sub_system'])
+        diff_info.set_class_name(new_info.get('class_name'))
         if 'content' in new_info['node_content']:
-            diff_info.set_new_api_full_text(new_info['node_content']['content'])
+            new_content = '类名:{};\nAPI命称:{};\n差异内容:{};\n位置:{},{}\n'.format(diff_info.class_name,
+                                                                           diff_info.api_name,
+                                                                           new_info['node_content']['content'],
+                                                                           diff_info.api_line,
+                                                                           diff_info.api_column)
+            diff_info.set_new_api_full_text(new_content)
 
     return diff_info
 
@@ -104,12 +121,14 @@ def process_func_param(old, new, diff_info_list):
         for i in range(max(old_len, new_len)):
             if (i + 1) > new_len:  # 减少参数
                 result_message_obj = get_initial_result_obj(DiffType.FUNCTION_PARAM_REDUCE, new, old)
-                diff_info = wrap_diff_info(old['parm'][i], new, result_message_obj)
+                new_none = None
+                diff_info = wrap_diff_info(old['parm'][i], new_none, result_message_obj)
                 diff_info_list.append(diff_info)
 
             elif (i + 1) > old_len:  # 增加参数
                 result_message_obj = get_initial_result_obj(DiffType.FUNCTION_PARAM_ADD, new, old)
-                diff_info = wrap_diff_info(old, new['parm'][i], result_message_obj)
+                old_none = None
+                diff_info = wrap_diff_info(old_none, new['parm'][i], result_message_obj)
                 diff_info_list.append(diff_info)
 
             else:
@@ -367,16 +386,16 @@ def process_enum_member_scene(old_member, new_member, diff_union_list):
 
 def process_variable_const(old, new):
     diff_var_or_con = []
+    if 'is_const' in old:
+        if old['is_const']:     # 处理常量
+            process_constant_name(old, new, diff_var_or_con)  # 处理常量名
+            process_constant_type(old, new, diff_var_or_con)  # 处理常量类型
+            process_constant_value(old, new, diff_var_or_con)  # 处理常量值
 
-    if old['is_const']:     # 处理常量
-        process_constant_name(old, new, diff_var_or_con)  # 处理常量名
-        process_constant_type(old, new, diff_var_or_con)  # 处理常量类型
-        process_constant_value(old, new, diff_var_or_con)  # 处理常量值
-
-    else:   # 处理变量
-        process_variable_name(old, new, diff_var_or_con)     # 处理变量名
-        process_variable_type(old, new, diff_var_or_con)     # 处理变量类型
-        process_variable_value(old, new, diff_var_or_con)    # 处理变量值
+        else:   # 处理变量
+            process_variable_name(old, new, diff_var_or_con)     # 处理变量名
+            process_variable_type(old, new, diff_var_or_con)     # 处理变量类型
+            process_variable_value(old, new, diff_var_or_con)    # 处理变量值
 
     return diff_var_or_con
 
@@ -433,12 +452,14 @@ def process_constant_value(old, new, diff_constant_list):
             diff_constant_list.append(diff_info)
 
     elif 'children' not in old and 'children' in new and len(new['children']):
-        diff_info = wrap_diff_info(old, new['children'][0],
+        old_none = None
+        diff_info = wrap_diff_info(old_none, new['children'][0],
                                    DiffInfo(DiffType.CONSTANT_VALUE_CHANGE))
         diff_constant_list.append(diff_info)
 
     elif 'children' in old and 'children' not in new and len(old['children']):
-        diff_info = wrap_diff_info(old['children'][0], new,
+        new_none = None
+        diff_info = wrap_diff_info(old['children'][0], new_none,
                                    DiffInfo(DiffType.CONSTANT_VALUE_CHANGE))
         diff_constant_list.append(diff_info)
 

@@ -14,6 +14,7 @@
 # limitations under the License.
 
 import json
+import openpyxl as op
 from pathlib import Path
 from typedef.check.check import FileDocInfo, OutputTxt
 from coreImpl.check.check_doc import process_comment, process_file_doc_info
@@ -74,7 +75,28 @@ def result_to_json(check_result):
         message = 'API check error of [{}]:{}'.format(result.error_type['description'], result.error_info)
         txt_resul.append(OutputTxt(result.error_type['id'], result.level, result.api_since,
                                    location, result.file_name, message))
+    generate_excel(txt_resul)
     return json.dumps(txt_resul, default=lambda obj: obj.__dict__, indent=4)
+
+
+def generate_excel(result_info_list):
+    data = []
+    for diff_info in result_info_list:
+        info_data = [
+            diff_info.id,
+            diff_info.level,
+            diff_info.location,
+            diff_info.file_path,
+            diff_info.message
+        ]
+        data.append(info_data)
+    wb = op.Workbook()
+    ws = wb['Sheet']
+    ws.append(['类型', '等级', '所在文件位置', '所在文件', '信息'])
+    for i in range(len(data)):
+        d = data[i][0], data[i][1], data[i][2], data[i][3], data[i][4]
+        ws.append(d)
+    wb.save('error.xlsx')
 
 
 def curr_entry(md_files_path):
