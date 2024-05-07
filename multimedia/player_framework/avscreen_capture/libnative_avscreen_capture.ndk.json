@@ -70,5 +70,21 @@
     {
         "first_introduced": "12",
         "name": "OH_AVScreenCapture_SetErrorCallback"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AVScreenCapture_CreateContentFilter"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AVScreenCapture_ReleaseContentFilter"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AVScreenCapture_ContentFilter_AddAudioContent"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_AVScreenCapture_ExcludeContent"
     }
 ]
