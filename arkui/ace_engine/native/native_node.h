@@ -2616,6 +2616,20 @@ typedef enum {
      *
      */
     NODE_TEXT_INPUT_WORD_BREAK,
+
+    /**
+     * @brief Sets whether the keyboard pops up when the input box gains focus.
+     * It supports property setting, property reset and property acquisition interfaces.
+     *
+     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
+     * .value[0].i32: Whether to pop up the keyboard. \n
+     * \n
+     * Attribute acquisition method return value {@link ArkUI_AttributeItem} format: \n
+     * .value[0].i32: Whether to pop up the keyboard. \n
+     *
+     */
+    NODE_TEXT_INPUT_SHOW_KEYBOARD_ON_FOCUS,
+
     /**
      * @brief When this property is set, the height of the textInput component is calculated using this property.
      *
@@ -2897,6 +2911,19 @@ typedef enum {
      *
      */
     NODE_TEXT_AREA_CONTENT_TYPE,
+
+    /**
+     * @brief Sets whether the keyboard pops up when the input box gains focus.
+     * It supports property setting, property reset and property acquisition interfaces.
+     *
+     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
+     * .value[0].i32: Whether to pop up the keyboard. \n
+     * \n
+     * Attribute acquisition method return value {@link ArkUI_AttributeItem} format: \n
+     * .value[0].i32: Whether to pop up the keyboard. \n
+     *
+     */
+    NODE_TEXT_AREA_SHOW_KEYBOARD_ON_FOCUS,
     /**
      * @brief When this property is set, the height of the textArea component is calculated using this property.
      *
