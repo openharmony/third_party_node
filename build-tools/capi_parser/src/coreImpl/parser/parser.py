@@ -430,7 +430,6 @@ def parser_file_level(output_path):
     parser_path = os.path.abspath(os.path.join(current_file, r'../../../../..'))
     file_path_list = []
     link_include_path = []  # 装链接头文件路径
-    copy_std_lib(link_include_path)
     data_total = []
     if not os.path.isdir(parser_path):
         return data_total
