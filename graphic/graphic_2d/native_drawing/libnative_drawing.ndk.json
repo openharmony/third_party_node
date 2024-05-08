@@ -23,6 +23,10 @@
         "name": "OH_Drawing_BitmapReadPixels"
     },
     { "name": "OH_Drawing_BrushCreate" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_BrushCopy"
+    },
     { "name": "OH_Drawing_BrushDestroy" },
     { "name": "OH_Drawing_BrushGetAlpha" },
     { "name": "OH_Drawing_BrushSetAlpha" },
@@ -134,6 +138,10 @@
         "first_introduced": "12",
         "name": "OH_Drawing_FilterGetColorFilter"
     },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_FilterSetImageFilter"
+    },
     { "name": "OH_Drawing_FilterSetMaskFilter" },
     { "name": "OH_Drawing_FilterDestroy" },
     { "name": "OH_Drawing_FontCreate" },
@@ -234,12 +242,32 @@
         "first_introduced": "12",
         "name": "OH_Drawing_GpuContextDestroy"
     },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_ImageFilterCreateBlur"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_ImageFilterCreateFromColorFilter"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_ImageFilterDestroy"
+    },
     { "name": "OH_Drawing_MaskFilterCreateBlur" },
     { "name": "OH_Drawing_MaskFilterDestroy" },
     { "name": "OH_Drawing_MatrixCreate" },
     { "name": "OH_Drawing_MatrixCreateRotation" },
     { "name": "OH_Drawing_MatrixCreateScale" },
     { "name": "OH_Drawing_MatrixCreateTranslation" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_MatrixMapPoints"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_MatrixMapRect"
+    },
     { "name": "OH_Drawing_MatrixSetMatrix" },
     {
         "first_introduced": "12",
@@ -286,6 +314,10 @@
     { "name": "OH_Drawing_MatrixIsEqual" },
     { "name": "OH_Drawing_MatrixIsIdentity" },
     { "name": "OH_Drawing_MatrixDestroy" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_PathBuildFromSvgString"
+    },
     { "name": "OH_Drawing_PathCreate" },
     { "name": "OH_Drawing_PathCopy" },
     { "name": "OH_Drawing_PathDestroy" },
@@ -318,6 +350,10 @@
         "first_introduced": "12",
         "name": "OH_Drawing_PathRCubicTo"
     },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_PathAddCircle"
+    },
     { "name": "OH_Drawing_PathAddRect" },
     {
         "first_introduced": "12",
@@ -344,6 +380,14 @@
     },
     {
         "first_introduced": "12",
+        "name": "OH_Drawing_PathAddPolygon"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_PathGetBounds"
+    },
+    {
+        "first_introduced": "12",
         "name": "OH_Drawing_PathGetLength"
     },
     {
@@ -363,6 +407,26 @@
         "name": "OH_Drawing_PathOffset"
     },
     { "name": "OH_Drawing_PathReset" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_PathIsClosed"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_PathGetPositionTangent"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_PathOp"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_PathGetMatrix"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_PenCopy"
+    },
     { "name": "OH_Drawing_PenCreate" },
     { "name": "OH_Drawing_PenDestroy" },
     { "name": "OH_Drawing_PenGetAlpha" },
@@ -380,6 +444,10 @@
     { "name": "OH_Drawing_PenSetCap" },
     { "name": "OH_Drawing_PenGetJoin" },
     { "name": "OH_Drawing_PenSetJoin" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_PenGetFillPath"
+    },
     { "name": "OH_Drawing_PenSetFilter" },
     {
         "first_introduced": "12",
@@ -426,6 +494,10 @@
     {
         "first_introduced": "12",
         "name": "OH_Drawing_RectIntersect"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_RectJoin"
     },
     {
         "first_introduced": "12",
@@ -492,8 +564,20 @@
     { "name": "OH_Drawing_SetTextStyleFontFamilies" },
     { "name": "OH_Drawing_SetTextStyleFontStyle" },
     { "name": "OH_Drawing_SetTextStyleLocale" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_ShaderEffectCreateColorShader"
+    },
     { "name": "OH_Drawing_ShaderEffectCreateLinearGradient" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_ShaderEffectCreateLinearGradientWithLocalMatrix"
+    },
     { "name": "OH_Drawing_ShaderEffectCreateRadialGradient" },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_ShaderEffectCreateRadialGradientWithLocalMatrix"
+    },
     { "name": "OH_Drawing_ShaderEffectCreateSweepGradient" },
     {
         "first_introduced": "12",
@@ -558,6 +642,14 @@
     {
         "first_introduced": "12",
         "name": "OH_Drawing_PixelMapGetFromNativePixelMap"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_PixelMapGetFromOhPixelMapNative"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_PixelMapDissolve"
     },
     { "name": "OH_Drawing_ImageCreate" },
     { "name": "OH_Drawing_ImageDestroy" },
@@ -925,6 +1017,18 @@
     {
         "first_introduced": "12",
         "name": "OH_Drawing_RegionCreate"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_RegionContains"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_RegionOp"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_Drawing_RegionSetPath"
     },
     {
         "first_introduced": "12",

@@ -54,6 +54,19 @@ extern "C" {
 OH_Drawing_Pen* OH_Drawing_PenCreate(void);
 
 /**
+ * @brief Creates an <b>OH_Drawing_Pen</b> copy object.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_Pen Indicates the pointer to an <b>OH_Drawing_Pen</b> object.
+ * @return Returns the pointer to the <b>OH_Drawing_Pen</b> object created.
+ *         If nullptr is returned, the creation fails.
+ *         The possible cause of the failure is that the available memory is empty or a nullptr is passed.
+ * @since 12
+ * @version 1.0
+ */
+OH_Drawing_Pen* OH_Drawing_PenCopy(OH_Drawing_Pen*);
+
+/**
  * @brief Destroys an <b>OH_Drawing_Pen</b> object and reclaims the memory occupied by the object.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
@@ -334,6 +347,24 @@ void OH_Drawing_PenGetFilter(OH_Drawing_Pen*, OH_Drawing_Filter*);
  * @version 1.0
  */
 void OH_Drawing_PenSetBlendMode(OH_Drawing_Pen*, OH_Drawing_BlendMode);
+
+/**
+ * @brief Gets the filled equivalent of the src path.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_Pen Indicates the pointer to an <b>OH_Drawing_Pen</b> object.
+ * @param src Indicates the Path read to create a filled version.
+ * @param dst Indicates the resulting Path.
+ * @param OH_Drawing_Rect Indicates the pointer to an <b>OH_Drawing_Rect</b> object that limits the PathEffect area if
+                          Pen has PathEffect.
+ * @param OH_Drawing_Matrix Indicates the pointer to an <b>OH_Drawing_Matrix</b> object that tranfomation applied to
+                          PathEffect if Pen has PathEffect.
+ * @return Returns true if get successes; false if get fails.
+ * @since 12
+ * @version 1.0
+ */
+bool OH_Drawing_PenGetFillPath(OH_Drawing_Pen*, const OH_Drawing_Path* src, OH_Drawing_Path* dst,
+    const OH_Drawing_Rect*, const OH_Drawing_Matrix*);
 
 /**
  * @brief Resets all pen contents to their initial values.
