@@ -2287,7 +2287,7 @@ typedef enum {
      *
      * Inputs:
      *
-     * * <b>input</b>: <i>n</i>-dimensional tensor with numeric data type.
+     * * <b>input</b>: <i>n</i>-dimensional tensor with numeric data type。
      *
      * Outputs:
      *
