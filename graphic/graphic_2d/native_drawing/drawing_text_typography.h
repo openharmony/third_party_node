@@ -1502,7 +1502,7 @@ OH_Drawing_FontDescriptor* OH_Drawing_FontParserGetFontByName(OH_Drawing_FontPar
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_Typography Indicates the pointer to a typography object <b>OH_Drawing_Typography</b>.
- * @return Indicates the pointer to a lime metrics object <b>OH_Drawing_LineMetrics</b>.
+ * @return Indicates the pointer to a line metrics object <b>OH_Drawing_LineMetrics</b>.
  * @since 12
  * @version 1.0
  */
@@ -1512,7 +1512,7 @@ OH_Drawing_LineMetrics* OH_Drawing_TypographyGetLineMetrics(OH_Drawing_Typograph
  * @brief Get the number of lines.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_LineMetrics Indicates the pointer to a lime metrics object <b>OH_Drawing_LineMetrics</b>.
+ * @param OH_Drawing_LineMetrics Indicates the pointer to a line metrics object <b>OH_Drawing_LineMetrics</b>.
  * @return Returns the number of lines.
  * @since 12
  * @version 1.0
@@ -1523,7 +1523,7 @@ size_t OH_Drawing_LineMetricsGetSize(OH_Drawing_LineMetrics*);
  * @brief Releases the memory occupied by line metrics.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_LineMetrics Indicates the pointer to a lime metrics object <b>OH_Drawing_LineMetrics</b>.
+ * @param OH_Drawing_LineMetrics Indicates the pointer to a line metrics object <b>OH_Drawing_LineMetrics</b>.
  * @since 12
  * @version 1.0
  */
@@ -1535,7 +1535,7 @@ void OH_Drawing_DestroyLineMetrics(OH_Drawing_LineMetrics*);
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
  * @param OH_Drawing_Typography Indicates the pointer to a typography object <b>OH_Drawing_Typography</b>.
  * @param int Line number.
- * @param OH_Drawing_LineMetrics Indicates the pointer to a lime metrics object <b>OH_Drawing_LineMetrics</b>.
+ * @param OH_Drawing_LineMetrics Indicates the pointer to a line metrics object <b>OH_Drawing_LineMetrics</b>.
  * @return Whether the line metrics was obtained.
  * @since 12
  * @version 1.0
@@ -1660,7 +1660,7 @@ bool OH_Drawing_TextStyleGetFontMetrics(OH_Drawing_Typography*, OH_Drawing_TextS
  * @param int Line number.
  * @param bool True is the information for the whole line, and false is the information to get the first character
  * @param bool Whether the text width contains whitespace.
- * @param OH_Drawing_LineMetrics Indicates the pointer to a lime metrics object <b>OH_Drawing_LineMetrics</b>.
+ * @param OH_Drawing_LineMetrics Indicates the pointer to a line metrics object <b>OH_Drawing_LineMetrics</b>.
  * @return return whether the information was successfully fetched.
  * @since 12
  * @version 1.0
@@ -2698,6 +2698,16 @@ void OH_Drawing_TypographyDestroyEllipsis(char* ellipsis);
  * @version 1.0
  */
 bool OH_Drawing_TypographyStyleEquals(OH_Drawing_TypographyStyle* from, OH_Drawing_TypographyStyle* to);
+
+/**
+ * @brief Releases the memory occupied by text box.
+ *
+ * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
+ * @param OH_Drawing_TextBox Indicates the pointer to a text box object <b>OH_Drawing_TextBox</b>.
+ * @since 12
+ * @version 1.0
+ */
+void OH_Drawing_TypographyDestroyTextBox(OH_Drawing_TextBox*);
 
 #ifdef __cplusplus
 }
