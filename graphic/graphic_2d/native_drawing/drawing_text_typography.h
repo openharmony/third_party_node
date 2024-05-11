@@ -2700,13 +2700,13 @@ void OH_Drawing_TypographyDestroyEllipsis(char* ellipsis);
 bool OH_Drawing_TypographyStyleEquals(OH_Drawing_TypographyStyle* from, OH_Drawing_TypographyStyle* to);
 
 /**
- * @brief Resetting original parameter of text-shadow.
+ * @brief Sets the parameter of text-shadow.
  *
  * @syscap SystemCapability.Graphic.Graphic2D.NativeDrawing
- * @param OH_Drawing_TextShadow The original hand form text-shadow.
- * @param color The color-paramter is already dealt by function of OH_Drawing_ColorSetArgb.
- * @param OH_Drawing_Point Hope the offset value of text-shadow.
- * @param blurRadius Expectation radius value of blur.
+ * @param OH_Drawing_TextShadow Indicates the pointer to an <b>OH_Drawing_TextShadow</b> object.
+ * @param color Indicates the color setting of text-shadow.
+ * @param OH_Drawing_Point Indicates the pointer to an <b>OH_Drawing_Point</b> object.
+ * @param blurRadius Indicates the radius of blur for text-shadow.
  * @since 12
  * @version 1.0
  */
