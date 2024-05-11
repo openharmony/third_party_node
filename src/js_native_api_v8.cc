@@ -4855,3 +4855,153 @@ JSVM_Status JSVM_CDECL OH_JSVM_IsCallable(JSVM_Env env,
   *isCallable = val->IsFunction();
   return jsvm_clear_last_error(env);
 }
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsUndefined(JSVM_Env env,
+                                           JSVM_Value value,
+                                           bool* isUndefined) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8
+  // calls here cannot throw JS exceptions.
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isUndefined);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isUndefined = val->IsUndefined();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsNull(JSVM_Env env,
+                                      JSVM_Value value,
+                                      bool* isNull) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8
+  // calls here cannot throw JS exceptions.
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isNull);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isNull = val->IsNull();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsNullOrUndefined(JSVM_Env env,
+                                                 JSVM_Value value,
+                                                 bool* isNullOrUndefined) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8
+  // calls here cannot throw JS exceptions.
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isNullOrUndefined);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isNullOrUndefined = val->IsNullOrUndefined();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsBoolean(JSVM_Env env,
+                                         JSVM_Value value,
+                                         bool* isBoolean) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8
+  // calls here cannot throw JS exceptions.
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isBoolean);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isBoolean = val->IsBoolean();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsNumber(JSVM_Env env,
+                                        JSVM_Value value,
+                                        bool* isNumber) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8
+  // calls here cannot throw JS exceptions.
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isNumber);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isNumber = val->IsNumber();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsString(JSVM_Env env,
+                                        JSVM_Value value,
+                                        bool* isString) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8
+  // calls here cannot throw JS exceptions.
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isString);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isString = val->IsString();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsSymbol(JSVM_Env env,
+                                        JSVM_Value value,
+                                        bool* isSymbol) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8
+  // calls here cannot throw JS exceptions.
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isSymbol);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isSymbol = val->IsSymbol();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsFunction(JSVM_Env env,
+                                          JSVM_Value value,
+                                          bool* isFunction) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8
+  // calls here cannot throw JS exceptions.
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isFunction);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isFunction = val->IsFunction();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsObject(JSVM_Env env,
+                                        JSVM_Value value,
+                                        bool* isObject) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8
+  // calls here cannot throw JS exceptions.
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isObject);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isObject = val->IsObject();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsBigInt(JSVM_Env env,
+                                        JSVM_Value value,
+                                        bool* isBigInt) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8
+  // calls here cannot throw JS exceptions.
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isBigInt);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isBigInt = val->IsBigInt();
+
+  return jsvm_clear_last_error(env);
+}
