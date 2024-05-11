@@ -2348,7 +2348,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsCallable(JSVM_Env env,
  *
  * @param env: The VM instance on which to check microtasks.
  * @param value: The JavaScript value to check.
- * @param isUndefined: Whether the given value is undefined.
+ * @param isUndefined: Whether the given value is Undefined.
  * @return Only returns JSVM_OK, because this API will not trigger any exception.
  * @since 12
  */
@@ -2362,7 +2362,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsUndefined(JSVM_Env env,
  *
  * @param env: The VM instance on which to check microtasks.
  * @param value: The JavaScript value to check.
- * @param isNull: Whether the given value is null.
+ * @param isNull: Whether the given value is Null.
  * @return Only returns JSVM_OK, because this API will not trigger any exception.
  * @since 12
  */
@@ -2376,7 +2376,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsNull(JSVM_Env env,
  *
  * @param env: The VM instance on which to check microtasks.
  * @param value: The JavaScript value to check.
- * @param isNullOrUndefined: Whether the given value is null or undefined.
+ * @param isNullOrUndefined: Whether the given value is Null or Undefined.
  * @return Only returns JSVM_OK, because this API will not trigger any exception.
  * @since 12
  */
@@ -2390,7 +2390,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsNullOrUndefined(JSVM_Env env,
  *
  * @param env: The VM instance on which to check microtasks.
  * @param value: The JavaScript value to check.
- * @param isBoolean: Whether the given value is boolean.
+ * @param isBoolean: Whether the given value is Boolean.
  * @return Only returns JSVM_OK, because this API will not trigger any exception.
  * @since 12
  */
@@ -2404,7 +2404,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsBoolean(JSVM_Env env,
  *
  * @param env: The VM instance on which to check microtasks.
  * @param value: The JavaScript value to check.
- * @param isNumber: Whether the given value is number.
+ * @param isNumber: Whether the given value is Number.
  * @return Only returns JSVM_OK, because this API will not trigger any exception.
  * @since 12
  */
@@ -2418,7 +2418,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsNumber(JSVM_Env env,
  *
  * @param env: The VM instance on which to check microtasks.
  * @param value: The JavaScript value to check.
- * @param isString: Whether the given value is string.
+ * @param isString: Whether the given value is String.
  * @return Only returns JSVM_OK, because this API will not trigger any exception.
  * @since 12
  */
@@ -2432,7 +2432,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsString(JSVM_Env env,
  *
  * @param env: The VM instance on which to check microtasks.
  * @param value: The JavaScript value to check.
- * @param isSymbol: Whether the given value is symbol.
+ * @param isSymbol: Whether the given value is Symbol.
  * @return Only returns JSVM_OK, because this API will not trigger any exception.
  * @since 12
  */
@@ -2446,7 +2446,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsSymbol(JSVM_Env env,
  *
  * @param env: The VM instance on which to check microtasks.
  * @param value: The JavaScript value to check.
- * @param isFunction: Whether the given value is function.
+ * @param isFunction: Whether the given value is Function.
  * @return Only returns JSVM_OK, because this API will not trigger any exception.
  * @since 12
  */
@@ -2459,7 +2459,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsFunction(JSVM_Env env,
  *
  * @param env: The VM instance on which to check microtasks.
  * @param value: The JavaScript value to check.
- * @param isObject: Whether the given value is object.
+ * @param isObject: Whether the given value is Object.
  * @return Only returns JSVM_OK, because this API will not trigger any exception.
  * @since 12
  */
@@ -2473,7 +2473,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsObject(JSVM_Env env,
  *
  * @param env: The VM instance on which to check microtasks.
  * @param value: The JavaScript value to check.
- * @param isBigInt: Whether the given value is bigInt.
+ * @param isBigInt: Whether the given value is BigInt.
  * @return Only returns JSVM_OK, because this API will not trigger any exception.
  * @since 12
  */
