@@ -32,40 +32,40 @@ class ParserGetResultTable:
 
 
 class OneFileApiMessage:
-    filePath = ''
-    kitName = ''
-    subSystem = ''
-    apiNumber = 0
+    file_path = ''
+    kit_name = ''
+    sub_system = ''
+    api_number = 0
 
     def __init__(self, file_path, kit_name, sub_system, api_number):
-        self.filePath = file_path
-        self.kitName = kit_name
-        self.subSystem = sub_system
-        self.apiNumber = api_number
+        self.file_path = file_path
+        self.kit_name = kit_name
+        self.sub_system = sub_system
+        self.api_number = api_number
 
     def set_file_path(self, file_path):
-        self.filePath = file_path
+        self.file_path = file_path
 
     def get_file_path(self):
-        return self.filePath
+        return self.file_path
 
     def set_kit_name(self, kit_name):
-        self.kitName = kit_name
+        self.kit_name = kit_name
 
     def get_kit_name(self):
-        return self.kitName
+        return self.kit_name
 
     def set_sub_system(self, sub_system):
-        self.subSystem = sub_system
+        self.sub_system = sub_system
 
     def get_sub_system(self):
-        return self.subSystem
+        return self.sub_system
 
     def set_api_number(self, api_number):
-        self.apiNumber = api_number
+        self.api_number = api_number
 
     def get_api_number(self):
-        return self.apiNumber
+        return self.api_number
 
 
 class NodeKind(enum.Enum):

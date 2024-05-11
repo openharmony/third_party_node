@@ -197,7 +197,7 @@ typedef struct OH_Drawing_ShaderEffect OH_Drawing_ShaderEffect;
 typedef struct OH_Drawing_ShadowLayer OH_Drawing_ShadowLayer;
 
 /**
- * @brief Defines a filter, which is used to store maskFilter and colorFilter.
+ * @brief Defines a filter, which is used to store maskFilter, colorFilter and imageFilter.
  *
  * @since 11
  * @version 1.0
@@ -260,6 +260,14 @@ typedef struct OH_Drawing_TextBlob OH_Drawing_TextBlob;
  * @version 1.0
  */
 typedef struct OH_Drawing_Image OH_Drawing_Image;
+
+/**
+ * @brief Defines a image filter, which is used to operate on all the color bits of pixels that make up an image.
+ *
+ * @since 12
+ * @version 1.0
+ */
+typedef struct OH_Drawing_ImageFilter OH_Drawing_ImageFilter;
 
 /**
  * @brief Defines a sampling options, which is used to describe the sampling mode.

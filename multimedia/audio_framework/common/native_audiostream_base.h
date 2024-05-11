@@ -415,6 +415,8 @@ typedef enum {
     /**
      * Playback capture source type.
      *
+     * @deprecated since 12
+     * @useinstead OH_AVScreenCapture in native interface.
      * @since 10
      */
     AUDIOSTREAM_SOURCE_TYPE_PLAYBACK_CAPTURE = 2,
@@ -645,6 +647,22 @@ typedef void (*OH_AudioRenderer_OnMarkReachedCallback)(OH_AudioRenderer* rendere
  */
 typedef int32_t (*OH_AudioRenderer_WriteDataWithMetadataCallback)(OH_AudioRenderer* renderer,
     void* userData, void* audioData, int32_t audioDataSize, void* metadata, int32_t metadataSize);
+
+/**
+ * @brief Defines Enumeration of audio stream privacy type for playback capture.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** Privacy type that stream can be captured by third party applications.
+     * @since 12
+     */
+    AUDIO_STREAM_PRIVACY_TYPE_PUBLIC = 0,
+    /** Privacy type that stream can not be captured.
+     * @since 12
+     */
+    AUDIO_STREAM_PRIVACY_TYPE_PRIVATE = 1,
+} OH_AudioStream_PrivacyType;
 #ifdef __cplusplus
 }
 #endif

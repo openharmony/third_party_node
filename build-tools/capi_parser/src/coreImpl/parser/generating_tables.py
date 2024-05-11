@@ -112,13 +112,24 @@ def collated_api_data(api_data: list):
         api_content = ''
         if 'node_content' in api and 'content' in api['node_content']:
             api_content = api['node_content']['content']
-            api_content = api_content.replace('\r', '').replace('\n', '')
+            api_content = api_content.replace('   ', '')
         collated_data = [
+            api.get('module_name'),
+            api.get('class_name'),
             api.get('name'),
             api_content,
             api.get('kind'),
             api.get('since'),
+            api.get('deprecate_since'),
             api.get('syscap'),
+            api.get('error_num'),
+            api.get('is_system_api'),
+            api.get('model_constraint'),
+            api.get('permission'),
+            api.get('cross_platform'),
+            api.get('form'),
+            api.get('atomic_service'),
+            api.get('decorator'),
             api.get('kit_name'),
             api.get('location_path'),
             api.get('sub_system')
@@ -128,8 +139,10 @@ def collated_api_data(api_data: list):
 
 
 def generate_excel(array, name, generate_json_unique, original_json_unique):
-    first_line_infor = ['方法名', '方法内容', '类型', '版本', 'syscap', 'kit',
-                        '文件路径', '子系统']
+    first_line_infor = ['模块名', '类名', '方法名', '函数', '类型', '起始版本',
+                        '废弃版本', 'syscap', '错误码', '是否为系统API', '模型限制',
+                        '权限', '是否支持跨平台', '是否支持卡片应用', '是否支持高阶API',
+                        '装饰器', 'kit', '文件路径', '子系统']
     workbook = openpyxl.Workbook()
     work_sheet1 = workbook.active
     work_sheet1.title = '对比结果'
@@ -150,7 +163,9 @@ def generate_excel(array, name, generate_json_unique, original_json_unique):
 def write_information_to_worksheet(work_sheet, information_data):
     for data in information_data:
         write_data = data[0], data[1], data[2], data[3], data[4], \
-                     data[5], data[6], data[7]
+                     data[5], data[6], data[7], data[8], data[9], \
+                     data[10], data[11], data[12], data[13], data[14], \
+                     data[15], data[16], data[17], data[18]
         work_sheet.append(write_data)
 
 

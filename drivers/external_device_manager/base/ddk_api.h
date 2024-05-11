@@ -49,7 +49,9 @@ extern "C" {
  * @param name Pointer to the shared memory to create.
  * @param size Size of the buffer corresponding to the shared memory.
  * @param ashmem Pointer to the shared memory created.
- * @return Returns <b>DDK_SUCCESS</b> if the operation is successful; returns a negative value otherwise.
+ * @return {@link DDK_SUCCESS} the operation is successful.
+ *         {@link DDK_INVALID_PARAMETER} name is NULL, size is 0 or ashmem is NULL.
+ *         {@link DDK_FAILURE} create the shared memory failed or create structure DDK_Ashmem failed.
  * @since 12
  */
 DDK_RetCode OH_DDK_CreateAshmem(const uint8_t *name, uint32_t size, DDK_Ashmem **ashmem);
@@ -60,7 +62,10 @@ DDK_RetCode OH_DDK_CreateAshmem(const uint8_t *name, uint32_t size, DDK_Ashmem *
  *
  * @param ashmem Pointer of the shared memory to map.
  * @param ashmemMapType Protection permission value of the shared memory.
- * @return Returns <b>DDK_SUCCESS</b> if the operation is successful; returns a negative value otherwise.
+ * @return {@link DDK_SUCCESS} the operation is successful.
+ *         {@link DDK_NULL_PTR} ashmem is NULL.
+ *         {@link DDK_FAILURE} the fd of ashmem is invalid.
+ *         {@link DDK_INVALID_OPERATION} use function MapAshmem failed.
  * @since 12
  */
 DDK_RetCode OH_DDK_MapAshmem(DDK_Ashmem *ashmem, const uint8_t ashmemMapType);
@@ -69,7 +74,9 @@ DDK_RetCode OH_DDK_MapAshmem(DDK_Ashmem *ashmem, const uint8_t ashmemMapType);
  * @brief Unmaps shared memory.
  *
  * @param ashmem Pointer of the shared memory to unmap.
- * @return Returns <b>DDK_SUCCESS</b> if the operation is successful; returns a negative value otherwise.
+ * @return {@link DDK_SUCCESS} the operation is successful.
+ *         {@link DDK_NULL_PTR} ashmem is NULL.
+ *         {@link DDK_FAILURE} the fd of ashmem is invalid.
  * @since 12
  */
 DDK_RetCode OH_DDK_UnmapAshmem(DDK_Ashmem *ashmem);
@@ -78,7 +85,9 @@ DDK_RetCode OH_DDK_UnmapAshmem(DDK_Ashmem *ashmem);
  * @brief Destroys shared memory.
  *
  * @param ashmem Pointer of the shared memory to destroy.
- * @return Returns <b>DDK_SUCCESS</b> if the operation is successful; returns a negative value otherwise.
+ * @return {@link DDK_SUCCESS} the operation is successful.
+ *         {@link DDK_NULL_PTR} ashmem is NULL.
+ *         {@link DDK_FAILURE} the fd of ashmem is invalid.
  * @since 12
  */
 DDK_RetCode OH_DDK_DestroyAshmem(DDK_Ashmem *ashmem);

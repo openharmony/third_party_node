@@ -42,8 +42,10 @@ struct OH_AVScreenCapture *OH_AVScreenCapture_Create(void);
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param config Information describing the audio and video config
- * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, init config failed.
  * @since 10
  * @version 1.0
  */
@@ -55,8 +57,11 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_Init(struct OH_AVScreenCapture *c
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param type Information describing the data type of the capture
- * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, set privacy authority enabled
+ *         failed or start ScreenCapture failed.
  * @since 10
  * @version 1.0
  */
@@ -66,8 +71,10 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_StartScreenCapture(struct OH_AVSc
  * @brief Stop the av screen capture
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
- * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, stop ScreenCapture failed.
  * @since 10
  * @version 1.0
  */
@@ -77,8 +84,11 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_StopScreenCapture(struct OH_AVScr
  * @brief Start av screen record use to start save screen record file.
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
- * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, set privacy authority enabled
+ *         failed or start ScreenRecording failed.
  * @since 10
  * @version 1.0
  */
@@ -88,8 +98,10 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_StartScreenRecording(struct OH_AV
  * @brief Start av screen record use to stop save screen record file.
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
- * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, stop ScreenRecording failed.
  * @since 10
  * @version 1.0
  */
@@ -101,8 +113,12 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_StopScreenRecording(struct OH_AVS
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param audiobuffer Information describing the audio buffer of the capture
  * @param type Information describing the audio source type
- * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr or input **audiobuffer is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_NO_MEMORY} no memory, audiobuffer allocate failed.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, not permit for has set
+ *         DataCallback or acquire AudioBuffer failed.
  * @since 10
  * @version 1.0
  */
@@ -128,8 +144,11 @@ OH_NativeBuffer* OH_AVScreenCapture_AcquireVideoBuffer(struct OH_AVScreenCapture
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param type Information describing the audio source type
- * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, not permit for has set
+ *         DataCallback or Release AudioBuffer failed.
  * @since 10
  * @version 1.0
  */
@@ -140,8 +159,11 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_ReleaseAudioBuffer(struct OH_AVSc
  * @brief Release the video buffer for the av screen capture
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
- * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, not permit for has set
+ *         DataCallback or Release VideoBuffer failed.
  * @since 10
  * @version 1.0
  */
@@ -153,8 +175,10 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_ReleaseVideoBuffer(struct OH_AVSc
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param callback A collection of all callback functions, see {@link OH_AVScreenCaptureCallback}
- * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr or input callback is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, set callback failed.
  * @since 10
  * @version 1.0
  */
@@ -165,8 +189,10 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_SetCallback(struct OH_AVScreenCap
  * @brief Release the av screen capture
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
- * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, screen capture release failed.
  * @since 10
  * @version 1.0
  */
@@ -177,8 +203,10 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_Release(struct OH_AVScreenCapture
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param isMicrophone The switch of the microphone
- * @return Returns AVSCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, set microphone enable failed.
  * @since 10
  * @version 1.0
  */
@@ -192,8 +220,11 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_SetMicrophoneEnabled(struct OH_AV
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param callback State callback function, see {@link OH_AVScreenCapture_OnStateChange}
  * @param userData Pointer to user specific data
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr or input callback is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_NO_MEMORY} no memory, mem allocate failed.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, set StateCallback failed.
  * @since 12
  * @version 1.0
  */
@@ -207,8 +238,11 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_SetStateCallback(struct OH_AVScre
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param callback Data callback function, see {@link OH_AVScreenCapture_OnBufferAvailable}
  * @param userData Pointer to user specific data
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr or input callback is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_NO_MEMORY} no memory, mem allocate failed.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, set DataCallback failed.
  * @since 12
  * @version 1.0
  */
@@ -222,8 +256,11 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_SetDataCallback(struct OH_AVScree
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param callback Error callback function, see {@link OH_AVScreenCapture_OnError}
  * @param userData Pointer to user specific data
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr or input callback is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_NO_MEMORY} no memory, mem allocate failed.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, set ErrorCallback failed.
  * @since 12
  * @version 1.0
  */
@@ -235,8 +272,12 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_SetErrorCallback(struct OH_AVScre
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param window Pointer to an OHNativeWindow instance
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr or input window is nullptr or
+ *         input windowSurface is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, set privacy authority enabled
+ *         failed or start ScreenCaptureWithSurface failed.
  * @since 12
  * @version 1.0
  */
@@ -248,8 +289,10 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_StartScreenCaptureWithSurface(str
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param canvasRotation whether to rotate the canvas
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT} opertation not be permitted, set CanvasRotation failed.
  * @since 12
  * @version 1.0
  */
@@ -269,8 +312,9 @@ struct OH_AVScreenCapture_ContentFilter *OH_AVScreenCapture_CreateContentFilter(
  * @brief Release the screen capture content filter
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param filter Pointer to an OH_AVScreenCapture_ContentFilter instance
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input filter is nullptr.
  * @since 12
  * @version 1.0
  */
@@ -281,8 +325,9 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_ReleaseContentFilter(struct OH_AV
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param filter Pointer to an OH_AVScreenCapture_ContentFilter instance
  * @param content content to be added
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input filter is nullptr or input content invalid.
  * @since 12
  * @version 1.0
  */
@@ -294,8 +339,11 @@ OH_AVSCREEN_CAPTURE_ErrCode OH_AVScreenCapture_ContentFilter_AddAudioContent(
  * @syscap SystemCapability.Multimedia.Media.AVScreenCapture
  * @param capture Pointer to an OH_AVScreenCapture instance
  * @param filter Pointer to an OH_AVScreenCapture_ContentFilter instance
- * @return Returns AV_SCREEN_CAPTURE_ERR_OK if the execution is successful,
- * otherwise returns a specific error code, refer to {@link OH_AVSCREEN_CAPTURE_ErrCode}
+ * @return Function result code.
+ *         {@link AV_SCREEN_CAPTURE_ERR_OK} if the execution is successful.
+ *         {@link AV_SCREEN_CAPTURE_ERR_INVALID_VAL} input capture is nullptr or input filter is nullptr.
+ *         {@link AV_SCREEN_CAPTURE_ERR_UNSUPPORT} not support, for STREAM, should call AudioCapturer interface to make
+ *         effect when start, for CAPTURE FILE, should call Recorder interface to make effect when start.
  * @since 12
  * @version 1.0
  */

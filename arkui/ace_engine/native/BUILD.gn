@@ -26,6 +26,7 @@ if (!is_arkui_x) {
   ohos_ndk_headers("arkui_header") {
     dest_dir = "$ndk_headers_out_dir/arkui/"
     sources = [
+      "drawable_descriptor.h",
       "native_animate.h",
       "native_dialog.h",
       "native_gesture.h",

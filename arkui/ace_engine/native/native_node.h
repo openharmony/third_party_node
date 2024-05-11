@@ -182,13 +182,13 @@ typedef enum {
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .string: image address;\n
      * .value[0]?.i32: whether to repeat the image. Optional. The parameter type is {@link ArkUI_ImageRepeat}.
-     * .objcet: The parameter type is {@link ArkUI_DrawableDescriptor}. Either .string or .object must be set.\n
+     * .object: The parameter type is {@link ArkUI_DrawableDescriptor}. Either .string or .object must be set.\n
      * The default value is <b>ARKUI_IMAGE_REPEAT_NONE</b>.\n
      * \n
      * Format of the return value {@link ArkUI_AttributeItem}:\n
      * .string: image address;\n
      * .value[0].i32: whether to repeat the image. The parameter type is {@link ArkUI_ImageRepeat}.\n
-     * .objcet: The parameter type is {@link ArkUI_DrawableDescriptor}.\n
+     * .object: The parameter type is {@link ArkUI_DrawableDescriptor}.\n
      *
      */
     NODE_BACKGROUND_IMAGE,
@@ -1584,6 +1584,25 @@ typedef enum {
      *
      */
     NODE_FOREGROUND_BLUR_STYLE,
+
+    /**
+     * @brief Defines layout rect attribute, which can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: x position of the component.
+     * .value[1].i32: y position of the component.
+     * .value[2].i32: width of the component.
+     * .value[3].i32: height of the component.
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: x position of the component.
+     * .value[1].i32: y position of the component.
+     * .value[2].i32: width of the component.
+     * .value[3].i32: height of the component.
+     *
+     */
+    NODE_LAYOUT_RECT,
+
     /**
      * @brief Defines the text content attribute, which can be set, reset, and obtained as required through APIs.
      *
@@ -1920,6 +1939,18 @@ typedef enum {
      *
      */
     NODE_TEXT_ENABLE_DATA_DETECTOR_CONFIG,
+    /**
+     * @brief Defines the background color of the selected text.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].u32: color value, in 0xARGB format. For example, 0xFFFF0000 indicates red. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].u32: color value, in 0xARGB format. \n
+     *
+     */
+    NODE_TEXT_SELECTED_BACKGROUND_COLOR,
 
     /**
      * @brief Defines the text content attribute, which can be set, reset, and obtained as required through APIs.
@@ -1960,11 +1991,11 @@ typedef enum {
      *
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .string: image address of the image span.\n
-     * .objcet: The parameter type is {@link ArkUI_DrawableDescriptor}. Either .string or .object must be set.\n
+     * .object: The parameter type is {@link ArkUI_DrawableDescriptor}. Either .string or .object must be set.\n
      * \n
      * Format of the return value {@link ArkUI_AttributeItem}:\n
      * .string: image address of the image span.\n
-     * .objcet: The parameter type is {@link ArkUI_DrawableDescriptor}.\n
+     * .object: The parameter type is {@link ArkUI_DrawableDescriptor}.\n
      *
      */
     NODE_IMAGE_SPAN_SRC = MAX_NODE_SCOPE_NUM * ARKUI_NODE_IMAGE_SPAN,
@@ -1988,11 +2019,11 @@ typedef enum {
      *
      * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
      * .string: image source.\n
-     * .objcet: The parameter type is {@link ArkUI_DrawableDescriptor}. Either .string or .object must be set.\n
+     * .object: The parameter type is {@link ArkUI_DrawableDescriptor}. Either .string or .object must be set.\n
      * \n
      * Format of the return value {@link ArkUI_AttributeItem}:\n
      * .string: image source.\n
-     * .objcet: The parameter type is {@link ArkUI_DrawableDescriptor}.\n
+     * .object: The parameter type is {@link ArkUI_DrawableDescriptor}.\n
      *
      */
     NODE_IMAGE_SRC = MAX_NODE_SCOPE_NUM * ARKUI_NODE_IMAGE,
@@ -2046,23 +2077,6 @@ typedef enum {
      *
      */
     NODE_IMAGE_COLOR_FILTER,
-    /**
-     * @brief Sets the resizable image options.
-     *
-     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
-     * .value[0].f32: width of the left edge. The unit is vp. \n
-     * .value[1].f32: width of the top edge. The unit is vp. \n
-     * .value[2].f32: width of the right edge. The unit is vp. \n
-     * .value[3].f32: width of the bottom edge. The unit is vp. \n
-     * \n
-     * Format of the return value {@link ArkUI_AttributeItem}:\n
-     * .value[0].f32: width of the left edge. The unit is vp. \n
-     * .value[1].f32: width of the top edge. The unit is vp. \n
-     * .value[2].f32: width of the right edge. The unit is vp. \n
-     * .value[3].f32: width of the bottom edge. The unit is vp. \n
-     *
-     */
-    NODE_IMAGE_RESIZABLE,
     /**
      * @brief Defines the auto resize attribute, which can be set, reset, and obtained as required through APIs.
      *
@@ -2133,6 +2147,23 @@ typedef enum {
      *
      */
     NODE_IMAGE_FILL_COLOR,
+    /**
+     * @brief Sets the resizable image options.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: width of the left edge. The unit is vp. \n
+     * .value[1].f32: width of the top edge. The unit is vp. \n
+     * .value[2].f32: width of the right edge. The unit is vp. \n
+     * .value[3].f32: width of the bottom edge. The unit is vp. \n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: width of the left edge. The unit is vp. \n
+     * .value[1].f32: width of the top edge. The unit is vp. \n
+     * .value[2].f32: width of the right edge. The unit is vp. \n
+     * .value[3].f32: width of the bottom edge. The unit is vp. \n
+     *
+     */
+    NODE_IMAGE_RESIZABLE,
     /**
      * @brief Defines the color of the component when it is selected.
      * This attribute can be set, reset, and obtained as required through APIs.
@@ -2604,6 +2635,31 @@ typedef enum {
      *
      */
     NODE_TEXT_INPUT_WORD_BREAK,
+
+    /**
+     * @brief Sets whether the keyboard pops up when the input box gains focus.
+     * It supports property setting, property reset and property acquisition interfaces.
+     *
+     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
+     * .value[0].i32: Whether to pop up the keyboard. \n
+     * \n
+     * Attribute acquisition method return value {@link ArkUI_AttributeItem} format: \n
+     * .value[0].i32: Whether to pop up the keyboard. \n
+     *
+     */
+    NODE_TEXT_INPUT_SHOW_KEYBOARD_ON_FOCUS,
+
+    /**
+     * @brief When this property is set, the height of the textInput component is calculated using this property.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: set the value of numberOfLines.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: the value of numberOfLines.\n
+     *
+     */
+    NODE_TEXT_INPUT_NUMBER_OF_LINES,
     /**
      * @brief Defines the default placeholder text for the multi-line text box.
      * This attribute can be set, reset, and obtained as required through APIs.
@@ -2874,6 +2930,30 @@ typedef enum {
      *
      */
     NODE_TEXT_AREA_CONTENT_TYPE,
+
+    /**
+     * @brief Sets whether the keyboard pops up when the input box gains focus.
+     * It supports property setting, property reset and property acquisition interfaces.
+     *
+     * Attribute setting method parameter {@link ArkUI_AttributeItem} format:\n
+     * .value[0].i32: Whether to pop up the keyboard. \n
+     * \n
+     * Attribute acquisition method return value {@link ArkUI_AttributeItem} format: \n
+     * .value[0].i32: Whether to pop up the keyboard. \n
+     *
+     */
+    NODE_TEXT_AREA_SHOW_KEYBOARD_ON_FOCUS,
+    /**
+     * @brief When this property is set, the height of the textArea component is calculated using this property.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].i32: set the value of numberOfLines.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].i32: Set the value of numberOfLines\n
+     *
+     */
+    NODE_TEXT_AREA_NUMBER_OF_LINES,
     /**
      * @brief Defines the button text content. This attribute can be set, reset, and obtained as required through APIs.
      *
@@ -3760,6 +3840,30 @@ typedef enum {
      * The type is 0xARGB, and the default value is 0xFFFFFFF. \n
      */
     NODE_RADIO_STYLE,
+    /**
+     * @brief Sets the value of the current radio.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Attribute setting method {@Link ArkUI_AttributeItem} Parameter format:\n
+     * .string: radio value.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: radio value.\n
+     *
+     */
+    NODE_RADIO_VALUE,
+    /**
+     * @brief Set the group name of the current Radio group, only one radio of the same group can be selected.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Attribute setting method {@Link ArkUI_AttributeItem} Parameter format:\n
+     * .string: name of the group to which the current option box belongs.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .string: name of the group to which the current option box belongs.\n
+     *
+     */
+    NODE_RADIO_GROUP,
 
     /**
      * @brief Defines the alignment mode of the child components in the container. This attribute can be set, reset,
@@ -3928,6 +4032,7 @@ typedef enum {
      * The default value is <b>ARKUI_CURVE_EASE</b>. \n
      * .value[4]?.i32: whether to enable the default spring animation. Optional. The default value <b>0</b> means not
      * to enable the default spring animation. \n
+     * .value[5]?.i32: Optional value, sets whether scrolling can cross the boundary. \n
      * \n
      * Format of the return value {@link ArkUI_AttributeItem}:\n
      * .value[0].f32: horizontal scrolling offset, in vp. \n
@@ -4622,6 +4727,25 @@ typedef enum {
     NODE_WATER_FLOW_SCROLL_TO_INDEX,
 
     /**
+     * @brief Defines the size constraints to apply to water flow items.
+     * This attribute can be set, reset, and obtained as required through APIs.
+     *
+     * Format of the {@link ArkUI_AttributeItem} parameter for setting the attribute:\n
+     * .value[0].f32: minimum width, in vp.\n
+     * .value[1].f32: maximum width, in vp.\n
+     * .value[2].f32: minimum height, in vp.\n
+     * .value[3].f32: maximum height, in vp.\n
+     * \n
+     * Format of the return value {@link ArkUI_AttributeItem}:\n
+     * .value[0].f32: minimum width, in vp.\n
+     * .value[1].f32: maximum width, in vp.\n
+     * .value[2].f32: minimum height, in vp.\n
+     * .value[3].f32: maximum height, in vp.\n
+     *
+     */
+    NODE_WATER_FLOW_ITEM_CONSTRAINT_SIZE,
+
+    /**
      * @brief Set the auxiliary line in the RelativeContaine container, supporting property setting,
      * property reset and property acquisition interfaces.
      *
@@ -4957,6 +5081,17 @@ typedef enum {
      * {@link ArkUI_NodeComponentEvent} does not contain parameters.
      */
     NODE_IMAGE_ON_SVG_PLAY_FINISH,
+    /**
+     * @brief Defines image download process event.
+     *
+     * This event is triggered when downloading webpage images from page components.\n
+     * When the event callback occurs, the union type in the {@link ArkUI_NodeEvent} object is
+     * {@link ArkUI_NodeComponentEvent}. \n
+     * {@link ArkUI_NodeComponentEvent} contains two parameter:\n
+     * <b>ArkUI_NodeComponentEvent.data[0].u32</b>: the num of bytes downloaded. \n
+     * <b>ArkUI_NodeComponentEvent.data[1].u32</b>: the total number of bytes to download. \n
+     */
+    NODE_IMAGE_ON_DOWNLOAD_PROGRESS,
     /**
      * @brief Defines the event triggered when the toggle status changes.
      *

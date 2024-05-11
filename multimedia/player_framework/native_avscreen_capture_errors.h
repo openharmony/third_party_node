@@ -29,51 +29,51 @@ extern "C" {
 
 typedef enum OH_AVSCREEN_CAPTURE_ErrCode {
     /**
-     * basic error mask for screen recording.
+     * @error basic error mask for screen recording.
      */
     AV_SCREEN_CAPTURE_ERR_BASE = 0,
     /**
-     * the operation completed successfully.
+     * @error the operation completed successfully.
      */
     AV_SCREEN_CAPTURE_ERR_OK = AV_SCREEN_CAPTURE_ERR_BASE,
     /**
-     * no memory.
+     * @error no memory.
      */
     AV_SCREEN_CAPTURE_ERR_NO_MEMORY = AV_SCREEN_CAPTURE_ERR_BASE + 1,
     /**
-     * opertation not be permitted.
+     * @error opertation not be permitted.
      */
     AV_SCREEN_CAPTURE_ERR_OPERATE_NOT_PERMIT = AV_SCREEN_CAPTURE_ERR_BASE + 2,
     /**
-     * invalid argument.
+     * @error invalid argument.
      */
     AV_SCREEN_CAPTURE_ERR_INVALID_VAL = AV_SCREEN_CAPTURE_ERR_BASE + 3,
     /**
-     * IO error.
+     * @error IO error.
      */
     AV_SCREEN_CAPTURE_ERR_IO = AV_SCREEN_CAPTURE_ERR_BASE + 4,
     /**
-     * network timeout.
+     * @error network timeout.
      */
     AV_SCREEN_CAPTURE_ERR_TIMEOUT = AV_SCREEN_CAPTURE_ERR_BASE + 5,
     /**
-     * unknown error.
+     * @error unknown error.
      */
     AV_SCREEN_CAPTURE_ERR_UNKNOWN = AV_SCREEN_CAPTURE_ERR_BASE + 6,
     /**
-     * media service died.
+     * @error media service died.
      */
     AV_SCREEN_CAPTURE_ERR_SERVICE_DIED = AV_SCREEN_CAPTURE_ERR_BASE + 7,
     /**
-     * the state is not support this operation.
+     * @error the state is not support this operation.
      */
     AV_SCREEN_CAPTURE_ERR_INVALID_STATE = AV_SCREEN_CAPTURE_ERR_BASE + 8,
     /**
-     * unsupport interface.
+     * @error unsupport interface.
      */
     AV_SCREEN_CAPTURE_ERR_UNSUPPORT = AV_SCREEN_CAPTURE_ERR_BASE + 9,
     /**
-     * extend err start.
+     * @error extend err start.
      */
     AV_SCREEN_CAPTURE_ERR_EXTEND_START = AV_SCREEN_CAPTURE_ERR_BASE + 100,
 } OH_AVSCREEN_CAPTURE_ErrCode;

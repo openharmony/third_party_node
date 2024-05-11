@@ -22,7 +22,7 @@ StringConstant.INCLUDE_LIB：# 拉到本地仓的三方库路径
 
 options:
   -h, --help            show this help message and exit
-  -N {collect, check, diff, collect_h}, --tool-name {collect, check, diff, collect_h}
+  -N {collect, check, diff, collect_h, collect_file}, --tool-name {collect, check, diff, collect_h, collect_file}
                         工具名称
   -P PARSER_PATH, --parser-path PARSER_PATH
                         解析路径
@@ -46,6 +46,11 @@ options:
 在工作路径下执行：py main.py路径(相对工作路径) -N collect -P 目录文件路径
 生成文件名：result_total.xlsx--扫描结果api数据
 
-2）统计工具(直接获取)(这个也可以获取到文件级的kit、子系统和文件当前接口数)
+2）统计工具(直接获取)
 在工作路径下执行：py main.py路径(相对工作路径) -N collect_h -P 目录文件路径/头文件路径
-生成文件名：file_api_json.json--文件级接口数据；parser_direct_data.xlsx--扫描结果api数据
+生成文件名：parser_direct_data.xlsx--扫描结果api数据
+
+3）统计工具(获取到文件级的kit、子系统和文件当前接口数)
+在工作路径下执行：py main.py路径(相对工作路径) -N collect_h -P 参数随意 -O 输出json文件路径名或者不加-O
+生成文件名(不加-O)：file_api_json.json--文件级接口数据；
+生成文件名(加-O)：传入json文件路径名

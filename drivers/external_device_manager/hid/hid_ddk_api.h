@@ -51,8 +51,14 @@ extern "C" {
  * vendor ID, and product ID.
  * @param hidEventProperties Pointer to the events of the device to be observed, including the event type and
  * properties of the key event, absolute coordinate event, and relative coordinate event.
- * @return Returns the device ID (a non-negative number) if the operation is successful;
- * returns a negative number otherwise.
+ * @return device ID (a non-negative number), if the operation is successful;
+ *         {@link HID_DDK_NO_PERM} permission check failed.
+ *         {@link HID_DDK_INVALID_OPERATION} connect hid ddk service failed.
+ *         {@link HID_DDK_INVALID_PARAMETER} parameter check failed. Possible causes: 1.hidDevice is null;\n
+ *         2.hidEventProperties is null; 3.properties length exceeds 7; 4.hidEventTypes length exceeds 5;\n
+ *         5.hidKeys length exceeds 100; 6.hidAbs length exceeds 26; 7.hidRelBits length exceeds 13;\n
+ *         8.hidMiscellaneous length exceeds 6.
+ *         {@link HID_DDK_FAILURE} the number of device reaches the maximum 200.
  * @since 11
  * @version 1.0
  */
@@ -68,7 +74,13 @@ int32_t OH_Hid_CreateDevice(Hid_Device *hidDevice, Hid_EventProperties *hidEvent
  * <b>Hid_AbsAxes</b> for an absolute coordinate code, <b>Hid_RelAxes</b> for a relative coordinate event,
  * and <b>Hid_MscEvent</b> for other input event code), and value input by the device.
  * @param length Length of the event list (number of events sent at a time).
- * @return Returns <b>0</b> if the operation is successful; returns a negative number otherwise.
+ * @return {@link HID_DDK_SUCCESS} operation successful.
+ *         {@link HID_DDK_NO_PERM} permission check failed.
+ *         {@link HID_DDK_INVALID_OPERATION} connect hid ddk service failed or the caller is not the creator of device.
+ *         {@link HID_DDK_INVALID_PARAMETER} parameter check failed. Possible causes: 1.deviceId is less than 0;\n
+ *         2.length exceeds 7; 3.items is null.
+ *         {@link HID_DDK_NULL_PTR} the inject of device is null.
+ *         {@link HID_DDK_FAILURE} the device does not exit.
  * @since 11
  * @version 1.0
  */
@@ -79,7 +91,10 @@ int32_t OH_Hid_EmitEvent(int32_t deviceId, const Hid_EmitItem items[], uint16_t 
  *
  * @permission ohos.permission.ACCESS_DDK_HID
  * @param deviceId ID of the device to destroy.
- * @return Returns <b>0</b> if the operation is successful; returns a negative number otherwise.
+ * @return {@link HID_DDK_SUCCESS} operation successful.
+ *         {@link HID_DDK_NO_PERM} permission check failed.
+ *         {@link HID_DDK_INVALID_OPERATION} connect hid ddk service failed or the caller is not the creator of device.
+ *         {@link HID_DDK_FAILURE} the device does not exit.
  * @since 11
  * @version 1.0
  */

@@ -36,34 +36,36 @@ def start_diff_file(old_dir, new_dir):
     print(result_json)
 
 
-def generate_excel(result_info_list):
+def disposal_result_data(result_info_list):
     data = []
     for diff_info in result_info_list:
-        info_data = []
-        info_data.append(diff_info.api_name)
-        info_data.append(diff_info.api_line)
-        info_data.append(diff_info.api_column)
-        info_data.append(diff_info.api_file_path)
-        info_data.append(diff_info.api_type)
-        info_data.append(diff_info.diff_type.name)
-        info_data.append(diff_info.diff_message)
-        info_data.append(diff_info.old_api_full_text)
-        info_data.append(diff_info.new_api_full_text)
+        info_data = [
+            diff_info.diff_type.name,
+            diff_info.old_api_full_text,
+            diff_info.new_api_full_text
+        ]
         result = '是' if diff_info.is_compatible else '否'
         info_data.append(result)
+        info_data.append(diff_info.api_file_path)
+        info_data.append(diff_info.sub_system)
+        info_data.append(diff_info.kit_name)
         api_result = '是' if diff_info.is_api_change else '否'
         info_data.append(api_result)
         info_data.append(diff_info.api_modification_type)
         data.append(info_data)
+
+    return data
+
+
+def generate_excel(result_info_list):
+    data = disposal_result_data(result_info_list)
     wb = op.Workbook()
     ws = wb['Sheet']
-    ws.append(['api名称', '所在行', '所在列', '所在文件', '节点类型',
-               '变更类型', '变更信息', '旧版节点内容', '新版节点内容',
-               '兼容', 'API变化', 'API修改类型'])
+    ws.append(['操作标记', '差异项-旧版本', '差异项-新版本', '兼容',
+               '.h文件', '归属子系统', 'kit', 'API变化', 'API修改类型'])
     for title in data:
         d = title[0], title[1], title[2], title[3], title[4],\
-            title[5], title[6], title[7], title[8], title[9],\
-            title[10], title[11]
+            title[5], title[6], title[7], title[8]
         ws.append(d)
     wb.save('diff.xlsx')
 

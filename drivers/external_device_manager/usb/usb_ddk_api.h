@@ -49,7 +49,8 @@ extern "C" {
  * @brief Initializes the DDK.
  *
  * @permission ohos.permission.ACCESS_DDK_USB
- * @return <b>0</b> if the operation is successful; a negative value otherwise.
+ * @return {@link USB_DDK_SUCCESS} the operation is successful.
+ *         {@link USB_DDK_FAILED} permission check failed or connect usb ddk service failed or internal error failed.
  * @since 10
  * @version 1.0
  */
@@ -70,7 +71,10 @@ void OH_Usb_Release(void);
  * @permission ohos.permission.ACCESS_DDK_USB
  * @param deviceId ID of the device whose descriptor is to be obtained.
  * @param desc Standard device descriptor defined in the USB protocol.
- * @return <b>0</b> if the operation is successful; a negative value otherwise.
+ * @return {@link USB_DDK_SUCCESS} the operation is successful.
+ *         {@link USB_DDK_FAILED} permission check failed or internal error failed.
+ *         {@link USB_DDK_INVALID_OPERATION} connect usb ddk service failed.
+ *         {@link USB_DDK_INVALID_PARAMETER} desc is null.
  * @since 10
  * @version 1.0
  */
@@ -85,7 +89,10 @@ int32_t OH_Usb_GetDeviceDescriptor(uint64_t deviceId, struct UsbDeviceDescriptor
  * @param configIndex Configuration index, which corresponds to <b>bConfigurationValue</b> in the USB protocol.
  * @param config Configuration descriptor, which includes the standard configuration descriptor defined in the\n
  * USB protocol and the associated interface descriptor and endpoint descriptor.
- * @return <b>0</b> if the operation is successful; a negative value otherwise.
+ * @return {@link USB_DDK_SUCCESS} the operation is successful.
+ *         {@link USB_DDK_FAILED} permission check failed or internal error failed.
+ *         {@link USB_DDK_INVALID_OPERATION} connect usb ddk service failed.
+ *         {@link USB_DDK_INVALID_PARAMETER} config is null.
  * @since 10
  * @version 1.0
  */
@@ -111,7 +118,10 @@ void OH_Usb_FreeConfigDescriptor(struct UsbDdkConfigDescriptor * const config);
  * @param interfaceIndex Interface index, which corresponds to <b>bInterfaceNumber</b> in the USB protocol.
  * @param interfaceHandle Interface operation handle. After the interface is claimed successfully, a value will be\n
  * assigned to this parameter.
- * @return <b>0</b> if the operation is successful; a negative value otherwise.
+ * @return {@link USB_DDK_SUCCESS} the operation is successful.
+ *         {@link USB_DDK_FAILED} permission check failed or internal error failed.
+ *         {@link USB_DDK_INVALID_OPERATION} connect usb ddk service failed.
+ *         {@link USB_DDK_INVALID_PARAMETER} interfaceHandle is null.
  * @since 10
  * @version 1.0
  */
@@ -122,7 +132,9 @@ int32_t OH_Usb_ClaimInterface(uint64_t deviceId, uint8_t interfaceIndex, uint64_
  *
  * @permission ohos.permission.ACCESS_DDK_USB
  * @param interfaceHandle Interface operation handle.
- * @return <b>0</b> if the operation is successful; a negative value otherwise.
+ * @return {@link USB_DDK_SUCCESS} the operation is successful.
+ *         {@link USB_DDK_FAILED} permission check failed or internal error failed.
+ *         {@link USB_DDK_INVALID_OPERATION} connect usb ddk service failed.
  * @since 10
  * @version 1.0
  */
@@ -135,7 +147,9 @@ int32_t OH_Usb_ReleaseInterface(uint64_t interfaceHandle);
  * @param interfaceHandle Interface operation handle.
  * @param settingIndex Index of the alternate setting, which corresponds to <b>bAlternateSetting</b>\n
  * in the USB protocol.
- * @return <b>0</b> if the operation is successful; a negative value otherwise.
+ * @return {@link USB_DDK_SUCCESS} the operation is successful.
+ *         {@link USB_DDK_FAILED} permission check failed or internal error failed.
+ *         {@link USB_DDK_INVALID_OPERATION} connect usb ddk service failed.
  * @since 10
  * @version 1.0
  */
@@ -148,7 +162,10 @@ int32_t OH_Usb_SelectInterfaceSetting(uint64_t interfaceHandle, uint8_t settingI
  * @param interfaceHandle Interface operation handle.
  * @param settingIndex Index of the alternate setting, which corresponds to <b>bAlternateSetting</b>\n
  * in the USB protocol.
- * @return <b>0</b> if the operation is successful; a negative value otherwise.
+ * @return {@link USB_DDK_SUCCESS} the operation is successful.
+ *         {@link USB_DDK_FAILED} permission check failed or internal error failed.
+ *         {@link USB_DDK_INVALID_OPERATION} connect usb ddk service failed.
+ *         {@link USB_DDK_INVALID_PARAMETER} settingIndex is null.
  * @since 10
  * @version 1.0
  */
@@ -163,7 +180,12 @@ int32_t OH_Usb_GetCurrentInterfaceSetting(uint64_t interfaceHandle, uint8_t *set
  * @param timeout Timeout duration, in milliseconds.
  * @param data Data to be transferred.
  * @param dataLen Data length. The return value indicates the length of the actually read data.
- * @return <b>0</b> if the operation is successful; a negative value otherwise.
+ * @return {@link USB_DDK_SUCCESS} the operation is successful.
+ *         {@link USB_DDK_FAILED} permission check failed or internal error failed.
+ *         {@link USB_DDK_INVALID_OPERATION} connect usb ddk service failed.
+ *         {@link USB_DDK_INVALID_PARAMETER} setup is null or data is null or dataLen is null or dataLen is less than\n
+ *         size of the read data.
+ *         {@link USB_DDK_MEMORY_ERROR} the memory of read data copies failed.
  * @since 10
  * @version 1.0
  */
@@ -179,7 +201,10 @@ int32_t OH_Usb_SendControlReadRequest(uint64_t interfaceHandle, const struct Usb
  * @param timeout Timeout duration, in milliseconds.
  * @param data Data to be transferred.
  * @param dataLen Data length.
- * @return <b>0</b> if the operation is successful; a negative value otherwise.
+ * @return {@link USB_DDK_SUCCESS} the operation is successful.
+ *         {@link USB_DDK_FAILED} permission check failed or internal error failed.
+ *         {@link USB_DDK_INVALID_OPERATION} connect usb ddk service failed.
+ *         {@link USB_DDK_INVALID_PARAMETER} setup is null or data is null.
  * @since 10
  * @version 1.0
  */
@@ -193,7 +218,10 @@ int32_t OH_Usb_SendControlWriteRequest(uint64_t interfaceHandle, const struct Us
  * @permission ohos.permission.ACCESS_DDK_USB
  * @param pipe Pipe used to transfer data.
  * @param devMmap Device memory map, which can be obtained by calling <b>OH_Usb_CreateDeviceMemMap</b>.
- * @return <b>0</b> if the operation is successful; a negative value otherwise.
+ * @return {@link USB_DDK_SUCCESS} the operation is successful.
+ *         {@link USB_DDK_FAILED} permission check failed or internal error failed.
+ *         {@link USB_DDK_INVALID_OPERATION} connect usb ddk service failed.
+ *         {@link USB_DDK_INVALID_PARAMETER} pipe is null or devMmap is null or address of devMmap is null.
  * @since 10
  * @version 1.0
  */
@@ -206,7 +234,10 @@ int32_t OH_Usb_SendPipeRequest(const struct UsbRequestPipe *pipe, UsbDeviceMemMa
  * @permission ohos.permission.ACCESS_DDK_USB
  * @param pipe Pipe used to transfer data.
  * @param ashmem Shared memory, which can be obtained by calling <b>OH_DDK_CreateAshmem</b>.
- * @return <b>0</b> if the operation is successful; a negative value otherwise.
+ * @return {@link USB_DDK_SUCCESS} the operation is successful.
+ *         {@link USB_DDK_FAILED} permission check failed or internal error failed.
+ *         {@link USB_DDK_INVALID_OPERATION} connect usb ddk service failed.
+ *         {@link USB_DDK_INVALID_PARAMETER} pipe is null or ashmem is null or address of ashmem is null.
  * @since 12
  */
 int32_t OH_Usb_SendPipeRequestWithAshmem(const struct UsbRequestPipe *pipe, DDK_Ashmem *ashmem);
@@ -219,7 +250,10 @@ int32_t OH_Usb_SendPipeRequestWithAshmem(const struct UsbRequestPipe *pipe, DDK_
  * @param deviceId ID of the device for which the buffer is to be created.
  * @param size Buffer size.
  * @param devMmap Data memory map, through which the created buffer is returned to the caller.
- * @return <b>0</b> if the operation is successful; a negative value otherwise.
+ * @return {@link USB_DDK_SUCCESS} the operation is successful.
+ *         {@link USB_DDK_FAILED} permission check failed or internal error failed.
+ *         {@link USB_DDK_INVALID_PARAMETER} devMmap is null.
+ *         {@link USB_DDK_MEMORY_ERROR} mmap failed or alloc memory of devMmap failed.
  * @since 10
  * @version 1.0
  */
