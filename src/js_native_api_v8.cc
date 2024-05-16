@@ -1514,7 +1514,7 @@ OH_JSVM_CompileScript(JSVM_Env env,
     ? new v8::ScriptCompiler::CachedData(cachedData, cachedDataLength) : nullptr;
   v8::ScriptCompiler::Source scriptSource(v8_script.As<v8::String>(), cache);
   auto option = cache ? v8::ScriptCompiler::kConsumeCodeCache
-    : v8::ScriptCompiler::kNoCompileOptions;
+    : (eagerCompile ? v8::ScriptCompiler::kEagerCompile : v8::ScriptCompiler::kNoCompileOptions);
 
   auto maybe_script = v8::ScriptCompiler::Compile(context, &scriptSource, option);
 
