@@ -117,9 +117,6 @@ void JSVM_Env__::RunAndClearInterrupts() {
 }
 
 void JSVM_Env__::InvokeFinalizerFromGC(v8impl::RefTracker* finalizer) {
-  if (module_api_version != JSVM_VERSION_EXPERIMENTAL) {
-    EnqueueFinalizer(finalizer);
-  } else {
     // The experimental code calls finalizers immediately to release native
     // objects as soon as possible. In that state any code that may affect GC
     // state causes a fatal error. To work around this issue the finalizer code
@@ -128,7 +125,6 @@ void JSVM_Env__::InvokeFinalizerFromGC(v8impl::RefTracker* finalizer) {
         [this, saved = in_gc_finalizer] { in_gc_finalizer = saved; });
     in_gc_finalizer = true;
     finalizer->Finalize();
-  }
 }
 
 namespace v8impl {
