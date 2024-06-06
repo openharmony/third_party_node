@@ -1315,6 +1315,9 @@ v8::Platform* JSVM_Env__::platform() {
 
 JSVM_Status JSVM_CDECL
 OH_JSVM_Init(const JSVM_InitOptions* options) {
+#ifdef TARGET_OHOS
+  v8impl::ResourceSchedule::ReportKeyThread(getuid(), getprocpid(), getproctid());
+#endif
   v8::V8::InitializePlatform(v8impl::g_platform.get());
 
   if (options && options->argc && options->argv) {
@@ -1341,6 +1344,9 @@ JSVM_Status JSVM_CDECL OH_JSVM_GetVM(JSVM_Env env,
 
 JSVM_Status JSVM_CDECL
 OH_JSVM_CreateVM(const JSVM_CreateVMOptions* options, JSVM_VM* result) {
+#ifdef TARGET_OHOS
+  v8impl::ResourceSchedule::ReportKeyThread(getuid(), getprocpid(), getproctid());
+#endif
   v8::Isolate::CreateParams create_params;
   auto externalReferences = v8impl::externalReferenceRegistry.data();
   create_params.external_references = externalReferences;
