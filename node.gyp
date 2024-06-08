@@ -29,7 +29,8 @@
     'node_lib_target_name%': 'libjsvm',
     'node_intermediate_lib_type%': 'static_library',
     'node_builtin_modules_path%': '',
-    'NDK_SYS_ROOT': '<(PRODUCT_DIR)/../../../../../../../../../../out/generic_generic_arm_64only/general_all_phone_standard',
+    'TARGET_DIR': '$(TARGET_GEN_DIR)',
+    'NDK_SYS_ROOT': '<(TARGET_DIR)/../../../../..',
     'linked_module_files': [
     ],
     # We list the deps/ files out instead of globbing them in js2c.py since we
