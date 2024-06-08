@@ -29,6 +29,7 @@
     'node_lib_target_name%': 'libjsvm',
     'node_intermediate_lib_type%': 'static_library',
     'node_builtin_modules_path%': '',
+    'NDK_SYS_ROOT': '<(PRODUCT_DIR)/../../../../../../../../../../out/generic_generic_arm_64only/general_all_phone_standard',
     'linked_module_files': [
     ],
     # We list the deps/ files out instead of globbing them in js2c.py since we
@@ -717,12 +718,16 @@
         # Warn when using deprecated V8 APIs.
         'V8_DEPRECATION_WARNINGS=1',
         'NODE_OPENSSL_SYSTEM_CERT_PATH="<(openssl_system_ca_path)"',
+        'TARGET_OHOS',
       ],
 
       # - "C4244: conversion from 'type1' to 'type2', possible loss of data"
       #   Ususaly safe. Disable for `dep`, enable for `src`
       'msvs_disabled_warnings!': [4244],
 
+      'ldflags' : [
+        '<(NDK_SYS_ROOT)/resourceschedule/resource_schedule_service/libressched_client.z.so',
+      ],
       'conditions': [
         [ 'openssl_default_cipher_list!=""', {
           'defines': [
@@ -1431,6 +1436,10 @@
       ],
 
       'defines': [ 'NODE_WANT_INTERNALS=1' ],
+   
+      'ldflags' : [
+        '<(NDK_SYS_ROOT)/resourceschedule/resource_schedule_service/libressched_client.z.so'
+      ],
 
       'sources': [
         'src/node_snapshot_stub.cc',
