@@ -4,6 +4,12 @@
 #include "jsvm_types.h"
 #include "js_native_api_v8_internals.h"
 
+#ifdef TARGET_OHOS
+#include <unistd.h>
+extern "C" void ReportData(uint32_t resType, int64_t value,
+  const std::unordered_map<std::string, std::string>& mapPayLoad);
+#endif
+
 inline JSVM_Status jsvm_clear_last_error(JSVM_Env env);
 
 namespace v8impl {
@@ -543,6 +549,40 @@ inline void CfgFinalizedCallback(JSVM_Env env, void* finalizeData, void* finaliz
   }
   delete cfg;
 }
+
+#ifdef TARGET_OHOS
+namespace ResourceSchedule {
+namespace ResType {
+enum : uint32_t {
+  RES_TYPE_REPORT_KEY_THREAD = 39
+};
+
+enum ReportChangeStatus : int64_t {
+  CREATE = 0,
+  REMOVE = 1
+};
+
+enum ThreadRole : int64_t {
+  USER_INTERACT = 0,
+  NORMAL_DISPLAY = 1,
+  IMPORTANT_DISPLAY = 2,
+  NORMAL_AUDIO = 3,
+  IMPORTANT_AUDIO = 4,
+  IMAGE_DECODE = 5
+};
+}
+
+static inline void ReportKeyThread(uid_t uid, pid_t pid, pid_t tid)
+{
+  std::unordered_map<std::string, std::string> payLoad = {
+    {"uid", std::to_string(uid)},
+    {"pid", std::to_string(pid)},
+    {"tid", std::to_string(tid)},
+    {"role", std::to_string(v8impl::ResourceSchedule::ResType::ThreadRole::IMPORTANT_DISPLAY)}};
+  ReportData(v8impl::ResourceSchedule::ResType::RES_TYPE_REPORT_KEY_THREAD, v8impl::ResourceSchedule::ResType::ReportChangeStatus::CREATE, payLoad);
+}
+}
+#endif
 }  // end of namespace v8impl
 
 #endif  // SRC_JS_NATIVE_API_V8_H_
