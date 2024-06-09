@@ -579,7 +579,8 @@ static inline void ReportKeyThread(uid_t uid, pid_t pid, pid_t tid)
     {"pid", std::to_string(pid)},
     {"tid", std::to_string(tid)},
     {"role", std::to_string(v8impl::ResourceSchedule::ResType::ThreadRole::IMPORTANT_DISPLAY)}};
-  ReportData(v8impl::ResourceSchedule::ResType::RES_TYPE_REPORT_KEY_THREAD, v8impl::ResourceSchedule::ResType::ReportChangeStatus::CREATE, payLoad);
+  ReportData(v8impl::ResourceSchedule::ResType::RES_TYPE_REPORT_KEY_THREAD,
+    v8impl::ResourceSchedule::ResType::ReportChangeStatus::CREATE, payLoad);
 }
 }
 #endif
