@@ -221,7 +221,7 @@ static std::vector<intptr_t> externalReferenceRegistry;
 
 static std::unordered_map<std::string, std::string> sourceMapUrlMap;
 
-static void SetFileToSourceMapMappiong(std::string &&file, std::string &&sourceMapUrl) {
+static void SetFileToSourceMapMapping(std::string &&file, std::string &&sourceMapUrl) {
   auto it = sourceMapUrlMap.find(file);
   if (it == sourceMapUrlMap.end()) {
     sourceMapUrlMap.emplace(file, sourceMapUrl);
@@ -1570,7 +1570,6 @@ v8::MaybeLocal<v8::Value> PrepareStackTraceCallback(
       v8::String::NewFromUtf8(isolate, "sourcemap").ToLocalChecked();
   v8::Local<v8::String> moduleSourceString =
       v8::String::NewFromUtf8(isolate, SourceMapRunner.c_str()).ToLocalChecked();
-  v8::Local<v8::Module> module;
 
   v8::ScriptOrigin moduleOrigin =
       CreateScriptOrigin(isolate, moduleName, v8::ScriptType::kClassic);
@@ -1629,7 +1628,8 @@ OH_JSVM_CompileScriptWithOrigin(JSVM_Env env,
   auto *isolate = context->GetIsolate();
 
   if (origin->sourceMapUrl) {
-    v8impl::SetFileToSourceMapMappiong(origin->resourceName, origin->sourceMapUrl);
+    v8impl::SetFileToSourceMapMapping(origin->resourceName, origin->sourceMapUrl);
+    isolate->SetPrepareStackTraceCallback(PrepareStackTraceCallback);
   }
   auto sourceMapUrl = !origin->sourceMapUrl ? v8::Local<v8::Value>() :
     v8::String::NewFromUtf8(isolate, origin->sourceMapUrl).ToLocalChecked().As<v8::Value>();
@@ -1644,7 +1644,6 @@ OH_JSVM_CompileScriptWithOrigin(JSVM_Env env,
   auto option = cache ? v8::ScriptCompiler::kConsumeCodeCache
     : (eagerCompile ? v8::ScriptCompiler::kEagerCompile : v8::ScriptCompiler::kNoCompileOptions);
 
-  isolate->SetPrepareStackTraceCallback(PrepareStackTraceCallback);
   auto maybe_script = v8::ScriptCompiler::Compile(context, &scriptSource, option);
 
   if (cache && cacheRejected) {
