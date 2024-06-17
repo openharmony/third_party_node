@@ -466,6 +466,7 @@
       'include_dirs': [
         'src',
         'deps/postject',
+        '../../base/startup/init/interfaces/innerkits/include/param',
         '<(SHARED_INTERMEDIATE_DIR)' # for node_natives.h
       ],
       'dependencies': [
@@ -728,6 +729,7 @@
 
       'ldflags' : [
         '<(NDK_SYS_ROOT)/resourceschedule/resource_schedule_service/libressched_client.z.so',
+        '<(NDK_SYS_ROOT)/startup/init/libbegetutil.z.so'
       ],
       'conditions': [
         [ 'openssl_default_cipher_list!=""', {
@@ -1434,12 +1436,14 @@
         'deps/cares/include',
         'deps/uv/include',
         'deps/uvwasi/include',
+        '../../base/startup/init/interfaces/innerkits/include/param',
       ],
 
       'defines': [ 'NODE_WANT_INTERNALS=1' ],
    
       'ldflags' : [
-        '<(NDK_SYS_ROOT)/resourceschedule/resource_schedule_service/libressched_client.z.so'
+        '<(NDK_SYS_ROOT)/resourceschedule/resource_schedule_service/libressched_client.z.so',
+        '<(NDK_SYS_ROOT)/startup/init/libbegetutil.z.so'
       ],
 
       'sources': [
