@@ -30,6 +30,7 @@
 #include "node_util.h"
 #include "string_bytes.h"
 #include "uv.h"
+#include "init_param.h"
 
 #ifdef _WIN32
 #include <io.h>  // _S_IREAD _S_IWRITE
@@ -51,6 +52,8 @@
 #include <iomanip>
 #include <sstream>
 
+#define ARGBUFFSIZE 32
+
 static std::atomic_int seq = {0};  // Sequence number for diagnostic filenames.
 
 namespace node {
@@ -60,6 +63,16 @@ using v8::Isolate;
 using v8::Local;
 using v8::String;
 using v8::Value;
+
+bool ReadSystemXpmState() {
+  char buffer[ARGBUFFSIZE] = { 0 };
+  uint32_t buffSize = sizeof(buffer);
+
+  if (SystemGetParameter("ohos.boot.advsecmode.state", buffer, &buffSize) == 0 && strcmp(buffer, "0") != 0) {
+    return true;
+  }
+  return false;
+}
 
 template <typename T>
 static void MakeUtf8String(Isolate* isolate,
