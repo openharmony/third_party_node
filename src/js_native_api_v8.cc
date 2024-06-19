@@ -17,6 +17,8 @@
 #include "util.h"
 #include "sourcemap.def"
 
+#define SECARGCNT   2
+
 #define CHECK_MAYBE_NOTHING(env, maybe, status)                                \
   RETURN_STATUS_IF_FALSE((env), !((maybe).IsNothing()), (status))
 
@@ -1319,6 +1321,12 @@ OH_JSVM_Init(const JSVM_InitOptions* options) {
   v8impl::ResourceSchedule::ReportKeyThread(getuid(), getprocpid(), getproctid());
 #endif
   v8::V8::InitializePlatform(v8impl::g_platform.get());
+
+  if (node::ReadSystemXpmState()) {
+    int secArgc = SECARGCNT;
+    char *secArgv[SECARGCNT] = {"jsvm", "--jitless"};
+    v8::V8::SetFlagsFromCommandLine(&secArgc, secArgv, false);
+  }
 
   if (options && options->argc && options->argv) {
     v8::V8::SetFlagsFromCommandLine(options->argc, options->argv, options->removeFlags);

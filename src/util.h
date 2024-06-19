@@ -53,6 +53,8 @@
 
 namespace node {
 
+bool ReadSystemXpmState();
+
 // Maybe remove kPathSeparator when cpp17 is ready
 #ifdef _WIN32
     constexpr char kPathSeparator = '\\';
