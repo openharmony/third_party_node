@@ -613,5 +613,33 @@ typedef struct {
     /** Resource column offset. */
     size_t resourceColumnOffset;
 } JSVM_ScriptOrigin;
+
+/**
+ * @brief Regular expression flag bits. They can be or'ed to enable a set of flags.
+ *
+ * @since 12
+ */
+typedef enum {
+    /** None mode. */
+    JSVM_REGEXP_NONE = 0,
+    /** Global mode. */
+    JSVM_REGEXP_GLOBAL = 1 << 0,
+    /** Ignore Case mode. */
+    JSVM_REGEXP_IGNORE_CASE = 1 << 1,
+    /** Multiline mode. */
+    JSVM_REGEXP_MULTILINE = 1 << 2,
+    /** Sticky mode. */
+    JSVM_REGEXP_STICKY = 1 << 3,
+    /** Unicode mode. */
+    JSVM_REGEXP_UNICODE = 1 << 4,
+    /** dotAll mode. */
+    JSVM_REGEXP_DOT_ALL = 1 << 5,
+    /** Linear mode. */
+    JSVM_REGEXP_LINEAR = 1 << 6,
+    /** Has Indices mode. */
+    JSVM_REGEXP_HAS_INDICES = 1 << 7,
+    /** Unicode Sets mode. */
+    JSVM_REGEXP_UNICODE_SETS = 1 << 8,
+} JSVM_RegExpFlags;
 /** @} */
 #endif /* ARK_RUNTIME_JSVM_JSVM_TYPE_H */
