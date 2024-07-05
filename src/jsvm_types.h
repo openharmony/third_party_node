@@ -44,6 +44,7 @@
 
 #include <stddef.h>  // NOLINT(modernize-deprecated-headers)
 #include <stdint.h>  // NOLINT(modernize-deprecated-headers)
+#include <stdbool.h>  // NOLINT(modernize-deprecated-headers)
 
 #if !defined __cplusplus || (defined(_MSC_VER) && _MSC_VER < 1900)
 typedef uint16_t char16_t;
@@ -373,6 +374,43 @@ typedef enum {
 } JSVM_MemoryPressureLevel;
 
 /**
+ *
+ * @brief Compile mode
+ *
+ * @since 12
+ */
+typedef enum {
+    /** default mode. */
+    JSVM_COMPILE_MODE_DEFAULT,
+    /** consume code cache. */
+    JSVM_COMPILE_MODE_CONSUME_CODE_CACHE,
+    /** apply eager compile. */
+    JSVM_COMPILE_MODE_EAGER_COMPILE,
+    /** preset for compile profile. */
+    JSVM_COMPILE_MODE_PRODUCE_COMPILE_PROFILE,
+    /** consume compile profile. */
+    JSVM_COMPILE_MODE_CONSUME_COMPILE_PROFILE,
+} JSVM_CompileMode;
+
+/**
+ * @brief Compile option id
+ *
+ * @since 12
+ */
+typedef enum {
+    /** compile mode. */
+    JSVM_COMPILE_MODE,
+    /** code cache content. */
+    JSVM_COMPILE_CODE_CACHE,
+    /** script origin. */
+    JSVM_COMPILE_SCRIPT_ORIGIN,
+    /** compile profile content. */
+    JSVM_COMPILE_COMPILE_PROFILE,
+    /** switch for source map support. */
+    JSVM_COMPILE_ENABLE_SOURCE_MAP,
+} JSVM_CompileOptionId;
+
+/**
  * @brief Heap statisics.
  *
  * @since 12
@@ -613,5 +651,48 @@ typedef struct {
     /** Resource column offset. */
     size_t resourceColumnOffset;
 } JSVM_ScriptOrigin;
+
+/**
+ * @brief Compile Options
+ *
+ * @since 12
+ */
+typedef struct {
+    /** compile option id. */
+    JSVM_CompileOptionId id;
+    /** option content. */
+    union {
+      /** ptr type. */
+      void *ptr;
+      /** int type. */
+      int num;
+      /** bool type. */
+      _Bool boolean;
+    } content;
+} JSVM_CompileOptions;
+
+/**
+ * @brief code cache passed with JSVM_COMPILE_CODE_CACHE
+ *
+ * @since 12
+ */
+typedef struct {
+    /** cache pointer. */
+    uint8_t *cache;
+    /** length. */
+    size_t length;
+} JSVM_CodeCache;
+
+/**
+ * @brief compile profile passed with JSVM_COMPILE_COMPILE_PROFILE
+ *
+ * @since 12
+ */
+typedef const struct {
+    /** profile pointer. */
+    int *profile;
+    /** length. */
+    size_t length;
+} JSVM_CompileProfile;
 /** @} */
 #endif /* ARK_RUNTIME_JSVM_JSVM_TYPE_H */
