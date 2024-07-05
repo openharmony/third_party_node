@@ -263,6 +263,25 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CompileScriptWithOrigin(JSVM_Env env,
                                                         bool* cacheRejected,
                                                         JSVM_ScriptOrigin* origin,
                                                         JSVM_Script* result);
+
+/**
+ * @brief This function compiles a string of JavaScript code with the source code information
+ * and returns the compiled script.
+ *
+ * @param env: The environment that the JSVM-API call is invoked under.
+ * @param script: A JavaScript string containing the script to be compiled.
+ * @param optionCount: length of option array.
+ * @param options: Compile options to be passed.
+ * @param result: The compiled script.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_CompileScriptWithOptions(JSVM_Env env,
+                                                         JSVM_Value script,
+                                                         size_t optionCount,
+                                                         JSVM_CompileOptions options[],
+                                                         JSVM_Script* result);
+
 /**
  * @brief This function creates code cache for the compiled script.
  *
@@ -1879,7 +1898,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_NewInstance(JSVM_Env env,
  * is null-terminated.
  * @param constructor: Struct include callback function that handles constructing instances of the class.
  * When wrapping a C++ class, this method must be a static member with the JSVM_Callback.callback
- * signature. A C++ class constructor cannot be used. 
+ * signature. A C++ class constructor cannot be used.
  * Include Optional data to be passed to the constructor callback as the data
  * property of the callback info. JSVM_Callback provides more details.
  * @param propertyCount: Number of items in the properties array argument.
@@ -2256,7 +2275,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_WaitForDebugger(JSVM_Env env,
  * is null-terminated.
  * @param constructor: Struct include callback function that handles constructing instances of the class.
  * When wrapping a C++ class, this method must be a static member with the JSVM_Callback.callback
- * signature. A C++ class constructor cannot be used. 
+ * signature. A C++ class constructor cannot be used.
  * Include Optional data to be passed to the constructor callback as the data
  * property of the callback info. JSVM_Callback provides more details.
  * @param propertyCount: Number of items in the properties array argument.
