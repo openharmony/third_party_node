@@ -4871,7 +4871,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_ObjectSetPrototypeOf(JSVM_Env env,
   CHECK_TO_OBJECT(env, context, obj, object);
 
   v8::Local<v8::Value> type = v8impl::V8LocalValueFromJsValue(prototype);
-  RETURN_STATUS_IF_FALSE(env, type.IsObject(), JSVM_INVALID_ARG);
+  RETURN_STATUS_IF_FALSE(env, type->IsObject(), JSVM_INVALID_ARG);
   v8::Maybe<bool> set_maybe = obj->SetPrototypeV2(context, type);
 
   RETURN_STATUS_IF_FALSE(env, set_maybe.FromMaybe(false), JSVM_GENERIC_FAILURE);
