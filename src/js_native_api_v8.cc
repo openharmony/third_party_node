@@ -4779,6 +4779,16 @@ JSVM_Status JSVM_CDECL OH_JSVM_IsConstructor(JSVM_Env env,
   return jsvm_clear_last_error(env);
 }
 
+JSVM_Status JSVM_CDECL OH_JSVM_CreateSet(JSVM_Env env,
+                                         JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+
+  *result = v8impl::JsValueFromV8LocalValue(v8::Set::New(env->isolate));
+
+  return jsvm_clear_last_error(env);
+}
+
 JSVM_Status JSVM_CDECL OH_JSVM_CreateRegExp(JSVM_Env env,
                                             JSVM_Value value,
                                             JSVM_RegExpFlags flags,
@@ -4818,4 +4828,52 @@ JSVM_Status JSVM_CDECL OH_JSVM_IsMap(JSVM_Env env,
 
   *isMap = val->IsMap();
   return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsSet(JSVM_Env env,
+                                     JSVM_Value value,
+                                     bool* isSet) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isSet);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isSet = val->IsSet();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_ObjectGetPrototypeOf(JSVM_Env env,
+                                                    JSVM_Value object,
+                                                    JSVM_Value* result) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, result);
+
+  v8::Local<v8::Context> context = env->context();
+
+  v8::Local<v8::Object> obj;
+  CHECK_TO_OBJECT(env, context, obj, object);
+
+  v8::Local<v8::Value> val = obj->GetPrototypeV2();
+  *result = v8impl::JsValueFromV8LocalValue(val);
+  return GET_RETURN_STATUS(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_ObjectSetPrototypeOf(JSVM_Env env,
+                                                    JSVM_Value object,
+                                                    JSVM_Value prototype) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, prototype);
+
+  v8::Local<v8::Context> context = env->context();
+
+  v8::Local<v8::Object> obj;
+  CHECK_TO_OBJECT(env, context, obj, object);
+
+  v8::Local<v8::Value> type = v8impl::V8LocalValueFromJsValue(prototype);
+  RETURN_STATUS_IF_FALSE(env, type.IsObject(), JSVM_INVALID_ARG);
+  v8::Maybe<bool> set_maybe = obj->SetPrototypeV2(context, type);
+
+  RETURN_STATUS_IF_FALSE(env, set_maybe.FromMaybe(false), JSVM_GENERIC_FAILURE);
+  return GET_RETURN_STATUS(env);
 }
