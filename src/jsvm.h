@@ -2480,6 +2480,61 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsObject(JSVM_Env env,
 JSVM_EXTERN JSVM_Status OH_JSVM_IsBigInt(JSVM_Env env,
                                          JSVM_Value value,
                                          bool* isBigInt);
+
+/**
+ * @brief This API checks if the value passed in is a constructor.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param value: The JavaScript value to check.
+ * @param isConstructor: Whether the given value is Constructor.
+ * @return Returns JSVM_OK if the API succeeded. Returns JSVM_INVALID_ARG if the API failed.
+ * @since 12
+ */
+JSVM_Status JSVM_CDECL OH_JSVM_IsConstructor(JSVM_Env env,
+                                             JSVM_Value value,
+                                             bool* isConstructor);
+
+/**
+ * @brief This API returns the JavaScript value of the regular expression
+ * corresponding to the input.
+ * The interface may throw an exception.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param value: The JavaScript string to convert to a regular expression.
+ * @param flags: Regular expression flag bits.
+ * @param result: A JSVM_Value representing a JavaScript RegExp.
+ * @return Returns JSVM_OK if the API succeeded.
+ * Returns JSVM_PENDING_EXCPTION or JSVM_INVALID_ARG or JSVM_GENERIC_FAILURE if the API failed.
+ * @since 12
+ */
+JSVM_Status JSVM_CDECL OH_JSVM_CreateRegExp(JSVM_Env env,
+                                            JSVM_Value value,
+                                            JSVM_RegExpFlags flags,
+                                            JSVM_Value* result);
+
+/**
+ * @brief This API returns a JSVM-API value corresponding to a JavaScript Map type.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param result: A JSVM_Value representing a JavaScript Map.
+ * @return Returns JSVM_OK if the API succeeded. Returns JSVM_INVALID_ARG if the API failed.
+ * @since 12
+ */
+JSVM_Status JSVM_CDECL OH_JSVM_CreateMap(JSVM_Env env, JSVM_Value* result);
+
+/**
+ * @brief This API checks if the value passed in is a Map.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param value: The JavaScript value to check.
+ * @param isMap: Whether the given value is Map.
+ * @return Returns JSVM_OK if the API succeeded. Returns JSVM_INVALID_ARG if the API failed.
+ * @since 12
+ */
+JSVM_Status JSVM_CDECL OH_JSVM_IsMap(JSVM_Env env,
+                                     JSVM_Value value,
+                                     bool* isMap);
+
 EXTERN_C_END
 
 /** @} */
