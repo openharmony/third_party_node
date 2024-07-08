@@ -1534,9 +1534,7 @@ OH_JSVM_CompileScript(JSVM_Env env,
 
   v8::Local<v8::Value> v8_script = v8impl::V8LocalValueFromJsValue(script);
 
-  if (!v8_script->IsString()) {
-    return jsvm_set_last_error(env, JSVM_STRING_EXPECTED);
-  }
+  RETURN_STATUS_IF_FALSE(env, v8_script->IsString(), JSVM_STRING_EXPECTED);
 
   v8::Local<v8::Context> context = env->context();
 
@@ -1547,6 +1545,10 @@ OH_JSVM_CompileScript(JSVM_Env env,
     : (eagerCompile ? v8::ScriptCompiler::kEagerCompile : v8::ScriptCompiler::kNoCompileOptions);
 
   auto maybe_script = v8::ScriptCompiler::Compile(context, &scriptSource, option);
+
+  if (cache) {
+    delete cache;
+  }
 
   if (cache && cacheRejected) {
     *cacheRejected = cache->rejected;
@@ -1628,9 +1630,7 @@ OH_JSVM_CompileScriptWithOrigin(JSVM_Env env,
 
   v8::Local<v8::Value> v8_script = v8impl::V8LocalValueFromJsValue(script);
 
-  if (!v8_script->IsString()) {
-    return jsvm_set_last_error(env, JSVM_STRING_EXPECTED);
-  }
+  RETURN_STATUS_IF_FALSE(env, v8_script->IsString(), JSVM_STRING_EXPECTED);
 
   v8::Local<v8::Context> context = env->context();
   auto *isolate = context->GetIsolate();
@@ -1654,9 +1654,114 @@ OH_JSVM_CompileScriptWithOrigin(JSVM_Env env,
 
   auto maybe_script = v8::ScriptCompiler::Compile(context, &scriptSource, option);
 
+  if (cache) {
+    delete cache;
+  }
+
   if (cache && cacheRejected) {
     *cacheRejected = cache->rejected;
   }
+
+  CHECK_MAYBE_EMPTY(env, maybe_script, JSVM_GENERIC_FAILURE);
+  v8::Local<v8::Script> compiled_script = maybe_script.ToLocalChecked();
+  *result = reinterpret_cast<JSVM_Script>(*compiled_script);
+
+  return GET_RETURN_STATUS(env);
+}
+
+class CompileOptionResolver {
+ public:
+  CompileOptionResolver(size_t length, JSVM_CompileOptions options[], v8::Isolate *isolate) {
+    for (size_t i = 0; i < length; i++) {
+      switch(options[i].id) {
+        case JSVM_COMPILE_MODE: {
+          v8Option = static_cast<v8::ScriptCompiler::CompileOptions>(options[i].content.num);
+          break;
+        }
+        case JSVM_COMPILE_CODE_CACHE: {
+          auto cache = static_cast<JSVM_CodeCache*>(options[i].content.ptr);
+          cachedData = cache->cache ?
+            new v8::ScriptCompiler::CachedData(cache->cache, cache->length) : nullptr;
+          break;
+        }
+        case JSVM_COMPILE_SCRIPT_ORIGIN: {
+          jsvmOrigin = static_cast<JSVM_ScriptOrigin*>(options[i].content.ptr);
+          break;
+        }
+        case JSVM_COMPILE_COMPILE_PROFILE: {
+          profile = static_cast<JSVM_CompileProfile*>(options[i].content.ptr);
+          break;
+        }
+        case JSVM_COMPILE_ENABLE_SOURCE_MAP: {
+          enableSourceMap = options[i].content.boolean;
+          break;
+        }
+        default: {
+          continue;
+        }
+      }
+    }
+    auto sourceString = jsvmOrigin ? jsvmOrigin->resourceName :
+      "script_" + std::to_string(compileCount++);
+    auto sourceMapPtr = jsvmOrigin && jsvmOrigin->sourceMapUrl ?
+      jsvmOrigin->sourceMapUrl : nullptr;
+    auto sourceMapUrl = (jsvmOrigin && jsvmOrigin->sourceMapUrl) ?
+      v8::String::NewFromUtf8(isolate, jsvmOrigin->sourceMapUrl).ToLocalChecked().As<v8::Value>() :
+      v8::Local<v8::Value>();
+    auto resourceName = v8::String::NewFromUtf8(isolate, sourceString.c_str()).ToLocalChecked();
+    v8Origin = new v8::ScriptOrigin(isolate, resourceName,
+      jsvmOrigin ? jsvmOrigin->resourceLineOffset : 0,
+      jsvmOrigin ? jsvmOrigin->resourceColumnOffset : 0,
+      false, -1, sourceMapUrl);
+    if (enableSourceMap) {
+      v8impl::SetFileToSourceMapMapping(jsvmOrigin->resourceName, sourceMapPtr);
+      isolate->SetPrepareStackTraceCallback(PrepareStackTraceCallback);
+    }
+  }
+
+  ~CompileOptionResolver() {
+    delete v8Origin;
+    v8Origin = nullptr;
+    if (cachedData) {
+      delete cachedData;
+      cachedData = nullptr;
+    }
+  }
+
+  v8::ScriptCompiler::CompileOptions v8Option =
+    v8::ScriptCompiler::kNoCompileOptions;
+  v8::ScriptCompiler::CachedData *cachedData = nullptr;
+  v8::ScriptOrigin *v8Origin = nullptr;
+  JSVM_CompileProfile *profile = nullptr;
+  JSVM_ScriptOrigin *jsvmOrigin = nullptr;
+  bool enableSourceMap = false;
+  static size_t compileCount;
+};
+
+size_t CompileOptionResolver::compileCount = 0;
+
+JSVM_Status JSVM_CDECL
+OH_JSVM_CompileScriptWithOptions(JSVM_Env env,
+                                 JSVM_Value script,
+                                 size_t optionCount,
+                                 JSVM_CompileOptions options[],
+                                 JSVM_Script* result) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, script);
+  CHECK_ARG(env, result);
+
+  v8::Local<v8::Context> context = env->context();
+  auto *isolate = context->GetIsolate();
+  CompileOptionResolver optionResolver(optionCount, options, isolate);
+
+  v8::Local<v8::Value> v8_script = v8impl::V8LocalValueFromJsValue(script);
+
+  RETURN_STATUS_IF_FALSE(env, v8_script->IsString(), JSVM_STRING_EXPECTED);
+
+  v8::ScriptCompiler::Source scriptSource(v8_script.As<v8::String>(),
+    *optionResolver.v8Origin, optionResolver.cachedData);
+  auto maybe_script = v8::ScriptCompiler::Compile(context, &scriptSource, optionResolver.v8Option);
+
   CHECK_MAYBE_EMPTY(env, maybe_script, JSVM_GENERIC_FAILURE);
   v8::Local<v8::Script> compiled_script = maybe_script.ToLocalChecked();
   *result = reinterpret_cast<JSVM_Script>(*compiled_script);
