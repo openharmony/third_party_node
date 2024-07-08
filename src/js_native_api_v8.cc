@@ -4865,3 +4865,62 @@ JSVM_Status JSVM_CDECL OH_JSVM_IsBigInt(JSVM_Env env,
 
   return jsvm_clear_last_error(env);
 }
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsConstructor(JSVM_Env env,
+                                             JSVM_Value value,
+                                             bool* isConstructor) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isConstructor);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  if (!val->IsObject()) {
+    *isConstructor = false;
+    return jsvm_clear_last_error(env);
+  }
+  v8::Local<v8::Object> obj = val.As<v8::Object>();
+  *isConstructor = obj->IsConstructor();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_CreateRegExp(JSVM_Env env,
+                                            JSVM_Value value,
+                                            JSVM_RegExpFlags flags,
+                                            JSVM_Value* result) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+
+  v8::Local<v8::Value> pattern = v8impl::V8LocalValueFromJsValue(value);
+  RETURN_STATUS_IF_FALSE(env, pattern->IsString(), JSVM_STRING_EXPECTED);
+  v8::Local<v8::Context> context = env->context();
+  v8::MaybeLocal<v8::RegExp> regExp = v8::RegExp::New(context, pattern.As<v8::String>(),
+                                                      static_cast<v8::RegExp::Flags>(flags));
+  CHECK_MAYBE_EMPTY(env, regExp, JSVM_GENERIC_FAILURE);
+  *result = v8impl::JsValueFromV8LocalValue(regExp.ToLocalChecked());
+
+  return GET_RETURN_STATUS(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_CreateMap(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+
+  *result = v8impl::JsValueFromV8LocalValue(v8::Map::New(env->isolate));
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsMap(JSVM_Env env,
+                                     JSVM_Value value,
+                                     bool* isMap) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isMap);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+
+  *isMap = val->IsMap();
+  return jsvm_clear_last_error(env);
+}
