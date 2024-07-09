@@ -2071,6 +2071,52 @@ JSVM_Status JSVM_CDECL OH_JSVM_CreateFunction(JSVM_Env env,
   return GET_RETURN_STATUS(env);
 }
 
+JSVM_Status JSVM_CDECL OH_JSVM_CreateFunctionWithScript(JSVM_Env env,
+                                                        const char* funcName,
+                                                        size_t length,
+                                                        size_t argc,
+                                                        const JSVM_Value* argv,
+                                                        JSVM_Value script,
+                                                        JSVM_Value* result) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, script);
+  CHECK_ARG(env, result);
+  if (argc > 0) {
+    CHECK_ARG(env, argv);
+    for (auto i = 0; i < argc; i++) {
+      RETURN_STATUS_IF_FALSE(env, v8impl::V8LocalValueFromJsValue(argv[i])->IsString(),
+          JSVM_STRING_EXPECTED);
+    }
+  }
+
+  v8::Local<v8::Value> v8_script = v8impl::V8LocalValueFromJsValue(script);
+
+  RETURN_STATUS_IF_FALSE(env, v8_script->IsString(), JSVM_STRING_EXPECTED);
+
+  v8::ScriptCompiler::Source scriptSource(v8_script.As<v8::String>());
+
+  v8::Local<v8::Context> context = env->context();
+
+  v8::MaybeLocal<v8::Function> maybe_fun =
+    v8::ScriptCompiler::CompileFunction(context, &scriptSource, argc,
+    reinterpret_cast<v8::Local<v8::String>*>(const_cast<JSVM_Value*>(argv)));
+
+  CHECK_MAYBE_EMPTY(env, maybe_fun, JSVM_GENERIC_FAILURE);
+
+  v8::Local<v8::Function> func = maybe_fun.ToLocalChecked();
+
+  if (funcName != nullptr) {
+    v8::Local<v8::String> funcNameString;
+    CHECK_NEW_FROM_UTF8_LEN(env, funcNameString, funcName, length);
+    func->SetName(funcNameString);
+  }
+
+  *result =
+    v8impl::JsValueFromV8LocalValue(func);
+
+  return GET_RETURN_STATUS(env);
+}
+
 JSVM_Status JSVM_CDECL
 OH_JSVM_DefineClass(JSVM_Env env,
                   const char* utf8name,
@@ -2647,6 +2693,19 @@ JSVM_Status JSVM_CDECL OH_JSVM_IsArray(JSVM_Env env,
   v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
 
   *result = val->IsArray();
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsRegExp(JSVM_Env env,
+                                        JSVM_Value value,
+                                        bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+
+  *result = val->IsRegExp();
   return jsvm_clear_last_error(env);
 }
 
@@ -3619,6 +3678,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_CoerceToBool(JSVM_Env env,
 GEN_COERCE_FUNCTION(NUMBER, Number, number)
 GEN_COERCE_FUNCTION(OBJECT, Object, object)
 GEN_COERCE_FUNCTION(STRING, String, string)
+GEN_COERCE_FUNCTION(BIGINT, BigInt, bigint)
 
 #undef GEN_COERCE_FUNCTION
 

@@ -298,6 +298,9 @@ inline JSVM_Status jsvm_set_last_error(JSVM_Env env,
 #define CHECK_TO_OBJECT(env, context, result, src)                             \
   CHECK_TO_TYPE((env), Object, (context), (result), (src), JSVM_OBJECT_EXPECTED)
 
+#define CHECK_TO_BIGINT(env, context, result, src)                             \
+  CHECK_TO_TYPE((env), BigInt, (context), (result), (src), JSVM_BIGINT_EXPECTED)
+
 #define CHECK_TO_OBJECT_WITH_PREAMBLE(env, context, result, src)               \
   CHECK_TO_TYPE_WITH_PREAMBLE(                                                 \
       (env), Object, (context), (result), (src), JSVM_OBJECT_EXPECTED)
