@@ -2183,9 +2183,14 @@ OH_JSVM_DefineClass(JSVM_Env env,
                                                     v8::AccessControl::DEFAULT);
     } else if (p->method != nullptr) {
       v8::Local<v8::FunctionTemplate> t;
-      STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
-          env, p->method, &t, v8::Signature::New(isolate, tpl)));
-
+      if (p->attributes & JSVM_NO_RECEIVER_CHECK) {
+        STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+            env, p->method, &t));
+      } else {
+        STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+            env, p->method, &t, v8::Signature::New(isolate, tpl)));
+      }
+      
       tpl->PrototypeTemplate()->Set(property_name, t, attributes);
     } else {
       v8::Local<v8::Value> value = v8impl::V8LocalValueFromJsValue(p->value);
@@ -4648,8 +4653,13 @@ OH_JSVM_DefineClassWithPropertyHandler(JSVM_Env env,
                                                     v8::AccessControl::DEFAULT);
     } else if (p->method != nullptr) {
       v8::Local<v8::FunctionTemplate> t;
-      STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
-          env, p->method, &t, v8::Signature::New(isolate, tpl)));
+      if (p->attributes & JSVM_NO_RECEIVER_CHECK) {
+        STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+            env, p->method, &t));
+      } else {
+        STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+            env, p->method, &t, v8::Signature::New(isolate, tpl)));
+      }
 
       tpl->PrototypeTemplate()->Set(property_name, t, attributes);
     } else {

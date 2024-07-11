@@ -193,12 +193,21 @@ typedef enum {
     JSVM_ENUMERABLE = 1 << 1,
     /** The property is configurable. */
     JSVM_CONFIGURABLE = 1 << 2,
+    /** Used to mark the receiver of a native method need not be checked.
+     *  If JSVM_NO_RECEIVER_CHECK is not set, the method only accept instance of the defined class as receiver,
+     *  Otherwise Exception "Type Error: Illegal Ivocation" will be throw into JSVM.
+    */
+    JSVM_NO_RECEIVER_CHECK = 1 << 3,
     /** Used with OH_JSVM_DefineClass to distinguish static properties from instance properties. */
     JSVM_STATIC = 1 << 10,
     /** Default for class methods. */
     JSVM_DEFAULT_METHOD = JSVM_WRITABLE | JSVM_CONFIGURABLE,
+    /** Class method with no receiver check*/
+    JSVM_METHOD_NO_RECEIVER_CHECK = JSVM_DEFAULT_METHOD | JSVM_NO_RECEIVER_CHECK,
     /** Default for object properties, like in JS obj[prop]. */
     JSVM_DEFAULT_JSPROPERTY = JSVM_WRITABLE | JSVM_ENUMERABLE | JSVM_CONFIGURABLE,
+    /** Object properties with no receiver check*/
+    JSVM_JSPROPERTY_NO_RECEIVER_CHECK = JSVM_DEFAULT_JSPROPERTY | JSVM_NO_RECEIVER_CHECK,
 } JSVM_PropertyAttributes;
 
 /**
