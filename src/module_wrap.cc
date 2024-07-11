@@ -58,7 +58,7 @@ ModuleWrap::ModuleWrap(Environment* env,
     : BaseObject(env, object),
       module_(env->isolate(), module),
       module_hash_(module->GetIdentityHash()) {
-  object->SetInternalFieldForNodeCore(kModuleSlot, module);
+  object->SetInternalField(kModuleSlot, module.As<Value>());
   object->SetInternalField(kURLSlot, url);
   object->SetInternalField(kSyntheticEvaluationStepsSlot,
                            synthetic_evaluation_step);
