@@ -877,8 +877,7 @@ void ContextifyScript::New(const FunctionCallbackInfo<Value>& args) {
 
   contextify_script->script_.Reset(isolate, v8_script);
   contextify_script->script_.SetWeak();
-  contextify_script->object()->SetInternalFieldForNodeCore(kUnboundScriptSlot,
-                                                           v8_script);
+  contextify_script->object()->SetInternalField(kUnboundScriptSlot, v8_script.As<Value>());
 
   std::unique_ptr<ScriptCompiler::CachedData> new_cached_data;
   if (produce_cached_data) {

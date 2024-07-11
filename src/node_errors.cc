@@ -521,9 +521,9 @@ static void ReportFatalException(Environment* env,
   ABORT();
 }
 
-[[noreturn]] void OOMErrorHandler(const char* location, bool is_heap_oom) {
+[[noreturn]] void OOMErrorHandler(const char* location, const v8::OOMDetails& details) {
   const char* message =
-      is_heap_oom ? "Allocation failed - JavaScript heap out of memory"
+      details.is_heap_oom ? "Allocation failed - JavaScript heap out of memory"
                   : "Allocation failed - process out of memory";
   if (location) {
     FPrintF(stderr, "FATAL ERROR: %s %s\n", location, message);
