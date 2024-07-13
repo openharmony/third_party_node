@@ -1556,7 +1556,7 @@ OH_JSVM_CompileScript(JSVM_Env env,
 
   CHECK_MAYBE_EMPTY(env, maybe_script, JSVM_GENERIC_FAILURE);
   v8::Local<v8::Script> compiled_script = maybe_script.ToLocalChecked();
-  *result = reinterpret_cast<JSVM_Script>(*compiled_script);
+  *result = reinterpret_cast<JSVM_Script>(env->NewJsvmData(compiled_script));
 
   return GET_RETURN_STATUS(env);
 }
@@ -1664,7 +1664,7 @@ OH_JSVM_CompileScriptWithOrigin(JSVM_Env env,
 
   CHECK_MAYBE_EMPTY(env, maybe_script, JSVM_GENERIC_FAILURE);
   v8::Local<v8::Script> compiled_script = maybe_script.ToLocalChecked();
-  *result = reinterpret_cast<JSVM_Script>(*compiled_script);
+  *result = reinterpret_cast<JSVM_Script>(env->NewJsvmData(compiled_script));
 
   return GET_RETURN_STATUS(env);
 }
@@ -1774,8 +1774,8 @@ OH_JSVM_CreateCodeCache(JSVM_Env env,
                        JSVM_Script script,
                        const uint8_t** data,
                        size_t* length) {
-  v8::Local<v8::Script> v8script;
-  memcpy(static_cast<void*>(&v8script), &script, sizeof(script));
+  auto jsvmData = reinterpret_cast<JSVM_Data__*>(script);
+  auto v8script = jsvmData->ToV8Local<v8::Script>(env->isolate);
   v8::ScriptCompiler::CachedData* cache;
   cache = v8::ScriptCompiler::CreateCodeCache(v8script->GetUnboundScript());
 
@@ -1797,8 +1797,8 @@ OH_JSVM_RunScript(JSVM_Env env, JSVM_Script script, JSVM_Value* result) {
   CHECK_ARG(env, script);
   CHECK_ARG(env, result);
 
-  v8::Local<v8::Script> v8script;
-  memcpy(static_cast<void*>(&v8script), &script, sizeof(script));
+  auto jsvmData = reinterpret_cast<JSVM_Data__*>(script);
+  auto v8script = jsvmData->ToV8Local<v8::Script>(env->isolate);
   auto script_result = v8script->Run(env->context());
   CHECK_MAYBE_EMPTY(env, script_result, JSVM_GENERIC_FAILURE);
   *result = v8impl::JsValueFromV8LocalValue(script_result.ToLocalChecked());
@@ -3940,6 +3940,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_CloseHandleScope(JSVM_Env env,
     return JSVM_HANDLE_SCOPE_MISMATCH;
   }
 
+  env->ReleaseJsvmData();
   env->open_handle_scopes--;
   delete v8impl::V8HandleScopeFromJsHandleScope(scope);
   return jsvm_clear_last_error(env);
@@ -5041,4 +5042,28 @@ JSVM_Status JSVM_CDECL OH_JSVM_ObjectSetPrototypeOf(JSVM_Env env,
 
   RETURN_STATUS_IF_FALSE(env, set_maybe.FromMaybe(false), JSVM_GENERIC_FAILURE);
   return GET_RETURN_STATUS(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_RetainScript(JSVM_Env env, JSVM_Script script) {
+  CHECK_ENV(env);
+  auto jsvmData = reinterpret_cast<JSVM_Data__ *>(script);
+
+  RETURN_STATUS_IF_FALSE(env, jsvmData && !jsvmData->isGlobal, JSVM_INVALID_ARG);
+
+  jsvmData->taggedPointer = v8::Global<v8::Script>(
+    env->isolate, jsvmData->ToV8Local<v8::Script>(env->isolate));
+
+  jsvmData->isGlobal = true;
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_ReleaseScript(JSVM_Env env, JSVM_Script script) {
+  CHECK_ENV(env);
+  auto jsvmData = reinterpret_cast<JSVM_Data__ *>(script);
+
+  RETURN_STATUS_IF_FALSE(env, jsvmData && jsvmData->isGlobal, JSVM_INVALID_ARG);
+
+  std::get<v8::Global<v8::Script>>(jsvmData->taggedPointer).Reset();
+  delete jsvmData;
+  return jsvm_clear_last_error(env);
 }
