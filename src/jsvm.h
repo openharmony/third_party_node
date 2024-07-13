@@ -2680,6 +2680,21 @@ JSVM_EXTERN JSVM_Status OH_JSVM_RetainScript(JSVM_Env env, JSVM_Script script);
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_ReleaseScript(JSVM_Env env, JSVM_Script script);
 
+/**
+ * @brief This function activates insepctor with pid and alias it.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param pid: A process id to identify the inspector connection.
+ * @param name: An alias for the inspector that under a specific pid.
+ * default name is jsvm if a nullptr is passed in.
+ * @return Returns JSVM funtions result code.
+ *         Returns {@link JSVM_OK } if the function executed successfully.\n
+ *         Returns {@link JSVM_PENDING_EXCEPTION } if an exception occurs.\n
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_OpenInspectorWithName(JSVM_Env env,
+                                                      int pid,
+                                                      const char* name);
 EXTERN_C_END
 
 /** @} */

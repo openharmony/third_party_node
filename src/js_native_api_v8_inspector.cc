@@ -817,16 +817,20 @@ void InspectorIo::ThreadMain() {
                               script_path, script_name_));
   std::string host;
   int port;
+  int pid;
   {
     ExclusiveAccess<HostPort>::Scoped host_port(host_port_);
     host = host_port->host();
     port = host_port->port();
+    pid = host_port->pid();
   }
   InspectorSocketServer server(std::move(delegate),
                                &loop,
                                std::move(host),
                                port,
-                               inspect_publish_uid_);
+                               inspect_publish_uid_,
+                               stderr,
+                               pid);
   request_queue_ = queue->handle();
   // Its lifetime is now that of the server delegate
   queue.reset();
