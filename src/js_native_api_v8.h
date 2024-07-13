@@ -1,6 +1,7 @@
 #ifndef SRC_JS_NATIVE_API_V8_H_
 #define SRC_JS_NATIVE_API_V8_H_
 
+#include <variant>
 #include "jsvm_types.h"
 #include "js_native_api_v8_internals.h"
 
@@ -56,6 +57,31 @@ class RefTracker {
 class Finalizer;
 class Agent;
 }  // end of namespace v8impl
+
+struct JSVM_Data__ {
+ public:
+  using SourcePtr = std::variant<v8::Local<v8::Script>, v8::Global<v8::Script>>;
+  using DataType = enum { kJsvmScript };
+
+  template<typename T>
+  JSVM_Data__(T ptr, bool retained, DataType type = kJsvmScript)
+    : taggedPointer(ptr),
+      isGlobal(retained),
+      type(type) {}
+
+  template<class T>
+  v8::Local<T> ToV8Local(v8::Isolate *isolate) {
+    if (isGlobal) {
+      return v8::Local<T>::New(isolate, std::get<v8::Global<T>>(taggedPointer));
+    } else {
+      return std::get<v8::Local<T>>(taggedPointer);
+    }
+  }
+
+  SourcePtr taggedPointer;
+  bool isGlobal = false;
+  DataType type;
+};
 
 struct JSVM_Env__ {
   explicit JSVM_Env__(v8::Local<v8::Context> context,
@@ -166,6 +192,28 @@ struct JSVM_Env__ {
     }
   }
 
+  template<typename T>
+  JSVM_Data__ *NewJsvmData(T srcPtr, JSVM_Data__::DataType type = JSVM_Data__::kJsvmScript) {
+    if (dataStack.empty() || open_handle_scopes != dataStack.top().first) {
+      dataStack.emplace(open_handle_scopes, std::vector<JSVM_Data__*>());
+    }
+    auto newData = new JSVM_Data__(srcPtr, false, type);
+    dataStack.top().second.push_back(newData);
+    return newData;
+  }
+
+  void ReleaseJsvmData() {
+    if (dataStack.empty() || open_handle_scopes != dataStack.top().first) {
+      return;
+    }
+    for (auto data : dataStack.top().second) {
+      if (!data->isGlobal) {
+        delete data;
+      }
+    }
+    dataStack.pop();
+  }
+
   v8::Isolate* const isolate;  // Shortcut for context()->GetIsolate()
   v8impl::Persistent<v8::Context> context_persistent;
 
@@ -186,6 +234,7 @@ struct JSVM_Env__ {
   int32_t module_api_version = NODE_API_DEFAULT_MODULE_API_VERSION;
   bool in_gc_finalizer = false;
   v8::Locker* locker = nullptr;
+  std::stack<std::pair<int, std::vector<JSVM_Data__*>>> dataStack;
 
  private:
   v8impl::Agent* inspector_agent_;
