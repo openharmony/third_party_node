@@ -1,4 +1,5 @@
 #include "inspector_socket_server.h"
+#include <unistd.h>
 
 #include "node.h"
 #include "util-inl.h"
@@ -6,9 +7,12 @@
 #include "zlib.h"
 
 #include <algorithm>
+#include <cstdio>
+#include <iostream>
 #include <map>
 #include <set>
 #include <sstream>
+#include <string>
 
 namespace node {
 namespace inspector {
@@ -205,10 +209,16 @@ class SocketSession {
 class ServerSocket {
  public:
   explicit ServerSocket(InspectorSocketServer* server)
-                        : tcp_socket_(uv_tcp_t()), server_(server) {}
-  int Listen(sockaddr* addr, uv_loop_t* loop);
+                        : tcp_socket_(uv_tcp_t()), server_(server), unix_socket_(uv_pipe_t()) {}
+  int Listen(sockaddr* addr, uv_loop_t* loop, int pid = -1);
   void Close() {
     uv_close(reinterpret_cast<uv_handle_t*>(&tcp_socket_), FreeOnCloseCallback);
+  }
+  void CloseUnix() {
+    if (unix_socket_on) {
+      uv_close(reinterpret_cast<uv_handle_t*>(&unix_socket_), nullptr);
+      unix_socket_on = false;
+    }
   }
   int port() const { return port_; }
 
@@ -219,15 +229,18 @@ class ServerSocket {
                              reinterpret_cast<uv_tcp_t*>(socket));
   }
   static void SocketConnectedCallback(uv_stream_t* tcp_socket, int status);
+  static void UnixSocketConnectedCallback(uv_stream_t* unix_socket, int status);
   static void FreeOnCloseCallback(uv_handle_t* tcp_socket_) {
     delete FromTcpSocket(tcp_socket_);
   }
-  int DetectPort();
+  int DetectPort(uv_loop_t *loop, int pid);
   ~ServerSocket() = default;
 
   uv_tcp_t tcp_socket_;
   InspectorSocketServer* server_;
+  uv_pipe_t unix_socket_;
   int port_ = -1;
+  bool unix_socket_on = false;
 };
 
 void PrintDebuggerReadyMessage(
@@ -255,14 +268,15 @@ void PrintDebuggerReadyMessage(
 InspectorSocketServer::InspectorSocketServer(
     std::unique_ptr<SocketServerDelegate> delegate, uv_loop_t* loop,
     const std::string& host, int port,
-    const InspectPublishUid& inspect_publish_uid, FILE* out)
+    const InspectPublishUid& inspect_publish_uid, FILE* out, int pid)
     : loop_(loop),
       delegate_(std::move(delegate)),
       host_(host),
       port_(port),
       inspect_publish_uid_(inspect_publish_uid),
       next_session_id_(0),
-      out_(out) {
+      out_(out),
+      pid_(pid) {
   delegate_->AssignServer(this);
   state_ = ServerState::kNew;
 }
@@ -407,7 +421,7 @@ bool InspectorSocketServer::Start() {
   for (addrinfo* address = req.addrinfo; address != nullptr;
        address = address->ai_next) {
     auto server_socket = ServerSocketPtr(new ServerSocket(this));
-    err = server_socket->Listen(address->ai_addr, loop_);
+    err = server_socket->Listen(address->ai_addr, loop_, pid_);
     if (err == 0)
       server_sockets_.push_back(std::move(server_socket));
   }
@@ -488,6 +502,7 @@ void InspectorSocketServer::Send(int session_id, const std::string& message) {
 
 void InspectorSocketServer::CloseServerSocket(ServerSocket* server) {
   server->Close();
+  server->CloseUnix();
 }
 
 // InspectorSession tracking
@@ -518,7 +533,7 @@ void SocketSession::Delegate::OnWsFrame(const std::vector<char>& data) {
 }
 
 // ServerSocket implementation
-int ServerSocket::DetectPort() {
+int ServerSocket::DetectPort(uv_loop_t *loop, int pid) {
   sockaddr_storage addr;
   int len = sizeof(addr);
   int err = uv_tcp_getsockname(&tcp_socket_,
@@ -531,10 +546,28 @@ int ServerSocket::DetectPort() {
   else
     port = reinterpret_cast<const sockaddr_in*>(&addr)->sin_port;
   port_ = ntohs(port);
+  if (!unix_socket_on && pid != -1) {
+    auto unixDomainSocketPath = "/tmp/jsvm_devtools_remote_" +
+      std::to_string(port_) + "_" + std::to_string(pid);
+    if (access(unixDomainSocketPath.c_str(), F_OK) != -1) {
+      unlink(unixDomainSocketPath.c_str());
+    }
+    err = uv_pipe_init(loop, &unix_socket_, 0);
+
+    if (err == 0) {
+      err = uv_pipe_bind(&unix_socket_, unixDomainSocketPath.c_str());
+    }
+
+    if (err == 0) {
+      err = uv_listen(reinterpret_cast<uv_stream_t*>(&unix_socket_), 128,
+        ServerSocket::UnixSocketConnectedCallback);
+    }
+    unix_socket_on = err == 0;
+  }
   return err;
 }
 
-int ServerSocket::Listen(sockaddr* addr, uv_loop_t* loop) {
+int ServerSocket::Listen(sockaddr* addr, uv_loop_t* loop, int pid) {
   uv_tcp_t* server = &tcp_socket_;
   CHECK_EQ(0, uv_tcp_init(loop, server));
   int err = uv_tcp_bind(server, addr, 0);
@@ -544,7 +577,7 @@ int ServerSocket::Listen(sockaddr* addr, uv_loop_t* loop) {
                     ServerSocket::SocketConnectedCallback);
   }
   if (err == 0) {
-    err = DetectPort();
+    err = DetectPort(loop, pid);
   }
   return err;
 }
@@ -556,6 +589,13 @@ void ServerSocket::SocketConnectedCallback(uv_stream_t* tcp_socket,
     ServerSocket* server_socket = ServerSocket::FromTcpSocket(tcp_socket);
     // Memory is freed when the socket closes.
     server_socket->server_->Accept(server_socket->port_, tcp_socket);
+  }
+}
+
+void ServerSocket::UnixSocketConnectedCallback(uv_stream_t* unix_socket,
+                                               int status) {
+  if (status == 0) {
+    (void)unix_socket;
   }
 }
 }  // namespace inspector

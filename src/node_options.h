@@ -19,8 +19,8 @@ namespace node {
 
 class HostPort {
  public:
-  HostPort(const std::string& host_name, int port)
-      : host_name_(host_name), port_(port) {}
+  HostPort(const std::string& host_name, int port, int pid = -1)
+      : host_name_(host_name), port_(port), pid_(pid) {}
   HostPort(const HostPort&) = default;
   HostPort& operator=(const HostPort&) = default;
   HostPort(HostPort&&) = default;
@@ -38,6 +38,10 @@ class HostPort {
     return port_;
   }
 
+  int pid() const {
+    return pid_;
+  }
+
   void Update(const HostPort& other) {
     if (!other.host_name_.empty()) host_name_ = other.host_name_;
     if (other.port_ >= 0) port_ = other.port_;
@@ -46,6 +50,7 @@ class HostPort {
  private:
   std::string host_name_;
   int port_;
+  int pid_;
 };
 
 class Options {
@@ -88,7 +93,7 @@ class DebugOptions : public Options {
 
   enum { kDefaultInspectorPort = 9229 };
 
-  HostPort host_port{"127.0.0.1", kDefaultInspectorPort};
+  HostPort host_port{"127.0.0.1", kDefaultInspectorPort, -1};
 
   // Used to patch the options as if --inspect-brk is passed.
   void EnableBreakFirstLine() {
