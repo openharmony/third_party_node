@@ -2655,6 +2655,31 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateFunctionWithScript(JSVM_Env env,
                                                          JSVM_Value script,
                                                          JSVM_Value* result);
 
+/**
+ * @brief This function keep persistently save a JSVM_Script and extend its lifecycle
+ * beyond the current scope.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param script: A JavaScript string containing the script to be retained.
+ * @return Returns JSVM functions result code
+ *         {@link JSVM_OK } if the API succeeded. \n
+ *         {@link JSVM_INVALID_ARG } if the script is empty or already retained. \n
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_RetainScript(JSVM_Env env, JSVM_Script script);
+
+/**
+ * @brief This function release the script retained by OH_JSVM_RetainScript
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param script: A JavaScript string containing the script to be retained.
+ * @return Returns JSVM functions result code
+ *         {@link JSVM_OK } if the API succeeded. \n
+ *         {@link JSVM_INVALID_ARG } if the script is empty or not retained. \n
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_ReleaseScript(JSVM_Env env, JSVM_Script script);
+
 EXTERN_C_END
 
 /** @} */
