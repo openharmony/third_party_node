@@ -48,7 +48,8 @@ class InspectorSocketServer {
                         const std::string& host,
                         int port,
                         const InspectPublishUid& inspect_publish_uid,
-                        FILE* out = stderr);
+                        FILE* out = stderr,
+                        int pid = -1);
   ~InspectorSocketServer();
 
   // Start listening on host/port
@@ -100,6 +101,7 @@ class InspectorSocketServer {
   int next_session_id_;
   FILE* out_;
   ServerState state_;
+  int pid_;
 };
 
 }  // namespace inspector

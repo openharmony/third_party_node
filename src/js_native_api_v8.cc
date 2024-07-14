@@ -1,3 +1,5 @@
+#include <string.h>
+#include <unistd.h>
 #include <algorithm>
 #include <climits>  // INT_MAX
 #include <cmath>
@@ -5066,4 +5068,48 @@ JSVM_Status JSVM_CDECL OH_JSVM_ReleaseScript(JSVM_Env env, JSVM_Script script) {
   std::get<v8::Global<v8::Script>>(jsvmData->taggedPointer).Reset();
   delete jsvmData;
   return jsvm_clear_last_error(env);
+}
+
+int FindavailablePort() {
+  constexpr int startPort = 9229;
+  constexpr int endPort = 9999;
+  constexpr int invalidPort = -1;
+  int sockfd = -1;
+
+  for (auto port = startPort; port <= endPort; ++port) {
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0) {
+      continue;
+    }
+    struct sockaddr_in addr;
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    addr.sin_port = htons(port);
+
+    if (bind(sockfd, reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr)) < 0) {
+      close(sockfd);
+      if (errno == EADDRINUSE) {
+        continue;
+      } else {
+        break;
+      }
+    }
+    close(sockfd);
+    return port;
+  }
+  return invalidPort;
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_OpenInspectorWithName(JSVM_Env env,
+                                                     int pid,
+                                                     const char* name) {
+  JSVM_PREAMBLE(env);
+  RETURN_STATUS_IF_FALSE(env, !name || strlen(name) < SIZE_MAX , JSVM_INVALID_ARG);
+  RETURN_STATUS_IF_FALSE(env, pid >= 0, JSVM_INVALID_ARG);
+  std::string path(name ? name : "jsvm");
+  auto port = FindAvailablePort();
+  auto hostPort =
+    std::make_shared<node::ExclusiveAccess<node::HostPort>>("localhost", port, pid);
+  env->inspector_agent()->Start(path, hostPort, true, false);
+  return GET_RETURN_STATUS(env);
 }
