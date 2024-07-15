@@ -667,7 +667,7 @@ typedef struct {
       /** int type. */
       int num;
       /** bool type. */
-      _Bool boolean;
+      bool boolean;
     } content;
 } JSVM_CompileOptions;
 
