@@ -5070,7 +5070,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_ReleaseScript(JSVM_Env env, JSVM_Script script) {
   return jsvm_clear_last_error(env);
 }
 
-int FindavailablePort() {
+int FindAvailablePort() {
   constexpr int startPort = 9229;
   constexpr int endPort = 9999;
   constexpr int invalidPort = -1;
