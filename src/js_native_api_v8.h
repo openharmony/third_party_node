@@ -624,13 +624,13 @@ enum ThreadRole : int64_t {
 };
 }
 
-static inline void ReportKeyThread(uid_t uid, pid_t pid, pid_t tid)
+static inline void ReportKeyThread(uid_t uid, pid_t pid, pid_t tid, ResType::ThreadRole role)
 {
   std::unordered_map<std::string, std::string> payLoad = {
     {"uid", std::to_string(uid)},
     {"pid", std::to_string(pid)},
     {"tid", std::to_string(tid)},
-    {"role", std::to_string(v8impl::ResourceSchedule::ResType::ThreadRole::IMPORTANT_DISPLAY)}};
+    {"role", std::to_string(role)}};
   ReportData(v8impl::ResourceSchedule::ResType::RES_TYPE_REPORT_KEY_THREAD,
     v8impl::ResourceSchedule::ResType::ReportChangeStatus::CREATE, payLoad);
 }
