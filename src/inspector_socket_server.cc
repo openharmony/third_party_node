@@ -547,22 +547,22 @@ int ServerSocket::DetectPort(uv_loop_t *loop, int pid) {
     port = reinterpret_cast<const sockaddr_in*>(&addr)->sin_port;
   port_ = ntohs(port);
   if (!unix_socket_on && pid != -1) {
-    auto unixDomainSocketPath = "/tmp/jsvm_devtools_remote_" +
+    auto unixDomainSocketPath = "jsvm_devtools_remote_" +
       std::to_string(port_) + "_" + std::to_string(pid);
-    if (access(unixDomainSocketPath.c_str(), F_OK) != -1) {
-      unlink(unixDomainSocketPath.c_str());
+    auto *abstract = new char[unixDomainSocketPath.length() + 2];
+    abstract[0] = '\0';
+    strcpy(abstract + 1, unixDomainSocketPath.c_str());
+    auto status = uv_pipe_init(loop, &unix_socket_, 0);
+    if (status == 0) {
+      status = uv_pipe_bind(&unix_socket_, abstract);
     }
-    err = uv_pipe_init(loop, &unix_socket_, 0);
-
-    if (err == 0) {
-      err = uv_pipe_bind(&unix_socket_, unixDomainSocketPath.c_str());
-    }
-
-    if (err == 0) {
-      err = uv_listen(reinterpret_cast<uv_stream_t*>(&unix_socket_), 128,
+    if (status == 0) {
+      constexpr int unixBacklog = 128;
+      status = uv_listen(reinterpret_cast<uv_stream_t*>(&unix_socket_), unixBacklog,
         ServerSocket::UnixSocketConnectedCallback);
     }
-    unix_socket_on = err == 0;
+    unix_socket_on = status == 0;
+    delete abstract;
   }
   return err;
 }
