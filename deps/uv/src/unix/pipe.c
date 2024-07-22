@@ -28,6 +28,7 @@
 #include <sys/un.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 
 int uv_pipe_init(uv_loop_t* loop, uv_pipe_t* handle, int ipc) {
@@ -55,7 +56,17 @@ int uv_pipe_bind(uv_pipe_t* handle, const char* name) {
     return UV_EINVAL;
   }
   /* Make a copy of the file name, it outlives this function's scope. */
-  pipe_fname = uv__strdup(name);
+  bool use_abstract = (name != NULL) && (*name == '\0');
+  if (use_abstract) {
+    size_t len = strlen(name + 1) + 2;
+    char* m = uv__malloc(len);
+    if (m == NULL) {
+      return UV_ENOMEM;
+    }
+    pipe_fname = memcpy(m, name, len);
+  } else {
+    pipe_fname = uv__strdup(name);
+  }
   if (pipe_fname == NULL)
     return UV_ENOMEM;
 
@@ -68,7 +79,12 @@ int uv_pipe_bind(uv_pipe_t* handle, const char* name) {
   sockfd = err;
 
   memset(&saddr, 0, sizeof saddr);
-  uv__strscpy(saddr.sun_path, pipe_fname, sizeof(saddr.sun_path));
+  if (use_abstract) {
+    saddr.sun_path[0] = '\0';
+    uv__strscpy(saddr.sun_path + 1, pipe_fname + 1, sizeof(saddr.sun_path));
+  } else {
+    uv__strscpy(saddr.sun_path, pipe_fname, sizeof(saddr.sun_path));
+  }
   saddr.sun_family = AF_UNIX;
 
   if (bind(sockfd, (struct sockaddr*)&saddr, sizeof saddr)) {
