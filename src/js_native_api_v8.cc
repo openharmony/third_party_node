@@ -1729,19 +1729,18 @@ class CompileOptionResolver {
       jsvmOrigin ? jsvmOrigin->resourceLineOffset : 0,
       jsvmOrigin ? jsvmOrigin->resourceColumnOffset : 0,
       false, -1, sourceMapUrl);
-    if (enableSourceMap) {
+    if (enableSourceMap && sourceMapPtr) {
       v8impl::SetFileToSourceMapMapping(jsvmOrigin->resourceName, sourceMapPtr);
       isolate->SetPrepareStackTraceCallback(PrepareStackTraceCallback);
+    }
+    if (v8Option == v8::ScriptCompiler::kConsumeCodeCache && !cachedData) {
+      hasInvalidOption = true;
     }
   }
 
   ~CompileOptionResolver() {
     delete v8Origin;
     v8Origin = nullptr;
-    if (cachedData) {
-      delete cachedData;
-      cachedData = nullptr;
-    }
   }
 
   v8::ScriptCompiler::CompileOptions v8Option =
@@ -1752,6 +1751,7 @@ class CompileOptionResolver {
   JSVM_ScriptOrigin *jsvmOrigin = nullptr;
   bool enableSourceMap = false;
   static size_t compileCount;
+  bool hasInvalidOption = false;
 };
 
 size_t CompileOptionResolver::compileCount = 0;
@@ -1769,6 +1769,7 @@ OH_JSVM_CompileScriptWithOptions(JSVM_Env env,
   v8::Local<v8::Context> context = env->context();
   auto *isolate = context->GetIsolate();
   CompileOptionResolver optionResolver(optionCount, options, isolate);
+  RETURN_STATUS_IF_FALSE(env, !optionResolver.hasInvalidOption, JSVM_INVALID_ARG);
 
   v8::Local<v8::Value> v8_script = v8impl::V8LocalValueFromJsValue(script);
 
@@ -2206,7 +2207,7 @@ OH_JSVM_DefineClass(JSVM_Env env,
         STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
             env, p->method, &t, v8::Signature::New(isolate, tpl)));
       }
-      
+
       tpl->PrototypeTemplate()->Set(property_name, t, attributes);
     } else {
       v8::Local<v8::Value> value = v8impl::V8LocalValueFromJsValue(p->value);
