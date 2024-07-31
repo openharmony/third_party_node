@@ -1232,7 +1232,9 @@ template <typename... Args>
 Reference::Reference(JSVM_Env env, v8::Local<v8::Value> value, Args&&... args)
     : RefBase(env, std::forward<Args>(args)...),
       persistent_(env->isolate, value),
-      can_be_weak_(CanBeHeldWeakly(value)) {
+      can_be_weak_(CanBeHeldWeakly(value)),
+      deleted_by_user(false),
+      wait_callback(false) {
   if (RefCount() == 0) {
     SetWeak();
   }
@@ -1268,6 +1270,7 @@ uint32_t Reference::Ref() {
   uint32_t refcount = RefBase::Ref();
   if (refcount == 1 && can_be_weak_) {
     persistent_.ClearWeak();
+    wait_callback = false;
   }
   return refcount;
 }
@@ -1294,6 +1297,15 @@ v8::Local<v8::Value> Reference::Get() {
   }
 }
 
+void Reference::Delete() {
+  assert(Ownership() == kUserland);
+  if (!wait_callback) {
+    delete this;
+  } else {
+    deleted_by_user = true;
+  }
+}
+
 void Reference::Finalize() {
   // Unconditionally reset the persistent handle so that no weak callback will
   // be invoked again.
@@ -1307,6 +1319,7 @@ void Reference::Finalize() {
 // by the gc.
 void Reference::SetWeak() {
   if (can_be_weak_) {
+    wait_callback = true;
     persistent_.SetWeak(this, WeakCallback, v8::WeakCallbackType::kParameter);
   } else {
     persistent_.Reset();
@@ -1320,7 +1333,16 @@ void Reference::WeakCallback(const v8::WeakCallbackInfo<Reference>& data) {
   Reference* reference = data.GetParameter();
   // The reference must be reset during the weak callback as the API protocol.
   reference->persistent_.Reset();
+  assert(reference->wait_callback);
+  // For owership == kRuntime, deleted_by_user is always false.
+  // Due to reference may be free in InvokeFinalizerFromGC, the status of
+  // reference should be set before finalize call.
+  bool need_delete = reference->deleted_by_user;
+  reference->wait_callback = false;
   reference->env_->InvokeFinalizerFromGC(reference);
+  if (need_delete) {
+    delete reference;
+  }
 }
 
 }  // end of namespace v8impl
@@ -3866,7 +3888,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_DeleteReference(JSVM_Env env, JSVM_Ref ref) {
   CHECK_ENV(env);
   CHECK_ARG(env, ref);
 
-  delete reinterpret_cast<v8impl::Reference*>(ref);
+  reinterpret_cast<v8impl::Reference*>(ref)->Delete();
 
   return jsvm_clear_last_error(env);
 }
@@ -3885,6 +3907,9 @@ JSVM_Status JSVM_CDECL OH_JSVM_ReferenceRef(JSVM_Env env,
   CHECK_ARG(env, ref);
 
   v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(ref);
+  if (reference->HasDeletedByUser()) {
+    return jsvm_set_last_error(env, JSVM_GENERIC_FAILURE);
+  }
   uint32_t count = reference->Ref();
 
   if (result != nullptr) {
@@ -3908,7 +3933,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_ReferenceUnref(JSVM_Env env,
 
   v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(ref);
 
-  if (reference->RefCount() == 0) {
+  if (reference->RefCount() == 0 || reference->HasDeletedByUser()) {
     return jsvm_set_last_error(env, JSVM_GENERIC_FAILURE);
   }
 
