@@ -2695,6 +2695,106 @@ JSVM_EXTERN JSVM_Status OH_JSVM_ReleaseScript(JSVM_Env env, JSVM_Script script);
 JSVM_EXTERN JSVM_Status OH_JSVM_OpenInspectorWithName(JSVM_Env env,
                                                       int pid,
                                                       const char* name);
+
+/**
+ * @brief Compile WebAssembly bytecode into a WebAssembly module.
+ * If WebAssembly cache provided, deserialization will be performed.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param wasmBytecode: WebAssembly bytecode.
+ * @param wasmBytecodeLength: WebAssembly bytecode length in byte.
+ * @param cacheData: Optional WebAssembly cache.
+ * @param cacheDataLength: Optional WebAssembly cache length in byte.
+ * @param cacheRejected: Output parameter representing whether the provided cacheData is rejected.
+ * @param  wasmModule: Output parameter representing compiled WebAssembly module.
+ * @return Returns JSVM funtions result code.
+ *         Returns {@link JSVM_OK } if the function executed successfully.\n
+ *         Returns {@link JSVM_INVALID_ARG } if any of env, wasmBytecode is NULL, or data length is invalid.\n
+ *         Returns {@link JSVM_GENERIC_FAILURE } if compile failed.\n
+ *         Returns {@link JSVM_PENDING_EXCEPTION } if an exception occurs.\n
+ *
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_CompileWasmModule(JSVM_Env env,
+                                                  const uint8_t *wasmBytecode,
+                                                  size_t wasmBytecodeLength,
+                                                  const uint8_t *cacheData,
+                                                  size_t cacheDataLength,
+                                                  bool *cacheRejected,
+                                                  JSVM_Value *wasmModule);
+
+/**
+ * @brief Compile the function with the specified index in the WebAssembly module
+ * into the specified optimization level.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param wasmModule: The WebAssembly module to which the function to compiled belongs.
+ * @param functionIndex: The index of the function to be compiled, should never be out of range.
+ * @param optLevel: Optimization level the function will be compiled with.
+ * @return Returns JSVM funtions result code.
+ *         Returns {@link JSVM_OK } if the function executed successfully.\n
+ *         Returns {@link JSVM_INVALID_ARG } if env is NULL, or wasmModule is NULL or is not a WebAssembly module.\n
+ *         Returns {@link JSVM_GENERIC_FAILURE } if functionIndex out of range or compile failed.\n
+ *         Returns {@link JSVM_PENDING_EXCEPTION } if an exception occurs.\n
+ *
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_CompileWasmFunction(JSVM_Env env,
+                                                    JSVM_Value wasmModule,
+                                                    uint32_t functionIndex,
+                                                    JSVM_WasmOptLevel optLevel);
+
+/**
+ * @brief Check whether the given JSVM_Value is a WebAssembly module.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param value: The JavaScript value to check.
+ * @param result: Whether the given value is a WebAssembly module.
+ * @return Returns JSVM funtions result code.
+ *         Returns {@link JSVM_OK } if the function executed successfully.\n
+ *         Returns {@link JSVM_INVALID_ARG } if any of the input arguments is NULL.\n
+ *
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_IsWasmModuleObject(JSVM_Env env,
+                                                   JSVM_Value value,
+                                                   bool* result);
+
+/**
+ * @brief Create cache for compiled WebAssembly module.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param wasmModule: The compiled WebAssembly module.
+ * @param data: Output parameter representing generated WebAssembly module cache.
+ * @param length: Output parameter representing byte length of generated WebAssembly module cache.
+ * @return Returns JSVM funtions result code.
+ *         Returns {@link JSVM_OK } if the function executed successfully.\n
+ *         Returns {@link JSVM_INVALID_ARG } if any of the input arguments is NULL.\n
+ *         Returns {@link JSVM_GENERIC_FAILURE } if create wasm cache failed.\n
+ *
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_CreateWasmCache(JSVM_Env env,
+                                                JSVM_Value wasmModule,
+                                                const uint8_t** data,
+                                                size_t* length);
+
+/**
+ * @brief Release cache data with specified cache type.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param cacheData: The cache data to be released, double free is undefined behaviors.
+ * @param cacheType: The type of cache data.
+ * @return Returns JSVM funtions result code.
+ *         Returns {@link JSVM_OK } if the function executed successfully.\n
+ *         Returns {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL or cacheType is illegal.\n
+ *
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_ReleaseCache(JSVM_Env env,
+                                             const uint8_t* cacheData,
+                                             JSVM_CacheType cacheType);
+
 EXTERN_C_END
 
 /** @} */
