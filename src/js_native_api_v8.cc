@@ -5163,3 +5163,125 @@ JSVM_Status JSVM_CDECL OH_JSVM_OpenInspectorWithName(JSVM_Env env,
   env->inspector_agent()->Start(path, hostPort, true, false);
   return GET_RETURN_STATUS(env);
 }
+
+JSVM_Status JSVM_CDECL OH_JSVM_CompileWasmModule(JSVM_Env env,
+                                                 const uint8_t *wasmBytecode,
+                                                 size_t wasmBytecodeLength,
+                                                 const uint8_t *cacheData,
+                                                 size_t cacheDataLength,
+                                                 bool *cacheRejected,
+                                                 JSVM_Value *wasmModule) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, wasmBytecode);
+  RETURN_STATUS_IF_FALSE(env, wasmBytecodeLength > 0, JSVM_INVALID_ARG);
+  v8::MaybeLocal<v8::WasmModuleObject> maybe_module;
+  if (cacheData == nullptr) {
+    maybe_module = v8::WasmModuleObject::Compile(env->isolate, {wasmBytecode, wasmBytecodeLength});
+  } else {
+    RETURN_STATUS_IF_FALSE(env, cacheDataLength > 0, JSVM_INVALID_ARG);
+    bool rejected;
+    maybe_module = v8::WasmModuleObject::DeserializeOrCompile(
+      env->isolate, {wasmBytecode, wasmBytecodeLength}, {cacheData, cacheDataLength}, rejected);
+    if (cacheRejected != nullptr) {
+      *cacheRejected = rejected;
+    }
+  }
+  // To avoid the status code caused by exception being override, check exception once v8 API finished
+  if (try_catch.HasCaught()) {
+    return jsvm_set_last_error(env, JSVM_PENDING_EXCEPTION);
+  }
+  CHECK_MAYBE_EMPTY(env, maybe_module, JSVM_GENERIC_FAILURE);
+  *wasmModule = v8impl::JsValueFromV8LocalValue(maybe_module.ToLocalChecked());
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_CompileWasmFunction(JSVM_Env env,
+                                                   JSVM_Value wasmModule,
+                                                   uint32_t functionIndex,
+                                                   JSVM_WasmOptLevel optLevel) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, wasmModule);
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(wasmModule);
+  RETURN_STATUS_IF_FALSE(env, val->IsWasmModuleObject(), JSVM_INVALID_ARG);
+
+  v8::Local<v8::WasmModuleObject> v8WasmModule = val.As<v8::WasmModuleObject>();
+  v8::WasmExecutionTier tier = v8::WasmExecutionTier::kNone;
+  if (optLevel == JSVM_WASM_OPT_BASELINE) {
+    // v8 liftoff has bug, keep BASELINE same as HIGH.
+    tier = v8::WasmExecutionTier::kTurbofan;
+  } else if (optLevel == JSVM_WASM_OPT_HIGH) {
+    tier = v8::WasmExecutionTier::kTurbofan;
+  } else {
+    // Unsupported optLevel
+    return jsvm_set_last_error(env, JSVM_INVALID_ARG);
+  }
+  bool compileSuccess = v8WasmModule->CompileFunction(env->isolate, functionIndex, tier);
+  // To avoid the status code caused by exception being override, check exception once v8 API finished
+  if (try_catch.HasCaught()) {
+    return jsvm_set_last_error(env, JSVM_PENDING_EXCEPTION);
+  }
+  RETURN_STATUS_IF_FALSE(env, compileSuccess, JSVM_GENERIC_FAILURE);
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsWasmModuleObject(JSVM_Env env,
+                                                  JSVM_Value value,
+                                                  bool* result) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8
+  // calls here cannot throw JS exceptions.
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *result = val->IsWasmModuleObject();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_CreateWasmCache(JSVM_Env env,
+                                               JSVM_Value wasmModule,
+                                               const uint8_t** data,
+                                               size_t* length) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, wasmModule);
+  CHECK_ARG(env, data);
+  CHECK_ARG(env, length);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(wasmModule);
+  RETURN_STATUS_IF_FALSE(env, val->IsWasmModuleObject(), JSVM_INVALID_ARG);
+
+  v8::Local<v8::WasmModuleObject> v8WasmModule = val.As<v8::WasmModuleObject>();
+  v8::CompiledWasmModule compiledWasmModule = v8WasmModule->GetCompiledModule();
+  v8::OwnedBuffer serialized_bytes = compiledWasmModule.Serialize();
+  // To avoid the status code caused by exception being override, check exception once v8 API finished
+  if (try_catch.HasCaught()) {
+    return jsvm_set_last_error(env, JSVM_PENDING_EXCEPTION);
+  }
+  // If buffer size is 0, create wasm cache failed.
+  RETURN_STATUS_IF_FALSE(env, serialized_bytes.size > 0, JSVM_GENERIC_FAILURE);
+  *data = serialized_bytes.buffer.get();
+  *length = serialized_bytes.size;
+  // Release the ownership of buffer, OH_JSVM_ReleaseCache must be called explicitly to release the buffer
+  serialized_bytes.buffer.release();
+
+  return GET_RETURN_STATUS(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_ReleaseCache(JSVM_Env env,
+                                            const uint8_t* cacheData,
+                                            JSVM_CacheType cacheType) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, cacheData);
+  if (cacheType == JSVM_CACHE_TYPE_JS) {
+    // The release behavior MUST match the memory allocation of OH_JSVM_CreateCodeCache.
+    delete[] cacheData;
+  } else if (cacheType == JSVM_CACHE_TYPE_WASM) {
+    // The release behavior MUST match the memory allocation of OH_JSVM_CreateWasmCache.
+    delete[] cacheData;
+  } else {
+    // Unsupported cacheType
+    return jsvm_set_last_error(env, JSVM_INVALID_ARG);
+  }
+  return jsvm_clear_last_error(env);
+}
