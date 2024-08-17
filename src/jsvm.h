@@ -694,6 +694,57 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateArraybuffer(JSVM_Env env,
                                                   JSVM_Value* result);
 
 /**
+ * @brief This API allocate the memory of array buffer backing store.
+ *
+ * @param byteLength: size of backing store memory.
+ * @param initialized: initialization status of the backing store memory.
+ * @param data: pointer that recieve the backing store memory pointer.
+ * @return Returns JSVM funtions result code.
+ *         Returns {@link JSVM_OK } if allocation succeed.\n
+ *         Returns {@link JSVM_INVALID_ARG } if data is null pointer.\n
+ *         Returns {@link JSVM_GENERIC_FAILURE } if allocation failed.\n
+ * @since 12
+ */
+JSVM_Status JSVM_CDECL OH_JSVM_AllocateArrayBufferBackingStoreData(size_t byteLength,
+                                                                   JSVM_InitializedFlag initialized,
+                                                                   void **data);
+
+/**
+ * @brief This API release the memory of an array buffer backing store.
+ *
+ * @param data: pointer to the backing store memory.
+ * @return Returns JSVM funtions result code.
+ *         Returns {@link JSVM_OK } if run succeed.\n
+ *         Returns {@link JSVM_INVALID_ARG } if data is null pointer.\n
+ * @since 12
+ */
+JSVM_Status JSVM_CDECL OH_JSVM_FreeArrayBufferBackingStoreData(void *data);
+
+/**
+ * @brief This API create an array buffer using the backing store data.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param data: pointer to the backing store memory.
+ * @param backingStoreSize: size of backing store memory.
+ * @param offset: start position of the array buffer in the backing store memory.
+ * @param arrayBufferSize: size of the array buffer.
+ * @param result: pointer that recieve the array buffer.
+ * @return Returns JSVM funtions result code.
+ *         Returns {@link JSVM_OK } if creation succeed.\n
+ *         Returns {@link JSVM_INVALID_ARG } if any of the following condition reached:\n
+ *         1. offset + arrayBufferSize > backingStoreSize\n
+ *         2. backingStoreSize or arrayBufferSize equals zero
+ *         3. data or result is null pointer
+ * @since 12
+ */
+JSVM_Status JSVM_CDECL OH_JSVM_CreateArraybufferFromBackingStoreData(JSVM_Env env,
+                                                                     void *data,
+                                                                     size_t backingStoreSize,
+                                                                     size_t offset,
+                                                                     size_t arrayBufferSize,
+                                                                     JSVM_Value *result);
+
+/**
  * @brief This API does not observe leap seconds; they are ignored, as ECMAScript aligns with POSIX time specification.
  * This API allocates a JavaScript Date object.
  *
