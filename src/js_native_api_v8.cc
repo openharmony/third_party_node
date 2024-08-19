@@ -4170,7 +4170,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_FreeArrayBufferBackingStoreData(void *data) {
   return JSVM_OK;
 }
 
-JSVM_Status JSVM_CDECL OH_JSVM_CreateArraybufferFromBackingStoreData(JSVM_Env env,
+JSVM_Status JSVM_CDECL OH_JSVM_CreateArrayBufferFromBackingStoreData(JSVM_Env env,
                                                                      void *data,
                                                                      size_t byteLength,
                                                                      size_t offset,
