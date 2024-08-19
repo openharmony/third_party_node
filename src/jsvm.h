@@ -737,7 +737,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_FreeArrayBufferBackingStoreData(void *data);
  *         3. data or result is null pointer
  * @since 12
  */
-JSVM_Status JSVM_CDECL OH_JSVM_CreateArraybufferFromBackingStoreData(JSVM_Env env,
+JSVM_Status JSVM_CDECL OH_JSVM_CreateArrayBufferFromBackingStoreData(JSVM_Env env,
                                                                      void *data,
                                                                      size_t backingStoreSize,
                                                                      size_t offset,
