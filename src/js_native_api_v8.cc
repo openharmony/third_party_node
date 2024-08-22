@@ -225,6 +225,15 @@ static std::vector<intptr_t> externalReferenceRegistry;
 
 static std::unordered_map<std::string, std::string> sourceMapUrlMap;
 
+static std::unique_ptr<v8::ArrayBuffer::Allocator> defaultArrayBufferAllocator;
+
+static v8::ArrayBuffer::Allocator *GetOrCreateDefaultArrayBufferAllocator() {
+  if (!defaultArrayBufferAllocator) {
+    defaultArrayBufferAllocator.reset(v8::ArrayBuffer::Allocator::NewDefaultAllocator());
+  }
+  return defaultArrayBufferAllocator.get();
+}
+
 static void SetFileToSourceMapMapping(std::string &&file, std::string &&sourceMapUrl) {
   auto it = sourceMapUrlMap.find(file);
   if (it == sourceMapUrlMap.end()) {
@@ -1396,7 +1405,7 @@ OH_JSVM_CreateVM(const JSVM_CreateVMOptions* options, JSVM_VM* result) {
     v8impl::SetIsolateSnapshotCreator(isolate, creator);
   } else {
     create_params.array_buffer_allocator =
-      v8::ArrayBuffer::Allocator::NewDefaultAllocator();
+      v8impl::GetOrCreateDefaultArrayBufferAllocator();
     isolate = v8::Isolate::New(create_params);
   }
   v8impl::CreateIsolateData(isolate, snapshotBlob);
@@ -4139,6 +4148,51 @@ JSVM_Status JSVM_CDECL OH_JSVM_CreateArraybuffer(JSVM_Env env,
   return GET_RETURN_STATUS(env);
 }
 
+JSVM_Status JSVM_CDECL OH_JSVM_AllocateArrayBufferBackingStoreData(size_t byteLength,
+                                                                   JSVM_InitializedFlag initialized,
+                                                                   void **data) {
+  if (!data) {
+    return JSVM_INVALID_ARG;
+  }
+  auto allocator = v8impl::GetOrCreateDefaultArrayBufferAllocator();
+  *data = (initialized == JSVM_ZERO_INITIALIZED) ?
+    allocator->Allocate(byteLength) :
+    allocator->AllocateUninitialized(byteLength);
+  return *data ? JSVM_OK : JSVM_GENERIC_FAILURE;
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_FreeArrayBufferBackingStoreData(void *data) {
+  if (!data) {
+    return JSVM_INVALID_ARG;
+  }
+  auto allocator = v8impl::GetOrCreateDefaultArrayBufferAllocator();
+  allocator->Free(data, JSVM_AUTO_LENGTH);
+  return JSVM_OK;
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_CreateArrayBufferFromBackingStoreData(JSVM_Env env,
+                                                                     void *data,
+                                                                     size_t byteLength,
+                                                                     size_t offset,
+                                                                     size_t slicedByteLength,
+                                                                     JSVM_Value *result) {
+  CHECK_ENV(env);
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, data);
+  CHECK_ARG(env, result);
+  CHECK_ARG_NOT_ZERO(env, byteLength);
+  CHECK_ARG_NOT_ZERO(env, slicedByteLength);
+  void *dataPtr = static_cast<uint8_t*>(data) + offset;
+  auto backingStoreSize = slicedByteLength;
+  RETURN_STATUS_IF_FALSE(env, offset + slicedByteLength <= byteLength, JSVM_INVALID_ARG);
+  auto backingStore = v8::ArrayBuffer::NewBackingStore(
+    dataPtr, backingStoreSize, v8::BackingStore::EmptyDeleter, nullptr);
+  v8::Local<v8::ArrayBuffer> arrayBuffer =
+    v8::ArrayBuffer::New(env->isolate, std::move(backingStore));
+  *result = v8impl::JsValueFromV8LocalValue(arrayBuffer);
+  return jsvm_clear_last_error(env);
+}
+
 JSVM_Status JSVM_CDECL
 OH_JSVM_CreateExternalArraybuffer(JSVM_Env env,
                                  void* externalData,
@@ -4572,13 +4626,13 @@ JSVM_Status JSVM_CDECL OH_JSVM_GetInstanceData(JSVM_Env env, void** data) {
 }
 
 JSVM_Status JSVM_CDECL OH_JSVM_DetachArraybuffer(JSVM_Env env,
-                                               JSVM_Value arraybuffer) {
+                                                 JSVM_Value arraybuffer) {
   CHECK_ENV(env);
   CHECK_ARG(env, arraybuffer);
 
   v8::Local<v8::Value> value = v8impl::V8LocalValueFromJsValue(arraybuffer);
   RETURN_STATUS_IF_FALSE(
-      env, value->IsArrayBuffer(), JSVM_ARRAYBUFFER_EXPECTED);
+      env, value->IsArrayBuffer() || value->IsSharedArrayBuffer(), JSVM_ARRAYBUFFER_EXPECTED);
 
   v8::Local<v8::ArrayBuffer> it = value.As<v8::ArrayBuffer>();
   RETURN_STATUS_IF_FALSE(

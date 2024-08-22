@@ -755,5 +755,17 @@ typedef enum {
     /** Unicode Sets mode. */
     JSVM_REGEXP_UNICODE_SETS = 1 << 8,
 } JSVM_RegExpFlags;
+
+/**
+ * @brief initialization flag
+ *
+ * @since 12
+ */
+typedef enum {
+    /** initialize with zero. */
+    JSVM_ZERO_INITIALIZED,
+    /** leave uninitialized. */
+    JSVM_UNINITIALIZED,
+} JSVM_InitializedFlag;
 /** @} */
 #endif /* ARK_RUNTIME_JSVM_JSVM_TYPE_H */
