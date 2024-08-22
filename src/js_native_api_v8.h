@@ -297,6 +297,9 @@ inline JSVM_Status jsvm_set_last_error(JSVM_Env env,
 #define CHECK_ARG(env, arg)                                                    \
   RETURN_STATUS_IF_FALSE((env), ((arg) != nullptr), JSVM_INVALID_ARG)
 
+#define CHECK_ARG_NOT_ZERO(env, arg)                                                    \
+  RETURN_STATUS_IF_FALSE((env), ((arg) != 0), JSVM_INVALID_ARG)
+
 #define CHECK_ARG_WITH_PREAMBLE(env, arg)                                      \
   RETURN_STATUS_IF_FALSE_WITH_PREAMBLE(                                        \
       (env), ((arg) != nullptr), JSVM_INVALID_ARG)
