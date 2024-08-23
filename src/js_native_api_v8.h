@@ -529,9 +529,13 @@ class Reference : public RefBase {
                         void* finalizeHint = nullptr);
 
   virtual ~Reference();
+  bool HasDeletedByUser() {
+    return deleted_by_user;
+  }
   uint32_t Ref();
   uint32_t Unref();
   v8::Local<v8::Value> Get();
+  void Delete();
 
  protected:
   void Finalize() override;
@@ -543,6 +547,8 @@ class Reference : public RefBase {
 
   v8impl::Persistent<v8::Value> persistent_;
   bool can_be_weak_;
+  bool deleted_by_user;
+  bool wait_callback;
 };
 
 typedef JSVM_Value (* GetterCallback)(JSVM_Env, JSVM_Value, JSVM_Value, JSVM_Value);
