@@ -4197,21 +4197,20 @@ JSVM_Status JSVM_CDECL OH_JSVM_FreeArrayBufferBackingStoreData(void *data) {
 
 JSVM_Status JSVM_CDECL OH_JSVM_CreateArrayBufferFromBackingStoreData(JSVM_Env env,
                                                                      void *data,
-                                                                     size_t byteLength,
+                                                                     size_t backingStoreSize,
                                                                      size_t offset,
-                                                                     size_t slicedByteLength,
+                                                                     size_t arrayBufferSize,
                                                                      JSVM_Value *result) {
   CHECK_ENV(env);
   JSVM_PREAMBLE(env);
   CHECK_ARG(env, data);
   CHECK_ARG(env, result);
-  CHECK_ARG_NOT_ZERO(env, byteLength);
-  CHECK_ARG_NOT_ZERO(env, slicedByteLength);
+  CHECK_ARG_NOT_ZERO(env, backingStoreSize);
+  CHECK_ARG_NOT_ZERO(env, arrayBufferSize);
   void *dataPtr = static_cast<uint8_t*>(data) + offset;
-  auto backingStoreSize = slicedByteLength;
-  RETURN_STATUS_IF_FALSE(env, offset + slicedByteLength <= byteLength, JSVM_INVALID_ARG);
+  RETURN_STATUS_IF_FALSE(env, offset + arrayBufferSize <= backingStoreSize, JSVM_INVALID_ARG);
   auto backingStore = v8::ArrayBuffer::NewBackingStore(
-    dataPtr, backingStoreSize, v8::BackingStore::EmptyDeleter, nullptr);
+    dataPtr, arrayBufferSize, v8::BackingStore::EmptyDeleter, nullptr);
   v8::Local<v8::ArrayBuffer> arrayBuffer =
     v8::ArrayBuffer::New(env->isolate, std::move(backingStore));
   *result = v8impl::JsValueFromV8LocalValue(arrayBuffer);
