@@ -558,24 +558,12 @@ class CallbackBundle {
   // wrapper, used to retrieve the native callback function and data pointer.
   static inline v8::Local<v8::Value> New(JSVM_Env env,
                                          JSVM_Callback cb) {
-    JSVM_Callback cbInternal = new JSVM_CallbackStruct;
-    cbInternal->callback = cb->callback;
-    cbInternal->data = cb->data;
-    v8::Local<v8::Value> cbdata = v8::External::New(env->isolate, cbInternal);
-    Reference::New(
-        env, cbdata, 0, Ownership::kRuntime, DeleteCallbackStruct, cbInternal, nullptr);
-    return cbdata;
+    return v8::External::New(env->isolate, cb);
   }
 
   static inline v8::Local<v8::Value> New(JSVM_Env env,
                                          v8impl::JSVM_PropertyHandlerCfgStruct* cb) {
     return v8::External::New(env->isolate, cb);
-  }
-
- private:
-  static void DeleteCallbackStruct(JSVM_Env env, void* data, void* hint) {
-    JSVM_Callback cbInternal = static_cast<JSVM_Callback>(data);
-    delete cbInternal;
   }
 };
 
