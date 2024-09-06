@@ -1626,16 +1626,16 @@ v8::MaybeLocal<v8::Value> PrepareStackTraceCallback(
   auto resultFunc = v8::Local<v8::Function>::Cast(result);
 
   v8::Local<v8::Value> element = trace->Get(context, 0).ToLocalChecked();
-  char *fileName = nullptr;
+  std::string fileName = "";
   if (element->IsObject()) {
     auto obj = element->ToObject(context);
     auto getFileName = v8::String::NewFromUtf8(isolate, "getFileName", v8::NewStringType::kNormal);
     auto function = obj.ToLocalChecked()->Get(context, getFileName.ToLocalChecked()).ToLocalChecked();
     auto lineNumberFunction = v8::Local<v8::Function>::Cast(function);
     auto fileNameObj = lineNumberFunction->Call(context, obj.ToLocalChecked(), 0, {});
-    fileName = *v8::String::Utf8Value(isolate, fileNameObj.ToLocalChecked());
+    fileName = std::string(*v8::String::Utf8Value(isolate, fileNameObj.ToLocalChecked()));
   }
-  auto &&sourceMapUrl = fileName ? v8impl::GetSourceMapFromFileName(fileName) : "";
+  auto &&sourceMapUrl = (!fileName.empty()) ? v8impl::GetSourceMapFromFileName(std::move(fileName)) : "";
   std::ifstream sourceMapfile(sourceMapUrl);
   std::string content = "";
   if (sourceMapfile.good()) {
