@@ -1,6 +1,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <algorithm>
+#include <atomic>
 #include <climits>  // INT_MAX
 #include <cmath>
 #include "v8-debug.h"
@@ -1350,6 +1351,11 @@ v8::Platform* JSVM_Env__::platform() {
 
 JSVM_Status JSVM_CDECL
 OH_JSVM_Init(const JSVM_InitOptions* options) {
+  static std::atomic<bool> initialized(false);
+  if (initialized.load()) {
+    return JSVM_GENERIC_FAILURE;
+  }
+  initialized.store(true);
 #ifdef TARGET_OHOS
   v8impl::ResourceSchedule::ReportKeyThread(getuid(), getprocpid(), getproctid(),
     v8impl::ResourceSchedule::ResType::ThreadRole::IMPORTANT_DISPLAY);
