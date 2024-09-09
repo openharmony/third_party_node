@@ -899,8 +899,7 @@ class ChannelImpl final : public v8_inspector::V8Inspector::Channel,
         retaining_context_(false) {
     session_ = inspector->connect(CONTEXT_GROUP_ID,
                                   this,
-                                  StringView(),
-                                  V8Inspector::ClientTrustLevel::kFullyTrusted);
+                                  StringView());
     node_dispatcher_ = std::make_unique<protocol::UberDispatcher>(this);
     runtime_agent_ = std::make_unique<protocol::RuntimeAgent>();
     runtime_agent_->Wire(node_dispatcher_.get());
