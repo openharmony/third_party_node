@@ -82,12 +82,10 @@
       'dependencies': [ 'tools/v8_gypfiles/d8.gyp:d8' ],
     }],
     [ 'node_use_bundled_v8=="true"', {
-      'include_dirs': [
-        'deps/v8/include/v8-include',
+      'dependencies': [
+        'tools/v8_gypfiles/v8.gyp:v8_snapshot',
+        'tools/v8_gypfiles/v8.gyp:v8_libplatform',
       ],
-      'ldflags': [
-        '<(obj_dir)/../../../libv8_shared.so'
-      ]
     }],
     [ 'node_use_v8_platform=="true"', {
       'defines': [

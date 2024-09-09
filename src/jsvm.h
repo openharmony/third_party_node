@@ -2411,7 +2411,6 @@ JSVM_EXTERN JSVM_Status OH_JSVM_PerformMicrotaskCheckpoint(JSVM_VM vm);
 JSVM_EXTERN JSVM_Status OH_JSVM_IsCallable(JSVM_Env env,
                                            JSVM_Value value,
                                            bool* isCallable);
-
 /**
  * @brief This API checks if the value passed in is undefined.
  * This equals to `value === undefined` in JS.
@@ -2552,6 +2551,148 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsBigInt(JSVM_Env env,
                                          bool* isBigInt);
 
 /**
+ * @brief This API implements the abstract operation `ToBigInt()`.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param value: The JavaScript value to coerce.
+ * @param result: JSVM_Value representing the coerced JavaScript BigInt.
+ * @return Returns JSVM_OK if the API succeeded. Returns JSVM_BIGINT_EXPECTED if the
+ * JavaScript value fails to coerce.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_CoerceToBigInt(JSVM_Env env,
+                                               JSVM_Value value,
+                                               JSVM_Value* result);
+
+/**
+ * @brief This API checks if the value passed in is a JavaScript RegExp object.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param value: The JavaScript value to check.
+ * @param result: Whether the given value is RegExp.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_IsRegExp(JSVM_Env env,
+                                         JSVM_Value value,
+                                         bool* result);
+
+/**
+ * @brief Creates a function with a given script as its body.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param funcName: A string containing the function's name. Pass NULL to create an anonymous function.
+ * @param length: The length of the funcName in bytes, or JSVM_AUTO_LENGTH if it
+ * is null-terminated.
+ * @param argc: The count of elements in the argv array.
+ * @param argv: Array of JSVM_Values representing JavaScript strings passed in as arguments to the function.
+ * @param script: A JavaScript string containing the script to use as the function's body.
+ * @param result: JSVM_Value representing the JavaScript function object for the newly
+ * created function.
+ * @return Returns JSVM_OK if the API succeeded. Returns JSVM_GENERIC_FAILURE if the input script fails to
+ * be compiled.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_CreateFunctionWithScript(JSVM_Env env,
+                                                         const char* funcName,
+                                                         size_t length,
+                                                         size_t argc,
+                                                         const JSVM_Value* argv,
+                                                         JSVM_Value script,
+                                                         JSVM_Value* result);
+
+/**
+ * @brief This API returns a JSVM-API value corresponding to a JavaScript Set type.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param result: A JSVM_Value representing a JavaScript Set.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_CreateSet(JSVM_Env env,
+                                          JSVM_Value* result);
+
+/**
+ * @brief This API checks if the value passed in is a Set.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param value: The JavaScript value to check.
+ * @param isSet: Whether the given value is Set.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_IsSet(JSVM_Env env,
+                                      JSVM_Value value,
+                                      bool* isSet);
+
+/**
+ * @brief This API returns the Object prototype.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param object: JSVM_Value representing JavaScript Object whose prototype to return.
+ * @param result: JSVM_Value representing prototype of the given object.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_ObjectGetPrototypeOf(JSVM_Env env,
+                                                     JSVM_Value object,
+                                                     JSVM_Value* result);
+
+/**
+ * @brief This API set the prototype on the Object passed in.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param object: The object on which to set the prototype.
+ * @param prototype: The prototype value.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_ObjectSetPrototypeOf(JSVM_Env env,
+                                                     JSVM_Value object,
+                                                     JSVM_Value prototype);
+
+/*
+ * @brief This function keep persistently save a JSVM_Script and extend its lifecycle
+ * beyond the current scope.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param script: A JavaScript string containing the script to be retained.
+ * @return Returns JSVM functions result code
+ *         {@link JSVM_OK } if the API succeeded. \n
+ *         {@link JSVM_INVALID_ARG } if the script is empty or already retained. \n
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_RetainScript(JSVM_Env env, JSVM_Script script);
+
+/**
+ * @brief This function release the script retained by OH_JSVM_RetainScript
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param script: A JavaScript string containing the script to be retained.
+ * @return Returns JSVM functions result code
+ *         {@link JSVM_OK } if the API succeeded. \n
+ *         {@link JSVM_INVALID_ARG } if the script is empty or not retained. \n
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_ReleaseScript(JSVM_Env env, JSVM_Script script);
+
+/**
+ * @brief This function activates insepctor with pid and alias it.
+ *
+ * @param env: The environment that the API is invoked under.
+ * @param pid: A process id to identify the inspector connection.
+ * @param name: An alias for the inspector that under a specific pid.
+ * default name is jsvm if a nullptr is passed in.
+ * @return Returns JSVM funtions result code.
+ *         Returns {@link JSVM_OK } if the function executed successfully.\n
+ *         Returns {@link JSVM_PENDING_EXCEPTION } if an exception occurs.\n
+ * @since 12
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_OpenInspectorWithName(JSVM_Env env,
+                                                      int pid,
+                                                      const char* name);
+
+/**
  * @brief This API checks if the value passed in is a constructor.
  *
  * @param env: The environment that the API is invoked under.
@@ -2604,148 +2745,6 @@ JSVM_Status JSVM_CDECL OH_JSVM_CreateMap(JSVM_Env env, JSVM_Value* result);
 JSVM_Status JSVM_CDECL OH_JSVM_IsMap(JSVM_Env env,
                                      JSVM_Value value,
                                      bool* isMap);
-
-/**
- * @brief This API returns a JSVM-API value corresponding to a JavaScript Set type.
- *
- * @param env: The environment that the API is invoked under.
- * @param result: A JSVM_Value representing a JavaScript Set.
- * @return Returns JSVM_OK if the API succeeded.
- * @since 12
- */
-JSVM_EXTERN JSVM_Status OH_JSVM_CreateSet(JSVM_Env env,
-                                          JSVM_Value* result);
-
-/**
- * @brief This API checks if the value passed in is a Set.
- *
- * @param env: The environment that the API is invoked under.
- * @param value: The JavaScript value to check.
- * @param isSet: Whether the given value is Set.
- * @return Returns JSVM_OK if the API succeeded.
- * @since 12
- */
-JSVM_EXTERN JSVM_Status OH_JSVM_IsSet(JSVM_Env env,
-                                     JSVM_Value value,
-                                     bool* isSet);
-
-/**
- * @brief This API returns the Object prototype.
- *
- * @param env: The environment that the API is invoked under.
- * @param object: JSVM_Value representing JavaScript Object whose prototype to return.
- * @param result: JSVM_Value representing prototype of the given object.
- * @return Returns JSVM_OK if the API succeeded.
- * @since 12
- */
-JSVM_EXTERN JSVM_Status OH_JSVM_ObjectGetPrototypeOf(JSVM_Env env,
-                                                     JSVM_Value object,
-                                                     JSVM_Value* result);
-
-/**
- * @brief This API set the prototype on the Object passed in.
- *
- * @param env: The environment that the API is invoked under.
- * @param object: The object on which to set the prototype.
- * @param prototype: The prototype value.
- * @return Returns JSVM_OK if the API succeeded.
- * @since 12
- */
-JSVM_EXTERN JSVM_Status OH_JSVM_ObjectSetPrototypeOf(JSVM_Env env,
-                                                     JSVM_Value object,
-                                                     JSVM_Value prototype);
-
-/**
- * @brief This API implements the abstract operation `ToBigInt()`.
- *
- * @param env: The environment that the API is invoked under.
- * @param value: The JavaScript value to coerce.
- * @param result: JSVM_Value representing the coerced JavaScript BigInt.
- * @return Returns JSVM_OK if the API succeeded. Returns JSVM_BIGINT_EXPECTED if the
- * JavaScript value fails to coerce.
- * @since 12
- */
-JSVM_EXTERN JSVM_Status OH_JSVM_CoerceToBigInt(JSVM_Env env,
-                                               JSVM_Value value,
-                                               JSVM_Value* result);
-
-/**
- * @brief This API checks if the value passed in is a JavaScript RegExp object.
- *
- * @param env: The environment that the API is invoked under.
- * @param value: The JavaScript value to check.
- * @param result: Whether the given value is RegExp.
- * @return Returns JSVM_OK if the API succeeded.
- * @since 12
- */
-JSVM_EXTERN JSVM_Status OH_JSVM_IsRegExp(JSVM_Env env,
-                                         JSVM_Value value,
-                                         bool* result);
-
-/**
- * @brief Creates a function with a given script as its body.
- *
- * @param env: The environment that the API is invoked under.
- * @param funcName: A string containing the function's name. Pass NULL to create an anonymous function.
- * @param length: The length of the funcName in bytes, or JSVM_AUTO_LENGTH if it
- * is null-terminated.
- * @param argc: The count of elements in the argv array.
- * @param argv: Array of JSVM_Values representing JavaScript strings passed in as arguments to the function.
- * @param script: A JavaScript string containing the script to use as the function's body.
- * @param result: JSVM_Value representing the JavaScript function object for the newly
- * created function.
- * @return Returns JSVM_OK if the API succeeded. Returns JSVM_GENERIC_FAILURE if the input script fails to
- * be compiled.
- * @since 12
- */
-JSVM_EXTERN JSVM_Status OH_JSVM_CreateFunctionWithScript(JSVM_Env env,
-                                                         const char* funcName,
-                                                         size_t length,
-                                                         size_t argc,
-                                                         const JSVM_Value* argv,
-                                                         JSVM_Value script,
-                                                         JSVM_Value* result);
-
-/**
- * @brief This function keep persistently save a JSVM_Script and extend its lifecycle
- * beyond the current scope.
- *
- * @param env: The environment that the API is invoked under.
- * @param script: A JavaScript string containing the script to be retained.
- * @return Returns JSVM functions result code
- *         {@link JSVM_OK } if the API succeeded. \n
- *         {@link JSVM_INVALID_ARG } if the script is empty or already retained. \n
- * @since 12
- */
-JSVM_EXTERN JSVM_Status OH_JSVM_RetainScript(JSVM_Env env, JSVM_Script script);
-
-/**
- * @brief This function release the script retained by OH_JSVM_RetainScript
- *
- * @param env: The environment that the API is invoked under.
- * @param script: A JavaScript string containing the script to be retained.
- * @return Returns JSVM functions result code
- *         {@link JSVM_OK } if the API succeeded. \n
- *         {@link JSVM_INVALID_ARG } if the script is empty or not retained. \n
- * @since 12
- */
-JSVM_EXTERN JSVM_Status OH_JSVM_ReleaseScript(JSVM_Env env, JSVM_Script script);
-
-/**
- * @brief This function activates insepctor with pid and alias it.
- *
- * @param env: The environment that the API is invoked under.
- * @param pid: A process id to identify the inspector connection.
- * @param name: An alias for the inspector that under a specific pid.
- * default name is jsvm if a nullptr is passed in.
- * @return Returns JSVM funtions result code.
- *         Returns {@link JSVM_OK } if the function executed successfully.\n
- *         Returns {@link JSVM_PENDING_EXCEPTION } if an exception occurs.\n
- * @since 12
- */
-JSVM_EXTERN JSVM_Status OH_JSVM_OpenInspectorWithName(JSVM_Env env,
-                                                      int pid,
-                                                      const char* name);
 
 /**
  * @brief Compile WebAssembly bytecode into a WebAssembly module.

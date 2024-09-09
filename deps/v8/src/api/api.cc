@@ -4596,6 +4596,63 @@ Local<Value> v8::Object::GetPrototype() {
   return Utils::ToLocal(i::PrototypeIterator::GetCurrent(iter));
 }
 
+Local<Value> v8::Object::GetPrototypeV2() {
+  auto self = Utils::OpenHandle(this);
+  auto i_isolate = self->GetIsolate();
+  i::PrototypeIterator iter(i_isolate, self);
+  if (self->IsJSGlobalProxy()) {
+    // Skip hidden prototype (i.e. JSGlobalObject).
+    iter.Advance();
+  }
+  DCHECK(!i::PrototypeIterator::GetCurrent(iter)->IsJSGlobalObject());
+  return Utils::ToLocal(i::PrototypeIterator::GetCurrent(iter));
+}
+
+namespace {
+
+Maybe<bool> SetPrototypeImpl(v8::Object* this_, Local<Context> context,
+                             Local<Value> value, bool from_javascript) {
+  auto i_isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
+  auto self = Utils::OpenHandle(this_);
+  auto value_obj = Utils::OpenHandle(*value);
+  // TODO(333672197): turn this to DCHECK once it's no longer possible
+  // to get JSGlobalObject via API.
+  CHECK_IMPLIES(from_javascript, !value_obj->IsJSGlobalObject());
+  if (self->IsJSObject()) {
+    ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
+    // TODO(333672197): turn this to DCHECK once it's no longer possible
+    // to get JSGlobalObject via API.
+    CHECK_IMPLIES(from_javascript, !self->IsJSGlobalObject());
+    auto result =
+        i::JSObject::SetPrototype(i_isolate, i::Handle<i::JSObject>::cast(self),
+                                  value_obj, from_javascript, i::kDontThrow);
+    if (!result.FromJust()) return Nothing<bool>();
+    return Just(true);
+  }
+  if (self->IsJSProxy()) {
+    ENTER_V8(i_isolate, context, Object, SetPrototype, Nothing<bool>(), i::HandleScope);
+    // We do not allow exceptions thrown while setting the prototype
+    // to propagate outside.
+    TryCatch try_catch(reinterpret_cast<v8::Isolate*>(i_isolate));
+    auto result =
+        i::JSProxy::SetPrototype(i_isolate, i::Handle<i::JSProxy>::cast(self),
+                                 value_obj, from_javascript, i::kThrowOnError);
+    has_pending_exception = result.IsNothing();
+    RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
+    return Just(true);
+  }
+  // Wasm object or other kind of special object not supported here.
+  return Nothing<bool>();
+}
+
+}  // namespace
+
+Maybe<bool> v8::Object::SetPrototypeV2(Local<Context> context,
+                                       Local<Value> value) {
+  static constexpr bool from_javascript = true;
+  return SetPrototypeImpl(this, context, value, from_javascript);
+}
+
 Maybe<bool> v8::Object::SetPrototype(Local<Context> context,
                                      Local<Value> value) {
   auto isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
@@ -8930,6 +8987,69 @@ void Isolate::GetHeapStatistics(HeapStatistics* heap_statistics) {
       i::wasm::GetWasmEngine()->allocator()->GetCurrentMemoryUsage();
   heap_statistics->peak_malloced_memory_ +=
       i::wasm::GetWasmEngine()->allocator()->GetMaxMemoryUsage();
+#endif  // V8_ENABLE_WEBASSEMBLY
+}
+
+MaybeLocal<WasmModuleObject> WasmModuleObject::DeserializeOrCompile(
+    Isolate* v8_isolate, MemorySpan<const uint8_t> wire_bytes,
+    MemorySpan<const uint8_t> wasm_cache_data, bool& cacheRejected) {
+#if V8_ENABLE_WEBASSEMBLY
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
+  i::MaybeHandle<i::WasmModuleObject> maybe_mdoule =
+      i::wasm::DeserializeNativeModule(
+          i_isolate,
+          base::Vector<const uint8_t>(wasm_cache_data.data(),
+                                      wasm_cache_data.size()),
+          base::Vector<const uint8_t>(wire_bytes.data(), wire_bytes.size()),
+          {});
+  cacheRejected = maybe_mdoule.is_null();
+  if (!cacheRejected) {
+    // Deserialize successfully
+    return Local<WasmModuleObject>::Cast(Utils::ToLocal(
+        i::Handle<i::JSObject>::cast(maybe_mdoule.ToHandleChecked())));
+  }
+  return Compile(v8_isolate, wire_bytes);
+#else
+  Utils::ApiCheck(false, "WasmModuleObject::DeserializeOrCompile",
+                  "WebAssembly support is not enabled");
+  UNREACHABLE();
+#endif  // V8_ENABLE_WEBASSEMBLY
+}
+
+bool WasmModuleObject::CompileFunction(Isolate* v8_isolate,
+                                       uint32_t function_index,
+                                       WasmExecutionTier tier) {
+#if V8_ENABLE_WEBASSEMBLY
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
+  auto module = i::Handle<i::WasmModuleObject>::cast(Utils::OpenHandle(this));
+  auto* native_module = module->native_module();
+  uint32_t num_imported_functions = native_module->num_imported_functions();
+  uint32_t num_functions = native_module->num_functions();
+  // Check function index out of range.
+  if (function_index < num_imported_functions || function_index >= num_functions) {
+    return false;
+  }
+
+  // Update the static_assert once i::wasm::ExecutionTier changed.
+  static_assert(static_cast<uint8_t>(v8::WasmExecutionTier::kNone) ==
+                static_cast<uint8_t>(i::wasm::ExecutionTier::kNone));
+  static_assert(static_cast<uint8_t>(v8::WasmExecutionTier::kLiftoff) ==
+                static_cast<uint8_t>(i::wasm::ExecutionTier::kLiftoff));
+  static_assert(static_cast<uint8_t>(v8::WasmExecutionTier::kTurbofan) ==
+                static_cast<uint8_t>(i::wasm::ExecutionTier::kTurbofan));
+  auto executionTier =
+      static_cast<i::wasm::ExecutionTier>(static_cast<uint8_t>(tier));
+  i::wasm::GetWasmEngine()->CompileFunction(i_isolate,
+                                            module->native_module(),
+                                            function_index, executionTier);
+  if (native_module->compilation_state()->failed()) {
+    return false;
+  }
+  return true;
+#else
+  Utils::ApiCheck(false, "WasmModuleObject::CompileFunction",
+                  "WebAssembly support is not enabled");
+  UNREACHABLE();
 #endif  // V8_ENABLE_WEBASSEMBLY
 }
 
