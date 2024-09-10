@@ -21,7 +21,7 @@ void AppendExceptionLine(Environment* env,
 
 [[noreturn]] void FatalError(const char* location, const char* message);
 [[noreturn]] void OnFatalError(const char* location, const char* message);
-[[noreturn]] void OOMErrorHandler(const char* location, const v8::OOMDetails& details);
+[[noreturn]] void OOMErrorHandler(const char* location, bool is_heap_oom);
 
 // Helpers to construct errors similar to the ones provided by
 // lib/internal/errors.js.

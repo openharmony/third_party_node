@@ -180,7 +180,7 @@ struct JSVM_Env__ {
   virtual void DeleteMe();
 
   void CheckGCAccess() {
-    if (module_api_version == JSVM_VERSION_EXPERIMENTAL && in_gc_finalizer) {
+    if (in_gc_finalizer) {
       v8impl::OnFatalError(
           nullptr,
           "Finalizer is calling a function that may affect GC state.\n"
@@ -641,7 +641,7 @@ static inline void ReportKeyThread(uid_t uid, pid_t pid, pid_t tid, ResType::Thr
     {"tid", std::to_string(tid)},
     {"role", std::to_string(role)}};
   ReportData(v8impl::ResourceSchedule::ResType::RES_TYPE_REPORT_KEY_THREAD,
-    v8impl::ResourceSchedule::ResType::ReportChangeStatus::CREATE, payLoad);
+      v8impl::ResourceSchedule::ResType::ReportChangeStatus::CREATE, payLoad);
 }
 }
 #endif

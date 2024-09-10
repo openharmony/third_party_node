@@ -216,6 +216,12 @@ using AddHistogramSampleCallback = void (*)(void* histogram, int sample);
 
 using FatalErrorCallback = void (*)(const char* location, const char* message);
 
+
+struct OOMDetails {
+ bool is_heap_oom = false;
+ const char* detail = nullptr;
+};
+
 using OOMErrorCallback = void (*)(const char* location, bool is_heap_oom);
 
 using MessageCallback = void (*)(Local<Message> message, Local<Value> data);
