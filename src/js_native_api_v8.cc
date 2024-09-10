@@ -1,4 +1,3 @@
-#include <string.h>
 #include <unistd.h>
 #include <algorithm>
 #include <climits>  // INT_MAX
@@ -558,24 +557,12 @@ class CallbackBundle {
   // wrapper, used to retrieve the native callback function and data pointer.
   static inline v8::Local<v8::Value> New(JSVM_Env env,
                                          JSVM_Callback cb) {
-    JSVM_Callback cbInternal = new JSVM_CallbackStruct;
-    cbInternal->callback = cb->callback;
-    cbInternal->data = cb->data;
-    v8::Local<v8::Value> cbdata = v8::External::New(env->isolate, cbInternal);
-    Reference::New(
-        env, cbdata, 0, Ownership::kRuntime, DeleteCallbackStruct, cbInternal, nullptr);
-    return cbdata;
+    return v8::External::New(env->isolate, cb);
   }
 
   static inline v8::Local<v8::Value> New(JSVM_Env env,
                                          v8impl::JSVM_PropertyHandlerCfgStruct* cb) {
     return v8::External::New(env->isolate, cb);
-  }
-
- private:
-  static void DeleteCallbackStruct(JSVM_Env env, void* data, void* hint) {
-    JSVM_Callback cbInternal = static_cast<JSVM_Callback>(data);
-    delete cbInternal;
   }
 };
 
@@ -1391,7 +1378,7 @@ OH_JSVM_Init(const JSVM_InitOptions* options) {
 }
 
 JSVM_Status JSVM_CDECL OH_JSVM_GetVM(JSVM_Env env,
-				      JSVM_VM* result) {
+              JSVM_VM* result) {
   *result = reinterpret_cast<JSVM_VM>(env->isolate);
   return JSVM_OK;
 }
@@ -1593,10 +1580,6 @@ OH_JSVM_CompileScript(JSVM_Env env,
 
   auto maybe_script = v8::ScriptCompiler::Compile(context, &scriptSource, option);
 
-  if (cache) {
-    delete cache;
-  }
-
   if (cache && cacheRejected) {
     *cacheRejected = cache->rejected;
   }
@@ -1638,16 +1621,16 @@ v8::MaybeLocal<v8::Value> PrepareStackTraceCallback(
   auto resultFunc = v8::Local<v8::Function>::Cast(result);
 
   v8::Local<v8::Value> element = trace->Get(context, 0).ToLocalChecked();
-  char *fileName = nullptr;
+  std::string fileName = "";
   if (element->IsObject()) {
     auto obj = element->ToObject(context);
     auto getFileName = v8::String::NewFromUtf8(isolate, "getFileName", v8::NewStringType::kNormal);
     auto function = obj.ToLocalChecked()->Get(context, getFileName.ToLocalChecked()).ToLocalChecked();
     auto lineNumberFunction = v8::Local<v8::Function>::Cast(function);
     auto fileNameObj = lineNumberFunction->Call(context, obj.ToLocalChecked(), 0, {});
-    fileName = *v8::String::Utf8Value(isolate, fileNameObj.ToLocalChecked());
+    fileName = std::string(*v8::String::Utf8Value(isolate, fileNameObj.ToLocalChecked()));
   }
-  auto &&sourceMapUrl = fileName ? v8impl::GetSourceMapFromFileName(fileName) : "";
+  auto &&sourceMapUrl = (!fileName.empty()) ? v8impl::GetSourceMapFromFileName(std::move(fileName)) : "";
   std::ifstream sourceMapfile(sourceMapUrl);
   std::string content = "";
   if (sourceMapfile.good()) {
@@ -1700,10 +1683,6 @@ OH_JSVM_CompileScriptWithOrigin(JSVM_Env env,
     : (eagerCompile ? v8::ScriptCompiler::kEagerCompile : v8::ScriptCompiler::kNoCompileOptions);
 
   auto maybe_script = v8::ScriptCompiler::Compile(context, &scriptSource, option);
-
-  if (cache) {
-    delete cache;
-  }
 
   if (cache && cacheRejected) {
     *cacheRejected = cache->rejected;
@@ -1812,7 +1791,7 @@ OH_JSVM_CompileScriptWithOptions(JSVM_Env env,
 
   CHECK_MAYBE_EMPTY(env, maybe_script, JSVM_GENERIC_FAILURE);
   v8::Local<v8::Script> compiled_script = maybe_script.ToLocalChecked();
-  *result = reinterpret_cast<JSVM_Script>(*compiled_script);
+  *result = reinterpret_cast<JSVM_Script>(env->NewJsvmData(compiled_script));
 
   return GET_RETURN_STATUS(env);
 }
@@ -2797,7 +2776,8 @@ JSVM_Status JSVM_CDECL OH_JSVM_StrictEquals(JSVM_Env env,
 JSVM_Status JSVM_CDECL OH_JSVM_Equals(JSVM_Env env,
                                       JSVM_Value lhs,
                                       JSVM_Value rhs,
-                                      bool* result) {
+                                      bool* result)
+{
   JSVM_PREAMBLE(env);
   CHECK_ARG(env, lhs);
   CHECK_ARG(env, rhs);
@@ -4388,7 +4368,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_GetTypedarrayInfo(JSVM_Env env,
   v8::Local<v8::ArrayBuffer> buffer;
   if (data != nullptr || arraybuffer != nullptr) {
     // Calling Buffer() may have the side effect of allocating the buffer,
-    // so only do this when it's needed.
+    // so only do this when it’s needed.
     buffer = array->Buffer();
   }
 
@@ -4468,7 +4448,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_GetDataviewInfo(JSVM_Env env,
   v8::Local<v8::ArrayBuffer> buffer;
   if (data != nullptr || arraybuffer != nullptr) {
     // Calling Buffer() may have the side effect of allocating the buffer,
-    // so only do this when it's needed.
+    // so only do this when it’s needed.
     buffer = array->Buffer();
   }
 
@@ -5033,24 +5013,6 @@ JSVM_Status JSVM_CDECL OH_JSVM_IsBigInt(JSVM_Env env,
   return jsvm_clear_last_error(env);
 }
 
-JSVM_Status JSVM_CDECL OH_JSVM_IsConstructor(JSVM_Env env,
-                                             JSVM_Value value,
-                                             bool* isConstructor) {
-  CHECK_ENV(env);
-  CHECK_ARG(env, value);
-  CHECK_ARG(env, isConstructor);
-
-  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
-  if (!val->IsObject()) {
-    *isConstructor = false;
-    return jsvm_clear_last_error(env);
-  }
-  v8::Local<v8::Object> obj = val.As<v8::Object>();
-  *isConstructor = obj->IsConstructor();
-
-  return jsvm_clear_last_error(env);
-}
-
 JSVM_Status JSVM_CDECL OH_JSVM_CreateSet(JSVM_Env env,
                                          JSVM_Value* result) {
   CHECK_ENV(env);
@@ -5058,47 +5020,6 @@ JSVM_Status JSVM_CDECL OH_JSVM_CreateSet(JSVM_Env env,
 
   *result = v8impl::JsValueFromV8LocalValue(v8::Set::New(env->isolate));
 
-  return jsvm_clear_last_error(env);
-}
-
-JSVM_Status JSVM_CDECL OH_JSVM_CreateRegExp(JSVM_Env env,
-                                            JSVM_Value value,
-                                            JSVM_RegExpFlags flags,
-                                            JSVM_Value* result) {
-  JSVM_PREAMBLE(env);
-  CHECK_ARG(env, value);
-  CHECK_ARG(env, result);
-
-  v8::Local<v8::Value> pattern = v8impl::V8LocalValueFromJsValue(value);
-  RETURN_STATUS_IF_FALSE(env, pattern->IsString(), JSVM_STRING_EXPECTED);
-  v8::Local<v8::Context> context = env->context();
-  v8::MaybeLocal<v8::RegExp> regExp = v8::RegExp::New(context, pattern.As<v8::String>(),
-                                                      static_cast<v8::RegExp::Flags>(flags));
-  CHECK_MAYBE_EMPTY(env, regExp, JSVM_GENERIC_FAILURE);
-  *result = v8impl::JsValueFromV8LocalValue(regExp.ToLocalChecked());
-
-  return GET_RETURN_STATUS(env);
-}
-
-JSVM_Status JSVM_CDECL OH_JSVM_CreateMap(JSVM_Env env, JSVM_Value* result) {
-  CHECK_ENV(env);
-  CHECK_ARG(env, result);
-
-  *result = v8impl::JsValueFromV8LocalValue(v8::Map::New(env->isolate));
-
-  return jsvm_clear_last_error(env);
-}
-
-JSVM_Status JSVM_CDECL OH_JSVM_IsMap(JSVM_Env env,
-                                     JSVM_Value value,
-                                     bool* isMap) {
-  CHECK_ENV(env);
-  CHECK_ARG(env, value);
-  CHECK_ARG(env, isMap);
-
-  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
-
-  *isMap = val->IsMap();
   return jsvm_clear_last_error(env);
 }
 
@@ -5208,7 +5129,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_OpenInspectorWithName(JSVM_Env env,
                                                      int pid,
                                                      const char* name) {
   JSVM_PREAMBLE(env);
-  RETURN_STATUS_IF_FALSE(env, !name || strlen(name) < SIZE_MAX , JSVM_INVALID_ARG);
+  RETURN_STATUS_IF_FALSE(env, !name || strlen(name) < SIZE_MAX, JSVM_INVALID_ARG);
   RETURN_STATUS_IF_FALSE(env, pid >= 0, JSVM_INVALID_ARG);
   std::string path(name ? name : "jsvm");
   auto port = FindAvailablePort();
@@ -5216,6 +5137,69 @@ JSVM_Status JSVM_CDECL OH_JSVM_OpenInspectorWithName(JSVM_Env env,
     std::make_shared<node::ExclusiveAccess<node::HostPort>>("localhost", port, pid);
   env->inspector_agent()->Start(path, hostPort, true, false);
   return GET_RETURN_STATUS(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsConstructor(JSVM_Env env,
+                                             JSVM_Value value,
+                                             bool* isConstructor)
+{
+    CHECK_ENV(env);
+    CHECK_ARG(env, value);
+    CHECK_ARG(env, isConstructor);
+
+    v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+    if (!val->IsObject()) {
+        *isConstructor = false;
+        return jsvm_clear_last_error(env);
+    }
+    v8::Local<v8::Object> obj = val.As<v8::Object>();
+    *isConstructor = obj->IsConstructor();
+
+    return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_CreateRegExp(JSVM_Env env,
+                                            JSVM_Value value,
+                                            JSVM_RegExpFlags flags,
+                                            JSVM_Value* result)
+{
+    JSVM_PREAMBLE(env);
+    CHECK_ARG(env, value);
+    CHECK_ARG(env, result);
+
+    v8::Local<v8::Value> pattern = v8impl::V8LocalValueFromJsValue(value);
+    RETURN_STATUS_IF_FALSE(env, pattern->IsString(), JSVM_STRING_EXPECTED);
+    v8::Local<v8::Context> context = env->context();
+    v8::MaybeLocal<v8::RegExp> regExp = v8::RegExp::New(context, pattern.As<v8::String>(),
+                                                        static_cast<v8::RegExp::Flags>(flags));
+    CHECK_MAYBE_EMPTY(env, regExp, JSVM_GENERIC_FAILURE);
+    *result = v8impl::JsValueFromV8LocalValue(regExp.ToLocalChecked());
+
+    return GET_RETURN_STATUS(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_CreateMap(JSVM_Env env, JSVM_Value* result)
+{
+    CHECK_ENV(env);
+    CHECK_ARG(env, result);
+
+    *result = v8impl::JsValueFromV8LocalValue(v8::Map::New(env->isolate));
+
+    return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsMap(JSVM_Env env,
+                                     JSVM_Value value,
+                                     bool* isMap)
+{
+    CHECK_ENV(env);
+    CHECK_ARG(env, value);
+    CHECK_ARG(env, isMap);
+
+    v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+
+    *isMap = val->IsMap();
+    return jsvm_clear_last_error(env);
 }
 
 JSVM_Status JSVM_CDECL OH_JSVM_CompileWasmModule(JSVM_Env env,

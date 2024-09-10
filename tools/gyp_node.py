@@ -38,7 +38,7 @@ def run_gyp(args):
     # Tell make to write its output into the same dir
     args.extend(['-Goutput_dir=' + output_dir])
 
-  args.append('-Dcomponent=shared_library')
+  args.append('-Dcomponent=static_library')
   args.append('-Dlibrary=static_library')
 
   rc = gyp.main(args)
