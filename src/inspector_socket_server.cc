@@ -392,7 +392,7 @@ std::string InspectorSocketServer::GetFrontendURL(bool is_compat,
   std::ostringstream frontend_url;
   frontend_url << "devtools://devtools/bundled/";
   frontend_url << (is_compat ? "inspector" : "js_app");
-  frontend_url << ".html?experiments=true&v8only=true&ws=";
+  frontend_url << ".html?v8only=true&ws=";
   frontend_url << formatted_address;
   return frontend_url.str();
 }
