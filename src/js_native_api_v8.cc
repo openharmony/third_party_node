@@ -1432,6 +1432,9 @@ OH_JSVM_CreateVM(const JSVM_CreateVMOptions* options, JSVM_VM* result) {
 
 JSVM_Status JSVM_CDECL
 OH_JSVM_DestroyVM(JSVM_VM vm) {
+  if (vm == nullptr) {
+    return JSVM_INVALID_ARG;
+  }
   auto isolate = reinterpret_cast<v8::Isolate*>(vm);
   auto creator = v8impl::GetIsolateSnapshotCreator(isolate);
   auto data = v8impl::GetIsolateData(isolate);
@@ -1816,6 +1819,10 @@ OH_JSVM_CreateCodeCache(JSVM_Env env,
                        JSVM_Script script,
                        const uint8_t** data,
                        size_t* length) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, script);
+  CHECK_ARG(env, data);
+  CHECK_ARG(env, length);
   auto jsvmData = reinterpret_cast<JSVM_Data__*>(script);
   auto v8script = jsvmData->ToV8Local<v8::Script>(env->isolate);
   v8::ScriptCompiler::CachedData* cache;
