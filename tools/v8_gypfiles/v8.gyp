@@ -342,6 +342,11 @@
       'type': 'static_library',
       'toolsets': ['target'],
       'conditions': [
+        ['v8_control_flow_integrity==1', {
+          'sources': [
+            '<(V8_ROOT)/src/deoptimizer/deoptimizer-cfi-builtins.cc',
+          ],
+        }],
         ['want_separate_host_toolset', {
           'conditions': [
             ['v8_target_arch=="arm64"', {
@@ -372,6 +377,10 @@
             'v8_libplatform',
           ]
         }],
+      ],
+      'include_dirs': [
+        '<(SHARED_INTERMEDIATE_DIR)',
+        '<(generate_bytecode_output_root)',
       ],
       'sources': [
         '<(V8_ROOT)/src/init/setup-isolate-deserialize.cc',
@@ -1452,6 +1461,11 @@
         # Avoid excessive LTO
         ['enable_lto=="true"', {
           'ldflags': [ '-fno-lto' ],
+        }],
+        ['v8_control_flow_integrity==1', {
+          'sources': [
+            '<(V8_ROOT)/src/deoptimizer/deoptimizer-cfi-empty.cc',
+          ],
         }],
       ],
     },  # mksnapshot
