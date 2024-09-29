@@ -20,6 +20,10 @@
 #include "util.h"
 #include "sourcemap.def"
 
+#ifdef ENABLE_HISYSEVENT
+#include "hisysevent.h"
+#endif
+
 #define SECARGCNT   2
 
 #define CHECK_MAYBE_NOTHING(env, maybe, status)                                \
@@ -1349,6 +1353,45 @@ v8::Platform* JSVM_Env__::platform() {
   return v8impl::g_platform.get();
 }
 
+constexpr int MAX_FILE_LENGTH = 32 * 1024 * 1024;
+
+static bool LoadStringFromFile(const std::string& filePath, std::string& content)
+{
+  std::ifstream file(filePath.c_str());
+  if (!file.is_open()) {
+    return false;
+  }
+
+  file.seekg(0, std::ios::end);
+  const long fileLength = file.tellg();
+  if (fileLength > MAX_FILE_LENGTH) {
+    return false;
+  }
+
+  content.clear();
+  file.seekg(0, std::ios::beg);
+  std::copy(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), std::back_inserter(content));
+  return true;
+}
+
+static bool ProcessBundleName(std::string& bundleName)
+{
+  int pid = getprocpid();
+  std::string filePath = "/proc/" + std::to_string(pid) + "/cmdline";
+  if (!LoadStringFromFile(filePath, bundleName)) {
+    return false;
+  }
+  if (bundleName.empty()) {
+    return false;
+  }
+  auto pos = bundleName.find(":");
+  if (pos != std::string::npos) {
+    bundleName = bundleName.substr(0, pos);
+  }
+  bundleName = bundleName.substr(0, strlen(bundleName.c_str()));
+  return true;
+}
+
 JSVM_Status JSVM_CDECL
 OH_JSVM_Init(const JSVM_InitOptions* options) {
   static std::atomic<bool> initialized(false);
@@ -1357,6 +1400,15 @@ OH_JSVM_Init(const JSVM_InitOptions* options) {
   }
   initialized.store(true);
 #ifdef TARGET_OHOS
+#ifdef ENABLE_HISYSEVENT
+  std::string bundleName;
+  if (!ProcessBundleName(bundleName)) {
+    bundleName = "INVALID_BUNDLE_NAME";
+  }
+  HiSysEventWrite(OHOS::HiviewDFX::HiSysEvent::Domain::JSVM_RUNTIME, "APP_STATS",
+                  OHOS::HiviewDFX::HiSysEvent::EventType::STATISTIC,
+                  "BUNDLE_NAME", bundleName);
+#endif
   v8impl::ResourceSchedule::ReportKeyThread(getuid(), getprocpid(), getproctid(),
     v8impl::ResourceSchedule::ResType::ThreadRole::IMPORTANT_DISPLAY);
 #endif
