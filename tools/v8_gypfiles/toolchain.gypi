@@ -269,7 +269,7 @@
         ],
         'conditions': [
           ['v8_control_flow_integrity==1', {
-            'cflags': [ '-mbranch-protection=standard' ],
+            'cflags': [ '-mbranch-protection=pac-ret+b-key+bti' ],
           }],
         ],
        'target_conditions': [
