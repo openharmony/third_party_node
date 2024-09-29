@@ -467,6 +467,7 @@
         'src',
         'deps/postject',
         '../../base/startup/init/interfaces/innerkits/include/param',
+        '../../base/hiviewdfx/hisysevent/interfaces/native/innerkits/hisysevent/include',
         '<(SHARED_INTERMEDIATE_DIR)' # for node_natives.h
       ],
       'dependencies': [
@@ -721,6 +722,7 @@
         'V8_DEPRECATION_WARNINGS=1',
         'NODE_OPENSSL_SYSTEM_CERT_PATH="<(openssl_system_ca_path)"',
         'TARGET_OHOS',
+        'ENABLE_HISYSEVENT',
       ],
 
       # - "C4244: conversion from 'type1' to 'type2', possible loss of data"
@@ -1443,7 +1445,8 @@
    
       'ldflags' : [
         '<(NDK_SYS_ROOT)/resourceschedule/resource_schedule_service/libressched_client.z.so',
-        '<(NDK_SYS_ROOT)/startup/init/libbegetutil.z.so'
+        '<(NDK_SYS_ROOT)/startup/init/libbegetutil.z.so',
+        '<(NDK_SYS_ROOT)/hiviewdfx/hisysevent/libhisysevent.z.so'
       ],
 
       'sources': [
