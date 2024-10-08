@@ -234,7 +234,7 @@
 
     # Enable control-flow integrity features, such as pointer authentication
     # for ARM64.
-    'v8_control_flow_integrity%': 0,
+    'v8_control_flow_integrity%': 1,
 
     # Enable V8 zone compression experimental feature.
     # Sets -DV8_COMPRESS_ZONES.

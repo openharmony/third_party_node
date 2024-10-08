@@ -340,6 +340,7 @@
       }],
       [ 'target_arch=="arm64"', {
         'msvs_configuration_platform': 'arm64',
+        'cflags': ['-mbranch-protection=pac-ret+b-key+bti'],
       }],
       ['asan == 1 and OS != "mac" and OS != "zos"', {
         'cflags+': [
