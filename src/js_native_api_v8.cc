@@ -579,7 +579,9 @@ class CallbackWrapper {
   inline CallbackWrapper(JSVM_Value thisArg, size_t args_length, void* data)
       : _this(thisArg), _args_length(args_length), _data(data) {}
 
-  virtual JSVM_Value GetNewTarget() {};
+  virtual JSVM_Value GetNewTarget() {
+    return nullptr;
+  };
   virtual void Args(JSVM_Value* buffer, size_t bufferlength) {};
   virtual void SetReturnValue(JSVM_Value value) = 0;
 
@@ -1416,7 +1418,7 @@ OH_JSVM_Init(const JSVM_InitOptions* options) {
 
   if (node::ReadSystemXpmState()) {
     int secArgc = SECARGCNT;
-    char *secArgv[SECARGCNT] = {"jsvm", "--jitless"};
+    char *secArgv[SECARGCNT] = {const_cast<char*>("jsvm"), const_cast<char*>("--jitless")};
     v8::V8::SetFlagsFromCommandLine(&secArgc, secArgv, false);
   }
 
