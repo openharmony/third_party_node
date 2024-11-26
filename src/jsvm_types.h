@@ -768,4 +768,18 @@ typedef enum {
     JSVM_UNINITIALIZED,
 } JSVM_InitializedFlag;
 /** @} */
+
+/**
+ * @brief Microtask policies of JSVM.
+ *
+ * @since 16
+ */
+typedef enum {
+    /** Microtasks are invoked with the OH_JSVM_PerformMicrotaskCheckpoint() method. */
+    JSVM_MICROTASK_EXPLICIT = 0,
+    /** Microtasks are invoked when the script call depth decrements to zero.
+     *  Default mode.
+     */
+    JSVM_MICROTASK_AUTO,
+} JSVM_MicrotaskPolicy;
 #endif /* ARK_RUNTIME_JSVM_JSVM_TYPE_H */

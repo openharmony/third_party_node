@@ -1484,6 +1484,24 @@ OH_JSVM_CreateVM(const JSVM_CreateVMOptions* options, JSVM_VM* result) {
   return JSVM_OK;
 }
 
+JSVM_Status OH_JSVM_SetMicrotaskPolicy(JSVM_VM vm,
+                                       JSVM_MicrotaskPolicy policy) {
+  static constexpr v8::MicrotasksPolicy converter[] = {
+    v8::MicrotasksPolicy::kExplicit,
+    v8::MicrotasksPolicy::kAuto
+  };
+  constexpr size_t policyCount = node::arraysize(converter);
+
+  if (!vm || policy >= policyCount) {
+    return JSVM_INVALID_ARG;
+  }
+
+  auto isolate = reinterpret_cast<v8::Isolate*>(vm);
+  isolate->SetMicrotasksPolicy(converter[policy]);
+
+  return JSVM_OK;
+}
+
 JSVM_Status JSVM_CDECL
 OH_JSVM_DestroyVM(JSVM_VM vm) {
   if (vm == nullptr) {
