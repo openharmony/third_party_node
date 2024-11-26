@@ -334,6 +334,10 @@ typedef enum {
     JSVM_NO_EXTERNAL_BUFFERS_ALLOWED,
     /** cannot run +js status. */
     JSVM_CANNOT_RUN_JS,
+    /** invalid input type status.
+     * @since 16
+     */
+    JSVM_INVALID_TYPE
 } JSVM_Status;
 
 /**
@@ -913,7 +917,7 @@ typedef enum {
 
 /**
  * @brief Function pointer type of GC callback.
- * 
+ *
  * @param vm The VM instance that the JSVM-API call is invoked under.
  * @param gcType The gc type.
  * @param flags The GC callback flags.
@@ -969,7 +973,6 @@ typedef struct {
         bool boolean;
     } content;
 } JSVM_DefineClassOptions;
-/** @} */
 
 /**
  * @brief Microtask policies of JSVM.
@@ -1007,5 +1010,6 @@ typedef enum {
     /** Tracing more detailed interface invoking of WASM, such as background compilation and wrappers. */
     JSVM_TRACE_WASM_DETAILED
 } JSVM_TraceCategory;
+/** @} */
 #endif /* ARK_RUNTIME_JSVM_JSVM_TYPE_H */
 
