@@ -2190,6 +2190,28 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsPromise(JSVM_Env env,
                                           bool* isPromise);
 
 /**
+ * @brief This API register a resolution/rejection handler with a promise.
+ * @param env The environment that the API is invoked under.
+ * @param promise The promise to be handled.
+ * @param onFulfilled The function to be invoked if promise is resolved.
+ * @param onRejected The function to be invoked if promise is rejected.
+ * @param result Another promise returned from promise then/catch method.
+ * @return Returns JSVM functions result code.
+ *         {@link JSVM_OK } if the API succeeded. \n
+ *         {@link JSVM_INVALID_ARG } if the arguments are invalid. \n
+ *         {@link JSVM_INVALID_TYPE } if the arguments are invalid Javascript type. \n
+ *         {@link JSVM_PENDING_EXCEPTION} if an exception occurs. \n
+ *         {@link JSVM_GENERIC_FAILURE} if the API failed. \n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_PromiseRegisterHandler(JSVM_Env env,
+                                                       JSVM_Value promise,
+                                                       JSVM_Value onFulfilled,
+                                                       JSVM_Value onRejected,
+                                                       JSVM_Value* result);
+
+/**
  * @brief This API parses a JSON string and returns it as value if successful.
  * @param env: The environment that the API is invoked under.
  * @param jsonString: The string to parse.
