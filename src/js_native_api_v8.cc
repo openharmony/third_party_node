@@ -1485,6 +1485,171 @@ static bool ProcessBundleName(std::string& bundleName)
   return true;
 }
 
+JSVM_Status OH_JSVM_IsBooleanObject(JSVM_Env env, JSVM_Value value, bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Value> v = v8impl::V8LocalValueFromJsValue(value);
+  *result = v->IsBooleanObject();
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_IsBigIntObject(JSVM_Env env, JSVM_Value value, bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Value> v = v8impl::V8LocalValueFromJsValue(value);
+  *result = v->IsBigIntObject();
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_IsStringObject(JSVM_Env env, JSVM_Value value, bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Value> v = v8impl::V8LocalValueFromJsValue(value);
+  *result = v->IsStringObject();
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_IsNumberObject(JSVM_Env env, JSVM_Value value, bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Value> v = v8impl::V8LocalValueFromJsValue(value);
+  *result = v->IsNumberObject();
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_IsSymbolObject(JSVM_Env env, JSVM_Value value, bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Value> v = v8impl::V8LocalValueFromJsValue(value);
+  *result = v->IsSymbolObject();
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolToStringTag(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolToStringTag = v8::Symbol::GetToStringTag(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolToStringTag);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolIterator(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolIterator = v8::Symbol::GetIterator(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolIterator);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolAsyncIterator(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolAsyncIterator = v8::Symbol::GetAsyncIterator(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolAsyncIterator);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolHasInstance(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolHasInstance = v8::Symbol::GetHasInstance(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolHasInstance);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolUnscopables(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolUnscopables = v8::Symbol::GetUnscopables(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolUnscopables);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolIsConcatSpreadable(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolIsConcatSpreadable = v8::Symbol::GetIsConcatSpreadable(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolIsConcatSpreadable);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolMatch(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolMatch = v8::Symbol::GetMatch(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolMatch);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolReplace(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolReplace = v8::Symbol::GetReplace(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolReplace);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolSearch(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolSearch = v8::Symbol::GetSearch(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolSearch);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolSplit(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolSplit = v8::Symbol::GetSplit(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolSplit);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolToPrimitive(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolToPrimitive = v8::Symbol::GetToPrimitive(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolToPrimitive);
+ 
+  return jsvm_clear_last_error(env);
+}
+
 JSVM_Status JSVM_CDECL
 OH_JSVM_Init(const JSVM_InitOptions* options) {
   static std::atomic<bool> initialized(false);
