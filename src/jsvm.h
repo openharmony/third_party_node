@@ -102,7 +102,7 @@ EXTERN_C_START
 /**
  * @brief Init a JavaScript vm.
  *
- * @param  options: The options for initialize the JavaScript VM.
+ * @param  options The options for initialize the JavaScript VM.
  * @return Returns JSVM funtions result code.
  *         Returns {@link JSVM_OK } in all cases.\n
  * @since 11
@@ -1546,9 +1546,9 @@ JSVM_EXTERN JSVM_Status OH_JSVM_IsArraybuffer(JSVM_Env env,
 /**
  * @brief This API checks if the Object passed in is a date.
  *
- * @param env: The environment that the API is invoked under.
- * @param value: The JavaScript value to check.
- * @param result: Whether the given JSVM_Value represents a JavaScript Date object.
+ * @param env The environment that the API is invoked under.
+ * @param value The JavaScript value to check.
+ * @param isDate Whether the given JSVM_Value represents a JavaScript Date object.
  * @return Returns JSVM funtions result code.
  *         {@link JSVM_OK } If the function executed successfully.\n
  * @since 11
@@ -2522,8 +2522,8 @@ JSVM_EXTERN JSVM_Status OH_JSVM_ReleaseLock(JSVM_Env env);
  * @brief Starts the running of the task queue inside the VM.
  * This task queue can be executed by an external event loop.
  *
- * @param env: The VM instance on which to start the task queue.
- * @param result: Whether the task queue was successfully started.
+ * @param vm The VM instance on which to start the task queue.
+ * @param result Whether the task queue was successfully started.
  * @return Returns JSVM funtions result code.
  *         {@link JSVM_OK } If the function executed successfully.\n
  * @since 12
@@ -2534,7 +2534,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_PumpMessageLoop(JSVM_VM vm,
 /**
  * @brief Check to see if there are any microtasks waiting in the queue, and if there are, execute them.
  *
- * @param env: The VM instance on which to check microtasks.
+ * @param vm The VM instance on which to check microtasks.
  * @return Returns JSVM funtions result code.
  *         {@link JSVM_OK } If the function executed successfully.\n
  * @since 12
