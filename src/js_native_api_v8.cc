@@ -10,6 +10,7 @@
 #include "v8-primitive.h"
 #include "v8-statistics.h"
 #include "v8-version-string.h"
+#include "v8-proxy.h"
 #define JSVM_EXPERIMENTAL
 #include "env-inl.h"
 #include "jsvm.h"
@@ -1787,6 +1788,59 @@ OH_JSVM_DestroyVM(JSVM_VM vm) {
   return JSVM_OK;
 }
 
+JSVM_Status JSVM_CDECL OH_JSVM_CreateProxy(JSVM_Env env, JSVM_Value target, JSVM_Value handler, JSVM_Value *result)
+{
+  // Check args is not null
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, target);
+  CHECK_ARG(env, handler);
+  CHECK_ARG(env, result);
+
+  // Check target and handler are v8 Object
+  auto localTarget = v8impl::V8LocalValueFromJsValue(target);
+  RETURN_STATUS_IF_FALSE(env, localTarget->IsObject(), JSVM_OBJECT_EXPECTED);
+  auto localHandler = v8impl::V8LocalValueFromJsValue(handler);
+  RETURN_STATUS_IF_FALSE(env, localHandler->IsObject(), JSVM_OBJECT_EXPECTED);
+
+  v8::Local<v8::Context> context = env->context();
+
+  v8::MaybeLocal<v8::Proxy> maybeProxy =
+      v8::Proxy::New(context, localTarget.As<v8::Object>(), localHandler.As<v8::Object>());
+
+  CHECK_MAYBE_EMPTY_WITH_PREAMBLE(env, maybeProxy, JSVM_GENERIC_FAILURE);
+
+  v8::Local<v8::Proxy> proxy = maybeProxy.ToLocalChecked();
+  *result = v8impl::JsValueFromV8LocalValue(proxy);
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsProxy(JSVM_Env env, JSVM_Value value, bool *isProxy)
+{
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isProxy);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isProxy = val->IsProxy();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_ProxyGetTarget(JSVM_Env env, JSVM_Value value, JSVM_Value *result)
+{
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+
+  RETURN_STATUS_IF_FALSE(env, val->IsProxy(), JSVM_INVALID_TYPE);
+
+  *result = v8impl::JsValueFromV8LocalValue(val.As<v8::Proxy>()->GetTarget());
+  return jsvm_clear_last_error(env);
+}
+
 JSVM_Status JSVM_CDECL OH_JSVM_OpenVMScope(JSVM_VM vm, JSVM_VMScope* result) {
   auto isolate = reinterpret_cast<v8::Isolate*>(vm);
   auto scope = new v8::Isolate::Scope(isolate);
@@ -2445,6 +2499,7 @@ static const char* error_messages[] = {
     "Main thread would deadlock",
     "External buffers are not allowed",
     "Cannot run JavaScript",
+    "Invalid type"
 };
 
 JSVM_Status JSVM_CDECL OH_JSVM_GetLastErrorInfo(
@@ -2456,7 +2511,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_GetLastErrorInfo(
   // message in the `JSVM_Status` enum each time a new error message is added.
   // We don't have a jsvm_status_last as this would result in an ABI
   // change each time a message was added.
-  const int last_status = JSVM_CANNOT_RUN_JS;
+  const int last_status = JSVM_INVALID_TYPE;
 
   static_assert(JSVM_ARRAYSIZE(error_messages) == last_status + 1,
                 "Count of error messages must match count of error values");
@@ -3234,7 +3289,7 @@ static void OnFatalError(const char* location, const char* message) {
 }
 
 JSVM_Status JSVM_CDECL OH_JSVM_SetHandlerForFatalError(JSVM_VM vm,
-                                            JSVM_HandlerForFatalError handler) {
+    JSVM_HandlerForFatalError handler) {
   if (vm == nullptr) {
     return JSVM_INVALID_ARG;
   }
@@ -3320,7 +3375,7 @@ JSVM_GCType GetJSVMGCType(v8::GCType gcType) {
 }
 
 static v8::GCType GetV8GCType(JSVM_GCType gcType) {
-  switch(gcType) {
+  switch (gcType) {
     case JSVM_GC_TYPE_SCAVENGE:
       return v8::GCType::kGCTypeScavenge;
     case JSVM_GC_TYPE_MINOR_MARK_COMPACT:
@@ -3379,20 +3434,21 @@ JSVM_Status JSVM_CDECL OH_JSVM_AddHandlerForGC(JSVM_VM vm,
                                                JSVM_CBTriggerTimeForGC triggerTime,
                                                JSVM_HandlerForGC handler,
                                                JSVM_GCType gcType,
-                                               void* data) {
+                                               void* userData) {
   if (!vm || !handler) {
     return JSVM_INVALID_ARG;
   }
   auto* isolate = reinterpret_cast<v8::Isolate*>(vm);
   auto* pool = v8impl::GetOrCreateIsolateHandlerPool(isolate);
-  auto &handlers = triggerTime == JSVM_CB_TRIGGER_BEFORE_GC ? pool->handlerWrappersBeforeGC : pool->handlerWrappersAfterGC;
-  auto it = std::find_if(handlers.begin(), handlers.end(), [handler, data](v8impl::GCHandlerWrapper *callbackData) {
-    return callbackData->handler == handler && callbackData->userData == data;
+  auto &handlers = triggerTime == JSVM_CB_TRIGGER_BEFORE_GC ?
+    pool->handlerWrappersBeforeGC : pool->handlerWrappersAfterGC;
+  auto it = std::find_if(handlers.begin(), handlers.end(), [handler, userData](v8impl::GCHandlerWrapper *callbackData) {
+    return callbackData->handler == handler && callbackData->userData == userData;
   });
   if (it != handlers.end()) {
     return JSVM_INVALID_ARG;
   }
-  auto *callbackData = new v8impl::GCHandlerWrapper(gcType, handler, data);
+  auto *callbackData = new v8impl::GCHandlerWrapper(gcType, handler, userData);
   handlers.push_back(callbackData);
   
   if (triggerTime == JSVM_CB_TRIGGER_BEFORE_GC) {
@@ -3417,7 +3473,8 @@ JSVM_Status JSVM_CDECL OH_JSVM_RemoveHandlerForGC(JSVM_VM vm,
   if (pool == nullptr) {
     return JSVM_INVALID_ARG;
   }
-  auto &handlers = triggerTime == JSVM_CB_TRIGGER_BEFORE_GC ? pool->handlerWrappersBeforeGC : pool->handlerWrappersAfterGC;
+  auto &handlers = triggerTime == JSVM_CB_TRIGGER_BEFORE_GC ?
+    pool->handlerWrappersBeforeGC : pool->handlerWrappersAfterGC;
   auto it = std::find_if(handlers.begin(), handlers.end(), [handler, userData](v8impl::GCHandlerWrapper *callbackData) {
     return callbackData->handler == handler && callbackData->userData == userData;
   });
@@ -5866,8 +5923,8 @@ OH_JSVM_DefineClassWithOptions(JSVM_Env env,
       continue;
     }
 
-    v8::Local<v8::Name> property_name;
-    STATUS_CALL(v8impl::V8NameFromPropertyDescriptor(env, p, &property_name));
+    v8::Local<v8::Name> propertyName;
+    STATUS_CALL(v8impl::V8NameFromPropertyDescriptor(env, p, &propertyName));
     v8::PropertyAttribute attributes = v8impl::V8PropertyAttributesFromDescriptor(p);
 
     // This code is similar to that in OH_JSVM_DefineProperties(); the
@@ -5875,31 +5932,31 @@ OH_JSVM_DefineClassWithOptions(JSVM_Env env,
     // and preferred PropertyAttribute for lack of PropertyDescriptor
     // support on ObjectTemplate.
     if (p->getter != nullptr || p->setter != nullptr) {
-      v8::Local<v8::FunctionTemplate> getter_tpl;
-      v8::Local<v8::FunctionTemplate> setter_tpl;
+      v8::Local<v8::FunctionTemplate> getterTpl;
+      v8::Local<v8::FunctionTemplate> setterTpl;
       if (p->getter != nullptr) {
         STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
-            env, p->getter, &getter_tpl));
+            env, p->getter, &getterTpl));
       }
       if (p->setter != nullptr) {
         STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
-            env, p->setter, &setter_tpl));
+            env, p->setter, &setterTpl));
       }
 
-      tpl->PrototypeTemplate()->SetAccessorProperty(property_name,
-                                                    getter_tpl,
-                                                    setter_tpl,
+      tpl->PrototypeTemplate()->SetAccessorProperty(propertyName,
+                                                    getterTpl,
+                                                    setterTpl,
                                                     attributes,
                                                     v8::AccessControl::DEFAULT);
     } else if (p->method != nullptr) {
-      v8::Local<v8::FunctionTemplate> t;
+      v8::Local<v8::FunctionTemplate> temp;
       STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
-          env, p->method, &t, v8::Signature::New(isolate, tpl)));
+          env, p->method, &temp, v8::Signature::New(isolate, tpl)));
 
-      tpl->PrototypeTemplate()->Set(property_name, t, attributes);
+      tpl->PrototypeTemplate()->Set(propertyName, temp, attributes);
     } else {
       v8::Local<v8::Value> value = v8impl::V8LocalValueFromJsValue(p->value);
-      tpl->PrototypeTemplate()->Set(property_name, value, attributes);
+      tpl->PrototypeTemplate()->Set(propertyName, value, attributes);
     }
   }
 
