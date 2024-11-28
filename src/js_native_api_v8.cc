@@ -16,6 +16,7 @@
 #include "js_native_api_v8.h"
 #include "js_native_api_v8_inspector.h"
 #include "libplatform/libplatform.h"
+#include "libplatform/v8-tracing.h"
 #include "util-inl.h"
 #include "util.h"
 #include "sourcemap.def"
@@ -23,6 +24,10 @@
 #ifdef ENABLE_HISYSEVENT
 #include "hisysevent.h"
 #endif
+
+#ifdef V8_USE_PERFETTO
+#error Unsupported Perfetto.
+#endif  // V8_USE_PERFETTO
 
 #define SECARGCNT   2
 
@@ -291,6 +296,23 @@ static v8::ArrayBuffer::Allocator *GetOrCreateDefaultArrayBufferAllocator() {
   }
   return defaultArrayBufferAllocator.get();
 }
+
+static std::unique_ptr<std::stringstream> g_trace_stream;
+
+constexpr uint32_t g_trace_catrgory_count = 7;
+static constexpr const char* g_internal_trace_categories[] = {
+    "v8",
+    TRACE_DISABLED_BY_DEFAULT("v8.compile"),
+    "v8.execute",
+    TRACE_DISABLED_BY_DEFAULT("v8.runtime"),
+    TRACE_DISABLED_BY_DEFAULT("v8.stack_trace"),
+    "v8.wasm",
+    TRACE_DISABLED_BY_DEFAULT("v8.wasm.detailed"),
+};
+
+constexpr uint32_t g_default_catrgory_count = 4;
+static constexpr JSVM_TraceCategory g_default_categories[] = {
+    JSVM_TRACE_VM, JSVM_TRACE_EXECUTE, JSVM_TRACE_COMPILE, JSVM_TRACE_RUNTIME };
 
 static void SetFileToSourceMapMapping(std::string &&file, std::string &&sourceMapUrl) {
   auto it = sourceMapUrlMap.find(file);
@@ -2417,6 +2439,86 @@ OH_JSVM_DefineClass(JSVM_Env env,
   }
 
   return GET_RETURN_STATUS(env);
+}
+
+JSVM_EXTERN JSVM_Status OH_JSVM_TraceStart(size_t count,
+                                           const JSVM_TraceCategory* categories,
+                                           const char* tag,
+                                           size_t eventsCount) {
+  if (count > v8impl::g_trace_catrgory_count ||
+      ((count != 0) != (categories != nullptr))) {
+    return JSVM_INVALID_ARG;
+  }
+
+  for (size_t i = 0; i < count; ++i) {
+    if (categories[i] >= v8impl::g_trace_catrgory_count) {
+      return JSVM_INVALID_ARG;
+    }
+  }
+
+  using namespace v8::platform::tracing;
+  TraceConfig* trace_config = new TraceConfig();
+
+  if (count == 0) {
+    count = v8impl::g_default_catrgory_count;
+    categories = v8impl::g_default_categories;
+  }
+
+  for (size_t i = 0; i < count; ++i) {
+    trace_config->AddIncludedCategory(
+        v8impl::g_internal_trace_categories[categories[i]]);
+  }
+
+  v8::Platform* platform = v8impl::g_platform.get();
+  TracingController* controller =
+      static_cast<TracingController*>(platform->GetTracingController());
+  v8impl::g_trace_stream.reset(new std::stringstream());
+  auto stream = v8impl::g_trace_stream.get();
+
+  TraceWriter* writer = nullptr;
+  if (tag != nullptr) {
+    writer = TraceWriter::CreateJSONTraceWriter(*stream, tag);
+  } else {
+    writer = TraceWriter::CreateJSONTraceWriter(*stream);
+  }
+
+  size_t max_chunks;
+  if (eventsCount != 0) {
+    size_t chunk_size = TraceBufferChunk::kChunkSize;
+    max_chunks = (eventsCount + chunk_size - 1) / chunk_size;
+  } else {
+    max_chunks = TraceBuffer::kRingBufferChunks;
+  }
+
+  TraceBuffer* ring_buffer =
+      TraceBuffer::CreateTraceBufferRingBuffer(max_chunks, writer);
+  controller->Initialize(ring_buffer);
+  controller->StartTracing(trace_config);
+  return JSVM_OK;
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_TraceStop(JSVM_OutputStream stream,
+                                         void* streamData) {
+  if (stream == nullptr || streamData == nullptr ||
+      v8impl::g_trace_stream.get() == nullptr) {
+    return JSVM_INVALID_ARG;
+  }
+
+  using namespace v8::platform::tracing;
+  v8::Platform* platform = v8impl::g_platform.get();
+  auto controller =
+      static_cast<TracingController*>(platform->GetTracingController());
+  DCHECK(controller != nullptr);
+  controller->StopTracing();
+
+  // Call the destructor of TraceBuffer to print the JSON end.
+  controller->Initialize(nullptr);
+
+  std::string output = v8impl::g_trace_stream.get()->rdbuf()->str();
+  stream(output.c_str(), output.size(), streamData);
+
+  v8impl::g_trace_stream.reset(nullptr);
+  return JSVM_OK;
 }
 
 JSVM_Status JSVM_CDECL OH_JSVM_GetPropertyNames(JSVM_Env env,
