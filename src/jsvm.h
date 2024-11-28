@@ -3343,6 +3343,34 @@ JSVM_EXTERN JSVM_Status OH_JSVM_DefineClassWithOptions(JSVM_Env env,
                                                        size_t option_count,
                                                        JSVM_DefineClassOptions options[],
                                                        JSVM_Value* result);
+/**
+ * @brief Trace start with specified categories for all JSVM VM.(Non-thread-safe)
+ *
+ * @param count The count of trace categories.
+ * @param categories Select internal trace events for tracing by categories.
+ * @param tag User-defined tag of trace data.
+ * @param eventsCount Number of trace events.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if categories or count is illegal.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_TraceStart(size_t count, const JSVM_TraceCategory* categories,
+                                           const char* tag, size_t eventsCount);
+
+/**
+ * @brief Trace stop for specified categories for all JSVM VM.(Non-thread-safe)
+ *
+ * @param stream The output stream callback for receiving the data.
+ * @param streamData Data passed to the stream callback.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if stream or streamData is NULL\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_TraceStop(JSVM_OutputStream stream, void* streamData);
 EXTERN_C_END
 /** @} */
 #endif /* ARK_RUNTIME_JSVM_JSVM_H */
