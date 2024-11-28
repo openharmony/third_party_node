@@ -855,6 +855,76 @@ typedef void(JSVM_CDECL* JSVM_HandlerForFatalError)(const char* location,
 typedef void(JSVM_CDECL* JSVM_HandlerForPromiseReject)(JSVM_Env env,
                                                        JSVM_PromiseRejectEvent rejectEvent,
                                                        JSVM_Value rejectInfo);
+/**
+ * @brief The timing of GC callback trigger.
+ *
+ * @since 16
+ */
+typedef enum {
+    /** Trigger GC callback before GC. */
+    JSVM_CB_TRIGGER_BEFORE_GC,
+    /** Trigger GC callback after GC. */
+    JSVM_CB_TRIGGER_AFTER_GC,
+} JSVM_CBTriggerTimeForGC;
+
+/**
+ * @brief The GC type.
+ *
+ * @since 16
+ */
+typedef enum {
+    /** The GC algorithm is Scavenge. */
+    JSVM_GC_TYPE_SCAVENGE = 1 << 0,
+    /** The GC algorithm is Minor-Mark-Compact. */
+    JSVM_GC_TYPE_MINOR_MARK_COMPACT = 1 << 1,
+    /** The GC algorithm is Mark-Sweep-Compact. */
+    JSVM_GC_TYPE_MARK_SWEEP_COMPACT = 1 << 2,
+    /** The GC algorithm is Incremental-Marking. */
+    JSVM_GC_TYPE_INCREMENTAL_MARKING = 1 << 3,
+    /** The GC algorithm is Weak-Callbacks. */
+    JSVM_GC_TYPE_PROCESS_WEAK_CALLBACKS = 1 << 4,
+    /** All GC algorithm. */
+    JSVM_GC_TYPE_ALL = JSVM_GC_TYPE_SCAVENGE | JSVM_GC_TYPE_MINOR_MARK_COMPACT |
+                       JSVM_GC_TYPE_MARK_SWEEP_COMPACT | JSVM_GC_TYPE_INCREMENTAL_MARKING |
+                       JSVM_GC_TYPE_PROCESS_WEAK_CALLBACKS,
+} JSVM_GCType;
+
+/**
+ * @brief The GC callback flags.
+ *
+ * @since 16
+ */
+typedef enum {
+    /** No GC callback falgs. */
+    JSVM_NO_GC_CALLBACK_FLAGS,
+    /** Reserved object information will be built in the garbage collection callback. */
+    JSVM_GC_CALLBACK_CONSTRUCT_RETAINED_OBJECT_INFOS,
+    /** Enforce Garbage Collection Callback. */
+    JSVM_GC_CALLBACK_FORCED,
+    /** Synchronous phantom callback processing. */
+    JSVM_GC_CALLBACK_SYNCHRONOUS_PHANTOM_CALLBACK_PROCESSING,
+    /** All available garbage objects are collected during garbage collection. */
+    JSVM_GC_CALLBACK_COLLECT_ALL_AVAILABLE_GARBAGE,
+    /** Garbage collection collects all external memory. */
+    JSVM_GC_CALLBACK_COLLECT_ALL_EXTERNAL_MEMORY,
+    /** Schedule Garbage Collection at Idle Time. */
+    JSVM_GC_CALLBACK_SCHEDULE_IDLE_GARBAGE_COLLECTION,
+} JSVM_GCCallbackFlags;
+
+/**
+ * @brief Function pointer type of GC callback.
+ * 
+ * @param vm The VM instance that the JSVM-API call is invoked under.
+ * @param gcType The gc type.
+ * @param flags The GC callback flags.
+ * @param data The native pointer data.
+ *
+ * @since 16
+ */
+typedef void(JSVM_CDECL* JSVM_HandlerForGC)(JSVM_VM vm,
+                                            JSVM_GCType gcType,
+                                            JSVM_GCCallbackFlags flags,
+                                            void* data);
 /** @} */
 
 /**

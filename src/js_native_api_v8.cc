@@ -148,10 +148,34 @@ enum IsolateDataSlot {
 // Always compare the final element of IsolateDataSlot with v8 limit.
 static_assert(kIsolateHandlerPoolSlot < v8::internal::Internals::kNumIsolateDataSlots);
 
+struct GCHandlerWrapper {
+  GCHandlerWrapper(JSVM_GCType gcType, JSVM_HandlerForGC handler, void* userData)
+      : gcType(gcType), handler(handler), userData(userData) {}
+
+  JSVM_GCType gcType;
+  JSVM_HandlerForGC handler;
+  void *userData;
+};
+
+using GCHandlerWrappers = std::list<GCHandlerWrapper*>;
+
 struct IsolateHandlerPool {
+  GCHandlerWrappers handlerWrappersBeforeGC;
+  GCHandlerWrappers handlerWrappersAfterGC;
   JSVM_HandlerForOOMError handlerForOOMError = nullptr;
   JSVM_HandlerForFatalError handlerForFatalError = nullptr;
   JSVM_HandlerForPromiseReject handlerForPromiseReject = nullptr;
+
+  ~IsolateHandlerPool() {
+    for (auto *handler : handlerWrappersBeforeGC) {
+      delete handler;
+    }
+    handlerWrappersBeforeGC.clear();
+    for (auto *handler : handlerWrappersAfterGC) {
+      delete handler;
+    }
+    handlerWrappersAfterGC.clear();
+  }
 };
 
 static IsolateHandlerPool* GetIsolateHandlerPool(v8::Isolate* isolate) {
@@ -2966,6 +2990,138 @@ JSVM_Status JSVM_CDECL OH_JSVM_SetHandlerForPromiseReject(
   auto* pool = v8impl::GetOrCreateIsolateHandlerPool(isolate);
   pool->handlerForPromiseReject = handler;
   isolate->SetPromiseRejectCallback(OnPromiseReject);
+  return JSVM_OK;
+}
+
+JSVM_GCType GetJSVMGCType(v8::GCType gcType) {
+  switch (gcType) {
+    case v8::GCType::kGCTypeScavenge:
+      return JSVM_GC_TYPE_SCAVENGE;
+    case v8::GCType::kGCTypeMinorMarkCompact:
+      return JSVM_GC_TYPE_MINOR_MARK_COMPACT;
+    case v8::GCType::kGCTypeMarkSweepCompact:
+      return JSVM_GC_TYPE_MARK_SWEEP_COMPACT;
+    case v8::GCType::kGCTypeIncrementalMarking:
+      return JSVM_GC_TYPE_INCREMENTAL_MARKING;
+    case v8::GCType::kGCTypeProcessWeakCallbacks:
+      return JSVM_GC_TYPE_PROCESS_WEAK_CALLBACKS;
+    default:
+      return JSVM_GC_TYPE_ALL;
+  }
+}
+
+static v8::GCType GetV8GCType(JSVM_GCType gcType) {
+  switch(gcType) {
+    case JSVM_GC_TYPE_SCAVENGE:
+      return v8::GCType::kGCTypeScavenge;
+    case JSVM_GC_TYPE_MINOR_MARK_COMPACT:
+      return v8::GCType::kGCTypeMinorMarkCompact;
+    case JSVM_GC_TYPE_MARK_SWEEP_COMPACT:
+      return v8::GCType::kGCTypeMarkSweepCompact;
+    case JSVM_GC_TYPE_INCREMENTAL_MARKING:
+      return v8::GCType::kGCTypeIncrementalMarking;
+    case JSVM_GC_TYPE_PROCESS_WEAK_CALLBACKS:
+      return v8::GCType::kGCTypeProcessWeakCallbacks;
+    default:
+      return v8::GCType::kGCTypeAll;
+  }
+}
+
+JSVM_GCCallbackFlags GetJSVMGCCallbackFlags(v8::GCCallbackFlags flag) {
+  switch (flag) {
+    case v8::GCCallbackFlags::kGCCallbackFlagConstructRetainedObjectInfos:
+      return JSVM_GC_CALLBACK_CONSTRUCT_RETAINED_OBJECT_INFOS;
+    case v8::GCCallbackFlags::kGCCallbackFlagForced:
+      return JSVM_GC_CALLBACK_FORCED;
+    case v8::GCCallbackFlags::kGCCallbackFlagSynchronousPhantomCallbackProcessing:
+      return JSVM_GC_CALLBACK_SYNCHRONOUS_PHANTOM_CALLBACK_PROCESSING;
+    case v8::GCCallbackFlags::kGCCallbackFlagCollectAllAvailableGarbage:
+      return JSVM_GC_CALLBACK_COLLECT_ALL_AVAILABLE_GARBAGE;
+    case v8::GCCallbackFlags::kGCCallbackFlagCollectAllExternalMemory:
+      return JSVM_GC_CALLBACK_COLLECT_ALL_EXTERNAL_MEMORY;
+    case v8::GCCallbackFlags::kGCCallbackScheduleIdleGarbageCollection:
+      return JSVM_GC_CALLBACK_SCHEDULE_IDLE_GARBAGE_COLLECTION;
+    default:
+      return JSVM_NO_GC_CALLBACK_FLAGS;
+  }
+}
+
+static void OnBeforeGC(v8::Isolate* isolate, v8::GCType type, v8::GCCallbackFlags flags, void* data) {
+  auto *pool = v8impl::GetIsolateHandlerPool(isolate);
+  DCHECK_NOT_NULL(pool);
+  JSVM_GCType gcType = GetJSVMGCType(type);
+  JSVM_GCCallbackFlags gcFlags = GetJSVMGCCallbackFlags(flags);
+
+  auto *gcHandlerWrapper = (v8impl::GCHandlerWrapper*)data;
+  gcHandlerWrapper->handler(reinterpret_cast<JSVM_VM>(isolate), gcType, gcFlags, gcHandlerWrapper->userData);
+}
+
+static void OnAfterGC(v8::Isolate* isolate, v8::GCType type, v8::GCCallbackFlags flags, void* data) {
+  auto *pool = v8impl::GetIsolateHandlerPool(isolate);
+  DCHECK_NOT_NULL(pool);
+  JSVM_GCType gcType = GetJSVMGCType(type);
+  JSVM_GCCallbackFlags gcFlags = GetJSVMGCCallbackFlags(flags);
+
+  auto *gcHandlerWrapper = (v8impl::GCHandlerWrapper*)data;
+  gcHandlerWrapper->handler(reinterpret_cast<JSVM_VM>(isolate), gcType, gcFlags, gcHandlerWrapper->userData);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_AddHandlerForGC(JSVM_VM vm,
+                                               JSVM_CBTriggerTimeForGC triggerTime,
+                                               JSVM_HandlerForGC handler,
+                                               JSVM_GCType gcType,
+                                               void* data) {
+  if (!vm || !handler) {
+    return JSVM_INVALID_ARG;
+  }
+  auto* isolate = reinterpret_cast<v8::Isolate*>(vm);
+  auto* pool = v8impl::GetOrCreateIsolateHandlerPool(isolate);
+  auto &handlers = triggerTime == JSVM_CB_TRIGGER_BEFORE_GC ? pool->handlerWrappersBeforeGC : pool->handlerWrappersAfterGC;
+  auto it = std::find_if(handlers.begin(), handlers.end(), [handler, data](v8impl::GCHandlerWrapper *callbackData) {
+    return callbackData->handler == handler && callbackData->userData == data;
+  });
+  if (it != handlers.end()) {
+    return JSVM_INVALID_ARG;
+  }
+  auto *callbackData = new v8impl::GCHandlerWrapper(gcType, handler, data);
+  handlers.push_back(callbackData);
+  
+  if (triggerTime == JSVM_CB_TRIGGER_BEFORE_GC) {
+    isolate->AddGCPrologueCallback(
+        OnBeforeGC, callbackData, GetV8GCType(gcType));
+  } else {
+    isolate->AddGCEpilogueCallback(
+        OnAfterGC, callbackData, GetV8GCType(gcType));
+  }
+  return JSVM_OK;
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_RemoveHandlerForGC(JSVM_VM vm,
+                                                  JSVM_CBTriggerTimeForGC triggerTime,
+                                                  JSVM_HandlerForGC handler,
+                                                  void* userData) {
+  if (!vm || !handler) {
+    return JSVM_INVALID_ARG;
+  }
+  auto* isolate = reinterpret_cast<v8::Isolate*>(vm);
+  auto* pool = v8impl::GetOrCreateIsolateHandlerPool(isolate);
+  if (pool == nullptr) {
+    return JSVM_INVALID_ARG;
+  }
+  auto &handlers = triggerTime == JSVM_CB_TRIGGER_BEFORE_GC ? pool->handlerWrappersBeforeGC : pool->handlerWrappersAfterGC;
+  auto it = std::find_if(handlers.begin(), handlers.end(), [handler, userData](v8impl::GCHandlerWrapper *callbackData) {
+    return callbackData->handler == handler && callbackData->userData == userData;
+  });
+  if (it == handlers.end()) {
+    return JSVM_INVALID_ARG;
+  }
+  handlers.erase(it);
+  if (triggerTime == JSVM_CB_TRIGGER_BEFORE_GC) {
+    isolate->RemoveGCPrologueCallback(OnBeforeGC, (*it));
+  } else {
+    isolate->RemoveGCEpilogueCallback(OnAfterGC, (*it));
+  }
+  delete (*it);
   return JSVM_OK;
 }
 
