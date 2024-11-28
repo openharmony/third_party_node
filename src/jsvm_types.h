@@ -109,6 +109,13 @@ typedef struct JSVM_CpuProfiler__* JSVM_CpuProfiler;
 typedef struct JSVM_Value__* JSVM_Value;
 
 /**
+ * @brief To represent a JavaScript Data type.
+ *
+ * @since 16
+ */
+typedef struct JSVM_Data__* JSVM_Data;
+
+/**
  * @brief To represent a JavaScript value references.
  *
  * @since 11
