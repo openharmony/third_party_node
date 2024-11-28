@@ -1688,6 +1688,46 @@ JSVM_EXTERN JSVM_Status OH_JSVM_Instanceof(JSVM_Env env,
                                            JSVM_Value constructor,
                                            bool* result);
 
+
+/**
+* @brief Add VM GC Callback.
+*
+* @param vm The environment that the API is invoked under.
+* @param triggerTime The timing of GC callback trigger.
+* @param handler When Trigger gc, the callback function will be called.
+* @param gcType The type of gc.
+* @param userData The native pointer data.
+* @return Returns JSVM funtions result code.
+*         {@link JSVM_OK } if the function executed successfully.\n
+*         {@link JSVM_INVALID_ARG } if the vm or the handler is NULL or the handler has been added before.\n
+*
+* @since 16
+*/
+JSVM_EXTERN JSVM_Status OH_JSVM_AddHandlerForGC(JSVM_VM vm,
+                                                JSVM_CBTriggerTimeForGC triggerTime,
+                                                JSVM_HandlerForGC handler,
+                                                JSVM_GCType gcType,
+                                                void* userData);
+
+/**
+* @brief Remove VM GC Callback.
+*
+* @param vm The environment that the API is invoked under.
+* @param triggerTime The timing of GC callback trigger.
+* @param handler When Trigger gc, the callback function will be called.
+* @param userData The native pointer data.
+* @return Returns JSVM funtions result code.
+*         {@link JSVM_OK } if the function executed successfully.\n
+*         {@link JSVM_INVALID_ARG } if the vm or the handler is NULL, or the handler has been removed,
+* or the handler has never been added.\n
+*
+* @since 16
+*/
+JSVM_EXTERN JSVM_Status OH_JSVM_RemoveHandlerForGC(JSVM_VM vm,
+                                                   JSVM_CBTriggerTimeForGC triggerTime,
+                                                   JSVM_HandlerForGC handler,
+                                                   void* userData);
+
 /**
  * @brief Set Handler For OOM Error. If this function is invoked repeatedly,
  * only the last time takes effect. When handler is null, the previous setting is canceled.
