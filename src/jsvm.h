@@ -1437,6 +1437,51 @@ JSVM_EXTERN JSVM_Status OH_JSVM_Instanceof(JSVM_Env env,
                                            bool* result);
 
 /**
+ * @brief Set Handler For OOM Error. If this function is invoked repeatedly,
+ * only the last time takes effect. When handler is null, the previous setting is canceled.
+ *
+ * @param vm The environment that the API is invoked under.
+ * @param handler The handler for OOM Error.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if vm is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_SetHandlerForOOMError(JSVM_VM vm,
+                                                      JSVM_HandlerForOOMError handler);
+
+/**
+ * @brief Set Handler For Fatal Error. If this function is invoked repeatedly,
+ * only the last time takes effect. When handler is null, the previous setting is canceled.
+ *
+ * @param vm The environment that the API is invoked under.
+ * @param handler The handler for Fatal Error.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if vm is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_SetHandlerForFatalError(JSVM_VM vm,
+                                                        JSVM_HandlerForFatalError handler);
+
+/**
+ * @brief Set Handler For Promise Reject. If this function is invoked repeatedly,
+ * only the last time takes effect. When handler is null, the previous setting is canceled.
+ *
+ * @param vm The environment that the API is invoked under.
+ * @param handler The handler for Promise Reject.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if vm is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_SetHandlerForPromiseReject(JSVM_VM vm,
+                                                           JSVM_HandlerForPromiseReject handler);
+
+/**
  * @brief This API represents invoking the IsArray operation on the object
  *
  * @param env: The environment that the API is invoked under.
