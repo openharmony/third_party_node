@@ -58,13 +58,13 @@ class Finalizer;
 class Agent;
 }  // end of namespace v8impl
 
-struct JSVM_Data__ {
+struct JSVM_Script_Data__ {
  public:
   using SourcePtr = std::variant<v8::Local<v8::Script>, v8::Global<v8::Script>>;
   using DataType = enum { kJsvmScript };
 
   template<typename T>
-  JSVM_Data__(T ptr, bool retained, DataType type = kJsvmScript)
+  JSVM_Script_Data__(T ptr, bool retained, DataType type = kJsvmScript)
     : taggedPointer(ptr),
       isGlobal(retained),
       type(type) {}
@@ -193,11 +193,11 @@ struct JSVM_Env__ {
   }
 
   template<typename T>
-  JSVM_Data__ *NewJsvmData(T srcPtr, JSVM_Data__::DataType type = JSVM_Data__::kJsvmScript) {
+  JSVM_Script_Data__ *NewJsvmData(T srcPtr, JSVM_Script_Data__::DataType type = JSVM_Script_Data__::kJsvmScript) {
     if (dataStack.empty() || open_handle_scopes != dataStack.top().first) {
-      dataStack.emplace(open_handle_scopes, std::vector<JSVM_Data__*>());
+      dataStack.emplace(open_handle_scopes, std::vector<JSVM_Script_Data__*>());
     }
-    auto newData = new JSVM_Data__(srcPtr, false, type);
+    auto newData = new JSVM_Script_Data__(srcPtr, false, type);
     dataStack.top().second.push_back(newData);
     return newData;
   }
@@ -234,7 +234,7 @@ struct JSVM_Env__ {
   int32_t module_api_version = NODE_API_DEFAULT_MODULE_API_VERSION;
   bool in_gc_finalizer = false;
   v8::Locker* locker = nullptr;
-  std::stack<std::pair<int, std::vector<JSVM_Data__*>>> dataStack;
+  std::stack<std::pair<int, std::vector<JSVM_Script_Data__*>>> dataStack;
 
  private:
   v8impl::Agent* inspector_agent_;
@@ -395,9 +395,19 @@ inline JSVM_Value JsValueFromV8LocalValue(v8::Local<v8::Value> local) {
   return reinterpret_cast<JSVM_Value>(*local);
 }
 
-inline v8::Local<v8::Value> V8LocalValueFromJsValue(JSVM_Value v) {
+inline JSVM_Data JsDataFromV8LocalData(v8::Local<v8::Data> local) {
+  return reinterpret_cast<JSVM_Data>(*local);
+}
+
+inline v8::Local<v8::Value> V8LocalValueFromJsValue(JSVM_Value value) {
   v8::Local<v8::Value> local;
-  memcpy(static_cast<void*>(&local), &v, sizeof(v));
+  memcpy(static_cast<void*>(&local), &value, sizeof(JSVM_Value));
+  return local;
+}
+
+inline v8::Local<v8::Data> V8LocalDataFromJsData(JSVM_Data data) {
+  v8::Local<v8::Data> local;
+  memcpy(static_cast<void*>(&local), &data, sizeof(JSVM_Data));
   return local;
 }
 
@@ -517,16 +527,17 @@ class RefBase : public TrackedFinalizer {
 class Reference : public RefBase {
  protected:
   template <typename... Args>
-  Reference(JSVM_Env env, v8::Local<v8::Value> value, Args&&... args);
+  Reference(JSVM_Env env, v8::Local<v8::Data> value, bool isValue, Args&&... args);
 
  public:
   static Reference* New(JSVM_Env env,
-                        v8::Local<v8::Value> value,
+                        v8::Local<v8::Data> value,
                         uint32_t initialRefcount,
                         Ownership ownership,
                         JSVM_Finalize finalizeCallback = nullptr,
                         void* finalizeData = nullptr,
-                        void* finalizeHint = nullptr);
+                        void* finalizeHint = nullptr,
+                        bool isValue = true);
 
   virtual ~Reference();
   bool HasDeletedByUser() {
@@ -534,8 +545,12 @@ class Reference : public RefBase {
   }
   uint32_t Ref();
   uint32_t Unref();
-  v8::Local<v8::Value> Get();
+  v8::Local<v8::Value> GetValue();
+  v8::Local<v8::Data> GetData();
   void Delete();
+  bool IsValue() const {
+    return is_value;
+  }
 
  protected:
   void Finalize() override;
@@ -545,7 +560,8 @@ class Reference : public RefBase {
 
   void SetWeak();
 
-  v8impl::Persistent<v8::Value> persistent_;
+  v8impl::Persistent<v8::Data> persistent_;
+  bool is_value;
   bool can_be_weak_;
   bool deleted_by_user;
   bool wait_callback;
