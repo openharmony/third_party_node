@@ -5410,6 +5410,232 @@ OH_JSVM_DefineClassWithPropertyHandler(JSVM_Env env,
   return GET_RETURN_STATUS(env);
 }
 
+JSVM_Status ProcessPropertyHandler(JSVM_Env env,
+                                   v8::Local<v8::FunctionTemplate> tpl,
+                                   JSVM_PropertyHandlerCfg propertyHandlerCfg,
+                                   JSVM_Callback callAsFunctionCallback,
+                                   v8impl::JSVM_PropertyHandlerCfgStruct** propertyHandlerCfgStruct) {
+  CHECK_ARG(env, propertyHandlerCfg);
+  *propertyHandlerCfgStruct = v8impl::CreatePropertyCfg(env, propertyHandlerCfg);
+  if (*propertyHandlerCfgStruct == nullptr) {
+    return JSVM_GENERIC_FAILURE;
+  }
+  v8::Local<v8::Value> cbdata = v8impl::CallbackBundle::New(env, *propertyHandlerCfgStruct);
+
+  // register named property handler
+  v8::NamedPropertyHandlerConfiguration namedPropertyHandler;
+  if (propertyHandlerCfg->genericNamedPropertyGetterCallback) {
+    namedPropertyHandler.getter = v8impl::PropertyCallbackWrapper<v8::Value>::NameGetterInvoke;
+  }
+  if (propertyHandlerCfg->genericNamedPropertySetterCallback) {
+    namedPropertyHandler.setter = v8impl::PropertyCallbackWrapper<v8::Value>::NameSetterInvoke;
+  }
+  if (propertyHandlerCfg->genericNamedPropertyDeleterCallback) {
+    namedPropertyHandler.deleter = v8impl::PropertyCallbackWrapper<v8::Boolean>::NameDeleterInvoke;
+  }
+  if (propertyHandlerCfg->genericNamedPropertyEnumeratorCallback) {
+    namedPropertyHandler.enumerator = v8impl::PropertyCallbackWrapper<v8::Array>::NameEnumeratorInvoke;
+  }
+  namedPropertyHandler.data = cbdata;
+  tpl->InstanceTemplate()->SetHandler(namedPropertyHandler);
+
+  // register indexed property handle
+  v8::IndexedPropertyHandlerConfiguration indexPropertyHandler;
+  if (propertyHandlerCfg->genericIndexedPropertyGetterCallback) {
+    indexPropertyHandler.getter = v8impl::PropertyCallbackWrapper<v8::Value>::IndexGetterInvoke;
+  }
+  if (propertyHandlerCfg->genericIndexedPropertySetterCallback) {
+    indexPropertyHandler.setter = v8impl::PropertyCallbackWrapper<v8::Value>::IndexSetterInvoke;
+  }
+  if (propertyHandlerCfg->genericIndexedPropertyDeleterCallback) {
+    indexPropertyHandler.deleter = v8impl::PropertyCallbackWrapper<v8::Boolean>::IndexDeleterInvoke;
+  }
+  if (propertyHandlerCfg->genericIndexedPropertyEnumeratorCallback) {
+    indexPropertyHandler.enumerator = v8impl::PropertyCallbackWrapper<v8::Array>::IndexEnumeratorInvoke;
+  }
+  indexPropertyHandler.data = cbdata;
+  tpl->InstanceTemplate()->SetHandler(indexPropertyHandler);
+
+  // register call as function
+  if (callAsFunctionCallback && callAsFunctionCallback->callback) {
+    v8::Local<v8::Value> funcCbdata = v8impl::CallbackBundle::New(env, callAsFunctionCallback);
+    tpl->InstanceTemplate()->SetCallAsFunctionHandler(v8impl::FunctionCallbackWrapper::Invoke, funcCbdata);
+  }
+  return JSVM_OK;
+}
+
+class DefineClassOptionsResolver {
+  public:
+  void ProcessOptions(size_t length, JSVM_DefineClassOptions options[], JSVM_Env env,
+                      v8::Local<v8::FunctionTemplate> tpl) {
+    for (int32_t i = 0; i < length; i++) {
+      if (status != JSVM_OK) {
+        break;
+      }
+      switch(options[i].id) {
+        case JSVM_DEFINE_CLASS_NORMAL:
+          break;
+        case JSVM_DEFINE_CLASS_WITH_COUNT: {
+          auto count = options[i].content.num;
+          v8::Local<v8::ObjectTemplate> instance_templ = tpl->InstanceTemplate();
+          instance_templ->SetInternalFieldCount(count);
+          break;
+        }
+        case JSVM_DEFINE_CLASS_WITH_PROPERTY_HANDLER: {
+          hasPropertyHandle = true;
+          auto* propertyHandle = static_cast<JSVM_PropertyHandler*>(options[i].content.ptr);
+          propertyHandlerCfg = propertyHandle->propertyHandlerCfg;
+          callAsFunctionCallback = propertyHandle->callAsFunctionCallback;
+          status = ProcessPropertyHandler(env, tpl, propertyHandlerCfg, callAsFunctionCallback,
+                                          &propertyHandlerCfgStruct);
+          break;
+        }
+        default: {
+          status = JSVM_INVALID_ARG;
+        }
+      }
+    }
+  }
+
+  JSVM_Status GetStatus() {
+    return status;
+  }
+
+  v8impl::JSVM_PropertyHandlerCfgStruct* GetPropertyHandler() {
+    return propertyHandlerCfgStruct;
+  }
+
+  bool HasPropertyHandler() {
+    return hasPropertyHandle;
+  }
+
+ private:
+  JSVM_PropertyHandlerCfg propertyHandlerCfg = nullptr;
+  JSVM_Callback callAsFunctionCallback = nullptr;
+  bool hasPropertyHandle = false;
+  JSVM_Status status = JSVM_OK;
+  v8impl::JSVM_PropertyHandlerCfgStruct* propertyHandlerCfgStruct = nullptr;
+};
+
+JSVM_Status JSVM_CDECL
+OH_JSVM_DefineClassWithOptions(JSVM_Env env,
+                               const char* utf8name,
+                               size_t length,
+                               JSVM_Callback constructor,
+                               size_t propertyCount,
+                               const JSVM_PropertyDescriptor* properties,
+                               JSVM_Value parentClass,
+                               size_t option_count,
+                               JSVM_DefineClassOptions options[],
+                               JSVM_Value* result) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, result);
+  CHECK_ARG(env, constructor);
+  CHECK_ARG(env, constructor->callback);
+
+  if (propertyCount > 0) {
+    CHECK_ARG(env, properties);
+  }
+
+  v8::Isolate* isolate = env->isolate;
+  v8::EscapableHandleScope scope(isolate);
+  v8::Local<v8::FunctionTemplate> tpl;
+  STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+      env, constructor, &tpl));
+
+  v8::Local<v8::String> name_string;
+  CHECK_NEW_FROM_UTF8_LEN(env, name_string, utf8name, length);
+  tpl->SetClassName(name_string);
+
+  size_t static_property_count = 0;
+  for (size_t i = 0; i < propertyCount; i++) {
+    const JSVM_PropertyDescriptor* p = properties + i;
+
+    if ((p->attributes & JSVM_STATIC) != 0) { // attributes
+      // Static properties are handled separately below.
+      static_property_count++;
+      continue;
+    }
+
+    v8::Local<v8::Name> property_name;
+    STATUS_CALL(v8impl::V8NameFromPropertyDescriptor(env, p, &property_name));
+    v8::PropertyAttribute attributes = v8impl::V8PropertyAttributesFromDescriptor(p);
+
+    // This code is similar to that in OH_JSVM_DefineProperties(); the
+    // difference is it applies to a template instead of an object,
+    // and preferred PropertyAttribute for lack of PropertyDescriptor
+    // support on ObjectTemplate.
+    if (p->getter != nullptr || p->setter != nullptr) {
+      v8::Local<v8::FunctionTemplate> getter_tpl;
+      v8::Local<v8::FunctionTemplate> setter_tpl;
+      if (p->getter != nullptr) {
+        STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+            env, p->getter, &getter_tpl));
+      }
+      if (p->setter != nullptr) {
+        STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+            env, p->setter, &setter_tpl));
+      }
+
+      tpl->PrototypeTemplate()->SetAccessorProperty(property_name,
+                                                    getter_tpl,
+                                                    setter_tpl,
+                                                    attributes,
+                                                    v8::AccessControl::DEFAULT);
+    } else if (p->method != nullptr) {
+      v8::Local<v8::FunctionTemplate> t;
+      STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+          env, p->method, &t, v8::Signature::New(isolate, tpl)));
+
+      tpl->PrototypeTemplate()->Set(property_name, t, attributes);
+    } else {
+      v8::Local<v8::Value> value = v8impl::V8LocalValueFromJsValue(p->value);
+      tpl->PrototypeTemplate()->Set(property_name, value, attributes);
+    }
+  }
+
+  if (parentClass != nullptr) {
+    v8::Local<v8::Function> parentFunc;
+    CHECK_TO_FUNCTION(env, parentFunc, parentClass);
+    if (!tpl->Inherit(parentFunc)) {
+      return JSVM_INVALID_ARG;
+    }
+  }
+
+  DefineClassOptionsResolver optionResolver;
+  optionResolver.ProcessOptions(option_count, options, env, tpl);
+
+  if (optionResolver.GetStatus() != JSVM_OK) {
+    return optionResolver.GetStatus();
+  }
+
+  v8::Local<v8::Context> context = env->context();
+  *result = v8impl::JsValueFromV8LocalValue(
+      scope.Escape(tpl->GetFunction(context).ToLocalChecked()));
+
+  if (optionResolver.HasPropertyHandler()) {
+    v8impl::Reference::New(env, v8impl::V8LocalValueFromJsValue(*result), 0, v8impl::Ownership::kRuntime,
+      v8impl::CfgFinalizedCallback, optionResolver.GetPropertyHandler(), nullptr);
+  }
+
+  if (static_property_count > 0) {
+    std::vector<JSVM_PropertyDescriptor> static_descriptors;
+    static_descriptors.reserve(static_property_count);
+
+    for (size_t i = 0; i < propertyCount; i++) {
+      const JSVM_PropertyDescriptor* p = properties + i;
+      if ((p->attributes & JSVM_STATIC) != 0) {
+        static_descriptors.push_back(*p);
+      }
+    }
+
+    STATUS_CALL(OH_JSVM_DefineProperties(
+        env, *result, static_descriptors.size(), static_descriptors.data()));
+  }
+
+  return GET_RETURN_STATUS(env);
+}
+
 JSVM_Status JSVM_CDECL OH_JSVM_IsLocked(JSVM_Env env,
                                         bool* isLocked) {
   CHECK_ENV(env);
