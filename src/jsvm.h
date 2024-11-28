@@ -3275,6 +3275,46 @@ JSVM_EXTERN JSVM_Status OH_JSVM_TraceStart(size_t count, const JSVM_TraceCategor
  * @since 16
  */
 JSVM_EXTERN JSVM_Status OH_JSVM_TraceStop(JSVM_OutputStream stream, void* streamData);
+
+/**
+ * @brief When wrapping a C++ class, the C++ constructor callback passed via constructor
+ * should be a static method on the class that calls the actual class constructor, then
+ * wraps the new C++ instance in a JavaScript object according to the different Options
+ * passed in, and returns the wrapper object.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param utf8name Name of the JavaScript constructor function. For clarity, it is
+ * recommended to use the C++ class name when wrapping a C++ class.
+ * @param length The length of the utf8name in bytes, or JSVM_AUTO_LENGTH if it
+ * is null-terminated.
+ * @param constructor Struct include callback function that handles constructing instances of the class.
+ * When wrapping a C++ class, this method must be a static member with the JSVM_Callback.callback
+ * signature. A C++ class constructor cannot be used.
+ * Include Optional data to be passed to the constructor callback as the data
+ * property of the callback info. JSVM_Callback provides more details.
+ * @param propertyCount Number of items in the properties array argument.
+ * @param properties Array of property descriptors describing static and instance data
+ * properties, accessors, and methods on the class See JSVM_PropertyDescriptor.
+ * @param parentClass The parent-class of the currently defined class.
+ * @param option_count Number of items in an option array argument.
+ * @param options DefineClass options to be passed.
+ * @param result A JSVM_Value representing the constructor function for the class.
+ * @return Returns JSVM functions result code.
+ *         {@link JSVM_OK } if the function executed successfully. \n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL. \n
+ *         {@link JSVM_GENERIC_FAILURE} if the input utf8name | constructor | properties is invalid. \n
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_DefineClassWithOptions(JSVM_Env env,
+                                                       const char* utf8name,
+                                                       size_t length,
+                                                       JSVM_Callback constructor,
+                                                       size_t propertyCount,
+                                                       const JSVM_PropertyDescriptor* properties,
+                                                       JSVM_Value parentClass,
+                                                       size_t option_count,
+                                                       JSVM_DefineClassOptions options[],
+                                                       JSVM_Value* result);
 EXTERN_C_END
 
 /** @} */
