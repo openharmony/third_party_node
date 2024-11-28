@@ -143,11 +143,40 @@ namespace {
 enum IsolateDataSlot {
   kIsolateData = 0,
   kIsolateSnapshotCreatorSlot = 1,
+  kIsolateHandlerPoolSlot = 2,
 };
+// Always compare the final element of IsolateDataSlot with v8 limit.
+static_assert(kIsolateHandlerPoolSlot < v8::internal::Internals::kNumIsolateDataSlots);
+
+struct IsolateHandlerPool {
+  JSVM_HandlerForOOMError handlerForOOMError = nullptr;
+  JSVM_HandlerForFatalError handlerForFatalError = nullptr;
+  JSVM_HandlerForPromiseReject handlerForPromiseReject = nullptr;
+};
+
+static IsolateHandlerPool* GetIsolateHandlerPool(v8::Isolate* isolate) {
+  auto pool = isolate->GetData(v8impl::kIsolateHandlerPoolSlot);
+  return reinterpret_cast<IsolateHandlerPool*>(pool);
+}
+
+static IsolateHandlerPool* GetOrCreateIsolateHandlerPool(v8::Isolate* isolate) {
+  auto *pool = isolate->GetData(v8impl::kIsolateHandlerPoolSlot);
+  if (pool != nullptr) {
+    return reinterpret_cast<IsolateHandlerPool*>(pool);
+  }
+  auto *createdPool = new v8impl::IsolateHandlerPool();
+  isolate->SetData(v8impl::kIsolateHandlerPoolSlot, createdPool);
+  return createdPool;
+}
 
 enum ContextEmbedderIndex {
   kContextEnvIndex = 1,
 };
+
+static JSVM_Env GetEnvByContext(v8::Local<v8::Context> context) {
+  auto env = context->GetAlignedPointerFromEmbedderData(v8impl::kContextEnvIndex);
+  return reinterpret_cast<JSVM_Env>(env);
+}
 
 struct IsolateData {
   IsolateData(v8::StartupData* blob) : blob(blob) {}
@@ -1498,6 +1527,8 @@ OH_JSVM_CreateVM(const JSVM_CreateVMOptions* options, JSVM_VM* result) {
   }
   v8impl::CreateIsolateData(isolate, snapshotBlob);
   *result = reinterpret_cast<JSVM_VM>(isolate);
+  // Create nullptr placeholder
+  isolate->SetData(v8impl::kIsolateHandlerPoolSlot, nullptr);
 
   return JSVM_OK;
 }
@@ -1529,6 +1560,7 @@ OH_JSVM_DestroyVM(JSVM_VM vm) {
   auto creator = v8impl::GetIsolateSnapshotCreator(isolate);
   auto data = v8impl::GetIsolateData(isolate);
 
+  auto *handlerPool = v8impl::GetIsolateHandlerPool(isolate);
   if (creator != nullptr) {
     delete creator;
   } else {
@@ -1538,6 +1570,9 @@ OH_JSVM_DestroyVM(JSVM_VM vm) {
       delete data;
   }
 
+  if (handlerPool != nullptr) {
+    delete handlerPool;
+  }
   return JSVM_OK;
 }
 
@@ -2826,6 +2861,112 @@ JSVM_Status JSVM_CDECL OH_JSVM_ObjectSeal(JSVM_Env env, JSVM_Value object) {
       env, set_sealed.FromMaybe(false), JSVM_GENERIC_FAILURE);
 
   return GET_RETURN_STATUS(env);
+}
+
+static void OnOOMError(const char* location, const v8::OOMDetails& details) {
+  auto* isolate = v8::Isolate::GetCurrent();
+  auto* pool = v8impl::GetIsolateHandlerPool(isolate);
+  if (pool == nullptr) {
+    return;
+  }
+  auto* handler = pool->handlerForOOMError;
+  if (handler == nullptr) {
+    return;
+  }
+  (*handler)(location, details.detail, details.is_heap_oom);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_SetHandlerForOOMError(JSVM_VM vm, JSVM_HandlerForOOMError handler) {
+  if (vm == nullptr) {
+    return JSVM_INVALID_ARG;
+  }
+  auto* isolate = reinterpret_cast<v8::Isolate*>(vm);
+  auto* pool = v8impl::GetOrCreateIsolateHandlerPool(isolate);
+  pool->handlerForOOMError = handler;
+  isolate->SetOOMErrorHandler(OnOOMError);
+  return JSVM_OK;
+}
+
+static void OnFatalError(const char* location, const char* message) {
+  auto* isolate = v8::Isolate::GetCurrent();
+  auto* pool = v8impl::GetIsolateHandlerPool(isolate);
+  if (pool == nullptr) {
+    return;
+  }
+  auto* handler = pool->handlerForFatalError;
+  if (handler == nullptr) {
+    return;
+  }
+  (*handler)(location, message);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_SetHandlerForFatalError(JSVM_VM vm,
+                                            JSVM_HandlerForFatalError handler) {
+  if (vm == nullptr) {
+    return JSVM_INVALID_ARG;
+  }
+  auto* isolate = reinterpret_cast<v8::Isolate*>(vm);
+  auto* pool = v8impl::GetOrCreateIsolateHandlerPool(isolate);
+  pool->handlerForFatalError = handler;
+  isolate->SetFatalErrorHandler(OnFatalError);
+  return JSVM_OK;
+}
+
+static void OnPromiseReject(v8::PromiseRejectMessage rejectMessage) {
+  auto* isolate = v8::Isolate::GetCurrent();
+  auto* pool = v8impl::GetIsolateHandlerPool(isolate);
+  if (pool == nullptr) {
+    return;
+  }
+  auto* handler = pool->handlerForPromiseReject;
+  if (handler == nullptr) {
+    return;
+  }
+  auto context = isolate->GetCurrentContext();
+  auto env = v8impl::GetEnvByContext(context);
+  v8::HandleScope scope(isolate);
+  v8::Local<v8::Object> rejectInfo = v8::Object::New(isolate);
+  auto strPromise =
+      v8::String::NewFromUtf8(isolate, "promise").ToLocalChecked();
+  (void)rejectInfo->Set(context, strPromise, rejectMessage.GetPromise());
+  auto strValue = v8::String::NewFromUtf8(isolate, "value").ToLocalChecked();
+  (void)rejectInfo->Set(context, strValue, rejectMessage.GetValue());
+  JSVM_Value jsvmRejectInfo = v8impl::JsValueFromV8LocalValue(rejectInfo);
+  JSVM_PromiseRejectEvent rejectEvent = JSVM_PROMISE_REJECT_OTHER_REASONS;
+  switch (rejectMessage.GetEvent()) {
+    case v8::kPromiseRejectWithNoHandler: {
+      rejectEvent = JSVM_PROMISE_REJECT_WITH_NO_HANDLER;
+      break;
+    }
+    case v8::kPromiseHandlerAddedAfterReject: {
+      rejectEvent = JSVM_PROMISE_ADD_HANDLER_AFTER_REJECTED;
+      break;
+    }
+    case v8::kPromiseRejectAfterResolved: {
+      rejectEvent = JSVM_PROMISE_REJECT_AFTER_RESOLVED;
+      break;
+    }
+    case v8::kPromiseResolveAfterResolved: {
+      rejectEvent = JSVM_PROMISE_RESOLVE_AFTER_RESOLVED;
+      break;
+    }
+    default: {
+      rejectEvent = JSVM_PROMISE_REJECT_OTHER_REASONS;
+    }
+  }
+  (*handler)(env, rejectEvent, jsvmRejectInfo);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_SetHandlerForPromiseReject(
+    JSVM_VM vm, JSVM_HandlerForPromiseReject handler) {
+  if (vm == nullptr) {
+    return JSVM_INVALID_ARG;
+  }
+  auto* isolate = reinterpret_cast<v8::Isolate*>(vm);
+  auto* pool = v8impl::GetOrCreateIsolateHandlerPool(isolate);
+  pool->handlerForPromiseReject = handler;
+  isolate->SetPromiseRejectCallback(OnPromiseReject);
+  return JSVM_OK;
 }
 
 JSVM_Status JSVM_CDECL OH_JSVM_IsArray(JSVM_Env env,
