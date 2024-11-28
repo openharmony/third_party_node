@@ -728,7 +728,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->namedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->namedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
 
     bool exceptionOccurred = false;
@@ -761,7 +761,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->namedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->namedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
     bool exceptionOccurred = false;
     JSVM_Value result = nullptr;
@@ -792,7 +792,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->namedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->namedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
 
     bool exceptionOccurred = false;
@@ -826,7 +826,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->namedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->namedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
 
     bool exceptionOccurred = false;
@@ -859,7 +859,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->indexedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->indexedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
 
     bool exceptionOccurred = false;
@@ -892,7 +892,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->indexedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->indexedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
 
     JSVM_Value result = nullptr;
@@ -924,7 +924,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->indexedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->indexedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
 
     bool exceptionOccurred = false;
@@ -958,7 +958,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->indexedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->indexedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
 
     bool exceptionOccurred = false;
@@ -1117,7 +1117,11 @@ inline JSVM_Status Wrap(JSVM_Env env,
 // Currently, V8 has no API to detect if a symbol is local or global.
 // Until we have a V8 API for it, we consider that all symbols can be weak.
 // This matches the current Node-API behavior.
-inline bool CanBeHeldWeakly(v8::Local<v8::Value> value) {
+inline bool CanBeHeldWeakly(v8::Local<v8::Data> data) {
+  if (data->IsPrivate()) {
+    return false;
+  }
+  auto value = data.As<v8::Value>();
   return value->IsObject() || value->IsSymbol();
 }
 
@@ -1233,10 +1237,11 @@ void RefBase::Finalize() {
 }
 
 template <typename... Args>
-Reference::Reference(JSVM_Env env, v8::Local<v8::Value> value, Args&&... args)
+Reference::Reference(JSVM_Env env, v8::Local<v8::Data> data, bool isValue, Args&&... args)
     : RefBase(env, std::forward<Args>(args)...),
-      persistent_(env->isolate, value),
-      can_be_weak_(CanBeHeldWeakly(value)),
+      persistent_(env->isolate, data),
+      is_value(isValue),
+      can_be_weak_(isValue && CanBeHeldWeakly(data.As<v8::Value>())),
       deleted_by_user(false),
       wait_callback(false) {
   if (RefCount() == 0) {
@@ -1250,14 +1255,16 @@ Reference::~Reference() {
 }
 
 Reference* Reference::New(JSVM_Env env,
-                          v8::Local<v8::Value> value,
+                          v8::Local<v8::Data> data,
                           uint32_t initialRefcount,
                           Ownership ownership,
                           JSVM_Finalize finalizeCallback,
                           void* finalizeData,
-                          void* finalizeHint) {
+                          void* finalizeHint,
+                          bool isValue) {
   return new Reference(env,
-                       value,
+                       data,
+                       isValue,
                        initialRefcount,
                        ownership,
                        finalizeCallback,
@@ -1293,11 +1300,20 @@ uint32_t Reference::Unref() {
   return refcount;
 }
 
-v8::Local<v8::Value> Reference::Get() {
+v8::Local<v8::Value> Reference::GetValue() {
+  DCHECK(is_value);
   if (persistent_.IsEmpty()) {
     return v8::Local<v8::Value>();
   } else {
-    return v8::Local<v8::Value>::New(env_->isolate, persistent_);
+    return v8::Local<v8::Data>::New(env_->isolate, persistent_).As<v8::Value>();
+  }
+}
+
+v8::Local<v8::Data> Reference::GetData() {
+  if (persistent_.IsEmpty()) {
+    return v8::Local<v8::Data>();
+  } else {
+    return v8::Local<v8::Data>::New(env_->isolate, persistent_);
   }
 }
 
@@ -1416,11 +1432,13 @@ OH_JSVM_Init(const JSVM_InitOptions* options) {
 #endif
   v8::V8::InitializePlatform(v8impl::g_platform.get());
 
+#ifdef TARGET_OHOS
   if (node::ReadSystemXpmState()) {
     int secArgc = SECARGCNT;
     char *secArgv[SECARGCNT] = {const_cast<char*>("jsvm"), const_cast<char*>("--jitless")};
     v8::V8::SetFlagsFromCommandLine(&secArgc, secArgv, false);
   }
+#endif
 
   if (options && options->argc && options->argv) {
     v8::V8::SetFlagsFromCommandLine(options->argc, options->argv, options->removeFlags);
@@ -1877,7 +1895,7 @@ OH_JSVM_CreateCodeCache(JSVM_Env env,
   CHECK_ARG(env, script);
   CHECK_ARG(env, data);
   CHECK_ARG(env, length);
-  auto jsvmData = reinterpret_cast<JSVM_Data__*>(script);
+  auto jsvmData = reinterpret_cast<JSVM_Script_Data__*>(script);
   auto v8script = jsvmData->ToV8Local<v8::Script>(env->isolate);
   v8::ScriptCompiler::CachedData* cache;
   cache = v8::ScriptCompiler::CreateCodeCache(v8script->GetUnboundScript());
@@ -1900,7 +1918,7 @@ OH_JSVM_RunScript(JSVM_Env env, JSVM_Script script, JSVM_Value* result) {
   CHECK_ARG(env, script);
   CHECK_ARG(env, result);
 
-  auto jsvmData = reinterpret_cast<JSVM_Data__*>(script);
+  auto jsvmData = reinterpret_cast<JSVM_Script_Data__*>(script);
   auto v8script = jsvmData->ToV8Local<v8::Script>(env->isolate);
   auto script_result = v8script->Run(env->context());
   CHECK_MAYBE_EMPTY(env, script_result, JSVM_GENERIC_FAILURE);
@@ -2912,6 +2930,60 @@ JSVM_Status JSVM_CDECL OH_JSVM_CreateArrayWithLength(JSVM_Env env,
   return jsvm_clear_last_error(env);
 }
 
+JSVM_Status JSVM_CDECL OH_JSVM_CreateExternalStringLatin1(JSVM_Env env,
+                                                          char* str,
+                                                          size_t length,
+                                                          JSVM_Finalize finalizeCallback,
+                                                          void* finalizeHint,
+                                                          JSVM_Value* result,
+                                                          bool* copied) {
+  CHECK_ARG(env, copied);
+  return v8impl::NewExternalString(
+    env,
+    str,
+    length,
+    finalizeCallback,
+    finalizeHint,
+    result,
+    copied,
+    OH_JSVM_CreateStringLatin1,
+    [&](v8::Isolate* isolate) {
+      if (length == JSVM_AUTO_LENGTH) {
+        length = (std::string_view(str)).length();
+      }
+      auto resource = new v8impl::ExternalOneByteStringResource(
+        env, str, length, finalizeCallback, finalizeHint);
+      return v8::String::NewExternalOneByte(isolate, resource);
+    });
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_CreateExternalStringUtf16(JSVM_Env env,
+                                                         char16_t* str,
+                                                         size_t length,
+                                                         JSVM_Finalize finalizeCallback,
+                                                         void* finalizeHint,
+                                                         JSVM_Value* result,
+                                                         bool* copied) {
+  CHECK_ARG(env, copied);
+  return v8impl::NewExternalString(
+    env,
+    str,
+    length,
+    finalizeCallback,
+    finalizeHint,
+    result,
+    copied,
+    OH_JSVM_CreateStringUtf16,
+    [&](v8::Isolate* isolate) {
+      if (length == JSVM_AUTO_LENGTH) {
+        length = (std::u16string_view(str)).length();
+      }
+      auto resource = new v8impl::ExternalStringResource(
+        env, str, length, finalizeCallback, finalizeHint);
+      return v8::String::NewExternalTwoByte(isolate, resource);
+    });
+}
+
 JSVM_Status JSVM_CDECL OH_JSVM_CreateStringLatin1(JSVM_Env env,
                                                  const char* str,
                                                  size_t length,
@@ -3095,6 +3167,90 @@ JSVM_Status JSVM_CDECL OH_JSVM_SymbolFor(JSVM_Env env,
       v8::Symbol::For(env->isolate, description_string));
 
   return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_CreatePrivate(JSVM_Env env,
+                                             JSVM_Value description,
+                                             JSVM_Data* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+
+  v8::Isolate* isolate = env->isolate;
+
+  if (description == nullptr) {
+    *result = v8impl::JsDataFromV8LocalData(v8::Private::New(isolate));
+  } else {
+    v8::Local<v8::Value> v8Name = v8impl::V8LocalValueFromJsValue(description);
+    RETURN_STATUS_IF_FALSE(env, v8Name->IsString(), JSVM_STRING_EXPECTED);
+
+    *result = v8impl::JsDataFromV8LocalData(v8::Private::New(isolate, v8Name.As<v8::String>()));
+  }
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_SetPrivate(JSVM_Env env,
+                                          JSVM_Value object,
+                                          JSVM_Data key,
+                                          JSVM_Value value) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, object);
+  CHECK_ARG(env, key);
+  CHECK_ARG(env, value);
+
+  auto context = env->context();
+  auto obj = v8impl::V8LocalValueFromJsValue(object);
+  RETURN_STATUS_IF_FALSE(env, obj->IsObject(), JSVM_OBJECT_EXPECTED);
+  auto privateKey = v8impl::V8LocalDataFromJsData(key);
+  RETURN_STATUS_IF_FALSE(env, privateKey->IsPrivate(), JSVM_INVALID_ARG);
+  auto val = v8impl::V8LocalValueFromJsValue(value);
+
+  auto set_maybe = obj.As<v8::Object>()->SetPrivate(context, privateKey.As<v8::Private>(), val);
+
+  RETURN_STATUS_IF_FALSE_WITH_PREAMBLE(env, set_maybe.FromMaybe(false), JSVM_GENERIC_FAILURE);
+  return GET_RETURN_STATUS(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_GetPrivate(JSVM_Env env,
+                                          JSVM_Value object,
+                                          JSVM_Data key,
+                                          JSVM_Value *result) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, object);
+  CHECK_ARG(env, key);
+  CHECK_ARG(env, result);
+
+  auto context = env->context();
+  auto obj = v8impl::V8LocalValueFromJsValue(object);
+  RETURN_STATUS_IF_FALSE(env, obj->IsObject(), JSVM_OBJECT_EXPECTED);
+  auto privateKey = v8impl::V8LocalDataFromJsData(key);
+  RETURN_STATUS_IF_FALSE(env, privateKey->IsPrivate(), JSVM_INVALID_ARG);
+
+  auto getMaybe = obj.As<v8::Object>()->GetPrivate(context, privateKey.As<v8::Private>());
+  CHECK_MAYBE_EMPTY_WITH_PREAMBLE(env, getMaybe, JSVM_GENERIC_FAILURE);
+
+  v8::Local<v8::Value> val = getMaybe.ToLocalChecked();
+  *result = v8impl::JsValueFromV8LocalValue(val);
+  return GET_RETURN_STATUS(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_DeletePrivate(JSVM_Env env,
+                                             JSVM_Value object,
+                                             JSVM_Data key) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, object);
+  CHECK_ARG(env, key);
+
+  auto context = env->context();
+  auto obj = v8impl::V8LocalValueFromJsValue(object);
+  RETURN_STATUS_IF_FALSE(env, obj->IsObject(), JSVM_OBJECT_EXPECTED);
+  auto privateKey = v8impl::V8LocalDataFromJsData(key);
+  RETURN_STATUS_IF_FALSE(env, privateKey->IsPrivate(), JSVM_INVALID_ARG);
+
+  auto deleteMaybe = obj.As<v8::Object>()->DeletePrivate(context, privateKey.As<v8::Private>());
+  auto success = deleteMaybe.IsJust() && deleteMaybe.FromMaybe(false);
+  RETURN_STATUS_IF_FALSE_WITH_PREAMBLE(env, success, JSVM_GENERIC_FAILURE);
+  return GET_RETURN_STATUS(env);
 }
 
 static inline JSVM_Status set_error_code(JSVM_Env env,
@@ -3944,6 +4100,33 @@ JSVM_Status JSVM_CDECL OH_JSVM_CreateReference(JSVM_Env env,
   return jsvm_clear_last_error(env);
 }
 
+// ref for data can not be weak, so initialRefcount must be greater than 0
+JSVM_Status JSVM_CDECL OH_JSVM_CreateDataReference(JSVM_Env env,
+                                                   JSVM_Data data,
+                                                   uint32_t initialRefcount,
+                                                   JSVM_Ref* result) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8 calls here cannot throw
+  // JS exceptions.
+  CHECK_ENV(env);
+  CHECK_ARG(env, data);
+  CHECK_ARG(env, result);
+  RETURN_STATUS_IF_FALSE(env, initialRefcount != 0, JSVM_INVALID_ARG);
+
+  v8::Local<v8::Data> v8_value = v8impl::V8LocalDataFromJsData(data);
+  v8impl::Reference* reference = v8impl::Reference::New(
+      env,
+      v8_value,
+      initialRefcount,
+      v8impl::Ownership::kUserland,
+      nullptr,
+      nullptr,
+      nullptr,
+      false);
+
+  *result = reinterpret_cast<JSVM_Ref>(reference);
+  return jsvm_clear_last_error(env);
+}
+
 // Deletes a reference. The referenced value is released, and may be GC'd unless
 // there are other references to it.
 JSVM_Status JSVM_CDECL OH_JSVM_DeleteReference(JSVM_Env env, JSVM_Ref ref) {
@@ -4023,7 +4206,27 @@ JSVM_Status JSVM_CDECL OH_JSVM_GetReferenceValue(JSVM_Env env,
   CHECK_ARG(env, result);
 
   v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(ref);
-  *result = v8impl::JsValueFromV8LocalValue(reference->Get());
+  RETURN_STATUS_IF_FALSE(env, reference->IsValue(), JSVM_INVALID_ARG);
+  *result = v8impl::JsValueFromV8LocalValue(reference->GetValue());
+
+  return jsvm_clear_last_error(env);
+}
+
+// Attempts to get a referenced value. If the reference is weak, the value might
+// no longer be available, in that case the call is still successful but the
+// result is NULL.
+JSVM_Status JSVM_CDECL OH_JSVM_GetReferenceData(JSVM_Env env,
+                                                JSVM_Ref ref,
+                                                JSVM_Data* result) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8 calls here cannot throw
+  // JS exceptions.
+  CHECK_ENV(env);
+  CHECK_ARG(env, ref);
+  CHECK_ARG(env, result);
+
+  v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(ref);
+  RETURN_STATUS_IF_FALSE(env, !reference->IsValue(), JSVM_INVALID_ARG);
+  *result = v8impl::JsDataFromV8LocalData(reference->GetData());
 
   return jsvm_clear_last_error(env);
 }
@@ -5206,7 +5409,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_ObjectSetPrototypeOf(JSVM_Env env,
 
 JSVM_Status JSVM_CDECL OH_JSVM_RetainScript(JSVM_Env env, JSVM_Script script) {
   CHECK_ENV(env);
-  auto jsvmData = reinterpret_cast<JSVM_Data__ *>(script);
+  auto jsvmData = reinterpret_cast<JSVM_Script_Data__ *>(script);
 
   RETURN_STATUS_IF_FALSE(env, jsvmData && !jsvmData->isGlobal, JSVM_INVALID_ARG);
 
@@ -5219,7 +5422,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_RetainScript(JSVM_Env env, JSVM_Script script) {
 
 JSVM_Status JSVM_CDECL OH_JSVM_ReleaseScript(JSVM_Env env, JSVM_Script script) {
   CHECK_ENV(env);
-  auto jsvmData = reinterpret_cast<JSVM_Data__ *>(script);
+  auto jsvmData = reinterpret_cast<JSVM_Script_Data__ *>(script);
 
   RETURN_STATUS_IF_FALSE(env, jsvmData && jsvmData->isGlobal, JSVM_INVALID_ARG);
 

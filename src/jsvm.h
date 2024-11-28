@@ -594,6 +594,23 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateReference(JSVM_Env env,
                                                 JSVM_Ref* result);
 
 /**
+ * @brief This API creates a new reference with the specified reference count to the data passed in.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param value The JSVM_Data for which a reference is being created.
+ * @param initialRefcount Initial reference count for the new reference.
+ * @param result JSVM_Ref pointing to the new reference.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any parameter is null or the value of initialRefcount is 0.\n
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_CreateDataReference(JSVM_Env env,
+                                                    JSVM_Data data,
+                                                    uint32_t initialRefcount,
+                                                    JSVM_Ref* result);
+
+/**
  * @brief his API deletes the reference passed in.
  *
  * @param env: The environment that the API is invoked under.
@@ -645,6 +662,23 @@ JSVM_EXTERN JSVM_Status OH_JSVM_ReferenceUnref(JSVM_Env env,
 JSVM_EXTERN JSVM_Status OH_JSVM_GetReferenceValue(JSVM_Env env,
                                                   JSVM_Ref ref,
                                                   JSVM_Value* result);
+
+/**
+ * @brief If still valid, this API returns the JSVM_Data representing the
+ * JavaScript data associated with the JSVM_Ref. Otherwise, result will be NULL.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param ref The JSVM_Ref for which the corresponding value is being requested.
+ * @param result The JSVM_Data referenced by the JSVM_Ref.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any parameter is null or the ref is not a reference to JSVM_Data.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_GetReferenceData(JSVM_Env env,
+                                                 JSVM_Ref ref,
+                                                 JSVM_Data* result);
 
 /**
  * @brief This API returns a JSVM-API value corresponding to a JavaScript Array type.
@@ -820,6 +854,81 @@ JSVM_EXTERN JSVM_Status OH_JSVM_SymbolFor(JSVM_Env env,
                                           const char* utf8description,
                                           size_t length,
                                           JSVM_Value* result);
+
+/**
+ * @brief This API creates a JavaScript private key.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param description Optional JSVM_Value which refers to a JavaScript string to be set as the description
+ * for the private key.
+ * @param result A JSVM_Data representing a JavaScript private key.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if env or result is NULL.\n
+ *         {@link JSVM_STRING_EXPECTED } if the description is not a string.\n
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_CreatePrivate(JSVM_Env env,
+                                              JSVM_Value description,
+                                              JSVM_Data* result);
+
+/**
+ * @brief This API set a private property on the Object passed in.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param object The object on which to set the private property.
+ * @param key The private key of the property.
+ * @param value The private property value.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the arguments is NULL or the key is not a private key.\n
+ *         {@link JSVM_OBJECT_EXPECTED } object passed in is not a real object.\n
+ *         {@link JSVM_GENERIC_FAILURE } if failed to set the private key but no exception is pending.\n
+ *         {@link JSVM_PENDING_EXCPTION } if an exception occurs.\n
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_SetPrivate(JSVM_Env env,
+                                           JSVM_Value object,
+                                           JSVM_Data key,
+                                           JSVM_Value value);
+
+/**
+ * @brief This API gets the requested private property from the Object passed in.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param object The object from which to retrieve the private property.
+ * @param key The private key of the property.
+ * @param result The value of the private property.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the arguments is NULL or the key is not a private key.\n
+ *         {@link JSVM_OBJECT_EXPECTED } object passed in is not a real object.\n
+ *         {@link JSVM_GENERIC_FAILURE } if failed to get the private key but no exception is pending.\n
+ *         {@link JSVM_PENDING_EXCPTION } if an exception occurs.\n
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_GetPrivate(JSVM_Env env,
+                                           JSVM_Value object,
+                                           JSVM_Data key,
+                                           JSVM_Value *result);
+
+/**
+ * @brief This API attempts to delete the property of the private key from object.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param object The object to query.
+ * @param key The private key of the property to delete.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the arguments is NULL or the key is not a private key.\n
+ *         {@link JSVM_OBJECT_EXPECTED } object passed in is not a real object.\n
+ *         {@link JSVM_GENERIC_FAILURE } if failed to delete the private key but no exception is pending.\n
+ *         {@link JSVM_PENDING_EXCPTION } if an exception occurs.\n
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_DeletePrivate(JSVM_Env env,
+                                              JSVM_Value object,
+                                              JSVM_Data key);
 
 /**
  * @brief This API creates a JavaScript TypedArray object over an existing ArrayBuffer. TypedArray
@@ -1008,6 +1117,58 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateStringUtf8(JSVM_Env env,
                                                  const char* str,
                                                  size_t length,
                                                  JSVM_Value* result);
+/**
+ * @brief This API creates an external JavaScript string value from an ISO-8859-1-encoded C
+ * string. The native string is copied when failed to create external string.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param str Character buffer representing an ISO-8859-1-encoded string.
+ * @param length The length of the string in bytes, or JSVM_AUTO_LENGTH if it is null-terminated.
+ * @param finalizeCallback Optional callback to call when the external value is being collected.
+ * JSVM_Finalize provides more details.
+ * @param finalizeHint Optional hint to pass to the finalize callback during collection.
+ * @param result A JSVM_Value representing a JavaScript external string.
+ * @param copied flag indicate whether the external string is successfully created,
+ * true for faild to create external ones and fall back to non-external strings, false for success.
+ * @return Returns JSVM funtions result code.
+ *         Returns {@link JSVM_OK } if the function executed successfully.\n
+ *         Returns {@link JSVM_INVALID_ARG } if one of env, str and copied is NULL.\n
+ * @since 16
+ */
+JSVM_Status JSVM_CDECL OH_JSVM_CreateExternalStringLatin1(JSVM_Env env,
+                                                          char* str,
+                                                          size_t length,
+                                                          JSVM_Finalize finalizeCallback,
+                                                          void* finalizeHint,
+                                                          JSVM_Value* result,
+                                                          bool* copied);
+
+/**
+ * @brief This API creates an external JavaScript string value from an UTF16-LE-encoded C
+ * string. The native string is copied when failed to create external string.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param str Character buffer representing an UTF16-LE-encoded string.
+ * @param length The length of the string in bytes, or JSVM_AUTO_LENGTH if it is null-terminated.
+ * @param finalizeCallback Optional callback to call when the external value is being collected.
+ * JSVM_Finalize provides more details.
+ * @param finalizeHint Optional hint to pass to the finalize callback during collection.
+ * @param result A JSVM_Value representing a JavaScript external string.
+ * @param copied flag indicate whether the external string is successfully created,
+ * true for faild to create external ones and fall back to non-external strings, false for success.
+ * @return Returns JSVM funtions result code.
+ *         Returns {@link JSVM_OK } if the function executed successfully.\n
+ *         Returns {@link JSVM_INVALID_ARG } if one of env, str and copied is NULL.\n
+ * @since 16
+ */
+
+JSVM_Status JSVM_CDECL OH_JSVM_CreateExternalStringUtf16(JSVM_Env env,
+                                                         char16_t* str,
+                                                         size_t length,
+                                                         JSVM_Finalize finalizeCallback,
+                                                         void* finalizeHint,
+                                                         JSVM_Value* result,
+                                                         bool* copied);
 
 /**
  * @brief This API returns the length of an array.
