@@ -351,6 +351,61 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateVM(const JSVM_CreateVMOptions* options,
 JSVM_EXTERN JSVM_Status OH_JSVM_DestroyVM(JSVM_VM vm);
 
 /**
+ * @brief This API allocates a default JavaScript Proxy. It is the equivalent of
+ * doing new Proxy(target, handler) in JavaScript.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param target A JSVM_Value representing the JavaScript Object which you want to proxy.
+ * @param handler A JSVM_Value representing the JavaScript Object that defines which
+ * operations will be intercepted and how to redefine intercepted operations.
+ * @param result A JSVM_Value representing a JavaScript Proxy.
+ * @return Returns JSVM functions result code.
+ *         {@link JSVM_OK } if the API succeeded. \n
+ *         {@link JSVM_INVALID_ARG } if the any of the input arguments is NULL. \n
+ *         {@link JSVM_OBJECT_EXPECTED} if target or handler is not Javascript Object. \n
+ *         {@link JSVM_PENDING_EXCEPTION} if an exception occurs. \n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_CreateProxy(JSVM_Env env,
+                                            JSVM_Value target,
+                                            JSVM_Value handler,
+                                            JSVM_Value* result);
+
+/**
+ * @brief This API checks if the value passed in is a Proxy.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param value The JavaScript value to check.
+ * @param isProxy Whether the given value is Proxy.
+ * @return Returns JSVM functions result code.
+ *         {@link JSVM_OK } if the API succeeded. \n
+ *         {@link JSVM_INVALID_ARG } if the any of the input arguments is NULL. \n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_IsProxy(JSVM_Env env,
+                                        JSVM_Value value,
+                                        bool* isProxy);
+
+/**
+ * @brief This API gets target from proxy.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param value JSVM_Value representing JavaScript Proxy whose target to return.
+ * @param result Target of the given proxy.
+ * @return Returns JSVM functions result code.
+ *         {@link JSVM_OK } if the API succeeded. \n
+ *         {@link JSVM_INVALID_ARG } if the any of the input arguments is NULL. \n
+ *         {@link JSVM_INVALID_TYPE} if value is not a Javascript Proxy. \n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_ProxyGetTarget(JSVM_Env env,
+                                               JSVM_Value value,
+                                               JSVM_Value* result);
+
+/**
  * @brief This API open a new VM scope for the VM instance.
  *
  * @param vm: The VM instance to open scope for.
