@@ -99,6 +99,229 @@
 EXTERN_C_START
 
 /**
+ * @brief Check whether the given JSVM_Value is a BigInt Object.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param value The JavaScript value to check.
+ * @param result Whether the given value is a BigInt Object.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_IsBigIntObject(JSVM_Env env,
+                                               JSVM_Value value,
+                                               bool* result);
+
+/**
+ * @brief Check whether the given JSVM_Value is a Boolean Object.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param value The JavaScript value to check.
+ * @param result Whether the given value is a Boolean Object.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_IsBooleanObject(JSVM_Env env,
+                                                JSVM_Value value,
+                                                bool* result);
+
+/**
+ * @brief Check whether the given JSVM_Value is a String Object.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param value The JavaScript value to check.
+ * @param result Whether the given value is a String Object.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_IsStringObject(JSVM_Env env,
+                                               JSVM_Value value,
+                                               bool* result);
+
+/**
+ * @brief Check whether the given JSVM_Value is a Number Object.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param value The JavaScript value to check.
+ * @param result Whether the given value is a Number Object.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_IsNumberObject(JSVM_Env env,
+                                               JSVM_Value value,
+                                               bool* result);
+
+/**
+ * @brief Check whether the given JSVM_Value is a Symbol Object.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param value The JavaScript value to check.
+ * @param result Whether the given value is a Symbol Object.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_IsSymbolObject(JSVM_Env env,
+                                               JSVM_Value value,
+                                               bool* result);
+
+/**
+ * @brief This API returns the Symbol.asyncIterator of Well-Known Symbols.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param result The Symbol.asyncIterator of Well-Known Symbols.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_GetSymbolAsyncIterator(JSVM_Env env, JSVM_Value* result);
+
+/**
+ * @brief This API returns the Symbol.hasInstance of Well-Known Symbols.
+ *
+ * @param env The environment that the API is invoked under.
+ * @param result The Symbol.hasInstance of Well-Known Symbols.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_GetSymbolHasInstance(JSVM_Env env, JSVM_Value* result);
+
+/**
+ * @brief This API returns the Symbol.isConcatSpreadable of Well-Known Symbols
+ *
+ * @param env The environment that the API is invoked under.
+ * @param result The Symbol.isConcatSpreadable of Well-Known Symbols.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_GetSymbolIsConcatSpreadable(JSVM_Env env, JSVM_Value* result);
+
+/**
+ * @brief This API returns the Symbol.match of Well-Known Symbols
+ *
+ * @param env The environment that the API is invoked under.
+ * @param result The Symbol.match of Well-Known Symbols.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_GetSymbolMatch(JSVM_Env env, JSVM_Value* result);
+
+/**
+ * @brief This API returns the Symbol.replace of Well-Known Symbols
+ *
+ * @param env The environment that the API is invoked under.
+ * @param result The Symbol.replace of Well-Known Symbols.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_GetSymbolReplace(JSVM_Env env, JSVM_Value* result);
+
+/**
+ * @brief This API returns the Symbol.search of Well-Known Symbols
+ *
+ * @param env The environment that the API is invoked under.
+ * @param result The Symbol.search of Well-Known Symbols.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_GetSymbolSearch(JSVM_Env env, JSVM_Value* result);
+
+/**
+ * @brief This API returns the Symbol.split of Well-Known Symbols
+ *
+ * @param env The environment that the API is invoked under.
+ * @param result The Symbol.split of Well-Known Symbols.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_GetSymbolSplit(JSVM_Env env, JSVM_Value* result);
+
+/**
+ * @brief This API returns the Symbol.toPrimitive of Well-Known Symbols
+ *
+ * @param env The environment that the API is invoked under.
+ * @param result The Symbol.toPrimitive of Well-Known Symbols.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_GetSymbolToPrimitive(JSVM_Env env, JSVM_Value* result);
+
+/**
+ * @brief This API returns the Symbol.unscopables of Well-Known Symbols
+ *
+ * @param env The environment that the API is invoked under.
+ * @param result The Symbol.unscopables of Well-Known Symbols.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_GetSymbolUnscopables(JSVM_Env env, JSVM_Value* result);
+
+/**
+ * @brief This API returns the Symbol.toStringTag of Well-Known Symbols
+ *
+ * @param env The environment that the API is invoked under.
+ * @param result The Symbol.toStringTag of Well-Known Symbols.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_GetSymbolToStringTag(JSVM_Env env, JSVM_Value* result);
+
+/**
+ * @brief This API returns the Symbol.iterator of Well-Known Symbols
+ *
+ * @param env The environment that the API is invoked under.
+ * @param result The Symbol.iterator of Well-Known Symbols.
+ * @return Returns JSVM funtions result code.
+ *         {@link JSVM_OK } if the function executed successfully.\n
+ *         {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL.\n
+ *
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_GetSymbolIterator(JSVM_Env env, JSVM_Value* result);
+
+/**
  * @brief Init a JavaScript vm.
  *
  * @param  options: The options for initialize the JavaScript VM.
