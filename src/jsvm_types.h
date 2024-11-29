@@ -768,4 +768,27 @@ typedef enum {
     JSVM_UNINITIALIZED,
 } JSVM_InitializedFlag;
 /** @} */
+
+
+/**
+ * @brief Trace category for jsvm internal trace events.
+ *
+ * @since 16
+ */
+typedef enum {
+    /** Tracing main interface invoking of JSVM, such as run scripts. */
+    JSVM_TRACE_VM,
+    /** Tracing interface invoking about compilation, such as CompileCodeBackground. */
+    JSVM_TRACE_COMPILE,
+    /** Tracing interface invoking about execution status, such as Interrupts and Microtasks. */
+    JSVM_TRACE_EXECUTE,
+    /** Tracing external callback */
+    JSVM_TRACE_RUNTIME,
+    /** Tracing stack trace in JSVM. */
+    JSVM_TRACE_STACK_TRACE,
+    /** Tracing main interface invoking of WASM, such as Compile Wasm Module and Instantiate. */
+    JSVM_TRACE_WASM,
+    /** Tracing more detailed interface invoking of WASM, such as background compilation and wrappers. */
+    JSVM_TRACE_WASM_DETAILED
+} JSVM_TraceCategory;
 #endif /* ARK_RUNTIME_JSVM_JSVM_TYPE_H */
