@@ -10,6 +10,7 @@
 #include "v8-primitive.h"
 #include "v8-statistics.h"
 #include "v8-version-string.h"
+#include "v8-proxy.h"
 #define JSVM_EXPERIMENTAL
 #include "env-inl.h"
 #include "jsvm.h"
@@ -1692,6 +1693,59 @@ OH_JSVM_DestroyVM(JSVM_VM vm) {
   return JSVM_OK;
 }
 
+JSVM_Status JSVM_CDECL OH_JSVM_CreateProxy(JSVM_Env env, JSVM_Value target, JSVM_Value handler, JSVM_Value *result)
+{
+  // Check args is not null
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, target);
+  CHECK_ARG(env, handler);
+  CHECK_ARG(env, result);
+
+  // Check target and handler are v8 Object
+  auto localTarget = v8impl::V8LocalValueFromJsValue(target);
+  RETURN_STATUS_IF_FALSE(env, localTarget->IsObject(), JSVM_OBJECT_EXPECTED);
+  auto localHandler = v8impl::V8LocalValueFromJsValue(handler);
+  RETURN_STATUS_IF_FALSE(env, localHandler->IsObject(), JSVM_OBJECT_EXPECTED);
+
+  v8::Local<v8::Context> context = env->context();
+
+  v8::MaybeLocal<v8::Proxy> maybeProxy =
+      v8::Proxy::New(context, localTarget.As<v8::Object>(), localHandler.As<v8::Object>());
+
+  CHECK_MAYBE_EMPTY_WITH_PREAMBLE(env, maybeProxy, JSVM_GENERIC_FAILURE);
+
+  v8::Local<v8::Proxy> proxy = maybeProxy.ToLocalChecked();
+  *result = v8impl::JsValueFromV8LocalValue(proxy);
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsProxy(JSVM_Env env, JSVM_Value value, bool *isProxy)
+{
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isProxy);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isProxy = val->IsProxy();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_ProxyGetTarget(JSVM_Env env, JSVM_Value value, JSVM_Value *result)
+{
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+
+  RETURN_STATUS_IF_FALSE(env, val->IsProxy(), JSVM_INVALID_TYPE);
+
+  *result = v8impl::JsValueFromV8LocalValue(val.As<v8::Proxy>()->GetTarget());
+  return jsvm_clear_last_error(env);
+}
+
 JSVM_Status JSVM_CDECL OH_JSVM_OpenVMScope(JSVM_VM vm, JSVM_VMScope* result) {
   auto isolate = reinterpret_cast<v8::Isolate*>(vm);
   auto scope = new v8::Isolate::Scope(isolate);
@@ -2307,6 +2361,7 @@ static const char* error_messages[] = {
     "Main thread would deadlock",
     "External buffers are not allowed",
     "Cannot run JavaScript",
+    "Invalid type"
 };
 
 JSVM_Status JSVM_CDECL OH_JSVM_GetLastErrorInfo(
@@ -2318,7 +2373,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_GetLastErrorInfo(
   // message in the `JSVM_Status` enum each time a new error message is added.
   // We don't have a jsvm_status_last as this would result in an ABI
   // change each time a message was added.
-  const int last_status = JSVM_CANNOT_RUN_JS;
+  const int last_status = JSVM_INVALID_TYPE;
 
   static_assert(JSVM_ARRAYSIZE(error_messages) == last_status + 1,
                 "Count of error messages must match count of error values");
