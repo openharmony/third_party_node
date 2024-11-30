@@ -10,12 +10,14 @@
 #include "v8-primitive.h"
 #include "v8-statistics.h"
 #include "v8-version-string.h"
+#include "v8-proxy.h"
 #define JSVM_EXPERIMENTAL
 #include "env-inl.h"
 #include "jsvm.h"
 #include "js_native_api_v8.h"
 #include "js_native_api_v8_inspector.h"
 #include "libplatform/libplatform.h"
+#include "libplatform/v8-tracing.h"
 #include "util-inl.h"
 #include "util.h"
 #include "sourcemap.def"
@@ -23,6 +25,10 @@
 #ifdef ENABLE_HISYSEVENT
 #include "hisysevent.h"
 #endif
+
+#ifdef V8_USE_PERFETTO
+#error Unsupported Perfetto.
+#endif  // V8_USE_PERFETTO
 
 #define SECARGCNT   2
 
@@ -238,6 +244,23 @@ static v8::ArrayBuffer::Allocator *GetOrCreateDefaultArrayBufferAllocator() {
   }
   return defaultArrayBufferAllocator.get();
 }
+
+static std::unique_ptr<std::stringstream> g_trace_stream;
+
+constexpr uint32_t g_trace_catrgory_count = 7;
+static constexpr const char* g_internal_trace_categories[] = {
+    "v8",
+    TRACE_DISABLED_BY_DEFAULT("v8.compile"),
+    "v8.execute",
+    TRACE_DISABLED_BY_DEFAULT("v8.runtime"),
+    TRACE_DISABLED_BY_DEFAULT("v8.stack_trace"),
+    "v8.wasm",
+    TRACE_DISABLED_BY_DEFAULT("v8.wasm.detailed"),
+};
+
+constexpr uint32_t g_default_catrgory_count = 4;
+static constexpr JSVM_TraceCategory g_default_categories[] = {
+    JSVM_TRACE_VM, JSVM_TRACE_EXECUTE, JSVM_TRACE_COMPILE, JSVM_TRACE_RUNTIME };
 
 static void SetFileToSourceMapMapping(std::string &&file, std::string &&sourceMapUrl) {
   auto it = sourceMapUrlMap.find(file);
@@ -1394,6 +1417,171 @@ static bool ProcessBundleName(std::string& bundleName)
   return true;
 }
 
+JSVM_Status OH_JSVM_IsBooleanObject(JSVM_Env env, JSVM_Value value, bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Value> v = v8impl::V8LocalValueFromJsValue(value);
+  *result = v->IsBooleanObject();
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_IsBigIntObject(JSVM_Env env, JSVM_Value value, bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Value> v = v8impl::V8LocalValueFromJsValue(value);
+  *result = v->IsBigIntObject();
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_IsStringObject(JSVM_Env env, JSVM_Value value, bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Value> v = v8impl::V8LocalValueFromJsValue(value);
+  *result = v->IsStringObject();
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_IsNumberObject(JSVM_Env env, JSVM_Value value, bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Value> v = v8impl::V8LocalValueFromJsValue(value);
+  *result = v->IsNumberObject();
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_IsSymbolObject(JSVM_Env env, JSVM_Value value, bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Value> v = v8impl::V8LocalValueFromJsValue(value);
+  *result = v->IsSymbolObject();
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolToStringTag(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolToStringTag = v8::Symbol::GetToStringTag(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolToStringTag);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolIterator(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolIterator = v8::Symbol::GetIterator(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolIterator);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolAsyncIterator(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolAsyncIterator = v8::Symbol::GetAsyncIterator(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolAsyncIterator);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolHasInstance(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolHasInstance = v8::Symbol::GetHasInstance(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolHasInstance);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolUnscopables(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolUnscopables = v8::Symbol::GetUnscopables(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolUnscopables);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolIsConcatSpreadable(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolIsConcatSpreadable = v8::Symbol::GetIsConcatSpreadable(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolIsConcatSpreadable);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolMatch(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolMatch = v8::Symbol::GetMatch(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolMatch);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolReplace(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolReplace = v8::Symbol::GetReplace(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolReplace);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolSearch(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolSearch = v8::Symbol::GetSearch(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolSearch);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolSplit(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolSplit = v8::Symbol::GetSplit(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolSplit);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolToPrimitive(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolToPrimitive = v8::Symbol::GetToPrimitive(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolToPrimitive);
+ 
+  return jsvm_clear_last_error(env);
+}
+
 JSVM_Status JSVM_CDECL
 OH_JSVM_Init(const JSVM_InitOptions* options) {
   static std::atomic<bool> initialized(false);
@@ -1521,6 +1709,59 @@ OH_JSVM_DestroyVM(JSVM_VM vm) {
   }
 
   return JSVM_OK;
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_CreateProxy(JSVM_Env env, JSVM_Value target, JSVM_Value handler, JSVM_Value *result)
+{
+  // Check args is not null
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, target);
+  CHECK_ARG(env, handler);
+  CHECK_ARG(env, result);
+
+  // Check target and handler are v8 Object
+  auto localTarget = v8impl::V8LocalValueFromJsValue(target);
+  RETURN_STATUS_IF_FALSE(env, localTarget->IsObject(), JSVM_OBJECT_EXPECTED);
+  auto localHandler = v8impl::V8LocalValueFromJsValue(handler);
+  RETURN_STATUS_IF_FALSE(env, localHandler->IsObject(), JSVM_OBJECT_EXPECTED);
+
+  v8::Local<v8::Context> context = env->context();
+
+  v8::MaybeLocal<v8::Proxy> maybeProxy =
+      v8::Proxy::New(context, localTarget.As<v8::Object>(), localHandler.As<v8::Object>());
+
+  CHECK_MAYBE_EMPTY_WITH_PREAMBLE(env, maybeProxy, JSVM_GENERIC_FAILURE);
+
+  v8::Local<v8::Proxy> proxy = maybeProxy.ToLocalChecked();
+  *result = v8impl::JsValueFromV8LocalValue(proxy);
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsProxy(JSVM_Env env, JSVM_Value value, bool *isProxy)
+{
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isProxy);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isProxy = val->IsProxy();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_ProxyGetTarget(JSVM_Env env, JSVM_Value value, JSVM_Value *result)
+{
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+
+  RETURN_STATUS_IF_FALSE(env, val->IsProxy(), JSVM_INVALID_TYPE);
+
+  *result = v8impl::JsValueFromV8LocalValue(val.As<v8::Proxy>()->GetTarget());
+  return jsvm_clear_last_error(env);
 }
 
 JSVM_Status JSVM_CDECL OH_JSVM_OpenVMScope(JSVM_VM vm, JSVM_VMScope* result) {
@@ -1854,6 +2095,48 @@ class CompileOptionResolver {
   bool hasInvalidOption = false;
 };
 
+JSVM_Status JSVM_CDECL OH_JSVM_PromiseRegisterHandler(
+    JSVM_Env env, JSVM_Value promise, JSVM_Value onFulfilled, JSVM_Value onRejected, JSVM_Value *result)
+{
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, promise);
+  RETURN_STATUS_IF_FALSE(env, onFulfilled || onRejected, JSVM_INVALID_ARG);
+
+  v8::Local<v8::Value> value = v8impl::V8LocalValueFromJsValue(promise);
+  RETURN_STATUS_IF_FALSE(env, value->IsPromise(), JSVM_INVALID_TYPE);
+  auto localPromise = value.As<v8::Promise>();
+
+  v8::Local<v8::Context> ctx = env->context();
+  v8::MaybeLocal<v8::Promise> maybe;
+  if (!onFulfilled) {
+    // Only pass onRejected, call v8::Promise::Catch
+    auto rejectedHandler = v8impl::V8LocalValueFromJsValue(onRejected);
+    RETURN_STATUS_IF_FALSE(env, rejectedHandler->IsFunction(), JSVM_INVALID_TYPE);
+    maybe = localPromise->Catch(ctx, rejectedHandler.As<v8::Function>());
+  } else if (!onRejected) {
+    // Only pass onFulfilled, call v8::Promise::Then
+    auto fulfiledHandler = v8impl::V8LocalValueFromJsValue(onFulfilled);
+    RETURN_STATUS_IF_FALSE(env, fulfiledHandler->IsFunction(), JSVM_INVALID_TYPE);
+    maybe = value.As<v8::Promise>()->Then(ctx, fulfiledHandler.As<v8::Function>());
+  } else {
+    // Pass onFulfilled and onRejected, call v8::Promise::Then
+    auto fulfiledHandler = v8impl::V8LocalValueFromJsValue(onFulfilled);
+    RETURN_STATUS_IF_FALSE(env, fulfiledHandler->IsFunction(), JSVM_INVALID_TYPE);
+    auto rejectedHandler = v8impl::V8LocalValueFromJsValue(onRejected);
+    RETURN_STATUS_IF_FALSE(env, rejectedHandler->IsFunction(), JSVM_INVALID_TYPE);
+    maybe = value.As<v8::Promise>()->Then(ctx, fulfiledHandler.As<v8::Function>(), rejectedHandler.As<v8::Function>());
+  }
+
+  CHECK_MAYBE_EMPTY_WITH_PREAMBLE(env, maybe, JSVM_GENERIC_FAILURE);
+
+  if (result) {
+    auto retPromise = maybe.ToLocalChecked();
+    *result = v8impl::JsValueFromV8LocalValue(retPromise);
+  }
+
+  return jsvm_clear_last_error(env);
+}
+
 size_t CompileOptionResolver::compileCount = 0;
 
 JSVM_Status JSVM_CDECL
@@ -2138,6 +2421,7 @@ static const char* error_messages[] = {
     "Main thread would deadlock",
     "External buffers are not allowed",
     "Cannot run JavaScript",
+    "Invalid type"
 };
 
 JSVM_Status JSVM_CDECL OH_JSVM_GetLastErrorInfo(
@@ -2149,7 +2433,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_GetLastErrorInfo(
   // message in the `JSVM_Status` enum each time a new error message is added.
   // We don't have a jsvm_status_last as this would result in an ABI
   // change each time a message was added.
-  const int last_status = JSVM_CANNOT_RUN_JS;
+  const int last_status = JSVM_INVALID_TYPE;
 
   static_assert(JSVM_ARRAYSIZE(error_messages) == last_status + 1,
                 "Count of error messages must match count of error values");
@@ -2339,6 +2623,86 @@ OH_JSVM_DefineClass(JSVM_Env env,
   }
 
   return GET_RETURN_STATUS(env);
+}
+
+JSVM_EXTERN JSVM_Status OH_JSVM_TraceStart(size_t count,
+                                           const JSVM_TraceCategory* categories,
+                                           const char* tag,
+                                           size_t eventsCount) {
+  if (count > v8impl::g_trace_catrgory_count ||
+      ((count != 0) != (categories != nullptr))) {
+    return JSVM_INVALID_ARG;
+  }
+
+  for (size_t i = 0; i < count; ++i) {
+    if (categories[i] >= v8impl::g_trace_catrgory_count) {
+      return JSVM_INVALID_ARG;
+    }
+  }
+
+  using namespace v8::platform::tracing;
+  TraceConfig* trace_config = new TraceConfig();
+
+  if (count == 0) {
+    count = v8impl::g_default_catrgory_count;
+    categories = v8impl::g_default_categories;
+  }
+
+  for (size_t i = 0; i < count; ++i) {
+    trace_config->AddIncludedCategory(
+        v8impl::g_internal_trace_categories[categories[i]]);
+  }
+
+  v8::Platform* platform = v8impl::g_platform.get();
+  TracingController* controller =
+      static_cast<TracingController*>(platform->GetTracingController());
+  v8impl::g_trace_stream.reset(new std::stringstream());
+  auto stream = v8impl::g_trace_stream.get();
+
+  TraceWriter* writer = nullptr;
+  if (tag != nullptr) {
+    writer = TraceWriter::CreateJSONTraceWriter(*stream, tag);
+  } else {
+    writer = TraceWriter::CreateJSONTraceWriter(*stream);
+  }
+
+  size_t max_chunks;
+  if (eventsCount != 0) {
+    size_t chunk_size = TraceBufferChunk::kChunkSize;
+    max_chunks = (eventsCount + chunk_size - 1) / chunk_size;
+  } else {
+    max_chunks = TraceBuffer::kRingBufferChunks;
+  }
+
+  TraceBuffer* ring_buffer =
+      TraceBuffer::CreateTraceBufferRingBuffer(max_chunks, writer);
+  controller->Initialize(ring_buffer);
+  controller->StartTracing(trace_config);
+  return JSVM_OK;
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_TraceStop(JSVM_OutputStream stream,
+                                         void* streamData) {
+  if (stream == nullptr || streamData == nullptr ||
+      v8impl::g_trace_stream.get() == nullptr) {
+    return JSVM_INVALID_ARG;
+  }
+
+  using namespace v8::platform::tracing;
+  v8::Platform* platform = v8impl::g_platform.get();
+  auto controller =
+      static_cast<TracingController*>(platform->GetTracingController());
+  DCHECK(controller != nullptr);
+  controller->StopTracing();
+
+  // Call the destructor of TraceBuffer to print the JSON end.
+  controller->Initialize(nullptr);
+
+  std::string output = v8impl::g_trace_stream.get()->rdbuf()->str();
+  stream(output.c_str(), output.size(), streamData);
+
+  v8impl::g_trace_stream.reset(nullptr);
+  return JSVM_OK;
 }
 
 JSVM_Status JSVM_CDECL OH_JSVM_GetPropertyNames(JSVM_Env env,

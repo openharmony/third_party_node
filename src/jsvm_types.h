@@ -322,6 +322,8 @@ typedef enum {
     JSVM_NO_EXTERNAL_BUFFERS_ALLOWED,
     /** cannot run +js status. */
     JSVM_CANNOT_RUN_JS,
+    /** invalid input type status. */
+    JSVM_INVALID_TYPE
 } JSVM_Status;
 
 /**
@@ -717,6 +719,17 @@ typedef enum {
 } JSVM_CacheType;
 
 /**
+ * @brief Microtask policies of JSVM.
+typedef enum {
+    /** Microtasks are invoked with the OH_JSVM_PerformMicrotaskCheckpoint() method. */
+    JSVM_MICROTASK_EXPLICIT = 0,
+    /** Microtasks are invoked when the script call depth decrements to zero.
+     *  Default mode.
+     */
+    JSVM_MICROTASK_AUTO,
+} JSVM_MicrotaskPolicy;
+
+/**
  * @brief compile profile passed with JSVM_COMPILE_COMPILE_PROFILE
  *
  * @since 12
@@ -770,16 +783,24 @@ typedef enum {
 /** @} */
 
 /**
- * @brief Microtask policies of JSVM.
+ * @brief Trace category for jsvm internal trace events.
  *
  * @since 16
  */
 typedef enum {
-    /** Microtasks are invoked with the OH_JSVM_PerformMicrotaskCheckpoint() method. */
-    JSVM_MICROTASK_EXPLICIT = 0,
-    /** Microtasks are invoked when the script call depth decrements to zero.
-     *  Default mode.
-     */
-    JSVM_MICROTASK_AUTO,
-} JSVM_MicrotaskPolicy;
+    /** Tracing main interface invoking of JSVM, such as run scripts. */
+    JSVM_TRACE_VM,
+    /** Tracing interface invoking about compilation, such as CompileCodeBackground. */
+    JSVM_TRACE_COMPILE,
+    /** Tracing interface invoking about execution status, such as Interrupts and Microtasks. */
+    JSVM_TRACE_EXECUTE,
+    /** Tracing external callback */
+    JSVM_TRACE_RUNTIME,
+    /** Tracing stack trace in JSVM. */
+    JSVM_TRACE_STACK_TRACE,
+    /** Tracing main interface invoking of WASM, such as Compile Wasm Module and Instantiate. */
+    JSVM_TRACE_WASM,
+    /** Tracing more detailed interface invoking of WASM, such as background compilation and wrappers. */
+    JSVM_TRACE_WASM_DETAILED
+} JSVM_TraceCategory;
 #endif /* ARK_RUNTIME_JSVM_JSVM_TYPE_H */
