@@ -342,6 +342,18 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateVM(const JSVM_CreateVMOptions* options,
                                          JSVM_VM* result);
 
 /**
+ * @brief This function controls how Microtasks are invoked of the vm. If the method is not
+ * called, the default microtask policy of vm is JSVM_MicrotaskPolicy::JSVM_MICROTASK_AUTO.
+ *
+ * @param vm The VM instance to set mircrotasks policy.
+ * @param policy Policy for running microtasks.
+ * @return Returns JSVM_OK if the API succeeded.
+ * @since 16
+ */
+JSVM_EXTERN JSVM_Status OH_JSVM_SetMicrotaskPolicy(JSVM_VM vm,
+                                                   JSVM_MicrotaskPolicy policy);
+
+/**
  * @brief Destroys VM instance.
  *
  * @param vm: The VM instance to be Destroyed.

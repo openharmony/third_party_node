@@ -719,6 +719,17 @@ typedef enum {
 } JSVM_CacheType;
 
 /**
+ * @brief Microtask policies of JSVM.
+typedef enum {
+    /** Microtasks are invoked with the OH_JSVM_PerformMicrotaskCheckpoint() method. */
+    JSVM_MICROTASK_EXPLICIT = 0,
+    /** Microtasks are invoked when the script call depth decrements to zero.
+     *  Default mode.
+     */
+    JSVM_MICROTASK_AUTO,
+} JSVM_MicrotaskPolicy;
+
+/**
  * @brief compile profile passed with JSVM_COMPILE_COMPILE_PROFILE
  *
  * @since 12
@@ -770,7 +781,6 @@ typedef enum {
     JSVM_UNINITIALIZED,
 } JSVM_InitializedFlag;
 /** @} */
-
 
 /**
  * @brief Trace category for jsvm internal trace events.
