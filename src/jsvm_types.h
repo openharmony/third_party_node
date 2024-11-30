@@ -935,6 +935,50 @@ typedef void(JSVM_CDECL* JSVM_HandlerForGC)(JSVM_VM vm,
                                             JSVM_GCType gcType,
                                             JSVM_GCCallbackFlags flags,
                                             void* data);
+/**
+ * @brief The property-handler used to define class.
+ *
+ * @since 16
+ */
+typedef struct {
+  /** The instance object triggers the corresponding callback function. */
+  JSVM_PropertyHandlerCfg propertyHandlerCfg;
+  /** Calling an instance object as a function will trigger this callback. */
+  JSVM_Callback callAsFunctionCallback;
+} JSVM_PropertyHandler;
+
+/**
+ * @brief DefineClass options id.
+ *
+ * @since 16
+ */
+typedef enum {
+    /** Defining a class in normal mode. */
+    JSVM_DEFINE_CLASS_NORMAL,
+    /** Defining a class with count. */
+    JSVM_DEFINE_CLASS_WITH_COUNT,
+    /** Defining a class with property handler. */
+    JSVM_DEFINE_CLASS_WITH_PROPERTY_HANDLER,
+} JSVM_DefineClassOptionsId;
+
+/**
+ * @brief DefineClass options.
+ *
+ * @since 16
+ */
+typedef struct {
+    /** DefineClass options id. */
+    JSVM_DefineClassOptionsId id;
+    /** option content. */
+    union {
+        /** for option value with pointer type. */
+        void* ptr;
+        /** for option value with integer type  */
+        int num;
+        /** for option value with bool type */
+        bool boolean;
+    } content;
+} JSVM_DefineClassOptions;
 /** @} */
 
 /**
