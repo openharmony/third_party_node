@@ -83,7 +83,7 @@
     }],
     [ 'node_use_bundled_v8=="true"', {
       'include_dirs': [
-        'deps/v8/include/v8-include',
+        '<(obj_dir)/../../../v8-include',
       ],
       'ldflags': [
         '<(obj_dir)/../../../libv8_shared.so'
