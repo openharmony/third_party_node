@@ -1425,13 +1425,13 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateStringUtf8(JSVM_Env env,
  *         Returns {@link JSVM_INVALID_ARG } if one of env, str and copied is NULL.\n
  * @since 16
  */
-JSVM_Status JSVM_CDECL OH_JSVM_CreateExternalStringLatin1(JSVM_Env env,
-                                                          char* str,
-                                                          size_t length,
-                                                          JSVM_Finalize finalizeCallback,
-                                                          void* finalizeHint,
-                                                          JSVM_Value* result,
-                                                          bool* copied);
+JSVM_EXTERN JSVM_Status OH_JSVM_CreateExternalStringLatin1(JSVM_Env env,
+                                                           char* str,
+                                                           size_t length,
+                                                           JSVM_Finalize finalizeCallback,
+                                                           void* finalizeHint,
+                                                           JSVM_Value* result,
+                                                           bool* copied);
 
 /**
  * @brief This API creates an external JavaScript string value from an UTF16-LE-encoded C
@@ -1452,13 +1452,13 @@ JSVM_Status JSVM_CDECL OH_JSVM_CreateExternalStringLatin1(JSVM_Env env,
  * @since 16
  */
 
-JSVM_Status JSVM_CDECL OH_JSVM_CreateExternalStringUtf16(JSVM_Env env,
-                                                         char16_t* str,
-                                                         size_t length,
-                                                         JSVM_Finalize finalizeCallback,
-                                                         void* finalizeHint,
-                                                         JSVM_Value* result,
-                                                         bool* copied);
+JSVM_EXTERN JSVM_Status OH_JSVM_CreateExternalStringUtf16(JSVM_Env env,
+                                                          char16_t* str,
+                                                          size_t length,
+                                                          JSVM_Finalize finalizeCallback,
+                                                          void* finalizeHint,
+                                                          JSVM_Value* result,
+                                                          bool* copied);
 
 /**
  * @brief This API returns the length of an array.
