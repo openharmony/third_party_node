@@ -1,8 +1,11 @@
 {
   'variables': {
+    'deps': '../',
     'v8_use_siphash%': 0,
     'v8_trace_maps%': 0,
-    'v8_enable_pointer_compression%': 0,
+    'use_node_zlib%': 'false',
+    'enable_hilog%' : 'true',
+    'v8_enable_pointer_compression%': 1,
     'v8_enable_31bit_smis_on_64bit_arch%': 0,
     'node_use_dtrace%': 'false',
     'node_use_etw%': 'false',
@@ -43,17 +46,17 @@
       '<@(linked_module_files)',
     ],
     'deps_files': [
-      'deps/v8/tools/splaytree.mjs',
-      'deps/v8/tools/codemap.mjs',
-      'deps/v8/tools/consarray.mjs',
-      'deps/v8/tools/csvparser.mjs',
-      'deps/v8/tools/profile.mjs',
-      'deps/v8/tools/profile_view.mjs',
-      'deps/v8/tools/logreader.mjs',
-      'deps/v8/tools/arguments.mjs',
-      'deps/v8/tools/tickprocessor.mjs',
-      'deps/v8/tools/sourcemap.mjs',
-      'deps/v8/tools/tickprocessor-driver.mjs',
+      '<(deps)/v8/tools/splaytree.mjs',
+      '<(deps)/v8/tools/codemap.mjs',
+      '<(deps)/v8/tools/consarray.mjs',
+      '<(deps)/v8/tools/csvparser.mjs',
+      '<(deps)/v8/tools/profile.mjs',
+      '<(deps)/v8/tools/profile_view.mjs',
+      '<(deps)/v8/tools/logreader.mjs',
+      '<(deps)/v8/tools/arguments.mjs',
+      '<(deps)/v8/tools/tickprocessor.mjs',
+      '<(deps)/v8/tools/sourcemap.mjs',
+      '<(deps)/v8/tools/tickprocessor-driver.mjs',
       'deps/acorn/acorn/dist/acorn.js',
       'deps/acorn/acorn-walk/dist/walk.js',
       'deps/minimatch/index.js',
@@ -159,7 +162,7 @@
 
       'include_dirs': [
         'src',
-        'deps/v8/include',
+        '<(deps)/v8/include',
         'deps/postject'
       ],
 
@@ -459,537 +462,99 @@
     {
       'target_name': '<(node_lib_target_name)',
       'type': '<(node_intermediate_lib_type)',
-      'includes': [
-        'node.gypi',
-      ],
-
-      'include_dirs': [
-        'src',
-        'deps/postject',
-        '../../base/startup/init/interfaces/innerkits/include/param',
-        '../../base/hiviewdfx/hisysevent/interfaces/native/innerkits/hisysevent/include',
-        '<(SHARED_INTERMEDIATE_DIR)' # for node_natives.h
-      ],
       'dependencies': [
-        'deps/base64/base64.gyp:base64',
-        'deps/googletest/googletest.gyp:gtest_prod',
-        'deps/histogram/histogram.gyp:histogram',
-        'deps/uvwasi/uvwasi.gyp:uvwasi',
-        'deps/simdutf/simdutf.gyp:simdutf',
-        'deps/ada/ada.gyp:ada',
-      ],
-
-      'sources': [
-        'src/api/async_resource.cc',
-        'src/api/callback.cc',
-        'src/api/embed_helpers.cc',
-        'src/api/encoding.cc',
-        'src/api/environment.cc',
-        'src/api/exceptions.cc',
-        'src/api/hooks.cc',
-        'src/api/utils.cc',
-        'src/async_wrap.cc',
-        'src/base_object.cc',
-        'src/cares_wrap.cc',
-        'src/cleanup_queue.cc',
-        'src/connect_wrap.cc',
-        'src/connection_wrap.cc',
-        'src/debug_utils.cc',
-        'src/env.cc',
-        'src/fs_event_wrap.cc',
-        'src/handle_wrap.cc',
-        'src/heap_utils.cc',
-        'src/histogram.cc',
-        'src/jsvm.h',
-        'src/jsvm_types.h',
-        'src/js_native_api_v8.cc',
-        'src/js_native_api_v8.h',
-        'src/js_native_api_v8_inspector.cc',
-        'src/js_native_api_v8_inspector.h',
-        'src/js_native_api_v8_internals.h',
-        'src/js_stream.cc',
-        'src/json_utils.cc',
-        'src/js_udp_wrap.cc',
-        'src/module_wrap.cc',
-        'src/node.cc',
-        'src/node_api.cc',
-        'src/node_binding.cc',
-        'src/node_blob.cc',
-        'src/node_buffer.cc',
-        'src/node_builtins.cc',
-        'src/node_config.cc',
-        'src/node_constants.cc',
-        'src/node_contextify.cc',
-        'src/node_credentials.cc',
-        'src/node_dir.cc',
-        'src/node_env_var.cc',
-        'src/node_errors.cc',
-        'src/node_external_reference.cc',
-        'src/node_file.cc',
-        'src/node_http_parser.cc',
-        'src/node_http2.cc',
-        'src/node_i18n.cc',
-        'src/node_main_instance.cc',
-        'src/node_messaging.cc',
-        'src/node_metadata.cc',
-        'src/node_options.cc',
-        'src/node_os.cc',
-        'src/node_perf.cc',
-        'src/node_platform.cc',
-        'src/node_postmortem_metadata.cc',
-        'src/node_process_events.cc',
-        'src/node_process_methods.cc',
-        'src/node_process_object.cc',
-        'src/node_realm.cc',
-        'src/node_report.cc',
-        'src/node_report_module.cc',
-        'src/node_report_utils.cc',
-        'src/node_sea.cc',
-        'src/node_serdes.cc',
-        'src/node_shadow_realm.cc',
-        'src/node_snapshotable.cc',
-        'src/node_sockaddr.cc',
-        'src/node_stat_watcher.cc',
-        'src/node_symbols.cc',
-        'src/node_task_queue.cc',
-        'src/node_trace_events.cc',
-        'src/node_types.cc',
-        'src/node_url.cc',
-        'src/node_util.cc',
-        'src/node_v8.cc',
-        'src/node_wasi.cc',
-        'src/node_wasm_web_api.cc',
-        'src/node_watchdog.cc',
-        'src/node_worker.cc',
-        'src/node_zlib.cc',
-        'src/pipe_wrap.cc',
-        'src/process_wrap.cc',
-        'src/signal_wrap.cc',
-        'src/spawn_sync.cc',
-        'src/stream_base.cc',
-        'src/stream_pipe.cc',
-        'src/stream_wrap.cc',
-        'src/string_bytes.cc',
-        'src/string_decoder.cc',
-        'src/tcp_wrap.cc',
-        'src/timers.cc',
-        'src/timer_wrap.cc',
-        'src/tracing/agent.cc',
-        'src/tracing/node_trace_buffer.cc',
-        'src/tracing/node_trace_writer.cc',
-        'src/tracing/trace_event.cc',
-        'src/tracing/traced_value.cc',
-        'src/tty_wrap.cc',
-        'src/udp_wrap.cc',
-        'src/util.cc',
-        'src/uv.cc',
-        # headers to make for a more pleasant IDE experience
-        'src/aliased_buffer.h',
-        'src/aliased_buffer-inl.h',
-        'src/aliased_struct.h',
-        'src/aliased_struct-inl.h',
-        'src/async_wrap.h',
-        'src/async_wrap-inl.h',
-        'src/base_object.h',
-        'src/base_object-inl.h',
-        'src/base_object_types.h',
-        'src/base64.h',
-        'src/base64-inl.h',
-        'src/callback_queue.h',
-        'src/callback_queue-inl.h',
-        'src/cleanup_queue.h',
-        'src/cleanup_queue-inl.h',
-        'src/connect_wrap.h',
-        'src/connection_wrap.h',
-        'src/debug_utils.h',
-        'src/debug_utils-inl.h',
-        'src/env_properties.h',
-        'src/env.h',
-        'src/env-inl.h',
-        'src/handle_wrap.h',
-        'src/histogram.h',
-        'src/histogram-inl.h',
-        'src/js_stream.h',
-        'src/json_utils.h',
-        'src/large_pages/node_large_page.cc',
-        'src/large_pages/node_large_page.h',
-        'src/memory_tracker.h',
-        'src/memory_tracker-inl.h',
-        'src/module_wrap.h',
-        'src/node.h',
-        'src/jsvm_node_api.h',
-        'src/jsvm_node_api_types.h',
-        'src/node_binding.h',
-        'src/node_blob.h',
-        'src/node_buffer.h',
-        'src/node_builtins.h',
-        'src/node_constants.h',
-        'src/node_context_data.h',
-        'src/node_contextify.h',
-        'src/node_dir.h',
-        'src/node_errors.h',
-        'src/node_external_reference.h',
-        'src/node_file.h',
-        'src/node_file-inl.h',
-        'src/node_http_common.h',
-        'src/node_http_common-inl.h',
-        'src/node_http2.h',
-        'src/node_http2_state.h',
-        'src/node_i18n.h',
-        'src/node_internals.h',
-        'src/node_main_instance.h',
-        'src/node_mem.h',
-        'src/node_mem-inl.h',
-        'src/node_messaging.h',
-        'src/node_metadata.h',
-        'src/node_mutex.h',
-        'src/node_object_wrap.h',
-        'src/node_options.h',
-        'src/node_options-inl.h',
-        'src/node_perf.h',
-        'src/node_perf_common.h',
-        'src/node_platform.h',
-        'src/node_process.h',
-        'src/node_process-inl.h',
-        'src/node_realm.h',
-        'src/node_realm-inl.h',
-        'src/node_report.h',
-        'src/node_revert.h',
-        'src/node_root_certs.h',
-        'src/node_sea.h',
-        'src/node_shadow_realm.h',
-        'src/node_snapshotable.h',
-        'src/node_snapshot_builder.h',
-        'src/node_sockaddr.h',
-        'src/node_sockaddr-inl.h',
-        'src/node_stat_watcher.h',
-        'src/node_union_bytes.h',
-        'src/node_url.h',
-        'src/node_util.h',
-        'src/node_version.h',
-        'src/node_v8.h',
-        'src/node_v8_platform-inl.h',
-        'src/node_wasi.h',
-        'src/node_watchdog.h',
-        'src/node_worker.h',
-        'src/pipe_wrap.h',
-        'src/req_wrap.h',
-        'src/req_wrap-inl.h',
-        'src/spawn_sync.h',
-        'src/stream_base.h',
-        'src/stream_base-inl.h',
-        'src/stream_pipe.h',
-        'src/stream_wrap.h',
-        'src/string_bytes.h',
-        'src/string_decoder.h',
-        'src/string_decoder-inl.h',
-        'src/string_search.h',
-        'src/tcp_wrap.h',
-        'src/tracing/agent.h',
-        'src/tracing/node_trace_buffer.h',
-        'src/tracing/node_trace_writer.h',
-        'src/tracing/trace_event.h',
-        'src/tracing/trace_event_common.h',
-        'src/tracing/traced_value.h',
-        'src/timer_wrap.h',
-        'src/timer_wrap-inl.h',
-        'src/tty_wrap.h',
-        'src/udp_wrap.h',
-        'src/util.h',
-        'src/util-inl.h',
-        # Dependency headers
-        'deps/v8/include/v8.h',
-        'deps/postject/postject-api.h'
-        # javascript files to make for an even more pleasant IDE experience
-        '<@(library_files)',
-        '<@(deps_files)',
-        # node.gyp is added by default, common.gypi is added for change detection
-        'common.gypi',
-      ],
-
-      'variables': {
-        'openssl_system_ca_path%': '',
-        'openssl_default_cipher_list%': '',
-      },
-
-      'cflags': ['-Werror=unused-result'],
-
-      'defines': [
-        'NODE_ARCH="<(target_arch)"',
-        'NODE_PLATFORM="<(OS)"',
-        'NODE_WANT_INTERNALS=1',
-        # Warn when using deprecated V8 APIs.
-        'V8_DEPRECATION_WARNINGS=1',
-        'NODE_OPENSSL_SYSTEM_CERT_PATH="<(openssl_system_ca_path)"',
-        'TARGET_OHOS',
-        'ENABLE_HISYSEVENT',
-      ],
-
-      # - "C4244: conversion from 'type1' to 'type2', possible loss of data"
-      #   Ususaly safe. Disable for `dep`, enable for `src`
-      'msvs_disabled_warnings!': [4244],
-
-      'ldflags' : [
-        '<(NDK_SYS_ROOT)/resourceschedule/resource_schedule_service/libressched_client.z.so',
-        '<(NDK_SYS_ROOT)/startup/init/libbegetutil.z.so'
+        'deps/llhttp/llhttp.gyp:llhttp',
       ],
       'conditions': [
-        [ 'openssl_default_cipher_list!=""', {
-          'defines': [
-            'NODE_OPENSSL_DEFAULT_CIPHER_LIST="<(openssl_default_cipher_list)"'
-           ]
-        }],
-        [ 'error_on_warn=="true"', {
-          'cflags': ['-Werror'],
-          'xcode_settings': {
-            'WARNING_CFLAGS': [ '-Werror' ],
-          },
-        }],
-        [ 'node_builtin_modules_path!=""', {
-          'defines': [ 'NODE_BUILTIN_MODULES_PATH="<(node_builtin_modules_path)"' ]
-        }],
-        [ 'node_shared=="true"', {
-          'sources': [
-            'src/node_snapshot_stub.cc',
-          ]
-        }],
-        [ 'node_shared=="true" and node_module_version!="" and OS!="win"', {
-          'product_extension': '<(shlib_suffix)',
-          'xcode_settings': {
-            'LD_DYLIB_INSTALL_NAME':
-              '@rpath/lib<(node_core_target_name).<(shlib_suffix)'
-          },
-        }],
-        [ 'node_use_node_code_cache=="true"', {
-          'defines': [
-            'NODE_USE_NODE_CODE_CACHE=1',
-          ],
-        }],
-        ['node_shared=="true" and OS in "aix os400"', {
-          'product_name': 'node_base',
-        }],
-        [ 'v8_enable_inspector==1', {
-          'includes' : [ 'src/inspector/node_inspector.gypi' ],
-        }, {
-          'defines': [ 'HAVE_INSPECTOR=0' ]
-        }],
-        [ 'OS=="win"', {
-          'conditions': [
-            [ 'node_intermediate_lib_type!="static_library"', {
-              'sources': [
-                'src/res/node.rc',
-              ],
-            }],
-          ],
-          'libraries': [
-            'Dbghelp',
-            'Psapi',
-            'Winmm',
-            'Ws2_32',
-          ],
-        }],
-        [ 'node_use_etw=="true"', {
-          'defines': [ 'HAVE_ETW=1' ],
-          'dependencies': [ 'node_etw' ],
-          'include_dirs': [
-            'src',
-            'tools/msvs/genfiles',
-            '<(SHARED_INTERMEDIATE_DIR)' # for node_natives.h
-          ],
-          'sources': [
-            'src/node_win32_etw_provider.h',
-            'src/node_win32_etw_provider-inl.h',
-            'src/node_win32_etw_provider.cc',
-            'src/node_dtrace.h',
-            'src/node_dtrace.cc',
-            'tools/msvs/genfiles/node_etw_provider.h',
-          ],
-          'conditions': [
-            ['node_intermediate_lib_type != "static_library"', {
-              'sources': [
-                'tools/msvs/genfiles/node_etw_provider.rc',
-              ],
-            }],
-          ],
-        }],
-        [ 'node_use_dtrace=="true"', {
-          'defines': [ 'HAVE_DTRACE=1' ],
-          'dependencies': [
-            'node_dtrace_header',
-            'specialize_node_d',
-          ],
-          'include_dirs': [ '<(SHARED_INTERMEDIATE_DIR)' ],
-          #
-          # DTrace is supported on linux, solaris, mac, and bsd.  There are
-          # three object files associated with DTrace support, but they're
-          # not all used all the time:
-          #
-          #   node_dtrace.o           all configurations
-          #   node_dtrace_ustack.o    not supported on mac and linux
-          #   node_dtrace_provider.o  All except OS X.  "dtrace -G" is not
-          #                           used on OS X.
-          #
-          # Note that node_dtrace_provider.cc and node_dtrace_ustack.cc do not
-          # actually exist.  They're listed here to trick GYP into linking the
-          # corresponding object files into the final "node" executable.  These
-          # object files are generated by "dtrace -G" using custom actions
-          # below, and the GYP-generated Makefiles will properly build them when
-          # needed.
-          #
-          'sources': [
-            'src/node_dtrace.h',
-            'src/node_dtrace.cc',
-          ],
-          'conditions': [
-            [ 'OS=="linux"', {
-              'sources': [
-                '<(SHARED_INTERMEDIATE_DIR)/node_dtrace_provider.o'
-              ],
-            }],
-            [ 'OS!="mac" and OS!="linux"', {
-              'sources': [
-                'src/node_dtrace_ustack.cc',
-                'src/node_dtrace_provider.cc',
-              ]
-            }
-          ] ]
+        [ 'use_node_zlib=="true"' , {
+          'dependencies': [ 'deps/zlib/zlib.gyp:zlib' ],
         } ],
-        [ 'node_use_openssl=="true"', {
-          'sources': [
-            'src/crypto/crypto_aes.cc',
-            'src/crypto/crypto_bio.cc',
-            'src/crypto/crypto_common.cc',
-            'src/crypto/crypto_dsa.cc',
-            'src/crypto/crypto_hkdf.cc',
-            'src/crypto/crypto_pbkdf2.cc',
-            'src/crypto/crypto_sig.cc',
-            'src/crypto/crypto_timing.cc',
-            'src/crypto/crypto_cipher.cc',
-            'src/crypto/crypto_context.cc',
-            'src/crypto/crypto_ec.cc',
-            'src/crypto/crypto_hmac.cc',
-            'src/crypto/crypto_random.cc',
-            'src/crypto/crypto_rsa.cc',
-            'src/crypto/crypto_spkac.cc',
-            'src/crypto/crypto_util.cc',
-            'src/crypto/crypto_clienthello.cc',
-            'src/crypto/crypto_dh.cc',
-            'src/crypto/crypto_hash.cc',
-            'src/crypto/crypto_keys.cc',
-            'src/crypto/crypto_keygen.cc',
-            'src/crypto/crypto_scrypt.cc',
-            'src/crypto/crypto_tls.cc',
-            'src/crypto/crypto_aes.cc',
-            'src/crypto/crypto_x509.cc',
-            'src/crypto/crypto_bio.h',
-            'src/crypto/crypto_clienthello-inl.h',
-            'src/crypto/crypto_dh.h',
-            'src/crypto/crypto_hmac.h',
-            'src/crypto/crypto_rsa.h',
-            'src/crypto/crypto_spkac.h',
-            'src/crypto/crypto_util.h',
-            'src/crypto/crypto_cipher.h',
-            'src/crypto/crypto_common.h',
-            'src/crypto/crypto_dsa.h',
-            'src/crypto/crypto_hash.h',
-            'src/crypto/crypto_keys.h',
-            'src/crypto/crypto_keygen.h',
-            'src/crypto/crypto_scrypt.h',
-            'src/crypto/crypto_tls.h',
-            'src/crypto/crypto_clienthello.h',
-            'src/crypto/crypto_context.h',
-            'src/crypto/crypto_ec.h',
-            'src/crypto/crypto_hkdf.h',
-            'src/crypto/crypto_pbkdf2.h',
-            'src/crypto/crypto_sig.h',
-            'src/crypto/crypto_random.h',
-            'src/crypto/crypto_timing.h',
-            'src/crypto/crypto_x509.h',
-            'src/node_crypto.cc',
-            'src/node_crypto.h'
-          ],
-        }],
-        [ 'OS in "linux freebsd mac solaris" and '
-          'target_arch=="x64" and '
-          'node_target_type=="executable"', {
-          'defines': [ 'NODE_ENABLE_LARGE_CODE_PAGES=1' ],
-        }],
-        [ 'use_openssl_def==1', {
-          # TODO(bnoordhuis) Make all platforms export the same list of symbols.
-          # Teach mkssldef.py to generate linker maps that UNIX linkers understand.
-          'variables': {
-            'mkssldef_flags': [
-              # Categories to export.
-              '-CAES,BF,BIO,DES,DH,DSA,EC,ECDH,ECDSA,ENGINE,EVP,HMAC,MD4,MD5,'
-              'PSK,RC2,RC4,RSA,SHA,SHA0,SHA1,SHA256,SHA512,SOCK,STDIO,TLSEXT,'
-              'UI,FP_API,TLS1_METHOD,TLS1_1_METHOD,TLS1_2_METHOD,SCRYPT,OCSP,'
-              'NEXTPROTONEG,RMD160,CAST,DEPRECATEDIN_1_1_0,DEPRECATEDIN_1_2_0,'
-              'DEPRECATEDIN_3_0',
-              # Defines.
-              '-DWIN32',
-              # Symbols to filter from the export list.
-              '-X^DSO',
-              '-X^_',
-              '-X^private_',
-              # Base generated DEF on zlib.def
-              '-Bdeps/zlib/win32/zlib.def'
+        [ 'use_node_zlib=="false"' , {
+            'include_dirs': [
+              '<(NDK_SYS_ROOT)/../../../third_party/zlib/include',
+              '<(NDK_SYS_ROOT)/../../../third_party/zlib',
             ],
-          },
-          'conditions': [
-            ['openssl_is_fips!=""', {
-              'variables': { 'mkssldef_flags': ['-DOPENSSL_FIPS'] },
-            }],
-          ],
-          'actions': [
-            {
-              'action_name': 'mkssldef',
-              'inputs': [
-                'deps/openssl/openssl/util/libcrypto.num',
-                'deps/openssl/openssl/util/libssl.num',
-              ],
-              'outputs': ['<(SHARED_INTERMEDIATE_DIR)/openssl.def'],
-              'process_outputs_as_sources': 1,
-              'action': [
-                '<(python)',
-                'tools/mkssldef.py',
-                '<@(mkssldef_flags)',
-                '-o',
-                '<@(_outputs)',
-                '<@(_inputs)',
-              ],
-            },
-          ],
-        }],
-        [ 'debug_nghttp2==1', {
-          'defines': [ 'NODE_DEBUG_NGHTTP2=1' ]
-        }],
+            'ldflags' : [
+              '<(NDK_SYS_ROOT)/obj/third_party/zlib/libz.a',
+            ]
+        } ],
+        [ 'enable_hilog=="true"' , {
+            'ldflags' : [
+              '<(NDK_SYS_ROOT)/hiviewdfx/hilog_override/libhilog.so',
+            ]
+        } ],
       ],
-      'actions': [
-        {
-          'action_name': 'node_js2c',
-          'process_outputs_as_sources': 1,
-          'inputs': [
-            # Put the code first so it's a dependency and can be used for invocation.
-            'tools/js2c.py',
-            '<@(library_files)',
-            '<@(deps_files)',
-            'config.gypi'
-          ],
-          'outputs': [
-            '<(SHARED_INTERMEDIATE_DIR)/node_javascript.cc',
-          ],
-          'action': [
-            '<(python)',
-            'tools/js2c.py',
-            '--directory',
-            'lib',
-            '--target',
-            '<@(_outputs)',
-            'config.gypi',
-            '<@(deps_files)',
-            '<@(linked_module_files)',
-          ],
-        },
+      'sources': [
+        'jsvm/src/platform/platform_ohos.cc',
+        'jsvm/src/inspector/js_native_api_v8_inspector.cc',
+        'jsvm/src/inspector/inspector_socket_server.cc',
+        'jsvm/src/inspector/inspector_socket.cc',
+        'jsvm/src/inspector/inspector_utils.cpp',
+        'jsvm/src/js_native_api_v8.cc',
+        'jsvm/src/jsvm_env.cc',
+        'jsvm/src/jsvm_reference.cpp',
+        # Dependency headers
+        '<(deps)/v8/include/v8.h',
+        'deps/postject/postject-api.h'
+      ],
+
+
+      'cflags': [
+        '-fstack-protector-strong',
+        '--target=aarch64-linux-ohos',
+        '-march=armv8-a',
+        '-mfpu=neon',
+        '-m64',
+        '-msign-return-address=all',
+        '-mbranch-protection=pac-ret+b-key+bti',
+        '-pthread',
+        '-Wall',
+        '-Wextra',
+        '-Wno-unused-parameter',
+        '-fPIC',
+        '-Werror=unused-result',
+        '-O3',
+        '-fno-omit-frame-pointer',
+        '-fno-rtti',
+        '-fno-exceptions',
+        '-std=gnu++17',
+        '-fvisibility=hidden'
+      ],
+
+      'defines': [
+        '_GLIBCXX_USE_CXX11_ABI=1',
+        '__STDC_FORMAT_MACROS',
+        '__POSIX__',
+        'TARGET_OHOS',
+        'ENABLE_HISYSEVENT',
+        'ENABLE_INSPECTOR',
+        'HAVE_OPENSSL=1'
+      ],
+      'include_dirs': [
+        'jsvm/interface/innerkits',
+        'jsvm/interface/kits',
+        'jsvm/src',
+        '<(NDK_SYS_ROOT)/../../../base/hiviewdfx/hisysevent/interfaces/native/innerkits/hisysevent/include',
+        '<(NDK_SYS_ROOT)/../../../base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter',
+        '<(NDK_SYS_ROOT)/../../../base/hiviewdfx/hilog/interfaces/native/innerkits/include',
+        '<(NDK_SYS_ROOT)/../../../base/startup/init/interfaces/innerkits/include/param',
+        '<(NDK_SYS_ROOT)/../../../third_party/libuv/include',
+        '<(NDK_SYS_ROOT)/../../../third_party/icu/icu4c/source/common',
+        '<(NDK_SYS_ROOT)/obj/third_party/openssl/build_all_generated/linux-aarch64/include',
+        '../openssl/include',
+        '<(obj_dir)/../../../v8-include'
+      ],
+      'ldflags' : [
+        '-fvisibility=hidden',
+        '<(NDK_SYS_ROOT)/resourceschedule/resource_schedule_service/libressched_client.z.so',
+        '<(NDK_SYS_ROOT)/startup/init/libbegetutil.z.so',
+        '<(NDK_SYS_ROOT)/hiviewdfx/hitrace/libhitrace_meter.so',
+        '<(NDK_SYS_ROOT)/thirdparty/libuv/libuv.so',
+        '<(NDK_SYS_ROOT)/thirdparty/icu/libhmicuuc.z.so',
+        '<(NDK_SYS_ROOT)/thirdparty/icu/libhmicui18n.z.so',
+        '<(NDK_SYS_ROOT)/thirdparty/openssl/libcrypto_openssl.z.so',
+        '<(NDK_SYS_ROOT)/thirdparty/openssl/libssl_openssl.z.so',
+        '<(obj_dir)/../../../libv8_shared.so',
       ],
     }, # node_lib_target_name
     {
@@ -1198,7 +763,7 @@
       'include_dirs': [
         'src',
         'tools/msvs/genfiles',
-        'deps/v8/include',
+        '<(deps)/v8/include',
         'deps/cares/include',
         'deps/uv/include',
         'deps/uvwasi/include',
@@ -1252,7 +817,7 @@
     #  'include_dirs': [
     #    'src',
     #    'tools/msvs/genfiles',
-    #    'deps/v8/include',
+    #    '<(deps)/v8/include',
     #    'deps/cares/include',
     #    'deps/uv/include',
     #    'deps/uvwasi/include',
@@ -1356,7 +921,7 @@
     #  'include_dirs': [
     #    'src',
     #    'tools/msvs/genfiles',
-    #    'deps/v8/include',
+    #    '<(deps)/v8/include',
     #    'deps/cares/include',
     #    'deps/uv/include',
     #    'deps/uvwasi/include',
@@ -1434,7 +999,7 @@
       'include_dirs': [
         'src',
         'tools/msvs/genfiles',
-        'deps/v8/include',
+        '<(deps)/v8/include',
         'deps/cares/include',
         'deps/uv/include',
         'deps/uvwasi/include',
@@ -1445,8 +1010,7 @@
    
       'ldflags' : [
         '<(NDK_SYS_ROOT)/resourceschedule/resource_schedule_service/libressched_client.z.so',
-        '<(NDK_SYS_ROOT)/startup/init/libbegetutil.z.so',
-        '<(NDK_SYS_ROOT)/hiviewdfx/hisysevent/libhisysevent.z.so'
+        '<(NDK_SYS_ROOT)/startup/init/libbegetutil.z.so'
       ],
 
       'sources': [
@@ -1500,7 +1064,7 @@
           'dependencies': ['<(node_lib_target_name)'],
           'include_dirs': [
             'src',
-            'deps/v8/include',
+            '<(deps)/v8/include',
           ],
           'sources': [
             '<@(library_files)',
