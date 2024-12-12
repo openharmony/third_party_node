@@ -2041,6 +2041,7 @@ OH_JSVM_TakeHeapSnapshot(JSVM_VM vm,
   auto snapshot = profiler->TakeHeapSnapshot();
   v8impl::OutputStream os(stream, streamData);
   snapshot->Serialize(&os);
+  const_cast<v8::HeapSnapshot*>(snapshot)->Delete();
   return JSVM_OK;
 }
 
