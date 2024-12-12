@@ -115,12 +115,12 @@ public:
     }
 
     template<typename T>
-    JSVM_Data__* NewJsvmData(T srcPtr, JSVM_Data__::DataType type = JSVM_Data__::kJsvmScript)
+    JSVM_Script_Data__* NewJsvmData(T srcPtr, JSVM_Script_Data__::DataType type = JSVM_Script_Data__::kJsvmScript)
     {
         if (dataStack.empty() || openHandleScopes != dataStack.top().first) {
-            dataStack.emplace(openHandleScopes, std::vector<JSVM_Data__*>());
+            dataStack.emplace(openHandleScopes, std::vector<JSVM_Script_Data__*>());
         }
-        auto newData = new JSVM_Data__(srcPtr, false, type);
+        auto newData = new JSVM_Script_Data__(srcPtr, false, type);
         dataStack.top().second.push_back(newData);
         return newData;
     }
@@ -153,7 +153,7 @@ public:
     v8impl::RefList finalizerList;
 
     // Store v8::Data
-    std::stack<std::pair<int, std::vector<JSVM_Data__*>>> dataStack;
+    std::stack<std::pair<int, std::vector<JSVM_Script_Data__*>>> dataStack;
 
     // Store external instance data
     void* instanceData = nullptr;
