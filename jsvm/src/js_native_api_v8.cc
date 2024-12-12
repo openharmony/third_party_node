@@ -5615,3 +5615,49 @@ JSVM_Status JSVM_CDECL OH_JSVM_DefineClassWithOptions(JSVM_Env env,
 
     return GET_RETURN_STATUS(env);
 }
+
+JSVM_Status JSVM_CDECL OH_JSVM_PromiseRegisterHandler(JSVM_Env env,
+                                                      JSVM_Value promise,
+                                                      JSVM_Value onFulfilled,
+                                                      JSVM_Value onRejected,
+                                                      JSVM_Value* result)
+{
+    JSVM_PREAMBLE(env);
+    CHECK_ARG(env, promise);
+    RETURN_STATUS_IF_FALSE(env, onFulfilled || onRejected, JSVM_INVALID_ARG);
+
+    v8::Local<v8::Value> value = v8impl::V8LocalValueFromJsValue(promise);
+    RETURN_STATUS_IF_FALSE(env, value->IsPromise(), JSVM_INVALID_TYPE);
+    auto localPromise = value.As<v8::Promise>();
+
+    v8::Local<v8::Context> ctx = env->context();
+    v8::MaybeLocal<v8::Promise> maybe;
+    if (!onFulfilled) {
+        // Only pass onRejected, call v8::Promise::Catch
+        auto rejectedHandler = v8impl::V8LocalValueFromJsValue(onRejected);
+        RETURN_STATUS_IF_FALSE(env, rejectedHandler->IsFunction(), JSVM_INVALID_TYPE);
+        maybe = localPromise->Catch(ctx, rejectedHandler.As<v8::Function>());
+    } else if (!onRejected) {
+        // Only pass onFulfilled, call v8::Promise::Then
+        auto fulfiledHandler = v8impl::V8LocalValueFromJsValue(onFulfilled);
+        RETURN_STATUS_IF_FALSE(env, fulfiledHandler->IsFunction(), JSVM_INVALID_TYPE);
+        maybe = value.As<v8::Promise>()->Then(ctx, fulfiledHandler.As<v8::Function>());
+    } else {
+        // Pass onFulfilled and onRejected, call v8::Promise::Then
+        auto fulfiledHandler = v8impl::V8LocalValueFromJsValue(onFulfilled);
+        RETURN_STATUS_IF_FALSE(env, fulfiledHandler->IsFunction(), JSVM_INVALID_TYPE);
+        auto rejectedHandler = v8impl::V8LocalValueFromJsValue(onRejected);
+        RETURN_STATUS_IF_FALSE(env, rejectedHandler->IsFunction(), JSVM_INVALID_TYPE);
+        maybe =
+            value.As<v8::Promise>()->Then(ctx, fulfiledHandler.As<v8::Function>(), rejectedHandler.As<v8::Function>());
+    }
+
+    CHECK_MAYBE_EMPTY_WITH_PREAMBLE(env, maybe, JSVM_GENERIC_FAILURE);
+
+    if (result) {
+        auto retPromise = maybe.ToLocalChecked();
+        *result = v8impl::JsValueFromV8LocalValue(retPromise);
+    }
+
+    return ClearLastError(env);
+}
