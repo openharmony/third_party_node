@@ -4,13 +4,14 @@
 
 #include "jsvm_util.h"
 
-struct JSVM_Data__ {
+struct JSVM_Script_Data__ {
 public:
     using SourcePtr = std::variant<v8::Local<v8::Script>, v8::Global<v8::Script>>;
     using DataType = enum { kJsvmScript };
 
     template<typename T>
-    JSVM_Data__(T ptr, bool retained, DataType type = kJsvmScript) : taggedPointer(ptr), isGlobal(retained), type(type)
+    JSVM_Script_Data__(T ptr, bool retained, DataType type = kJsvmScript)
+        : taggedPointer(ptr), isGlobal(retained), type(type)
     {}
 
     template<class T>
@@ -36,15 +37,27 @@ namespace v8impl {
 static_assert(sizeof(v8::Local<v8::Value>) == sizeof(JSVM_Value),
               "Cannot convert between v8::Local<v8::Value> and JSVM_Value");
 
+inline JSVM_Data JsDataFromV8LocalData(v8::Local<v8::Data> local)
+{
+    return reinterpret_cast<JSVM_Data>(*local);
+}
+
+inline v8::Local<v8::Data> V8LocalDataFromJsData(JSVM_Data data)
+{
+    v8::Local<v8::Data> local;
+    memcpy(static_cast<void*>(&local), &data, sizeof(JSVM_Data));
+    return local;
+}
+
 inline JSVM_Value JsValueFromV8LocalValue(v8::Local<v8::Value> local)
 {
     return reinterpret_cast<JSVM_Value>(*local);
 }
 
-inline v8::Local<v8::Value> V8LocalValueFromJsValue(JSVM_Value v)
+inline v8::Local<v8::Value> V8LocalValueFromJsValue(JSVM_Value value)
 {
     v8::Local<v8::Value> local;
-    memcpy(static_cast<void*>(&local), &v, sizeof(v));
+    memcpy(static_cast<void*>(&local), &value, sizeof(JSVM_Value));
     return local;
 }
 

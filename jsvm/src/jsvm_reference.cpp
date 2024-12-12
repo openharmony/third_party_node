@@ -29,18 +29,6 @@ inline void RefTracker::Link(RefList* list)
     list->next = this;
 }
 
-inline void RefTracker::Unlink()
-{
-    if (prev != nullptr) {
-        prev->next = next;
-    }
-    if (next != nullptr) {
-        next->prev = prev;
-    }
-    prev = nullptr;
-    next = nullptr;
-}
-
 void RefTracker::FinalizeAll(RefList* list)
 {
     while (list->next != nullptr) {
@@ -56,13 +44,20 @@ void RefTracker::Finalize()
 // UserReference
 UserReference* UserReference::New(JSVM_Env env, v8::Local<v8::Value> value, uint32_t initialRefcount)
 {
-    auto ref = new UserReference(env, value, initialRefcount);
+    auto ref = new UserReference(env, value, true, initialRefcount);
 
     return ref;
 }
 
-UserReference::UserReference(JSVM_Env env, v8::Local<v8::Value> value, uint32_t initialRefcount)
-    : persistent(env->isolate, value), env(env), refcount(initialRefcount), canBeWeak(CanBeHeldWeakly(value))
+UserReference* UserReference::NewData(JSVM_Env env, v8::Local<v8::Data> value, uint32_t initialRefcount)
+{
+    auto ref = new UserReference(env, value, false, initialRefcount);
+
+    return ref;
+}
+
+UserReference::UserReference(JSVM_Env env, v8::Local<v8::Data> value, bool isValue, uint32_t initialRefcount)
+    : persistent(env->isolate, value), isValue(isValue), env(env), refcount(initialRefcount), canBeWeak(isValue && CanBeHeldWeakly(value.As<v8::Value>()))
 {
     if (refcount == 0) {
         SetWeak();
@@ -85,11 +80,20 @@ void UserReference::Finalize()
 
 v8::Local<v8::Value> UserReference::Get()
 {
+    DCHECK(isValue);
     if (persistent.IsEmpty()) {
         return v8::Local<v8::Value>();
     } else {
-        return v8::Local<v8::Value>::New(env->isolate, persistent);
+        return  v8::Local<v8::Data>::New(env->isolate, persistent).As<v8::Value>();
     }
+}
+
+v8::Local<v8::Data> UserReference::GetData() {
+  if (persistent.IsEmpty()) {
+    return v8::Local<v8::Data>();
+  } else {
+    return v8::Local<v8::Data>::New(env->isolate, persistent);
+  }
 }
 
 void UserReference::SetWeak()
