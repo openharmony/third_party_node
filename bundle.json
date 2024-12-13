@@ -2,7 +2,7 @@
     "name": "@ohos/node",
     "description": "Node.js is an open-source, cross-platform, JavaScript runtime environment. It executes JavaScript code outside of a browser.",
     "version": "3.1",
-    "license": "ISC,Public Domain,MIT,Free Software Foundation - MIT,Apache V2,ICU,zlib/libpng,BSD 2-Clause,BSD 3-Clause",
+    "license": "MIT",
     "publishAs": "code-segment",
     "segment": {
         "destPath": "third_party/node"
