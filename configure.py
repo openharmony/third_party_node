@@ -1284,10 +1284,8 @@ def configure_node(o):
   o['variables']['host_arch'] = host_arch
   o['variables']['target_arch'] = target_arch
   o['variables']['node_byteorder'] = sys.byteorder
-  if options.target_platform in ('pc', 'emulator'):
+  if options.target_platform != 'phone':
     o['variables']['use_node_zlib'] = 'true'
- 
-  if options.target_platform == 'emulator':
     o['variables']['enable_hilog'] = 'false'
 
   cross_compiling = (options.cross_compiling

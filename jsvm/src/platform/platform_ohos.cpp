@@ -19,7 +19,9 @@
 #include "v8.h"
 
 // OHOS API header
+#ifdef ENABLE_HILOG
 #include "hilog/log.h"
+#endif
 #include "hitrace_meter.h"
 #include "init_param.h"
 #include "unistd.h"
@@ -82,6 +84,7 @@ uint64_t OS::GetTid()
 
 void OS::PrintString(LogLevel level, const char* string)
 {
+#ifdef ENABLE_HILOG
     // convert platform defined LogLevel to hilog LogLevel
     static constexpr ::LogLevel convertArray[] = { ::LogLevel::LOG_DEBUG, ::LogLevel::LOG_INFO, ::LogLevel::LOG_WARN,
                                                    ::LogLevel::LOG_ERROR, ::LogLevel::LOG_FATAL };
@@ -89,6 +92,9 @@ void OS::PrintString(LogLevel level, const char* string)
 
     // TODO: use LOG_APP or other LogType
     HiLogPrint(LOG_APP, convertArray[static_cast<uint64_t>(level)], LOG_DOMAIN, LOG_TAG, "%{public}s", string);
+#else
+    printf("%s", string);
+#endif
 }
 
 void OS::Print(LogLevel level, const char* format, ...)

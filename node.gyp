@@ -481,6 +481,9 @@
         [ 'enable_hilog=="true"' , {
             'ldflags' : [
               '<(NDK_SYS_ROOT)/hiviewdfx/hilog_override/libhilog.so',
+            ],
+            'defines': [
+              'ENABLE_HILOG',
             ]
         } ],
       ],
