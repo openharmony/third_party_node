@@ -10,12 +10,14 @@
 #include "v8-primitive.h"
 #include "v8-statistics.h"
 #include "v8-version-string.h"
+#include "v8-proxy.h"
 #define JSVM_EXPERIMENTAL
 #include "env-inl.h"
 #include "jsvm.h"
 #include "js_native_api_v8.h"
 #include "js_native_api_v8_inspector.h"
 #include "libplatform/libplatform.h"
+#include "libplatform/v8-tracing.h"
 #include "util-inl.h"
 #include "util.h"
 #include "sourcemap.def"
@@ -23,6 +25,10 @@
 #ifdef ENABLE_HISYSEVENT
 #include "hisysevent.h"
 #endif
+
+#ifdef V8_USE_PERFETTO
+#error Unsupported Perfetto.
+#endif  // V8_USE_PERFETTO
 
 #define SECARGCNT   2
 
@@ -143,11 +149,64 @@ namespace {
 enum IsolateDataSlot {
   kIsolateData = 0,
   kIsolateSnapshotCreatorSlot = 1,
+  kIsolateHandlerPoolSlot = 2,
 };
+// Always compare the final element of IsolateDataSlot with v8 limit.
+static_assert(kIsolateHandlerPoolSlot < v8::internal::Internals::kNumIsolateDataSlots);
+
+struct GCHandlerWrapper {
+  GCHandlerWrapper(JSVM_GCType gcType, JSVM_HandlerForGC handler, void* userData)
+      : gcType(gcType), handler(handler), userData(userData) {}
+
+  JSVM_GCType gcType;
+  JSVM_HandlerForGC handler;
+  void *userData;
+};
+
+using GCHandlerWrappers = std::list<GCHandlerWrapper*>;
+
+struct IsolateHandlerPool {
+  GCHandlerWrappers handlerWrappersBeforeGC;
+  GCHandlerWrappers handlerWrappersAfterGC;
+  JSVM_HandlerForOOMError handlerForOOMError = nullptr;
+  JSVM_HandlerForFatalError handlerForFatalError = nullptr;
+  JSVM_HandlerForPromiseReject handlerForPromiseReject = nullptr;
+
+  ~IsolateHandlerPool() {
+    for (auto *handler : handlerWrappersBeforeGC) {
+      delete handler;
+    }
+    handlerWrappersBeforeGC.clear();
+    for (auto *handler : handlerWrappersAfterGC) {
+      delete handler;
+    }
+    handlerWrappersAfterGC.clear();
+  }
+};
+
+static IsolateHandlerPool* GetIsolateHandlerPool(v8::Isolate* isolate) {
+  auto pool = isolate->GetData(v8impl::kIsolateHandlerPoolSlot);
+  return reinterpret_cast<IsolateHandlerPool*>(pool);
+}
+
+static IsolateHandlerPool* GetOrCreateIsolateHandlerPool(v8::Isolate* isolate) {
+  auto *pool = isolate->GetData(v8impl::kIsolateHandlerPoolSlot);
+  if (pool != nullptr) {
+    return reinterpret_cast<IsolateHandlerPool*>(pool);
+  }
+  auto *createdPool = new v8impl::IsolateHandlerPool();
+  isolate->SetData(v8impl::kIsolateHandlerPoolSlot, createdPool);
+  return createdPool;
+}
 
 enum ContextEmbedderIndex {
   kContextEnvIndex = 1,
 };
+
+static JSVM_Env GetEnvByContext(v8::Local<v8::Context> context) {
+  auto env = context->GetAlignedPointerFromEmbedderData(v8impl::kContextEnvIndex);
+  return reinterpret_cast<JSVM_Env>(env);
+}
 
 struct IsolateData {
   IsolateData(v8::StartupData* blob) : blob(blob) {}
@@ -238,6 +297,23 @@ static v8::ArrayBuffer::Allocator *GetOrCreateDefaultArrayBufferAllocator() {
   }
   return defaultArrayBufferAllocator.get();
 }
+
+static std::unique_ptr<std::stringstream> g_trace_stream;
+
+constexpr uint32_t g_trace_catrgory_count = 7;
+static constexpr const char* g_internal_trace_categories[] = {
+    "v8",
+    TRACE_DISABLED_BY_DEFAULT("v8.compile"),
+    "v8.execute",
+    TRACE_DISABLED_BY_DEFAULT("v8.runtime"),
+    TRACE_DISABLED_BY_DEFAULT("v8.stack_trace"),
+    "v8.wasm",
+    TRACE_DISABLED_BY_DEFAULT("v8.wasm.detailed"),
+};
+
+constexpr uint32_t g_default_catrgory_count = 4;
+static constexpr JSVM_TraceCategory g_default_categories[] = {
+    JSVM_TRACE_VM, JSVM_TRACE_EXECUTE, JSVM_TRACE_COMPILE, JSVM_TRACE_RUNTIME };
 
 static void SetFileToSourceMapMapping(std::string &&file, std::string &&sourceMapUrl) {
   auto it = sourceMapUrlMap.find(file);
@@ -728,7 +804,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->namedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->namedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
 
     bool exceptionOccurred = false;
@@ -761,7 +837,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->namedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->namedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
     bool exceptionOccurred = false;
     JSVM_Value result = nullptr;
@@ -792,7 +868,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->namedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->namedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
 
     bool exceptionOccurred = false;
@@ -826,7 +902,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->namedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->namedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
 
     bool exceptionOccurred = false;
@@ -859,7 +935,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->indexedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->indexedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
 
     bool exceptionOccurred = false;
@@ -892,7 +968,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->indexedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->indexedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
 
     JSVM_Value result = nullptr;
@@ -924,7 +1000,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->indexedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->indexedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
 
     bool exceptionOccurred = false;
@@ -958,7 +1034,7 @@ class PropertyCallbackWrapperBase : public CallbackWrapper {
     JSVM_Value innerData = nullptr;
     if (_cb->indexedPropertyData_ != nullptr) {
       v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(_cb->indexedPropertyData_);
-      innerData = v8impl::JsValueFromV8LocalValue(reference->Get());
+      innerData = v8impl::JsValueFromV8LocalValue(reference->GetValue());
     }
 
     bool exceptionOccurred = false;
@@ -1117,7 +1193,11 @@ inline JSVM_Status Wrap(JSVM_Env env,
 // Currently, V8 has no API to detect if a symbol is local or global.
 // Until we have a V8 API for it, we consider that all symbols can be weak.
 // This matches the current Node-API behavior.
-inline bool CanBeHeldWeakly(v8::Local<v8::Value> value) {
+inline bool CanBeHeldWeakly(v8::Local<v8::Data> data) {
+  if (data->IsPrivate()) {
+    return false;
+  }
+  auto value = data.As<v8::Value>();
   return value->IsObject() || value->IsSymbol();
 }
 
@@ -1233,10 +1313,11 @@ void RefBase::Finalize() {
 }
 
 template <typename... Args>
-Reference::Reference(JSVM_Env env, v8::Local<v8::Value> value, Args&&... args)
+Reference::Reference(JSVM_Env env, v8::Local<v8::Data> data, bool isValue, Args&&... args)
     : RefBase(env, std::forward<Args>(args)...),
-      persistent_(env->isolate, value),
-      can_be_weak_(CanBeHeldWeakly(value)),
+      persistent_(env->isolate, data),
+      is_value(isValue),
+      can_be_weak_(isValue && CanBeHeldWeakly(data.As<v8::Value>())),
       deleted_by_user(false),
       wait_callback(false) {
   if (RefCount() == 0) {
@@ -1250,14 +1331,16 @@ Reference::~Reference() {
 }
 
 Reference* Reference::New(JSVM_Env env,
-                          v8::Local<v8::Value> value,
+                          v8::Local<v8::Data> data,
                           uint32_t initialRefcount,
                           Ownership ownership,
                           JSVM_Finalize finalizeCallback,
                           void* finalizeData,
-                          void* finalizeHint) {
+                          void* finalizeHint,
+                          bool isValue) {
   return new Reference(env,
-                       value,
+                       data,
+                       isValue,
                        initialRefcount,
                        ownership,
                        finalizeCallback,
@@ -1293,11 +1376,20 @@ uint32_t Reference::Unref() {
   return refcount;
 }
 
-v8::Local<v8::Value> Reference::Get() {
+v8::Local<v8::Value> Reference::GetValue() {
+  DCHECK(is_value);
   if (persistent_.IsEmpty()) {
     return v8::Local<v8::Value>();
   } else {
-    return v8::Local<v8::Value>::New(env_->isolate, persistent_);
+    return v8::Local<v8::Data>::New(env_->isolate, persistent_).As<v8::Value>();
+  }
+}
+
+v8::Local<v8::Data> Reference::GetData() {
+  if (persistent_.IsEmpty()) {
+    return v8::Local<v8::Data>();
+  } else {
+    return v8::Local<v8::Data>::New(env_->isolate, persistent_);
   }
 }
 
@@ -1394,6 +1486,171 @@ static bool ProcessBundleName(std::string& bundleName)
   return true;
 }
 
+JSVM_Status OH_JSVM_IsBooleanObject(JSVM_Env env, JSVM_Value value, bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Value> v = v8impl::V8LocalValueFromJsValue(value);
+  *result = v->IsBooleanObject();
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_IsBigIntObject(JSVM_Env env, JSVM_Value value, bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Value> v = v8impl::V8LocalValueFromJsValue(value);
+  *result = v->IsBigIntObject();
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_IsStringObject(JSVM_Env env, JSVM_Value value, bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Value> v = v8impl::V8LocalValueFromJsValue(value);
+  *result = v->IsStringObject();
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_IsNumberObject(JSVM_Env env, JSVM_Value value, bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Value> v = v8impl::V8LocalValueFromJsValue(value);
+  *result = v->IsNumberObject();
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_IsSymbolObject(JSVM_Env env, JSVM_Value value, bool* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Value> v = v8impl::V8LocalValueFromJsValue(value);
+  *result = v->IsSymbolObject();
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolToStringTag(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolToStringTag = v8::Symbol::GetToStringTag(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolToStringTag);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolIterator(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolIterator = v8::Symbol::GetIterator(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolIterator);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolAsyncIterator(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolAsyncIterator = v8::Symbol::GetAsyncIterator(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolAsyncIterator);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolHasInstance(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolHasInstance = v8::Symbol::GetHasInstance(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolHasInstance);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolUnscopables(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolUnscopables = v8::Symbol::GetUnscopables(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolUnscopables);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolIsConcatSpreadable(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolIsConcatSpreadable = v8::Symbol::GetIsConcatSpreadable(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolIsConcatSpreadable);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolMatch(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolMatch = v8::Symbol::GetMatch(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolMatch);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolReplace(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolReplace = v8::Symbol::GetReplace(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolReplace);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolSearch(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolSearch = v8::Symbol::GetSearch(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolSearch);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolSplit(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolSplit = v8::Symbol::GetSplit(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolSplit);
+ 
+  return jsvm_clear_last_error(env);
+}
+ 
+JSVM_Status OH_JSVM_GetSymbolToPrimitive(JSVM_Env env, JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+ 
+  v8::Local<v8::Symbol> symbolToPrimitive = v8::Symbol::GetToPrimitive(env->isolate);
+  *result = v8impl::JsValueFromV8LocalValue(symbolToPrimitive);
+ 
+  return jsvm_clear_last_error(env);
+}
+
 JSVM_Status JSVM_CDECL
 OH_JSVM_Init(const JSVM_InitOptions* options) {
   static std::atomic<bool> initialized(false);
@@ -1416,11 +1673,13 @@ OH_JSVM_Init(const JSVM_InitOptions* options) {
 #endif
   v8::V8::InitializePlatform(v8impl::g_platform.get());
 
+#ifdef TARGET_OHOS
   if (node::ReadSystemXpmState()) {
     int secArgc = SECARGCNT;
     char *secArgv[SECARGCNT] = {const_cast<char*>("jsvm"), const_cast<char*>("--jitless")};
     v8::V8::SetFlagsFromCommandLine(&secArgc, secArgv, false);
   }
+#endif
 
   if (options && options->argc && options->argv) {
     v8::V8::SetFlagsFromCommandLine(options->argc, options->argv, options->removeFlags);
@@ -1480,6 +1739,26 @@ OH_JSVM_CreateVM(const JSVM_CreateVMOptions* options, JSVM_VM* result) {
   }
   v8impl::CreateIsolateData(isolate, snapshotBlob);
   *result = reinterpret_cast<JSVM_VM>(isolate);
+  // Create nullptr placeholder
+  isolate->SetData(v8impl::kIsolateHandlerPoolSlot, nullptr);
+
+  return JSVM_OK;
+}
+
+JSVM_Status OH_JSVM_SetMicrotaskPolicy(JSVM_VM vm,
+                                       JSVM_MicrotaskPolicy policy) {
+  static constexpr v8::MicrotasksPolicy converter[] = {
+    v8::MicrotasksPolicy::kExplicit,
+    v8::MicrotasksPolicy::kAuto
+  };
+  constexpr size_t policyCount = node::arraysize(converter);
+
+  if (!vm || policy >= policyCount) {
+    return JSVM_INVALID_ARG;
+  }
+
+  auto isolate = reinterpret_cast<v8::Isolate*>(vm);
+  isolate->SetMicrotasksPolicy(converter[policy]);
 
   return JSVM_OK;
 }
@@ -1493,6 +1772,7 @@ OH_JSVM_DestroyVM(JSVM_VM vm) {
   auto creator = v8impl::GetIsolateSnapshotCreator(isolate);
   auto data = v8impl::GetIsolateData(isolate);
 
+  auto *handlerPool = v8impl::GetIsolateHandlerPool(isolate);
   if (creator != nullptr) {
     delete creator;
   } else {
@@ -1502,7 +1782,63 @@ OH_JSVM_DestroyVM(JSVM_VM vm) {
       delete data;
   }
 
+  if (handlerPool != nullptr) {
+    delete handlerPool;
+  }
   return JSVM_OK;
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_CreateProxy(JSVM_Env env, JSVM_Value target, JSVM_Value handler, JSVM_Value *result)
+{
+  // Check args is not null
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, target);
+  CHECK_ARG(env, handler);
+  CHECK_ARG(env, result);
+
+  // Check target and handler are v8 Object
+  auto localTarget = v8impl::V8LocalValueFromJsValue(target);
+  RETURN_STATUS_IF_FALSE(env, localTarget->IsObject(), JSVM_OBJECT_EXPECTED);
+  auto localHandler = v8impl::V8LocalValueFromJsValue(handler);
+  RETURN_STATUS_IF_FALSE(env, localHandler->IsObject(), JSVM_OBJECT_EXPECTED);
+
+  v8::Local<v8::Context> context = env->context();
+
+  v8::MaybeLocal<v8::Proxy> maybeProxy =
+      v8::Proxy::New(context, localTarget.As<v8::Object>(), localHandler.As<v8::Object>());
+
+  CHECK_MAYBE_EMPTY_WITH_PREAMBLE(env, maybeProxy, JSVM_GENERIC_FAILURE);
+
+  v8::Local<v8::Proxy> proxy = maybeProxy.ToLocalChecked();
+  *result = v8impl::JsValueFromV8LocalValue(proxy);
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsProxy(JSVM_Env env, JSVM_Value value, bool *isProxy)
+{
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isProxy);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isProxy = val->IsProxy();
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_ProxyGetTarget(JSVM_Env env, JSVM_Value value, JSVM_Value *result)
+{
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, result);
+
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+
+  RETURN_STATUS_IF_FALSE(env, val->IsProxy(), JSVM_INVALID_TYPE);
+
+  *result = v8impl::JsValueFromV8LocalValue(val.As<v8::Proxy>()->GetTarget());
+  return jsvm_clear_last_error(env);
 }
 
 JSVM_Status JSVM_CDECL OH_JSVM_OpenVMScope(JSVM_VM vm, JSVM_VMScope* result) {
@@ -1836,6 +2172,48 @@ class CompileOptionResolver {
   bool hasInvalidOption = false;
 };
 
+JSVM_Status JSVM_CDECL OH_JSVM_PromiseRegisterHandler(
+    JSVM_Env env, JSVM_Value promise, JSVM_Value onFulfilled, JSVM_Value onRejected, JSVM_Value *result)
+{
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, promise);
+  RETURN_STATUS_IF_FALSE(env, onFulfilled || onRejected, JSVM_INVALID_ARG);
+
+  v8::Local<v8::Value> value = v8impl::V8LocalValueFromJsValue(promise);
+  RETURN_STATUS_IF_FALSE(env, value->IsPromise(), JSVM_INVALID_TYPE);
+  auto localPromise = value.As<v8::Promise>();
+
+  v8::Local<v8::Context> ctx = env->context();
+  v8::MaybeLocal<v8::Promise> maybe;
+  if (!onFulfilled) {
+    // Only pass onRejected, call v8::Promise::Catch
+    auto rejectedHandler = v8impl::V8LocalValueFromJsValue(onRejected);
+    RETURN_STATUS_IF_FALSE(env, rejectedHandler->IsFunction(), JSVM_INVALID_TYPE);
+    maybe = localPromise->Catch(ctx, rejectedHandler.As<v8::Function>());
+  } else if (!onRejected) {
+    // Only pass onFulfilled, call v8::Promise::Then
+    auto fulfiledHandler = v8impl::V8LocalValueFromJsValue(onFulfilled);
+    RETURN_STATUS_IF_FALSE(env, fulfiledHandler->IsFunction(), JSVM_INVALID_TYPE);
+    maybe = value.As<v8::Promise>()->Then(ctx, fulfiledHandler.As<v8::Function>());
+  } else {
+    // Pass onFulfilled and onRejected, call v8::Promise::Then
+    auto fulfiledHandler = v8impl::V8LocalValueFromJsValue(onFulfilled);
+    RETURN_STATUS_IF_FALSE(env, fulfiledHandler->IsFunction(), JSVM_INVALID_TYPE);
+    auto rejectedHandler = v8impl::V8LocalValueFromJsValue(onRejected);
+    RETURN_STATUS_IF_FALSE(env, rejectedHandler->IsFunction(), JSVM_INVALID_TYPE);
+    maybe = value.As<v8::Promise>()->Then(ctx, fulfiledHandler.As<v8::Function>(), rejectedHandler.As<v8::Function>());
+  }
+
+  CHECK_MAYBE_EMPTY_WITH_PREAMBLE(env, maybe, JSVM_GENERIC_FAILURE);
+
+  if (result) {
+    auto retPromise = maybe.ToLocalChecked();
+    *result = v8impl::JsValueFromV8LocalValue(retPromise);
+  }
+
+  return jsvm_clear_last_error(env);
+}
+
 size_t CompileOptionResolver::compileCount = 0;
 
 JSVM_Status JSVM_CDECL
@@ -1877,7 +2255,7 @@ OH_JSVM_CreateCodeCache(JSVM_Env env,
   CHECK_ARG(env, script);
   CHECK_ARG(env, data);
   CHECK_ARG(env, length);
-  auto jsvmData = reinterpret_cast<JSVM_Data__*>(script);
+  auto jsvmData = reinterpret_cast<JSVM_Script_Data__*>(script);
   auto v8script = jsvmData->ToV8Local<v8::Script>(env->isolate);
   v8::ScriptCompiler::CachedData* cache;
   cache = v8::ScriptCompiler::CreateCodeCache(v8script->GetUnboundScript());
@@ -1900,7 +2278,7 @@ OH_JSVM_RunScript(JSVM_Env env, JSVM_Script script, JSVM_Value* result) {
   CHECK_ARG(env, script);
   CHECK_ARG(env, result);
 
-  auto jsvmData = reinterpret_cast<JSVM_Data__*>(script);
+  auto jsvmData = reinterpret_cast<JSVM_Script_Data__*>(script);
   auto v8script = jsvmData->ToV8Local<v8::Script>(env->isolate);
   auto script_result = v8script->Run(env->context());
   CHECK_MAYBE_EMPTY(env, script_result, JSVM_GENERIC_FAILURE);
@@ -2121,6 +2499,7 @@ static const char* error_messages[] = {
     "Main thread would deadlock",
     "External buffers are not allowed",
     "Cannot run JavaScript",
+    "Invalid type"
 };
 
 JSVM_Status JSVM_CDECL OH_JSVM_GetLastErrorInfo(
@@ -2132,7 +2511,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_GetLastErrorInfo(
   // message in the `JSVM_Status` enum each time a new error message is added.
   // We don't have a jsvm_status_last as this would result in an ABI
   // change each time a message was added.
-  const int last_status = JSVM_CANNOT_RUN_JS;
+  const int last_status = JSVM_INVALID_TYPE;
 
   static_assert(JSVM_ARRAYSIZE(error_messages) == last_status + 1,
                 "Count of error messages must match count of error values");
@@ -2322,6 +2701,86 @@ OH_JSVM_DefineClass(JSVM_Env env,
   }
 
   return GET_RETURN_STATUS(env);
+}
+
+JSVM_EXTERN JSVM_Status OH_JSVM_TraceStart(size_t count,
+                                           const JSVM_TraceCategory* categories,
+                                           const char* tag,
+                                           size_t eventsCount) {
+  if (count > v8impl::g_trace_catrgory_count ||
+      ((count != 0) != (categories != nullptr))) {
+    return JSVM_INVALID_ARG;
+  }
+
+  for (size_t i = 0; i < count; ++i) {
+    if (categories[i] >= v8impl::g_trace_catrgory_count) {
+      return JSVM_INVALID_ARG;
+    }
+  }
+
+  using namespace v8::platform::tracing;
+  TraceConfig* trace_config = new TraceConfig();
+
+  if (count == 0) {
+    count = v8impl::g_default_catrgory_count;
+    categories = v8impl::g_default_categories;
+  }
+
+  for (size_t i = 0; i < count; ++i) {
+    trace_config->AddIncludedCategory(
+        v8impl::g_internal_trace_categories[categories[i]]);
+  }
+
+  v8::Platform* platform = v8impl::g_platform.get();
+  TracingController* controller =
+      static_cast<TracingController*>(platform->GetTracingController());
+  v8impl::g_trace_stream.reset(new std::stringstream());
+  auto stream = v8impl::g_trace_stream.get();
+
+  TraceWriter* writer = nullptr;
+  if (tag != nullptr) {
+    writer = TraceWriter::CreateJSONTraceWriter(*stream, tag);
+  } else {
+    writer = TraceWriter::CreateJSONTraceWriter(*stream);
+  }
+
+  size_t max_chunks;
+  if (eventsCount != 0) {
+    size_t chunk_size = TraceBufferChunk::kChunkSize;
+    max_chunks = (eventsCount + chunk_size - 1) / chunk_size;
+  } else {
+    max_chunks = TraceBuffer::kRingBufferChunks;
+  }
+
+  TraceBuffer* ring_buffer =
+      TraceBuffer::CreateTraceBufferRingBuffer(max_chunks, writer);
+  controller->Initialize(ring_buffer);
+  controller->StartTracing(trace_config);
+  return JSVM_OK;
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_TraceStop(JSVM_OutputStream stream,
+                                         void* streamData) {
+  if (stream == nullptr || streamData == nullptr ||
+      v8impl::g_trace_stream.get() == nullptr) {
+    return JSVM_INVALID_ARG;
+  }
+
+  using namespace v8::platform::tracing;
+  v8::Platform* platform = v8impl::g_platform.get();
+  auto controller =
+      static_cast<TracingController*>(platform->GetTracingController());
+  DCHECK(controller != nullptr);
+  controller->StopTracing();
+
+  // Call the destructor of TraceBuffer to print the JSON end.
+  controller->Initialize(nullptr);
+
+  std::string output = v8impl::g_trace_stream.get()->rdbuf()->str();
+  stream(output.c_str(), output.size(), streamData);
+
+  v8impl::g_trace_stream.reset(nullptr);
+  return JSVM_OK;
 }
 
 JSVM_Status JSVM_CDECL OH_JSVM_GetPropertyNames(JSVM_Env env,
@@ -2792,6 +3251,246 @@ JSVM_Status JSVM_CDECL OH_JSVM_ObjectSeal(JSVM_Env env, JSVM_Value object) {
   return GET_RETURN_STATUS(env);
 }
 
+static void OnOOMError(const char* location, const v8::OOMDetails& details) {
+  auto* isolate = v8::Isolate::GetCurrent();
+  auto* pool = v8impl::GetIsolateHandlerPool(isolate);
+  if (pool == nullptr) {
+    return;
+  }
+  auto* handler = pool->handlerForOOMError;
+  if (handler == nullptr) {
+    return;
+  }
+  (*handler)(location, details.detail, details.is_heap_oom);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_SetHandlerForOOMError(JSVM_VM vm, JSVM_HandlerForOOMError handler) {
+  if (vm == nullptr) {
+    return JSVM_INVALID_ARG;
+  }
+  auto* isolate = reinterpret_cast<v8::Isolate*>(vm);
+  auto* pool = v8impl::GetOrCreateIsolateHandlerPool(isolate);
+  pool->handlerForOOMError = handler;
+  isolate->SetOOMErrorHandler(OnOOMError);
+  return JSVM_OK;
+}
+
+static void OnFatalError(const char* location, const char* message) {
+  auto* isolate = v8::Isolate::GetCurrent();
+  auto* pool = v8impl::GetIsolateHandlerPool(isolate);
+  if (pool == nullptr) {
+    return;
+  }
+  auto* handler = pool->handlerForFatalError;
+  if (handler == nullptr) {
+    return;
+  }
+  (*handler)(location, message);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_SetHandlerForFatalError(JSVM_VM vm,
+    JSVM_HandlerForFatalError handler) {
+  if (vm == nullptr) {
+    return JSVM_INVALID_ARG;
+  }
+  auto* isolate = reinterpret_cast<v8::Isolate*>(vm);
+  auto* pool = v8impl::GetOrCreateIsolateHandlerPool(isolate);
+  pool->handlerForFatalError = handler;
+  isolate->SetFatalErrorHandler(OnFatalError);
+  return JSVM_OK;
+}
+
+static void OnPromiseReject(v8::PromiseRejectMessage rejectMessage) {
+  auto* isolate = v8::Isolate::GetCurrent();
+  auto* pool = v8impl::GetIsolateHandlerPool(isolate);
+  if (pool == nullptr) {
+    return;
+  }
+  auto* handler = pool->handlerForPromiseReject;
+  if (handler == nullptr) {
+    return;
+  }
+  auto context = isolate->GetCurrentContext();
+  auto env = v8impl::GetEnvByContext(context);
+  v8::HandleScope scope(isolate);
+  v8::Local<v8::Object> rejectInfo = v8::Object::New(isolate);
+  auto strPromise =
+      v8::String::NewFromUtf8(isolate, "promise").ToLocalChecked();
+  (void)rejectInfo->Set(context, strPromise, rejectMessage.GetPromise());
+  auto strValue = v8::String::NewFromUtf8(isolate, "value").ToLocalChecked();
+  (void)rejectInfo->Set(context, strValue, rejectMessage.GetValue());
+  JSVM_Value jsvmRejectInfo = v8impl::JsValueFromV8LocalValue(rejectInfo);
+  JSVM_PromiseRejectEvent rejectEvent = JSVM_PROMISE_REJECT_OTHER_REASONS;
+  switch (rejectMessage.GetEvent()) {
+    case v8::kPromiseRejectWithNoHandler: {
+      rejectEvent = JSVM_PROMISE_REJECT_WITH_NO_HANDLER;
+      break;
+    }
+    case v8::kPromiseHandlerAddedAfterReject: {
+      rejectEvent = JSVM_PROMISE_ADD_HANDLER_AFTER_REJECTED;
+      break;
+    }
+    case v8::kPromiseRejectAfterResolved: {
+      rejectEvent = JSVM_PROMISE_REJECT_AFTER_RESOLVED;
+      break;
+    }
+    case v8::kPromiseResolveAfterResolved: {
+      rejectEvent = JSVM_PROMISE_RESOLVE_AFTER_RESOLVED;
+      break;
+    }
+    default: {
+      rejectEvent = JSVM_PROMISE_REJECT_OTHER_REASONS;
+    }
+  }
+  (*handler)(env, rejectEvent, jsvmRejectInfo);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_SetHandlerForPromiseReject(
+    JSVM_VM vm, JSVM_HandlerForPromiseReject handler) {
+  if (vm == nullptr) {
+    return JSVM_INVALID_ARG;
+  }
+  auto* isolate = reinterpret_cast<v8::Isolate*>(vm);
+  auto* pool = v8impl::GetOrCreateIsolateHandlerPool(isolate);
+  pool->handlerForPromiseReject = handler;
+  isolate->SetPromiseRejectCallback(OnPromiseReject);
+  return JSVM_OK;
+}
+
+JSVM_GCType GetJSVMGCType(v8::GCType gcType) {
+  switch (gcType) {
+    case v8::GCType::kGCTypeScavenge:
+      return JSVM_GC_TYPE_SCAVENGE;
+    case v8::GCType::kGCTypeMinorMarkCompact:
+      return JSVM_GC_TYPE_MINOR_MARK_COMPACT;
+    case v8::GCType::kGCTypeMarkSweepCompact:
+      return JSVM_GC_TYPE_MARK_SWEEP_COMPACT;
+    case v8::GCType::kGCTypeIncrementalMarking:
+      return JSVM_GC_TYPE_INCREMENTAL_MARKING;
+    case v8::GCType::kGCTypeProcessWeakCallbacks:
+      return JSVM_GC_TYPE_PROCESS_WEAK_CALLBACKS;
+    default:
+      return JSVM_GC_TYPE_ALL;
+  }
+}
+
+static v8::GCType GetV8GCType(JSVM_GCType gcType) {
+  switch (gcType) {
+    case JSVM_GC_TYPE_SCAVENGE:
+      return v8::GCType::kGCTypeScavenge;
+    case JSVM_GC_TYPE_MINOR_MARK_COMPACT:
+      return v8::GCType::kGCTypeMinorMarkCompact;
+    case JSVM_GC_TYPE_MARK_SWEEP_COMPACT:
+      return v8::GCType::kGCTypeMarkSweepCompact;
+    case JSVM_GC_TYPE_INCREMENTAL_MARKING:
+      return v8::GCType::kGCTypeIncrementalMarking;
+    case JSVM_GC_TYPE_PROCESS_WEAK_CALLBACKS:
+      return v8::GCType::kGCTypeProcessWeakCallbacks;
+    default:
+      return v8::GCType::kGCTypeAll;
+  }
+}
+
+JSVM_GCCallbackFlags GetJSVMGCCallbackFlags(v8::GCCallbackFlags flag) {
+  switch (flag) {
+    case v8::GCCallbackFlags::kGCCallbackFlagConstructRetainedObjectInfos:
+      return JSVM_GC_CALLBACK_CONSTRUCT_RETAINED_OBJECT_INFOS;
+    case v8::GCCallbackFlags::kGCCallbackFlagForced:
+      return JSVM_GC_CALLBACK_FORCED;
+    case v8::GCCallbackFlags::kGCCallbackFlagSynchronousPhantomCallbackProcessing:
+      return JSVM_GC_CALLBACK_SYNCHRONOUS_PHANTOM_CALLBACK_PROCESSING;
+    case v8::GCCallbackFlags::kGCCallbackFlagCollectAllAvailableGarbage:
+      return JSVM_GC_CALLBACK_COLLECT_ALL_AVAILABLE_GARBAGE;
+    case v8::GCCallbackFlags::kGCCallbackFlagCollectAllExternalMemory:
+      return JSVM_GC_CALLBACK_COLLECT_ALL_EXTERNAL_MEMORY;
+    case v8::GCCallbackFlags::kGCCallbackScheduleIdleGarbageCollection:
+      return JSVM_GC_CALLBACK_SCHEDULE_IDLE_GARBAGE_COLLECTION;
+    default:
+      return JSVM_NO_GC_CALLBACK_FLAGS;
+  }
+}
+
+static void OnBeforeGC(v8::Isolate* isolate, v8::GCType type, v8::GCCallbackFlags flags, void* data) {
+  auto *pool = v8impl::GetIsolateHandlerPool(isolate);
+  DCHECK_NOT_NULL(pool);
+  JSVM_GCType gcType = GetJSVMGCType(type);
+  JSVM_GCCallbackFlags gcFlags = GetJSVMGCCallbackFlags(flags);
+
+  auto *gcHandlerWrapper = (v8impl::GCHandlerWrapper*)data;
+  gcHandlerWrapper->handler(reinterpret_cast<JSVM_VM>(isolate), gcType, gcFlags, gcHandlerWrapper->userData);
+}
+
+static void OnAfterGC(v8::Isolate* isolate, v8::GCType type, v8::GCCallbackFlags flags, void* data) {
+  auto *pool = v8impl::GetIsolateHandlerPool(isolate);
+  DCHECK_NOT_NULL(pool);
+  JSVM_GCType gcType = GetJSVMGCType(type);
+  JSVM_GCCallbackFlags gcFlags = GetJSVMGCCallbackFlags(flags);
+
+  auto *gcHandlerWrapper = (v8impl::GCHandlerWrapper*)data;
+  gcHandlerWrapper->handler(reinterpret_cast<JSVM_VM>(isolate), gcType, gcFlags, gcHandlerWrapper->userData);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_AddHandlerForGC(JSVM_VM vm,
+                                               JSVM_CBTriggerTimeForGC triggerTime,
+                                               JSVM_HandlerForGC handler,
+                                               JSVM_GCType gcType,
+                                               void* userData) {
+  if (!vm || !handler) {
+    return JSVM_INVALID_ARG;
+  }
+  auto* isolate = reinterpret_cast<v8::Isolate*>(vm);
+  auto* pool = v8impl::GetOrCreateIsolateHandlerPool(isolate);
+  auto &handlers = triggerTime == JSVM_CB_TRIGGER_BEFORE_GC ?
+    pool->handlerWrappersBeforeGC : pool->handlerWrappersAfterGC;
+  auto it = std::find_if(handlers.begin(), handlers.end(), [handler, userData](v8impl::GCHandlerWrapper *callbackData) {
+    return callbackData->handler == handler && callbackData->userData == userData;
+  });
+  if (it != handlers.end()) {
+    return JSVM_INVALID_ARG;
+  }
+  auto *callbackData = new v8impl::GCHandlerWrapper(gcType, handler, userData);
+  handlers.push_back(callbackData);
+  
+  if (triggerTime == JSVM_CB_TRIGGER_BEFORE_GC) {
+    isolate->AddGCPrologueCallback(
+        OnBeforeGC, callbackData, GetV8GCType(gcType));
+  } else {
+    isolate->AddGCEpilogueCallback(
+        OnAfterGC, callbackData, GetV8GCType(gcType));
+  }
+  return JSVM_OK;
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_RemoveHandlerForGC(JSVM_VM vm,
+                                                  JSVM_CBTriggerTimeForGC triggerTime,
+                                                  JSVM_HandlerForGC handler,
+                                                  void* userData) {
+  if (!vm || !handler) {
+    return JSVM_INVALID_ARG;
+  }
+  auto* isolate = reinterpret_cast<v8::Isolate*>(vm);
+  auto* pool = v8impl::GetOrCreateIsolateHandlerPool(isolate);
+  if (pool == nullptr) {
+    return JSVM_INVALID_ARG;
+  }
+  auto &handlers = triggerTime == JSVM_CB_TRIGGER_BEFORE_GC ?
+    pool->handlerWrappersBeforeGC : pool->handlerWrappersAfterGC;
+  auto it = std::find_if(handlers.begin(), handlers.end(), [handler, userData](v8impl::GCHandlerWrapper *callbackData) {
+    return callbackData->handler == handler && callbackData->userData == userData;
+  });
+  if (it == handlers.end()) {
+    return JSVM_INVALID_ARG;
+  }
+  handlers.erase(it);
+  if (triggerTime == JSVM_CB_TRIGGER_BEFORE_GC) {
+    isolate->RemoveGCPrologueCallback(OnBeforeGC, (*it));
+  } else {
+    isolate->RemoveGCEpilogueCallback(OnAfterGC, (*it));
+  }
+  delete (*it);
+  return JSVM_OK;
+}
+
 JSVM_Status JSVM_CDECL OH_JSVM_IsArray(JSVM_Env env,
                                      JSVM_Value value,
                                      bool* result) {
@@ -2911,6 +3610,60 @@ JSVM_Status JSVM_CDECL OH_JSVM_CreateArrayWithLength(JSVM_Env env,
       v8impl::JsValueFromV8LocalValue(v8::Array::New(env->isolate, length));
 
   return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_CreateExternalStringLatin1(JSVM_Env env,
+                                                          char* str,
+                                                          size_t length,
+                                                          JSVM_Finalize finalizeCallback,
+                                                          void* finalizeHint,
+                                                          JSVM_Value* result,
+                                                          bool* copied) {
+  CHECK_ARG(env, copied);
+  return v8impl::NewExternalString(
+    env,
+    str,
+    length,
+    finalizeCallback,
+    finalizeHint,
+    result,
+    copied,
+    OH_JSVM_CreateStringLatin1,
+    [&](v8::Isolate* isolate) {
+      if (length == JSVM_AUTO_LENGTH) {
+        length = (std::string_view(str)).length();
+      }
+      auto resource = new v8impl::ExternalOneByteStringResource(
+        env, str, length, finalizeCallback, finalizeHint);
+      return v8::String::NewExternalOneByte(isolate, resource);
+    });
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_CreateExternalStringUtf16(JSVM_Env env,
+                                                         char16_t* str,
+                                                         size_t length,
+                                                         JSVM_Finalize finalizeCallback,
+                                                         void* finalizeHint,
+                                                         JSVM_Value* result,
+                                                         bool* copied) {
+  CHECK_ARG(env, copied);
+  return v8impl::NewExternalString(
+    env,
+    str,
+    length,
+    finalizeCallback,
+    finalizeHint,
+    result,
+    copied,
+    OH_JSVM_CreateStringUtf16,
+    [&](v8::Isolate* isolate) {
+      if (length == JSVM_AUTO_LENGTH) {
+        length = (std::u16string_view(str)).length();
+      }
+      auto resource = new v8impl::ExternalStringResource(
+        env, str, length, finalizeCallback, finalizeHint);
+      return v8::String::NewExternalTwoByte(isolate, resource);
+    });
 }
 
 JSVM_Status JSVM_CDECL OH_JSVM_CreateStringLatin1(JSVM_Env env,
@@ -3096,6 +3849,90 @@ JSVM_Status JSVM_CDECL OH_JSVM_SymbolFor(JSVM_Env env,
       v8::Symbol::For(env->isolate, description_string));
 
   return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_CreatePrivate(JSVM_Env env,
+                                             JSVM_Value description,
+                                             JSVM_Data* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
+
+  v8::Isolate* isolate = env->isolate;
+
+  if (description == nullptr) {
+    *result = v8impl::JsDataFromV8LocalData(v8::Private::New(isolate));
+  } else {
+    v8::Local<v8::Value> v8Name = v8impl::V8LocalValueFromJsValue(description);
+    RETURN_STATUS_IF_FALSE(env, v8Name->IsString(), JSVM_STRING_EXPECTED);
+
+    *result = v8impl::JsDataFromV8LocalData(v8::Private::New(isolate, v8Name.As<v8::String>()));
+  }
+
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_SetPrivate(JSVM_Env env,
+                                          JSVM_Value object,
+                                          JSVM_Data key,
+                                          JSVM_Value value) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, object);
+  CHECK_ARG(env, key);
+  CHECK_ARG(env, value);
+
+  auto context = env->context();
+  auto obj = v8impl::V8LocalValueFromJsValue(object);
+  RETURN_STATUS_IF_FALSE(env, obj->IsObject(), JSVM_OBJECT_EXPECTED);
+  auto privateKey = v8impl::V8LocalDataFromJsData(key);
+  RETURN_STATUS_IF_FALSE(env, privateKey->IsPrivate(), JSVM_INVALID_ARG);
+  auto val = v8impl::V8LocalValueFromJsValue(value);
+
+  auto set_maybe = obj.As<v8::Object>()->SetPrivate(context, privateKey.As<v8::Private>(), val);
+
+  RETURN_STATUS_IF_FALSE_WITH_PREAMBLE(env, set_maybe.FromMaybe(false), JSVM_GENERIC_FAILURE);
+  return GET_RETURN_STATUS(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_GetPrivate(JSVM_Env env,
+                                          JSVM_Value object,
+                                          JSVM_Data key,
+                                          JSVM_Value *result) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, object);
+  CHECK_ARG(env, key);
+  CHECK_ARG(env, result);
+
+  auto context = env->context();
+  auto obj = v8impl::V8LocalValueFromJsValue(object);
+  RETURN_STATUS_IF_FALSE(env, obj->IsObject(), JSVM_OBJECT_EXPECTED);
+  auto privateKey = v8impl::V8LocalDataFromJsData(key);
+  RETURN_STATUS_IF_FALSE(env, privateKey->IsPrivate(), JSVM_INVALID_ARG);
+
+  auto getMaybe = obj.As<v8::Object>()->GetPrivate(context, privateKey.As<v8::Private>());
+  CHECK_MAYBE_EMPTY_WITH_PREAMBLE(env, getMaybe, JSVM_GENERIC_FAILURE);
+
+  v8::Local<v8::Value> val = getMaybe.ToLocalChecked();
+  *result = v8impl::JsValueFromV8LocalValue(val);
+  return GET_RETURN_STATUS(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_DeletePrivate(JSVM_Env env,
+                                             JSVM_Value object,
+                                             JSVM_Data key) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, object);
+  CHECK_ARG(env, key);
+
+  auto context = env->context();
+  auto obj = v8impl::V8LocalValueFromJsValue(object);
+  RETURN_STATUS_IF_FALSE(env, obj->IsObject(), JSVM_OBJECT_EXPECTED);
+  auto privateKey = v8impl::V8LocalDataFromJsData(key);
+  RETURN_STATUS_IF_FALSE(env, privateKey->IsPrivate(), JSVM_INVALID_ARG);
+
+  auto deleteMaybe = obj.As<v8::Object>()->DeletePrivate(context, privateKey.As<v8::Private>());
+  auto success = deleteMaybe.IsJust() && deleteMaybe.FromMaybe(false);
+  RETURN_STATUS_IF_FALSE_WITH_PREAMBLE(env, success, JSVM_GENERIC_FAILURE);
+  return GET_RETURN_STATUS(env);
 }
 
 static inline JSVM_Status set_error_code(JSVM_Env env,
@@ -3945,6 +4782,33 @@ JSVM_Status JSVM_CDECL OH_JSVM_CreateReference(JSVM_Env env,
   return jsvm_clear_last_error(env);
 }
 
+// ref for data can not be weak, so initialRefcount must be greater than 0
+JSVM_Status JSVM_CDECL OH_JSVM_CreateDataReference(JSVM_Env env,
+                                                   JSVM_Data data,
+                                                   uint32_t initialRefcount,
+                                                   JSVM_Ref* result) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8 calls here cannot throw
+  // JS exceptions.
+  CHECK_ENV(env);
+  CHECK_ARG(env, data);
+  CHECK_ARG(env, result);
+  RETURN_STATUS_IF_FALSE(env, initialRefcount != 0, JSVM_INVALID_ARG);
+
+  v8::Local<v8::Data> v8_value = v8impl::V8LocalDataFromJsData(data);
+  v8impl::Reference* reference = v8impl::Reference::New(
+      env,
+      v8_value,
+      initialRefcount,
+      v8impl::Ownership::kUserland,
+      nullptr,
+      nullptr,
+      nullptr,
+      false);
+
+  *result = reinterpret_cast<JSVM_Ref>(reference);
+  return jsvm_clear_last_error(env);
+}
+
 // Deletes a reference. The referenced value is released, and may be GC'd unless
 // there are other references to it.
 JSVM_Status JSVM_CDECL OH_JSVM_DeleteReference(JSVM_Env env, JSVM_Ref ref) {
@@ -4024,7 +4888,27 @@ JSVM_Status JSVM_CDECL OH_JSVM_GetReferenceValue(JSVM_Env env,
   CHECK_ARG(env, result);
 
   v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(ref);
-  *result = v8impl::JsValueFromV8LocalValue(reference->Get());
+  RETURN_STATUS_IF_FALSE(env, reference->IsValue(), JSVM_INVALID_ARG);
+  *result = v8impl::JsValueFromV8LocalValue(reference->GetValue());
+
+  return jsvm_clear_last_error(env);
+}
+
+// Attempts to get a referenced value. If the reference is weak, the value might
+// no longer be available, in that case the call is still successful but the
+// result is NULL.
+JSVM_Status JSVM_CDECL OH_JSVM_GetReferenceData(JSVM_Env env,
+                                                JSVM_Ref ref,
+                                                JSVM_Data* result) {
+  // Omit JSVM_PREAMBLE and GET_RETURN_STATUS because V8 calls here cannot throw
+  // JS exceptions.
+  CHECK_ENV(env);
+  CHECK_ARG(env, ref);
+  CHECK_ARG(env, result);
+
+  v8impl::Reference* reference = reinterpret_cast<v8impl::Reference*>(ref);
+  RETURN_STATUS_IF_FALSE(env, !reference->IsValue(), JSVM_INVALID_ARG);
+  *result = v8impl::JsDataFromV8LocalData(reference->GetData());
 
   return jsvm_clear_last_error(env);
 }
@@ -4892,6 +5776,232 @@ OH_JSVM_DefineClassWithPropertyHandler(JSVM_Env env,
   return GET_RETURN_STATUS(env);
 }
 
+JSVM_Status ProcessPropertyHandler(JSVM_Env env,
+                                   v8::Local<v8::FunctionTemplate> tpl,
+                                   JSVM_PropertyHandlerCfg propertyHandlerCfg,
+                                   JSVM_Callback callAsFunctionCallback,
+                                   v8impl::JSVM_PropertyHandlerCfgStruct** propertyHandlerCfgStruct) {
+  CHECK_ARG(env, propertyHandlerCfg);
+  *propertyHandlerCfgStruct = v8impl::CreatePropertyCfg(env, propertyHandlerCfg);
+  if (*propertyHandlerCfgStruct == nullptr) {
+    return JSVM_GENERIC_FAILURE;
+  }
+  v8::Local<v8::Value> cbdata = v8impl::CallbackBundle::New(env, *propertyHandlerCfgStruct);
+
+  // register named property handler
+  v8::NamedPropertyHandlerConfiguration namedPropertyHandler;
+  if (propertyHandlerCfg->genericNamedPropertyGetterCallback) {
+    namedPropertyHandler.getter = v8impl::PropertyCallbackWrapper<v8::Value>::NameGetterInvoke;
+  }
+  if (propertyHandlerCfg->genericNamedPropertySetterCallback) {
+    namedPropertyHandler.setter = v8impl::PropertyCallbackWrapper<v8::Value>::NameSetterInvoke;
+  }
+  if (propertyHandlerCfg->genericNamedPropertyDeleterCallback) {
+    namedPropertyHandler.deleter = v8impl::PropertyCallbackWrapper<v8::Boolean>::NameDeleterInvoke;
+  }
+  if (propertyHandlerCfg->genericNamedPropertyEnumeratorCallback) {
+    namedPropertyHandler.enumerator = v8impl::PropertyCallbackWrapper<v8::Array>::NameEnumeratorInvoke;
+  }
+  namedPropertyHandler.data = cbdata;
+  tpl->InstanceTemplate()->SetHandler(namedPropertyHandler);
+
+  // register indexed property handle
+  v8::IndexedPropertyHandlerConfiguration indexPropertyHandler;
+  if (propertyHandlerCfg->genericIndexedPropertyGetterCallback) {
+    indexPropertyHandler.getter = v8impl::PropertyCallbackWrapper<v8::Value>::IndexGetterInvoke;
+  }
+  if (propertyHandlerCfg->genericIndexedPropertySetterCallback) {
+    indexPropertyHandler.setter = v8impl::PropertyCallbackWrapper<v8::Value>::IndexSetterInvoke;
+  }
+  if (propertyHandlerCfg->genericIndexedPropertyDeleterCallback) {
+    indexPropertyHandler.deleter = v8impl::PropertyCallbackWrapper<v8::Boolean>::IndexDeleterInvoke;
+  }
+  if (propertyHandlerCfg->genericIndexedPropertyEnumeratorCallback) {
+    indexPropertyHandler.enumerator = v8impl::PropertyCallbackWrapper<v8::Array>::IndexEnumeratorInvoke;
+  }
+  indexPropertyHandler.data = cbdata;
+  tpl->InstanceTemplate()->SetHandler(indexPropertyHandler);
+
+  // register call as function
+  if (callAsFunctionCallback && callAsFunctionCallback->callback) {
+    v8::Local<v8::Value> funcCbdata = v8impl::CallbackBundle::New(env, callAsFunctionCallback);
+    tpl->InstanceTemplate()->SetCallAsFunctionHandler(v8impl::FunctionCallbackWrapper::Invoke, funcCbdata);
+  }
+  return JSVM_OK;
+}
+
+class DefineClassOptionsResolver {
+  public:
+  void ProcessOptions(size_t length, JSVM_DefineClassOptions options[], JSVM_Env env,
+                      v8::Local<v8::FunctionTemplate> tpl) {
+    for (int32_t i = 0; i < length; i++) {
+      if (status != JSVM_OK) {
+        break;
+      }
+      switch(options[i].id) {
+        case JSVM_DEFINE_CLASS_NORMAL:
+          break;
+        case JSVM_DEFINE_CLASS_WITH_COUNT: {
+          auto count = options[i].content.num;
+          v8::Local<v8::ObjectTemplate> instance_templ = tpl->InstanceTemplate();
+          instance_templ->SetInternalFieldCount(count);
+          break;
+        }
+        case JSVM_DEFINE_CLASS_WITH_PROPERTY_HANDLER: {
+          hasPropertyHandle = true;
+          auto* propertyHandle = static_cast<JSVM_PropertyHandler*>(options[i].content.ptr);
+          propertyHandlerCfg = propertyHandle->propertyHandlerCfg;
+          callAsFunctionCallback = propertyHandle->callAsFunctionCallback;
+          status = ProcessPropertyHandler(env, tpl, propertyHandlerCfg, callAsFunctionCallback,
+                                          &propertyHandlerCfgStruct);
+          break;
+        }
+        default: {
+          status = JSVM_INVALID_ARG;
+        }
+      }
+    }
+  }
+
+  JSVM_Status GetStatus() {
+    return status;
+  }
+
+  v8impl::JSVM_PropertyHandlerCfgStruct* GetPropertyHandler() {
+    return propertyHandlerCfgStruct;
+  }
+
+  bool HasPropertyHandler() {
+    return hasPropertyHandle;
+  }
+
+ private:
+  JSVM_PropertyHandlerCfg propertyHandlerCfg = nullptr;
+  JSVM_Callback callAsFunctionCallback = nullptr;
+  bool hasPropertyHandle = false;
+  JSVM_Status status = JSVM_OK;
+  v8impl::JSVM_PropertyHandlerCfgStruct* propertyHandlerCfgStruct = nullptr;
+};
+
+JSVM_Status JSVM_CDECL
+OH_JSVM_DefineClassWithOptions(JSVM_Env env,
+                               const char* utf8name,
+                               size_t length,
+                               JSVM_Callback constructor,
+                               size_t propertyCount,
+                               const JSVM_PropertyDescriptor* properties,
+                               JSVM_Value parentClass,
+                               size_t option_count,
+                               JSVM_DefineClassOptions options[],
+                               JSVM_Value* result) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, result);
+  CHECK_ARG(env, constructor);
+  CHECK_ARG(env, constructor->callback);
+
+  if (propertyCount > 0) {
+    CHECK_ARG(env, properties);
+  }
+
+  v8::Isolate* isolate = env->isolate;
+  v8::EscapableHandleScope scope(isolate);
+  v8::Local<v8::FunctionTemplate> tpl;
+  STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+      env, constructor, &tpl));
+
+  v8::Local<v8::String> name_string;
+  CHECK_NEW_FROM_UTF8_LEN(env, name_string, utf8name, length);
+  tpl->SetClassName(name_string);
+
+  size_t static_property_count = 0;
+  for (size_t i = 0; i < propertyCount; i++) {
+    const JSVM_PropertyDescriptor* p = properties + i;
+
+    if ((p->attributes & JSVM_STATIC) != 0) { // attributes
+      // Static properties are handled separately below.
+      static_property_count++;
+      continue;
+    }
+
+    v8::Local<v8::Name> propertyName;
+    STATUS_CALL(v8impl::V8NameFromPropertyDescriptor(env, p, &propertyName));
+    v8::PropertyAttribute attributes = v8impl::V8PropertyAttributesFromDescriptor(p);
+
+    // This code is similar to that in OH_JSVM_DefineProperties(); the
+    // difference is it applies to a template instead of an object,
+    // and preferred PropertyAttribute for lack of PropertyDescriptor
+    // support on ObjectTemplate.
+    if (p->getter != nullptr || p->setter != nullptr) {
+      v8::Local<v8::FunctionTemplate> getterTpl;
+      v8::Local<v8::FunctionTemplate> setterTpl;
+      if (p->getter != nullptr) {
+        STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+            env, p->getter, &getterTpl));
+      }
+      if (p->setter != nullptr) {
+        STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+            env, p->setter, &setterTpl));
+      }
+
+      tpl->PrototypeTemplate()->SetAccessorProperty(propertyName,
+                                                    getterTpl,
+                                                    setterTpl,
+                                                    attributes,
+                                                    v8::AccessControl::DEFAULT);
+    } else if (p->method != nullptr) {
+      v8::Local<v8::FunctionTemplate> temp;
+      STATUS_CALL(v8impl::FunctionCallbackWrapper::NewTemplate(
+          env, p->method, &temp, v8::Signature::New(isolate, tpl)));
+
+      tpl->PrototypeTemplate()->Set(propertyName, temp, attributes);
+    } else {
+      v8::Local<v8::Value> value = v8impl::V8LocalValueFromJsValue(p->value);
+      tpl->PrototypeTemplate()->Set(propertyName, value, attributes);
+    }
+  }
+
+  if (parentClass != nullptr) {
+    v8::Local<v8::Function> parentFunc;
+    CHECK_TO_FUNCTION(env, parentFunc, parentClass);
+    if (!tpl->Inherit(parentFunc)) {
+      return JSVM_INVALID_ARG;
+    }
+  }
+
+  DefineClassOptionsResolver optionResolver;
+  optionResolver.ProcessOptions(option_count, options, env, tpl);
+
+  if (optionResolver.GetStatus() != JSVM_OK) {
+    return optionResolver.GetStatus();
+  }
+
+  v8::Local<v8::Context> context = env->context();
+  *result = v8impl::JsValueFromV8LocalValue(
+      scope.Escape(tpl->GetFunction(context).ToLocalChecked()));
+
+  if (optionResolver.HasPropertyHandler()) {
+    v8impl::Reference::New(env, v8impl::V8LocalValueFromJsValue(*result), 0, v8impl::Ownership::kRuntime,
+      v8impl::CfgFinalizedCallback, optionResolver.GetPropertyHandler(), nullptr);
+  }
+
+  if (static_property_count > 0) {
+    std::vector<JSVM_PropertyDescriptor> static_descriptors;
+    static_descriptors.reserve(static_property_count);
+
+    for (size_t i = 0; i < propertyCount; i++) {
+      const JSVM_PropertyDescriptor* p = properties + i;
+      if ((p->attributes & JSVM_STATIC) != 0) {
+        static_descriptors.push_back(*p);
+      }
+    }
+
+    STATUS_CALL(OH_JSVM_DefineProperties(
+        env, *result, static_descriptors.size(), static_descriptors.data()));
+  }
+
+  return GET_RETURN_STATUS(env);
+}
+
 JSVM_Status JSVM_CDECL OH_JSVM_IsLocked(JSVM_Env env,
                                         bool* isLocked) {
   CHECK_ENV(env);
@@ -5207,7 +6317,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_ObjectSetPrototypeOf(JSVM_Env env,
 
 JSVM_Status JSVM_CDECL OH_JSVM_RetainScript(JSVM_Env env, JSVM_Script script) {
   CHECK_ENV(env);
-  auto jsvmData = reinterpret_cast<JSVM_Data__ *>(script);
+  auto jsvmData = reinterpret_cast<JSVM_Script_Data__ *>(script);
 
   RETURN_STATUS_IF_FALSE(env, jsvmData && !jsvmData->isGlobal, JSVM_INVALID_ARG);
 
@@ -5220,7 +6330,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_RetainScript(JSVM_Env env, JSVM_Script script) {
 
 JSVM_Status JSVM_CDECL OH_JSVM_ReleaseScript(JSVM_Env env, JSVM_Script script) {
   CHECK_ENV(env);
-  auto jsvmData = reinterpret_cast<JSVM_Data__ *>(script);
+  auto jsvmData = reinterpret_cast<JSVM_Script_Data__ *>(script);
 
   RETURN_STATUS_IF_FALSE(env, jsvmData && jsvmData->isGlobal, JSVM_INVALID_ARG);
 
