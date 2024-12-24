@@ -3,7 +3,7 @@
     'deps': '../',
     'v8_use_siphash%': 0,
     'v8_trace_maps%': 0,
-    'use_node_zlib%': 'false',
+    'use_node_zlib%': 'true',
     'enable_hilog%' : 'true',
     'v8_enable_pointer_compression%': 1,
     'v8_enable_31bit_smis_on_64bit_arch%': 0,
