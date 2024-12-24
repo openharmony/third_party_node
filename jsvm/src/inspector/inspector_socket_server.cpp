@@ -26,6 +26,7 @@
 
 #include "jsvm_version.h"
 #include "uv.h"
+#include "v8_inspector_protocol_json.h"
 #include "zlib.h"
 
 namespace jsvm {
@@ -35,11 +36,6 @@ namespace inspector {
 // depend on inspector_socket_server.h
 std::string FormatWsAddress(const std::string& host, int port, const std::string& targetId, bool includeProtocol);
 namespace {
-
-static const uint8_t PROTOCOL_JSON[] = {
-#include "v8_inspector_protocol_json.h" // NOLINT(build/include_order)
-};
-
 void Escape(std::string* string)
 {
     for (char& c : *string) {
