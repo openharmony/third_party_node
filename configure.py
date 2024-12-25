@@ -82,6 +82,12 @@ shared_builtin_optgroup = parser.add_argument_group("Shared builtins",
 
 # Options should be in alphabetical order but keep --prefix at the top,
 # that's arguably the one people will be looking for most.
+parser.add_argument('--target-platform',
+    action='store',
+    dest='target_platform',
+    default=None,
+    help='build with zlib in node deps')
+
 parser.add_argument('--prefix',
     action='store',
     dest='prefix',
@@ -1278,6 +1284,9 @@ def configure_node(o):
   o['variables']['host_arch'] = host_arch
   o['variables']['target_arch'] = target_arch
   o['variables']['node_byteorder'] = sys.byteorder
+  if options.target_platform != 'phone':
+    o['variables']['use_node_zlib'] = 'true'
+    o['variables']['enable_hilog'] = 'false'
 
   cross_compiling = (options.cross_compiling
                      if options.cross_compiling is not None
