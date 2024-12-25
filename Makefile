@@ -131,7 +131,7 @@ ifeq ($(BUILD_WITH), make)
 $(NODE_EXE): build_type:=Release
 $(NODE_G_EXE): build_type:=Debug
 $(NODE_EXE) $(NODE_G_EXE): config.gypi out/Makefile
-	$(MAKE) -C out BUILDTYPE=${build_type} V=$(V)
+	$(MAKE) -C out BUILDTYPE=${build_type} V=$(V) libjsvm -j$(NUM_CPUS)
 	if [ ! -r $@ ] || [ ! -L $@ ]; then \
 	  ln -fs out/${build_type}/$(NODE_EXE) $@; fi
 else
