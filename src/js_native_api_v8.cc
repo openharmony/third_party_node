@@ -5019,62 +5019,67 @@ JSVM_Status JSVM_CDECL OH_JSVM_IsBigInt(JSVM_Env env,
   return jsvm_clear_last_error(env);
 }
 
-JSVM_Status JSVM_CDECL OH_JSVM_CreateSet(JSVM_Env env,
-                                         JSVM_Value* result) {
-  CHECK_ENV(env);
-  CHECK_ARG(env, result);
+JSVM_Status JSVM_CDECL OH_JSVM_IsConstructor(JSVM_Env env,
+                                             JSVM_Value value,
+                                             bool* isConstructor)
+{
+    CHECK_ENV(env);
+    CHECK_ARG(env, value);
+    CHECK_ARG(env, isConstructor);
 
-  *result = v8impl::JsValueFromV8LocalValue(v8::Set::New(env->isolate));
+    v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+    if (!val->IsObject()) {
+        *isConstructor = false;
+        return jsvm_clear_last_error(env);
+    }
+    v8::Local<v8::Object> obj = val.As<v8::Object>();
+    *isConstructor = obj->IsConstructor();
 
-  return jsvm_clear_last_error(env);
+    return jsvm_clear_last_error(env);
 }
 
-JSVM_Status JSVM_CDECL OH_JSVM_IsSet(JSVM_Env env,
+JSVM_Status JSVM_CDECL OH_JSVM_CreateRegExp(JSVM_Env env,
+                                            JSVM_Value value,
+                                            JSVM_RegExpFlags flags,
+                                            JSVM_Value* result)
+{
+    JSVM_PREAMBLE(env);
+    CHECK_ARG(env, value);
+    CHECK_ARG(env, result);
+
+    v8::Local<v8::Value> pattern = v8impl::V8LocalValueFromJsValue(value);
+    RETURN_STATUS_IF_FALSE(env, pattern->IsString(), JSVM_STRING_EXPECTED);
+    v8::Local<v8::Context> context = env->context();
+    v8::MaybeLocal<v8::RegExp> regExp = v8::RegExp::New(context, pattern.As<v8::String>(),
+                                                        static_cast<v8::RegExp::Flags>(flags));
+    CHECK_MAYBE_EMPTY(env, regExp, JSVM_GENERIC_FAILURE);
+    *result = v8impl::JsValueFromV8LocalValue(regExp.ToLocalChecked());
+
+    return GET_RETURN_STATUS(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_CreateMap(JSVM_Env env, JSVM_Value* result)
+{
+    CHECK_ENV(env);
+    CHECK_ARG(env, result);
+
+    *result = v8impl::JsValueFromV8LocalValue(v8::Map::New(env->isolate));
+
+    return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_IsMap(JSVM_Env env,
                                      JSVM_Value value,
-                                     bool* isSet) {
-  CHECK_ENV(env);
-  CHECK_ARG(env, value);
-  CHECK_ARG(env, isSet);
+                                     bool* isMap)
+{
+    CHECK_ENV(env);
+    CHECK_ARG(env, value);
+    CHECK_ARG(env, isMap);
 
-  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
-  *isSet = val->IsSet();
+    v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
 
-  return jsvm_clear_last_error(env);
-}
-
-JSVM_Status JSVM_CDECL OH_JSVM_ObjectGetPrototypeOf(JSVM_Env env,
-                                                    JSVM_Value object,
-                                                    JSVM_Value* result) {
-  JSVM_PREAMBLE(env);
-  CHECK_ARG(env, result);
-
-  v8::Local<v8::Context> context = env->context();
-
-  v8::Local<v8::Object> obj;
-  CHECK_TO_OBJECT(env, context, obj, object);
-
-  v8::Local<v8::Value> val = obj->GetPrototypeV2();
-  *result = v8impl::JsValueFromV8LocalValue(val);
-  return GET_RETURN_STATUS(env);
-}
-
-JSVM_Status JSVM_CDECL OH_JSVM_ObjectSetPrototypeOf(JSVM_Env env,
-                                                    JSVM_Value object,
-                                                    JSVM_Value prototype) {
-  JSVM_PREAMBLE(env);
-  CHECK_ARG(env, prototype);
-
-  v8::Local<v8::Context> context = env->context();
-
-  v8::Local<v8::Object> obj;
-  CHECK_TO_OBJECT(env, context, obj, object);
-
-  v8::Local<v8::Value> type = v8impl::V8LocalValueFromJsValue(prototype);
-  RETURN_STATUS_IF_FALSE(env, type->IsObject(), JSVM_INVALID_ARG);
-  v8::Maybe<bool> set_maybe = obj->SetPrototypeV2(context, type);
-
-  RETURN_STATUS_IF_FALSE(env, set_maybe.FromMaybe(false), JSVM_GENERIC_FAILURE);
-  return GET_RETURN_STATUS(env);
+    *isMap = val->IsMap();
+    return jsvm_clear_last_error(env);
 }
 
 JSVM_Status JSVM_CDECL OH_JSVM_RetainScript(JSVM_Env env, JSVM_Script script) {
@@ -5145,67 +5150,62 @@ JSVM_Status JSVM_CDECL OH_JSVM_OpenInspectorWithName(JSVM_Env env,
   return GET_RETURN_STATUS(env);
 }
 
-JSVM_Status JSVM_CDECL OH_JSVM_IsConstructor(JSVM_Env env,
-                                             JSVM_Value value,
-                                             bool* isConstructor)
-{
-    CHECK_ENV(env);
-    CHECK_ARG(env, value);
-    CHECK_ARG(env, isConstructor);
+JSVM_Status JSVM_CDECL OH_JSVM_CreateSet(JSVM_Env env,
+                                         JSVM_Value* result) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, result);
 
-    v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
-    if (!val->IsObject()) {
-        *isConstructor = false;
-        return jsvm_clear_last_error(env);
-    }
-    v8::Local<v8::Object> obj = val.As<v8::Object>();
-    *isConstructor = obj->IsConstructor();
+  *result = v8impl::JsValueFromV8LocalValue(v8::Set::New(env->isolate));
 
-    return jsvm_clear_last_error(env);
+  return jsvm_clear_last_error(env);
 }
 
-JSVM_Status JSVM_CDECL OH_JSVM_CreateRegExp(JSVM_Env env,
-                                            JSVM_Value value,
-                                            JSVM_RegExpFlags flags,
-                                            JSVM_Value* result)
-{
-    JSVM_PREAMBLE(env);
-    CHECK_ARG(env, value);
-    CHECK_ARG(env, result);
-
-    v8::Local<v8::Value> pattern = v8impl::V8LocalValueFromJsValue(value);
-    RETURN_STATUS_IF_FALSE(env, pattern->IsString(), JSVM_STRING_EXPECTED);
-    v8::Local<v8::Context> context = env->context();
-    v8::MaybeLocal<v8::RegExp> regExp = v8::RegExp::New(context, pattern.As<v8::String>(),
-                                                        static_cast<v8::RegExp::Flags>(flags));
-    CHECK_MAYBE_EMPTY(env, regExp, JSVM_GENERIC_FAILURE);
-    *result = v8impl::JsValueFromV8LocalValue(regExp.ToLocalChecked());
-
-    return GET_RETURN_STATUS(env);
-}
-
-JSVM_Status JSVM_CDECL OH_JSVM_CreateMap(JSVM_Env env, JSVM_Value* result)
-{
-    CHECK_ENV(env);
-    CHECK_ARG(env, result);
-
-    *result = v8impl::JsValueFromV8LocalValue(v8::Map::New(env->isolate));
-
-    return jsvm_clear_last_error(env);
-}
-
-JSVM_Status JSVM_CDECL OH_JSVM_IsMap(JSVM_Env env,
+JSVM_Status JSVM_CDECL OH_JSVM_IsSet(JSVM_Env env,
                                      JSVM_Value value,
-                                     bool* isMap)
-{
-    CHECK_ENV(env);
-    CHECK_ARG(env, value);
-    CHECK_ARG(env, isMap);
+                                     bool* isSet) {
+  CHECK_ENV(env);
+  CHECK_ARG(env, value);
+  CHECK_ARG(env, isSet);
 
-    v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(value);
+  *isSet = val->IsSet();
 
-    *isMap = val->IsMap();
-    return jsvm_clear_last_error(env);
+  return jsvm_clear_last_error(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_ObjectGetPrototypeOf(JSVM_Env env,
+                                                    JSVM_Value object,
+                                                    JSVM_Value* result) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, result);
+
+  v8::Local<v8::Context> context = env->context();
+
+  v8::Local<v8::Object> obj;
+  CHECK_TO_OBJECT(env, context, obj, object);
+
+  v8::Local<v8::Value> val = obj->GetPrototypeV2();
+  *result = v8impl::JsValueFromV8LocalValue(val);
+  return GET_RETURN_STATUS(env);
+}
+
+JSVM_Status JSVM_CDECL OH_JSVM_ObjectSetPrototypeOf(JSVM_Env env,
+                                                    JSVM_Value object,
+                                                    JSVM_Value prototype) {
+  JSVM_PREAMBLE(env);
+  CHECK_ARG(env, prototype);
+
+  v8::Local<v8::Context> context = env->context();
+
+  v8::Local<v8::Object> obj;
+  CHECK_TO_OBJECT(env, context, obj, object);
+
+  v8::Local<v8::Value> type = v8impl::V8LocalValueFromJsValue(prototype);
+  RETURN_STATUS_IF_FALSE(env, type->IsObject(), JSVM_INVALID_ARG);
+  v8::Maybe<bool> set_maybe = obj->SetPrototypeV2(context, type);
+
+  RETURN_STATUS_IF_FALSE(env, set_maybe.FromMaybe(false), JSVM_GENERIC_FAILURE);
+  return GET_RETURN_STATUS(env);
 }
 
 JSVM_Status JSVM_CDECL OH_JSVM_CompileWasmModule(JSVM_Env env,
