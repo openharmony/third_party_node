@@ -471,8 +471,8 @@
         } ],
         [ 'use_node_zlib=="false"' , {
             'include_dirs': [
-              '<(NDK_SYS_ROOT)/../../../third_party/zlib/include',
-              '<(NDK_SYS_ROOT)/../../../third_party/zlib',
+              '../../third_party/zlib/include',
+              '../../third_party/zlib',
             ],
             'ldflags' : [
               '<(NDK_SYS_ROOT)/obj/third_party/zlib/libz.a',
@@ -480,7 +480,7 @@
         } ],
         [ 'enable_hilog=="true"' , {
             'ldflags' : [
-              '<(NDK_SYS_ROOT)/hiviewdfx/hilog_override/libhilog.so',
+              '<(NDK_SYS_ROOT)/hiviewdfx/hilog/libhilog.so',
             ],
             'defines': [
               'ENABLE_HILOG',
@@ -537,12 +537,12 @@
         'jsvm/interface/innerkits',
         'jsvm/interface/kits',
         'jsvm/src',
-        '<(NDK_SYS_ROOT)/../../../base/hiviewdfx/hisysevent/interfaces/native/innerkits/hisysevent/include',
-        '<(NDK_SYS_ROOT)/../../../base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter',
-        '<(NDK_SYS_ROOT)/../../../base/hiviewdfx/hilog/interfaces/native/innerkits/include',
-        '<(NDK_SYS_ROOT)/../../../base/startup/init/interfaces/innerkits/include/param',
-        '<(NDK_SYS_ROOT)/../../../third_party/libuv/include',
-        '<(NDK_SYS_ROOT)/../../../third_party/icu/icu4c/source/common',
+        '../../base/hiviewdfx/hisysevent/interfaces/native/innerkits/hisysevent/include',
+        '../../base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter',
+        '../../base/hiviewdfx/hilog/interfaces/native/innerkits/include',
+        '../../base/startup/init/interfaces/innerkits/include/param',
+        '../../third_party/libuv/include',
+        '../../third_party/icu/icu4c/source/common',
         '<(NDK_SYS_ROOT)/obj/third_party/openssl/build_all_generated/linux-aarch64/include',
         '../openssl/include',
         '<(obj_dir)/../../../v8-include'
