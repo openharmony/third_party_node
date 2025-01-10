@@ -22,8 +22,13 @@
 #ifdef ENABLE_HILOG
 #include "hilog/log.h"
 #endif
+#include <string>
+#include <sys/prctl.h>
+#include <unordered_set>
+
 #include "hitrace_meter.h"
 #include "init_param.h"
+#include "jsvm_log.h"
 #include "unistd.h"
 #ifdef ENABLE_HISYSEVENT
 #include "hisysevent.h"
@@ -32,7 +37,7 @@
 extern "C" void ReportData(uint32_t resType,
                            int64_t value,
                            const std::unordered_map<std::string, std::string>& mapPayLoad);
-
+static bool isJitMode = true;
 namespace ResourceSchedule {
 namespace ResType {
 enum : uint32_t { RES_TYPE_REPORT_KEY_THREAD = 39 };
@@ -133,6 +138,42 @@ RunJsTrace::~RunJsTrace()
 }
 
 namespace ohos {
+#define JITFORT_QUERY_ENCAPS 'E'
+#define HM_PR_SET_JITFORT 0x6a6974
+
+const std::string ENABLE_JIT_CONF_PATH = "/etc/jsvm/app_jit_enable_list.conf";
+bool ProcessBundleName(std::string& bundleName);
+
+void ReadEnableList(const std::string& jitConfigPath, std::unordered_set<std::string>& enableSet)
+{
+    std::ifstream file(jitConfigPath);
+    if (file.is_open()) {
+        std::string line;
+        while (std::getline(file, line)) {
+            if (!line.empty()) {
+                enableSet.insert(line);
+            }
+        }
+        file.close();
+    } else {
+        LOG(Error) << "Failed to open file: " << jitConfigPath << std::endl;
+    }
+}
+
+bool InJitMode() {
+    return isJitMode;
+}
+
+inline bool InAppEnableList(const std::string& bundleName, std::unordered_set<std::string>& enableSet)
+{
+    return (enableSet.count(bundleName) != 0);
+}
+
+inline bool HasJitfortACL()
+{
+    return (prctl(HM_PR_SET_JITFORT, JITFORT_QUERY_ENCAPS, 0) == 0);
+}
+
 void ReportKeyThread(ThreadRole role)
 {
     uint64_t uid = OS::GetUid();
@@ -161,7 +202,16 @@ inline bool ReadSystemXpmState()
 void SetSecurityMode()
 {
     constexpr size_t SEC_ARG_CNT = 2;
-    if (ReadSystemXpmState()) {
+    std::string bundleName;
+    if (!ProcessBundleName(bundleName)) {
+        LOG(Error) << "Failed to get bundleName" << std::endl;
+        bundleName = "INVALID_BUNDLE_NAME";
+    }
+    std::unordered_set<std::string> enableList {};
+    ReadEnableList(ENABLE_JIT_CONF_PATH, enableList);
+
+    if (ReadSystemXpmState() || (!InAppEnableList(bundleName, enableList) && !HasJitfortACL())) {
+        isJitMode = false;
         int secArgc = SEC_ARG_CNT;
         constexpr bool removeFlag = false;
         const char* secArgv[SEC_ARG_CNT] = { "jsvm", "--jitless" };
