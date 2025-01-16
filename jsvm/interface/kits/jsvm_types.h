@@ -329,6 +329,10 @@ typedef enum {
     JSVM_NO_EXTERNAL_BUFFERS_ALLOWED,
     /** cannot run +js status. */
     JSVM_CANNOT_RUN_JS,
+    /** jit mode expected status.
+     * @since 15
+     */
+    JSVM_JIT_MODE_EXPECTED,
     /** invalid input type status.
      * @since 16
      */
