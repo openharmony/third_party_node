@@ -1011,11 +1011,11 @@ JSVM_Status JSVM_CDECL OH_JSVM_Init(const JSVM_InitOptions* options)
     OHOS_API_CALL(platform::ohos::ReportKeyThread(platform::ohos::ThreadRole::IMPORTANT_DISPLAY));
     v8::V8::InitializePlatform(v8impl::g_platform.get());
 
-    OHOS_API_CALL(platform::ohos::SetSecurityMode());
-
     if (options && options->argc && options->argv) {
         v8::V8::SetFlagsFromCommandLine(options->argc, options->argv, options->removeFlags);
     }
+    OHOS_API_CALL(platform::ohos::SetSecurityMode());
+
     v8::V8::Initialize();
 
     const auto cb = v8impl::FunctionCallbackWrapper::Invoke;
@@ -1679,32 +1679,32 @@ JSVM_EXTERN JSVM_Status JSVM_CDECL OH_JSVM_PerformMicrotaskCheckpoint(JSVM_VM vm
 }
 
 // Warning: Keep in-sync with JSVM_Status enum
-static const char* errorMessages[] = {
-    nullptr,
-    "Invalid argument",
-    "An object was expected",
-    "A string was expected",
-    "A string or symbol was expected",
-    "A function was expected",
-    "A number was expected",
-    "A boolean was expected",
-    "An array was expected",
-    "Unknown failure",
-    "An exception is pending",
-    "The async work item was cancelled",
-    "OH_JSVM_EscapeHandle already called on scope",
-    "Invalid handle scope usage",
-    "Invalid callback scope usage",
-    "Thread-safe function queue is full",
-    "Thread-safe function handle is closing",
-    "A bigint was expected",
-    "A date was expected",
-    "An arraybuffer was expected",
-    "A detachable arraybuffer was expected",
-    "Main thread would deadlock",
-    "External buffers are not allowed",
-    "Cannot run JavaScript",
-};
+static const char* errorMessages[] = { nullptr,
+                                       "Invalid argument",
+                                       "An object was expected",
+                                       "A string was expected",
+                                       "A string or symbol was expected",
+                                       "A function was expected",
+                                       "A number was expected",
+                                       "A boolean was expected",
+                                       "An array was expected",
+                                       "Unknown failure",
+                                       "An exception is pending",
+                                       "The async work item was cancelled",
+                                       "OH_JSVM_EscapeHandle already called on scope",
+                                       "Invalid handle scope usage",
+                                       "Invalid callback scope usage",
+                                       "Thread-safe function queue is full",
+                                       "Thread-safe function handle is closing",
+                                       "A bigint was expected",
+                                       "A date was expected",
+                                       "An arraybuffer was expected",
+                                       "A detachable arraybuffer was expected",
+                                       "Main thread would deadlock",
+                                       "External buffers are not allowed",
+                                       "Cannot run JavaScript",
+                                       "Cannot run in Jitless Mode",
+                                       "Invalid type" };
 
 JSVM_Status JSVM_CDECL OH_JSVM_GetLastErrorInfo(JSVM_Env env, const JSVM_ExtendedErrorInfo** result)
 {
@@ -1715,7 +1715,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_GetLastErrorInfo(JSVM_Env env, const JSVM_Extende
     // message in the `JSVM_Status` enum each time a new error message is added.
     // We don't have a jsvm_status_last as this would result in an ABI
     // change each time a message was added.
-    const int lastStatus = JSVM_CANNOT_RUN_JS;
+    const int lastStatus = JSVM_INVALID_TYPE;
 
     static_assert(jsvm::ArraySize(errorMessages) == lastStatus + 1,
                   "Count of error messages must match count of error values");
@@ -4563,6 +4563,8 @@ JSVM_Status JSVM_CDECL OH_JSVM_CompileWasmModule(JSVM_Env env,
                                                  JSVM_Value* wasmModule)
 {
     JSVM_PREAMBLE(env);
+    // add jit mode check
+    RETURN_STATUS_IF_FALSE(env, platform::ohos::InJitMode(), JSVM_JIT_MODE_EXPECTED);
     CHECK_ARG(env, wasmBytecode);
     RETURN_STATUS_IF_FALSE(env, wasmBytecodeLength > 0, JSVM_INVALID_ARG);
     v8::MaybeLocal<v8::WasmModuleObject> maybeModule;
@@ -4590,7 +4592,10 @@ JSVM_Status JSVM_CDECL OH_JSVM_CompileWasmFunction(JSVM_Env env,
                                                    JSVM_WasmOptLevel optLevel)
 {
     JSVM_PREAMBLE(env);
+    // add jit mode check
+    RETURN_STATUS_IF_FALSE(env, platform::ohos::InJitMode(), JSVM_JIT_MODE_EXPECTED);
     CHECK_ARG(env, wasmModule);
+
     v8::Local<v8::Value> val = v8impl::V8LocalValueFromJsValue(wasmModule);
     RETURN_STATUS_IF_FALSE(env, val->IsWasmModuleObject(), JSVM_INVALID_ARG);
 
@@ -4632,6 +4637,8 @@ JSVM_Status JSVM_CDECL OH_JSVM_CreateWasmCache(JSVM_Env env,
                                                size_t* length)
 {
     JSVM_PREAMBLE(env);
+    // add jit mode check
+    RETURN_STATUS_IF_FALSE(env, platform::ohos::InJitMode(), JSVM_JIT_MODE_EXPECTED);
     CHECK_ARG(env, wasmModule);
     CHECK_ARG(env, data);
     CHECK_ARG(env, length);
