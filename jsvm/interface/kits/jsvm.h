@@ -3325,6 +3325,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_OpenInspectorWithName(JSVM_Env env,
  *         Returns {@link JSVM_INVALID_ARG } if any of env, wasmBytecode is NULL, or data length is invalid.\n
  *         Returns {@link JSVM_GENERIC_FAILURE } if compile failed.\n
  *         Returns {@link JSVM_PENDING_EXCEPTION } if an exception occurs.\n
+ *         Returns {@link JSVM_JIT_MODE_EXPECTED } if run in jitless mode.\n
  *
  * @since 12
  */
@@ -3349,6 +3350,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CompileWasmModule(JSVM_Env env,
  *         Returns {@link JSVM_INVALID_ARG } if env is NULL, or wasmModule is NULL or is not a WebAssembly module.\n
  *         Returns {@link JSVM_GENERIC_FAILURE } if functionIndex out of range or compile failed.\n
  *         Returns {@link JSVM_PENDING_EXCEPTION } if an exception occurs.\n
+ *         Returns {@link JSVM_JIT_MODE_EXPECTED } if run in jitless mode.\n
  *
  * @since 12
  */
@@ -3401,6 +3403,7 @@ JSVM_EXTERN JSVM_Status OH_JSVM_CreateWasmCache(JSVM_Env env,
  * @return Returns JSVM funtions result code.
  *         Returns {@link JSVM_OK } if the function executed successfully.\n
  *         Returns {@link JSVM_INVALID_ARG } if any of the pointer arguments is NULL or cacheType is illegal.\n
+ *         Returns {@link JSVM_JIT_MODE_EXPECTED } if run in jitless mode.\n
  *
  * @since 12
  */

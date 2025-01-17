@@ -160,7 +160,8 @@ void ReadEnableList(const std::string& jitConfigPath, std::unordered_set<std::st
     }
 }
 
-bool InJitMode() {
+bool InJitMode() 
+{
     return isJitMode;
 }
 
