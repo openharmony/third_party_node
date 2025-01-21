@@ -1703,8 +1703,8 @@ static const char* errorMessages[] = { nullptr,
                                        "Main thread would deadlock",
                                        "External buffers are not allowed",
                                        "Cannot run JavaScript",
-                                       "Cannot run in Jitless Mode",
-                                       "Invalid type" };
+                                       "Invalid type",
+                                       "Cannot run in Jitless Mode" };
 
 JSVM_Status JSVM_CDECL OH_JSVM_GetLastErrorInfo(JSVM_Env env, const JSVM_ExtendedErrorInfo** result)
 {
@@ -1715,7 +1715,7 @@ JSVM_Status JSVM_CDECL OH_JSVM_GetLastErrorInfo(JSVM_Env env, const JSVM_Extende
     // message in the `JSVM_Status` enum each time a new error message is added.
     // We don't have a jsvm_status_last as this would result in an ABI
     // change each time a message was added.
-    const int lastStatus = JSVM_INVALID_TYPE;
+    const int lastStatus = JSVM_JIT_MODE_EXPECTED;
 
     static_assert(jsvm::ArraySize(errorMessages) == lastStatus + 1,
                   "Count of error messages must match count of error values");
