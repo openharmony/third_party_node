@@ -544,6 +544,7 @@
         '../../third_party/libuv/include',
         '../../third_party/icu/icu4c/source/common',
         '<(NDK_SYS_ROOT)/obj/third_party/openssl/build_all_generated/linux-aarch64/include',
+        '<(NDK_SYS_ROOT)/obj/third_party/openssl/build_all_generated/include',
         '../openssl/include',
         '<(obj_dir)/../../../v8-include'
       ],
