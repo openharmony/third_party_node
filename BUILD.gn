@@ -24,7 +24,6 @@ ohos_static_library("node_header_notice") {
     "//third_party/node/src/js_native_api_types.h",
     "//third_party/node/src/node_api.h",
     "//third_party/node/src/node_api_types.h",
-    "src/jsvm.h",
   ]
   license_file = "//third_party/node/LICENSE"
   part_name = "node"
